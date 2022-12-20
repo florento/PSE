@@ -92,7 +92,6 @@ pybind11_add_module(pse
   src/pitch/Fifths.cpp
   src/pitch/Enharmonic.cpp
   src/ton/KeyFifth.cpp
-  src/pitch/Enharmonic.cpp
   src/ton/Ton.cpp
   src/ton/Weber.cpp
   src/spell/AccidentState.cpp
@@ -106,8 +105,8 @@ pybind11_add_module(pse
   src/import/PSEnum.cpp
   src/import/PSRawEnum.cpp
   src/import/PSM21Enum.cpp
-  Speller.cpp
-  pypse.cpp
+  src/Speller.cpp
+  src/pypse.cpp
 )
 
 # -fvisibility=hidden
