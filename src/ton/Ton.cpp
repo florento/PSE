@@ -1,0 +1,495 @@
+//
+//  Ton.cpp
+//  qparse
+//
+//  Created by Florent Jacquemard on 03/10/2022.
+//  Copyright © 2022 Florent Jacquemard. All rights reserved.
+//
+
+#include <cmath>        // std::abs
+#include <algorithm>    // std::max
+
+#include "Ton.hpp"
+//#include "Pitch.hpp"
+#include "Fifths.hpp"
+#include "AccidentState.hpp"
+#include "Weber.hpp" // Weber distance
+
+namespace pse {
+
+// static abbreviations for accidentals
+const Accid Ton::_2F = Accid::DoubleFlat;
+const Accid Ton::_1F = Accid::Flat;
+const Accid Ton::_0N = Accid::Natural;
+const Accid Ton::_1S = Accid::Sharp;
+const Accid Ton::_2S = Accid::DoubleSharp;
+const Accid Ton::__U = Accid::Undef;
+
+// accidentals in key signatures
+// and major or minor natural scales, for each key signature.
+const std::array<std::array<Accid, 7>, 15> Ton::KEYS =
+{{
+    { _1F, _1F, _1F, _1F, _1F, _1F, _1F }, // -7  Cb maj / Ab min nat
+    { _1F, _1F, _1F, _0N, _1F, _1F, _1F }, // -6  Gb maj / Eb min nat
+    { _0N, _1F, _1F, _0N, _1F, _1F, _1F }, // -5  Db maj / Bb min nat
+    { _0N, _1F, _1F, _0N, _0N, _1F, _1F }, // -4  Ab maj / F  min nat
+    { _0N, _0N, _1F, _0N, _0N, _1F, _1F }, // -3  Eb maj / C  min nat
+    { _0N, _0N, _1F, _0N, _0N, _0N, _1F }, // -2  Bb maj / G  min nat
+    { _0N, _0N, _0N, _0N, _0N, _0N, _1F }, // -1  F  maj / D  min nat
+    { _0N, _0N, _0N, _0N, _0N, _0N, _0N }, //  0  C  maj / A  min nat
+    { _0N, _0N, _0N, _1S, _0N, _0N, _0N }, //  1  G  maj / E  min nat
+    { _1S, _0N, _0N, _1S, _0N, _0N, _0N }, //  2  D  maj / B  min nat
+    { _1S, _0N, _0N, _1S, _1S, _0N, _0N }, //  3  A  maj / F# min nat
+    { _1S, _1S, _0N, _1S, _1S, _0N, _0N }, //  4  E  maj / C# min nat
+    { _1S, _1S, _0N, _1S, _1S, _1S, _0N }, //  5  B  maj / G# min nat
+    { _1S, _1S, _1S, _1S, _1S, _1S, _0N }, //  6  F# maj / D# min nat
+    { _1S, _1S, _1S, _1S, _1S, _1S, _1S }  //  7  C# maj / A# min nat
+}};
+
+// lead node in minor harmonic tons, in 0..6
+const std::array<int, 15> Ton::LEAD_HARM =
+{   4, 1, 5, 2, 6, 3, 0, 4, 1, 5, 2, 6, 3, 6, 4 };
+// -7 -6 -5 -4 -3 -2 -1  0  1  2  3  4  5  6  7
+//  Ab Eb Bb F  C  G  D  A  E  B  F# C# G# D# A#
+
+// accidentals in minor harmonic scales for each key signature.
+const std::array<std::array<Accid, 7>, 15> Ton::MIN_HARM =
+{{
+    { _1F, _1F, _1F, _1F, _0N, _1F, _1F }, // -7  Ab min harm
+    { _1F, _0N, _1F, _0N, _1F, _1F, _1F }, // -6  Eb min harm
+    { _0N, _1F, _1F, _0N, _1F, _0N, _1F }, // -5  Bb min harm
+    { _0N, _1F, _0N, _0N, _0N, _1F, _1F }, // -4  F  min harm
+    { _0N, _0N, _1F, _0N, _0N, _1F, _0N }, // -3  C  min harm
+    { _0N, _0N, _1F, _1S, _0N, _0N, _1F }, // -2  G  min harm
+    { _1S, _0N, _0N, _0N, _0N, _0N, _1F }, // -1  D  min harm
+    { _0N, _0N, _0N, _0N, _1S, _0N, _0N }, //  0  A  min harm
+    { _0N, _1S, _0N, _1S, _0N, _0N, _0N }, //  1  E  min harm
+    { _1S, _0N, _0N, _1S, _0N, _1S, _0N }, //  2  B  min harm
+    { _1S, _0N, _1S, _1S, _1S, _0N, _0N }, //  3  F# min harm
+    { _1S, _1S, _0N, _1S, _1S, _0N, _1S }, //  4  C# min harm
+    { _1S, _1S, _0N, _2S, _1S, _1S, _0N }, //  5  G# min harm
+    { _2S, _1S, _1S, _1S, _1S, _1S, _0N }, //  6  D# min harm
+    { _1S, _1S, _1S, _1S, _2S, _1S, _1S }, //  7   A# min harm
+}};
+
+// accidentals in minor melodic scales for each key signature.
+const std::array<std::array<Accid, 7>, 15> Ton::MIN_MEL =
+{{
+    { __U, __U, __U, _0N, _0N, __U, __U }, // -7  Ab min mel
+    { _0N, _0N, __U, __U, __U, __U, __U }, // -6  Eb min mel
+    { __U, __U, __U, __U, _0N, _0N, __U }, // -5  Bb min mel
+    { __U, _0N, _0N, __U, __U, __U, __U }, // -4  F  min mel
+    { __U, __U, __U, __U, __U, _0N, _0N }, // -3  C  min mel
+    { __U, __U, _0N, _1S, __U, __U, __U }, // -2  G  min mel
+    { _1S, __U, __U, __U, __U, __U, _0N }, // -1  D  min mel
+    { __U, __U, __U, _1S, _1S, _0N, _0N }, //  0  A  min mel
+    { _1S, _1S, __U, __U, __U, __U, __U }, // 1  E  min mel
+    { __U, __U, __U, __U, _1S, _1S, __U }, //  2  B  min mel
+    { __U, _1S, _1S, __U, __U, __U, __U }, //  3  F# min mel
+    { __U, __U, __U, __U, __U, _1S, _1S }, //  4  C# min mel
+    { __U, __U, _1S, _2S, __U, __U, __U }, //  5  G# min mel
+    { _2S, __U, __U, __U, __U, __U, _1S }, //  6  D# min mel
+    { __U, __U, __U, _2S, _2S, __U, __U },  // 7  A# min mel
+}};
+
+
+
+
+
+Ton::Ton(int ks, Mode mode):
+KeyFifth(ks),
+_mode(mode)
+{
+    assert(mode != Mode::Undef);
+}
+
+
+Ton::Ton(const KeyFifth& ks, Mode mode):
+KeyFifth(ks),
+_mode(mode)
+{
+    assert(mode != Mode::Undef);
+}
+
+
+Ton::Ton(const Ton& ton):
+KeyFifth(ton),
+_mode(ton.mode())
+{ }
+
+
+Ton::~Ton()
+{ }
+
+
+Ton& Ton::operator=(const Ton& rhs)
+{
+    if (this != &rhs)
+    {
+        KeyFifth::operator=(rhs);
+        _mode = rhs._mode;
+    }
+    return *this;
+}
+
+
+bool Ton::operator==(const Ton& rhs) const
+{
+    return (KeyFifth::operator==(rhs) && (_mode == rhs._mode));
+}
+
+
+bool Ton::operator!=(const Ton& rhs) const
+{
+    return (! operator==(rhs));
+}
+
+
+Accid Ton::accidKey(int n) const
+{
+    assert(-7 <= _sig);
+    assert(_sig <= 7);
+    assert(0 <= n);
+    assert(n <= 6);
+    return KEYS[_sig + 7][n];
+}
+
+
+Accid Ton::accidKey(const NoteName& name) const
+{
+    assert(defined(name));
+    return accidKey(toint(name));
+}
+
+
+Accid Ton::accidDia(int n) const
+{
+    assert(-7 <= _sig);
+    assert(_sig <= 7);
+    assert(0 <= n);
+    assert(n <= 6);
+
+    switch (_mode)
+    {
+        case Mode::Undef:
+            return Accid::Undef;
+            
+        case Ton::Mode::Maj:
+            return KEYS[_sig + 7][n];
+            
+        case Ton::Mode::Min:  // harmonic
+            return MIN_HARM[_sig + 7][n];
+            
+        case Ton::Mode::MinNat:
+            return KEYS[_sig + 7][n];
+            
+        case Ton::Mode::MinMel:
+            return MIN_MEL[_sig + 7][n];
+            
+        case Ton::Mode::Ionian:
+        case Ton::Mode::Dorian:
+        case Ton::Mode::Phrygian:
+        case Ton::Mode::Lydian:
+        case Ton::Mode::Mixolydian:
+        case Ton::Mode::Eolian:
+        case Ton::Mode::Locrian:
+            return KEYS[_sig + 7][n];
+            
+        default:
+        {
+            ERROR("unknown Ton mode");
+            return Accid::Undef;
+        }
+    }
+}
+
+
+Accid Ton::accidDia(const NoteName& name) const
+{
+    assert(defined(name));
+    return accidDia(toint(name));
+}
+
+
+bool Ton::lead(const NoteName& name) const
+{
+    assert(defined(name));
+    int n = toint(name);
+    assert(0 <= n);
+    assert(n <= 6);
+    assert(-7 <= _sig);
+    assert(_sig <= 7);
+
+    // harmonic minor
+    if (_mode == Ton::Mode::Min)
+    {
+        // DEBUGU("{} ({}) is lead of {}", name, n, *this);
+        return (KEYS[_sig + 7][n] != MIN_HARM[_sig + 7][n]);
+    }
+    // melodic minor
+    else if (_mode == Ton::Mode::MinMel)
+    {
+        // DEBUGU("{} ({}) is lead of {}", name, n, *this);
+        return (KEYS[_sig + 7][n] != MIN_MEL[_sig + 7][n]);
+    }
+    else
+        return false;
+}
+
+
+unsigned int Ton::dist(const NoteName& name, const Accid& accid) const
+{
+    assert(defined(name));
+    assert(defined(accid));
+    // int n = name.toint();
+    // assert(0 <= n);
+    // assert(n <= 6);
+    // int a = accid.toint();
+    // assert(-2 <= a);
+    // assert(a <= 2);
+    // location of the given note in the array of fifths
+    int loc = Fifths::index(name, accid);
+    assert(-15 <= loc);
+    assert(loc <= 19);   // 0 is 'C'
+    return std::abs(loc - this->fifths());
+}
+
+
+unsigned int Ton::distFifths(const Ton& rhs) const
+{
+    return std::abs(fifths() - rhs.fifths());
+}
+
+
+unsigned int Ton::distHamming(const Ton& rhs) const
+{
+    unsigned int res = 0;
+    
+    for (int i = 0; i < 7; ++i) // pitch names
+    {
+        const NoteName n = NNofint(i);
+        const Accid& this_ai = accidDia(n);
+        const Accid& rhs_ai  = rhs.accidDia(n);
+        assert(this_ai != Accid::Undef);
+        assert(rhs_ai != Accid::Undef);
+        if (this_ai != rhs_ai)
+            res++;
+    }
+    return res;
+}
+
+
+unsigned int Ton::distDiatonic(const Ton& rhs) const
+{
+    unsigned int res = 0;
+    
+    for (int i = 0; i < 7; ++i) // pitch names
+    {
+        const NoteName n = NNofint(i);
+        const Accid& this_ai = accidDia(n);
+        const Accid& rhs_ai  = rhs.accidDia(n);
+        assert(this_ai != Accid::Undef);
+        assert(rhs_ai != Accid::Undef);
+        res += accidDist(this_ai, rhs_ai);
+    }
+    return res;
+}
+
+
+unsigned int Ton::distWeber(const Ton& rhs) const
+{
+    int res = Weber::static_dist(*this, rhs);
+    assert(res != Weber::UNDEF_DIST);
+    return res;
+}
+
+
+//unsigned int Ton::dist(const Ton& rhs) const
+//{
+//    if (_mode == Mode::Undef)
+//    {
+//        WARN("Ton distance {} {}: one undef mode", *this, rhs);
+//        return std::abs(fifths() - rhs.fifths());
+//    }
+//    else if (_mode == rhs._mode)
+//    {
+//        // dist in array of fifths
+//        return std::abs(fifths() - rhs.fifths());
+//    }
+//    else if (_mode == Mode::Maj)
+//    {
+//
+//    }
+//}
+
+
+// static
+//int Ton::dist(int name, int alt, int sig)
+//{
+//    assert(0 <= name);
+//    assert(name <= 6);
+//    assert(-2 <= alt);
+//    assert(alt <= 2);
+//    assert(-7 <= sig);
+//    assert(sig <= 7);
+//    // location of the given note in the array of fifths
+//    //std::pair<int, int> p = std::make_pair(_name, alt);
+//    // const int& loc = FIFTHS.at(p);
+//    int loc = 99;
+//    for (int i = 0; i < 35; ++i)
+//    {
+//        if ((FIFTHS[i][0] == name) && (FIFTHS[i][1] == alt))
+//        {
+//            loc = i;
+//            break;
+//        }
+//    }
+//    // not found
+//    if (loc > 34)
+//    {
+//        ERROR("KeySig distTon {} {} not found in array of fifths", name, alt);
+//        return 0;
+//    }
+//
+//    // location of the tonic in array of fifths
+//    int locton = 15 + sig;
+//
+//    return std::abs(loc - locton);
+//}
+
+
+// static
+std::string Ton::tostring(const Ton::Mode& m)
+{
+    switch (m)
+    {
+        case Ton::Mode::Undef:
+            return "undef";
+
+        case Ton::Mode::Maj:
+            return "maj";
+
+        case Ton::Mode::Min:
+            return "min";
+
+        case Ton::Mode::MinNat:
+            return "min nat";
+
+        case Ton::Mode::MinMel:
+            return "min mel";
+
+        case Ton::Mode::Ionian:
+            return "Ionian";
+
+        case Ton::Mode::Dorian:
+            return "Dorian";
+
+        case Ton::Mode::Phrygian:
+            return "Phrygian";
+
+        case Ton::Mode::Lydian:
+            return "Lydian";
+
+        case Ton::Mode::Mixolydian:
+            return "Mixolydian";
+            
+        case Ton::Mode::Eolian:
+            return "Eolian";
+
+        case Ton::Mode::Locrian:
+            return "Locrian";
+
+        default:
+        {
+            ERROR("unknown Ton mode");
+            return "ERROR";
+        }
+    }
+}
+
+
+void Ton::print(std::ostream& o) const
+{
+    // number of tonic in array of fifths
+    int i = 99;
+    switch (_mode)
+    {
+        case Ton::Mode::Undef:
+            break;
+
+        case Ton::Mode::Maj:
+            i = fifths();
+            break;
+
+        case Ton::Mode::Min:
+        case Ton::Mode::MinNat:
+        case Ton::Mode::MinMel:
+            i = fifths()+3;
+            break;
+            
+        case Ton::Mode::Ionian:
+            i = fifths();
+            break;
+
+        case Ton::Mode::Dorian:
+            i = fifths(); // + 2;
+            break;
+
+        case Ton::Mode::Phrygian:
+            i = fifths(); // + 4;
+            break;
+
+        case Ton::Mode::Lydian:
+            i = fifths();
+            break;
+
+        case Ton::Mode::Mixolydian:
+            i = fifths();
+            break;
+            
+        case Ton::Mode::Eolian:
+            i = fifths();
+            break;
+
+        case Ton::Mode::Locrian:
+            i = fifths();
+            break;
+
+        default:
+        {
+            ERROR("unknown Ton mode");
+            break;
+        }
+    }
+    
+    if ((-15 <= i) && (i <= 19))
+    {
+        o << Fifths::name(i);
+        if (Fifths::accid(i) != Accid::Natural)
+            o << Fifths::accid(i);
+        o << tostring(_mode);
+        o << ' ';
+        o << '(';
+        KeyFifth::print(o);
+        o << ')';
+    }
+    else
+        o << "ERROR";
+}
+
+
+std::ostream& operator<<(std::ostream& o, const Ton::Mode& mode)
+{
+    o << Ton::tostring(mode);
+    return o;
+}
+
+
+std::ostream& operator<<(std::ostream& o, const Ton& ton)
+{
+    ton.print(o);
+    return o;
+}
+
+
+} // end namespace pse

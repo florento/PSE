@@ -1,92 +1,206 @@
 # PSE
 
+algorithms for Pitch Spelling
+based on optimization of Engraving-based info.
 
 
-## Getting started
+## étapes
+(révision de "procédure" ci-dessous)
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
 
-## Add your files
+0. choix d'une liste de **tonalités**
+   défault = 30 tons -7..7 maj et min harm.
+   choix d'un **énumérateur** de notes (valeur MIDI dans 1..127)
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+1. calcul **table** de couts (`PST`)
+    - 1 **vecteur** (`PSV`) par mesure
+    - pour chaque vecteur, 1 **bag** de best config. (`PSB`) par tonalité
+    - **config.** (`PSC`) = map note name (C..B) vers accidents (-2..2)
+     les configs stockées dans les `PSB` de vecteurs sont les configs finales de plus faible coût dans un parcours des notes de la mesure.
+    - le **coût** est la composé lexico des mesures suivantes:
+        - nombre d'accidents écrits
+        - [AV] nombre de mouvements mélodiques non-conjoints qui pourraient être conjoints?
+        mouvements mélodiques conjoint : notes successives avec noms différents (à distance 1).
+    - rem: toutes les configs d'un PSB ont le même coût
 
+2. estimation d'une **tonalité globale**, sur la table de coût (`PST`)
+    - tonalité minimisant le cumul. par ligne des coûts ci-dessus
+    - [ ] améliorer tie breaks
+    - [ ] autoriser modulations? en nombre borné?
+
+3. estimation d'une **tonalité locale** pour chaque vecteur (`PSV`, i.e. chaque mesure)
+    - c'est l'index (tonalité) dans `PSV` minimisant un mesure lexico faite de:
+        - coût ci-dessus
+        - distance à tonalité locale de la mesure (`PSV`) précédente
+          la première tonalité "précédente" est la tonalité globale estimée en 2.
+        - [AV] distance à la tonalité globale?
+        - [AV] comparaison entre config. et tonalité ?
+    - [ ] nombreux tie breaks...
+    - distances entre tonalités: plusieurs choix possibles (les combiner?):
+        - table Weber
+        - distance de Hamming
+        - distance diatonique
+        - ...
+
+4. **respell** de la ligne de tonalité globale dans la table. 
+   nouveau calcul de plus court chemin 
+   - avec **coût** lexico suivant, étendant le coût de l'étape 1:
+        - nombre d'accidents écrits        
+        - nombre de mouvements mélodiques non-conjoints qui pourraient être conjoints
+        - distance (cumulée pour chaque note altérée) à la tonalité locale
+        - nb note altérées de couleur différente de la tonalité globale
+          couleur = `#` pour tonalité dans 0..7
+          couleur = `b` pour tonalité dans -7..-1
+    - [ ] tie breaks: peu. exemples?
+
+
+**table** (`PST`):
 ```
-cd existing_repo
-git remote add origin https://gitlab.inria.fr/pse/pse.git
-git branch -M main
-git push -uf origin main
+      bar_0     ...    bar_n
+      PSV_0     ...    PSV_n
+TON0  PSB_0,0          PSB_n,0
+.       .                .
+.       .                .
+.       .                . 
+TONk  PSB_0,k          PSB_n,k
 ```
 
-## Integrate with your tools
 
-- [ ] [Set up project integrations](https://gitlab.inria.fr/pse/pse/-/settings/integrations)
 
-## Collaborate with your team
+## classes  
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Automatically merge when pipeline succeeds](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
+-   `AccidState` (1 alteration (in -2..2 + UNDEF) / note name in 0..6)
+    -   constructor(ton, true) : = key sig.
+    -   constructor(ton, false) : jokers for minor (sensible…)  
+         not counted in cost
 
-## Test and Deploy
+-   `PSC0` (PS Config source)
+    -   accid. state
+    -   [private] cumul nb accid.
+    -   [private] cumul dist.
+    -   cost() sum of the 2 above = nb accidents
+    -   prev
+    -   alt(name)  (access to state)
+    -   successor(Pitch, Ton, [queue&])
 
-Use the built-in continuous integration in GitLab.
+-   `PSC` (PS Config) = PSC0 + 
+    -   name
+    -   printed (flag)
+    -   id last note read
+    -   alt() (from state and name)
+    -   unfold() = stack of configs to this config
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing(SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+-   `PSB` (bag of PS Configs)
+all the configs in the bag have the same weight
+all the configs in the bag have the same source
+    -   cost the cost value of every PS Config
 
-***
+-   `PSV` (vertical vector of `PSB`s, one `PSB` for each tonality)
+    -   static `TON[]` vector of tonalities (some size as the PSV). 
+        = order of enum of vector
+    -   static `ALTSTATE`s key sigs and sensibles for tons in `TON`.
+    -   `enum` : note enumerator
+    -   first note
+    -   note after last note
+    -   constructor (3 above args)
+    -   local tonality (index in TON) (initially UNDEF)
+    -   `updateLocal` (prev._local)  
+        collecte ensemble des index de TON de cout min dans la colonne  
+        si plusieurs, choisit celle la plus proche de prev._local  
+        second tie break ?
+- `PST` table = vector of `PSV`s
 
-# Editing this README
+-   `PSP` (path of PS Configs)  
+    idem actuel
+  
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thank you to [makeareadme.com](https://www.makeareadme.com/) for this template.
 
-## Suggestions for a good README
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
 
-## Name
-Choose a self-explaining name for your project.
+## procédure
+(ancienne version, obsolete. void "étapes" ci-dessus)
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+0.  calcul de 1 PSV / mesure.  
+    cost des PSC : uniquement # accidents
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+1.  estimation tonalité globale (function hors classe, arg = vec. PSV)  
+    f.e. TON : calcul cost cumulé de la ligne correspondante  
+    mémorisation de l’index du best
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+2.  a. estimation tonalité locale pour chaque PSV  
+    première = globale  
+    f.e. PSV : updateLocal(prev)
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+3.  b. calcul pour chaque PSV et TON[globale] du meilleur PSP  
+    pour ch. PSV, extrait _b_ = le PSB de TON[globale]  
+    cast _b_ en bag de stacks (map de unfold))  
+    toutes les stacks de _b_ ont le même top  
+    [pop] fait un pop de ch. stack de _b_  
+    détermine parmi tous les top celui (nom de note _n_) qui est le plus proche TON[locale du PSV]  
+    efface de _b_ tous les stacks avec top ≠ _n  
+    _goto [pop]
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+---
+29 nov. 2022
+visite Augustin
+premiers résultats d'évaluation Pitch Spelling'
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
 
-## License
-For open source projects, say how it is licensed.
+**tonalités**:
+- ajouter mode mineur mélodique ascendant
+  ascendant: pour degrés 5-6-7-1
+- modes jazz (dorien etc) : pour PS jazz?
+  dataset FiloBass, FiloSax, Weimar (Jazzomath)
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+
+---
+## todo (court terme)
+
+      
+- [x] ajout critère "disjoint" au coût 
+     nb mouvements mélodiques non-conjoints alors qu'ils pourraient l'être
+
+- [ ] respell avec tonalité globale donnée
+      `setGlobal()` dans `PST` (complémentaire `estimateGlobal()`) 
+      flag global est connu
+      pas d'appel auto à  `estimateGlobal()` dans `rename()`
+
+- [x] pb de tonalité (`Key`) non trouvée dans M21
+      erreur ` -1 key changes FAIL` 
+      = presque tous index pas dans  `LG_ok` `LG_assert`  de `LG_ok.py`
+      explorer les partitions à probleme
+
+- [x] diff (python) : ne pas compter les bécarres affichés (flag `print` = true)
+
+- [x] debug les crashs 
+      cf  `LGassert`   dans `LGok.py`
+
+- [ ] ajouter mode mineur mélodique ascendant
+  ascendant: pour degrés 5-6-7-1
+  
+- [x] table de Weber: distance entre tons  
+
+
+      
+---
+## todo (moyen terme)
+
+  
+- [ ] autoriser modulations? en nombre borné?
+
+- [ ] modes jazz (dorien etc) : pour PS jazz?
+
+
+**experimentations** 
+- [ ] datasets FiloBass, FiloSax, Weimar (Jazzomath)
+- [ ] dataset Temperly
+- [ ] dataset ASAP
+- [x] dataset Lamarque Goudard
+- [x] bundles M21
+
+
