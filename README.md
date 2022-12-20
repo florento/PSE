@@ -1,6 +1,5 @@
 # PSE
-
-algorithms for Pitch Spelling
+Various Pitch Spelling Algorithms
 based on optimization of Engraving-based info.
 
 
