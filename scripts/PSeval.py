@@ -15,7 +15,8 @@ import pandas as pd
 # import module with full path
 # see https://www.geeksforgeeks.org/how-to-import-a-python-module-given-the-full-path/
 
-#sys.path.append('/Users/jacquema/Code/qparse/PSE')
+#sys.path.insert(0, "/Users/jacquema/Code/qparse/PSE")
+#from pse import *
 #import pse
 
 import importlib.util

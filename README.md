@@ -1,6 +1,20 @@
 # PSE
-Various Pitch Spelling Algorithms
+Pitch Spelling Algorithms
 based on optimization of Engraving-based info.
+
+to compile:
+```shell
+mkdir build
+cd build
+cmake ..
+make
+```
+This leaves a library `pse.X.so` in `build` where `X` depends on your platform.
+
+With this library in your path, 
+you can do `import pse` in a Python3 interpreter.
+
+The file `scripts/PSeval.py` contains some functions for using the module `pse`.
 
 
 ## étapes
@@ -139,16 +153,10 @@ all the configs in the bag have the same source
     efface de _b_ tous les stacks avec top ≠ _n  
     _goto [pop]
 
-
-
-
-
 ---
 29 nov. 2022
 visite Augustin
 premiers résultats d'évaluation Pitch Spelling'
-
-
 
 **tonalités**:
 - ajouter mode mineur mélodique ascendant
@@ -156,11 +164,9 @@ premiers résultats d'évaluation Pitch Spelling'
 - modes jazz (dorien etc) : pour PS jazz?
   dataset FiloBass, FiloSax, Weimar (Jazzomath)
 
-
 ---
 ## todo (court terme)
 
-      
 - [x] ajout critère "disjoint" au coût 
      nb mouvements mélodiques non-conjoints alors qu'ils pourraient l'être
 
@@ -185,7 +191,6 @@ premiers résultats d'évaluation Pitch Spelling'
 - [x] table de Weber: distance entre tons  
 
 
-      
 ---
 ## todo (moyen terme)
 
@@ -197,7 +202,7 @@ premiers résultats d'évaluation Pitch Spelling'
 
 **experimentations** 
 - [ ] datasets FiloBass, FiloSax, Weimar (Jazzomath)
-- [ ] dataset Temperly
+- [ ] dataset Meredith
 - [ ] dataset ASAP
 - [x] dataset Lamarque Goudard
 - [x] bundles M21
