@@ -15,8 +15,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "436C6C3C2924016F00152D8C"
-               BuildableName = "pypse.cpython-310-darwin.so"
-               BlueprintName = "pypse"
+               BuildableName = "pse.cpython-310-darwin.so"
+               BlueprintName = "pse"
                ReferencedContainer = "container:pse.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -51,8 +51,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "436C6C3C2924016F00152D8C"
-            BuildableName = "pypse.cpython-310-darwin.so"
-            BlueprintName = "pypse"
+            BuildableName = "pse.cpython-310-darwin.so"
+            BlueprintName = "pse"
             ReferencedContainer = "container:pse.xcodeproj">
          </BuildableReference>
       </MacroExpansion>

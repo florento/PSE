@@ -97,11 +97,11 @@ def evaluation(root, stat, tons=0):
             print('\n')
             print(file)
             filep = file.parts
-            title = ''
+            t = ''
             if (filep[-2] == 'ref'):
-                title = filep[-3]
-            score = m21.converter.parse(file.as_posix())
-            stat.eval_score(score, i, title, '')
+                t = filep[-3]
+            s = m21.converter.parse(file.as_posix())
+            stat.eval_score(score=s, sid=i, title=t, composer='')
             
  
 def eval_export(root, filename, tons=0):

@@ -10,19 +10,19 @@ Created on Wed Nov 23 13:18:18 2022
 import music21 as m21
 import time
 import pandas as pd
-
+import pse
 
 # import module with full path
 # see https://www.geeksforgeeks.org/how-to-import-a-python-module-given-the-full-path/
 
-#sys.path.insert(0, "/Users/jacquema/Code/qparse/PSE")
+#sys.path.insert(0, "/Users/jacquema/Code/PSE")
 #from pse import *
 #import pse
 
-import importlib.util
-spec = importlib.util.spec_from_file_location("pse","/Users/jacquema/Code/qparse/PSE/pse.cpython-310-darwin.so")
-pse = importlib.util.module_from_spec(spec)
-spec.loader.exec_module(pse)
+#import importlib.util
+#spec = importlib.util.spec_from_file_location("pse","/Users/jacquema/Code/qparse/PSE/pse.cpython-310-darwin.so")
+#pse = importlib.util.module_from_spec(spec)
+#spec.loader.exec_module(pse)
 
 print(pse.excuseme)
 
@@ -41,7 +41,7 @@ print(pse.excuseme)
 # Key object is the more expressive (tonic, mode...)
 # KeySignature object is just the number of sharps (> 0) or flats, < 0)
 def extract_keys(part):
-    """extract the list of all keys or key signatures occurring in a part"""    
+    """extract the list of all keys or key signatures occurring in a music21 part"""    
     fpart = part.flatten()
     kl = fpart.getElementsByClass([m21.key.Key, m21.key.KeySignature])
     return kl
@@ -54,7 +54,7 @@ def key_changes(part):
 
 
 def get_key(part):
-    """return the key signature of a part, if unique, otherwise None"""
+    """return the key signature of a music21 part, if unique, otherwise None"""
     kl = extract_keys(part)
     if (len(kl) == 1):
         return kl[0]
@@ -63,26 +63,46 @@ def get_key(part):
 
 
 def count_notes(part):
-    """return the number of notes in a part"""    
+    """return the number of notes in a music21 part"""    
     fpart = part.flatten()
-    nl = fpart.getElementsByClass(m21.note.Note)
-    return len(nl)    
+    nn = len(fpart.getElementsByClass(m21.note.Note))
+    for c in fpart.getElementsByClass(m21.chord.Chord):
+        nn += len(c)
+    return nn    
 
 
 def count_chords(part):
-    """return the number of chords in a part"""    
+    """return the number of chords in a music21 part"""    
     cl = part.getElementsByClass(m21.chord.Chord)
     return len(cl) 
 
 
 def count_measures(part):
-    """return the number of measures in a part"""    
+    """return the number of measures in a music21 part"""    
     ml = part.getElementsByClass(m21.stream.Measure)
     return len(ml) 
 
 
 def extract_notes(part):
-    """extract the list of barred notes occurring in a part"""    
+    """extract the list of barred notes occurring in a music21 part"""    
+    mes = part.getElementsByClass(m21.stream.Measure)
+    b = 0
+    ln = []
+    for m in mes:
+        for e in m.flatten():                      # merge voices in measure
+            if isinstance(e, m21.note.Note):
+                ln.append((e, b))                  # append a pair          
+            elif isinstance(e, m21.chord.Chord):
+                for n in e:
+                    assert(isinstance(n, m21.note.Note))
+                    ln.append((n, b))
+        b  += 1
+    return ln
+
+
+
+def extract_onlynotes(part):
+    """extract the list of barred notes occurring in a music21 part"""    
     mes = part.getElementsByClass(m21.stream.Measure) # music21.stream.Measure
     b = 0
     ln = []
@@ -96,7 +116,7 @@ def extract_notes(part):
     
 
 def add_notes(ln, sp):
-    """feed a speller with the (MIDI) notes of the part"""
+    """feed a speller with a list of (MIDI) notes with bar number"""
     i = 0    
     for (n, b) in ln:
         #print('add', i, ':', n.pitch.midi, b, flush=True)
@@ -128,7 +148,7 @@ def add_tons(tons, sp):
 
 
 def get_pitches(sp):
-    """extract the list of M21 pitches from a speller"""    
+    """extract the list of music21 pitches from a speller"""    
     pl = []
     for i in range(sp.size()):
         p = mk_pitch(name = sp.name(i),  
@@ -146,7 +166,7 @@ def mk_pitch(name, accid, octave):
 
 
 def mk_step(nn):
-    """cast a PSE NoteName into a Music21 character"""
+    """cast a PSE NoteName into a music21 character"""
     if (nn == pse.NoteName.A):
         return 'A'
     elif (nn == pse.NoteName.B):
@@ -194,20 +214,20 @@ def mk_accid(a):
         print('Invalid argument')
 
 
-###################
-##               ##
-## diff PS / M21 ##
-##               ##
-###################
+####################
+##                ##
+## diff PSE / M21 ##
+##                ##
+####################
 
 
 def compare_name(n, pse_name):
-    """compare the name of a Music21 note and a PSE note name"""    
+    """compare the name of a music21 note and a PSE note name"""    
     return (n.step == mk_step(pse_name))
 
             
 def compare_accid(n, pse_accid, print_flag):
-    """compare the accidental of a Music21 note and a PSE accidental"""    
+    """compare the accidental of a music21 note and a PSE accidental"""    
     if (pse_accid == pse.Accid.Natural):
         # (print_flag == True): mandatory (print_flag == False) courtesy 
         if (n.pitch.accidental == m21.pitch.Accidental('natural')):
@@ -270,10 +290,11 @@ def spellable(part):
     if (get_key(part) == None):
         print(key_changes(part), 'key changes', end =' ')
         return False
-    elif (count_chords(part)):
-        print('chords', end =' ')
-        return False        
+    #elif (count_chords(part)):
+    #    print('chords', end =' ')
+    #    return False        
     return True
+
 
 
 #########################
@@ -307,7 +328,7 @@ def pseval_part(part, nbtons=0, debug=False):
     return (sp.sig(), ld)
 
     
-def pseval_part1(self, part, dflag=False):
+def pseval_part1(self, part):
     """evaluate spelling for one part in a score"""
     self._global_parts += 1
     k0 = get_key(part)
@@ -315,12 +336,12 @@ def pseval_part1(self, part, dflag=False):
     ln = extract_notes(part)
     #assert(count_notes(part) == len(ln))
     if (count_notes(part) != len(ln)):
-        print('ERROR countnote=', count_notes(part), 'ln=', len(ln))
+        print('ERROR countnote =', count_notes(part), 'ln =', len(ln))
     print(len(ln), 'notes,', count_measures(part), 'bars,', end=' ')
     self._current_notes = len(ln)
     self._global_notes += len(ln)    
     sp = pse.Speller()
-    sp.debug(dflag)
+    sp.debug(self.debug)       # debug flag for lib PSE
     add_tons(self.nbtons, sp)
     add_notes(ln, sp)
     t0 = time.time()
@@ -342,7 +363,7 @@ def pseval_part1(self, part, dflag=False):
 
 
 # TBR
-def pseval_score(score, tons=0):
+def pseval_score(score, tons=0, debug=False):
     """evaluate spelling for all parts in a score"""
     lp = score.getElementsByClass(m21.stream.Part)
     nbparts = len(lp)
@@ -353,7 +374,7 @@ def pseval_score(score, tons=0):
         if (nbparts > 1):
             print('part', i+1, '/', len(lp), end=' ', flush=True)
         if (spellable(part)):
-            pseval_part(part, tons, False)
+            pseval_part(part, tons, debug)
         else:
             print('cannot spell, skip', flush=True)
         
@@ -376,8 +397,8 @@ def pseval_score1(self, score, sid, title='', composer=''):
                 _comp = score.metadata.composer
             else:
                 _comp = composer                
-            self._newtuple(sid, _title, _comp, i)
-            pseval_part1(self, part, False)
+            self._newtuple(title=_title, composer=_comp, part=i, sid=sid)
+            pseval_part1(self, part)
             self._table.append(self._gettuple())
         else:
             print('cannot spell, skip', flush=True)
@@ -386,14 +407,17 @@ def pseval_score1(self, score, sid, title='', composer=''):
 class PSStats:
     _UNDEF_KS = 99
 
-    def __init__(self):        
+    def __init__(self, nbt=0, dflag=False):        
         # list of lists (one list per part)
         self._table = []
         #
         # parameters and flags
         #
         # number of tonalities fpr spelling: speller's default
-        self.nbtons = 0  
+        self.nbtons = nbt 
+        #
+        # debug mode (lib PSE)
+        self.debug = dflag
         #
         # counters for all parts
         #
@@ -477,9 +501,12 @@ class PSStats:
         df['time'] = df['time'].map('{:,.3f}'.format)
         return df
                 
-    def _newtuple(self, i, title, composer, part):
+    def _newtuple(self, title, composer, part, sid):
         """start a new row in evaluation table"""
-        self._current_id = i
+        if sid != None:
+            self._current_id = sid
+        else:
+            self._current_id += 1
         self._current_title = title
         self._current_composer = composer
         self._current_part = part
@@ -498,22 +525,9 @@ class PSStats:
         tl.append(self._current_time)
         return tl
         
-            
 
-def test1(i, j):
-    bundle = m21.corpus.corpora.CoreCorpus().search('bach', 'composer')
-    score = bundle[i].parse()
-    lp = score.getElementsByClass(m21.stream.Part)
-    part = lp[j]    
-    print('Bach bundle', i, '/', len(bundle), end = ' ') 
-    print(score.metadata.composer, score.metadata.title, end=' ')
-    print('part', j, '/', len(lp), end = ' ') 
-    if (spellable(part)):
-        print('(spellable)', end = ' ')      
-    else:
-        print('unspellable')              
-        return
-    pseval_part(part, False)
+    
+    
     
 #    k0 = get_key(part)
 #    print(k0, count_notes(part), 'notes,', count_measures(part), 'bars,', end = '\n')
@@ -523,7 +537,6 @@ def test1(i, j):
 #    add_notes(ln, sp)
 #    print('respell')
 #    sp.respell()
-
 
 
 #bachBundle = corpus.corpora.CoreCorpus().search('bach', 'composer')

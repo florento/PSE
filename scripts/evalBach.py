@@ -5,8 +5,11 @@ Spyder Editor
 This is a temporary script file.
 """
 
-
+import os
+from pathlib import Path, PosixPath
 from music21 import *
+import PSeval as ps
+
 
 s = corpus.parse('bach/bwv65.2.xml')
 sp = s.getElementsByClass(stream.Part)
@@ -65,3 +68,20 @@ def extract_notes(part):
         b  += 1
     return nl
 
+
+            
+# TBR
+def test1(i, j):
+    bundle = m21.corpus.corpora.CoreCorpus().search('bach', 'composer')
+    score = bundle[i].parse()
+    lp = score.getElementsByClass(m21.stream.Part)
+    part = lp[j]    
+    print('Bach bundle', i, '/', len(bundle), end = ' ') 
+    print(score.metadata.composer, score.metadata.title, end=' ')
+    print('part', j, '/', len(lp), end = ' ') 
+    if (spellable(part)):
+        print('(spellable)', end = ' ')      
+    else:
+        print('unspellable')              
+        return
+    pseval_part(part, False)

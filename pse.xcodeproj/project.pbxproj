@@ -119,7 +119,7 @@
 		4342FD1629268C78004E914F /* pypse.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = pypse.cpp; path = src/targets/pypse.cpp; sourceTree = "<group>"; };
 		4342FD1729268C78004E914F /* pypse.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = pypse.hpp; path = src/targets/pypse.hpp; sourceTree = "<group>"; };
 		4342FD1A2926B925004E914F /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
-		436C6C3D2924016F00152D8C /* pypse.cpython-310-darwin.so */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = "pypse.cpython-310-darwin.so"; sourceTree = BUILT_PRODUCTS_DIR; };
+		436C6C3D2924016F00152D8C /* pse.cpython-310-darwin.so */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = "pse.cpython-310-darwin.so"; sourceTree = BUILT_PRODUCTS_DIR; };
 		436C6C4D2924023100152D8C /* NoteName.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = NoteName.hpp; path = src/pitch/NoteName.hpp; sourceTree = "<group>"; };
 		43A2543E29280D8900D559D2 /* trace.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = trace.cpp; path = src/general/trace.cpp; sourceTree = "<group>"; };
 		43A2543F29280D8900D559D2 /* trace.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = trace.hpp; path = src/general/trace.hpp; sourceTree = "<group>"; };
@@ -261,7 +261,7 @@
 		436C6C3E2924016F00152D8C /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				436C6C3D2924016F00152D8C /* pypse.cpython-310-darwin.so */,
+				436C6C3D2924016F00152D8C /* pse.cpython-310-darwin.so */,
 				43FBEABD2930CD21008FC486 /* debugpse */,
 			);
 			name = Products;
@@ -370,9 +370,9 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		436C6C3C2924016F00152D8C /* pypse */ = {
+		436C6C3C2924016F00152D8C /* pse */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 436C6C482924016F00152D8C /* Build configuration list for PBXNativeTarget "pypse" */;
+			buildConfigurationList = 436C6C482924016F00152D8C /* Build configuration list for PBXNativeTarget "pse" */;
 			buildPhases = (
 				436C6C392924016F00152D8C /* Headers */,
 				436C6C3A2924016F00152D8C /* Sources */,
@@ -382,9 +382,9 @@
 			);
 			dependencies = (
 			);
-			name = pypse;
+			name = pse;
 			productName = pse;
-			productReference = 436C6C3D2924016F00152D8C /* pypse.cpython-310-darwin.so */;
+			productReference = 436C6C3D2924016F00152D8C /* pse.cpython-310-darwin.so */;
 			productType = "com.apple.product-type.library.dynamic";
 		};
 		43FBEABC2930CD21008FC486 /* debugpse */ = {
@@ -434,7 +434,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				436C6C3C2924016F00152D8C /* pypse */,
+				436C6C3C2924016F00152D8C /* pse */,
 				43FBEABC2930CD21008FC486 /* debugpse */,
 			);
 		};
@@ -756,7 +756,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		436C6C482924016F00152D8C /* Build configuration list for PBXNativeTarget "pypse" */ = {
+		436C6C482924016F00152D8C /* Build configuration list for PBXNativeTarget "pse" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				436C6C492924016F00152D8C /* Debug */,

@@ -14,7 +14,7 @@ import music21 as m21
 # import module with full path
 # see https://www.geeksforgeeks.org/how-to-import-a-python-module-given-the-full-path/
 
-#sys.path.append('/Users/jacquema/Code/qparse/PSE')
+#sys.path.append('/Users/jacquema/Code/PSE')
 #import pse
 
 import importlib.util
