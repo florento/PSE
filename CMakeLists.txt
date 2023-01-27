@@ -105,8 +105,8 @@ pybind11_add_module(pse
   src/import/PSEnum.cpp
   src/import/PSRawEnum.cpp
   src/import/PSM21Enum.cpp
-  src/Speller.cpp
-  src/pypse.cpp
+  src/targets/Speller.cpp
+  src/targets/pypse.cpp
 )
 
 # -fvisibility=hidden
