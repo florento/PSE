@@ -18,8 +18,12 @@ void WeberTable()
     godfried.dump();
 }
 
+void Beethoven_21_1(pse::Speller& sp);
+void LG470(pse::Speller& sp);
+void LG128(pse::Speller& sp);
 
-int main(int argc, const char * argv[])
+
+int main(int argc, const char* argv[])
 {
     std::cout << "Debug PSE\n";
     
@@ -32,7 +36,98 @@ int main(int argc, const char * argv[])
     
     pse::Speller sp = pse::Speller();
        
-    // content of LG 470 (loop)
+    Beethoven_21_1(sp);
+    
+    std::cout << sp.size() << " notes" << std::endl;
+    bool status = sp.respell();
+
+    std::cout << sp.size() << " spelled notes" << std::endl;
+    for (size_t i = 0; i < sp.size(); ++i)
+    {
+        std::cout << i << ' ';
+        std::cout << sp.name(i);
+        std::cout << sp.octave(i);
+        std::cout << sp.accidental(i);
+        std::cout << std::endl;
+    }
+
+    return 0;
+}
+
+// content of 2 first bars, left hand of Beethoven Waldstein, mvt 1
+// to debug pruning
+void Beethoven_21_1(pse::Speller& sp)
+{
+// measure 1
+//    sp.add(36, 0);
+//    sp.add(48, 0);
+//    sp.add(52, 0);
+//    sp.add(36, 0);
+//    sp.add(43, 0);
+//    sp.add(48, 0);
+//    sp.add(52, 0);
+//    sp.add(36, 0);
+//    sp.add(43, 0);
+//    sp.add(48, 0);
+//    sp.add(52, 0);
+//    sp.add(36, 0);
+//    sp.add(43, 0);
+//    sp.add(48, 0);
+//    sp.add(52, 0);
+//    sp.add(36, 0);
+//    sp.add(43, 0);
+//    sp.add(48, 0);
+//    sp.add(52, 0);
+//    sp.add(36, 0);
+//    sp.add(43, 0);
+//    sp.add(48, 0);
+//    sp.add(52, 0);
+//    sp.add(36, 0);
+//    sp.add(43, 0);
+//    sp.add(48, 0);
+//    sp.add(52, 0);
+//    sp.add(36, 0);
+//    sp.add(43, 0);
+// measure 2
+    sp.add(48, 1);
+    sp.add(52, 1);
+    sp.add(36, 1);
+    sp.add(43, 1);
+    sp.add(48, 1);
+    sp.add(52, 1);
+    sp.add(36, 1);
+    sp.add(43, 1);
+    sp.add(48, 1);
+    sp.add(52, 1);
+    sp.add(36, 1);
+    sp.add(43, 1);
+    sp.add(48, 1);
+    sp.add(52, 1);
+    sp.add(36, 1);
+    sp.add(43, 1);
+    sp.add(48, 1);
+    sp.add(52, 1);
+    sp.add(36, 1);
+    sp.add(43, 1);
+    sp.add(48, 1);
+    sp.add(52, 1);
+    sp.add(36, 1);
+    sp.add(43, 1);
+    sp.add(50, 1);
+    sp.add(54, 1);
+    sp.add(36, 1);
+    sp.add(45, 1);
+    sp.add(50, 1);
+    sp.add(54, 1);
+    sp.add(36, 1);
+    sp.add(45, 1);
+// measure 2
+//  sp.add(50, 2);
+}
+
+// content of LG 470 (to debug a loop)
+void LG470(pse::Speller& sp)
+{
     sp.add(60, 0);
     sp.add(60, 0);
     sp.add(60, 0);
@@ -194,116 +289,104 @@ int main(int argc, const char * argv[])
     sp.add(68, 10);
     sp.add(59, 10);
     sp.add(60, 11);
-    
-    std::cout << sp.size() << " notes" << std::endl;
-    bool status = sp.respell();
-
-    std::cout << sp.size() << " spelled notes" << std::endl;
-    for (size_t i = 0; i < sp.size(); ++i)
-    {
-        std::cout << i << ' ';
-        std::cout << sp.name(i);
-        std::cout << sp.octave(i);
-        std::cout << sp.accidental(i);
-        std::cout << std::endl;
-    }
-
-    return 0;
 }
 
 
 // content of LG 128
-//sp.add(67, 0);
-//sp.add(67, 0);
-//sp.add(67, 0);
-//sp.add(65, 0);
-//sp.add(65, 0);
-//sp.add(63, 1);
-//sp.add(63, 1);
-//sp.add(63, 1);
-//sp.add(62, 1);
-//sp.add(60, 1);
-//sp.add(69, 1);
-//sp.add(69, 1);
-//sp.add(72, 2);
-//sp.add(72, 2);
-//sp.add(72, 2);
-//sp.add(72, 2);
-//sp.add(62, 2);
-//sp.add(72, 2);
-//sp.add(72, 3);
-//sp.add(72, 3);
-//sp.add(72, 3);
-//sp.add(72, 3);
-//sp.add(72, 3);
-//sp.add(62, 3);
-//sp.add(70, 4);
-//sp.add(69, 4);
-//sp.add(68, 4);
-//sp.add(67, 4);
-//sp.add(70, 4);
-//sp.add(76, 4);
-//sp.add(76, 4);
-//sp.add(76, 5);
-//sp.add(74, 5);
-//sp.add(70, 5);
-//sp.add(69, 5);
-//sp.add(68, 5);
-//sp.add(72, 6);
-//sp.add(69, 6);
-//sp.add(65, 6);
-//sp.add(66, 6);
-//sp.add(73, 6);
-//sp.add(72, 6);
-//sp.add(71, 6);
-//sp.add(72, 7);
-//sp.add(77, 7);
-//sp.add(72, 7);
-//sp.add(72, 7);
-//sp.add(65, 7);
-//sp.add(68, 8);
-//sp.add(68, 8);
-//sp.add(67, 8);
-//sp.add(60, 8);
-//sp.add(60, 8);
-//sp.add(60, 8);
-//sp.add(60, 8);
-//sp.add(60, 8);
-//sp.add(61, 9);
-//sp.add(70, 9);
-//sp.add(70, 9);
-//sp.add(75, 10);
-//sp.add(67, 10);
-//sp.add(66, 10);
-//sp.add(64, 10);
-//sp.add(64, 10);
-//sp.add(73, 10);
-//sp.add(74, 10);
-//sp.add(75, 11);
-//sp.add(74, 11);
-//sp.add(74, 11);
-//sp.add(67, 11);
-//sp.add(72, 12);
-//sp.add(72, 12);
-//sp.add(72, 12);
-//sp.add(71, 12);
-//sp.add(72, 12);
-//sp.add(74, 12);
-//sp.add(74, 13);
-//sp.add(67, 13);
-//sp.add(69, 13);
-//sp.add(71, 13);
-//sp.add(72, 13);
-//sp.add(74, 13);
-//sp.add(75, 13);
-//sp.add(74, 14);
-//sp.add(72, 14);
-//sp.add(72, 14);
-//sp.add(80, 14);
-//sp.add(75, 14);
-//sp.add(72, 14);
-//sp.add(68, 14);
-//sp.add(66, 15);
-//sp.add(75, 15);
-//sp.add(74, 15);
-//sp.add(72, 15);
+void LG128(pse::Speller& sp)
+{
+    sp.add(67, 0);
+    sp.add(67, 0);
+    sp.add(67, 0);
+    sp.add(65, 0);
+    sp.add(65, 0);
+    sp.add(63, 1);
+    sp.add(63, 1);
+    sp.add(63, 1);
+    sp.add(62, 1);
+    sp.add(60, 1);
+    sp.add(69, 1);
+    sp.add(69, 1);
+    sp.add(72, 2);
+    sp.add(72, 2);
+    sp.add(72, 2);
+    sp.add(72, 2);
+    sp.add(62, 2);
+    sp.add(72, 2);
+    sp.add(72, 3);
+    sp.add(72, 3);
+    sp.add(72, 3);
+    sp.add(72, 3);
+    sp.add(72, 3);
+    sp.add(62, 3);
+    sp.add(70, 4);
+    sp.add(69, 4);
+    sp.add(68, 4);
+    sp.add(67, 4);
+    sp.add(70, 4);
+    sp.add(76, 4);
+    sp.add(76, 4);
+    sp.add(76, 5);
+    sp.add(74, 5);
+    sp.add(70, 5);
+    sp.add(69, 5);
+    sp.add(68, 5);
+    sp.add(72, 6);
+    sp.add(69, 6);
+    sp.add(65, 6);
+    sp.add(66, 6);
+    sp.add(73, 6);
+    sp.add(72, 6);
+    sp.add(71, 6);
+    sp.add(72, 7);
+    sp.add(77, 7);
+    sp.add(72, 7);
+    sp.add(72, 7);
+    sp.add(65, 7);
+    sp.add(68, 8);
+    sp.add(68, 8);
+    sp.add(67, 8);
+    sp.add(60, 8);
+    sp.add(60, 8);
+    sp.add(60, 8);
+    sp.add(60, 8);
+    sp.add(60, 8);
+    sp.add(61, 9);
+    sp.add(70, 9);
+    sp.add(70, 9);
+    sp.add(75, 10);
+    sp.add(67, 10);
+    sp.add(66, 10);
+    sp.add(64, 10);
+    sp.add(64, 10);
+    sp.add(73, 10);
+    sp.add(74, 10);
+    sp.add(75, 11);
+    sp.add(74, 11);
+    sp.add(74, 11);
+    sp.add(67, 11);
+    sp.add(72, 12);
+    sp.add(72, 12);
+    sp.add(72, 12);
+    sp.add(71, 12);
+    sp.add(72, 12);
+    sp.add(74, 12);
+    sp.add(74, 13);
+    sp.add(67, 13);
+    sp.add(69, 13);
+    sp.add(71, 13);
+    sp.add(72, 13);
+    sp.add(74, 13);
+    sp.add(75, 13);
+    sp.add(74, 14);
+    sp.add(72, 14);
+    sp.add(72, 14);
+    sp.add(80, 14);
+    sp.add(75, 14);
+    sp.add(72, 14);
+    sp.add(68, 14);
+    sp.add(66, 15);
+    sp.add(75, 15);
+    sp.add(74, 15);
+    sp.add(72, 15);
+}

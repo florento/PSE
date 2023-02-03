@@ -19,7 +19,6 @@ import PSeval as ps
 
 
 
-
 ###########################################
 ##                                       ##
 ## automatic evaluation of whole dataset ##
@@ -75,6 +74,23 @@ lm0 = lp[0].getElementsByClass(m21.stream.Measure)
 lm1 = lp[1].getElementsByClass(m21.stream.Measure)
 
 stat = ps.PSStats()
+root='../../../Datasets/ASAP/'
+bl = Beethoven_list(root)
+(i, file) = bl[4] # 21.1
+score = m21.converter.parse(file)
+lp = score.getElementsByClass(m21.stream.Part)
+k0 = ps.get_key(lp[1])
+
+
+import pse
+sp = pse.Speller()
+sp.debug(True)
+ps.add_tons(0, sp)
+ln0 = ps.extract_notes(lp[0])
+ln1 = ps.extract_notes(lp[1])
+ps.add_notes(ln1[:61], sp)
+#sp.respell()
+
 #stat.eval_score(b, 0)  # 0 : standard list of 26 tons
 #stat.show()
 

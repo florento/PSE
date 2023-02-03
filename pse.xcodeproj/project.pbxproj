@@ -18,9 +18,7 @@
 		431586392983ED5B00918B1B /* NoteName.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 436C6C4D2924023100152D8C /* NoteName.hpp */; };
 		4315863A2983EDD900918B1B /* PSRawEnum.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 431586292983E89B00918B1B /* PSRawEnum.hpp */; };
 		4315863B2983F15400918B1B /* PSEnum.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4315862B2983E89B00918B1B /* PSEnum.cpp */; };
-		4315863C2983F15400918B1B /* PSM21Enum.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4315862F2983E89B00918B1B /* PSM21Enum.cpp */; };
 		4315863D2983F15400918B1B /* PSRawEnum.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4315862D2983E89B00918B1B /* PSRawEnum.cpp */; };
-		4315863E2983F15400918B1B /* PSNoteEnum.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4315862A2983E89B00918B1B /* PSNoteEnum.cpp */; };
 		432657E3294E2FB100515080 /* Weber.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 432657E1294E2FB000515080 /* Weber.cpp */; };
 		432657E4294E2FB100515080 /* Weber.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 432657E1294E2FB000515080 /* Weber.cpp */; };
 		432657E5294E2FB100515080 /* Weber.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 432657E2294E2FB100515080 /* Weber.hpp */; };
@@ -492,9 +490,7 @@
 				43FBEAD32930CEDD008FC486 /* PSTable.cpp in Sources */,
 				43FBEAD42930CEDD008FC486 /* PSPath.cpp in Sources */,
 				4315863B2983F15400918B1B /* PSEnum.cpp in Sources */,
-				4315863C2983F15400918B1B /* PSM21Enum.cpp in Sources */,
 				4315863D2983F15400918B1B /* PSRawEnum.cpp in Sources */,
-				4315863E2983F15400918B1B /* PSNoteEnum.cpp in Sources */,
 				43FBEAC52930CEDD008FC486 /* Speller.cpp in Sources */,
 				43FBEAC42930CEDD008FC486 /* debugpse.cpp in Sources */,
 			);
@@ -719,9 +715,22 @@
 					"$(LOCAL_LIBRARY_DIR)/Frameworks",
 				);
 				HEADER_SEARCH_PATHS = extern/spdlog/include;
+				LIBRARY_SEARCH_PATHS = (
+					/usr/local/lib,
+					"$(PROJECT_DIR)/lib",
+				);
 				PRIVATE_HEADERS_FOLDER_PATH = /usr/local/include;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PUBLIC_HEADERS_FOLDER_PATH = /usr/local/include;
+				SYSTEM_HEADER_SEARCH_PATHS = (
+					"$(LOCAL_LIBRARY_DIR)/Frameworks/Python.framework/Headers",
+					extern/spdlog/include,
+				);
+				USER_HEADER_SEARCH_PATHS = (
+					include,
+					extern/pybind11/include,
+					extern/spdlog/include,
+				);
 			};
 			name = Debug;
 		};
@@ -738,9 +747,22 @@
 					"$(LOCAL_LIBRARY_DIR)/Frameworks",
 				);
 				HEADER_SEARCH_PATHS = extern/spdlog/include;
+				LIBRARY_SEARCH_PATHS = (
+					/usr/local/lib,
+					"$(PROJECT_DIR)/lib",
+				);
 				PRIVATE_HEADERS_FOLDER_PATH = /usr/local/include;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PUBLIC_HEADERS_FOLDER_PATH = /usr/local/include;
+				SYSTEM_HEADER_SEARCH_PATHS = (
+					"$(LOCAL_LIBRARY_DIR)/Frameworks/Python.framework/Headers",
+					extern/spdlog/include,
+				);
+				USER_HEADER_SEARCH_PATHS = (
+					include,
+					extern/pybind11/include,
+					extern/spdlog/include,
+				);
 			};
 			name = Release;
 		};

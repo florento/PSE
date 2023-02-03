@@ -88,15 +88,24 @@ def extract_notes(part):
     mes = part.getElementsByClass(m21.stream.Measure)
     b = 0
     ln = []
+    #max_notes = 0
+    #max_bar = 0
     for m in mes:
+        #nn = 0
         for e in m.flatten():                      # merge voices in measure
             if isinstance(e, m21.note.Note):
                 ln.append((e, b))                  # append a pair          
+                #nn = nn+1
             elif isinstance(e, m21.chord.Chord):
                 for n in e:
                     assert(isinstance(n, m21.note.Note))
                     ln.append((n, b))
+                    #nn = nn+1
+        #if (nn > max_notes):
+            #max_notes = nn
+            #max_bar = b
         b  += 1
+    #print('max notes per bar = ', max_notes, 'in bar: ', max_bar)
     return ln
 
 
@@ -240,16 +249,30 @@ def compare_accid(n, pse_accid, print_flag):
         return (n.pitch.accidental == mk_accid(pse_accid))
 
 
+
 def diff(ln, sp):
     """compare a list of barred notes and list of notes in speller"""    
-    if (len(ln) == sp.size()):
-        return diff1(ln, sp, 0, [])        
-    else:
-        print('ERROR (diff)')
+    assert(len(ln) == sp.size())
+    if (len(ln) == 0):
         return []
+    i = 0
+    ld = []
+    for (n, m) in ln:
+        if (compare_name(n, sp.name(i)) and
+            compare_accid(n, sp.accidental(i), sp.printed(i)) and 
+            n.octave == sp.octave(i)):
+            i = i+1
+        else:
+            #print('diff: ', i, ':', n, 
+            #      sp.name(i), sp.accidental(i), sp.octave(i), sp.printed(i))
+            d = (i, sp.name(i), sp.accidental(i), sp.octave(i), sp.printed(i))
+            i = i+1
+            ld = ld+[d]
+    return ld
 
 
-def diff1(ln, sp, i, ld):
+
+def diffrec(ln, sp, i, ld):
     if (len(ln) == 0):
         return ld
     else:
@@ -257,13 +280,12 @@ def diff1(ln, sp, i, ld):
         if (compare_name(n, sp.name(i)) and
             compare_accid(n, sp.accidental(i), sp.printed(i)) and 
             n.octave == sp.octave(i)):
-            return diff1(ln[1:], sp, i+1, ld)
+            return diffrec(ln[1:], sp, i+1, ld)
         else:
             #print('diff: ', i, ':', n, 
             #      sp.name(i), sp.accidental(i), sp.octave(i), sp.printed(i))
             d = (i, sp.name(i), sp.accidental(i), sp.octave(i), sp.printed(i))
-            return diff1(ln[1:], sp, i+1, ld+[d])
-
+            return diffrec(ln[1:], sp, i+1, ld+[d])
 
 def diff_notes(ln, lp):
     """compare a list of barred notes ad a list of pitches"""    

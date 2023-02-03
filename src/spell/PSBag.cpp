@@ -15,15 +15,17 @@
 namespace pse {
 
 /// ordering for PS Config0 based on lexico combination of
-/// - cost (nb accidents)
-/// - dist. to local tonality
-/// - number of disjoint moves
+/// - cost (nb accidents, dist. to local tonality, number of disjoint moves, color)
+/// - index in enumerator
 PSCCompare PSClex =
 [](std::shared_ptr<const PSC0> lhs, std::shared_ptr<const PSC0> rhs)
 {
     assert (lhs);
     assert (rhs);
-    return (lhs->cost() > rhs->cost());  // smallest cost
+    if (lhs->cost() == rhs->cost())
+        return (lhs->id() < rhs->id());  // largest index
+    else
+        return (lhs->cost() > rhs->cost());  // smallest cost
 };
 //    if (lhs->accidentals() == rhs->accidentals())
 //    {
@@ -49,7 +51,10 @@ PSCCompare PSCacc =
 {
     assert (lhs);
     assert (rhs);
-    return (lhs->cost().getAccid() > rhs->cost().getAccid());
+    if (lhs->cost().getAccid() == rhs->cost().getAccid())
+        return (lhs->id() < rhs->id());  // largest index
+    else
+        return (lhs->cost().getAccid() > rhs->cost().getAccid());
 };
 
 
@@ -68,8 +73,8 @@ PSCCompare PSCdist =
 PSB::PSB(const Ton& ton, PSEnum& e):
 _enum(e),
 _bests(),  // empty
-_cost(),   // zero
-_visited() // empty
+_cost()   // zero
+//_visited() // empty
 {
     if (! e.empty())
         init(ton, ton, false); // second arg. ton is ignored
@@ -80,8 +85,8 @@ _visited() // empty
 PSB::PSB(const Ton& ton, const Ton& lton, PSEnum& e):
 _enum(e),
 _bests(),   // empty
-_cost(),    // zero
-_visited()  // empty
+_cost()    // zero
+//_visited()  // empty
 {
     if (! e.empty())
         init(ton, lton, true);
@@ -107,7 +112,7 @@ PSB::~PSB()
     //{
     //    if(c) delete c;
     // }
-    _visited.clear();
+    //_visited.clear();
 }
 
 
@@ -133,7 +138,7 @@ void PSB::init(const Ton& ton, const Ton& lton, bool fsucc)
         assert(c);
         assert(_enum.first() <= c->id());
         assert(c->id() <= _enum.stop());
-        _visited.push_back(c); // keep c for deletion.
+        //_visited.push_back(c); // keep c for deletion.
         q.pop(); // remove c
         
         // the path c is complete
@@ -160,6 +165,12 @@ void PSB::init(const Ton& ton, const Ton& lton, bool fsucc)
                     break;
                 }
             }
+        }
+        // prune: the cost of current config already overwhelmed
+        // the cost of a best path found
+        else if ((! _bests.empty()) && (c->cost() > _cost))
+        {
+            continue;
         }
         // complete the path of c with its successors
         else

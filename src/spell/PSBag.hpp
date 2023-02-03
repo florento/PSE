@@ -100,9 +100,9 @@ private: // data
     /// cost of the best config in the bag.
     PSCost _cost;
 
-    /// backup of visited nodes.
-    /// @todo TBR
-    std::vector<std::shared_ptr<const PSC0>> _visited;
+    // backup of visited nodes.
+    // @todo TBR
+    //std::vector<std::shared_ptr<const PSC0>> _visited;
     
 private:
 
