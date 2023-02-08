@@ -108,7 +108,7 @@ void PSP::record_path(const PSC0& c)
     assert(co);
     while (! co->initial())
     {
-        const PSC* com = dynamic_cast<const PSC*>(co);
+        const PSC1* com = dynamic_cast<const PSC1*>(co);
         assert(com);
         _names.insert(_names.begin(), com->name()); // push_front (copy)
         _accids.insert(_accids.begin(), com->accidental());

@@ -99,21 +99,27 @@ public:
     /// add a new input note to the list of enumerated notes.
     /// @param note MIDI key of the new input note.
     /// @param bar bar number of the new input note.
-    void add(int note, int bar);
+    /// @param simult whether the new input note is simultaneous with the
+    /// next note.
+    void add(int note, int bar, bool simult=false);
     
     // the given note index is within the interval of notes accessible
     // to this enumerator.
     // @param i index of note.
     // virtual bool inside(size_t i) const;
 
+    /// midi key number in 0..128 of the note of the given index.
+    /// @param i index of a note. must be inside the interval of this enumerator.
+    virtual unsigned int midipitch(size_t i) const;
+
     /// number of measure the note of given index belongs to.
     /// midi key number in 0..128 of the note of the given index.
     /// @param i index of a note. must be inside the interval of this enumerator.
     virtual long measure(size_t i) const;
 
-    /// midi key number in 0..128 of the note of the given index.
+    /// whether the note of given index is simultaneous with the next note.
     /// @param i index of a note. must be inside the interval of this enumerator.
-    virtual unsigned int midipitch(size_t i) const;
+    virtual bool simultaneous(size_t i) const;
 
     /// record new NoteName, Accid, Octave, print_flag for the note of given index.
     /// @param name note name in 'A'..'G'.
@@ -151,8 +157,11 @@ private: // data (shared by all copies of this enumerator)
     /// extracted from the list of Music 21 notes.
     std::shared_ptr<std::vector<int>> _notes;
 
-    /// extracted list of bar numbers
+    /// list of bar number for each note
     std::shared_ptr<std::vector<int>> _barnum;
+    
+    /// list of simultaneity with next, for each ntoe
+    std::shared_ptr<std::vector<bool>> _simult;
     
     /// list of the estimated best note name (in 0..6) for each input note.
     /// copy of the values of the PSPaths (best paths) in the columns of table,

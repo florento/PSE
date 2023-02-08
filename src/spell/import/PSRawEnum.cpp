@@ -17,6 +17,7 @@ PSRawEnum::PSRawEnum(size_t i0, size_t i1):
 PSEnum(i0, i1), // empty
 _notes(new std::vector<int>), // empty initial vector
 _barnum(new std::vector<int>),
+_simult(new std::vector<bool>),
 _names(new std::vector<NoteName>),
 _accids(new std::vector<Accid>),
 _octs(new std::vector<int>),
@@ -40,6 +41,7 @@ PSRawEnum::PSRawEnum(const PSRawEnum& e):
 PSEnum(e),
 _notes(e._notes),  // vector copy (same vector elements)
 _barnum(e._barnum),
+_simult(e._simult),
 _names(e._names),
 _accids(e._accids),
 _octs(e._octs),
@@ -57,6 +59,7 @@ PSRawEnum::PSRawEnum(const PSRawEnum& e, size_t i0):
 PSEnum(e, i0),
 _notes(e._notes),  // vector copy (same vector object)
 _barnum(e._barnum),
+_simult(e._simult),
 _names(e._names),
 _accids(e._accids),
 _octs(e._octs),
@@ -74,6 +77,7 @@ PSRawEnum::PSRawEnum(const PSRawEnum& e, size_t i0, size_t i1):
 PSEnum(e, i0, i1),
 _notes(e._notes),  // vector copy (same vector object)
 _barnum(e._barnum),
+_simult(e._simult),
 _names(e._names),
 _accids(e._accids),
 _octs(e._octs),
@@ -98,10 +102,12 @@ bool PSRawEnum::sanity_check() const
 {
     if (_notes == nullptr)        return false;
     if (_barnum == nullptr)       return false;
+    if (_simult == nullptr)       return false;
     if (_names == nullptr)        return false;
     if (_accids == nullptr)       return false;
     if (_octs == nullptr)         return false;
     if (_barnum->size() != _notes->size()) return false;
+    if (_simult->size() != _notes->size()) return false;
     if (_names->size()  != _notes->size()) return false;
     if (_accids->size() != _notes->size()) return false;
     if (_octs->size()   != _notes->size()) return false;
@@ -117,7 +123,7 @@ size_t PSRawEnum::size() const
 }
 
 
-void PSRawEnum::add(int note, int bar)
+void PSRawEnum::add(int note, int bar, bool simult)
 {
     assert(sanity_check());
 
@@ -133,6 +139,10 @@ void PSRawEnum::add(int note, int bar)
     assert(_barnum->empty() || (_barnum->back() <= bar));
     _barnum->push_back(bar);
 
+    // simultaneous with next note
+    assert(_simult);
+    _simult->push_back(simult);
+
     // pad the output values (note names)
     assert(_names);
     _names->push_back(NoteName::Undef);
@@ -144,6 +154,30 @@ void PSRawEnum::add(int note, int bar)
     _prints->push_back(false);
 
     _stop++;
+}
+
+
+unsigned int PSRawEnum::midipitch(size_t i) const
+{
+    assert(_notes);
+    assert(i < _notes->size());
+    return _notes->at(i);
+}
+
+
+long PSRawEnum::measure(size_t i) const
+{
+    assert(_barnum);
+    assert(i < _barnum->size());
+    return _barnum->at(i);
+}
+
+
+bool PSRawEnum::simultaneous(size_t i) const
+{
+    assert(_simult);
+    assert(i < _simult->size());
+    return _simult->at(i);
 }
 
 
@@ -196,22 +230,6 @@ bool PSRawEnum::printed(size_t i) const
         ERROR("Speller print flag: {} out of range", i);
         return false;
     }
-}
-
-
-long PSRawEnum::measure(size_t i) const
-{
-    assert(_barnum);
-    assert(i < _barnum->size());
-    return _barnum->at(i);
-}
-
-
-unsigned int PSRawEnum::midipitch(size_t i) const
-{
-    assert(_notes);
-    assert(i < _notes->size());
-    return _notes->at(i);
 }
 
 

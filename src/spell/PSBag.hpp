@@ -23,7 +23,8 @@
 #include "PSEnum.hpp"
 #include "PSCost.hpp"
 #include "PSConfig0.hpp"
-#include "PSConfig.hpp"
+#include "PSConfig1.hpp"
+#include "PSConfig2.hpp"
 
 
 namespace pse {

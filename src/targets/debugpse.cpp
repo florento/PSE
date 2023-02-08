@@ -54,76 +54,76 @@ int main(int argc, const char* argv[])
     return 0;
 }
 
+
 // content of 2 first bars, left hand of Beethoven Waldstein, mvt 1
 // to debug pruning
 void Beethoven_21_1(pse::Speller& sp)
 {
-// measure 1
-//    sp.add(36, 0);
-//    sp.add(48, 0);
-//    sp.add(52, 0);
-//    sp.add(36, 0);
-//    sp.add(43, 0);
-//    sp.add(48, 0);
-//    sp.add(52, 0);
-//    sp.add(36, 0);
-//    sp.add(43, 0);
-//    sp.add(48, 0);
-//    sp.add(52, 0);
-//    sp.add(36, 0);
-//    sp.add(43, 0);
-//    sp.add(48, 0);
-//    sp.add(52, 0);
-//    sp.add(36, 0);
-//    sp.add(43, 0);
-//    sp.add(48, 0);
-//    sp.add(52, 0);
-//    sp.add(36, 0);
-//    sp.add(43, 0);
-//    sp.add(48, 0);
-//    sp.add(52, 0);
-//    sp.add(36, 0);
-//    sp.add(43, 0);
-//    sp.add(48, 0);
-//    sp.add(52, 0);
-//    sp.add(36, 0);
-//    sp.add(43, 0);
-// measure 2
-    sp.add(48, 1);
-    sp.add(52, 1);
-    sp.add(36, 1);
-    sp.add(43, 1);
-    sp.add(48, 1);
-    sp.add(52, 1);
-    sp.add(36, 1);
-    sp.add(43, 1);
-    sp.add(48, 1);
-    sp.add(52, 1);
-    sp.add(36, 1);
-    sp.add(43, 1);
-    sp.add(48, 1);
-    sp.add(52, 1);
-    sp.add(36, 1);
-    sp.add(43, 1);
-    sp.add(48, 1);
-    sp.add(52, 1);
-    sp.add(36, 1);
-    sp.add(43, 1);
-    sp.add(48, 1);
-    sp.add(52, 1);
-    sp.add(36, 1);
-    sp.add(43, 1);
-    sp.add(50, 1);
-    sp.add(54, 1);
-    sp.add(36, 1);
-    sp.add(45, 1);
-    sp.add(50, 1);
-    sp.add(54, 1);
-    sp.add(36, 1);
-    sp.add(45, 1);
-// measure 2
-//  sp.add(50, 2);
+// measure 1 (39)
+    sp.add(36, 0, false);
+    sp.add(48, 0, true);
+    sp.add(52, 0, true);
+    sp.add(36, 0, true);
+    sp.add(43, 0, false);
+    sp.add(48, 0, true);
+    sp.add(52, 0, true);
+    sp.add(36, 0, true);
+    sp.add(43, 0, false);
+    sp.add(48, 0, true);
+    sp.add(52, 0, true);
+    sp.add(36, 0, true);
+    sp.add(43, 0, false);
+    sp.add(48, 0, true);
+    sp.add(52, 0, true);
+    sp.add(36, 0, true);
+    sp.add(43, 0, false);
+    sp.add(48, 0, true);
+    sp.add(52, 0, true);
+    sp.add(36, 0, true);
+    sp.add(43, 0, false);
+    sp.add(48, 0, true);
+    sp.add(52, 0, true);
+    sp.add(36, 0, true);
+    sp.add(43, 0, false);
+    sp.add(48, 0, true);
+    sp.add(52, 0, true);
+    sp.add(36, 0, true);
+    sp.add(43, 0, false);
+// measure 2 (42)
+    sp.add(48, 1, true);
+    sp.add(52, 1, true);
+    sp.add(36, 1, true);
+    sp.add(43, 1, false);
+    sp.add(48, 1, true);
+    sp.add(52, 1, true);
+    sp.add(36, 1, true);
+    sp.add(43, 1, false);
+    sp.add(48, 1, true);
+    sp.add(52, 1, true);
+    sp.add(36, 1, true);
+    sp.add(43, 1, false);
+    sp.add(48, 1, true);
+    sp.add(52, 1, true);
+    sp.add(36, 1, true);
+    sp.add(43, 1, false);
+    sp.add(48, 1, true);
+    sp.add(52, 1, true);
+    sp.add(36, 1, true);
+    sp.add(43, 1, false);
+    sp.add(48, 1, true);
+    sp.add(52, 1, true);
+    sp.add(36, 1, true);
+    sp.add(43, 1, false);
+    sp.add(50, 1, true);
+    sp.add(54, 1, true);
+    sp.add(36, 1, true);
+    sp.add(45, 1, false);
+    sp.add(50, 1, true);
+    sp.add(54, 1, true);
+    sp.add(36, 1, true);
+    sp.add(45, 1, false);
 }
+
 
 // content of LG 470 (to debug a loop)
 void LG470(pse::Speller& sp)

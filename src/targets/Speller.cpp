@@ -78,10 +78,10 @@ size_t Speller::size() const
 }
 
 
-void Speller::add(int note, int bar)
+void Speller::add(int note, int bar, bool simult)
 {
     TRACE("Speller: add {} {}", note, bar);
-    _enum.add(note, bar);
+    _enum.add(note, bar, simult);
 }
 
 

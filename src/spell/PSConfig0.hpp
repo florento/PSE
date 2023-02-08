@@ -42,6 +42,7 @@ typedef std::priority_queue<std::shared_ptr<const PSC0>,
                             std::vector<std::shared_ptr<const PSC0>>,
                             PSCCompare> PSCQueue;
 
+
 /// Configuration for a pitch spelling algorithm of scope 1 bar.
 /// Configurations of this class are always initial in a best path solution
 /// for pitch spelling.
@@ -49,7 +50,7 @@ class PSC0
 {
 public:
 
-    /// initial config for a given tonality.
+    /// initial configuration for a given tonality.
     /// predecessor configuration will be null.
     /// @param ton a tonality, used to defined the accident state of this initial config.
     /// @param id index (in a note enumerator) of the note to read
@@ -93,6 +94,8 @@ public:
     /// index (in an enumerator) of note read for the transition from
     /// this config to its successors.
     size_t id() const;
+    
+    inline const AccidState& state() const { return _state; }
 
     /// cost of the minimal path to this config.
     inline const PSCost& cost() const { return _cost; }

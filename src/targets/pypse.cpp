@@ -72,7 +72,7 @@ PYBIND11_MODULE(pse, m)
         .def("debug", &pse::Speller::debug, "set debug mode", py::arg("on"))
         .def("size", &pse::Speller::size, "number notes to spell")
         .def("add", &pse::Speller::add, "add a new note to spell",
-             py::arg("midi"), py::arg("bar"))
+             py::arg("midi"), py::arg("bar"), py::arg("simultaneous"))
         .def("nb_tons", &pse::Speller::nbTons,
              "number of tonalities considered for pitch spelling")
         .def("reset_tons", &pse::Speller::resetTons,

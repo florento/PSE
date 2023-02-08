@@ -13,7 +13,6 @@
 		431586342983E89B00918B1B /* PSM21Enum.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 4315862C2983E89B00918B1B /* PSM21Enum.hpp */; };
 		431586352983E89B00918B1B /* PSRawEnum.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4315862D2983E89B00918B1B /* PSRawEnum.cpp */; };
 		431586362983E89B00918B1B /* PSEnum.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 4315862E2983E89B00918B1B /* PSEnum.hpp */; };
-		431586372983E89B00918B1B /* PSM21Enum.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4315862F2983E89B00918B1B /* PSM21Enum.cpp */; };
 		431586382983E89B00918B1B /* PSNoteEnum.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 431586302983E89B00918B1B /* PSNoteEnum.hpp */; };
 		431586392983ED5B00918B1B /* NoteName.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 436C6C4D2924023100152D8C /* NoteName.hpp */; };
 		4315863A2983EDD900918B1B /* PSRawEnum.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 431586292983E89B00918B1B /* PSRawEnum.hpp */; };
@@ -28,6 +27,14 @@
 		4342FD1229267895004E914F /* MidiNum.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4342FD1129267895004E914F /* MidiNum.cpp */; };
 		4342FD142926789C004E914F /* MidiNum.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 4342FD132926789C004E914F /* MidiNum.hpp */; };
 		4342FD1929268C78004E914F /* pypse.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 4342FD1729268C78004E914F /* pypse.hpp */; };
+		434B1DF8298ECCF1001CE41C /* PSConfig1.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 434B1DF6298ECCF0001CE41C /* PSConfig1.cpp */; };
+		434B1DF9298ED0A0001CE41C /* PSConfig1.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 434B1DF6298ECCF0001CE41C /* PSConfig1.cpp */; };
+		434B1DFC298ED394001CE41C /* PSConfig2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 434B1DFA298ED394001CE41C /* PSConfig2.cpp */; };
+		434B1DFD298ED394001CE41C /* PSConfig2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 434B1DFA298ED394001CE41C /* PSConfig2.cpp */; };
+		434B1DFE298ED394001CE41C /* PSConfig2.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 434B1DFB298ED394001CE41C /* PSConfig2.hpp */; };
+		434B1E01298FD4FE001CE41C /* PSChord.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 434B1DFF298FD4FE001CE41C /* PSChord.cpp */; };
+		434B1E02298FD4FE001CE41C /* PSChord.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 434B1DFF298FD4FE001CE41C /* PSChord.cpp */; };
+		434B1E03298FD4FE001CE41C /* PSChord.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 434B1E00298FD4FE001CE41C /* PSChord.hpp */; };
 		43A2544029280D8900D559D2 /* trace.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43A2543E29280D8900D559D2 /* trace.cpp */; };
 		43A2544129280D8900D559D2 /* trace.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 43A2543F29280D8900D559D2 /* trace.hpp */; };
 		43A2544529280E1600D559D2 /* config.h in Headers */ = {isa = PBXBuildFile; fileRef = 43A2544329280E1600D559D2 /* config.h */; };
@@ -117,6 +124,12 @@
 		4342FD1629268C78004E914F /* pypse.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = pypse.cpp; path = src/targets/pypse.cpp; sourceTree = "<group>"; };
 		4342FD1729268C78004E914F /* pypse.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = pypse.hpp; path = src/targets/pypse.hpp; sourceTree = "<group>"; };
 		4342FD1A2926B925004E914F /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
+		434B1DF5298ECCF0001CE41C /* PSConfig1.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = PSConfig1.hpp; path = src/spell/PSConfig1.hpp; sourceTree = "<group>"; };
+		434B1DF6298ECCF0001CE41C /* PSConfig1.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PSConfig1.cpp; path = src/spell/PSConfig1.cpp; sourceTree = "<group>"; };
+		434B1DFA298ED394001CE41C /* PSConfig2.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = PSConfig2.cpp; path = src/spell/PSConfig2.cpp; sourceTree = "<group>"; };
+		434B1DFB298ED394001CE41C /* PSConfig2.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = PSConfig2.hpp; path = src/spell/PSConfig2.hpp; sourceTree = "<group>"; };
+		434B1DFF298FD4FE001CE41C /* PSChord.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = PSChord.cpp; path = src/spell/PSChord.cpp; sourceTree = "<group>"; };
+		434B1E00298FD4FE001CE41C /* PSChord.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = PSChord.hpp; path = src/spell/PSChord.hpp; sourceTree = "<group>"; };
 		436C6C3D2924016F00152D8C /* pse.cpython-310-darwin.so */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = "pse.cpython-310-darwin.so"; sourceTree = BUILT_PRODUCTS_DIR; };
 		436C6C4D2924023100152D8C /* NoteName.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = NoteName.hpp; path = src/pitch/NoteName.hpp; sourceTree = "<group>"; };
 		43A2543E29280D8900D559D2 /* trace.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = trace.cpp; path = src/general/trace.cpp; sourceTree = "<group>"; };
@@ -198,6 +211,10 @@
 				43ABA52129242418002AC1D4 /* PSConfig0.cpp */,
 				43ABA51B29242418002AC1D4 /* PSConfig.hpp */,
 				43ABA51729242417002AC1D4 /* PSConfig.cpp */,
+				434B1DF5298ECCF0001CE41C /* PSConfig1.hpp */,
+				434B1DF6298ECCF0001CE41C /* PSConfig1.cpp */,
+				434B1DFB298ED394001CE41C /* PSConfig2.hpp */,
+				434B1DFA298ED394001CE41C /* PSConfig2.cpp */,
 				43ABA51A29242417002AC1D4 /* PSBag.hpp */,
 				43ABA51329242417002AC1D4 /* PSBag.cpp */,
 				43ABA51429242417002AC1D4 /* PSVector.hpp */,
@@ -215,6 +232,8 @@
 			children = (
 				4315862E2983E89B00918B1B /* PSEnum.hpp */,
 				4315862B2983E89B00918B1B /* PSEnum.cpp */,
+				434B1E00298FD4FE001CE41C /* PSChord.hpp */,
+				434B1DFF298FD4FE001CE41C /* PSChord.cpp */,
 				4315862C2983E89B00918B1B /* PSM21Enum.hpp */,
 				4315862F2983E89B00918B1B /* PSM21Enum.cpp */,
 				431586292983E89B00918B1B /* PSRawEnum.hpp */,
@@ -353,11 +372,13 @@
 				43ABA53029242418002AC1D4 /* PSConfig0.hpp in Headers */,
 				43ABA52B29242418002AC1D4 /* PSConfig.hpp in Headers */,
 				43ABA52A29242418002AC1D4 /* PSBag.hpp in Headers */,
+				434B1DFE298ED394001CE41C /* PSConfig2.hpp in Headers */,
 				43ABA52429242418002AC1D4 /* PSVector.hpp in Headers */,
 				43ABA53229242418002AC1D4 /* PSTable.hpp in Headers */,
 				43ABA52C29242418002AC1D4 /* PSPath.hpp in Headers */,
 				431586362983E89B00918B1B /* PSEnum.hpp in Headers */,
 				431586342983E89B00918B1B /* PSM21Enum.hpp in Headers */,
+				434B1E03298FD4FE001CE41C /* PSChord.hpp in Headers */,
 				4315863A2983EDD900918B1B /* PSRawEnum.hpp in Headers */,
 				431586382983E89B00918B1B /* PSNoteEnum.hpp in Headers */,
 				432EF6AE292D405400C620CF /* Speller.hpp in Headers */,
@@ -451,6 +472,7 @@
 				43ABA50C292423E8002AC1D4 /* Fifths.cpp in Sources */,
 				430CDFF12924E6D800A84650 /* KeyFifth.cpp in Sources */,
 				43ABA509292423E8002AC1D4 /* Ton.cpp in Sources */,
+				434B1DF8298ECCF1001CE41C /* PSConfig1.cpp in Sources */,
 				432657E3294E2FB100515080 /* Weber.cpp in Sources */,
 				43ABA52E29242418002AC1D4 /* AccidentState.cpp in Sources */,
 				43DD95492945E223006DC553 /* PSCost.cpp in Sources */,
@@ -458,10 +480,11 @@
 				43ABA52729242418002AC1D4 /* PSConfig.cpp in Sources */,
 				43ABA52329242418002AC1D4 /* PSBag.cpp in Sources */,
 				43ABA52529242418002AC1D4 /* PSVector.cpp in Sources */,
+				434B1E01298FD4FE001CE41C /* PSChord.cpp in Sources */,
 				43ABA52F29242418002AC1D4 /* PSTable.cpp in Sources */,
+				434B1DFC298ED394001CE41C /* PSConfig2.cpp in Sources */,
 				43ABA52629242418002AC1D4 /* PSPath.cpp in Sources */,
 				431586332983E89B00918B1B /* PSEnum.cpp in Sources */,
-				431586372983E89B00918B1B /* PSM21Enum.cpp in Sources */,
 				431586352983E89B00918B1B /* PSRawEnum.cpp in Sources */,
 				432EF6AD292D405400C620CF /* Speller.cpp in Sources */,
 				43B4939B2948D9F9006435B1 /* pypse.cpp in Sources */,
@@ -472,14 +495,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				434B1DFD298ED394001CE41C /* PSConfig2.cpp in Sources */,
 				43FBEAC62930CEDD008FC486 /* trace.cpp in Sources */,
 				43FBEAC72930CEDD008FC486 /* NoteName.cpp in Sources */,
 				43FBEAC82930CEDD008FC486 /* Accidental.cpp in Sources */,
 				43FBEAC92930CEDD008FC486 /* MidiNum.cpp in Sources */,
 				43FBEACA2930CEDD008FC486 /* Enharmonic.cpp in Sources */,
 				43FBEACB2930CEDD008FC486 /* Fifths.cpp in Sources */,
+				434B1E02298FD4FE001CE41C /* PSChord.cpp in Sources */,
 				43FBEACC2930CEDD008FC486 /* KeyFifth.cpp in Sources */,
 				43FBEACD2930CEDD008FC486 /* Ton.cpp in Sources */,
+				434B1DF9298ED0A0001CE41C /* PSConfig1.cpp in Sources */,
 				432657E4294E2FB100515080 /* Weber.cpp in Sources */,
 				43FBEACE2930CEDD008FC486 /* AccidentState.cpp in Sources */,
 				43DD954A2945E223006DC553 /* PSCost.cpp in Sources */,

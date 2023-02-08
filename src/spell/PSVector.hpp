@@ -148,8 +148,7 @@ private:
     
     /// debug counter: nb of tie break fails.
     unsigned int _tiebfail;
-    
-    
+
 private:
 
     /// access private PS enumerator

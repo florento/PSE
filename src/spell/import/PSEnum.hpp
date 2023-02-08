@@ -110,14 +110,18 @@ public:
     /// @param i index of note.
     bool outside(size_t i) const;
 
+    /// midi key number in 0..128 of the note of the given index.
+    /// @param i index of a note. must be inside the interval of this enumerator.
+    virtual unsigned int midipitch(size_t i) const = 0;
+
     /// number of measure the note of given index belongs to.
     /// midi key number in 0..128 of the note of the given index.
     /// @param i index of a note. must be inside the interval of this enumerator.
     virtual long measure(size_t i) const = 0;
 
-    /// midi key number in 0..128 of the note of the given index.
+    /// whether the note of given index is simultaneous with the next note.
     /// @param i index of a note. must be inside the interval of this enumerator.
-    virtual unsigned int midipitch(size_t i) const = 0;
+    virtual bool simultaneous(size_t i) const = 0;
 
     /// rename the note of given index
     /// @param name note name in 'A'..'G'.

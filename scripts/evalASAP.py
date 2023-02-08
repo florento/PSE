@@ -73,24 +73,53 @@ lp = get_parts(b)
 lm0 = lp[0].getElementsByClass(m21.stream.Measure)
 lm1 = lp[1].getElementsByClass(m21.stream.Measure)
 
-stat = ps.PSStats()
-root='../../../Datasets/ASAP/'
-bl = Beethoven_list(root)
-(i, file) = bl[4] # 21.1
-score = m21.converter.parse(file)
-lp = score.getElementsByClass(m21.stream.Part)
-k0 = ps.get_key(lp[1])
 
 
-import pse
-sp = pse.Speller()
-sp.debug(True)
-ps.add_tons(0, sp)
-ln0 = ps.extract_notes(lp[0])
-ln1 = ps.extract_notes(lp[1])
-ps.add_notes(ln1[:61], sp)
-#sp.respell()
+#import pse
 
 #stat.eval_score(b, 0)  # 0 : standard list of 26 tons
 #stat.show()
+
+# Waldstein chords in 2 first bars
+def Waldstein():
+    stat = ps.PSStats()
+    root='../../../Datasets/ASAP/'
+    bl = Beethoven_list(root)
+    (i, file) = bl[4] # 21.1
+    score = m21.converter.parse(file)
+    lp = score.getElementsByClass(m21.stream.Part)
+    k0 = ps.get_key(lp[1])
+    ln0 = ps.extract_part(lp[0])
+    ln1 = ps.extract_part(lp[1])
+    for (n, b, s) in ln1[:61]:   
+        a = 'sp.add('
+        a += str(n.pitch.midi)
+        a += ', '
+        a += str(b)
+        a += ', '
+        a += 'true' if s else 'false'
+        a += ');'
+        print(a)        
+        #print('sp.add(', n.pitch.midi, ',', b, ',', ('true' if s else 'false)'), ')')
+    #sp = ps.Speller()
+    #sp.debug(True)
+    #ps.add_tons(0, sp)
+    #sp.add_notes(ln1[:61], sp)
+    #sp.respell()
+
+
+
+#file = dataset[470]
+#print(file)
+#score = m21.converter.parse(file.as_posix())
+#lp = score.getElementsByClass(m21.stream.Part)
+#part = lp[0]
+#ln = ps.extract_notes(part)
+#sp = ps.Speller()
+#ps.add_notes(ln, sp)
+#sp.respell()
+#
+# for p in ln:
+#    print('sp.add(', p[0].pitch.midi, ',', p[1],')')
+    
 

@@ -19,6 +19,8 @@
 namespace pse {
 
 /// Cost model for the ordering of configuration of the PS algorithm.
+// see Note Spelling Conventions in Behind Bars (page 85)
+
 struct PSCost
 {
 public:
@@ -46,49 +48,67 @@ public:
     bool operator>(const PSCost& rhs) const;
 
     /// access cumulated number of accidents.
-    inline int getAccid() const { return _accid; }
+    inline size_t getAccid() const { return _accid; }
     
     /// modify cumulated number of accidents.
-    inline void incrAccid(int a=1) { _accid += a; }
+    inline void incrAccid(size_t a=1) { _accid += a; }
     
     /// access cumulated distance to tonic.
-    inline int getDist() const { return _dist; }
+    inline size_t getDist() const { return _dist; }
 
     /// modify cumulated distance to tonic.
-    inline void incrDist(int d=1) { _dist += d; }
+    inline void incrDist(size_t d=1) { _dist += d; }
 
     /// cumulated number of non-conjoint moves.
-    inline int getDisj() const { return _disj; }
+    inline size_t getDisj() const { return _disj; }
 
     /// modify number of non-conjoint moves.
-    inline void incrDisj(int d=1) { _disj += d; }
+    inline void incrDisj(size_t d=1) { _disj += d; }
     
     /// cumulated number of accidentals with color different from global ton.
-    inline int getColor() const { return _color; }
+    inline size_t getColor() const { return _color; }
 
     /// modify number of accidentals with color different from global ton.
-    inline void incrColor(int d=1) { _color += d; }
+    inline void incrColor(size_t d=1) { _color += d; }
     
     void print(std::ostream& o) const;
 
 private:
     
-    /// cumulated number of accidents in the minimal path to this config.
-    unsigned int _accid;
+    /// cumulated number of printed accidentals
+    /// in the minimal path to this config.
+    size_t _accid; // unsigned int
     
     /// cumulated distance to a conjectured local tonality
     /// in the minimal path to this config.
-    unsigned int _dist;
+    size_t _dist;
 
     /// cumulated number of non-conjoint moves
     /// in the minimal path to this config.
-    unsigned int _disj;
+    /// conjoint move = adjacent pitch letters (stepwise figures as a scale)
+    // replace by augmented and diminished intervals ?
+    size_t _disj;
 
     /// cumulated number of accidentals with color different from global ton
     /// in the minimal path to this config.
-    unsigned int _color;
+    size_t _color;
 
 };
+
+
+// Note Spelling Conventions in Behind Bars (page 85)
+// other rules
+//
+// - Use the most familiar intervals - perfect, minor and major
+//   rather than augmented and diminished intervals.
+//   melodic and harmonic intervals ?
+//
+// - Chromatic-scale figures use sharps to ascend, flats to descend
+//
+// - Spell stepwise figures as a scale, i.e. as adjacent pitch letters.
+//   e.g. D#, E, Fb and not Eb, Enat, E#
+
+
 
 
 std::ostream& operator<<(std::ostream& o, const PSCost& c);

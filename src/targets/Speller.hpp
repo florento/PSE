@@ -57,7 +57,9 @@ public:
     /// add a new input note to the list of notes to spell.
     /// @param note MIDI key of the new input note.
     /// @param bar bar number of the new input note.
-    void add(int note, int bar);
+    /// @param simult whether the new input note is simultaneous with the
+    /// next note.
+    void add(int note, int bar, bool simult=false);
     
     /// number of tonalities considered for pitch spelling.
     size_t nbTons() const;

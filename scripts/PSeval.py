@@ -37,6 +37,7 @@ print(pse.excuseme)
 # a barred note is a pair made of 
 # - a note and 
 # - the number of the  bar it belongs to
+# - a flag saying whether the onset of the note is the same as the onset of the nest note
 
 # Key object is the more expressive (tonic, mode...)
 # KeySignature object is just the number of sharps (> 0) or flats, < 0)
@@ -46,12 +47,10 @@ def extract_keys(part):
     kl = fpart.getElementsByClass([m21.key.Key, m21.key.KeySignature])
     return kl
 
-
 def key_changes(part):
     """check whether a music21 part contains one key signature change"""
     kl = extract_keys(part)
     return (len(kl) - 1)
-
 
 def get_key(part):
     """return the key signature of a music21 part, if unique, otherwise None"""
@@ -61,7 +60,6 @@ def get_key(part):
     else:
         return None
 
-
 def count_notes(part):
     """return the number of notes in a music21 part"""    
     fpart = part.flatten()
@@ -70,18 +68,15 @@ def count_notes(part):
         nn += len(c)
     return nn    
 
-
 def count_chords(part):
     """return the number of chords in a music21 part"""    
     cl = part.getElementsByClass(m21.chord.Chord)
     return len(cl) 
 
-
 def count_measures(part):
     """return the number of measures in a music21 part"""    
     ml = part.getElementsByClass(m21.stream.Measure)
     return len(ml) 
-
 
 def extract_notes(part):
     """extract the list of barred notes occurring in a music21 part"""    
@@ -108,7 +103,53 @@ def extract_notes(part):
     #print('max notes per bar = ', max_notes, 'in bar: ', max_bar)
     return ln
 
+def insert_note(note, date, next_note, next_date, bar, note_list):
+    """insert note as a barred note at the end of note_list"""
+    if (note == None):
+        return
+    else:
+        assert(isinstance(note, m21.note.Note))
 
+    if (next_note == None):   
+        note_list.append((note, bar, False))  # add a triplet
+    else:        
+        assert(isinstance(next_note, m21.note.Note))
+        # grace notes are spelled separatly
+        if note.duration.isGrace:
+            note_list.append((note, bar, False)) 
+        # other simultaneous notes (notes in chords) are spelled simultaneously
+        else:            
+            note_list.append((note, bar, (date == next_date))) #(note.offset == next_note.offset)))
+
+def extract_measure(m, b):
+    """extract the list of barred notes occurring in a music21 part"""    
+    assert(isinstance(m, m21.stream.Measure))
+    ln = []
+    prev_n = None        
+    prev_offset = 0              # onset of prev note in measure       
+    for e in m.flatten():      # merge voices in measure
+        if isinstance(e, m21.note.Note):
+            insert_note(prev_n, prev_offset, e, e.offset, b, ln)
+            prev_n = e
+            prev_offset = e.offset
+        elif isinstance(e, m21.chord.Chord):
+            for cn in e:
+                assert(isinstance(cn, m21.note.Note))
+                insert_note(prev_n, prev_offset, cn, e.offset, b, ln)
+                prev_n = cn
+                prev_offset = e.offset
+    insert_note(prev_n, prev_offset, None, 0, b, ln)      # insert last note
+    return ln
+    
+def extract_part(part):
+    """extract the list of barred notes occurring in a music21 part"""    
+    mes = part.getElementsByClass(m21.stream.Measure)
+    ln = []
+    b = 0
+    for m in mes:
+        ln += extract_measure(m, b)
+        b  += 1
+    return ln
 
 def extract_onlynotes(part):
     """extract the list of barred notes occurring in a music21 part"""    
@@ -123,7 +164,6 @@ def extract_onlynotes(part):
         b  += 1
     return ln
     
-
 def add_notes(ln, sp):
     """feed a speller with a list of (MIDI) notes with bar number"""
     i = 0    
@@ -131,7 +171,6 @@ def add_notes(ln, sp):
         #print('add', i, ':', n.pitch.midi, b, flush=True)
         sp.add(midi=n.pitch.midi, bar=b)
         i = i+1
-        
         
 def add_tons(tons, sp):
     """add tonalities to a speller"""
@@ -148,7 +187,6 @@ def add_tons(tons, sp):
             sp.add_ton(k, pse.Mode.Minor)
 
         
-
 ###############
 ##           ##
 ## PS to M21 ##
@@ -166,13 +204,11 @@ def get_pitches(sp):
         pl.append(p)
     return pl
 
-
 def mk_pitch(name, accid, octave):
     """construct a music21.pitch from a PSE NoteName, a PSE Accidental ad an octave number"""    
     return  m21.pitch.Pitch(step=mk_step(name), 
                             accidental=mk_accid(accid), 
                             octave=octave)
-
 
 def mk_step(nn):
     """cast a PSE NoteName into a music21 character"""
@@ -193,7 +229,6 @@ def mk_step(nn):
     else:
         print('Invalid argument')
         return 'X'
-
 
 def mk_accid(a):
     """cast a PSE Accidental into a music21.pitch.Accidental"""
@@ -234,7 +269,6 @@ def compare_name(n, pse_name):
     """compare the name of a music21 note and a PSE note name"""    
     return (n.step == mk_step(pse_name))
 
-            
 def compare_accid(n, pse_accid, print_flag):
     """compare the accidental of a music21 note and a PSE accidental"""    
     if (pse_accid == pse.Accid.Natural):
@@ -247,8 +281,6 @@ def compare_accid(n, pse_accid, print_flag):
             return False
     else:
         return (n.pitch.accidental == mk_accid(pse_accid))
-
-
 
 def diff(ln, sp):
     """compare a list of barred notes and list of notes in speller"""    
@@ -269,8 +301,6 @@ def diff(ln, sp):
             i = i+1
             ld = ld+[d]
     return ld
-
-
 
 def diffrec(ln, sp, i, ld):
     if (len(ln) == 0):
@@ -295,7 +325,6 @@ def diff_notes(ln, lp):
         print('ERROR (diff_notes)')
         return []
 
-
 def diff_notes1(ln, lp, i, ld):
     if (len(ln) == 0):
         return ld
@@ -306,7 +335,6 @@ def diff_notes1(ln, lp, i, ld):
         else:
             return diff_notes1(ln[1:], lp[1:], i+1, ld+[i])
 
-
 def spellable(part):
     """the given part can be pitch spelled"""
     if (get_key(part) == None):
@@ -316,7 +344,6 @@ def spellable(part):
     #    print('chords', end =' ')
     #    return False        
     return True
-
 
 
 #########################
@@ -331,7 +358,7 @@ def spellable(part):
 def pseval_part(part, nbtons=0, debug=False):
     """evaluate spelling for one part in a score"""
     k0 = get_key(part)
-    ln = extract_notes(part)
+    ln = extract_part(part)
     if (count_notes(part) != len(ln)):
         print('ERROR',  count_notes(part), len(ln))
         return
@@ -339,7 +366,8 @@ def pseval_part(part, nbtons=0, debug=False):
     sp = pse.Speller()
     sp.debug(debug)
     add_tons(nbtons, sp)
-    add_notes(ln, sp)
+    for (n, b, s) in ln:   # note, bar number, simultaneous flag
+        sp.add(midi=n.pitch.midi, bar=b, simultaneous=s)
     sp.respell()
     if (sp.sig() == k0.sharps):
         print('global ton: OK:', '(', sp.sig(), '),', end=' ')
@@ -349,13 +377,12 @@ def pseval_part(part, nbtons=0, debug=False):
     print('diff:', len(ld), end='\n', flush=True)
     return (sp.sig(), ld)
 
-    
 def pseval_part1(self, part):
     """evaluate spelling for one part in a score"""
     self._global_parts += 1
     k0 = get_key(part)
     self._current_ks_gt = k0.sharps
-    ln = extract_notes(part)
+    ln = extract_part(part)
     #assert(count_notes(part) == len(ln))
     if (count_notes(part) != len(ln)):
         print('ERROR countnote =', count_notes(part), 'ln =', len(ln))
@@ -365,7 +392,9 @@ def pseval_part1(self, part):
     sp = pse.Speller()
     sp.debug(self.debug)       # debug flag for lib PSE
     add_tons(self.nbtons, sp)
-    add_notes(ln, sp)
+    #add_notes(ln, sp)
+    for (n, b, s) in ln:   # note, bar number, simultaneous flag
+        sp.add(midi=n.pitch.midi, bar=b, simultaneous=s)
     t0 = time.time()
     sp.respell()
     self._current_time = time.time() - t0
@@ -383,7 +412,6 @@ def pseval_part1(self, part):
         self._global_kserr += 1
     return ld
 
-
 # TBR
 def pseval_score(score, tons=0, debug=False):
     """evaluate spelling for all parts in a score"""
@@ -400,7 +428,6 @@ def pseval_score(score, tons=0, debug=False):
         else:
             print('cannot spell, skip', flush=True)
         
-
 def pseval_score1(self, score, sid, title='', composer=''):
     """evaluate spelling for all parts in a score"""
     lp = score.getElementsByClass(m21.stream.Part)
@@ -424,7 +451,6 @@ def pseval_score1(self, score, sid, title='', composer=''):
             self._table.append(self._gettuple())
         else:
             print('cannot spell, skip', flush=True)
-
 
 class PSStats:
     _UNDEF_KS = 99
@@ -547,9 +573,6 @@ class PSStats:
         tl.append(self._current_time)
         return tl
         
-
-    
-    
     
 #    k0 = get_key(part)
 #    print(k0, count_notes(part), 'notes,', count_measures(part), 'bars,', end = '\n')

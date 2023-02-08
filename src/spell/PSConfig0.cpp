@@ -11,7 +11,8 @@
 #include <cmath>        // std::abs
 
 #include "PSConfig0.hpp"
-#include "PSConfig.hpp"
+#include "PSConfig1.hpp"
+#include "PSConfig2.hpp"
 #include "Enharmonic.hpp"
 
 
@@ -145,14 +146,13 @@ void PSC0::succ(PSEnum& e, const Ton& ton, PSCQueue& q) const
         Accid accid = Enharmonics::accid(m, j);
         // case of 8 and (short list) 1, 3, 6, 10
         if (defined(name) && defined(accid))
-            q.push(std::make_shared<PSC>(*this, pm, name, accid, ton));
+            q.push(std::make_shared<PSC1>(*this, pm, name, accid, ton));
     }
 }
 
 
 // mv to PSBag ?
-void PSC0::succ(PSEnum& e, const Ton& ton, const Ton& lton,
-                PSCQueue& q) const
+void PSC0::succ(PSEnum& e, const Ton& ton, const Ton& lton, PSCQueue& q) const
 {
     // midi pitch of the note read for transition from this config
     unsigned int pm = e.midipitch(_id);
@@ -166,7 +166,7 @@ void PSC0::succ(PSEnum& e, const Ton& ton, const Ton& lton,
         Accid accid = Enharmonics::accid(m, j);
         // case of 8 and (short list) 1, 3, 6, 10
         if (defined(name) && defined(accid))
-            q.push(std::make_shared<PSC>(*this, pm, name, accid, ton, lton));
+            q.push(std::make_shared<PSC1>(*this, pm, name, accid, ton, lton));
     }
 }
 
