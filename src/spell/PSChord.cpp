@@ -36,19 +36,14 @@ PSChord::~PSChord()
 
 void PSChord::init()
 {
-    // initialize all bitvector to false
-    for (size_t c = 0; c < 12; ++c)
-    {
-        _occurences[c] =  std::vector<bool>(length(), false);
-    }
-
+    // trverse all notes in this sequence
     for (size_t i = first(); i < stop(); ++i)
     {
         unsigned int pm = _enum.midipitch(i);
         assert(0 <= pm);
         assert(pm <= 127);
-        int c = pm % 12; // chroma in 0..11
-        _occurences[c][i-first()] = true;
+        int c = pm % 12; // chroma (pitch class) of note, in 0..11
+        _occurences[c].push_back(i-first());
     }
 }
 
@@ -77,17 +72,10 @@ std::unique_ptr<PSEnum> PSChord::clone(size_t i0, size_t i1) const
 }
 
 
-unsigned int PSChord::occurences(unsigned int c) const
+size_t PSChord::occurences(unsigned int c) const
 {
     assert(c < 12);
-    const std::vector<bool>& v = _occurences[c];
-    // return std::count(v.begin(), v.end(), true);
-    unsigned int ret = 0;
-    for (auto i = v.begin(); i != v.end(); ++i)
-    {
-        if (*i == true) ++ret;
-    }
-    return ret;
+    return _occurences[c].size();
 }
 
 
@@ -120,7 +108,6 @@ size_t PSChord::firstNonSimult(const PSEnum& e, size_t i0)
             return i1 + 1;
     }
 }
-
 
 
 unsigned int PSChord::midipitch(size_t i) const

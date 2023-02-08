@@ -27,7 +27,7 @@
 namespace pse {
 
 /// sequence of simultaneous notes called a "chord".
-/// it can point notes in different voices or in one or several simultaneous
+/// It can point notes in different voices or in one or several simultaneous
 /// chords.
 class PSChord : public PSEnum
 {
@@ -104,9 +104,10 @@ public:
     
 private:
 
-    /// occurrences of each pitch class in the sequence of simultaneous notes.
-    // use std::vector<bool> because
-    std::array<std::vector<bool>, 12> _occurences;
+    /// seq of occurrences of each pitch class
+    /// in the sequence of simultaneous notes.
+    std::array<std::vector<size_t>, 12> _occurences;
+    //std::array<std::vector<bool>, 12> _occurences;
 
     // number of occurrence of each pitch class in thos sequence of simultaneous
     // notes. stored separatly from occurences because std::vector<bool> does
