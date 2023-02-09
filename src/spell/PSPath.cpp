@@ -108,11 +108,29 @@ void PSP::record_path(const PSC0& c)
     assert(co);
     while (! co->initial())
     {
-        const PSC1* com = dynamic_cast<const PSC1*>(co);
-        assert(com);
-        _names.insert(_names.begin(), com->name()); // push_front (copy)
-        _accids.insert(_accids.begin(), com->accidental());
-        _prints.insert(_prints.begin(), com->printed());
+        if (co->fromNote())
+        {
+            const PSC1* com = dynamic_cast<const PSC1*>(co);
+            assert(com);
+            _names.insert(_names.begin(), com->name());  // push_front (copy)
+            _accids.insert(_accids.begin(), com->accidental());
+            _prints.insert(_prints.begin(), com->printed());
+        }
+        else
+        {
+            assert(co->fromChord());
+            const PSC2* com = dynamic_cast<const PSC2*>(co);
+            assert(com);
+            // assert(com->size() > 1);
+            std::vector<Accid> accids;
+            for (size_t i = 0; i < com->size(); ++i)
+                accids.push_back(com->accidental(i));
+
+            _names.insert(_names.begin(), com->cbeginName(), com->cendName());
+            _accids.insert(_accids.begin(), accids.cbegin(), accids.cend());
+            _prints.insert(_prints.begin(), com->cbeginPrint(), com->cendPrint());
+        }
+        
         co = co->previous(); // NULL if co is initial
         assert(co);
     }

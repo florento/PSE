@@ -79,9 +79,17 @@ public:
     /// configs have different list of accidentals
     bool operator!=(const PSC0& rhs) const;
     
-    /// always true: PSC0 are initial configurations in a best path.
+    /// this configuration is initial in a best path.
+    /// always true for this class.
     virtual bool initial() const;
     
+    /// this configuration was reached by reading a single note.
+    virtual bool fromNote() const;
+
+    /// this configuration was reached by reading
+    /// several simultaneous notes (a "chord").
+    virtual bool fromChord() const;
+
     /// previous config in shortest path to this config,
     /// or null if there are none.
     /// every config has at most one predecessor.
@@ -101,27 +109,28 @@ public:
     inline const PSCost& cost() const { return _cost; }
     
     /// cumulated number of accidents in the minimal path to this config.
-    inline int accidentals() const { return _cost.getAccid(); }
+    size_t accidentals() const { return _cost.getAccid(); }
     
     /// cumulated distance to tonic in the minimal path to this config.
     /// @todo remove
-    inline int dist() const { return _cost.getDist(); }
+    size_t dist() const { return _cost.getDist(); }
 
     /// cumulated number of non-conjoint moves in the minimal path to this config.
     /// @todo remove
-    inline int disjoint() const { return _cost.getDisj(); }
+    size_t disjoint() const { return _cost.getDisj(); }
 
     /// allocate every config reached by one transition from this config,
-    /// when reading the given pitch, and push it to the given queue.
-    // @param p pitch of note read to reach this configuration.
+    /// when reading one pitch or several simultaneous pitchs,
+    /// and push it to the given queue.
     /// @param e an enumerator of notes for computing transitions from
     /// this config.
     /// @param ton conjectured main (global) tonality (key signature).
     /// @param q queue receiving the target configs.
     void succ(PSEnum& e, const Ton& ton, PSCQueue& q) const;
-
+    
     /// allocate every config reached by one transition from this config,
-    /// when reading the given pitch, and push it to the given queue.
+    /// when reading one pitch or several simultaneous pitchs,
+    /// and push it to the given queue.
     /// @param e an enumerator of notes for computing transitions from
     /// this config.
     /// @param ton conjectured main (global) tonality (key signature).
@@ -169,6 +178,44 @@ protected:
     // cumulated number of non-conjoint moves
     // in the minimal path to this config.
     // unsigned int _disj;
+    
+private:
+    
+    /// allocate every config reached by one transition from this config,
+    /// when reading one pitch and push it to the given queue.
+    /// @param e an enumerator of notes for computing transitions from
+    /// this config.
+    /// @param ton conjectured main (global) tonality (key signature).
+    /// @param q queue receiving the target configs.
+    void succ1(PSEnum& e, const Ton& ton, PSCQueue& q) const;
+
+    /// allocate every config reached by one transition from this config,
+    /// when reading several simultaneous pitchs (chord) and push it to
+    /// the given queue.
+    /// @param e an enumerator of notes for computing transitions from
+    /// this config.
+    /// @param ton conjectured main (global) tonality (key signature).
+    /// @param q queue receiving the target configs.
+    void succ2(PSEnum& e, const Ton& ton, PSCQueue& q) const;
+    
+    /// allocate every config reached by one transition from this config,
+    /// when reading one pitch and push it to the given queue.
+    /// @param e an enumerator of notes for computing transitions from
+    /// this config.
+    /// @param ton conjectured main (global) tonality (key signature).
+    /// @param lton conjectured local tonality.
+    /// @param q queue receiving the target configs.
+    void succ1(PSEnum& e, const Ton& ton, const Ton& lton, PSCQueue& q) const;
+
+    /// allocate every config reached by one transition from this config,
+    /// when reading several simultaneous pitchs (chord), and push it to
+    /// the given queue.
+    /// @param e an enumerator of notes for computing transitions from
+    /// this config.
+    /// @param ton conjectured main (global) tonality (key signature).
+    /// @param lton conjectured local tonality.
+    /// @param q queue receiving the target configs.
+    void succ2(PSEnum& e, const Ton& ton, const Ton& lton, PSCQueue& q) const;
 
 };
 

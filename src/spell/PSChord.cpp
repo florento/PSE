@@ -36,7 +36,7 @@ PSChord::~PSChord()
 
 void PSChord::init()
 {
-    // trverse all notes in this sequence
+    // traverse all notes in this sequence
     for (size_t i = first(); i < stop(); ++i)
     {
         unsigned int pm = _enum.midipitch(i);

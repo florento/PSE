@@ -104,7 +104,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "EB1AB53F-97BC-4603-B5C6-F3E4946F181B"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "src/spell/PSTable.cpp"
@@ -136,7 +136,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "D93338D3-CF13-40C0-A399-8AEE7B4275D0"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "src/spell/PSBag.cpp"
@@ -145,6 +145,102 @@
             startingLineNumber = "143"
             endingLineNumber = "143"
             landmarkName = "PSB::init(ton, lton, fsucc)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "A9D11F12-38B9-4AAA-885F-C66E36B284D7"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "src/spell/PSConfig0.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "150"
+            endingLineNumber = "150"
+            landmarkName = "PSC0::succ(e, ton, q)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "8E38EA9D-DCEF-46A3-BFB9-FFE463664C1D"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "src/spell/PSConfig0.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "185"
+            endingLineNumber = "185"
+            landmarkName = "PSC0::succ2(e, ton, q)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "AEE63674-CB3C-40E1-A13A-C749AF259881"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "src/spell/PSConfig2.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "34"
+            endingLineNumber = "34"
+            landmarkName = "PSC2::PSC2(c, name, accid, ton)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "AEE63674-CB3C-40E1-A13A-C749AF259881 - 498dee5c1d27b845"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "pse::PSC2::PSC2(pse::PSC2 const&amp;, pse::NoteName const&amp;, pse::Accid const&amp;, pse::Ton const&amp;)"
+                  moduleName = "debugpse"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/jacquema/Code/PSE/src/spell/PSConfig2.cpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "34"
+                  endingLineNumber = "34"
+                  offsetFromSymbolStart = "49">
+               </Location>
+               <Location
+                  uuid = "AEE63674-CB3C-40E1-A13A-C749AF259881 - 498dee5c1d27b845"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "pse::PSC2::PSC2(pse::PSC2 const&amp;, pse::NoteName const&amp;, pse::Accid const&amp;, pse::Ton const&amp;)"
+                  moduleName = "debugpse"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/jacquema/Code/PSE/src/spell/PSConfig2.cpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "34"
+                  endingLineNumber = "34"
+                  offsetFromSymbolStart = "49">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "F034EA0B-6C46-49F3-BD1C-0CFAAA3E5AFE"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "src/spell/PSConfig2.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "23"
+            endingLineNumber = "23"
+            landmarkName = "PSC2::PSC2(c, e)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
