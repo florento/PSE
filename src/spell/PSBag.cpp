@@ -73,8 +73,8 @@ PSCCompare PSCdist =
 PSB::PSB(const Ton& ton, PSEnum& e):
 _enum(e),
 _bests(),  // empty
-_cost()   // zero
-//_visited() // empty
+_cost(),   // zero
+_visited() // empty
 {
     if (! e.empty())
         init(ton, ton, false); // second arg. ton is ignored
@@ -85,8 +85,8 @@ _cost()   // zero
 PSB::PSB(const Ton& ton, const Ton& lton, PSEnum& e):
 _enum(e),
 _bests(),   // empty
-_cost()    // zero
-//_visited()  // empty
+_cost(),    // zero
+_visited()  // empty
 {
     if (! e.empty())
         init(ton, lton, true);
@@ -112,7 +112,7 @@ PSB::~PSB()
     //{
     //    if(c) delete c;
     // }
-    //_visited.clear();
+    _visited.clear();
 }
 
 
@@ -138,7 +138,6 @@ void PSB::init(const Ton& ton, const Ton& lton, bool fsucc)
         assert(c);
         assert(_enum.first() <= c->id());
         assert(c->id() <= _enum.stop());
-        //_visited.push_back(c); // keep c for deletion.
         q.pop(); // remove c
         
         // the path c is complete
@@ -175,6 +174,9 @@ void PSB::init(const Ton& ton, const Ton& lton, bool fsucc)
         // complete the path of c with its successors
         else
         {
+            // c will bbr the prev of the succ computed here,
+            // keep it for rollback or best path.
+            _visited.push_back(c);
             // add every possible successor configs to q
             if (fsucc)
                 c->succ(_enum, ton, lton, q);

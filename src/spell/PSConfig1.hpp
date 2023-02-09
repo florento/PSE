@@ -51,7 +51,7 @@ public:
     /// @param name chosen name for the received pitch, in 0..6 (0 is 'C', 6 is 'B').
     /// @param accid chosen alteration for the received pitch, in -2..2.
     /// @param ton conjectured main (global) tonality (key signature).
-    PSC1(const PSC0& c, unsigned int mp,
+    PSC1(const PSC0* c, unsigned int mp,
          const NoteName& name,
          const Accid& accid,
          const Ton& ton);
@@ -67,7 +67,7 @@ public:
     /// @param acc chosen alteration for the received pitch, in -2..2.
     /// @param ton conjectured main (global) tonality (key signature).
     /// @param lton conjectured local tonality.
-    PSC1(const PSC0& c, unsigned int mp, const NoteName& name,      const Accid& acc,
+    PSC1(const PSC0* c, unsigned int mp, const NoteName& name,      const Accid& acc,
          const Ton& ton, const Ton& lton);
 
     /// copy constructor

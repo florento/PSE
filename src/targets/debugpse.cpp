@@ -36,6 +36,8 @@ int main(int argc, const char* argv[])
     
     pse::Speller sp = pse::Speller();
        
+    //LG128(sp);
+    // LG470(sp);
     Beethoven_21_1(sp);
     
     std::cout << sp.size() << " notes" << std::endl;

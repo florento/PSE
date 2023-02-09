@@ -17,10 +17,13 @@ namespace pse {
 
 
 // copy and update
-PSC::PSC(const PSC0& c):
-PSC0(c),
-_pred(&c)
-{ }
+PSC::PSC(const PSC0* c):
+PSC0(*c),
+_pred(c)
+{
+    assert(_pred);
+    assert(_pred->initial() || _pred->fromNote() || _pred->fromChord());
+}
 
 
 PSC::PSC(const PSC& c):
@@ -73,9 +76,13 @@ bool PSC::initial() const
 
 const PSC0* PSC::previous() const
 {
+    //assert(_pred.get());
+    assert(_pred);
+    assert(_pred->initial() || _pred->fromNote() || _pred->fromChord());
     return _pred;
 }
-    
+
+
 //void PSC::succ(PSEnum& _enum, const Ton& ton, PSCQueue& q) const
 //{
 //

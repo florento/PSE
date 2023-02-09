@@ -14,7 +14,7 @@ namespace pse {
 
 
 //PSC2::PSC2(const PSC0& c, const PSChord& e):
-PSC2::PSC2(const PSC0& c, PSEnum& e, size_t i0):
+PSC2::PSC2(const PSC0* c, PSEnum& e, size_t i0):
 PSC(c),
 _chord(std::make_shared<const PSChord>(e, i0)),
 _current(firstChroma()),             // jump to the first non-empty pitch class

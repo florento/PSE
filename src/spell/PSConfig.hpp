@@ -36,7 +36,7 @@ public:
 
     /// target PS config for a transition from given (previous) config.
     /// @param c previous config (origin), to be updated with the transition.
-    PSC(const PSC0& c);
+    PSC(const PSC0* c);
 
     /// copy constructor
     PSC(const PSC& c);
@@ -73,6 +73,7 @@ protected:
         
     /// previous config in shortest path to this config.
     const PSC0* _pred;
+    //std::shared_ptr<const PSC0> _pred;
     
 };
 

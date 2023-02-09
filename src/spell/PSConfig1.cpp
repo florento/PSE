@@ -17,7 +17,7 @@ namespace pse {
 
 
 // copy and update
-PSC1::PSC1(const PSC0& c, unsigned int mp,
+PSC1::PSC1(const PSC0* c, unsigned int mp,
            const NoteName& name, const Accid& accid,
            const Ton& ton):
 PSC(c),
@@ -25,8 +25,9 @@ _midi(mp),
 _name(name),
 _print(false)
 {
+    assert(c);
     _print = _state.update(name, accid);
-    _id = c.id()+1; // next note in enum
+    _id = c->id()+1; // next note in enum
     assert(defined(accid));
 
     // count the cost
@@ -88,11 +89,12 @@ _print(false)
 }
 
 
-PSC1::PSC1(const PSC0& c, unsigned int mp,
+PSC1::PSC1(const PSC0* c, unsigned int mp,
            const NoteName& name, const Accid& accid,
            const Ton& ton, const Ton& lton):
 PSC1(c, mp, name, accid, ton)
 {
+    assert(c);
     // complete the update
 
     // distance to conjectured local ton.

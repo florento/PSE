@@ -49,7 +49,7 @@ public:
     /// @param c previous config, to be updated with the received chord.
     /// @param e note enumerator containing the notes of the read chord.
     /// @param i0 index of the first note of chord in the given enumerator.
-    PSC2(const PSC0& c, PSEnum& e, size_t i0);
+    PSC2(const PSC0* c, PSEnum& e, size_t i0);
     //PSC2(const PSC0& c, const PSChord& e);
 
     /// target PS config for a transition from given (previous) config,

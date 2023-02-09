@@ -15,13 +15,12 @@
 namespace pse {
 
 
-
 PSP::PSP(const PSC0& psc, PSEnum& e):
 _enum(e),
 _names(),   // initially empty
 _accids(),
 _prints(),
-_cost(psc.accidentals()),
+_cost(psc.cost()),
 _computed(false)
 {
     TRACE("PSP: computing best path for {}-{}", e.first(), e.stop());
@@ -103,7 +102,7 @@ bool PSP::printed(size_t i) const
 void PSP::record_path(const PSC0& c)
 {
     assert(c.id() == _enum.stop());
-    assert(_cost == c.accidentals());
+    assert(_cost == c.cost());
     const PSC0* co = &c;
     assert(co);
     assert(co->initial() || co->fromNote() || co->fromChord());
@@ -132,8 +131,10 @@ void PSP::record_path(const PSC0& c)
             _prints.insert(_prints.begin(), com->cbeginPrint(), com->cendPrint());
         }
         
+        assert(co->previous());
         co = co->previous(); // NULL if co is initial
         assert(co);
+        assert(co->initial() || co->fromNote() || co->fromChord());
     }
     
     assert(_names.size()  == _enum.length()); // number of notes

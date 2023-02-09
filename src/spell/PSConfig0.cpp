@@ -167,7 +167,7 @@ void PSC0::succ1(PSEnum& e, const Ton& ton, PSCQueue& q) const
         Accid accid = Enharmonics::accid(m, j);
         // case of 8 and (short list) 1, 3, 6, 10
         if (defined(name) && defined(accid))
-            q.push(std::make_shared<PSC1>(*this, pm, name, accid, ton));
+            q.push(std::make_shared<PSC1>(this, pm, name, accid, ton));
     }
 }
 
@@ -177,7 +177,7 @@ void PSC0::succ2(PSEnum& e, const Ton& ton, PSCQueue& q) const
     //PSChord c(e, _id);
     //assert(c.size() > 1);
     std::stack<std::shared_ptr<const PSC2>> cs;
-    cs.push(std::make_shared<const PSC2>(*this, e, _id));     // initial config
+    cs.push(std::make_shared<const PSC2>(this, e, _id));     // initial config
     
     while (! cs.empty())
     {
@@ -231,7 +231,7 @@ void PSC0::succ1(PSEnum& e, const Ton& ton, const Ton& lton, PSCQueue& q) const
         Accid accid = Enharmonics::accid(m, j);
         // case of 8 and (short list) 1, 3, 6, 10
         if (defined(name) && defined(accid))
-            q.push(std::make_shared<PSC1>(*this, pm, name, accid, ton, lton));
+            q.push(std::make_shared<PSC1>(this, pm, name, accid, ton, lton));
     }
 }
 
@@ -241,7 +241,7 @@ void PSC0::succ2(PSEnum& e, const Ton& ton, const Ton& lton, PSCQueue& q) const
     //PSChord c(e, _id);
     //assert(c.size() > 1);
     std::stack<std::shared_ptr<const PSC2>> cs;
-    cs.push(std::make_shared<const PSC2>(*this, e, _id));     // initial config
+    cs.push(std::make_shared<const PSC2>(this, e, _id));     // initial config
     
     while (! cs.empty())
     {
@@ -268,7 +268,6 @@ void PSC0::succ2(PSEnum& e, const Ton& ton, const Ton& lton, PSCQueue& q) const
             }
         }
     }
-
 }
 
 
