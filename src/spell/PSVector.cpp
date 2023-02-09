@@ -84,7 +84,7 @@ void PSV::init()
     for (size_t i = 0; i < nbtons(); ++i)
     {
         // PS Bag is empty if first() = last()
-        TRACE("PSV {}-{} ton {}", psenum().first(), psenum().stop(), ton(i));
+        INFO("PSV {}-{} ton {}", psenum().first(), psenum().stop(), ton(i));
         _psb0[i] = std::make_unique<const PSB>(ton(i), psenum());
         _psb1[i] = nullptr; // std::make_shared<const PSB>(ton(i), psenum());
         TRACE("compute the best spelling for notes {}-{}, ton = {}: {} accid",

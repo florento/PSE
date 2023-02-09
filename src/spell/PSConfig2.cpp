@@ -22,7 +22,7 @@ _names(_chord->size(), NoteName::Undef), // empty
 _prints(_chord->size(), false)           // empty
 {
     assert(e.length() > 1);
-    _id = e.stop();          // first note after chord
+    _id = _chord->stop();          // first note after chord
 }
 
 

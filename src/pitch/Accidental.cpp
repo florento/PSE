@@ -260,7 +260,7 @@ std::string tostring(const Accid& a)
             break;
 
         case Accid::Natural:
-            return "0";
+            return "n";
             break;
 
         case Accid::QuarterSharp:
