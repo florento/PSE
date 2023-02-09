@@ -13,6 +13,7 @@
 
 #include <iostream>
 #include <assert.h>
+#include <memory>
 #include <array>
 #include <vector>
 
@@ -43,15 +44,20 @@ class PSC2 : public PSC
     
 public:
 
-    PSC2(const PSC0& c, const PSChord& e);
-         //const Ton& ton, const Ton& lton);
+    /// target PS config for a transition from given (previous) config,
+    /// when reading a chord.
+    /// @param c previous config, to be updated with the received chord.
+    /// @param e note enumerator containing the notes of the read chord.
+    /// @param i0 index of the first note of chord in the given enumerator.
+    PSC2(const PSC0& c, PSEnum& e, size_t i0);
+    //PSC2(const PSC0& c, const PSChord& e);
 
     /// target PS config for a transition from given (previous) config,
-    /// when reading a pitch.
+    /// when reading a chord.
     /// copy and update with given accident for given name and accidental,
     /// in given conjectured global tonality.
     /// only the cost (number of accidentals) is updated.
-    /// @param c previous config (origin), to be updated with the received pitch.
+    /// @param c previous config (origin), to be updated with the received pitch in a chord.
     /// @param name chosen name for the received pitch, in 0..6 (0 is 'C', 6 is 'B').
     /// @param accid chosen alteration for the received pitch, in -2..2.
     /// @param ton conjectured main (global) tonality (key signature).
@@ -60,11 +66,11 @@ public:
          const Ton& ton);
 
     /// alternative target PS config for a transition
-    /// from a given (previous) PS config, when reading a pitch.
+    /// from a given (previous) PS config, when reading a chord.
     /// copy and update with given accident for given name and accidental,
     /// in given conjectured global tonality and local tonality.
     /// the cost (number of accidentals) and distance (to local ton) are updated.
-    /// @param c previous config, to be updated with the received pitch.
+    /// @param c previous config, to be updated with the received pitch in a chord.
     /// @param name chosen name for the received pitch, in 0..6 (0 is 'C', 6 is 'B').
     /// @param acc chosen alteration for the received pitch, in -2..2.
     /// @param ton conjectured main (global) tonality (key signature).
@@ -154,7 +160,8 @@ private:
 
     /// representation of the sequence of simultaneous notes
     /// read to reach this config.
-    const PSChord* _chord;
+    std::shared_ptr<const PSChord> _chord;
+    //const PSChord* _chord;
     //const PSChord& _chord;
     
     /// index of the next pitch class number to process in the input chord.
@@ -178,7 +185,10 @@ private:
     
     /// state of previous config in shortest path to this config.
     const AccidState& prevState() const;
-    
+
+    /// first pitch class number to be processed in the input chord
+    unsigned int firstChroma() const;
+
     /// next pitch class number to be processed in the input chord
     unsigned int nextChroma() const;
 

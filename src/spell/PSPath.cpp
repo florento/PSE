@@ -106,6 +106,7 @@ void PSP::record_path(const PSC0& c)
     assert(_cost == c.accidentals());
     const PSC0* co = &c;
     assert(co);
+    assert(co->initial() || co->fromNote() || co->fromChord());
     while (! co->initial())
     {
         if (co->fromNote())

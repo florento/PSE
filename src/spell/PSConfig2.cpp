@@ -13,15 +13,15 @@
 namespace pse {
 
 
-PSC2::PSC2(const PSC0& c, const PSChord& e):
+//PSC2::PSC2(const PSC0& c, const PSChord& e):
+PSC2::PSC2(const PSC0& c, PSEnum& e, size_t i0):
 PSC(c),
-_chord(&e),
-_current(0),
-_names(e.size(), NoteName::Undef), // empty
-_prints(e.size(), false) // empty
+_chord(std::make_shared<const PSChord>(e, i0)),
+_current(firstChroma()),             // jump to the first non-empty pitch class
+_names(_chord->size(), NoteName::Undef), // empty
+_prints(_chord->size(), false)           // empty
 {
     assert(e.length() > 1);
-    _current = nextChroma(); // jump to the first non-empty chroma
     _id = e.stop();          // first note after chord
 }
 
@@ -59,10 +59,10 @@ PSC2(c) // copy of current
 // copy
 PSC2::PSC2(const PSC2& rhs):
 PSC(rhs),
-_chord(rhs._chord),
+_chord(rhs._chord),     // shared ptr copy
 _current(rhs._current),
-_names(rhs._names),   // vector copy
-_prints(rhs._prints)  // vector copy
+_names(rhs._names),     // vector copy
+_prints(rhs._prints)    // vector copy
 { }
 
 
@@ -191,6 +191,20 @@ const AccidState& PSC2::prevState() const
 {
     assert(previous());
     return previous()->state();
+}
+
+
+unsigned int PSC2::firstChroma() const
+{
+    assert(_chord);
+    for (unsigned int i = 0; i < 12; ++i)
+    {
+        if (_chord->occurences(i) > 0)
+            return i;
+    }
+    // nothing in chord, should not happen
+    ERROR("PSC2: empty chord {}-{}", _chord->first(), _chord->stop());
+    return 12;
 }
 
 

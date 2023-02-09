@@ -174,10 +174,10 @@ void PSC0::succ1(PSEnum& e, const Ton& ton, PSCQueue& q) const
 
 void PSC0::succ2(PSEnum& e, const Ton& ton, PSCQueue& q) const
 {
-    PSChord c(e, _id);
-    assert(c.size() > 1);
+    //PSChord c(e, _id);
+    //assert(c.size() > 1);
     std::stack<std::shared_ptr<const PSC2>> cs;
-    cs.push(std::make_shared<PSC2>(*this, c));     // initial config
+    cs.push(std::make_shared<const PSC2>(*this, e, _id));     // initial config
     
     while (! cs.empty())
     {
@@ -238,10 +238,10 @@ void PSC0::succ1(PSEnum& e, const Ton& ton, const Ton& lton, PSCQueue& q) const
 
 void PSC0::succ2(PSEnum& e, const Ton& ton, const Ton& lton, PSCQueue& q) const
 {
-    PSChord c(e, _id);
-    assert(c.size() > 1);
+    //PSChord c(e, _id);
+    //assert(c.size() > 1);
     std::stack<std::shared_ptr<const PSC2>> cs;
-    cs.push(std::make_shared<PSC2>(*this, c));     // initial config
+    cs.push(std::make_shared<const PSC2>(*this, e, _id));     // initial config
     
     while (! cs.empty())
     {
