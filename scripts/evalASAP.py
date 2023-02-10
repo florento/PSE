@@ -12,11 +12,15 @@ Created on Fri Jan 27 16:50:52 2023
 import os
 from pathlib import Path, PosixPath
 import re
+from operator import itemgetter, attrgetter
 
 import music21 as m21
 import PSeval as ps
 
 
+# global variables
+_dataset_root = '../../../Datasets/ASAP/'  # path for ASAP
+_generic_score = 'xml_score.musicxml'      # default score file name
 
 
 ###########################################
@@ -26,52 +30,61 @@ import PSeval as ps
 ###########################################
 
 
-
-
 def get_score(score_path):
-    _dataset_root = '../../../Datasets/ASAP/'
-    _generic_score = 'xml_score.musicxml'
+    global _dataset_root
+    global _generic_score
     complete_score_path = Path(_dataset_root) / score_path / _generic_score
     return m21.converter.parse(str(complete_score_path))
     
-
 def get_parts(score):
     return score.getElementsByClass(m21.stream.Part)
-
 
 def eval_asapscore(stat, i, file):
     s = m21.converter.parse(file)
     stat.eval_score(score=s, sid=i)
 
 
-beethoven1_1 = get_score('Beethoven/Piano_Sonatas/1-1')
+class Sonata:
+    def __init__(self, nb, mvt, file):
+        self.nb = nb
+        self.mvt = mvt
+        self.file = file
+    def __repr__(self):
+        return repr((self.nb, self.mvt, self.file))
 
-
-def Beethoven_list(root):
+def Beethoven_list():
+    """list of Beethoven Sonata in ASAP, 
+       in the form of triplets (sonata nb, mvt  nb, path)"""
+    global _dataset_root
+    global _generic_score
     dir_re = re.compile("(\d+)-(\d)_?\d?$")
     bl = []
-    p = Path(root)/'Beethoven'/'Piano_Sonatas'
+    p = Path(_dataset_root)/'Beethoven'/'Piano_Sonatas'
     assert(os.path.isdir(p))
     for d in os.listdir(p):
         dm = dir_re.match(d)
         if dm == None:
             continue
-        po = p / d / 'xml_score.musicxml'
+        po = p / d / _generic_score
         assert(os.path.isfile(po))
-        bl.append((int(dm.group(1)) + 0.1 * int(dm.group(2)), str(po)))
+        bl.append(Sonata(int(dm.group(1)), int(dm.group(2)), str(po)))
+    bl = sorted(bl, key=attrgetter('nb', 'mvt')) 
     return bl
 
     
-def eval_Beethoven(root, stat):
-    for (i, file) in Beethoven_list(root):
-        print(i, ':', file)
-        eval_asapscore(stat, i, file)
+def eval_Beethoven(stat):
+    for s in Beethoven_list():
+        print(s.nb, s.mvt, ':', s.file)
+        eval_asapscore(stat, s.nb*10 + s.mvt, s.file)
 
+stat = ps.PSStats() 
+stat.debug = True
 
-b = m21.converter.parse('xml_score.musicxml')
-lp = get_parts(b)
-lm0 = lp[0].getElementsByClass(m21.stream.Measure)
-lm1 = lp[1].getElementsByClass(m21.stream.Measure)
+#beethoven1_1 = get_score('Beethoven/Piano_Sonatas/1-1')
+#b = m21.converter.parse('xml_score.musicxml')
+#lp = get_parts(b)
+#lm0 = lp[0].getElementsByClass(m21.stream.Measure)
+#lm1 = lp[1].getElementsByClass(m21.stream.Measure)
 
 
 

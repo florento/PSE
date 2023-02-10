@@ -17,7 +17,7 @@ namespace pse {
 
 
 // copy and update
-PSC::PSC(const PSC0* c):
+PSC::PSC(std::shared_ptr<const PSC0> c):
 PSC0(*c),
 _pred(c)
 {
@@ -79,7 +79,7 @@ const PSC0* PSC::previous() const
     //assert(_pred.get());
     assert(_pred);
     assert(_pred->initial() || _pred->fromNote() || _pred->fromChord());
-    return _pred;
+    return _pred.get();
 }
 
 

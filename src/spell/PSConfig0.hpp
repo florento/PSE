@@ -126,7 +126,7 @@ public:
     /// this config.
     /// @param ton conjectured main (global) tonality (key signature).
     /// @param q queue receiving the target configs.
-    void succ(PSEnum& e, const Ton& ton, PSCQueue& q) const;
+    // void succ(PSEnum& e, const Ton& ton, PSCQueue& q) const;
     
     /// allocate every config reached by one transition from this config,
     /// when reading one pitch or several simultaneous pitchs,
@@ -136,7 +136,7 @@ public:
     /// @param ton conjectured main (global) tonality (key signature).
     /// @param lton conjectured local tonality.
     /// @param q queue receiving the target configs.
-    void succ(PSEnum& e, const Ton& ton, const Ton& lton, PSCQueue& q) const;
+    // void succ(PSEnum& e, const Ton& ton, const Ton& lton, PSCQueue& q) const;
 
     // stack the path of PS configs
     // from initial config (top or stack) to this PS config,
@@ -187,7 +187,7 @@ private:
     /// this config.
     /// @param ton conjectured main (global) tonality (key signature).
     /// @param q queue receiving the target configs.
-    void succ1(PSEnum& e, const Ton& ton, PSCQueue& q) const;
+    // void succ1(PSEnum& e, const Ton& ton, PSCQueue& q) const;
 
     /// allocate every config reached by one transition from this config,
     /// when reading several simultaneous pitchs (chord) and push it to
@@ -196,7 +196,7 @@ private:
     /// this config.
     /// @param ton conjectured main (global) tonality (key signature).
     /// @param q queue receiving the target configs.
-    void succ2(PSEnum& e, const Ton& ton, PSCQueue& q) const;
+    // void succ2(PSEnum& e, const Ton& ton, PSCQueue& q) const;
     
     /// allocate every config reached by one transition from this config,
     /// when reading one pitch and push it to the given queue.
@@ -205,7 +205,7 @@ private:
     /// @param ton conjectured main (global) tonality (key signature).
     /// @param lton conjectured local tonality.
     /// @param q queue receiving the target configs.
-    void succ1(PSEnum& e, const Ton& ton, const Ton& lton, PSCQueue& q) const;
+    // void succ1(PSEnum& e, const Ton& ton, const Ton& lton, PSCQueue& q) const;
 
     /// allocate every config reached by one transition from this config,
     /// when reading several simultaneous pitchs (chord), and push it to
@@ -215,7 +215,7 @@ private:
     /// @param ton conjectured main (global) tonality (key signature).
     /// @param lton conjectured local tonality.
     /// @param q queue receiving the target configs.
-    void succ2(PSEnum& e, const Ton& ton, const Ton& lton, PSCQueue& q) const;
+    // void succ2(PSEnum& e, const Ton& ton, const Ton& lton, PSCQueue& q) const;
 
 };
 

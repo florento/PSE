@@ -95,14 +95,19 @@ private: // data
     /// enumerator of notes for computing transitions between configs.
     PSEnum& _enum;
     
-    /// bag of target configs of best paths.
+    /// bag of final configs of best paths.
     PSCHeap _bests;
+
+    // bag of non-final configs involved in best paths.
+    // for rollback of best path.
+    // useless: they are stored in _prev
+    // std::vector<std::shared_ptr<const PSC0>> _inbests;
 
     /// cost of the best config in the bag.
     PSCost _cost;
 
-    /// backup of visited non-terminal nodes (pointed as previous).
-    std::vector<std::shared_ptr<const PSC0>> _visited;
+    // backup of visited non-terminal nodes (pointed as previous).
+    // std::vector<std::shared_ptr<const PSC0>> _visited;
     // @todo TBR
 
 private:
@@ -128,6 +133,74 @@ private:
     /// @warning this bag must not be empty.
     const PSC0& at(size_t i) const;
     
+    void addBest(std::shared_ptr<const PSC0> c);
+    
+    /// allocate every config reached by one transition from the given config,
+    /// when reading one pitch or several simultaneous pitchs,
+    /// and push it to the given queue.
+    /// @param c source configuration.
+    /// @param e an enumerator of notes for computing transitions from
+    /// this config.
+    /// @param ton conjectured main (global) tonality (key signature).
+    /// @param q queue receiving the target configs.
+    static void succ(std::shared_ptr<const PSC0> c,
+                     PSEnum& e, const Ton& ton, PSCQueue& q);
+    
+    /// allocate every config reached by one transition from the given config,
+    /// when reading one pitch or several simultaneous pitchs,
+    /// and push it to the given queue.
+    /// @param c source configuration.
+    /// @param e an enumerator of notes for computing transitions from
+    /// this config.
+    /// @param ton conjectured main (global) tonality (key signature).
+    /// @param lton conjectured local tonality.
+    /// @param q queue receiving the target configs.
+    static void succ(std::shared_ptr<const PSC0> c,
+                     PSEnum& e, const Ton& ton, const Ton& lton, PSCQueue& q);
+    
+    /// allocate every config reached by one transition from the given config,
+    /// when reading one pitch and push it to the given queue.
+    /// @param c source configuration.
+    /// @param e an enumerator of notes for computing transitions from
+    /// this config.
+    /// @param ton conjectured main (global) tonality (key signature).
+    /// @param q queue receiving the target configs.
+    static void succ1(std::shared_ptr<const PSC0> c,
+                      PSEnum& e, const Ton& ton, PSCQueue& q);
+
+    /// allocate every config reached by one transition from the given config,
+    /// when reading several simultaneous pitchs (chord) and push it to
+    /// the given queue.
+    /// @param c source configuration.
+    /// @param e an enumerator of notes for computing transitions from
+    /// this config.
+    /// @param ton conjectured main (global) tonality (key signature).
+    /// @param q queue receiving the target configs.
+    static void succ2(std::shared_ptr<const PSC0> c,
+                      PSEnum& e, const Ton& ton, PSCQueue& q);
+    
+    /// allocate every config reached by one transition from the given config,
+    /// when reading one pitch and push it to the given queue.
+    /// @param c source configuration.
+    /// @param e an enumerator of notes for computing transitions from
+    /// this config.
+    /// @param ton conjectured main (global) tonality (key signature).
+    /// @param lton conjectured local tonality.
+    /// @param q queue receiving the target configs.
+    static void succ1(std::shared_ptr<const PSC0> c,
+                      PSEnum& e, const Ton& ton, const Ton& lton, PSCQueue& q);
+
+    /// allocate every config reached by one transition from the given config,
+    /// when reading several simultaneous pitchs (chord), and push it to
+    /// the given queue.
+    /// @param c source configuration.
+    /// @param e an enumerator of notes for computing transitions from
+    /// this config.
+    /// @param ton conjectured main (global) tonality (key signature).
+    /// @param lton conjectured local tonality.
+    /// @param q queue receiving the target configs.
+    static void succ2(std::shared_ptr<const PSC0> c,
+                      PSEnum& e, const Ton& ton, const Ton& lton, PSCQueue& q);
 };
 
 

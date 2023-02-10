@@ -87,9 +87,21 @@ bool PSCost::operator<(const PSCost& rhs) const
 }
 
 
+bool PSCost::operator<=(const PSCost& rhs) const
+{
+    return operator<(rhs) || operator==(rhs);
+}
+
+
 bool PSCost::operator>(const PSCost& rhs) const
 {
     return (operator!=(rhs) && rhs.operator<(*this));
+}
+
+
+bool PSCost::operator>=(const PSCost& rhs) const
+{
+    return operator>(rhs) || operator==(rhs);
 }
 
 

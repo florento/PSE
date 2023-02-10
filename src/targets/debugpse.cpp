@@ -18,7 +18,7 @@ void WeberTable()
     godfried.dump();
 }
 
-void Beethoven_21_1(pse::Speller& sp);
+void Waldstein(pse::Speller& sp);
 void LG470(pse::Speller& sp);
 void LG128(pse::Speller& sp);
 
@@ -38,7 +38,7 @@ int main(int argc, const char* argv[])
        
     //LG128(sp);
     // LG470(sp);
-    Beethoven_21_1(sp);
+    Waldstein(sp);
     
     std::cout << sp.size() << " notes" << std::endl;
     bool status = sp.respell();
@@ -57,9 +57,9 @@ int main(int argc, const char* argv[])
 }
 
 
-// content of 2 first bars, left hand of Beethoven Waldstein, mvt 1
+// content of 2 first bars, left hand of Beethoven Sonata 21, mvt 1
 // to debug pruning
-void Beethoven_21_1(pse::Speller& sp)
+void Waldstein(pse::Speller& sp)
 {
 // measure 1 (39)
     sp.add(36, 0, false);

@@ -17,7 +17,7 @@ namespace pse {
 
 
 // copy and update
-PSC1::PSC1(const PSC0* c, unsigned int mp,
+PSC1::PSC1(std::shared_ptr<const PSC0> c, unsigned int mp,
            const NoteName& name, const Accid& accid,
            const Ton& ton):
 PSC(c),
@@ -89,7 +89,7 @@ _print(false)
 }
 
 
-PSC1::PSC1(const PSC0* c, unsigned int mp,
+PSC1::PSC1(std::shared_ptr<const PSC0> c, unsigned int mp,
            const NoteName& name, const Accid& accid,
            const Ton& ton, const Ton& lton):
 PSC1(c, mp, name, accid, ton)

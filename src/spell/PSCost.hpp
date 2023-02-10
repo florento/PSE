@@ -45,7 +45,13 @@ public:
     bool operator<(const PSCost& rhs) const;
 
     /// lexicographic ordering for costs
+    bool operator<=(const PSCost& rhs) const;
+
+    /// lexicographic ordering for costs
     bool operator>(const PSCost& rhs) const;
+
+    /// lexicographic ordering for costs
+    bool operator>=(const PSCost& rhs) const;
 
     /// access cumulated number of accidents.
     inline size_t getAccid() const { return _accid; }

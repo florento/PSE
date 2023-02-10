@@ -144,131 +144,131 @@ const Accid PSC0::accidental(const NoteName&  name) const
 //}
 
 
+// @todo mv to PSBag ?
+//void PSC0::succ(PSEnum& e, const Ton& ton, PSCQueue& q) const
+//{
+//    if (e.simultaneous(_id))
+//        succ2(e, ton, q);    // chord
+//    else
+//        succ1(e, ton, q);    // single note
+//}
+    
+//void PSC0::succ1(PSEnum& e, const Ton& ton, PSCQueue& q) const
+//{
+//    // midi pitch of the note read for transition from this config
+//    unsigned int pm = e.midipitch(_id);
+//    assert(0 <= pm);
+//    assert(pm <= 127);
+//    int m = pm % 12; // chroma in 0..11
+//
+//    for (int j = 0; j < 3; ++j)
+//    {
+//        NoteName name = Enharmonics::name(m, j);
+//        Accid accid = Enharmonics::accid(m, j);
+//        // case of 8 and (short list) 1, 3, 6, 10
+//        if (defined(name) && defined(accid))
+//            q.push(std::make_shared<PSC1>(this, pm, name, accid, ton));
+//    }
+//}
+
+
+//void PSC0::succ2(PSEnum& e, const Ton& ton, PSCQueue& q) const
+//{
+//    //PSChord c(e, _id);
+//    //assert(c.size() > 1);
+//    std::stack<std::shared_ptr<const PSC2>> cs;
+//    cs.push(std::make_shared<const PSC2>(this, e, _id));     // initial config
+//
+//    while (! cs.empty())
+//    {
+//        std::shared_ptr<const PSC2> c = cs.top();
+//        cs.pop();
+//        assert(c);
+//        if (c->complete())
+//            q.push(c);
+//        else
+//        {
+//            unsigned int m = c->current(); // chroma in 0..11
+//            assert(0 <= m);
+//            assert(m < 11);
+//
+//            // 3 enharmonics
+//            for (int j = 0; j < 3; ++j)
+//            {
+//                NoteName name = Enharmonics::name(m, j);
+//                Accid accid = Enharmonics::accid(m, j);
+//                // case of 8 and (short list) 1, 3, 6, 10
+//                if (defined(name) && defined(accid) &&
+//                    c->consistent(name, accid))
+//                    cs.push(std::make_shared<PSC2>(*c, name, accid, ton));
+//            }
+//        }
+//    }
+//}
+
+
 // mv to PSBag ?
-void PSC0::succ(PSEnum& e, const Ton& ton, PSCQueue& q) const
-{
-    if (e.simultaneous(_id))
-        succ2(e, ton, q);    // chord
-    else
-        succ1(e, ton, q);    // single note
-}
-    
-void PSC0::succ1(PSEnum& e, const Ton& ton, PSCQueue& q) const
-{
-    // midi pitch of the note read for transition from this config
-    unsigned int pm = e.midipitch(_id);
-    assert(0 <= pm);
-    assert(pm <= 127);
-    int m = pm % 12; // chroma in 0..11
-
-    for (int j = 0; j < 3; ++j)
-    {
-        NoteName name = Enharmonics::name(m, j);
-        Accid accid = Enharmonics::accid(m, j);
-        // case of 8 and (short list) 1, 3, 6, 10
-        if (defined(name) && defined(accid))
-            q.push(std::make_shared<PSC1>(this, pm, name, accid, ton));
-    }
-}
+//void PSC0::succ(PSEnum& e, const Ton& ton, const Ton& lton, PSCQueue& q) const
+//{
+//    if (e.simultaneous(_id))
+//        succ2(e, ton, lton, q);    // chord
+//    else
+//        succ1(e, ton, lton, q);    // single note
+//}
 
 
-void PSC0::succ2(PSEnum& e, const Ton& ton, PSCQueue& q) const
-{
-    //PSChord c(e, _id);
-    //assert(c.size() > 1);
-    std::stack<std::shared_ptr<const PSC2>> cs;
-    cs.push(std::make_shared<const PSC2>(this, e, _id));     // initial config
-    
-    while (! cs.empty())
-    {
-        std::shared_ptr<const PSC2> c = cs.top();
-        cs.pop();
-        assert(c);
-        if (c->complete())
-            q.push(c);
-        else
-        {
-            unsigned int m = c->current(); // chroma in 0..11
-            assert(0 <= m);
-            assert(m < 11);
-
-            // 3 enharmonics
-            for (int j = 0; j < 3; ++j)
-            {
-                NoteName name = Enharmonics::name(m, j);
-                Accid accid = Enharmonics::accid(m, j);
-                // case of 8 and (short list) 1, 3, 6, 10
-                if (defined(name) && defined(accid) &&
-                    c->consistent(name, accid))
-                    cs.push(std::make_shared<PSC2>(*c, name, accid, ton));
-            }
-        }
-    }
-}
+//void PSC0::succ1(PSEnum& e, const Ton& ton, const Ton& lton, PSCQueue& q) const
+//{
+//    // midi pitch of the note read for transition from this config
+//    unsigned int pm = e.midipitch(_id);
+//    assert(0 <= pm);
+//    assert(pm <= 127);
+//    int m = pm % 12; // chroma in 0..11
+//
+//    for (int j = 0; j < 3; ++j)
+//    {
+//        NoteName name = Enharmonics::name(m, j);
+//        Accid accid = Enharmonics::accid(m, j);
+//        // case of 8 and (short list) 1, 3, 6, 10
+//        if (defined(name) && defined(accid))
+//            q.push(std::make_shared<PSC1>(this, pm, name, accid, ton, lton));
+//    }
+//}
 
 
-// mv to PSBag ?
-void PSC0::succ(PSEnum& e, const Ton& ton, const Ton& lton, PSCQueue& q) const
-{
-    if (e.simultaneous(_id))
-        succ2(e, ton, lton, q);    // chord
-    else
-        succ1(e, ton, lton, q);    // single note
-}
-
-
-void PSC0::succ1(PSEnum& e, const Ton& ton, const Ton& lton, PSCQueue& q) const
-{
-    // midi pitch of the note read for transition from this config
-    unsigned int pm = e.midipitch(_id);
-    assert(0 <= pm);
-    assert(pm <= 127);
-    int m = pm % 12; // chroma in 0..11
-
-    for (int j = 0; j < 3; ++j)
-    {
-        NoteName name = Enharmonics::name(m, j);
-        Accid accid = Enharmonics::accid(m, j);
-        // case of 8 and (short list) 1, 3, 6, 10
-        if (defined(name) && defined(accid))
-            q.push(std::make_shared<PSC1>(this, pm, name, accid, ton, lton));
-    }
-}
-
-
-void PSC0::succ2(PSEnum& e, const Ton& ton, const Ton& lton, PSCQueue& q) const
-{
-    //PSChord c(e, _id);
-    //assert(c.size() > 1);
-    std::stack<std::shared_ptr<const PSC2>> cs;
-    cs.push(std::make_shared<const PSC2>(this, e, _id));     // initial config
-    
-    while (! cs.empty())
-    {
-        std::shared_ptr<const PSC2> c = cs.top();
-        cs.pop();
-        assert(c);
-        if (c->complete())
-            q.push(c);
-        else
-        {
-            unsigned int m = c->current(); // chroma in 0..11
-            assert(0 <= m);
-            assert(m < 11);
-
-            // 3 enharmonics
-            for (int j = 0; j < 3; ++j)
-            {
-                NoteName name = Enharmonics::name(m, j);
-                Accid accid = Enharmonics::accid(m, j);
-                // case of 8 and (short list) 1, 3, 6, 10
-                if (defined(name) && defined(accid) &&
-                    c->consistent(name, accid))
-                    cs.push(std::make_shared<PSC2>(*c, name, accid, ton, lton));
-            }
-        }
-    }
-}
+//void PSC0::succ2(PSEnum& e, const Ton& ton, const Ton& lton, PSCQueue& q) const
+//{
+//    //PSChord c(e, _id);
+//    //assert(c.size() > 1);
+//    std::stack<std::shared_ptr<const PSC2>> cs;
+//    cs.push(std::make_shared<const PSC2>(this, e, _id));     // initial config
+//
+//    while (! cs.empty())
+//    {
+//        std::shared_ptr<const PSC2> c = cs.top();
+//        cs.pop();
+//        assert(c);
+//        if (c->complete())
+//            q.push(c);
+//        else
+//        {
+//            unsigned int m = c->current(); // chroma in 0..11
+//            assert(0 <= m);
+//            assert(m < 11);
+//
+//            // 3 enharmonics
+//            for (int j = 0; j < 3; ++j)
+//            {
+//                NoteName name = Enharmonics::name(m, j);
+//                Accid accid = Enharmonics::accid(m, j);
+//                // case of 8 and (short list) 1, 3, 6, 10
+//                if (defined(name) && defined(accid) &&
+//                    c->consistent(name, accid))
+//                    cs.push(std::make_shared<PSC2>(*c, name, accid, ton, lton));
+//            }
+//        }
+//    }
+//}
 
 
 //std::stack<const PSC0*> PSC0::stack() const
