@@ -77,8 +77,8 @@ def eval_Beethoven(stat):
         print(s.nb, s.mvt, ':', s.file)
         eval_asapscore(stat, s.nb*10 + s.mvt, s.file)
 
-stat = ps.PSStats() 
-stat.debug = True
+stat = ps.PSStats(0, True)
+bl = Beethoven_list()
 
 #beethoven1_1 = get_score('Beethoven/Piano_Sonatas/1-1')
 #b = m21.converter.parse('xml_score.musicxml')
@@ -97,14 +97,14 @@ stat.debug = True
 def Waldstein():
     stat = ps.PSStats()
     root='../../../Datasets/ASAP/'
-    bl = Beethoven_list(root)
-    (i, file) = bl[4] # 21.1
-    score = m21.converter.parse(file)
+    bl = Beethoven_list()
+    sonata = bl[33] # 21.1
+    score = m21.converter.parse(sonata.file)
     lp = score.getElementsByClass(m21.stream.Part)
     k0 = ps.get_key(lp[1])
     ln0 = ps.extract_part(lp[0])
     ln1 = ps.extract_part(lp[1])
-    for (n, b, s) in ln1[:61]:   
+    for (n, b, s) in ln1[:610]:   
         a = 'sp.add('
         a += str(n.pitch.midi)
         a += ', '
@@ -113,7 +113,6 @@ def Waldstein():
         a += 'true' if s else 'false'
         a += ');'
         print(a)        
-        #print('sp.add(', n.pitch.midi, ',', b, ',', ('true' if s else 'false)'), ')')
     #sp = ps.Speller()
     #sp.debug(True)
     #ps.add_tons(0, sp)

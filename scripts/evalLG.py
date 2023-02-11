@@ -14,8 +14,6 @@ import music21 as m21
 import PSeval as ps
 
 
-
-
 ###############################
 ##                           ##
 ## import dataset to Music21 ##
@@ -42,8 +40,8 @@ def search_xml(directory_path):
     return 
         
     
-def init(root):
-    dataset_path = Path(dataset_root)
+def LG_map(root):
+    dataset_path = Path(root)
     assert isinstance(dataset_path, PosixPath)
     ld = os.listdir(dataset_path)
     dataset = dict()
@@ -68,6 +66,7 @@ def init(root):
             print(directory, 'has no ref/')
             continue
         #print(directory, id)
+    dataset = dict(sorted(dataset.items()))
     return dataset
 
 
@@ -79,14 +78,17 @@ def init(root):
 ###########################################
 
 
-dataset_root = '/Users/jacquema/Datasets/Lamarque-Goudard'
+# global variables
+_dataset_root = '../../../Datasets/Lamarque-Goudard/'  # path for LG
+
 
 # these opus might cause complexity issues (extreme measures)
 skip = [470, 472, 473, 475, 478]
 
-def evaluation(root, stat, tons=0):
+def evaluation(stat, tons=0):
+    global _dataset_root
     stat.nbtons = tons
-    dataset = init(root)
+    dataset = LG_map(_dataset_root)
     li = sorted(list(dataset)) # list of index in dataset   
     print('\n')
     print('starting evaluation')
@@ -104,16 +106,14 @@ def evaluation(root, stat, tons=0):
             stat.eval_score(score=s, sid=i, title=t, composer='')
             
  
-def eval_export(root, filename, tons=0):
+def eval_export(filename, tons=0):
     stat = ps.PSStats()    
-    evaluation(root, stat, tons)
+    evaluation(stat, tons)
     stat.show()    
     df = stat.get_dataframe() # create pands dataframe
     df.pop('part') # del column part umber (always 0)
     df.to_csv(filename, header=True, index=False)
     
-
-
 
 
 #######################
@@ -133,7 +133,7 @@ def first_part(score):
 
 def key_changes(root):
     """find scores in data set with key changes"""
-    dataset = init(root)
+    dataset = LG_map(root)
     li = sorted(list(dataset)) # list of index in dataset    
     for i in li:
         file = dataset[i]
@@ -147,12 +147,17 @@ def key_changes(root):
 
 
 # TBR
-dataset = init(dataset_root)
+#_dataset = init(dataset_root)
 #li = sorted(list(dataset)) # list of index in dataset    
 
 
-# TBR
+
+
+
+        
 def eval_item(id, tons=0, dflag=False):
+    global _dataset_root
+    dataset = LG_map(_dataset_root)
     file = dataset[id]
     score = m21.converter.parse(file.as_posix())
     print(id, score.metadata.composer, score.metadata.title, end=' ')

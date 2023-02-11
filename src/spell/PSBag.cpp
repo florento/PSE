@@ -317,7 +317,7 @@ void PSB::succ2(std::shared_ptr<const PSC0> c,
         {
             unsigned int m = c2->current(); // chroma in 0..11
             assert(0 <= m);
-            assert(m < 11);
+            assert(m < 12);
 
             // 3 enharmonics
             for (int j = 0; j < 3; ++j)
@@ -388,7 +388,7 @@ void PSB::succ2(std::shared_ptr<const PSC0> c,
         {
             unsigned int m = c2->current(); // chroma in 0..11
             assert(0 <= m);
-            assert(m < 11);
+            assert(m < 12);
 
             // 3 enharmonics
             for (int j = 0; j < 3; ++j)

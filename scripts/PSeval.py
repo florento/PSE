@@ -289,7 +289,7 @@ def diff(ln, sp):
         return []
     i = 0
     ld = []
-    for (n, m) in ln:
+    for (n, m, simult) in ln:
         if (compare_name(n, sp.name(i)) and
             compare_accid(n, sp.accidental(i), sp.printed(i)) and 
             n.octave == sp.octave(i)):
@@ -336,7 +336,7 @@ def diff_notes1(ln, lp, i, ld):
             return diff_notes1(ln[1:], lp[1:], i+1, ld+[i])
 
 def spellable(part):
-    """the given part can be pitch spelled"""
+    """the given part can be pitch spelled""" 
     if (get_key(part) == None):
         print(key_changes(part), 'key changes', end =' ')
         return False
@@ -344,6 +344,28 @@ def spellable(part):
     #    print('chords', end =' ')
     #    return False        
     return True
+
+def mark_part(part, ld):
+    """mark mispells from a diff-list in red in a score"""
+    if (len(ld) > 0):
+        fpart = part.flatten()
+        ln = fpart.getElementsByClass(m21.note.Note) 
+        for (i, n, a, o, p) in ld:
+            ln[i].style.color = 'red'
+            ln[i].pitch.step = mk_step(n)
+            if ((a != pse.Accid.Natural) or (p == True)):
+                ln[i].pitch.accidental = mk_accid(a)
+            ln[i].pitch.octave = o                
+
+def mark_score(score, k, lld):
+    """print the given estimated key sign and mark mispells in score"""
+    #score.show()
+    tb = m21.text.TextBox('estimated key signature = '+str(k), 30, 30)
+    score.append(tb)
+    lp = score.getElementsByClass(m21.stream.Part)
+    assert(len(lp) == len(lld))
+    for i in range(0, len(lp)):
+        mark_part(lp[i], lld[i])    
 
 
 #########################
@@ -410,7 +432,7 @@ def pseval_part1(self, part):
         print('global ton: NO:', '(', sp.sig(), 'was', k0, '),', end=' ')
         print('diff:', len(ld), end='\n', flush=True)
         self._global_kserr += 1
-    return ld
+    return (sp.sig(), ld)
 
 # TBR
 def pseval_score(score, tons=0, debug=False):

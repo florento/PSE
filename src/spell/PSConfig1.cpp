@@ -102,8 +102,9 @@ PSC1(c, mp, name, accid, ton)
 
     // disjoint move from previous note
     assert(previous());
-    if (! previous()->initial())
+    if (previous()->fromNote())
     {
+        assert(! previous()->initial());
         const PSC1* pred = dynamic_cast<const PSC1*>(previous());
         assert(pred);
         // previous note (before mp)

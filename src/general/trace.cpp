@@ -24,9 +24,9 @@
 
 
 //spdlog::set_pattern("*** [%H:%M:%S %z] [thread %t] %v ***");
-int spdlog_setPattern()
+int spdlog_setPattern(const std::string& s)
 {
-    spdlog::set_pattern("[%^pse_%l%$] %v");
+    spdlog::set_pattern(s);
     return 0;
 }
 

@@ -9,6 +9,7 @@
 #define trace_hpp
 
 #include <iostream>
+#include <string>
 
 #include <spdlog/spdlog.h>
 #include <spdlog/cfg/env.h>  // support for loading levels from the environment variable
@@ -29,7 +30,7 @@
 
 /// apply custom format globally to all registered loggers
 /// @see https://github.com/gabime/spdlog/wiki/3.-Custom-formatting
-int spdlog_setPattern();
+int spdlog_setPattern(const std::string& s = "[%^pse_%l%$] %v");
 
 /// set verbosity level. log levels:
 /// trace    = 6,
