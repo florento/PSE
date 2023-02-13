@@ -13,7 +13,6 @@
 #define NoteName_hpp
 
 #include <iostream>
-//#include <ostream>
 #include <assert.h>
 
 #include "trace.hpp"

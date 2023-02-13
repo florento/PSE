@@ -20,12 +20,60 @@ namespace pse {
 
 
 /// Pitch without octave
-struct PWO
+class PWO
 {
 public:
-    pse::NoteName name;
-    pse::Accid    accid;
+    
+    PWO();
+    
+    /// main constructor
+    PWO(const NoteName& n, const Accid& a);
+    
+    /// @brief copy constructor.
+    PWO(const PWO& p);
+    
+    /// destructor
+    virtual ~PWO() {}
+    
+    /// assignment operator
+    virtual PWO& operator=(const PWO&);
+
+    /// equality
+    virtual bool equal(const PWO&) const;
+
+    /// unpitched
+    virtual bool undef() const;
+
+    /// unpitched
+    /// @see undef()
+    virtual bool unpitched() const { return undef(); }
+    
+    virtual void print(std::ostream& o) const;
+    
+public: // data
+    
+    /// @brief note name betwen 'A' and 'G'.
+    /// @see MusicXML step https://usermanuals.musicxml.com/MusicXML/Content/EL-MusicXML-step.htm
+    /// @todo revise with NoteName
+    NoteName name;
+
+    /// @brief alteration in [-2, 2] where 1.0 is half tone.
+    /// e.g. -1 for flat, 1 for sharp
+    /// decimal values are used for microtones
+    /// e.g. 0.5 for quarter tone sharp
+    /// @see MusicXML alter https://usermanuals.musicxml.com/MusicXML/Content/EL-MusicXML-alter.htm
+    /// revision: @see https://www.w3.org/2021/06/musicxml40/musicxml-reference/data-types/accidental-value/
+    Accid alteration;
+    
 };
+
+// boolean operators
+bool operator==(const PWO& lhs, const PWO& rhs);
+
+bool operator!=(const PWO& lhs, const PWO& rhs);
+
+std::ostream& operator<<(std::ostream& o, const PWO& p);
+
 
 
 } // namespace pse
@@ -33,4 +81,3 @@ public:
 #endif /* PWO_hpp */
 
 /// @}
-

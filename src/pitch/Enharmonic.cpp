@@ -32,7 +32,7 @@ Accid Enharmonics::accid(int c, int i)
     assert(c <= 11);
     assert(0 <= i);
     assert(i <= 2);
-    return ENHARMONIC[c][i].accid;
+    return ENHARMONIC[c][i].alteration;
 }
 
 

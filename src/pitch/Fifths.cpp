@@ -31,7 +31,7 @@ Accid Fifths::accid(int i)
     assert(-15 <= i);
     assert(i <= 19);
 
-    return FIFTHS[i+15].accid;
+    return FIFTHS[i+15].alteration;
     //assert(-2 <= a);
     //assert(a <= 2);
     //return accidofint(a);

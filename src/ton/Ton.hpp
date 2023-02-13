@@ -25,7 +25,7 @@ namespace pse {
 
 // class AccidState;
 
-/// A tonality is the combination of  by a Key Signature and a Mode.
+/// A tonality is the combination of  by a Key Signature in -7..7 and a Mode.
 /// | ks | Maj | Min  | sens (harm) |
 /// |:--:|:---:|:----:|:------------|
 /// | -7 | Cb  | Ab   | Gnat        |

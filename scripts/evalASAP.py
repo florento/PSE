@@ -104,7 +104,7 @@ def Waldstein():
     k0 = ps.get_key(lp[1])
     ln0 = ps.extract_part(lp[0])
     ln1 = ps.extract_part(lp[1])
-    for (n, b, s) in ln1[:610]:   
+    for (n, b, s) in ln1[600:]:   
         a = 'sp.add('
         a += str(n.pitch.midi)
         a += ', '

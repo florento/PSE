@@ -38,7 +38,6 @@ namespace pse {
 /// |   9  |       |       | Bbb-1 | A-1   | G##-1 |  9     |
 /// |  10  |       |       |[Cbb0] | Bb-1  | A#-1  | 10     |
 /// |  11  |       |       | Cb0   | B-1   | A##-1 | 11     |
-///
 /// |  12  |       |       | Dbb0  | C0    | B#-1  |  0     |
 /// |  13  |       |       | Db0   | C#0   |[B##-1]|  1     |
 /// |  14  |       |       | Ebb0  | D0    | C##0  |  2     |
@@ -49,7 +48,7 @@ namespace pse {
 /// |  19  |       |       | Abb0  | G0    | F##0  |  7     |
 /// |  29  |       |       | Ab0   | G#0   |       |  8     |
 /// |  21  |   1   |       | Bbb0  | A0    | G##0  |  9     |
-/// |  22  |   2   |       |[Cbb]1 | Bb0   | A#0   | 10     |
+/// |  22  |   2   |       |[Cbb1] | Bb0   | A#0   | 10     |
 /// |  23  |   3   |       | Cb1   | B0    | A##0  | 11     |
 /// |  24  |   4   |       | Dbb1  | C1    | B#0   |  0     |
 /// |  25  |   5   |       | Db1   | C#1   |[B##0] |  1     |
@@ -146,7 +145,7 @@ namespace pse {
 /// | 116  |       |       | Ab8   | G#8   |       |  8     |
 /// | 117  |       |       | Bbb8  | A8    | G##8  |  9     |
 /// | 118  |       |       |[Cbb9] | Bb8   | A#8   | 10     |
-/// | 119  |       |       | Cb9   | B8    | A##8 | 11     |
+/// | 119  |       |       | Cb9   | B8    | A##8  | 11     |
 /// | 120  |       |       | Dbb9  | C9    | B#8   |  0     |
 /// | 121  |       |       | Db9   | C#9   |[B##8] |  1     |
 /// | 122  |       |       | Ebb9  | D9    | C##9  |  2     |
@@ -160,10 +159,11 @@ namespace pse {
 
 //namespace MidiNum {
 
+/// octave number for a given MIDI key.
 /// @param m midi number
 /// @param n note name in 'A'..'G'.
 /// @brief a accidental in [-2, 2], where 1.0 is a half tone.
-/// @return octave number, in -2..9, for the note of given midi nb, name
+/// @return octave number, in -2..9, for the note of given midi key, name
 /// and accidental.
 int midi_to_octave(unsigned int m, const pse::NoteName& n, const pse::Accid& a);
 

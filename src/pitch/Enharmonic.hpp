@@ -21,22 +21,25 @@
 namespace pse {
 
 
-/// for each pitch class (MIDI pitch modulo 12),
+/// for each pitch class (MIDI key modulo 12),
 /// there are 2 or 3 enharmonics, described in the following table:
-/// | pitch  |       |    |       |
-/// |:------:|:------|:---|:------|
-/// |   0    |  Dbb  | C  |  B#   |
-/// |   1    |  Db   | C# | [B##] |
-/// |   2    |  Ebb  | D  |  C##  |
-/// |   3    | [Fbb] | Eb |  D#   |
-/// |   4    |  Fb   | E  |  D##  |
-/// |   5    |  Gbb  | F  |  E#   |
-/// |   6    |  Gb   | F# | [E##] |
-/// |   7    |  Abb  | G  |  F##  |
-/// |   8    |  Ab   | G# |       |
-/// |   9    |  Bbb  | A  |  G##  |
-/// |  10    | [Cbb] | Bb |  A#   |
-/// |  11    |  Cb   | B  |  A##  |
+/// | pitch  | name1 | name2 | name3 |
+/// |:------:|:------|:------|:------|
+/// |   0    |  Dbb  |  C    |  B#   |
+/// |   1    |  Db   |  C#   | [B##] |
+/// |   2    |  Ebb  |  D    |  C##  |
+/// |   3    | [Fbb] |  Eb   |  D#   |
+/// |   4    |  Fb   |  E    |  D##  |
+/// |   5    |  Gbb  |  F    |  E#   |
+/// |   6    |  Gb   |  F#   | [E##] |
+/// |   7    |  Abb  |  G    |  F##  |
+/// |   8    |  Ab   |  G#   |       |
+/// |   9    |  Bbb  |  A    |  G##  |
+/// |  10    | [Cbb] |  Bb   |  A#   |
+/// |  11    |  Cb   |  B    |  A##  |
+/// @see NoteName for the encoding of note names
+/// @see Accid for the encoding of accidentals
+/// @see MidiNum for a complete table
 class Enharmonics
 {
 public:

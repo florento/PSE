@@ -62,7 +62,7 @@ bool PSCost::operator==(const PSCost& rhs) const
 
 bool PSCost::operator!=(const PSCost& rhs) const
 {
-    return (! operator==(rhs));
+    return !operator==(rhs);
 }
 
 
@@ -89,19 +89,20 @@ bool PSCost::operator<(const PSCost& rhs) const
 
 bool PSCost::operator<=(const PSCost& rhs) const
 {
-    return operator<(rhs) || operator==(rhs);
+    return !operator>(rhs);
 }
 
 
 bool PSCost::operator>(const PSCost& rhs) const
 {
-    return (operator!=(rhs) && rhs.operator<(*this));
+//  return (operator!=(rhs) && rhs.operator<(*this));
+    return rhs.operator<(*this);
 }
 
 
 bool PSCost::operator>=(const PSCost& rhs) const
 {
-    return operator>(rhs) || operator==(rhs);
+    return !operator<(rhs);
 }
 
 

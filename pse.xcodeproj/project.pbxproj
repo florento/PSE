@@ -62,6 +62,16 @@
 		43ABA53129242418002AC1D4 /* PSConfig0.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43ABA52129242418002AC1D4 /* PSConfig0.cpp */; };
 		43ABA53229242418002AC1D4 /* PSTable.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 43ABA52229242418002AC1D4 /* PSTable.hpp */; };
 		43B4939B2948D9F9006435B1 /* pypse.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4342FD1629268C78004E914F /* pypse.cpp */; };
+		43C2BA10299946150084AB3B /* Interval.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43C2BA0E299946150084AB3B /* Interval.cpp */; };
+		43C2BA11299946150084AB3B /* Interval.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43C2BA0E299946150084AB3B /* Interval.cpp */; };
+		43C2BA12299946150084AB3B /* Interval.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 43C2BA0F299946150084AB3B /* Interval.hpp */; };
+		43C2BA1529994F630084AB3B /* Pitch.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 43C2BA1329994F630084AB3B /* Pitch.hpp */; };
+		43C2BA1629994F630084AB3B /* Pitch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43C2BA1429994F630084AB3B /* Pitch.cpp */; };
+		43C2BA1729994F630084AB3B /* Pitch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43C2BA1429994F630084AB3B /* Pitch.cpp */; };
+		43C2BA192999529E0084AB3B /* PWO.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43C2BA182999529E0084AB3B /* PWO.cpp */; };
+		43C2BA1A2999529E0084AB3B /* PWO.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43C2BA182999529E0084AB3B /* PWO.cpp */; };
+		43C2BA1D299A5FEE0084AB3B /* IntervalSimple.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43C2BA1B299A5FEE0084AB3B /* IntervalSimple.cpp */; };
+		43C2BA1E299A5FEE0084AB3B /* IntervalSimple.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43C2BA1B299A5FEE0084AB3B /* IntervalSimple.cpp */; };
 		43DD95492945E223006DC553 /* PSCost.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43DD95472945E223006DC553 /* PSCost.cpp */; };
 		43DD954A2945E223006DC553 /* PSCost.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43DD95472945E223006DC553 /* PSCost.cpp */; };
 		43DD954B2945E223006DC553 /* PSCost.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 43DD95482945E223006DC553 /* PSCost.hpp */; };
@@ -162,6 +172,13 @@
 		43ABA52129242418002AC1D4 /* PSConfig0.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PSConfig0.cpp; path = src/spell/PSConfig0.cpp; sourceTree = "<group>"; };
 		43ABA52229242418002AC1D4 /* PSTable.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = PSTable.hpp; path = src/spell/PSTable.hpp; sourceTree = "<group>"; };
 		43ABA53D292425AD002AC1D4 /* spdlog */ = {isa = PBXFileReference; lastKnownFileType = folder; name = spdlog; path = extern/spdlog; sourceTree = "<group>"; };
+		43C2BA0E299946150084AB3B /* Interval.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Interval.cpp; path = src/pitch/Interval.cpp; sourceTree = "<group>"; };
+		43C2BA0F299946150084AB3B /* Interval.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Interval.hpp; path = src/pitch/Interval.hpp; sourceTree = "<group>"; };
+		43C2BA1329994F630084AB3B /* Pitch.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Pitch.hpp; path = src/pitch/Pitch.hpp; sourceTree = "<group>"; };
+		43C2BA1429994F630084AB3B /* Pitch.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Pitch.cpp; path = src/pitch/Pitch.cpp; sourceTree = "<group>"; };
+		43C2BA182999529E0084AB3B /* PWO.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = PWO.cpp; path = src/pitch/PWO.cpp; sourceTree = "<group>"; };
+		43C2BA1B299A5FEE0084AB3B /* IntervalSimple.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = IntervalSimple.cpp; path = src/pitch/IntervalSimple.cpp; sourceTree = "<group>"; };
+		43C2BA1C299A5FEE0084AB3B /* IntervalSimple.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = IntervalSimple.hpp; path = src/pitch/IntervalSimple.hpp; sourceTree = "<group>"; };
 		43DD95472945E223006DC553 /* PSCost.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = PSCost.cpp; path = src/spell/PSCost.cpp; sourceTree = "<group>"; };
 		43DD95482945E223006DC553 /* PSCost.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = PSCost.hpp; path = src/spell/PSCost.hpp; sourceTree = "<group>"; };
 		43FBEAB52930CB16008FC486 /* debugpse.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = debugpse.cpp; path = src/targets/debugpse.cpp; sourceTree = "<group>"; };
@@ -330,11 +347,18 @@
 				43ABA505292423E8002AC1D4 /* Accidental.cpp */,
 				4342FD132926789C004E914F /* MidiNum.hpp */,
 				4342FD1129267895004E914F /* MidiNum.cpp */,
+				43C2BA1C299A5FEE0084AB3B /* IntervalSimple.hpp */,
+				43C2BA1B299A5FEE0084AB3B /* IntervalSimple.cpp */,
+				43C2BA0F299946150084AB3B /* Interval.hpp */,
+				43C2BA0E299946150084AB3B /* Interval.cpp */,
 				43ABA503292423E8002AC1D4 /* Enharmonic.hpp */,
 				43ABA507292423E8002AC1D4 /* Enharmonic.cpp */,
 				43ABA500292423E8002AC1D4 /* Fifths.hpp */,
 				43ABA502292423E8002AC1D4 /* Fifths.cpp */,
 				4342FD0F2926781E004E914F /* PWO.hpp */,
+				43C2BA182999529E0084AB3B /* PWO.cpp */,
+				43C2BA1329994F630084AB3B /* Pitch.hpp */,
+				43C2BA1429994F630084AB3B /* Pitch.cpp */,
 			);
 			name = pitch;
 			sourceTree = "<group>";
@@ -363,7 +387,9 @@
 				4342FD142926789C004E914F /* MidiNum.hpp in Headers */,
 				43ABA50D292423E8002AC1D4 /* Enharmonic.hpp in Headers */,
 				43ABA50A292423E8002AC1D4 /* Fifths.hpp in Headers */,
+				43C2BA12299946150084AB3B /* Interval.hpp in Headers */,
 				4342FD102926781E004E914F /* PWO.hpp in Headers */,
+				43C2BA1529994F630084AB3B /* Pitch.hpp in Headers */,
 				430CDFF22924E6D800A84650 /* KeyFifth.hpp in Headers */,
 				43ABA510292423E8002AC1D4 /* Ton.hpp in Headers */,
 				432657E5294E2FB100515080 /* Weber.hpp in Headers */,
@@ -470,6 +496,7 @@
 				4342FD1229267895004E914F /* MidiNum.cpp in Sources */,
 				43ABA511292423E8002AC1D4 /* Enharmonic.cpp in Sources */,
 				43ABA50C292423E8002AC1D4 /* Fifths.cpp in Sources */,
+				43C2BA192999529E0084AB3B /* PWO.cpp in Sources */,
 				430CDFF12924E6D800A84650 /* KeyFifth.cpp in Sources */,
 				43ABA509292423E8002AC1D4 /* Ton.cpp in Sources */,
 				434B1DF8298ECCF1001CE41C /* PSConfig1.cpp in Sources */,
@@ -477,9 +504,12 @@
 				43ABA52E29242418002AC1D4 /* AccidentState.cpp in Sources */,
 				43DD95492945E223006DC553 /* PSCost.cpp in Sources */,
 				43ABA53129242418002AC1D4 /* PSConfig0.cpp in Sources */,
+				43C2BA1D299A5FEE0084AB3B /* IntervalSimple.cpp in Sources */,
 				43ABA52729242418002AC1D4 /* PSConfig.cpp in Sources */,
+				43C2BA1629994F630084AB3B /* Pitch.cpp in Sources */,
 				43ABA52329242418002AC1D4 /* PSBag.cpp in Sources */,
 				43ABA52529242418002AC1D4 /* PSVector.cpp in Sources */,
+				43C2BA10299946150084AB3B /* Interval.cpp in Sources */,
 				434B1E01298FD4FE001CE41C /* PSChord.cpp in Sources */,
 				43ABA52F29242418002AC1D4 /* PSTable.cpp in Sources */,
 				434B1DFC298ED394001CE41C /* PSConfig2.cpp in Sources */,
@@ -501,6 +531,7 @@
 				43FBEAC82930CEDD008FC486 /* Accidental.cpp in Sources */,
 				43FBEAC92930CEDD008FC486 /* MidiNum.cpp in Sources */,
 				43FBEACA2930CEDD008FC486 /* Enharmonic.cpp in Sources */,
+				43C2BA1A2999529E0084AB3B /* PWO.cpp in Sources */,
 				43FBEACB2930CEDD008FC486 /* Fifths.cpp in Sources */,
 				434B1E02298FD4FE001CE41C /* PSChord.cpp in Sources */,
 				43FBEACC2930CEDD008FC486 /* KeyFifth.cpp in Sources */,
@@ -508,9 +539,12 @@
 				434B1DF9298ED0A0001CE41C /* PSConfig1.cpp in Sources */,
 				432657E4294E2FB100515080 /* Weber.cpp in Sources */,
 				43FBEACE2930CEDD008FC486 /* AccidentState.cpp in Sources */,
+				43C2BA1E299A5FEE0084AB3B /* IntervalSimple.cpp in Sources */,
 				43DD954A2945E223006DC553 /* PSCost.cpp in Sources */,
+				43C2BA1729994F630084AB3B /* Pitch.cpp in Sources */,
 				43FBEACF2930CEDD008FC486 /* PSConfig0.cpp in Sources */,
 				43FBEAD02930CEDD008FC486 /* PSConfig.cpp in Sources */,
+				43C2BA11299946150084AB3B /* Interval.cpp in Sources */,
 				43FBEAD12930CEDD008FC486 /* PSBag.cpp in Sources */,
 				43FBEAD22930CEDD008FC486 /* PSVector.cpp in Sources */,
 				43FBEAD32930CEDD008FC486 /* PSTable.cpp in Sources */,

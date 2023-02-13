@@ -25,8 +25,10 @@ namespace pse {
 /// every note is presented with 2 values :
 /// - name in 0..6 for C, D, E, F, G, A, B (see table Pitch::name_to_int)
 /// - alteration in -2..2
+///
 /// Fbb Cbb Gbb Dbb Abb Ebb Bbb Fb Cb Gb Db Ab Eb Bb
 /// F C G D A E B F# C# G# D# A# E# B# F## C## G## D## A## E## B##
+///
 /// @see NoteName for the encoding of note names
 /// @see Accid for the encoding of accidentals
 class Fifths
