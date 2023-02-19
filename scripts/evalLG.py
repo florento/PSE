@@ -79,13 +79,25 @@ def LG_map(root):
 
 
 # global variables
-_dataset_root = '../../../Datasets/Lamarque-Goudard/'  # path for LG
 
+# we assume that we are in dir script/ of the svaluation dir
+_eval_root = '../../PSeval'
+# path to LG dataset
+_dataset_root = _eval_root+'/../../Datasets/Lamarque-Goudard/'  
+# output dir name
+_dataset_name = 'LG'   
+# MuseScore commandline executable
+_mscore = '/Applications/MuseScore\ 4.app/Contents/MacOS/mscore'
 
 # these opus might cause complexity issues (extreme measures)
-skip = [470, 472, 473, 475, 478]
+skip = [441, 470, 472, 473, 475, 478]
 
-def evaluation(stat, tons=0):
+# 441:
+# raise MusicXMLExportException('Cannot convert inexpressible durations to MusicXML.')
+# MusicXMLExportException: In part (Voice), measure (11): Cannot convert inexpressible durations to MusicXML.
+
+
+def evaluation(stat, tons=0, debug=False, mark=False):
     global _dataset_root
     stat.nbtons = tons
     dataset = LG_map(_dataset_root)
@@ -103,17 +115,39 @@ def evaluation(stat, tons=0):
             if (filep[-2] == 'ref'):
                 t = filep[-3]
             s = m21.converter.parse(file.as_posix())
-            stat.eval_score(score=s, sid=i, title=t, composer='')
+            (ls, lld) =  ps.eval_score(score=s, sid=i, title=t, composer='', 
+                                       stat=stat, tons=tons, debug=debug, 
+                                       mark=mark)
+            if mark and not ps.empty_difflist(lld):
+                write_score(s, t)
             
+def write_score(score, outname):
+    global _eval_root
+    global _dataset_name
+    #global _mscore
+    assert(len(_dataset_name) > 0)
+    dirname = _eval_root+'/'+_dataset_name
+    if not os.path.isdir(dirname):
+        os.mkdir(dirname)
+    dirname = dirname+'/'+outname
+    if not os.path.isdir(dirname):
+        os.mkdir(dirname)
+    xmlfile = dirname+'/'+outname+'.musicxml'
+    score.write('musicxml', fp=xmlfile)
+    # pdffile = dirname+'/'+outname+'.pdf'
+    # os.system(_mscore + ' -o ' + pdffile + ' ' + xmlfile)
  
-def eval_export(filename, tons=0):
-    stat = ps.PSStats()    
-    evaluation(stat, tons)
+def eval_export(filename, tons=0, debug=False, mark=False):
+    global _eval_root
+    global _dataset_name
+    filename = _eval_root+'/'+_dataset_name+'/'+filename
+    stat = ps.Stats()    
+    evaluation(stat, tons, debug, mark)
     stat.show()    
     df = stat.get_dataframe() # create pands dataframe
     df.pop('part') # del column part umber (always 0)
     df.to_csv(filename, header=True, index=False)
-    
+
 
 
 #######################
@@ -130,7 +164,6 @@ def first_part(score):
         return
     return lp[0]
     
-
 def key_changes(root):
     """find scores in data set with key changes"""
     dataset = LG_map(root)
@@ -142,7 +175,8 @@ def key_changes(root):
         kex = []
         if (len(kl) > 1):
             kex.append(id)
-            print(len(kl), 'keys in', id, score.metadata.composer, score.metadata.title)
+            print(len(kl), 'keys in', id, 
+                  score.metadata.composer, score.metadata.title)
     return kex
 
 
@@ -151,10 +185,6 @@ def key_changes(root):
 #li = sorted(list(dataset)) # list of index in dataset    
 
 
-
-
-
-        
 def eval_item(id, tons=0, dflag=False):
     global _dataset_root
     dataset = LG_map(_dataset_root)

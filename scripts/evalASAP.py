@@ -43,7 +43,6 @@ def eval_asapscore(stat, i, file):
     s = m21.converter.parse(file)
     stat.eval_score(score=s, sid=i)
 
-
 class Sonata:
     def __init__(self, nb, mvt, file):
         self.nb = nb
@@ -77,7 +76,7 @@ def eval_Beethoven(stat):
         print(s.nb, s.mvt, ':', s.file)
         eval_asapscore(stat, s.nb*10 + s.mvt, s.file)
 
-stat = ps.PSStats(0, True)
+stat = ps.Stats()
 bl = Beethoven_list()
 
 #beethoven1_1 = get_score('Beethoven/Piano_Sonatas/1-1')
@@ -95,7 +94,7 @@ bl = Beethoven_list()
 
 # Waldstein chords in 2 first bars
 def Waldstein():
-    stat = ps.PSStats()
+    stat = ps.Stats()
     root='../../../Datasets/ASAP/'
     bl = Beethoven_list()
     sonata = bl[33] # 21.1

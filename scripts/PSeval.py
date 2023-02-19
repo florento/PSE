@@ -7,10 +7,13 @@ Created on Wed Nov 23 13:18:18 2022
 """
 
 #import sys
-import music21 as m21
+import os
 import time
+from dataclasses import dataclass
 import pandas as pd
+import music21 as m21
 import pse
+
 
 # import module with full path
 # see https://www.geeksforgeeks.org/how-to-import-a-python-module-given-the-full-path/
@@ -32,7 +35,6 @@ print(pse.excuseme)
 ## M21 to PS ##
 ##           ##
 ###############
-
 
 # a barred note is a pair made of 
 # - a note and 
@@ -193,7 +195,6 @@ def add_tons(tons, sp):
 ##           ##
 ###############
 
-
 def get_pitches(sp):
     """extract the list of music21 pitches from a speller"""    
     pl = []
@@ -264,7 +265,6 @@ def mk_accid(a):
 ##                ##
 ####################
 
-
 def compare_name(n, pse_name):
     """compare the name of a music21 note and a PSE note name"""    
     return (n.step == mk_step(pse_name))
@@ -283,7 +283,7 @@ def compare_accid(n, pse_accid, print_flag):
         return (n.pitch.accidental == mk_accid(pse_accid))
 
 def diff(ln, sp):
-    """compare a list of barred notes and list of notes in speller"""    
+    """compare a list of barred notes and the list of notes of a speller"""    
     assert(len(ln) == sp.size())
     if (len(ln) == 0):
         return []
@@ -295,8 +295,6 @@ def diff(ln, sp):
             n.octave == sp.octave(i)):
             i = i+1
         else:
-            #print('diff: ', i, ':', n, 
-            #      sp.name(i), sp.accidental(i), sp.octave(i), sp.printed(i))
             d = (i, sp.name(i), sp.accidental(i), sp.octave(i), sp.printed(i))
             i = i+1
             ld = ld+[d]
@@ -335,29 +333,30 @@ def diff_notes1(ln, lp, i, ld):
         else:
             return diff_notes1(ln[1:], lp[1:], i+1, ld+[i])
 
-def spellable(part):
-    """the given part can be pitch spelled""" 
-    if (get_key(part) == None):
-        print(key_changes(part), 'key changes', end =' ')
-        return False
-    #elif (count_chords(part)):
-    #    print('chords', end =' ')
-    #    return False        
-    return True
-
-def mark_part(part, ld):
-    """mark mispells from a diff-list in red in a score"""
+def anote_diff(ln, ld):
+    """mark mispells in red in a note list, based on a diff-list"""
     if (len(ld) > 0):
-        fpart = part.flatten()
-        ln = fpart.getElementsByClass(m21.note.Note) 
         for (i, n, a, o, p) in ld:
-            ln[i].style.color = 'red'
-            ln[i].pitch.step = mk_step(n)
+            ln[i][0].style.color = 'red'
+            ln[i][0].pitch.step = mk_step(n)
             if ((a != pse.Accid.Natural) or (p == True)):
-                ln[i].pitch.accidental = mk_accid(a)
-            ln[i].pitch.octave = o                
+                ln[i][0].pitch.accidental = mk_accid(a)
+            ln[i][0].pitch.octave = o                
 
-def mark_score(score, k, lld):
+def anote_ks_part(part, k):
+    e = m21.expressions.TextExpression('ks='+str(k))    
+    ml = part.getElementsByClass(m21.stream.Measure)
+    ml[0].insert(0, e)
+    e.placement = 'above'
+    e.style.color = 'red'   
+
+def anote_part(part, ld):
+    """mark mispells in red in a part, based on a diff-list"""
+    fpart = part.flatten()
+    ln = fpart.getElementsByClass(m21.note.Note) 
+    anote_diff(ln, ld)    
+
+def anote_score(score, k, lld):
     """print the given estimated key sign and mark mispells in score"""
     #score.show()
     tb = m21.text.TextBox('estimated key signature = '+str(k), 30, 30)
@@ -365,131 +364,30 @@ def mark_score(score, k, lld):
     lp = score.getElementsByClass(m21.stream.Part)
     assert(len(lp) == len(lld))
     for i in range(0, len(lp)):
-        mark_part(lp[i], lld[i])    
+        anote_part(lp[i], lld[i])    
 
 
 #########################
 ##                     ##
-## PS evaluation class ##
+##   error counting    ##
 ##                     ##
 #########################
 
-
-# TBR
-# flag 
-def pseval_part(part, nbtons=0, debug=False):
-    """evaluate spelling for one part in a score"""
-    k0 = get_key(part)
-    ln = extract_part(part)
-    if (count_notes(part) != len(ln)):
-        print('ERROR',  count_notes(part), len(ln))
-        return
-    print(len(ln), 'notes,', count_measures(part), 'bars,', end=' ')
-    sp = pse.Speller()
-    sp.debug(debug)
-    add_tons(nbtons, sp)
-    for (n, b, s) in ln:   # note, bar number, simultaneous flag
-        sp.add(midi=n.pitch.midi, bar=b, simultaneous=s)
-    sp.respell()
-    if (sp.sig() == k0.sharps):
-        print('global ton: OK:', '(', sp.sig(), '),', end=' ')
-    else:
-        print('global ton: NO:', '(', sp.sig(), 'was', k0, '),', end=' ')
-    ld = diff(ln, sp)
-    print('diff:', len(ld), end='\n', flush=True)
-    return (sp.sig(), ld)
-
-def pseval_part1(self, part):
-    """evaluate spelling for one part in a score"""
-    self._global_parts += 1
-    k0 = get_key(part)
-    self._current_ks_gt = k0.sharps
-    ln = extract_part(part)
-    #assert(count_notes(part) == len(ln))
-    if (count_notes(part) != len(ln)):
-        print('ERROR countnote =', count_notes(part), 'ln =', len(ln))
-    print(len(ln), 'notes,', count_measures(part), 'bars,', end=' ')
-    self._current_notes = len(ln)
-    self._global_notes += len(ln)    
-    sp = pse.Speller()
-    sp.debug(self.debug)       # debug flag for lib PSE
-    add_tons(self.nbtons, sp)
-    #add_notes(ln, sp)
-    for (n, b, s) in ln:   # note, bar number, simultaneous flag
-        sp.add(midi=n.pitch.midi, bar=b, simultaneous=s)
-    t0 = time.time()
-    sp.respell()
-    self._current_time = time.time() - t0
-    self._current_ks_est = sp.sig()
-    ld = diff(ln, sp)
-    self._current_nerr = len(ld)
-    self._global_nerr += len(ld)
-    if (sp.sig() == k0.sharps):
-        print('global ton: OK:', '(', sp.sig(), '),', end=' ')
-        print('diff:', len(ld), end='\n', flush=True)
-        self._global_nerr_ks += len(ld)
-    else:
-        print('global ton: NO:', '(', sp.sig(), 'was', k0, '),', end=' ')
-        print('diff:', len(ld), end='\n', flush=True)
-        self._global_kserr += 1
-    return (sp.sig(), ld)
-
-# TBR
-def pseval_score(score, tons=0, debug=False):
-    """evaluate spelling for all parts in a score"""
-    lp = score.getElementsByClass(m21.stream.Part)
-    nbparts = len(lp)
-    for i in range(nbparts):    
-        print('\n')
-        print(score.metadata.composer, score.metadata.title, end=' ')
-        part = lp[i]
-        if (nbparts > 1):
-            print('part', i+1, '/', len(lp), end=' ', flush=True)
-        if (spellable(part)):
-            pseval_part(part, tons, debug)
-        else:
-            print('cannot spell, skip', flush=True)
-        
-def pseval_score1(self, score, sid, title='', composer=''):
-    """evaluate spelling for all parts in a score"""
-    lp = score.getElementsByClass(m21.stream.Part)
-    nbparts = len(lp)
-    for i in range(nbparts):    
-        print(score.metadata.composer, score.metadata.title, end=' ')
-        part = lp[i]
-        if (nbparts > 1):
-            print('part', i+1, '/', len(lp), end=' ', flush=True)
-        if (spellable(part)):
-            if (len(title) == 0):
-                _title = score.metadata.title
-            else:
-                _title = title                
-            if (len(composer) == 0):
-                _comp = score.metadata.composer
-            else:
-                _comp = composer                
-            self._newtuple(title=_title, composer=_comp, part=i, sid=sid)
-            pseval_part1(self, part)
-            self._table.append(self._gettuple())
-        else:
-            print('cannot spell, skip', flush=True)
-
-class PSStats:
+def print_score(score, outfile):
+    musescore = "/MuseScore\ 3.app/Contents/MacOS/mscore"
+    pdffile = outfile+".pdf"
+    mxfile  = outfile+".musicxml"
+    os.system(musescore + " -o " + pdffile + " " + mxfile)
+                            
+# struct for counting evaluation errors 
+class Stats:
     _UNDEF_KS = 99
 
-    def __init__(self, nbt=0, dflag=False):        
+    def __init__(self):        
         # list of lists (one list per part)
         self._table = []
         #
-        # parameters and flags
-        #
-        # number of tonalities fpr spelling: speller's default
-        self.nbtons = nbt 
-        #
-        # debug mode (lib PSE)
-        self.debug = dflag
-        #
-        # counters for all parts
+        # counters for all parts sppled so far
         #
         #  number of parts proceeded
         self._global_parts = 0
@@ -502,31 +400,66 @@ class PSStats:
         # total number of wrong ks
         self._global_kserr = 0        
         #
-        # counters for current part
+        # info and counters for current score and part
         #
-        # number of notes in part currently proceeded
-        self._current_notes = 0
-        # real key sig. of part currently proceeded
-        self._current_ks_gt = self._UNDEF_KS 
-        # estimated key sig. of part currently proceeded
-        self._current_ks_est = self._UNDEF_KS 
-        # number of wrong note names in part currently proceeded
-        self._current_nerr = 0
-        # execution time for spelling part currently proceeded
-        self._current_time = 0
-        # part currently proceeded
-        self._current_part = 0
         # unique id of the score currently proceeded
         self._current_id = 0
         # title of the score currently proceeded
         self._current_title = ''
         # composer of the score currently proceeded
         self._current_composer = ''
+        # start time for spelling of the part currently proceeded
+        self._current_t0 = time.time()
+        # time for spelling of the part currently proceeded
+        self._current_time = 0
         
-    eval_part = pseval_part1
-    
-    eval_score = pseval_score1
+    ## record evaluation results
 
+    def new_score(self, score_id, title, composer):
+        """register info on a new score being precessed"""
+        if score_id == None:
+            self._current_id += 1
+        else:
+            self._current_id = score_id
+        if title == None:
+            self._current_title = ''
+        else:
+            self._current_title = title
+        if composer == None:
+            self._current_composer = ''
+        else:
+            self._current_composer = composer        
+
+    def start_timer(self):
+        """record starting time for processing of a part"""
+        self._current_t0 = time.time()
+             
+    def stop_timer(self):
+        self._current_time = time.time() - self._current_t0
+                 
+    def record_part(self, part_id, k_gt, k_est, nb_notes, nb_err):
+        """add a new row in evaluation table"""
+        self._global_parts += 1
+        self._global_notes += nb_notes
+        self._global_nerr += nb_err
+        if (k_est == k_gt.sharps):
+            self._global_nerr_ks += nb_err
+        else:
+            self._global_kserr += 1
+        row = []
+        row.append(self._current_id)
+        row.append(self._current_title)
+        row.append(self._current_composer)
+        row.append(part_id)       # current part id
+        row.append(k_gt.sharps)   # current ks gt
+        row.append(k_est)         # current ks estimation
+        row.append(nb_notes)      # nb notes in part 
+        row.append(nb_err)
+        row.append(self._current_time)
+        self._table.append(row)
+
+    ## getters 
+ 
     def get_nbparts(self):
         """return the nb of parts evaluated"""
         return self._global_parts
@@ -570,31 +503,171 @@ class PSStats:
         df.columns = ['id', 'title','composer', 'part', 'KS GT', 'KS est.', 'notes', 'err', 'time']
         df['time'] = df['time'].map('{:,.3f}'.format)
         return df
-                
-    def _newtuple(self, title, composer, part, sid):
-        """start a new row in evaluation table"""
-        if sid != None:
-            self._current_id = sid
+
+#########################
+##                     ##
+##    evaluation       ##
+##                     ##
+#########################
+
+def spellable(part):
+    """the given part can be pitch spelled"""
+    if (get_key(part) == None):
+        print(key_changes(part), 'key changes', end =' ')
+        return False
+    #elif (count_chords(part)):
+    #    print('chords', end =' ')
+    #    return False        
+    return True
+              
+def eval_part(part, stat, nbtons=0, debug=False, mark=False):
+    """evaluate spelling for one part in a score and mark errors in red"""
+    if stat == None:
+        stat=Stats()
+    k0 = get_key(part)
+    ln = extract_part(part)  # input note list
+    #assert(count_notes(part) == len(ln))
+    if (count_notes(part) != len(ln)):
+        print('ERROR',  count_notes(part), len(ln))
+        return
+    print(len(ln), 'notes,', count_measures(part), 'bars,', end=' ')
+    sp = pse.Speller()
+    sp.debug(debug)
+    add_tons(nbtons, sp)
+    for (n, b, s) in ln:   # note, bar number, simultaneous flag
+        sp.add(midi=n.pitch.midi, bar=b, simultaneous=s)
+    stat.start_timer()
+    sp.respell()
+    stat.stop_timer()
+    if (sp.sig() == k0.sharps):
+        print('global ton: OK:', '(', sp.sig(), '),', end=' ')
+    else:
+        print('global ton: NO:', '(', sp.sig(), 'was', k0, '),', end=' ')
+    ld = diff(ln, sp)
+    print('diff:', len(ld), end='\n', flush=True)
+    if mark:
+        anote_diff(ln, ld)
+        if (sp.sig() != k0.sharps):
+            # k0.style.color = 'red' 
+            anote_ks_part(part, sp.sig())
+    return (k0, sp.sig(), len(ln), ld)
+
+def eval_score(score, sid, title, composer,
+               stat, tons=0, debug=False, mark=False):
+    """evaluate spelling for all parts in a score"""
+    if stat == None:
+        stat = Stats()
+    if title == None:
+        title=score.metadata.title, 
+    if composer == None:
+        composer=score.metadata.composer        
+    stat.new_score(score_id=sid, title=title, composer=composer)
+    lp = score.getElementsByClass(m21.stream.Part)
+    nbparts = len(lp)
+    ls = []
+    lld = []
+    for i in range(nbparts):    
+        print('\n')
+        print(score.metadata.composer, score.metadata.title, end=' ')
+        part = lp[i]
+        if (nbparts > 1):
+            print('part', i+1, '/', len(lp), end=' ', flush=True)
+        if (spellable(part)):
+            (ks_gt, ks_est, nn, ld) = eval_part(part, stat, tons, debug, mark)
+            stat.record_part(i, ks_gt, ks_est, nn, len(ld))
+            ls.append(ks_est)
+            lld.append(ld)
         else:
-            self._current_id += 1
-        self._current_title = title
-        self._current_composer = composer
-        self._current_part = part
+            print('cannot spell, skip', flush=True)
+    return (ls, lld)
     
-    def _gettuple(self):
-        """return the current tuple of counter values"""
-        tl = []
-        tl.append(self._current_id)
-        tl.append(self._current_title)
-        tl.append(self._current_composer)
-        tl.append(self._current_part)
-        tl.append(self._current_ks_gt)
-        tl.append(self._current_ks_est)
-        tl.append(self._current_notes)
-        tl.append(self._current_nerr)
-        tl.append(self._current_time)
-        return tl
+def empty_difflist(lld):
+    for ld in lld:
+        if not ld:
+            continue
+        else:
+            return False
+    return True
+    
+    # struct storing detailed evaluation errors for one score
+    #class Errors:
+    #    def __init__(self):
+    #        self.lks = [] # one pair real ks est_ks for each part
+    #        self.lld = [] # onne ld for each part
+
+    #class EvalStruct:
+    #    def __init__(self, ks, ln):        
+    #        # ground truth key signature
+    #        ks_gt = ks
+    #        ks_est = ks
+    #        notes = ln
+    #        difflist = []
         
+# pseval_part in the class Stats        
+#def pseval_part1(self, part):
+#    """evaluate spelling for one part in aa score"""
+#    self._global_parts += 1
+#    k0 = get_key(part)
+#    self._current_ks_gt = k0.sharps
+#    ln = extract_part(part)
+#    #assert(count_notes(part) == len(ln))
+#    if (count_notes(part) != len(ln)):
+#        print('ERROR countnote =', count_notes(part), 'ln =', len(ln))
+#    print(len(ln), 'notes,', count_measures(part), 'bars,', end=' ')
+#    self._current_notes = len(ln)
+#    self._global_notes += len(ln)    
+#    sp = pse.Speller()
+#    sp.debug(self.debug)       # debug flag for lib PSE
+#    add_tons(self.nbtons, sp)
+#    #add_notes(ln, sp)
+#    for (n, b, s) in ln:   # note, bar number, simultaneous flag
+#        sp.add(midi=n.pitch.midi, bar=b, simultaneous=s)
+#    t0 = time.time()
+#    sp.respell()
+#    self._current_time = time.time() - t0
+#    self._current_ks_est = sp.sig()
+#    ld = diff(ln, sp)
+#    self._current_nerr = len(ld)
+#    self._global_nerr += len(ld)
+#    if (sp.sig() == k0.sharps):
+#        print('global ton: OK:', '(', sp.sig(), '),', end=' ')
+#        print('diff:', len(ld), end='\n', flush=True)
+#        self._global_nerr_ks += len(ld)
+#    else:
+#        print('global ton: NO:', '(', sp.sig(), 'was', k0, '),', end=' ')
+#        print('diff:', len(ld), end='\n', flush=True)
+#        self._global_kserr += 1
+#    return (k0, sp.sig(), len(ln), ld)
+    
+
+
+# pseval_score in the class Stats        
+#def pseval_score1(self, score, sid, title='', composer=''):
+#    """evaluate spelling for all parts in a score"""
+#    lp = score.getElementsByClass(m21.stream.Part)
+#    nbparts = len(lp)
+#    for i in range(nbparts):    
+#        print(score.metadata.composer, score.metadata.title, end=' ')
+#        part = lp[i]
+#        if (nbparts > 1):
+#            print('part', i+1, '/', len(lp), end=' ', flush=True)
+#        if (spellable(part)):
+#            if (len(title) == 0):
+#                _title = score.metadata.title
+#            else:
+#                _title = title                
+#            if (len(composer) == 0):
+#                _comp = score.metadata.composer
+#            else:
+#                _comp = composer                
+#            self._newtuple(title=_title, composer=_comp, part=i, sid=sid)
+#            pseval_part1(self, part)
+#            self._table.append(self._gettuple())
+#        else:
+#            print('cannot spell, skip', flush=True)
+
+    
+    
     
 #    k0 = get_key(part)
 #    print(k0, count_notes(part), 'notes,', count_measures(part), 'bars,', end = '\n')
@@ -629,9 +702,3 @@ class PSStats:
 #pseval(part)
 #bach0.show()
 
-
-
-
-  
-    
-    
