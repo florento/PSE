@@ -111,7 +111,7 @@ bool PST::init()
             
         // current bar b not empty (i0 in b). add it.
         i1 = bound_measure(b, i0); // first note after current measure b
-        INFO("PST init: bar {} {}-{}", b, i0, i1);
+        TRACE("PST init: bar {} {}-{}", b, i0, i1);
         assert(_enum.inside(i1 - 1));
         assert(_enum.measure(i1 - 1) == b);
         TRACE("PST: compute column of the best spelling table for measure {}\

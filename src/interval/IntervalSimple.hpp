@@ -65,8 +65,7 @@ namespace pse {
 /// | 12 | Augmented     | 7th    | A7       | 2 |
 /// | 12 | Perfect       | 8ve    | P8       | 0 |
 /// | 13 | OverAugmented | 7th    |          | 2 |
-/// | 13 | Augmented     | 8ve    | A8       | 2 |
-/// | 14 | OverAugmented | 8ve    |          | 2 |
+/// |                                    
 ///
 /// the last column in an interval category (interval cost, or rarety):
 /// - 0: intervals in the natural diatonic scale (all minor, Major, Perfect)

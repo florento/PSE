@@ -150,9 +150,9 @@
 		43A2544A292CC61100D559D2 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
 		43ABA4FD292423C5002AC1D4 /* NoteName.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = NoteName.cpp; path = src/pitch/NoteName.cpp; sourceTree = "<group>"; };
 		43ABA4FF292423E8002AC1D4 /* Ton.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Ton.cpp; path = src/ton/Ton.cpp; sourceTree = "<group>"; };
-		43ABA500292423E8002AC1D4 /* Fifths.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Fifths.hpp; path = src/pitch/Fifths.hpp; sourceTree = "<group>"; };
+		43ABA500292423E8002AC1D4 /* Fifths.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Fifths.hpp; path = src/ton/Fifths.hpp; sourceTree = "<group>"; };
 		43ABA501292423E8002AC1D4 /* Accidental.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Accidental.hpp; path = src/pitch/Accidental.hpp; sourceTree = "<group>"; };
-		43ABA502292423E8002AC1D4 /* Fifths.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Fifths.cpp; path = src/pitch/Fifths.cpp; sourceTree = "<group>"; };
+		43ABA502292423E8002AC1D4 /* Fifths.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Fifths.cpp; path = src/ton/Fifths.cpp; sourceTree = "<group>"; };
 		43ABA503292423E8002AC1D4 /* Enharmonic.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Enharmonic.hpp; path = src/pitch/Enharmonic.hpp; sourceTree = "<group>"; };
 		43ABA505292423E8002AC1D4 /* Accidental.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Accidental.cpp; path = src/pitch/Accidental.cpp; sourceTree = "<group>"; };
 		43ABA506292423E8002AC1D4 /* Ton.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Ton.hpp; path = src/ton/Ton.hpp; sourceTree = "<group>"; };
@@ -172,13 +172,13 @@
 		43ABA52129242418002AC1D4 /* PSConfig0.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PSConfig0.cpp; path = src/spell/PSConfig0.cpp; sourceTree = "<group>"; };
 		43ABA52229242418002AC1D4 /* PSTable.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = PSTable.hpp; path = src/spell/PSTable.hpp; sourceTree = "<group>"; };
 		43ABA53D292425AD002AC1D4 /* spdlog */ = {isa = PBXFileReference; lastKnownFileType = folder; name = spdlog; path = extern/spdlog; sourceTree = "<group>"; };
-		43C2BA0E299946150084AB3B /* Interval.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Interval.cpp; path = src/pitch/Interval.cpp; sourceTree = "<group>"; };
-		43C2BA0F299946150084AB3B /* Interval.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Interval.hpp; path = src/pitch/Interval.hpp; sourceTree = "<group>"; };
+		43C2BA0E299946150084AB3B /* Interval.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Interval.cpp; path = src/interval/Interval.cpp; sourceTree = "<group>"; };
+		43C2BA0F299946150084AB3B /* Interval.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Interval.hpp; path = src/interval/Interval.hpp; sourceTree = "<group>"; };
 		43C2BA1329994F630084AB3B /* Pitch.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Pitch.hpp; path = src/pitch/Pitch.hpp; sourceTree = "<group>"; };
 		43C2BA1429994F630084AB3B /* Pitch.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Pitch.cpp; path = src/pitch/Pitch.cpp; sourceTree = "<group>"; };
 		43C2BA182999529E0084AB3B /* PWO.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = PWO.cpp; path = src/pitch/PWO.cpp; sourceTree = "<group>"; };
-		43C2BA1B299A5FEE0084AB3B /* IntervalSimple.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = IntervalSimple.cpp; path = src/pitch/IntervalSimple.cpp; sourceTree = "<group>"; };
-		43C2BA1C299A5FEE0084AB3B /* IntervalSimple.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = IntervalSimple.hpp; path = src/pitch/IntervalSimple.hpp; sourceTree = "<group>"; };
+		43C2BA1B299A5FEE0084AB3B /* IntervalSimple.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = IntervalSimple.cpp; path = src/interval/IntervalSimple.cpp; sourceTree = "<group>"; };
+		43C2BA1C299A5FEE0084AB3B /* IntervalSimple.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = IntervalSimple.hpp; path = src/interval/IntervalSimple.hpp; sourceTree = "<group>"; };
 		43DD95472945E223006DC553 /* PSCost.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = PSCost.cpp; path = src/spell/PSCost.cpp; sourceTree = "<group>"; };
 		43DD95482945E223006DC553 /* PSCost.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = PSCost.hpp; path = src/spell/PSCost.hpp; sourceTree = "<group>"; };
 		43FBEAB52930CB16008FC486 /* debugpse.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = debugpse.cpp; path = src/targets/debugpse.cpp; sourceTree = "<group>"; };
@@ -206,6 +206,8 @@
 		431586182983E65A00918B1B /* ton */ = {
 			isa = PBXGroup;
 			children = (
+				43ABA500292423E8002AC1D4 /* Fifths.hpp */,
+				43ABA502292423E8002AC1D4 /* Fifths.cpp */,
 				430CDFF02924E6D700A84650 /* KeyFifth.hpp */,
 				430CDFEF2924E6D700A84650 /* KeyFifth.cpp */,
 				43ABA506292423E8002AC1D4 /* Ton.hpp */,
@@ -281,6 +283,24 @@
 			name = KrumhanslSchmuckler;
 			sourceTree = "<group>";
 		};
+		434D5CFC299FCFD900AEB02F /* interval */ = {
+			isa = PBXGroup;
+			children = (
+				43C2BA1C299A5FEE0084AB3B /* IntervalSimple.hpp */,
+				43C2BA1B299A5FEE0084AB3B /* IntervalSimple.cpp */,
+				43C2BA0F299946150084AB3B /* Interval.hpp */,
+				43C2BA0E299946150084AB3B /* Interval.cpp */,
+			);
+			name = interval;
+			sourceTree = "<group>";
+		};
+		434D5CFD299FCFF100AEB02F /* chord */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = chord;
+			sourceTree = "<group>";
+		};
 		436C6C342924016E00152D8C = {
 			isa = PBXGroup;
 			children = (
@@ -309,6 +329,8 @@
 				436C6C8E2924032000152D8C /* pybind */,
 				43A25448292BD4FE00D559D2 /* general */,
 				43A2543929280A6600D559D2 /* pitch */,
+				434D5CFC299FCFD900AEB02F /* interval */,
+				434D5CFD299FCFF100AEB02F /* chord */,
 				431586182983E65A00918B1B /* ton */,
 				431586192983E6BF00918B1B /* spell */,
 				4315861C2983E82300918B1B /* KrumhanslSchmuckler */,
@@ -347,14 +369,8 @@
 				43ABA505292423E8002AC1D4 /* Accidental.cpp */,
 				4342FD132926789C004E914F /* MidiNum.hpp */,
 				4342FD1129267895004E914F /* MidiNum.cpp */,
-				43C2BA1C299A5FEE0084AB3B /* IntervalSimple.hpp */,
-				43C2BA1B299A5FEE0084AB3B /* IntervalSimple.cpp */,
-				43C2BA0F299946150084AB3B /* Interval.hpp */,
-				43C2BA0E299946150084AB3B /* Interval.cpp */,
 				43ABA503292423E8002AC1D4 /* Enharmonic.hpp */,
 				43ABA507292423E8002AC1D4 /* Enharmonic.cpp */,
-				43ABA500292423E8002AC1D4 /* Fifths.hpp */,
-				43ABA502292423E8002AC1D4 /* Fifths.cpp */,
 				4342FD0F2926781E004E914F /* PWO.hpp */,
 				43C2BA182999529E0084AB3B /* PWO.cpp */,
 				43C2BA1329994F630084AB3B /* Pitch.hpp */,

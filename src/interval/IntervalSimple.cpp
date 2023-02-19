@@ -30,7 +30,7 @@ _quality(q),
 _cost(0)
 {
     assert(i != UNDEF_INTERVAL);
-    assert(0 <= i && i <= 6);
+    assert(1 <= i && i <= 8); // unison to octave
     assert(q != Quality::Undef);
     assert(cost != UNDEF_COST);
     assert(0 <= cost && cost <= 2);
