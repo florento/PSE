@@ -85,7 +85,7 @@ _eval_root = '../../PSeval'
 # path to LG dataset
 _dataset_root = _eval_root+'/../../Datasets/Lamarque-Goudard/'  
 # output dir name
-_dataset_name = 'LG'   
+_output_dir = 'LG/230228_300'   
 # MuseScore commandline executable
 _mscore = '/Applications/MuseScore\ 4.app/Contents/MacOS/mscore'
 
@@ -97,9 +97,9 @@ skip = [441, 470, 472, 473, 475, 478]
 # MusicXMLExportException: In part (Voice), measure (11): Cannot convert inexpressible durations to MusicXML.
 
 
-def evaluation(stat, tons=0, debug=False, mark=False):
+def evaluation(stat, tons=26, debug=False, mark=False):
     global _dataset_root
-    stat.nbtons = tons
+    # stat.nbtons = tons
     dataset = LG_map(_dataset_root)
     li = sorted(list(dataset)) # list of index in dataset   
     print('\n')
@@ -120,13 +120,35 @@ def evaluation(stat, tons=0, debug=False, mark=False):
                                        mark=mark)
             if mark and not ps.empty_difflist(lld):
                 write_score(s, t)
-            
+   
+def eval_item(id, tons=26, dflag=False, mflag=False):
+    global _dataset_root
+    dataset = LG_map(_dataset_root)
+    file = dataset[id]
+    score = m21.converter.parse(file.as_posix())
+    print(id, score.metadata.composer, score.metadata.title, end=' ')
+    part = first_part(score)
+    if (not ps.spellable(part)):
+        print('FAIL, cannot spell', flush=True)
+        return
+    # grounnd truth ks, estimated ks, nnb of nontes and list of diff notes
+    (ks_gt, gs_est, nn, ld) = ps.eval_part(part=part, nbtons=tons, 
+                                           debug=dflag, mark=mflag)
+    filep = file.parts
+    if (filep[-2] == 'ref'):
+        t = filep[-3]+'_eval'
+    else:
+        t = str(id)+'_eval'
+    if mflag and len(ld) > 0:
+        score.show()
+        write_score(score, t)
+                    
 def write_score(score, outname):
     global _eval_root
-    global _dataset_name
+    global _output_dir
     #global _mscore
-    assert(len(_dataset_name) > 0)
-    dirname = _eval_root+'/'+_dataset_name
+    assert(len(_output_dir) > 0)
+    dirname = _eval_root+'/'+_output_dir
     if not os.path.isdir(dirname):
         os.mkdir(dirname)
     dirname = dirname+'/'+outname
@@ -137,10 +159,10 @@ def write_score(score, outname):
     # pdffile = dirname+'/'+outname+'.pdf'
     # os.system(_mscore + ' -o ' + pdffile + ' ' + xmlfile)
  
-def eval_export(filename, tons=0, debug=False, mark=False):
+def eval_export(filename, tons=26, debug=False, mark=False):
     global _eval_root
-    global _dataset_name
-    filename = _eval_root+'/'+_dataset_name+'/'+filename
+    global _output_dir
+    filename = _eval_root+'/'+_output_dir+'/'+filename
     stat = ps.Stats()    
     evaluation(stat, tons, debug, mark)
     stat.show()    
@@ -184,7 +206,6 @@ def key_changes(root):
 #_dataset = init(dataset_root)
 #li = sorted(list(dataset)) # list of index in dataset    
 
-
 def eval_item(id, tons=0, dflag=False):
     global _dataset_root
     dataset = LG_map(_dataset_root)
@@ -210,7 +231,7 @@ def eval_item(id, tons=0, dflag=False):
                 ln[i].pitch.accidental = ps.mk_accid(a)
             ln[i].pitch.octave = o                
         score.show()
-        
+                
 
 #TESTI=128
 #dataset = init(dataset_root)

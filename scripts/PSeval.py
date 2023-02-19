@@ -178,13 +178,18 @@ def add_tons(tons, sp):
     """add tonalities to a speller"""
     print('add_tons', tons)
     if (tons == 0): 
-        return                  # use default tons of module
+        return                            # default tons of module (30)
+    elif (tons == 25):                    # Bach VTK
+        for k in range(-4, 8):            # maj key signature in [-4 .. 7]
+            sp.add_ton(k, pse.Mode.Major) # C, C#, D, Eb, E, F, F#, G, Ab, A, Bb, B 
+        for k in range(-6, 7):            # min key signature in [-6 .. 6]
+            sp.add_ton(k, pse.Mode.Minor) # C, C#, D, Eb, D#, E, F, F#, G, G#, A, Bb, B   
     elif (tons == 26):
-        for k in range(-6, 7):  # key signature in [-6 .. 6]
+        for k in range(-6, 7):            # key signature in [-6 .. 6]
             sp.add_ton(k, pse.Mode.Major)
             sp.add_ton(k, pse.Mode.Minor)
     elif (tons == 30):
-        for k in range(-7, 8):  # key signature in [-7 .. 7]
+        for k in range(-7, 8):            # key signature in [-7 .. 7]
             sp.add_ton(k, pse.Mode.Major)
             sp.add_ton(k, pse.Mode.Minor)
 
@@ -366,18 +371,17 @@ def anote_score(score, k, lld):
     for i in range(0, len(lp)):
         anote_part(lp[i], lld[i])    
 
+def print_score(score, outfile):
+    musescore = "/MuseScore\ 3.app/Contents/MacOS/mscore"
+    pdffile = outfile+".pdf"
+    mxfile  = outfile+".musicxml"
+    os.system(musescore + " -o " + pdffile + " " + mxfile)
 
 #########################
 ##                     ##
 ##   error counting    ##
 ##                     ##
 #########################
-
-def print_score(score, outfile):
-    musescore = "/MuseScore\ 3.app/Contents/MacOS/mscore"
-    pdffile = outfile+".pdf"
-    mxfile  = outfile+".musicxml"
-    os.system(musescore + " -o " + pdffile + " " + mxfile)
                             
 # struct for counting evaluation errors 
 class Stats:
