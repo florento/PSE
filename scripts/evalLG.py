@@ -14,14 +14,17 @@ import music21 as m21
 import PSeval as ps
 
 
-###############################
-##                           ##
-## import dataset to Music21 ##
-##                           ##
-###############################
+#################################
+##                             ##
+## extraction of dataset files ##
+##                             ##
+#################################
 
 # sys.path.insert(0, "/jacquema/Datasets/Lamarque-Goudard")
 
+# global variables
+# path to LG dataset
+_dataset_root = _eval_root+'/../../Datasets/Lamarque-Goudard/'
 
 def search_xml(directory_path):
     """search for a MusicXML file in a directory path"""
@@ -38,8 +41,29 @@ def search_xml(directory_path):
             return file
     # no xml file found: return None
     return 
-        
-    
+
+def first_part(score):
+    lp = score.getElementsByClass(m21.stream.Part)
+    if (len(lp) != 1):
+        print('FAIL, nb parts =', len(lp), flush=True)
+        return
+    return lp[0]
+
+def key_changes(root):
+    """find scores in data set with key changes"""
+    dataset = LG_map(root)
+    li = sorted(list(dataset))  # list of index in dataset
+    for i in li:
+        file = dataset[i]
+        score = m21.converter.parse(file.as_posix())
+        kl = ps.extract_keys(score)
+        kex = []
+        if (len(kl) > 1):
+            kex.append(id)
+            print(len(kl), 'keys in', id,
+                  score.metadata.composer, score.metadata.title)
+    return kex
+
 def LG_map(root):
     dataset_path = Path(root)
     assert isinstance(dataset_path, PosixPath)
@@ -77,15 +101,15 @@ def LG_map(root):
 ##                                       ##
 ###########################################
 
-
 # global variables
 
-# we assume that we are in dir script/ of the svaluation dir
+# root of evaluation dir
 _eval_root = '../../PSeval'
-# path to LG dataset
-_dataset_root = _eval_root+'/../../Datasets/Lamarque-Goudard/'  
-# output dir name
+# or '..' if we assume that we are in dir script/ of the evaluation dir
+
+# name of dir for evaluation output
 _output_dir = 'LG/230228_300'   
+
 # MuseScore commandline executable
 _mscore = '/Applications/MuseScore\ 4.app/Contents/MacOS/mscore'
 
@@ -97,7 +121,7 @@ skip = [441, 470, 472, 473, 475, 478]
 # MusicXMLExportException: In part (Voice), measure (11): Cannot convert inexpressible durations to MusicXML.
 
 
-def evaluation(stat, tons=26, debug=False, mark=False):
+def eval_LG(stat, tons=26, debug=False, mark=False):
     global _dataset_root
     # stat.nbtons = tons
     dataset = LG_map(_dataset_root)
@@ -106,20 +130,21 @@ def evaluation(stat, tons=26, debug=False, mark=False):
     print('starting evaluation')
     print('\n')    
     for i in li:
-        if (not i in skip):
-            file = dataset[i]
-            print('\n')
-            print(file)
-            filep = file.parts
-            t = ''
-            if (filep[-2] == 'ref'):
-                t = filep[-3]
-            s = m21.converter.parse(file.as_posix())
-            (ls, lld) =  ps.eval_score(score=s, sid=i, title=t, composer='', 
-                                       stat=stat, tons=tons, debug=debug, 
-                                       mark=mark)
-            if mark and not ps.empty_difflist(lld):
-                write_score(s, t)
+        if (i in skip):
+            continue
+        file = dataset[i]
+        print('\n')
+        print(file)
+        filep = file.parts
+        t = ''
+        if (filep[-2] == 'ref'):
+            t = filep[-3]
+        s = m21.converter.parse(file.as_posix())
+        (ls, lld) = ps.eval_score(score=s, sid=i, title=t, composer='', 
+                                  stat=stat, tons=tons, debug=debug, 
+                                  mark=mark)
+        if mark and not ps.empty_difflist(lld):
+            write_score(s, t)
    
 def eval_item(id, tons=26, dflag=False, mflag=False):
     global _dataset_root
@@ -164,48 +189,30 @@ def eval_export(filename, tons=26, debug=False, mark=False):
     global _output_dir
     filename = _eval_root+'/'+_output_dir+'/'+filename
     stat = ps.Stats()    
-    evaluation(stat, tons, debug, mark)
+    eval_LG(stat, tons, debug, mark)
     stat.show()    
     df = stat.get_dataframe() # create pands dataframe
-    df.pop('part') # del column part umber (always 0)
+    df.pop('part') # del column part number (always 0)
     df.to_csv(filename, header=True, index=False)
 
+def complete_table(df):
+    
+    return
+        
 
 
 #######################
-##                   ##
+##                   ## 
+##       test        ##
 ## manual evaluation ##
 ##                   ##
 #######################
-
-
-def first_part(score):
-    lp = score.getElementsByClass(m21.stream.Part)
-    if (len(lp) != 1):
-        print('FAIL, nb parts =', len(lp), flush=True)
-        return
-    return lp[0]
-    
-def key_changes(root):
-    """find scores in data set with key changes"""
-    dataset = LG_map(root)
-    li = sorted(list(dataset)) # list of index in dataset    
-    for i in li:
-        file = dataset[i]
-        score = m21.converter.parse(file.as_posix())
-        kl = ps.extract_keys(score)
-        kex = []
-        if (len(kl) > 1):
-            kex.append(id)
-            print(len(kl), 'keys in', id, 
-                  score.metadata.composer, score.metadata.title)
-    return kex
-
 
 # TBR
 #_dataset = init(dataset_root)
 #li = sorted(list(dataset)) # list of index in dataset    
 
+# old, TBR
 def eval_item(id, tons=0, dflag=False):
     global _dataset_root
     dataset = LG_map(_dataset_root)
@@ -245,9 +252,6 @@ def eval_item(id, tons=0, dflag=False):
 #for (n, b) in ln:
 #    print('sp.add(', n.pitch.midi, ',', b, ')')
     
-
-
-
 # 470 boucle dans respell
 #file = dataset[470]
 #print(file)
@@ -261,6 +265,4 @@ def eval_item(id, tons=0, dflag=False):
 #
 # for p in ln:
 #    print('sp.add(', p[0].pitch.midi, ',', p[1],')')
-    
-
 

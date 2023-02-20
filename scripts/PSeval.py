@@ -10,6 +10,7 @@ Created on Wed Nov 23 13:18:18 2022
 import os
 import time
 from dataclasses import dataclass
+import numpy as np
 import pandas as pd
 import music21 as m21
 import pse
@@ -179,7 +180,7 @@ def add_tons(tons, sp):
     print('add_tons', tons)
     if (tons == 0): 
         return                            # default tons of module (30)
-    elif (tons == 25):                    # Bach VTK
+    elif (tons == 25):                    # Bach DWK
         for k in range(-4, 8):            # maj key signature in [-4 .. 7]
             sp.add_ton(k, pse.Mode.Major) # C, C#, D, Eb, E, F, F#, G, Ab, A, Bb, B 
         for k in range(-6, 7):            # min key signature in [-6 .. 6]
@@ -504,9 +505,45 @@ class Stats:
     def get_dataframe(self):
         """return a panda dataframe of the evaluation"""
         df = pd.DataFrame(self._table)
-        df.columns = ['id', 'title','composer', 'part', 'KS GT', 'KS est.', 'notes', 'err', 'time']
+        df.columns = ['id', 'title','composer', 'part', 'KSgt', 'KSest', 'notes', 'err', 'time']
         df['time'] = df['time'].map('{:,.3f}'.format)
+        # every KSestimated identical to corresp. KSgt becomes NaN
+        df.loc[df['KSgt'] == df['KSest'], 'KSest'] = np.nan
+        # d = df['KSgt'].compare(df['KSest'], keep_shape=True)['other'].fillna('')        
+        # 2 new lines for sum of notes and errors
+        total = { 'KSest' : [df['KSest'].count()], 
+                  'notes' : [df['notes'].sum()], 
+                  'err' : [df['err'].sum()] }
+        df = df.append(pd.DataFrame.from_dict(total), ignore_index=True)
+        percent = { 'KSest' : [ pcformat(total['KSest'][0] * 100 / len(df['KSest'])) ], 
+                    'err'   : [ pcformat(total['err'][0] * 100 / total['notes'][0]) ] }
+        df = df.append(pd.DataFrame.from_dict(percent), ignore_index=True)
+        # replace NaN by empty string
+        #df = df.fillna('')
+        # reset type of column 'KSgt' to Integer
+        #df['KSest'] = df['KSest'].astype('Int64')                
         return df
+    
+def pcformat(x):    
+    if abs(x - int(x)) < 1e-6:
+        return int(x)
+    else:
+        return round(x,2)
+            
+def ks_errors(df):
+    return len(df['KSgt'].compare(df['KSest'], keep_shape=False))
+
+def sp_errors(df):
+    return df['err'].sum() / df['notes'].sum()
+
+
+# count errors in KS estimation
+
+
+
+# count spelling errors
+# df2 = df.append(df[['notes','err']].sum(),ignore_index=True).fillna('')
+
 
 #########################
 ##                     ##
