@@ -464,7 +464,6 @@ class Stats:
         self._table.append(row)
 
     ## getters 
- 
     def get_nbparts(self):
         """return the nb of parts evaluated"""
         return self._global_parts
@@ -482,11 +481,14 @@ class Stats:
         return self._global_kserr
 
     def get_nberrorsks(self):
-        """return the total nb of spell errors in evaluations with correct KS guess"""
+        """return the total nb of spell errors in evaluations with correct KS"""
         return self._global_nerr_ks
 
     def percent_spell(self):
         return (self._global_notes - self._global_nerr) * 100 / self._global_notes
+
+#    def percent_spell_correctKS(self):
+#        return (self._global_notes - self._global_nerr) * 100 / self._global_notes
 
     def percent_ks(self):
         return (self._global_parts - self._global_kserr) * 100 / self._global_parts
@@ -510,19 +512,41 @@ class Stats:
         # every KSestimated identical to corresp. KSgt becomes NaN
         df.loc[df['KSgt'] == df['KSest'], 'KSest'] = np.nan
         # d = df['KSgt'].compare(df['KSest'], keep_shape=True)['other'].fillna('')        
-        # 2 new lines for sum of notes and errors
-        total = { 'KSest' : [df['KSest'].count()], 
-                  'notes' : [df['notes'].sum()], 
-                  'err' : [df['err'].sum()] }
-        df = df.append(pd.DataFrame.from_dict(total), ignore_index=True)
-        percent = { 'KSest' : [ pcformat(total['KSest'][0] * 100 / len(df['KSest'])) ], 
-                    'err'   : [ pcformat(total['err'][0] * 100 / total['notes'][0]) ] }
-        df = df.append(pd.DataFrame.from_dict(percent), ignore_index=True)
+        return df
+
+    def write_dataframe(self, file):
+        """write the evaluation table into a cvs file, after some formatting"""
+        df = self.get_dataframe(self)
+        df.fillna('').to_csv(file, header=True, index=False)
+    
+    # useless, there are accessors for that
+    def get_datasum(self):
+        """return a summary of the evaluation as a dictionary"""
+        df = self.get_dataframe(self)
+        #df.loc[df['KSgt'] == df['KSest'], 'KSest'] = np.nan
+        # sums and errors
+        total = { 'nb_KS'    : len(df['KSgt']),
+                  'err_KS'   : [df['KSest'].count()], 
+                  'nb_note'  : [df['notes'].sum()], 
+                  'err_note' : [df['err'].sum()] }
+        #df = df.append(pd.DataFrame.from_dict(total), ignore_index=True)
+        #df = df.astype({"KSgt": int, "notes": int, "err": int})        
+        #df = df.convert_dtypes()
+        #df = df.fillna('')
+        percent = { 'KS_rate'  : [ pcformat(total['err_KS'][0] * 100 / total['nb_KS'][0]) ], 
+                    'err_rate' : [ pcformat(total['err_note'][0] * 100 / total['nb_note'][0]) ] }
+        #df = df.append(pd.DataFrame.from_dict(percent), ignore_index=True)
         # replace NaN by empty string
         #df = df.fillna('')
         # reset type of column 'KSgt' to Integer
         #df['KSest'] = df['KSest'].astype('Int64')                
+        df = pd.DataFrame(total | percent) # flat dataframe (1 raw) from concatenation of 2 dictionaries       
         return df
+
+    def write_datasum(self, file):
+        """write a summary of the evaluation into a cvs file (1 line)"""
+        df = self.get_datasum(self)
+        df.to_csv(file, header=True, index=False)
     
 def pcformat(x):    
     if abs(x - int(x)) < 1e-6:

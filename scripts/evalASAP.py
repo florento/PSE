@@ -40,7 +40,7 @@ def get_parts(score):
 
 ###########################################
 ##                                       ##
-## automatic evaluation of whole dataset ##
+## automatic evaluation of ASAP dataset  ##
 ##                                       ##
 ###########################################
 
@@ -63,6 +63,122 @@ def multisort(xs, specs):
     for key, reverse in reversed(specs):
         sorted(xs, key=attrgetter(key), reverse=reverse)
     return xs
+
+def write_score(score, title='title', composer='Unknown'):
+    global _eval_root
+    global _output_dir
+    assert(len(_output_dir) > 0)
+    dirname = _eval_root+'/'+_output_dir+'/'+composer
+    if not os.path.isdir(dirname):
+        os.mkdir(dirname)
+    xmlfile = dirname+'/'+title+'.musicxml'
+    score.write('musicxml', fp=xmlfile)
+    # pdffile = dirname+'/'+outname+'.pdf'
+    # os.system(_mscore + ' -o ' + pdffile + ' ' + xmlfile)
+    
+def eval_asapscore(sid, file, stat, title='title', composer='Unknown',
+                   tons=0, dflag=False, mflag=False):
+    s = m21.converter.parse(file)
+    (ls, lld) = ps.eval_score(score=s, sid=sid, title=title, composer=composer,
+                              stat=stat, tons=tons, debug=dflag, mark=mflag)
+    if mflag: # and not ps.empty_difflist(lld):
+        write_score(s, title, composer)
+
+def str_hands(i):
+    if i == 0:
+        return 'rh'
+    elif i == 1:
+        return 'lh'
+    else:        
+        return 'ERR'
+
+def revise_table_asap(df):
+    # replace part number (0 and 1) by 'rh' 'lh'
+    df['part'].update(df['part'].apply(str_hands))
+    #df.insert(4, 'hand', df['part'].apply(str_hands))
+    #df.pop('part')   
+
+
+
+
+########################
+##                    ##
+##  Beethoven Sonata  ##
+##                    ##
+########################
+
+def Beethoven_list():
+    """list of Beethoven Sonata in ASAP, 
+		in the form of triplets (sonata nb, mvt nb, path)"""
+    global _dataset_root
+    global _generic_score
+    dir_re = re.compile("(\d+)-(\d)_?\d?$")
+    bl = []
+    p = Path(_dataset_root)/'Beethoven'/'Piano_Sonatas'
+    assert(os.path.isdir(p))
+    for d in os.listdir(p):
+        dm = dir_re.match(d)
+        if dm == None:
+            continue
+        po = p / d / _generic_score
+        assert(os.path.isfile(po))
+        bl.append(Opus(int(dm.group(1)), int(dm.group(2)), str(po)))
+    bl = sorted(bl, key=attrgetter('nb', 'mvt')) 
+    return bl
+
+Beethoven_skip = []
+
+def eval_Beethoven(stat, tons=0, dflag=False, mflag=False):
+    if stat == None:
+        stat = ps.Stats()
+    for s in Beethoven_list():
+        if (s.nb, s.mvt) in Beethoven_skip:
+            print(s.nb, s.mvt, ': SKIP')           
+            continue
+        else:
+            print(s.nb, s.mvt, ':', s.file)
+            eval_asapscore(sid=s.nb*10+s.mvt, file=s.file, stat=stat,
+                           title='Sonata '+str(s.nb)+'_'+str(s.mvt), composer='Beethoven',
+                           tons=tons, debug=dflag, mark=mflag)
+    df = stat.get_dataframe()
+    revise_table_asap(df)
+    # write table and summary to files and display stats
+    df.to_csv(_dataset_root+'/Beethoven/Beethoven.csv', header=True, index=False)
+    stat.write_datasum(_dataset_root+'/Beethoven/Beethoven_sum.csv')
+    stat.show()
+
+# Waldstein chords in 2 first bars (for C++ debug)
+def Waldstein():
+    global _dataset_root
+    bl = Beethoven_list()
+    sonata = bl[33] # 21.1
+    score = m21.converter.parse(sonata.file)
+    lp = score.getElementsByClass(m21.stream.Part)
+    #k0 = ps.get_key(lp[1])
+    #ln0 = ps.extract_part(lp[0]) # right hand part
+    ln1 = ps.extract_part(lp[1])  # left hand part
+    for (n, b, s) in ln1[600:]:   
+        a = 'sp.add('
+        a += str(n.pitch.midi)
+        a += ', '
+        a += str(b)
+        a += ', '
+        a += 'true' if s else 'false'
+        a += ');'
+        print(a)        
+    #sp = ps.Speller()
+    #sp.debug(True)
+    #ps.add_tons(0, sp)
+    #sp.add_notes(ln1[:61], sp)
+    #sp.respell()
+
+
+
+######################################
+##                                  ##
+## Bach Das Wohltemperierte Klavier ##
+##                                  ##
+######################################
 
 def DWK_sublist(p, sublist):
     global _generic_score
@@ -149,54 +265,6 @@ lBach = [#(846, 'Prelude', '../../../Datasets/ASAP/Bach/Prelude/bwv_846/xml_scor
          #(893, 'Fugue', '../../../Datasets/ASAP/Bach/Fugue/bwv_893/xml_score.musicxml')
          ]
 
-def Beethoven_list():
-    """list of Beethoven Sonata in ASAP, 
-		in the form of triplets (sonata nb, mvt nb, path)"""
-    global _dataset_root
-    global _generic_score
-    dir_re = re.compile("(\d+)-(\d)_?\d?$")
-    bl = []
-    p = Path(_dataset_root)/'Beethoven'/'Piano_Sonatas'
-    assert(os.path.isdir(p))
-    for d in os.listdir(p):
-        dm = dir_re.match(d)
-        if dm == None:
-            continue
-        po = p / d / _generic_score
-        assert(os.path.isfile(po))
-        bl.append(Opus(int(dm.group(1)), int(dm.group(2)), str(po)))
-    bl = sorted(bl, key=attrgetter('nb', 'mvt')) 
-    return bl
-
-def write_score(score, title='title', composer='Unknown'):
-    global _eval_root
-    global _output_dir
-    assert(len(_output_dir) > 0)
-    dirname = _eval_root+'/'+_output_dir+'/'+composer
-    if not os.path.isdir(dirname):
-        os.mkdir(dirname)
-    xmlfile = dirname+'/'+title+'.musicxml'
-    score.write('musicxml', fp=xmlfile)
-    # pdffile = dirname+'/'+outname+'.pdf'
-    # os.system(_mscore + ' -o ' + pdffile + ' ' + xmlfile)
-    
-def eval_asapscore(sid, file, stat, title='title', composer='Unknown',
-                   tons=0, dflag=False, mflag=False):
-    s = m21.converter.parse(file)
-    (ls, lld) = ps.eval_score(score=s, sid=sid, title=title, composer=composer,
-                              stat=stat, tons=tons, debug=dflag, mark=mflag)
-    if mflag: # and not ps.empty_difflist(lld):
-        write_score(s, title, composer)
-
-def eval_Beethoven(stat, tons=0, dflag=False, mflag=False):
-    if stat == None:
-        stat = ps.Stats()
-    for s in Beethoven_list():
-        print(s.nb, s.mvt, ':', s.file)
-        eval_asapscore(sid=s.nb*10+s.mvt, file=s.file, stat=stat,
-                       title='Sonata '+str(s.nb)+'_'+str(s.mvt), composer='Beethoven',
-                       tons=tons, debug=dflag, mark=mflag)
-
 # (866, 'Prelude') lonnnng
 Bach_skip = [(856, 'Prelude'), (873, 'Prelude'), ]
 
@@ -225,32 +293,10 @@ def eval_Bach(tons=25, dflag=False, mflag=False):
                        tons=tons, dflag=dflag, mflag=mflag)
     df = stat.get_dataframe()
     revise_table_asap(df)
-    # write table to file
+    # write table and summary to files and display stats
     df.to_csv(_dataset_root+'/Bach/DWK.csv', header=True, index=False)
-    # and display stats
+    stat.write_datasum(_dataset_root+'/Bach/DWK_sum.csv')
     stat.show()
-
-def str_hands(i):
-    if i == 0:
-        return 'rh'
-    elif i == 1:
-        return 'lh'
-    else:        
-        return 'ERR'
-
-def revise_table_asap(df):
-    # replace part number (0 and 1) by 'rh' 'lh'
-    df['part'].update(df['part'].apply(str_hands))
-    #df.insert(4, 'hand', df['part'].apply(str_hands))
-    #df.pop('part')   
-
-def get_table(subdir,file):
-    global _eval_root
-    fp = Path(_eval_root)/'ASAP'/subdir/file
-    assert(os.path.isfile(fp))
-    df = pd.read_csv(fp)
-    return df
-
 
 
 # bl = Beethoven_list()
@@ -262,35 +308,15 @@ def get_table(subdir,file):
 
 #import pse
 
+def get_table(subdir,file):
+    global _eval_root
+    fp = Path(_eval_root)/'ASAP'/subdir/file
+    assert(os.path.isfile(fp))
+    df = pd.read_csv(fp)
+    return df
+
 #stat.eval_score(b, 0)  # 0 : standard list of 26 tons
 #stat.show()
-
-# Waldstein chords in 2 first bars
-def Waldstein():
-    stat = ps.Stats()
-    root='../../../Datasets/ASAP/'
-    bl = Beethoven_list()
-    sonata = bl[33] # 21.1
-    score = m21.converter.parse(sonata.file)
-    lp = score.getElementsByClass(m21.stream.Part)
-    k0 = ps.get_key(lp[1])
-    ln0 = ps.extract_part(lp[0])
-    ln1 = ps.extract_part(lp[1])
-    for (n, b, s) in ln1[600:]:   
-        a = 'sp.add('
-        a += str(n.pitch.midi)
-        a += ', '
-        a += str(b)
-        a += ', '
-        a += 'true' if s else 'false'
-        a += ');'
-        print(a)        
-    #sp = ps.Speller()
-    #sp.debug(True)
-    #ps.add_tons(0, sp)
-    #sp.add_notes(ln1[:61], sp)
-    #sp.respell()
-
 
 
 #file = dataset[470]
