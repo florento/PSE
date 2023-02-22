@@ -135,10 +135,10 @@ private:
     static const std::vector<const Ton> TONS26;
 
     // table of state vectors associated to tonalities in TON.
-    // static std::array<const AccidState, NBTONS> ASTATES;
+    // static std::array<const PSState, NBTONS> ASTATES;
 
     // table of joker state vectors associated to tonalities in TON.
-    // static std::array<const AccidState, NBTONS> AJOKER;
+    // static std::array<const PSState, NBTONS> AJOKER;
 
 };
 

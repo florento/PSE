@@ -17,119 +17,37 @@ namespace pse {
 
 
 // copy and update
-PSC1::PSC1(std::shared_ptr<const PSC0> c, unsigned int mp,
+PSC1::PSC1(std::shared_ptr<const PSC0> c, const PSEnum& e, //unsigned int mp,
            const NoteName& name, const Accid& accid,
            const Ton& ton):
 PSC(c),
-_midi(mp),
+_midi(e.midipitch(c->id()+1)),
 _name(name),
 _print(false)
 {
     assert(c);
     _print = _state.update(name, accid);
     _id = c->id()+1; // next note in enum
+    assert(_id < e.stop());
     assert(defined(accid));
-
-    // count the cost
-    bool cc = false;
-
-    // update cost when accident for the name was updated
-    // discount for lead degree
-    
-    // for min harm and min mel
-    // count cost for a lead note if its accidental is not the one of the scale
-    if (ton.lead(name))
-    {
-        cc = (ton.accidDia(name) != accid);
-        // if (ton == Ton(-3, Ton::Mode::Min))
-          // DEBUGU("PSC: {} lead {}: {} != {}",
-          //        ton, name, ton.accidDia(name), accid);
-          // DEBUGU("PSC: {}, {}: {} {}",
-          //       ton, name, ((ton.lead(name))?"lead":"not lead"),
-          //       ((ton.accidDia(name) != accid)?"!=":"=="));
-    }
-    // otherwise, count cost for every printed accidental
-    else
-    {
-        cc = _print;
-    }
-
-    if (cc)
-    {
-        // int a = toint(accid);
-        // assert(-2 <= a);
-        // assert(a <= 2);
-        // if (accid == Accid::Natural) // natural
-        //     _accidents += 1;
-        // else        // single or double sharp or flat
-        //     _accidents += std::abs(a);
-        switch (accid)
-        {
-            case Accid::DoubleSharp:
-            case Accid::DoubleFlat:
-                _cost.incrAccid(2);
-                break;
-
-            case Accid::Sharp:
-            case Accid::Flat:
-                _cost.incrAccid(1);
-                break;
-
-            case Accid::Natural:
-                _cost.incrAccid(1);
-                break;
-
-            default:
-            {
-                ERROR("PSC: unexpected accidental"); // accid
-                break;
-            }
-        }
-    }
+    _cost.update(*this, e, ton);
 }
 
 
-PSC1::PSC1(std::shared_ptr<const PSC0> c, unsigned int mp,
+PSC1::PSC1(std::shared_ptr<const PSC0> c, const PSEnum& e, //unsigned int mp,
            const NoteName& name, const Accid& accid,
            const Ton& ton, const Ton& lton):
-PSC1(c, mp, name, accid, ton)
+PSC1(c, e, name, accid, ton)
 {
-    assert(c);
     // complete the update
-
-    // distance to conjectured local ton.
-    _cost.incrDist(_state.dist(lton));
-
-    // disjoint move from previous note
-    assert(previous());
-    if (previous()->fromNote())
-    {
-        assert(! previous()->initial());
-        const PSC1* pred = dynamic_cast<const PSC1*>(previous());
-        assert(pred);
-        // previous note (before mp)
-        unsigned int pmp = pred->midi();
-        if ((std::abs((int) mp - (int) pmp) < 5) &&
-            (! diatonicStep(pred->name(), name)))
-        {
-            _cost.incrDisj(1);
-        }
-    }
-    // otherwise no previous note, _disj not updated
-    
-    // color of accident and color of global ton
-    if (((ton.fifths() >= 0) && (flat(accid))) ||
-        ((ton.fifths() < 0) && (sharp(accid))))
-    {
-        _cost.incrColor(1);
-    }
+    _cost.update(*this, e, ton, lton);
 }
 
 
 // copy
 PSC1::PSC1(const PSC1& c):
 PSC(c),
-_midi(c._midi),
+_midi(c._midi), // TBR
 _name(c._name),
 _print(c._print)
 { }

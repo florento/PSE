@@ -23,7 +23,7 @@
 #include "Accidental.hpp"
 //#include "Pitch.hpp"
 //#include "KeyFifth.hpp"
-#include "AccidentState.hpp"
+#include "PSState.hpp"
 #include "PSEnum.hpp"
 #include "PSCost.hpp"
 
@@ -63,7 +63,7 @@ public:
 
     // initial config with a given accident state
     // @param init index of last note read to reach this configuration
-    // PSC0(const AccidState& s, size_t init=0);
+    // PSC0(const PSState& s, size_t init=0);
 
     /// copy constructor
     PSC0(const PSC0& s);
@@ -99,11 +99,14 @@ public:
     /// @param name note nate coded in 0..6 (0 is 'C', 6 is 'B').
     const Accid accidental(const NoteName& name) const;
 
-    /// index (in an enumerator) of note read for the transition from
+    // enumerator this transition was built from
+    // PSEnum& psenum() const;
+    
+    /// index (in enumerator) of note read for the transition from
     /// this config to its successors.
     size_t id() const;
     
-    inline const AccidState& state() const { return _state; }
+    inline const PSState& state() const { return _state; }
 
     /// cost of the minimal path to this config.
     inline const PSCost& cost() const { return _cost; }
@@ -117,7 +120,7 @@ public:
 
     /// cumulated number of non-conjoint moves in the minimal path to this config.
     /// @todo remove
-    size_t disjoint() const { return _cost.getDisj(); }
+    size_t disjoint() const { return _cost.getDia(); }
 
     /// allocate every config reached by one transition from this config,
     /// when reading one pitch or several simultaneous pitchs,
@@ -154,15 +157,18 @@ public:
 protected:
 
     /// description of accidents for each note name.
-    AccidState _state;
+    PSState _state;
 
     // description of discounted accident for each note name.
     // will not be updated.
-    // AccidState _jokers;
+    // PSState _jokers;
+
+    // note enumerator, to read the note for the transition from
+    // this config to its successors.
+    // PSEnum& _enum;
     
-    /// index (in an enumerator) of note read for the transition from
+    /// index (in an enumerator) of the note read for the transition from
     /// this config to its successors.
-    /// @todo mv to PSC
     size_t _id;
     
     /// cumulated cost in the minimal path to this config.

@@ -14,13 +14,20 @@
 #include <assert.h>
 
 #include "trace.hpp"
-
+#include "PSEnum.hpp"
+#include "NoteName.hpp"
+#include "Accidental.hpp"
+#include "Ton.hpp"
 
 namespace pse {
 
+
+class PSC1;
+class PSC2;
+
+
 /// Cost model for the ordering of configuration of the PS algorithm.
 // see Note Spelling Conventions in Behind Bars (page 85)
-
 struct PSCost
 {
 public:
@@ -56,24 +63,29 @@ public:
     /// access cumulated number of accidents.
     inline size_t getAccid() const { return _accid; }
     
-    /// modify cumulated number of accidents.
-    inline void incrAccid(size_t a=1) { _accid += a; }
-    
     /// access cumulated distance to tonic.
     inline size_t getDist() const { return _dist; }
 
-    /// modify cumulated distance to tonic.
-    inline void incrDist(size_t d=1) { _dist += d; }
-
     /// cumulated number of non-conjoint moves.
-    inline size_t getDisj() const { return _disj; }
+    inline size_t getDia() const { return _ndia; }
 
-    /// modify number of non-conjoint moves.
-    inline void incrDisj(size_t d=1) { _disj += d; }
-    
     /// cumulated number of accidentals with color different from global ton.
     inline size_t getColor() const { return _color; }
 
+    void update(const PSC1& c, const PSEnum& e, const Ton& ton);
+
+    void update(const PSC1& c, const PSEnum& e,
+                const Ton& ton, const Ton& lton);
+
+    /// modify cumulated number of accidents.
+    inline void incrAccid(size_t a=1) { _accid += a; }
+    
+    /// modify cumulated distance to tonic.
+    inline void incrDist(size_t d=1) { _dist += d; }
+
+    /// modify number of non-conjoint moves.
+    inline void incrDisj(size_t d=1) { _ndia += d; }
+    
     /// modify number of accidentals with color different from global ton.
     inline void incrColor(size_t d=1) { _color += d; }
     
@@ -85,15 +97,15 @@ private:
     /// in the minimal path to this config.
     size_t _accid; // unsigned int
     
-    /// cumulated distance to a conjectured local tonality
-    /// in the minimal path to this config.
-    size_t _dist;
-
-    /// cumulated number of non-conjoint moves
+    /// cumulated number of non-diatonic moves
     /// in the minimal path to this config.
     /// conjoint move = adjacent pitch letters (stepwise figures as a scale)
     // replace by augmented and diminished intervals ?
-    size_t _disj;
+    size_t _ndia;
+
+    /// cumulated distance to a conjectured local tonality
+    /// in the minimal path to this config.
+    size_t _dist;
 
     /// cumulated number of accidentals with color different from global ton
     /// in the minimal path to this config.

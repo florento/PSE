@@ -292,7 +292,7 @@ void PSB::succ1(std::shared_ptr<const PSC0> c,
         Accid accid = Enharmonics::accid(m, j);
         // case of 8 and (short list) 1, 3, 6, 10
         if (defined(name) && defined(accid))
-            q.push(std::make_shared<PSC1>(c, pm, name, accid, ton));
+            q.push(std::make_shared<PSC1>(c, e, name, accid, ton));
     }
 }
 
@@ -363,7 +363,7 @@ void PSB::succ1(std::shared_ptr<const PSC0> c,
         Accid accid = Enharmonics::accid(m, j);
         // case of 8 and (short list) 1, 3, 6, 10
         if (defined(name) && defined(accid))
-            q.push(std::make_shared<PSC1>(c, pm, name, accid, ton, lton));
+            q.push(std::make_shared<PSC1>(c, e, name, accid, ton, lton));
     }
 }
 

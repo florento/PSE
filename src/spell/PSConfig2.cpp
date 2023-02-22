@@ -187,7 +187,7 @@ bool PSC2::fromChord() const
 }
 
 
-const AccidState& PSC2::prevState() const
+const PSState& PSC2::prevState() const
 {
     assert(previous());
     return previous()->state();

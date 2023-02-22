@@ -94,7 +94,7 @@ pybind11_add_module(pse
   src/ton/KeyFifth.cpp
   src/ton/Ton.cpp
   src/ton/Weber.cpp
-  src/spell/AccidentState.cpp
+  src/spell/PSState.cpp
   src/spell/PSCost.cpp
   src/spell/PSConfig0.cpp
   src/spell/PSConfig.cpp

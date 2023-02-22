@@ -83,7 +83,7 @@ TONk  PSB_0,k          PSB_n,k
 
 ## classes  
 
--   `AccidState` (1 alteration (in -2..2 + UNDEF) / note name in 0..6)
+-   `PSState` (1 alteration (in -2..2 + UNDEF) / note name in 0..6)
     -   constructor(ton, true) : = key sig.
     -   constructor(ton, false) : jokers for minor (sensible…)  
          not counted in cost

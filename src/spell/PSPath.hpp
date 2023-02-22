@@ -22,7 +22,7 @@
 #include "trace.hpp"
 //#include "Pitch.hpp"
 //#include "KeyFifth.hpp"
-#include "AccidentState.hpp"
+#include "PSState.hpp"
 // #include "PSConfig.hpp"
 //#include "NoteEnum.hpp"
 //#include "PSNoteEnum.hpp"

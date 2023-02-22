@@ -23,7 +23,7 @@
 
 namespace pse {
 
-// class AccidState;
+// class PSState;
 
 /// A tonality is the combination of  by a Key Signature in -7..7 and a Mode.
 /// | ks | Maj | Min  | sens (harm) |
@@ -47,7 +47,7 @@ namespace pse {
 class Ton : public KeyFifth
 {
 
-    friend class AccidentState;
+    friend class PSState;
     
 public:
     

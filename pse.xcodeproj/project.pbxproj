@@ -52,11 +52,11 @@
 		43ABA52529242418002AC1D4 /* PSVector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43ABA51529242417002AC1D4 /* PSVector.cpp */; };
 		43ABA52629242418002AC1D4 /* PSPath.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43ABA51629242417002AC1D4 /* PSPath.cpp */; };
 		43ABA52729242418002AC1D4 /* PSConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43ABA51729242417002AC1D4 /* PSConfig.cpp */; };
-		43ABA52929242418002AC1D4 /* AccidentState.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 43ABA51929242417002AC1D4 /* AccidentState.hpp */; };
+		43ABA52929242418002AC1D4 /* PSState.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 43ABA51929242417002AC1D4 /* PSState.hpp */; };
 		43ABA52A29242418002AC1D4 /* PSBag.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 43ABA51A29242417002AC1D4 /* PSBag.hpp */; };
 		43ABA52B29242418002AC1D4 /* PSConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 43ABA51B29242418002AC1D4 /* PSConfig.hpp */; };
 		43ABA52C29242418002AC1D4 /* PSPath.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 43ABA51C29242418002AC1D4 /* PSPath.hpp */; };
-		43ABA52E29242418002AC1D4 /* AccidentState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43ABA51E29242418002AC1D4 /* AccidentState.cpp */; };
+		43ABA52E29242418002AC1D4 /* PSState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43ABA51E29242418002AC1D4 /* PSState.cpp */; };
 		43ABA52F29242418002AC1D4 /* PSTable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43ABA51F29242418002AC1D4 /* PSTable.cpp */; };
 		43ABA53029242418002AC1D4 /* PSConfig0.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 43ABA52029242418002AC1D4 /* PSConfig0.hpp */; };
 		43ABA53129242418002AC1D4 /* PSConfig0.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43ABA52129242418002AC1D4 /* PSConfig0.cpp */; };
@@ -85,7 +85,7 @@
 		43FBEACB2930CEDD008FC486 /* Fifths.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43ABA502292423E8002AC1D4 /* Fifths.cpp */; };
 		43FBEACC2930CEDD008FC486 /* KeyFifth.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 430CDFEF2924E6D700A84650 /* KeyFifth.cpp */; };
 		43FBEACD2930CEDD008FC486 /* Ton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43ABA4FF292423E8002AC1D4 /* Ton.cpp */; };
-		43FBEACE2930CEDD008FC486 /* AccidentState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43ABA51E29242418002AC1D4 /* AccidentState.cpp */; };
+		43FBEACE2930CEDD008FC486 /* PSState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43ABA51E29242418002AC1D4 /* PSState.cpp */; };
 		43FBEACF2930CEDD008FC486 /* PSConfig0.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43ABA52129242418002AC1D4 /* PSConfig0.cpp */; };
 		43FBEAD02930CEDD008FC486 /* PSConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43ABA51729242417002AC1D4 /* PSConfig.cpp */; };
 		43FBEAD12930CEDD008FC486 /* PSBag.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43ABA51329242417002AC1D4 /* PSBag.cpp */; };
@@ -162,11 +162,11 @@
 		43ABA51529242417002AC1D4 /* PSVector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PSVector.cpp; path = src/spell/PSVector.cpp; sourceTree = "<group>"; };
 		43ABA51629242417002AC1D4 /* PSPath.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PSPath.cpp; path = src/spell/PSPath.cpp; sourceTree = "<group>"; };
 		43ABA51729242417002AC1D4 /* PSConfig.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PSConfig.cpp; path = src/spell/PSConfig.cpp; sourceTree = "<group>"; };
-		43ABA51929242417002AC1D4 /* AccidentState.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = AccidentState.hpp; path = src/spell/AccidentState.hpp; sourceTree = "<group>"; };
+		43ABA51929242417002AC1D4 /* PSState.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = PSState.hpp; path = src/spell/PSState.hpp; sourceTree = "<group>"; };
 		43ABA51A29242417002AC1D4 /* PSBag.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = PSBag.hpp; path = src/spell/PSBag.hpp; sourceTree = "<group>"; };
 		43ABA51B29242418002AC1D4 /* PSConfig.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = PSConfig.hpp; path = src/spell/PSConfig.hpp; sourceTree = "<group>"; };
 		43ABA51C29242418002AC1D4 /* PSPath.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = PSPath.hpp; path = src/spell/PSPath.hpp; sourceTree = "<group>"; };
-		43ABA51E29242418002AC1D4 /* AccidentState.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AccidentState.cpp; path = src/spell/AccidentState.cpp; sourceTree = "<group>"; };
+		43ABA51E29242418002AC1D4 /* PSState.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PSState.cpp; path = src/spell/PSState.cpp; sourceTree = "<group>"; };
 		43ABA51F29242418002AC1D4 /* PSTable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PSTable.cpp; path = src/spell/PSTable.cpp; sourceTree = "<group>"; };
 		43ABA52029242418002AC1D4 /* PSConfig0.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = PSConfig0.hpp; path = src/spell/PSConfig0.hpp; sourceTree = "<group>"; };
 		43ABA52129242418002AC1D4 /* PSConfig0.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PSConfig0.cpp; path = src/spell/PSConfig0.cpp; sourceTree = "<group>"; };
@@ -222,10 +222,10 @@
 			isa = PBXGroup;
 			children = (
 				4315861A2983E7FB00918B1B /* import */,
-				43ABA51929242417002AC1D4 /* AccidentState.hpp */,
-				43ABA51E29242418002AC1D4 /* AccidentState.cpp */,
 				43DD95482945E223006DC553 /* PSCost.hpp */,
 				43DD95472945E223006DC553 /* PSCost.cpp */,
+				43ABA51929242417002AC1D4 /* PSState.hpp */,
+				43ABA51E29242418002AC1D4 /* PSState.cpp */,
 				43ABA52029242418002AC1D4 /* PSConfig0.hpp */,
 				43ABA52129242418002AC1D4 /* PSConfig0.cpp */,
 				43ABA51B29242418002AC1D4 /* PSConfig.hpp */,
@@ -409,7 +409,7 @@
 				430CDFF22924E6D800A84650 /* KeyFifth.hpp in Headers */,
 				43ABA510292423E8002AC1D4 /* Ton.hpp in Headers */,
 				432657E5294E2FB100515080 /* Weber.hpp in Headers */,
-				43ABA52929242418002AC1D4 /* AccidentState.hpp in Headers */,
+				43ABA52929242418002AC1D4 /* PSState.hpp in Headers */,
 				43DD954B2945E223006DC553 /* PSCost.hpp in Headers */,
 				43ABA53029242418002AC1D4 /* PSConfig0.hpp in Headers */,
 				43ABA52B29242418002AC1D4 /* PSConfig.hpp in Headers */,
@@ -517,7 +517,7 @@
 				43ABA509292423E8002AC1D4 /* Ton.cpp in Sources */,
 				434B1DF8298ECCF1001CE41C /* PSConfig1.cpp in Sources */,
 				432657E3294E2FB100515080 /* Weber.cpp in Sources */,
-				43ABA52E29242418002AC1D4 /* AccidentState.cpp in Sources */,
+				43ABA52E29242418002AC1D4 /* PSState.cpp in Sources */,
 				43DD95492945E223006DC553 /* PSCost.cpp in Sources */,
 				43ABA53129242418002AC1D4 /* PSConfig0.cpp in Sources */,
 				43C2BA1D299A5FEE0084AB3B /* IntervalSimple.cpp in Sources */,
@@ -554,7 +554,7 @@
 				43FBEACD2930CEDD008FC486 /* Ton.cpp in Sources */,
 				434B1DF9298ED0A0001CE41C /* PSConfig1.cpp in Sources */,
 				432657E4294E2FB100515080 /* Weber.cpp in Sources */,
-				43FBEACE2930CEDD008FC486 /* AccidentState.cpp in Sources */,
+				43FBEACE2930CEDD008FC486 /* PSState.cpp in Sources */,
 				43C2BA1E299A5FEE0084AB3B /* IntervalSimple.cpp in Sources */,
 				43DD954A2945E223006DC553 /* PSCost.cpp in Sources */,
 				43C2BA1729994F630084AB3B /* Pitch.cpp in Sources */,

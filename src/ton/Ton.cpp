@@ -12,7 +12,7 @@
 #include "Ton.hpp"
 //#include "Pitch.hpp"
 #include "Fifths.hpp"
-#include "AccidentState.hpp"
+//#include "PSState.hpp"
 #include "Weber.hpp" // Weber distance
 
 namespace pse {

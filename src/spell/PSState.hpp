@@ -1,5 +1,5 @@
 //
-//  AccidentState.hpp
+//  PSState.hpp
 //  squant2
 //
 //  Created by Florent Jacquemard on 14/02/2021.
@@ -8,8 +8,8 @@
 /// @addtogroup pitch
 /// @{
 
-#ifndef AccidentState_hpp
-#define AccidentState_hpp
+#ifndef PSState_hpp
+#define PSState_hpp
 
 #include <iostream>
 #include <assert.h>
@@ -36,7 +36,7 @@ namespace pse {
 /// - pitch names correspond to  chars 'A'..'G', where 0 is 'C' and 6 is 'B'.
 /// @see current diatonic pitch set in https://hal.archives-ouvertes.fr/hal-02886399v2
 /// @see current diatonic scale in https://hal.archives-ouvertes.fr/hal-02162936v2
-class AccidState
+class PSState
 {
 public:
     
@@ -45,39 +45,39 @@ public:
     /// @param joker flag: true for computing the set of jokers for a minor ton,
     /// false for computing the initial state of the given ton.
     /// @todo the joker flag is obsolete.
-    AccidState(const Ton& ton, bool joker = false);
+    PSState(const Ton& ton, bool joker = false);
 
     /// initial state for a given tonality.
     /// @param ks a key signature given in number of flats (negative int)
     /// or number of sharps (positive int). must be in -7..7.
-    /// @warning obsolete. use AccidState(const Ton&).
-    AccidState(int ks);
+    /// @warning obsolete. use PSState(const Ton&).
+    PSState(int ks);
 
     /// initial state for a given key signature.
     /// @param k a key signature.
-    /// @warning obsolete. use AccidState(const Ton&).
-    AccidState(const KeyFifth& k);
+    /// @warning obsolete. use PSState(const Ton&).
+    PSState(const KeyFifth& k);
     
     /// copy constructor
-    AccidState(const AccidState& as);
+    PSState(const PSState& as);
 
     /// copy and update given name with given accident
-    AccidState(const AccidState& as,
+    PSState(const PSState& as,
                const NoteName& name, const Accid& accid);
 
-    ~AccidState();
+    ~PSState();
     
     /// assignement operator
-    AccidState& operator=(const AccidState& rhs);
+    PSState& operator=(const PSState& rhs);
 
     /// states have  the same list of accidentals
-    bool operator==(const AccidState& rhs) const;
+    bool operator==(const PSState& rhs) const;
 
     /// states have different list of accidentals
-    bool operator!=(const AccidState& rhs) const;
+    bool operator!=(const PSState& rhs) const;
 
     /// same list of accidentals
-    bool equal(const AccidState& rhs) const;
+    bool equal(const PSState& rhs) const;
     
     /// accidental in this state for a given pitch name.
     /// @param n a pitch name, in 0..6 (0 is 'C', 6 is 'B').
@@ -96,12 +96,12 @@ public:
     bool update(const NoteName&  n, const Accid& a);
     
     // distance from other state of accidentals
-    // unsigned int dist(const AccidState& rhs) const;
+    // unsigned int dist(const PSState& rhs) const;
 
     /// pointwise distance between this state of accidentals and another one.
     /// It is the number of accidentals that differ between the two states.
     /// @param rhs one state of accidentals.
-    unsigned int dist(const AccidState& rhs) const;
+    unsigned int dist(const PSState& rhs) const;
 
     /// distance distance between this state of accidentals and a tonality.
     /// It is the number of accidentals that differ.
@@ -114,8 +114,8 @@ public:
     /// @param ajoker one joker state of accidentals, possibly with undef.
     ///        The joker state is given the priority over the first state in
     ///        distance computation.
-    unsigned int dist(const AccidState& astate,
-                      const AccidState& ajoker) const;
+    unsigned int dist(const PSState& astate,
+                      const PSState& ajoker) const;
 
     /// pointwise distance between two pairs of states of accidentals
     /// Every pair of state corresponds to a tonality.
@@ -125,10 +125,10 @@ public:
     /// @param ajoker2 one joker state of accidentals, possibly with undef.
     /// The joker state is given the priority over the resp. first state in
     /// distance computation.
-    static unsigned int dist(const AccidState& astate1,
-                             const AccidState& ajoker1,
-                             const AccidState& astate2,
-                             const AccidState& ajoker2);
+    static unsigned int dist(const PSState& astate1,
+                             const PSState& ajoker1,
+                             const PSState& astate2,
+                             const PSState& ajoker2);
 private:
 
     /// association to each pitch name (in 0..6)
@@ -183,7 +183,7 @@ private:
 
 } // namespace pse
 
-#endif /* AccidentState_hpp */
+#endif /* PsState_hpp */
 
 /// @}
 

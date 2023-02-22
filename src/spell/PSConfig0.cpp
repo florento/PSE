@@ -38,7 +38,7 @@ _cost() // zero
 //{ }
 //
 //
-//PSC0::PSC0(const AccidState& s, size_t i):
+//PSC0::PSC0(const PSState& s, size_t i):
 //_state(s), // copy
 //_id(i),
 //_pred(nullptr),

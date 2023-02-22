@@ -18,10 +18,12 @@
 #include <vector>
 
 #include "trace.hpp"
+#include "PSEnum.hpp"
+#include "NoteName.hpp"
 #include "Accidental.hpp"
+#include "Ton.hpp"
 #include "PSConfig0.hpp"
 #include "PSConfig.hpp"
-#include "PSEnum.hpp"
 
 
 namespace pse {
@@ -47,11 +49,13 @@ public:
     /// in given conjectured global tonality.
     /// only the cost (number of accidentals) is updated.
     /// @param c previous config (origin), to be updated with the received pitch.
-    /// @param mp midi pitch to be named, used to update the config.
+    // @param mp midi pitch to be named, used to update the config.
+    /// @param e an enumerator of notes read for transition tp this configs.
     /// @param name chosen name for the received pitch, in 0..6 (0 is 'C', 6 is 'B').
     /// @param accid chosen alteration for the received pitch, in -2..2.
     /// @param ton conjectured main (global) tonality (key signature).
-    PSC1(std::shared_ptr<const PSC0> c, unsigned int mp,
+    PSC1(std::shared_ptr<const PSC0> c,
+         const PSEnum& e,               //unsigned int mp,
          const NoteName& name, const Accid& accid,
          const Ton& ton);
 
@@ -62,11 +66,13 @@ public:
     /// the cost (number of accidentals) and distance (to local ton) are updated.
     /// @param c previous config, to be updated with the received pitch.
     // @param p pitch to be named, used to update the config.
+    /// @param e an enumerator of notes read for transition tp this configs.
     /// @param name chosen name for the received pitch, in 0..6 (0 is 'C', 6 is 'B').
     /// @param acc chosen alteration for the received pitch, in -2..2.
     /// @param ton conjectured main (global) tonality (key signature).
     /// @param lton conjectured local tonality.
-    PSC1(std::shared_ptr<const PSC0> c, unsigned int mp,
+    PSC1(std::shared_ptr<const PSC0> c,
+         const PSEnum& e,               //unsigned int mp,
          const NoteName& name, const Accid& acc,
          const Ton& ton, const Ton& lton);
 
@@ -86,6 +92,7 @@ public:
     
     /// midi pitch of the note read for the transition
     /// from this config's predecessor.
+    /// @todo TBR
     unsigned int midi() const;
 
     /// name of the note read for the transition from this config's predecessor.
@@ -109,13 +116,14 @@ public:
     virtual bool fromNote() const;
 
     /// this configuration was reached by reading
-    /// several simultaneous notes (a "chord").
+    /// several simultaneous notes (an interval or a "chord").
     /// Always false for this class.
     virtual bool fromChord() const;
 
 private:
         
     /// MIDI pitch of the note read for the transition to this config.
+    /// @todo TBR
     unsigned int _midi;
 
     /// a chosen pitch name, in 0..6 (0 is 'C', 6 is 'B'),

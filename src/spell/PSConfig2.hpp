@@ -184,7 +184,7 @@ private:
     // void updateAccidents();
     
     /// state of previous config in shortest path to this config.
-    const AccidState& prevState() const;
+    const PSState& prevState() const;
 
     /// first pitch class number to be processed in the input chord
     unsigned int firstChroma() const;
@@ -200,17 +200,21 @@ private:
     /// @return the number of names assigned
     size_t setNames(const NoteName& name, bool print);
     
+    /// update the spelling cost for one pitch class in the current chord.
     /// @param name chosen name for the received pitch, in 0..6 (0 is 'C', 6 is 'B').
     /// @param accid chosen alteration for the received pitch, in -2..2.
     /// @param print whether the acciental must be printed in score.
+    /// @param nbocc nb of occurrence of the note (pitch class) in this chord.
     /// @param ton conjectured main (global) tonality (key signature).
     /// @return wheter the cost value of this config was increased
     bool updateCost(const NoteName& name, const Accid& accid, bool print,
                     size_t nbocc, const Ton& ton);
 
+    /// update the spelling cost for one pitch class in the current chord.
     /// @param name chosen name for the received pitch, in 0..6 (0 is 'C', 6 is 'B').
     /// @param accid chosen alteration for the received pitch, in -2..2.
     /// @param print whether the acciental must be printed in score.
+    /// @param nbocc nb of occurrence of the note (pitch class) in this chord.
     /// @param ton conjectured main (global) tonality (key signature).
     /// @param lton conjectured local tonality.
     /// @return wheter the cost value of this config was increased

@@ -8,30 +8,30 @@
 /// @addtogroup pitch
 /// @{
 
-#include "AccidentState.hpp"
+#include "PSState.hpp"
 
 
 namespace pse {
 
-// int AccidState::undef       =  9;
-// int AccidState::triplesharp =  3;
-// int AccidState::doublesharp =  2;
-// int AccidState::sharp       =  1;
-// int AccidState::natural     =  0;
-// int AccidState::flat        = -1;
-// int AccidState::doubleflat  = -2;
-// int AccidState::tripleflat  = -3;
+// int PSState::undef       =  9;
+// int PSState::triplesharp =  3;
+// int PSState::doublesharp =  2;
+// int PSState::sharp       =  1;
+// int PSState::natural     =  0;
+// int PSState::flat        = -1;
+// int PSState::doubleflat  = -2;
+// int PSState::tripleflat  = -3;
 
 // static abbreviations for accidentals
-const Accid AccidState::_2F = Accid::DoubleFlat;
-const Accid AccidState::_1F = Accid::Flat;
-const Accid AccidState::_0N = Accid::Natural;
-const Accid AccidState::_1S = Accid::Sharp;
-const Accid AccidState::_2S = Accid::DoubleSharp;
-const Accid AccidState::__U = Accid::Undef;
+const Accid PSState::_2F = Accid::DoubleFlat;
+const Accid PSState::_1F = Accid::Flat;
+const Accid PSState::_0N = Accid::Natural;
+const Accid PSState::_1S = Accid::Sharp;
+const Accid PSState::_2S = Accid::DoubleSharp;
+const Accid PSState::__U = Accid::Undef;
 
 // key signatures for major and minor tonalities
-const std::array<std::array<Accid, 7>, 15> AccidState::KEYS =
+const std::array<std::array<Accid, 7>, 15> PSState::KEYS =
 {{
     { _1F, _1F, _1F, _1F, _1F, _1F, _1F }, // -7  Cb maj / Ab min
     { _1F, _1F, _1F, _0N, _1F, _1F, _1F }, // -6  Gb maj / Eb min
@@ -50,7 +50,7 @@ const std::array<std::array<Accid, 7>, 15> AccidState::KEYS =
     { _1S, _1S, _1S, _1S, _1S, _1S, _1S }  //  7  C# maj / A# min
 }};
 
-//const std::array<std::array<Accid, 7>, 15> AccidState::MIN =
+//const std::array<std::array<Accid, 7>, 15> PSState::MIN =
 //{{
 //    { _1F, _1F, _1F, _1F, _1F, _1F, _1F }, // -7  Ab min
 //    { _1F, _0N, _1F, _1F, _1F, _1F, _1F }, // -6  Eb min
@@ -71,7 +71,7 @@ const std::array<std::array<Accid, 7>, 15> AccidState::KEYS =
 
 // accidentals in minor harmonic.__U == no accid.
 // min harm scale = MAJ + this mask
-const std::array<std::array<Accid, 7>, 15> AccidState::MIN_HARM =
+const std::array<std::array<Accid, 7>, 15> PSState::MIN_HARM =
 {{
     { __U, __U, __U, __U, _0N, __U, __U }, // -7  Ab min harm
     { __U, _0N, __U, __U, __U, __U, __U }, // -6  Eb min harm
@@ -91,7 +91,7 @@ const std::array<std::array<Accid, 7>, 15> AccidState::MIN_HARM =
 }};
 
 // accidentals in minor natural.__U == no accid.
-const std::array<std::array<Accid, 7>, 15> AccidState::MIN_NAT =
+const std::array<std::array<Accid, 7>, 15> PSState::MIN_NAT =
 {{
     { __U, __U, __U, __U, __U, __U, __U }, // -7  Ab min harm
     { __U, __U, __U, __U, __U, __U, __U }, // -6  Eb min harm
@@ -112,7 +112,7 @@ const std::array<std::array<Accid, 7>, 15> AccidState::MIN_NAT =
 
 // accidentals in minor melodic.__U == no accid.
 // min mel scale = MAJ + this mask
-const std::array<std::array<Accid, 7>, 15> AccidState::MIN_MEL =
+const std::array<std::array<Accid, 7>, 15> PSState::MIN_MEL =
 {{
     { __U, __U, __U, _0N, _0N, __U, __U }, // -7  Ab min harm
     { _0N, _0N, __U, __U, __U, __U, __U }, // -6  Eb min harm
@@ -133,7 +133,7 @@ const std::array<std::array<Accid, 7>, 15> AccidState::MIN_MEL =
 
 
 
-AccidState::AccidState(const Ton& ton, bool joker)
+PSState::PSState(const Ton& ton, bool joker)
 {
     int k = ton.fifths();
     assert(-7 <= k);
@@ -168,7 +168,7 @@ AccidState::AccidState(const Ton& ton, bool joker)
             case Ton::Mode::Eolian:
             case Ton::Mode::Locrian:
             {
-                WARN("AccidState Accid::undef for mode"); // m
+                WARN("PSState Accid::undef for mode"); // m
                 _state.fill(Accid::Undef);
                 break;
             }
@@ -199,7 +199,7 @@ AccidState::AccidState(const Ton& ton, bool joker)
             case Ton::Mode::Mixolydian:
             case Ton::Mode::Eolian:
             case Ton::Mode::Locrian:
-                WARN("AccidState Accid::undef for mode");
+                WARN("PSState Accid::undef for mode");
                 _state.fill(Accid::Undef);
                 break;
                 
@@ -213,7 +213,7 @@ AccidState::AccidState(const Ton& ton, bool joker)
 
 
 // obsolete
-AccidState::AccidState(int ks):
+PSState::PSState(int ks):
 _state(KEYS[ks+7])
 {
     assert(-7 <= ks);
@@ -222,7 +222,7 @@ _state(KEYS[ks+7])
 
 
 // obsolete
-AccidState::AccidState(const KeyFifth& k)
+PSState::PSState(const KeyFifth& k)
 {
     if (k.flats() > 0)
     {
@@ -237,12 +237,12 @@ AccidState::AccidState(const KeyFifth& k)
 }
 
 
-AccidState::AccidState(const AccidState& as):
+PSState::PSState(const PSState& as):
 _state(as._state)
 { }
 
 
-AccidState::AccidState(const AccidState& as,
+PSState::PSState(const PSState& as,
                        const NoteName& name, const Accid& accid):
 _state(as._state)
 {
@@ -253,11 +253,11 @@ _state(as._state)
 }
 
 
-AccidState::~AccidState()
+PSState::~PSState()
 { }
 
 
-AccidState& AccidState::operator=(const AccidState& rhs)
+PSState& PSState::operator=(const PSState& rhs)
 {
     if (this != &rhs)
     {
@@ -269,19 +269,19 @@ AccidState& AccidState::operator=(const AccidState& rhs)
 }
 
 
-bool AccidState::operator==(const AccidState& rhs) const
+bool PSState::operator==(const PSState& rhs) const
 {
     return equal(rhs);
 }
 
 
-bool AccidState::operator!=(const AccidState& rhs) const
+bool PSState::operator!=(const PSState& rhs) const
 {
     return (! operator==(rhs));
 }
 
 
-bool AccidState::equal(const AccidState& rhs) const
+bool PSState::equal(const PSState& rhs) const
 {
     for (size_t i = 0; i < 7; ++i)
     {
@@ -292,7 +292,7 @@ bool AccidState::equal(const AccidState& rhs) const
 }
 
 
-Accid AccidState::accid(int n) const
+Accid PSState::accid(int n) const
 {
     assert(0 <= n);
     assert(n <= 6);
@@ -300,13 +300,13 @@ Accid AccidState::accid(int n) const
 }
 
 
-const Accid AccidState::accid(const NoteName& name) const
+const Accid PSState::accid(const NoteName& name) const
 {
     return Accid(accid(toint(name)));
 }
 
 
-bool AccidState::member(const NoteName& name,
+bool PSState::member(const NoteName& name,
                         const Accid& accid) const
 {
     int n = toint(name);
@@ -316,7 +316,7 @@ bool AccidState::member(const NoteName& name,
 }
 
 
-bool AccidState::update(const NoteName& name, const Accid& accid)
+bool PSState::update(const NoteName& name, const Accid& accid)
 {
     int n = toint(name);
     assert(0 <= n);
@@ -334,7 +334,7 @@ bool AccidState::update(const NoteName& name, const Accid& accid)
 }
 
 
-unsigned int AccidState::dist(const AccidState& rhs) const
+unsigned int PSState::dist(const PSState& rhs) const
 {
     unsigned int res = 0;
     
@@ -349,7 +349,7 @@ unsigned int AccidState::dist(const AccidState& rhs) const
 }
 
 
-unsigned int AccidState::dist(const Ton& ton) const
+unsigned int PSState::dist(const Ton& ton) const
 {
     unsigned int res = 0;
     
@@ -363,13 +363,13 @@ unsigned int AccidState::dist(const Ton& ton) const
     }
     return res;
     // OLD version
-    // return dist(AccidState(ton, false), AccidState(ton, true));
+    // return dist(PSState(ton, false), PSState(ton, true));
 }
 
 
 // not used ?
-//unsigned int AccidState::dist(const AccidState& astate,
-//                              const AccidState& ajoker) const
+//unsigned int PSState::dist(const PSState& astate,
+//                              const PSState& ajoker) const
 //{
 //    unsigned int res = 0;
 //    
@@ -397,10 +397,10 @@ unsigned int AccidState::dist(const Ton& ton) const
 
 // static
 // not used ?
-unsigned int AccidState::dist(const AccidState& astate1,
-                              const AccidState& ajoker1,
-                              const AccidState& astate2,
-                              const AccidState& ajoker2)
+unsigned int PSState::dist(const PSState& astate1,
+                              const PSState& ajoker1,
+                              const PSState& astate2,
+                              const PSState& ajoker2)
 {
     unsigned int res = 0;
     
