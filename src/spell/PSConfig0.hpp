@@ -37,6 +37,7 @@ class PSC0;
 using PSCCompare = std::function<bool(std::shared_ptr<const PSC0>,
                                       std::shared_ptr<const PSC0>)>;
 
+
 /// priority queue of PS Configs
 typedef std::priority_queue<std::shared_ptr<const PSC0>,
                             std::vector<std::shared_ptr<const PSC0>>,

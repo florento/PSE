@@ -35,6 +35,7 @@
 		434B1E01298FD4FE001CE41C /* PSChord.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 434B1DFF298FD4FE001CE41C /* PSChord.cpp */; };
 		434B1E02298FD4FE001CE41C /* PSChord.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 434B1DFF298FD4FE001CE41C /* PSChord.cpp */; };
 		434B1E03298FD4FE001CE41C /* PSChord.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 434B1E00298FD4FE001CE41C /* PSChord.hpp */; };
+		4397A5DE29A6CDB300C2CC9A /* PSOrder.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 4397A5DC29A6CDB300C2CC9A /* PSOrder.hpp */; };
 		43A2544029280D8900D559D2 /* trace.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43A2543E29280D8900D559D2 /* trace.cpp */; };
 		43A2544129280D8900D559D2 /* trace.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 43A2543F29280D8900D559D2 /* trace.hpp */; };
 		43A2544529280E1600D559D2 /* config.h in Headers */ = {isa = PBXBuildFile; fileRef = 43A2544329280E1600D559D2 /* config.h */; };
@@ -142,6 +143,7 @@
 		434B1E00298FD4FE001CE41C /* PSChord.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = PSChord.hpp; path = src/spell/PSChord.hpp; sourceTree = "<group>"; };
 		436C6C3D2924016F00152D8C /* pse.cpython-310-darwin.so */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = "pse.cpython-310-darwin.so"; sourceTree = BUILT_PRODUCTS_DIR; };
 		436C6C4D2924023100152D8C /* NoteName.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = NoteName.hpp; path = src/pitch/NoteName.hpp; sourceTree = "<group>"; };
+		4397A5DC29A6CDB300C2CC9A /* PSOrder.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = PSOrder.hpp; path = src/spell/PSOrder.hpp; sourceTree = "<group>"; };
 		43A2543E29280D8900D559D2 /* trace.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = trace.cpp; path = src/general/trace.cpp; sourceTree = "<group>"; };
 		43A2543F29280D8900D559D2 /* trace.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = trace.hpp; path = src/general/trace.hpp; sourceTree = "<group>"; };
 		43A2544329280E1600D559D2 /* config.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = config.h; path = src/general/config.h; sourceTree = "<group>"; };
@@ -234,6 +236,7 @@
 				434B1DF6298ECCF0001CE41C /* PSConfig1.cpp */,
 				434B1DFB298ED394001CE41C /* PSConfig2.hpp */,
 				434B1DFA298ED394001CE41C /* PSConfig2.cpp */,
+				4397A5DC29A6CDB300C2CC9A /* PSOrder.hpp */,
 				43ABA51A29242417002AC1D4 /* PSBag.hpp */,
 				43ABA51329242417002AC1D4 /* PSBag.cpp */,
 				43ABA51429242417002AC1D4 /* PSVector.hpp */,
@@ -414,6 +417,7 @@
 				43ABA53029242418002AC1D4 /* PSConfig0.hpp in Headers */,
 				43ABA52B29242418002AC1D4 /* PSConfig.hpp in Headers */,
 				43ABA52A29242418002AC1D4 /* PSBag.hpp in Headers */,
+				4397A5DE29A6CDB300C2CC9A /* PSOrder.hpp in Headers */,
 				434B1DFE298ED394001CE41C /* PSConfig2.hpp in Headers */,
 				43ABA52429242418002AC1D4 /* PSVector.hpp in Headers */,
 				43ABA53229242418002AC1D4 /* PSTable.hpp in Headers */,

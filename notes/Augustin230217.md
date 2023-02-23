@@ -191,7 +191,7 @@ tables de résultats, avec
 - nb erreurs de spelling
 - tie breaks
 
-## qualitatif
+### qualitatif
 
 sortie pdf de la partition avec
 

@@ -36,16 +36,66 @@ PSChord::~PSChord()
 
 void PSChord::init()
 {
+    assert(first() < stop());
+    //unsigned int bass = _enum.midipitch(first());
+    size_t bass = first();
+    
     // traverse all notes in this sequence
     for (size_t i = first(); i < stop(); ++i)
     {
         unsigned int pm = _enum.midipitch(i);
         assert(0 <= pm);
         assert(pm <= 127);
+        if (pm < _enum.midipitch(bass))
+            bass = i;
         int c = pm % 12; // chroma (pitch class) of note, in 0..11
-        _occurences[c].push_back(i-first());
+        //_occurences[c].push_back(i-first());
+        insert_occurrence(c, i);
+    }
+    init_constitution(bass);
+}
+
+
+void PSChord::insert_occurrence(int c, size_t i)
+{
+    std::vector<size_t>& vo = _occurences[c];
+    unsigned int pmi = _enum.midipitch(i);
+    
+    for (auto it = vo.begin(); it != vo.end(); ++it)
+    {
+        if (pmi <= _enum.midipitch(*it))
+        {
+            vo.insert(it, i);
+            return;
+        }
+    }
+    // i was not inserted
+    vo.push_back(i);
+    //ERROR("Chord insert_occurrence: nont inserted");
+}
+
+
+void PSChord::init_constitution(size_t bass)
+{
+    assert(first() <= bass);
+    assert(bass < stop());
+    // pitch class of bass note, in 0..11
+    int c0 = _enum.midipitch(bass) % 12;
+    assert(! _occurences[c0].empty());
+    for (int c = c0; c < 12; ++c)
+    {
+        if (! _occurences[c].empty())
+            _constitution.push_back(_occurences[c][0]);
+            /// @todo does the choice of occurrence matter?
+            /// shall we take the lowest pitch ?
+    }
+    for (int c = 0; c < c0; ++c)
+    {
+        if (! _occurences[c].empty())
+            _constitution.push_back(_occurences[c][0]);
     }
 }
+
 
 
 // should not be called
@@ -107,6 +157,13 @@ size_t PSChord::firstNonSimult(const PSEnum& e, size_t i0)
             // index of next note or index of the note after the last note of enum
             return i1 + 1;
     }
+}
+
+
+// static
+size_t PSChord::_length(const PSEnum& e, size_t i0)
+{
+    return firstNonSimult(e, i0) - i0;
 }
 
 

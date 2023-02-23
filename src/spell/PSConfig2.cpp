@@ -197,10 +197,10 @@ const PSState& PSC2::prevState() const
 unsigned int PSC2::firstChroma() const
 {
     assert(_chord);
-    for (unsigned int i = 0; i < 12; ++i)
+    for (unsigned int c = 0; c < 12; ++c)
     {
-        if (_chord->occurences(i) > 0)
-            return i;
+        if (_chord->occurences(c) > 0)
+            return c;
     }
     // nothing in chord, should not happen
     ERROR("PSC2: empty chord {}-{}", _chord->first(), _chord->stop());
@@ -211,14 +211,14 @@ unsigned int PSC2::firstChroma() const
 unsigned int PSC2::nextChroma() const
 {
     assert(_chord);
-    unsigned int i = _current+1; 
-    while (i < 12)
+    unsigned int c = _current+1;
+    while (c < 12)
     {
-        if (_chord->occurences(i) > 0)
-            return i;
-        i++;
+        if (_chord->occurences(c) > 0)
+            return c;
+        c++;
     }
-    assert(i >= 12);
+    assert(c >= 12);
     return 12;
 }
 

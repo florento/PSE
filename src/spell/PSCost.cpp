@@ -114,30 +114,27 @@ void PSCost::update(const PSC1& c, const PSEnum& e, const Ton& ton)
 
     const NoteName& name = c.name();
     const Accid& accid = c.accidental();
-    bool printed = c.printed();
     
     // update cost when accident for the name was updated
     // discount for lead degree
     
     // for min harm and min mel
     // count cost for a lead note if its accidental is not the one of the scale
-    if (ton.lead(name))
-    {
-        cc = (ton.accidDia(name) != accid);
-        // if (ton == Ton(-3, Ton::Mode::Min))
-          // DEBUGU("PSC: {} lead {}: {} != {}",
-          //        ton, name, ton.accidDia(name), accid);
-          // DEBUGU("PSC: {}, {}: {} {}",
-          //       ton, name, ((ton.lead(name))?"lead":"not lead"),
-          //       ((ton.accidDia(name) != accid)?"!=":"=="));
-    }
-    // otherwise, count a cost for every printed accidental
-    else
-    {
-        cc = printed;
-    }
+//    if (ton.lead(name))
+//    {
+//        cc = (ton.accidDia(name) != accid);
+//        // if (ton == Ton(-3, Ton::Mode::Min))
+//          // DEBUGU("PSC: {} lead {}: {} != {}",
+//          //        ton, name, ton.accidDia(name), accid);
+//          // DEBUGU("PSC: {}, {}: {} {}",
+//          //       ton, name, ((ton.lead(name))?"lead":"not lead"),
+//          //       ((ton.accidDia(name) != accid)?"!=":"=="));
+//    }
+//    // otherwise, count a cost for every printed accidental
+//    else
+//        cc = c.printed();
 
-    if (cc)
+    if ((ton.lead(name) && ton.accidDia(name) != accid) || c.printed())
     {
         // int a = toint(accid);
         // assert(-2 <= a);
@@ -169,25 +166,14 @@ void PSCost::update(const PSC1& c, const PSEnum& e, const Ton& ton)
             }
         }
     }
-}
-
-
-void PSCost::update(const PSC1& c, const PSEnum& e,
-                    const Ton& ton, const Ton& lton)
-{
-    assert(e.inside(c.id()));
-    unsigned int mp = e.midipitch(c.id()); // c.midi();
-    const Accid& accid = c.accidental();
     
-    // distance to conjectured local ton.
-    _dist += c.state().dist(lton);
-
     // non-diatonic move from conjoint previous note
     const PSC0* previous = c.previous();
     assert(previous);
     if (previous->fromNote())
     {
         assert(! previous->initial());
+        unsigned int mp = e.midipitch(c.id()); // c.midi();
         const PSC1* pc = dynamic_cast<const PSC1*>(previous);
         assert(pc);
         assert(e.inside(pc->id()));
@@ -202,6 +188,17 @@ void PSCost::update(const PSC1& c, const PSEnum& e,
         }
     }
     // otherwise no previous note, _disj not updated
+}
+
+
+void PSCost::update(const PSC1& c, const PSEnum& e,
+                    const Ton& ton, const Ton& lton)
+{
+    assert(e.inside(c.id()));
+    const Accid& accid = c.accidental();
+    
+    // distance to conjectured local ton.
+    _dist += c.state().dist(lton);
     
     // color of accident and color of global ton
     if (((ton.fifths() >= 0) && (flat(accid))) ||
@@ -209,7 +206,6 @@ void PSCost::update(const PSC1& c, const PSEnum& e,
     {
         _color += 1;
     }
-
 }
 
 

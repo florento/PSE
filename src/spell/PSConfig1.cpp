@@ -17,11 +17,11 @@ namespace pse {
 
 
 // copy and update
-PSC1::PSC1(std::shared_ptr<const PSC0> c, const PSEnum& e, //unsigned int mp,
+PSC1::PSC1(std::shared_ptr<const PSC0> c, const PSEnum& e,
            const NoteName& name, const Accid& accid,
            const Ton& ton):
 PSC(c),
-_midi(e.midipitch(c->id()+1)),
+//_midi(e.midipitch(c->id()+1)),
 _name(name),
 _print(false)
 {
@@ -34,7 +34,7 @@ _print(false)
 }
 
 
-PSC1::PSC1(std::shared_ptr<const PSC0> c, const PSEnum& e, //unsigned int mp,
+PSC1::PSC1(std::shared_ptr<const PSC0> c, const PSEnum& e,
            const NoteName& name, const Accid& accid,
            const Ton& ton, const Ton& lton):
 PSC1(c, e, name, accid, ton)
@@ -47,7 +47,7 @@ PSC1(c, e, name, accid, ton)
 // copy
 PSC1::PSC1(const PSC1& c):
 PSC(c),
-_midi(c._midi), // TBR
+//_midi(c._midi), // TBR
 _name(c._name),
 _print(c._print)
 { }
@@ -65,7 +65,7 @@ PSC1& PSC1::operator=(const PSC1& rhs)
     if (this != &rhs)
     {
         PSC::operator=(rhs);
-        _midi        = rhs._midi;
+        //_midi        = rhs._midi;
         _name        = rhs._name;
         _print       = rhs._print;
     }
@@ -76,7 +76,7 @@ PSC1& PSC1::operator=(const PSC1& rhs)
 bool PSC1::operator==(const PSC1& rhs) const
 {
     return (PSC::operator==(rhs) &&
-            (_midi == rhs._midi) &&
+            //(_midi == rhs._midi) &&
             (_name == rhs._name) &&
             (_print == rhs._print));
 
@@ -95,10 +95,10 @@ bool PSC1::operator!=(const PSC1& rhs) const
 //}
 
 
-unsigned int PSC1::midi() const
-{
-    return _midi;
-}
+//unsigned int PSC1::midi() const
+//{
+//    return _midi;
+//}
 
 
 NoteName PSC1::name() const

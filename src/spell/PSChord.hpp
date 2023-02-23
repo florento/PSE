@@ -67,6 +67,9 @@ public:
     /// @see PSEnum::length()
     inline size_t size() const { return length(); }
     
+    /// category of the chord: 2 for interval, 3 for triad etc.
+    inline size_t type() const { return _constitution.size(); }
+    
     /// number of occurrences of the given pitch class in this chord.
     /// @param c pitch class number, between 0 and 11.
     /// @return number of occurrences of the pitch class c in this chord.
@@ -75,25 +78,31 @@ public:
     /// index of one occurrence of the given pitch class in this chord.
     /// @param c pitch class number, between 0 and 11.
     /// @param i index in 0..occurences(c).
-    /// @return number of occurrences of the pitch class c in this chord.
+    /// @return index of the ith occurrences of the pitch class c in this chord,
+    /// in 0..size(). For the index in enumerator, add first().
     size_t occurence(unsigned int c, size_t i) const;
 
     /// midi key number in 0..128 of the note of the given index.
-    /// @param i index of a note. must be inside the interval of this enumerator.
+    /// @param i index of a note, inside the interval [first(), last() [
+    /// of this enumerator.
     virtual unsigned int midipitch(size_t i) const;
 
     /// number of measure the note of given index belongs to.
     /// midi key number in 0..128 of the note of the given index.
-    /// @param i index of a note. must be inside the interval of this enumerator.
+    /// @param i index of a noteinside the interval [first(), last() [
+    /// of this enumerator.
     virtual long measure(size_t i) const;
 
     /// whether the note of given index is simultaneous with the next note.
-    /// @param i index of a note. must be inside the interval of this enumerator.
+    /// @param i index of a note inside the interval [first(), last() [
+    /// of this enumerator.
     /// @warning always true for the notes in this enumerator,
     /// except the last one.
     virtual bool simultaneous(size_t i) const;
     
-    /// rename the note of given index
+    /// rename the note of given index.
+    /// @param i note index inside the interval [first(), last() [
+    /// of this enumerator.
     /// @param name note name in 'A'..'G'.
     /// @param accid accidental in [-2, 2] where 1 is a half tone
     /// @param oct octave number in -10..10
@@ -104,8 +113,13 @@ public:
     
 private:
 
-    /// seq of occurrences of each pitch class
+    /// underlying enumerator
+    const PSEnum& _enum;
+    
+    /// sequence of vectors of index of occurrences, for each pitch class,
     /// in the sequence of simultaneous notes.
+    /// the vectors of index are ordered by pitch of the corresponding notes.
+    /// the indnexx are indnex of the ennum used to construct this chord.
     std::array<std::vector<size_t>, 12> _occurences;
     //std::array<std::vector<bool>, 12> _occurences;
 
@@ -113,18 +127,34 @@ private:
     // notes. stored separatly from occurences because std::vector<bool> does
     // not provide count similar to std::bitset
     //unsigned int _nboccurences[12];
+
+    // index, in enumerator, of the bass of chord (lowest pitch)
+    // size_t _bass;
+
+    /// ordered list of index of consitutive notes of the chord,
+    /// starting from the bass.
+    std::vector<size_t> _constitution;
     
-    /// underlying enumerator
-    const PSEnum& _enum;
-    
-    /// @return the index of the first note in enumerator e
+    /// @return the index of the first note in enumerator
     /// not simultaneous (and after) the note of index i0,
     /// or ID_INF if there is none.
     static size_t firstNonSimult(const PSEnum& e, size_t i0);
 
-    /// initialize the table of occurrences
+    /// nunmber of notes in chord.
+    /// @param e enunmerator which whihchh thihs chohrd is built.
+    /// @param i0 index of first note of cohrd in nenunmerator.
+    /// @return the number of notes after i0 and
+    /// simultaneous with i0.
+    static size_t _length(const PSEnum& e, size_t i0);
+
+    void insert_occurrence(int c, size_t i);
+    
+    /// initialize the table of occurrences and bass
     void init();
     
+    /// initialize the table of consitutive elements
+    void init_constitution(size_t bass);
+
 }; // class PSChord
 
 

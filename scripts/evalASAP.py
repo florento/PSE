@@ -281,7 +281,7 @@ def eval1_Bach(nb, mvt, file, stat, tons=25, dflag=False, mflag=False):
                    title='BWV'+str(nb)+'_'+str(mvt), composer='Bach',
                    tons=tons, dflag=dflag, mflag=mflag)
     
-def eval_Bach(tons=25, dflag=False, mflag=False):
+def eval_Bach(tons=25, dflag=False, mflag=False): 
     global Bach_skip
     global _dataset_root
     stat = ps.Stats()
