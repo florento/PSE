@@ -156,7 +156,6 @@ We assume given
 - a sequence of $m$ bars (measures) of written notes in the above representation.
 
 2 parameters: 
-
 - $N$ : one nb for the choice of global tonality
 - $C$ : one combination of the above measures  
   (we consider 2 cases $C_\ell$ or $C_+$ defined below).
