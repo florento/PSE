@@ -377,7 +377,7 @@ bool PST::estimateLocals()
     }
     assert(_global < nbTons());
 
-    // indedx of previous local tonality
+    // index of previous local tonality
     size_t pre = _global;
     for (size_t i = 0; i < _psvs.size(); ++i)
     {

@@ -32,6 +32,7 @@ struct PSCost
 {
 public:
 
+    /// null cost (neutral element for plus).
     PSCost();
     
     /// copy constructor
@@ -41,6 +42,12 @@ public:
     
     /// assignement operator
     PSCost& operator=(const PSCost& rhs);
+    
+    /// sum operator (non const).
+    PSCost& operator+=(const PSCost& rhs);
+
+    /// sum operator (const).
+    PSCost operator+(const PSCost& rhs) const;
     
     /// same costs
     bool operator==(const PSCost& rhs) const;
@@ -59,6 +66,8 @@ public:
 
     /// lexicographic ordering for costs
     bool operator>=(const PSCost& rhs) const;
+    
+    /// @todo operators operator+ (externe), operator+= (non const)
 
     /// access cumulated number of accidents.
     inline size_t getAccid() const { return _accid; }
@@ -110,6 +119,9 @@ private:
     /// cumulated number of accidentals with color different from global ton
     /// in the minimal path to this config.
     size_t _color;
+    
+    // internal constructor.
+    // PSCost(size_t a, size_t n, size_t d, size_t c);
 
 };
 
@@ -127,7 +139,7 @@ private:
 //   e.g. D#, E, Fb and not Eb, Enat, E#
 
 
-
+PSCost operator+(const PSCost& c1, const PSCost& c2);
 
 std::ostream& operator<<(std::ostream& o, const PSCost& c);
 

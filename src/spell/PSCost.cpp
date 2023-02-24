@@ -44,11 +44,36 @@ PSCost& PSCost::operator=(const PSCost& rhs)
     if (this != &rhs)
     {
         _accid = rhs._accid;
-        _dist  = rhs._dist;
         _ndia  = rhs._ndia;
+        _dist  = rhs._dist;
         _color  = rhs._color;
     }
     return *this;
+}
+
+
+PSCost& PSCost::operator+=(const PSCost& rhs)
+{
+    _accid += rhs._accid;
+    _ndia  += rhs._ndia;
+    _dist  += rhs._dist;
+    _color += rhs._color;
+    return *this;
+}
+
+
+//PSCost::PSCost(size_t a, size_t n, size_t d, size_t c):
+//_accid(a),
+//_dist(n),
+//_ndia(d),
+//_color(c)
+//{ }
+
+
+PSCost PSCost::operator+(const PSCost& rhs) const
+{
+    PSCost copy(*this);
+    return copy.operator+=(rhs);
 }
 
 
@@ -215,6 +240,12 @@ void PSCost::print(std::ostream& o) const
     o << "dist=" << _dist << ',';
     o << "disj=" << _ndia << ',';
     o << "color=" << _color;
+}
+
+
+PSCost operator+(const PSCost& c1, const PSCost& c2)
+{
+    return c1.operator+(c2);
 }
 
 

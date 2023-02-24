@@ -24,6 +24,21 @@
 namespace pse {
 
 
+
+// table: tonindex (for rows) x header of psvect
+//
+// tonindex = class with
+// - a list of tons (mv _tons)
+// size() (< const CEIL) CEIL = max = 200
+// addTon()
+// resetTons
+// const undef() or UNDEF = ceil+1
+// const failed() or FAILED = ceil+2
+//
+// the TonIndex of the table is passed (ref) to every columnn
+// (repl. PSV::_tons)
+
+
 /// A PS Table is a list of PS Vectors, one for each measure.
 class PST
 {
@@ -90,17 +105,24 @@ public:
 
     /// estimated global tonality for this table, in 0..NBTONS.
     /// @warning estimGlobal() must have been called successfully.
+    /// @todo change to const Ton& global(size_t i) const; (ith-best)
     const Ton& global() const;
 
     /// estimate a local tonality for each column of this table.
     /// @return whether estimation of the local tonalities successed.
     /// @warning estimGlobal() must have been called successfully.
+    /// @todo change to estimateLocals(size_t i) const;
+    /// (for ith-best global)
+    /// or estimateLocals(Ton& global)
     bool estimateLocals();
 
     /// estimated local tonality for the ith column of this table,
     /// in 0..nbtons().
     /// @param i column number. must be smaller than size().
     /// @warning estimLocals() must have been called.
+    /// @todo change to estimateLocals(size_t i, size_t j) const;
+    /// (for jth-best global)
+    /// or estimateLocals(size_t i, Ton& global)
     const Ton& local(size_t i) const;
     
     /// rename all notes read to build this PS table.
@@ -114,28 +136,39 @@ private: // data
 
     /// vector of tonalities = headers of rows of this table
     std::vector<const Ton> _tons;
+    /// @todo TonIndex
 
     /// enumerator of notes used to build this PS table.
     PSEnum& _enum;
     
+    /// columnns:
     /// one vector of bags of best paths (target configs) per measure
     std::vector<std::unique_ptr<PSV>> _psvs;
 
     /// index of global tonality in 0..nbtons()
     size_t _global;
+    /// @todo replace by vect<size_t> ordered list of best tons
     
     /// the global tonality has been estimated,
     /// i.e. estimateGlobal() was called.
+    /// @todo TBR (replaced by _globbal != TonIndex::UNDEF)
     bool _estimated_global;
 
     /// the local tonalities have been estimated,
     /// i.e. estimateLocals() was called.
+    /// @todo TBR
     bool _estimated_locals;
     
     /// intermediate vector of the sum of costs for each row
     /// every row of the table corresponds to a tonality.
+    /// @todo change to vect<PSCost>
     std::vector<unsigned int> _rowcost;
 
+    /// @todo
+    /// second _rowcost : cost re-evaluated (complete cost)
+    /// for the each row
+    /// or UNDEF Cost if nont evaluated.
+    
     /// flags : whether _rowcost was really estimated
     std::vector<bool> _frowcost;
     

@@ -54,6 +54,12 @@ public:
     /// and can be accessed with PSV::ton(i).
     static const size_t NBTONS = 30;
     
+    /// a tonality that was ont estimated yet.
+    static const size_t UNDEF_TON = NBTONS+1;
+
+    /// a tonality whose estimation failed.
+    static const size_t FAILED_TON = NBTONS+2;
+
     /// main constructor.
     /// @param tons vector of tonalities. dimension of this vector.
     /// @param e an enumerator of notes for transitions of configs.
@@ -142,6 +148,8 @@ private:
 
     /// index of local tonality in TONS
     size_t _local;
+    /// @todo std::vector<std::pair<size_t, size_t>> _local;
+    /// mapping global -> local for this PSvec
     
     /// the local tonality has been estimated
     bool _estimated;
