@@ -15,7 +15,6 @@ le choix d'alteration, entre enharmoniques, dépend du contexte musicale dans le
 → altération donne souvent une indication sur l'intention du compositeur.
 
 ## Representations of notes
-
 We call *part* a polyphonic sequence of notes, organized in measures (bars).
 Typically, it represents one staff in CWN.
 
@@ -55,7 +54,6 @@ lead tons in minor modes...
 Tonality distance...
 
 ## Measures of cost
-
 We consider several measures of cost used below for shortest path computations.  
 
 Let us represent a given part by $\bar{S} = S_1, ..., S_n$, the sequence of sets of simultaneous notes, ordered by onsets.
@@ -158,9 +156,9 @@ We assume given
 - a sequence of $m$ bars (measures) of written notes in the above representation.
 
 2 parameters: 
-
 - $N$ : one nb for the choice of global tonality
-- $C$ : the combination of the above measures considered ($C_\ell$ or $C_+$).
+- $C$ : one combination of the above measures  
+  (we consider 2 cases $C_\ell$ or $C_+$ defined below).
 
 Spell($N$, $C$):
 
@@ -181,15 +179,14 @@ Next, for all $t^g \in T^g$, do the following.
 
 3. estimation of a local tonality $t^\ell_b \in T$ for every bar $b \in 1..m$.  
 	- let $t^\ell_0 = t_g$
-	- for all $b \in 1..m$, we select $t^\ell_b \in T$ $SP[t^\ell_b][b]$ 
-	that has the best cost in the column $(SP[t][b])_{t \in T}$.  
-	In case of tie break, we use furthermore the lexicographic composition of the 2 following criteria:
+	- for all $b \in 1..m$, we select $t^\ell_b \in T$ such that has the best cost in the column $(SP[t][b])_{t \in T}$.  
+  
+  In case of tie break, we use furthermore the lexicographic composition of the 2 following criteria:
 		- the tonality distance to the previous estimated local tonality $t^\ell_{b-1}$, 
 		- the tonality distance to the global tonality $t^g$.
 
 4. Spelling.  
-	For all bar $b \in 1..m$, we recompute one best path, following a cost measure
-	defined as a lexicographic composition of:
+  For all bar $b \in 1..m$, we recompute one best path, following a cost measure defined as a lexicographic composition of:
 	- $C$
 	- the distance between the current state and the estimated local tonality $t^\ell_b$
 	- ~~the distance between a spelling and the glocal tonality $t^g$~~
