@@ -89,20 +89,28 @@ pybind11_add_module(pse
   src/pitch/NoteName.cpp
   src/pitch/Accidental.cpp
   src/pitch/MidiNum.cpp
-  src/pitch/Fifths.cpp
   src/pitch/Enharmonic.cpp
+  src/pitch/PWO.cpp
+  src/pitch/pitch.cpp
+  src/interval/IntervalSimple.cpp
+  src/interval/Interval.cpp
+  src/ton/Fifths.cpp
   src/ton/KeyFifth.cpp
   src/ton/Ton.cpp
+  src/ton/TonIndex.cpp
   src/ton/Weber.cpp
-  src/spell/PSState.cpp
   src/spell/PSCost.cpp
+  src/spell/PSState.cpp
   src/spell/PSConfig0.cpp
   src/spell/PSConfig.cpp
+  src/spell/PSConfig1.cpp
+  src/spell/PSConfig2.cpp
   src/spell/PSBag.cpp
   src/spell/PSVector.cpp
   src/spell/PSTable.cpp
   src/spell/PSPath.cpp
   src/import/PSEnum.cpp
+  src/import/PSChord.cpp
   src/import/PSRawEnum.cpp
   src/import/PSM21Enum.cpp
   src/targets/Speller.cpp

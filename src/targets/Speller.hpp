@@ -82,7 +82,7 @@ public:
     void addTon(int ks, Ton::Mode mode = Ton::Mode::Maj);
 
     /// add a tonality for pitch spelling.
-    void addTon(const Ton ton);
+    void addTon(const Ton& ton);
         
     /// compute the best pitch spelling for the input notes.
     /// @return whether computation was succesfull.
@@ -128,11 +128,13 @@ private: // data
     
 private:
         
-    /// default array of tonalities considered for Pitch Spelling.
-    static const std::vector<const Ton> TONS;
+    // default array of tonalities considered for Pitch Spelling.
+    // @todo mv to TonIndex
+    // static const std::vector<const Ton> TONS;
 
-    /// smaller table of all tonalities considered for PS.
-    static const std::vector<const Ton> TONS26;
+    // smaller table of all tonalities considered for PS.
+    // @todo mv to TonIndex
+    // static const std::vector<const Ton> TONS26;
 
     // table of state vectors associated to tonalities in TON.
     // static std::array<const PSState, NBTONS> ASTATES;

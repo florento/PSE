@@ -87,26 +87,26 @@ void Speller::add(int note, int bar, bool simult)
 
 size_t Speller::nbTons() const
 {
-    return _table.nbTons();
+    return _table.index.size();  // nbTons();
 }
 
 
 const Ton& Speller::ton(size_t i) const
 {
-    return _table.ton(i);
+    return _table.index.ton(i);
 }
 
 
 void Speller::resetTons()
 {
-    _table.resetTons();
+    _table.index.reset();
 }
 
 
-void Speller::addTon(const Ton ton)
+void Speller::addTon(const Ton& ton)
 {
     TRACE("Speller: add tonality {}", ton);
-    _table.addTon(ton);
+    _table.index.add(ton);
 }
 
 
@@ -117,20 +117,20 @@ void Speller::addTon(int ks, Ton::Mode mode)
         ERROR("Speller addTon: wrong key signature value {}", ks);
     }
     TRACE("Speller: add tonality {} {}", ks, mode);
-    _table.addTon(ks, mode);
+    _table.index.add(ks, mode);
 }
 
 
 bool Speller::respell()
 {
     //DEBUGU("Speller respell: nb tonalities in table: {}", _table.nbTons());
-    if (_table.nbTons() == 0)
+    if (_table.index.size() == 0)
     {
         TRACE("Speller respell: no tonality added, use default tonality array");
         for (int ks = -7; ks <= 7; ++ks)
-            _table.addTon(ks, Ton::Mode::Maj);
+            _table.index.add(ks, Ton::Mode::Maj);
         for (int ks = -7; ks <= 7; ++ks)
-            _table.addTon(ks, Ton::Mode::Min);
+            _table.index.add(ks, Ton::Mode::Min);
     }
     
     //    if (finit)
@@ -185,72 +185,6 @@ bool Speller::respell()
 //}
 
 
-
-// TONS30
-const std::vector<const Ton> Speller::TONS =
-{
-    Ton(-7, Ton::Mode::Maj),
-    Ton(-6, Ton::Mode::Maj),
-    Ton(-5, Ton::Mode::Maj),
-    Ton(-4, Ton::Mode::Maj),
-    Ton(-3, Ton::Mode::Maj),
-    Ton(-2, Ton::Mode::Maj),
-    Ton(-1, Ton::Mode::Maj),
-    Ton(0,  Ton::Mode::Maj),
-    Ton(1,  Ton::Mode::Maj),
-    Ton(2,  Ton::Mode::Maj),
-    Ton(3,  Ton::Mode::Maj),
-    Ton(4,  Ton::Mode::Maj),
-    Ton(5,  Ton::Mode::Maj),
-    Ton(6,  Ton::Mode::Maj),
-    Ton(7,  Ton::Mode::Maj),
-    Ton(-7, Ton::Mode::Min),
-    Ton(-6, Ton::Mode::Min),
-    Ton(-5, Ton::Mode::Min),
-    Ton(-4, Ton::Mode::Min),
-    Ton(-3, Ton::Mode::Min),
-    Ton(-2, Ton::Mode::Min),
-    Ton(-1, Ton::Mode::Min),
-    Ton(0,  Ton::Mode::Min),
-    Ton(1,  Ton::Mode::Min),
-    Ton(2,  Ton::Mode::Min),
-    Ton(3,  Ton::Mode::Min),
-    Ton(4,  Ton::Mode::Min),
-    Ton(5,  Ton::Mode::Min),
-    Ton(6,  Ton::Mode::Min),
-    Ton(7,  Ton::Mode::Min)
-};
-
-
-const std::vector<const Ton> Speller::TONS26 =
-{
-    Ton(-6, Ton::Mode::Maj),
-    Ton(-5, Ton::Mode::Maj),
-    Ton(-4, Ton::Mode::Maj),
-    Ton(-3, Ton::Mode::Maj),
-    Ton(-2, Ton::Mode::Maj),
-    Ton(-1, Ton::Mode::Maj),
-    Ton(0,  Ton::Mode::Maj),
-    Ton(1,  Ton::Mode::Maj),
-    Ton(2,  Ton::Mode::Maj),
-    Ton(3,  Ton::Mode::Maj),
-    Ton(4,  Ton::Mode::Maj),
-    Ton(5,  Ton::Mode::Maj),
-    Ton(6,  Ton::Mode::Maj),
-    Ton(-6, Ton::Mode::Min),
-    Ton(-5, Ton::Mode::Min),
-    Ton(-4, Ton::Mode::Min),
-    Ton(-3, Ton::Mode::Min),
-    Ton(-2, Ton::Mode::Min),
-    Ton(-1, Ton::Mode::Min),
-    Ton(0,  Ton::Mode::Min),
-    Ton(1,  Ton::Mode::Min),
-    Ton(2,  Ton::Mode::Min),
-    Ton(3,  Ton::Mode::Min),
-    Ton(4,  Ton::Mode::Min),
-    Ton(5,  Ton::Mode::Min),
-    Ton(6,  Ton::Mode::Min),
-};
 
 
 // TBR not used

@@ -16,14 +16,13 @@
 namespace pse {
 
 
-PSV::PSV(const std::vector<const Ton>& tons,
-         const PSEnum& e):
-_tons(tons),
+PSV::PSV(const TonIndex& i, const PSEnum& e):
+index(i),
 _enum(e.clone()),
 _psb0(),
 _psb1(),
-_local(nbtons()), // undef (value out of range)
-_estimated(false),
+_local(TonIndex::UNDEF), // undef (value out of range)
+//_estimated(false),
 _tiebfail(0)
 {
     // _psb0.fill(nullptr);
@@ -32,14 +31,13 @@ _tiebfail(0)
 }
 
 
-PSV::PSV(const std::vector<const Ton>& tons,
-         const PSEnum& e, size_t i0, size_t i1):
-_tons(tons),
+PSV::PSV(const TonIndex& i, const PSEnum& e, size_t i0, size_t i1):
+index(i),
 _enum(e.clone(i0, i1)),
 _psb0(),
 _psb1(),
-_local(nbtons()), // undef (value out of range)
-_estimated(false),
+_local(TonIndex::UNDEF), // undef (value out of range)
+//_estimated(false),
 _tiebfail(0)
 {
     // _psb0.fill(nullptr);
@@ -48,14 +46,13 @@ _tiebfail(0)
 }
 
 
-PSV::PSV(const std::vector<const Ton>& tons,
-         const PSEnum& e, size_t i0):
-_tons(tons),
+PSV::PSV(const TonIndex& i, const PSEnum& e, size_t i0):
+index(i),
 _enum(e.clone(i0)),
 _psb0(),
 _psb1(),
-_local(nbtons()), // undef (value out of range)
-_estimated(false),
+_local(TonIndex::UNDEF), // undef (value out of range)
+//_estimated(false),
 _tiebfail(0)
 {
     // _psb0.fill(nullptr);
@@ -81,7 +78,7 @@ PSEnum& PSV::psenum() const
 // compute _psb0
 void PSV::init()
 {
-    for (size_t i = 0; i < nbtons(); ++i)
+    for (size_t i = 0; i < index.size(); ++i)
     {
         // PS Bag is empty if first() = last()
         TRACE("PSV {}-{} ton {}", psenum().first(), psenum().stop(), ton(i));
@@ -95,22 +92,20 @@ void PSV::init()
 
 const Ton& PSV::ton(size_t i) const
 {
-    //assert(i < NBTONS);
-    //return TONS[i];
-    assert(i < _tons.size());
-    return _tons.at(i);
+    assert(i < index.size());
+    return index.ton(i);
 }
 
 
-size_t PSV::nbtons() const
-{
-    return _tons.size();
-}
+//size_t PSV::nbtons() const
+//{
+//    return _tons.size();
+//}
 
 
 const PSB& PSV::best0(size_t i) const
 {
-    assert(i < nbtons());
+    assert(i < index.size());
     assert(_psb0[i]);   // is a std::unique_ptr<const PSB>
     return *(_psb0[i]);
 }
@@ -118,23 +113,24 @@ const PSB& PSV::best0(size_t i) const
 
 const PSB& PSV::best1(size_t i)
 {
-    assert(i < nbtons());
-    if (_estimated == false)
+    assert(i < index.size());
+    
+    if (_local == TonIndex::UNDEF)
     {
         ERROR("PSV: best1: local ton must be estimated");
         assert(_psb0[i]);   // is a std::unique_ptr<const PSB>
         return *(_psb0[i]);
     }
-    else if (_local >= nbtons())
+    else if (_local == TonIndex::FAILED)
     {
-        ERROR("PSV: best1: local ton could not be estimated");
+        ERROR("PSV: best1: estimation of local ton failed");
         assert(_psb0[i]);   // is a std::unique_ptr<const PSB>
         return *(_psb0[i]);
     }
 
     if (_psb1[i] == nullptr) // not tabulated yet
     {
-        assert(_local < nbtons());
+        assert(_local < index.size());
         const Ton& lton = ton(_local);
         const Ton& gton = ton(i);
         // PS Bag is empty if first() = last()
@@ -148,11 +144,15 @@ const PSB& PSV::best1(size_t i)
 
 size_t PSV::local() const
 {
-    if (_estimated == false)
+    if (_local == TonIndex::UNDEF)
     {
         ERROR("PSV: local ton must be estimated before accessed");
     }
-    
+    else if (_local == TonIndex::FAILED)
+    {
+        ERROR("PSV: estimation of local ton failed");
+    }
+
     return _local;
 }
 
@@ -160,28 +160,33 @@ size_t PSV::local() const
 // compute _local
 bool PSV::estimateLocal(size_t prev)
 {
-    if (_estimated)
+    if (_local != TonIndex::UNDEF)
     {
         WARN("PSV: re-estimation of local tonality. ignored.");
         return true;
     }
+    else if (_local != TonIndex::FAILED)
+    {
+        WARN("PSV: failure in estimation of local tonality.");
+        return false;
+    }
     
-    if (psenum().first() == psenum().stop())
+    if (psenum().first() == psenum().stop()) // psenum().empty
     {
         DEBUGU("PSV: estimate local: empty vector {}-{}",
               psenum().first(), psenum().stop());
         // we stay in the previous local tonality
         _local = prev;
-        _estimated = true;
+        //_estimated = true;
         return true;
     }
     
-    assert(prev < nbtons());
+    assert(prev < index.size());
     const Ton& pton = ton(prev);
     // const PSB& ppsb = *(_psb0[prev]);
 
     // index of the current best local tonality.
-    size_t ibest = nbtons(); // out of range. initialized to avoid warning.
+    size_t ibest = TonIndex::UNDEF; // out of range. initialized to avoid warning.
 
     // cost for the current best local tonality.
     PSCost cbest; // initialized to avoid warning. // was -1
@@ -189,7 +194,7 @@ bool PSV::estimateLocal(size_t prev)
     // current best distance
     unsigned int dbest = -1; // initialized to avoid warning
 
-    for (size_t i = 0; i < nbtons(); ++i)
+    for (size_t i = 0; i < index.size(); ++i)
     {
         assert(_psb0[i]);
         const PSB& psb = *(_psb0[i]);
@@ -197,7 +202,6 @@ bool PSV::estimateLocal(size_t prev)
         assert(! psb.empty());
 
         PSCost cost = psb.cost();
-        //assert(cost >= 0);
         
         // new best cost
         if ((i == 0) || (cost < cbest))
@@ -237,9 +241,11 @@ bool PSV::estimateLocal(size_t prev)
         }
     }
 
-    assert(ibest < nbtons());
+    assert(ibest != TonIndex::UNDEF);
+    assert(ibest != TonIndex::FAILED);
+    assert(ibest < index.size());
     _local = ibest;
-    _estimated = true;
+    // _estimated = true;
     return true;
 }
 

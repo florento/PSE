@@ -35,6 +35,9 @@
 		434B1E01298FD4FE001CE41C /* PSChord.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 434B1DFF298FD4FE001CE41C /* PSChord.cpp */; };
 		434B1E02298FD4FE001CE41C /* PSChord.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 434B1DFF298FD4FE001CE41C /* PSChord.cpp */; };
 		434B1E03298FD4FE001CE41C /* PSChord.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 434B1E00298FD4FE001CE41C /* PSChord.hpp */; };
+		435406A429A8D4BB0075B3B7 /* TonIndex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 435406A229A8D4BB0075B3B7 /* TonIndex.cpp */; };
+		435406A529A8D4BB0075B3B7 /* TonIndex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 435406A229A8D4BB0075B3B7 /* TonIndex.cpp */; };
+		435406A629A8D4BB0075B3B7 /* TonIndex.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 435406A329A8D4BB0075B3B7 /* TonIndex.hpp */; };
 		4397A5DE29A6CDB300C2CC9A /* PSOrder.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 4397A5DC29A6CDB300C2CC9A /* PSOrder.hpp */; };
 		43A2544029280D8900D559D2 /* trace.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43A2543E29280D8900D559D2 /* trace.cpp */; };
 		43A2544129280D8900D559D2 /* trace.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 43A2543F29280D8900D559D2 /* trace.hpp */; };
@@ -141,6 +144,11 @@
 		434B1DFB298ED394001CE41C /* PSConfig2.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = PSConfig2.hpp; path = src/spell/PSConfig2.hpp; sourceTree = "<group>"; };
 		434B1DFF298FD4FE001CE41C /* PSChord.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = PSChord.cpp; path = src/spell/PSChord.cpp; sourceTree = "<group>"; };
 		434B1E00298FD4FE001CE41C /* PSChord.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = PSChord.hpp; path = src/spell/PSChord.hpp; sourceTree = "<group>"; };
+		4354069F29A8D2F90075B3B7 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = src/chord/README.md; sourceTree = "<group>"; };
+		435406A029A8D3530075B3B7 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = src/spiral/README.md; sourceTree = "<group>"; };
+		435406A129A8D4050075B3B7 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = src/KrumhanslSchmuckler/README.md; sourceTree = "<group>"; };
+		435406A229A8D4BB0075B3B7 /* TonIndex.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = TonIndex.cpp; path = src/ton/TonIndex.cpp; sourceTree = "<group>"; };
+		435406A329A8D4BB0075B3B7 /* TonIndex.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = TonIndex.hpp; path = src/ton/TonIndex.hpp; sourceTree = "<group>"; };
 		436C6C3D2924016F00152D8C /* pse.cpython-310-darwin.so */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = "pse.cpython-310-darwin.so"; sourceTree = BUILT_PRODUCTS_DIR; };
 		436C6C4D2924023100152D8C /* NoteName.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = NoteName.hpp; path = src/pitch/NoteName.hpp; sourceTree = "<group>"; };
 		4397A5DC29A6CDB300C2CC9A /* PSOrder.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = PSOrder.hpp; path = src/spell/PSOrder.hpp; sourceTree = "<group>"; };
@@ -214,6 +222,8 @@
 				430CDFEF2924E6D700A84650 /* KeyFifth.cpp */,
 				43ABA506292423E8002AC1D4 /* Ton.hpp */,
 				43ABA4FF292423E8002AC1D4 /* Ton.cpp */,
+				435406A329A8D4BB0075B3B7 /* TonIndex.hpp */,
+				435406A229A8D4BB0075B3B7 /* TonIndex.cpp */,
 				432657E2294E2FB100515080 /* Weber.hpp */,
 				432657E1294E2FB000515080 /* Weber.cpp */,
 			);
@@ -269,6 +279,7 @@
 		4315861B2983E80400918B1B /* spiral */ = {
 			isa = PBXGroup;
 			children = (
+				435406A029A8D3530075B3B7 /* README.md */,
 				431586222983E86E00918B1B /* InputSegmentSpiral.hpp */,
 				431586232983E86E00918B1B /* InputSegmentSpiral.cpp */,
 				431586212983E86E00918B1B /* Spiral.hpp */,
@@ -280,6 +291,7 @@
 		4315861C2983E82300918B1B /* KrumhanslSchmuckler */ = {
 			isa = PBXGroup;
 			children = (
+				435406A129A8D4050075B3B7 /* README.md */,
 				4315861D2983E84D00918B1B /* KeyFind.hpp */,
 				4315861E2983E84D00918B1B /* KeyFind.cpp */,
 			);
@@ -300,6 +312,7 @@
 		434D5CFD299FCFF100AEB02F /* chord */ = {
 			isa = PBXGroup;
 			children = (
+				4354069F29A8D2F90075B3B7 /* README.md */,
 			);
 			name = chord;
 			sourceTree = "<group>";
@@ -427,6 +440,7 @@
 				434B1E03298FD4FE001CE41C /* PSChord.hpp in Headers */,
 				4315863A2983EDD900918B1B /* PSRawEnum.hpp in Headers */,
 				431586382983E89B00918B1B /* PSNoteEnum.hpp in Headers */,
+				435406A629A8D4BB0075B3B7 /* TonIndex.hpp in Headers */,
 				432EF6AE292D405400C620CF /* Speller.hpp in Headers */,
 				4342FD1929268C78004E914F /* pypse.hpp in Headers */,
 			);
@@ -519,6 +533,7 @@
 				43C2BA192999529E0084AB3B /* PWO.cpp in Sources */,
 				430CDFF12924E6D800A84650 /* KeyFifth.cpp in Sources */,
 				43ABA509292423E8002AC1D4 /* Ton.cpp in Sources */,
+				435406A429A8D4BB0075B3B7 /* TonIndex.cpp in Sources */,
 				434B1DF8298ECCF1001CE41C /* PSConfig1.cpp in Sources */,
 				432657E3294E2FB100515080 /* Weber.cpp in Sources */,
 				43ABA52E29242418002AC1D4 /* PSState.cpp in Sources */,
@@ -554,6 +569,7 @@
 				43C2BA1A2999529E0084AB3B /* PWO.cpp in Sources */,
 				43FBEACB2930CEDD008FC486 /* Fifths.cpp in Sources */,
 				434B1E02298FD4FE001CE41C /* PSChord.cpp in Sources */,
+				435406A529A8D4BB0075B3B7 /* TonIndex.cpp in Sources */,
 				43FBEACC2930CEDD008FC486 /* KeyFifth.cpp in Sources */,
 				43FBEACD2930CEDD008FC486 /* Ton.cpp in Sources */,
 				434B1DF9298ED0A0001CE41C /* PSConfig1.cpp in Sources */,

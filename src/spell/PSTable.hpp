@@ -19,6 +19,7 @@
 
 #include "trace.hpp"
 #include "PSEnum.hpp"
+#include "TonIndex.hpp"
 #include "PSVector.hpp"
 
 namespace pse {
@@ -42,12 +43,18 @@ namespace pse {
 /// A PS Table is a list of PS Vectors, one for each measure.
 class PST
 {
+    
 public:
 
+    /// header of rows: vector of tonalities (1 per row).
+    TonIndex index;
+    
     /// main constructor.
     /// @param e an enumerator of notes for transitions of configs.
+    /// @param nbTons default list of tonalities.
+    /// @see TonIndex for supported values.
     /// @warning the enumerator cannot be changed once the object created.
-    PST(PSEnum& e);
+    PST(PSEnum& e, size_t nbTons=0);
 
     // main constructor.
     // @param e an enumerator of notes for transitions of configs.
@@ -70,34 +77,39 @@ public:
     /// @return wether the computation was successful.
     bool init();
     
-    /// number of columns (PS Vectors)  in this table (i.e. nb of measures).
+    /// number of columns (PS Vectors) in this table (i.e. nb of measures).
     size_t size() const;
         
     /// access the ith column (PS vector) of this table.
     /// @param i column number. must be smaller than size().
     PSV& column(size_t i);
     
-    /// number of rows (dimension of PS Vectors) in this table
-    /// (i.e. nb of tonalities considered).
-    size_t nbTons() const;
+    // number of rows (dimension of PS Vectors) in this table
+    // (i.e. nb of tonalities considered).
+    // @todo TBR (repl. by TonIndex)
+    // size_t nbTons() const;
 
-    /// Row header = tonality corresponding to the given row index.
-    /// @param i an index in array of tonalities. must be smaller than NBTONS.
-    const Ton& ton(size_t i) const;
+    // Row header = tonality corresponding to the given row index.
+    // @param i an index in array of tonalities. must be smaller than NBTONS.
+    // @todo TBR (repl. by TonIndex)
+    // const Ton& ton(size_t i) const;
     
-    /// empty the list of row headers (tonalities).
-    /// @see addTon
-    void resetTons();
+    // empty the list of row headers (tonalities).
+    // @see addTon
+    // @todo TBR (repl. by TonIndex)
+    // void resetTons();
 
-    ///add a tonality to the list of row headers.
-    void addTon(const Ton ton);
+    // add a tonality to the list of row headers.
+    // @todo TBR (repl. by TonIndex)
+    // void addTon(const Ton ton);
     
-    ///add a tonality to the list of row headers.
-    /// @param ks number of flats if negative int,
-    /// or number of sharps if positive int. must be in -7..7.
-    /// @param mode mode of this tonality.
-    /// @see Ton
-    void addTon(int ks, Ton::Mode mode = Ton::Mode::Maj);
+    // add a tonality to the list of row headers.
+    // @param ks number of flats if negative int,
+    // or number of sharps if positive int. must be in -7..7.
+    // @param mode mode of this tonality.
+    // @see Ton
+    // @todo TBR (repl. by TonIndex)
+    // void addTon(int ks, Ton::Mode mode = Ton::Mode::Maj);
     
     /// estimate the global tonality for this table.
     /// @return whether the estimation of the global tonality successed.
@@ -131,12 +143,11 @@ public:
     /// @return whether renaming succeded for all measures.
     bool rename();
     
-    
 private: // data
 
-    /// vector of tonalities = headers of rows of this table
-    std::vector<const Ton> _tons;
-    /// @todo TonIndex
+    // vector of tonalities = headers of rows of this table
+    // std::vector<const Ton> _tons;
+    // @todo replace by TonIndex
 
     /// enumerator of notes used to build this PS table.
     PSEnum& _enum;
@@ -145,7 +156,10 @@ private: // data
     /// one vector of bags of best paths (target configs) per measure
     std::vector<std::unique_ptr<PSV>> _psvs;
 
-    /// index of global tonality in 0..nbtons()
+    /// index of estimated global tonality.
+    /// - TonIndex::UNDEF if it was not estimated yet.
+    /// - TonIndex::FAILED if its estimation failed.
+    /// - an integer value between 0 and index.size() otherwise.
     size_t _global;
     /// @todo replace by vect<size_t> ordered list of best tons
     
