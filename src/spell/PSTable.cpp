@@ -14,15 +14,13 @@
 namespace pse {
 
 
-PST::PST(PSEnum& e, size_t n):
+PST::PST(PSEnum& e, size_t n, bool dflag):
 index(n),    // empty
 _enum(e),
-_psvs(), // empty
+_psvs(),     // empty
 _global(TonIndex::UNDEF), // undef (value out of range)
-_estimated_global(false),
 _estimated_locals(false),
-_rowcost(), // empty
-_frowcost() // empty
+_debug(dflag)
 {
     TRACE("new PS Table");
     
@@ -58,8 +56,6 @@ PST::~PST()
     TRACE("delete PS Table {}-{}", _enum.first(), _enum.stop());
     //((stop() == NoteEnum::ID_UNDEF)?"NaN":std::to_string(stop())));
     _psvs.clear();
-    _rowcost.clear();
-    _frowcost.clear();
 }
 
 
@@ -91,14 +87,14 @@ bool PST::init()
     
     // reset table
     _psvs.clear();
-    _estimated_global = false;
+    //_estimated_global = false;
     _global = TonIndex::UNDEF; // undef (value out of range)
     _estimated_locals = false;
     
     while (_enum.inside(i0))
     {
         assert(_enum.measure(i0) >= b);
-        // current bar b is empty (i0 is after b)
+        // the current bar b is empty (i0 is after b)
         if (_enum.measure(i0) > b)
         {
             DEBUGU("PST init: bar {} EMPTY", b);
@@ -108,7 +104,7 @@ bool PST::init()
             continue;
         }
             
-        // current bar b not empty (i0 in b). add it.
+        // the current bar b is not empty (i0 in b). add it.
         i1 = bound_measure(b, i0); // first note after current measure b
         TRACE("PST init: bar {} {}-{}", b, i0, i1);
         assert(_enum.inside(i1 - 1));
@@ -185,9 +181,151 @@ PSV& PST::column(size_t i)
 //}
 
 
+//unsigned int PST::rowcost(size_t i) const
+//{
+//    assert(i < _rowcost.size());
+//    return _rowcost.at(i);
+//}
+
+
+//bool PST::frowcost(size_t i) const
+//{
+//    assert(i < _frowcost.size());
+//    assert(_frowcost.size() == _rowcost.size());
+//    return _frowcost.at(i);
+//}
+
+
+PSCost PST::rowCost(size_t step, size_t i)
+{
+    PSCost rc; // zero
+    // every column of the table corresponds to a measure
+    // for (std::unique_ptr<const PSV> psv : _psvs)
+    for (size_t j = 0; j < _psvs.size(); ++j)
+    {
+        assert(_psvs[j]);
+        PSV& psv = *(_psvs[j]);
+        const PSB& psb = psv.best(step, i);
+        if (! psb.empty())
+            rc += psb.cost();
+    }
+    return rc;
+}
+
+
+bool PST::estimateGlobals()
+{
+    if (estimatedGlobals()) // ((! _globals.empty()) || (_global != TonIndex::UNDEF))
+    {
+        ERROR("PST: global tonality candidates already estimated.");
+        //WARN("PST: re-estimation of global tonality candidates. ignored.");
+        return false;
+    }
+    
+    if (_enum.empty()) // first() == stop()
+    {
+        ERROR("PST: estimation of global tonality impossible: no entry");
+        _global = TonIndex::FAILED; // error value
+        return false;
+    }
+    
+    if (index.empty())
+    {
+        ERROR("PST estimateGlobal: no tonality");
+        _global = TonIndex::FAILED; // error value        // _estimated_globals = true;
+        return false;
+    }
+    
+    /// store cumultated cost of every row
+    /// debug: one row cost at least must be estimated:
+    /// if one psb is empty, the whole column is empty
+    /// hence if a whole row could no be estimated, all columns are empty
+    /// hence the table is empty.
+    std::vector<PSCost> RowCost;
+    for (size_t i = 0; i < index.size(); ++i)
+    {
+        RowCost.push_back(rowCost(0, i));
+    }
+    
+    if (_debug) dump_table(RowCost);
+    
+    // candidate list for best global
+    // _globals is empty
+    // invariant: all index in _globals have the same RowCost
+    _globals.push_back(0);
+    
+    // estimate the best tonality wrt costs (nb accidentals)
+    for (size_t i = 0; i < index.size(); ++i)
+    {
+        assert(i < RowCost.size());
+        assert(! _globals.empty());
+        // all elements of cands have same cost
+        const PSCost bestCost = RowCost[_globals[0]];
+        // new best ton
+        if (RowCost[i] < bestCost)
+        {
+            _globals.clear();
+            _globals.push_back(i);
+        }
+        // tie
+        else if (RowCost[i] == bestCost)
+        {
+            _globals.push_back(i);
+        }
+        // otherwise do nothing
+    }
+    assert(! _globals.empty());
+    assert(estimatedGlobals()); // the checker is well defined
+    return true;
+    
+    // deprecated: tie break solving
+    //    const Ton& ton = index.ton(i);
+    //    const Ton& tonmin = index.ton(ibest);
+    //    // tie break 1 : smaller key signature
+    //    if (std::abs(ton.fifths()) < std::abs(tonmin.fifths()))
+    //    {
+    //        ibest = i;
+    //    }
+    //    // tie break 2 : major better than minor
+    //    else if ((ton.mode() == Ton::Mode::Maj) &&
+    //             (tonmin.mode() != Ton::Mode::Maj))
+    //    {
+    //        ibest = i;
+    //    }
+    //    // tie break 3 : sharp better than flat
+    //    else if (ton.fifths() > tonmin.fifths())
+    //    {
+    //        ibest = i;
+    //    }
+    //    // default: keep the smaller ibest
+    //    else
+    //    {
+    //        WARN("PST: estim global: tie brack fail {} {}", tonmin, ton);
+    //    }
+}
+
+
+void PST::setGlobal(size_t ig)
+{
+    assert(ig < index.size());
+    assert(ig != TonIndex::UNDEF);
+    assert(ig != TonIndex::FAILED);
+    if ((! _globals.empty()) || (_global != TonIndex::UNDEF))
+    {
+        WARN("PST setGlobal: global tonality candidates already estimated or set, wiped");
+        _globals.clear();
+    }
+    assert(_globals.empty());
+    _globals.push_back(ig);
+    _global = ig;
+    assert(estimatedGlobals()); // the checker is well defined
+    assert(estimatedGlobal()); // the checker is well defined
+}
+
+
 size_t PST::iglobal() const
 {
-    if (_global == TonIndex::UNDEF)  // (_estimated_global == false)
+    if (! estimatedGlobal())  // (_global == TonIndex::UNDEF)
     {
         ERROR("PST: global ton must be estimated before accessed");
     }
@@ -207,179 +345,29 @@ const Ton& PST::global() const
 }
 
 
-bool PST::estimateGlobal()
-{
-    if (_global != TonIndex::UNDEF)  // (_estimated_global)
-    {
-        WARN("PST: re-estimation of global tonality. ignored.");
-        return (_global != TonIndex::FAILED);
-    }
-    
-    if (_enum.empty()) // first() == stop()
-    {
-        ERROR("PST: estimation of global tonality impossible: no entry");
-        _global = TonIndex::FAILED; // error value
-        // _estimated_global = true;
-        return false;
-    }
-    
-    if (index.empty())
-    {
-        ERROR("PST estimateGlobal: no tonality");
-        _global = TonIndex::FAILED; // error value
-        return false;
-    }
-       
-    computeRowcost();
-    dump_table(); // DEBUGU
-    
-    size_t ibest = TonIndex::UNDEF; // out-of-range. initialized because of warning
-    
-    // estimate the best tonality wrt costs (nb accidentals)
-    for (size_t i = 0; i < index.size(); ++i)
-    {
-        // should not happen
-        if (frowcost(i) == false)
-        {
-            WARN("PST: failure with rowcost {}", i);
-            continue;
-        }
-        // new best ton
-        else if ((i == 0) || (rowcost(i) < rowcost(ibest)))
-        {
-            ibest = i;
-        }
-        // tie break
-        else if (rowcost(i) == rowcost(ibest))
-        {
-            const Ton& ton = index.ton(i);
-            const Ton& tonmin = index.ton(ibest);
-            // tie break 1 : smaller key signature
-            if (std::abs(ton.fifths()) < std::abs(tonmin.fifths()))
-            {
-                ibest = i;
-            }
-            // tie break 2 : major better than minor
-            else if ((ton.mode() == Ton::Mode::Maj) &&
-                     (tonmin.mode() != Ton::Mode::Maj))
-            {
-                ibest = i;
-            }
-            // tie break 3 : sharp better than flat
-            else if (ton.fifths() > tonmin.fifths())
-            {
-                ibest = i;
-            }
-            // default: keep the smaller ibest
-            else
-            {
-                WARN("PST: estim global: tie brack fail {} {}", tonmin, ton);
-            }
-        }
-    }
-    
-    assert(ibest != TonIndex::FAILED);
-    if (ibest == TonIndex::UNDEF)
-    {
-        ERROR("PST: failed to estimate global tonality");
-        _global = TonIndex::FAILED;
-        return false;
-    }
-    else
-    {
-        _global = ibest;
-        //_estimated_global = true;
-        return true;
-    }
-}
-
-
-void PST::computeRowcost()
-{
-    // initialise as static arrays
-    _rowcost.assign(index.size(), 0);
-    _frowcost.assign(index.size(), false);
-    
-    for (size_t i = 0; i < index.size(); ++i)
-    {
-        // every column of the table corresponds to a measure
-        // for (std::unique_ptr<const PSV> psv : _psvs)
-        for (size_t j = 0; j < _psvs.size(); ++j)
-        {
-            assert(_psvs[j]);
-            const PSV& psv = *(_psvs[j]);
-            const PSB& psb = psv.best0(i);
-            if (! psb.empty())
-            {
-                if (frowcost(i) == false)
-                {
-                    _frowcost[i] = true;
-                    _rowcost[i] = psb.cost().getAccid();
-                }
-                else
-                {
-                    _rowcost[i] += psb.cost().getAccid();
-                }
-            }
-        }
-    }
-    // if one psb is empty, the whole column is empty
-    // hence if a whole row could no be estimated, all columns are empty
-    // hence the table is empty.
-    assert(check_rowcost());
-}
-
-
-unsigned int PST::rowcost(size_t i) const
-{
-    assert(i < _rowcost.size());
-    return _rowcost.at(i);
-}
-
-
-bool PST::frowcost(size_t i) const
-{
-    assert(i < _frowcost.size());
-    assert(_frowcost.size() == _rowcost.size());
-    return _frowcost.at(i);
-}
-
-
-size_t PST::ilocal(size_t i) const
-{
-    if (_estimated_locals == false)
-        ERROR("PST: local tons must be estimated before accessed");
-
-    assert(i < _psvs.size());
-    assert(_psvs[i]);
-    return _psvs[i]->local();
-}
-
-
-const Ton& PST::local(size_t i) const
-{
-    return index.ton(ilocal(i));
-}
-
-
 bool PST::estimateLocals()
 {
-    if (_estimated_locals)
+    if (estimatedLocals()) // (_estimated_locals)
     {
         WARN("PST: re-estimation of local tonalities. ignored.");
-        return true;
-    }
-    
-    if (_global == TonIndex::UNDEF)
-    {
-        ERROR("PST: estimate global ton before estimating local tons.");
-        _estimated_locals = false;
         return false;
     }
-    else if (_global == TonIndex::FAILED)
+    
+    if (_globals.empty())
     {
-        ERROR("PST: failed to estimate global ton. cannot estimate local tons.");
-        _estimated_locals = false;
+        if (_global == TonIndex::UNDEF)
+        {
+            ERROR("PST: estimate global candidates ton before estimating local tons.");
+        }
+        else if (_global == TonIndex::FAILED)
+        {
+            ERROR("PST: failed to estimate global ton. cannot estimate local tons.");
+        }
+        else
+        {
+            ERROR("PST: unexpected state in local tons estimation.");
+        }
+        _estimated_locals = true;
         return false;
     }
 
@@ -389,51 +377,156 @@ bool PST::estimateLocals()
         _estimated_locals = true;
         return false;
     }
-    assert(_global < index.size());
 
-    // index of previous local tonality
-    size_t pre = _global;
-    for (size_t i = 0; i < _psvs.size(); ++i)
-    {
-        PSV& psv = column(i);
-        assert(pre < index.size());
-        bool status = psv.estimateLocal(pre);
-        if (status) // local succesfully estimated
-        {
-            pre = psv.local();
-        }
-        // otherwise, do not update the pre.
-    }
+    for (size_t ig : _globals)
+        estimateLocals(ig);
+
     _estimated_locals = true;
     return true;
 }
 
 
+bool PST::estimateLocals(size_t ig)
+{
+    bool status = true;
+    assert(ig < index.size());
+    // index of previous local tonality
+    size_t pre = ig;
+    for (size_t i = 0; i < _psvs.size(); ++i)
+    {
+        PSV& psv = column(i);
+        assert(pre < index.size());
+        bool lstatus = psv.estimateLocal(ig, pre);
+        if (lstatus) // local succesfully estimated
+        {
+            pre = psv.local(i);
+        }
+        // otherwise, do not update the pre.
+        else
+        {
+            status = false;
+        }
+    }
+    return status;
+}
+
+
+size_t PST::ilocal(size_t i, size_t j) const
+{
+    if (_estimated_locals == false)
+        ERROR("PST: local tons must be estimated before accessed");
+    assert(j < _psvs.size());
+    assert(_psvs[j]);
+    assert(i < index.size());
+    assert(i != TonIndex::UNDEF);
+    assert(i != TonIndex::FAILED);
+    return _psvs[j]->local(i);
+}
+
+
+const Ton& PST::local(size_t i, size_t j) const
+{
+    return index.ton(ilocal(i, j));
+}
+
+
+bool PST::estimateGlobal()
+{
+    if (_global == TonIndex::FAILED)  // (_estimated_global)
+    {
+        WARN("PST: the estimation of global tonality failed.");
+        return false;
+    }
+    else if (_global != TonIndex::UNDEF)  // (_estimated_global)
+    {
+        WARN("PST: re-estimation of global tonality. ignored.");
+        return true;
+    }
+    if (_globals.empty())
+    {
+        assert(_global == TonIndex::UNDEF);
+        ERROR("PST estimateGlobal: global tonality candidates not estimated.");
+        return false;
+    }
+    
+    PSCost cbest; // zero
+    size_t ibest = TonIndex::UNDEF;
+    
+    for (size_t i = 0; i < _globals.size(); ++i)
+    {
+        size_t ig = _globals[i];
+        PSCost rc = rowCost(1, ig);
+        // new best global
+        if ((i == 0) || (rc < cbest))
+        {
+            ibest = ig;
+            cbest = rc;
+        }
+        // tie
+        else if (rc == cbest)
+        {
+            const Ton& ton = index.ton(ig);
+            const Ton& tonbest = index.ton(ibest);
+            // tie break 1 : smaller key signature
+            if (std::abs(ton.fifths()) < std::abs(tonbest.fifths()))
+            {
+                ibest = ig;
+            }
+            else if (std::abs(ton.fifths()) == std::abs(tonbest.fifths()))
+            {
+                WARN("PST estimate global: tie break fail {} - {}", ibest, ig);
+                // keep ibest (arbitrarily)
+            }
+            // otherwise ibest unchanged
+        }
+    }
+    
+    if (ibest == TonIndex::UNDEF)
+    {
+        ERROR("PST estimation of global failed");
+        _global = TonIndex::FAILED;
+        return false;
+    }
+    else
+    {
+        assert(ibest != TonIndex::FAILED);
+        assert(ibest < index.size());
+        _global = ibest;
+        assert(estimatedGlobal()); // the checker is well defined
+        return true;
+    }
+}
+
+
 bool PST::rename()
 {
-    bool status = (_global != TonIndex::UNDEF);
-    if (status == false)
-        status = estimateGlobal();
+    bool status = false;
     
+    if (! estimatedGlobals())
+    {
+        status = estimateGlobals();
+    }
+        
+    if (status && !estimatedLocals())
+    {
+        status = estimateLocals();
+    }
+
+    if (status && !estimatedGlobal())
+    {
+        status = estimateGlobal();
+    }
+
     if ((status == false) || (_global == TonIndex::FAILED))
     {
         ERROR("PST: failed to estimate global ton. cannot rename pitches {}-{}",
               _enum.first(), _enum.stop());
         return false;
     }
+    
     assert(_global < index.size());
     const Ton& gton = index.ton(_global);
     DEBUGU("PST: estimated global ton: {}", gton);
-
-    if (! _estimated_locals)
-        status = estimateLocals();
-    
-    if (status == false)
-    {
-        ERROR("PST: failed to estimate locals. cannot rename pitches {}-{}",
-              _enum.first(), _enum.stop());
-        return false;
-    }
     
     for (size_t i = 0; i < _psvs.size(); ++i)
     {
@@ -441,50 +534,71 @@ bool PST::rename()
         PSV& psv = *(_psvs[i]);
         // std::cout << "PST: rename vector " << i << std::endl;
         DEBUGU("PST: renaming bar {}({}-{}) (local ton = {})",
-              i, psv.first(), psv.stop(), index.ton(psv.local()));
+              i, psv.first(), psv.stop(), index.ton(psv.local(_global)));
         status = psv.rename(_global);
     }
     return status;
 }
 
 
-// debug
-bool PST::check_rowcost() const
+bool PST::estimatedGlobals() const
 {
-    assert(_frowcost.size() == _rowcost.size());
-    for (bool b : _frowcost)
-    {
-        if (b == true)
-            return true;
-    }
-    return false;
+    return ((! _globals.empty()) || (_global != TonIndex::UNDEF));
 }
 
 
-void PST::dump_rowcost() const
+bool PST::estimatedLocals() const
 {
-    assert(check_rowcost());
+    return _estimated_locals;
+}
+
+
+bool PST::estimatedGlobal() const
+{
+    return (_global != TonIndex::UNDEF);
+}
+
+
+// debug
+//bool PST::check_rowcost(const std::vector<PSCost>& rc) const
+//{
+//    for (bool b : rc)
+//    {
+//        if (b == true)
+//            return true;
+//    }
+//    return false;
+//}
+
+
+void PST::dump_rowcost(const std::vector<PSCost>& rc) const
+{
     DEBUGU("PST: Row Costs:");
     for (size_t i = 0; i < index.size(); ++i)
     {
-        DEBUGU("PST row: {} cost {}", index.ton(i), _rowcost[i]);
+        DEBUGU("PST row: {} cost {}", index.ton(i), rc[i]);
     }
 }
 
 
-void PST::dump_table() const
+void PST::dump_table(const std::vector<PSCost>& rc) const
 {
     DEBUGU("PS Table:");
+    assert(rc.size() == index.size());
+
+    // rows
     for (size_t i = 0; i < index.size(); ++i)
     {
         std::string srow; // row content (bars)
+
+        // columns
         // every column of the table corresponds to a measure
         // for (std::unique_ptr<const PSV> psv : _psvs)
         for (size_t j = 0; j < _psvs.size(); ++j)
         {
             assert(_psvs[j]);
-            const PSV& psv = *(_psvs[j]);
-            const PSB& psb = psv.best0(i);
+            PSV& psv = *(_psvs[j]);
+            const PSB& psb = psv.best(0, i);
             srow += " ";
             if (psb.empty())
             {
@@ -500,7 +614,7 @@ void PST::dump_table() const
         }
         std::string hrow; // header
         
-        DEBUGU("PST row: {} {}: {}", index.ton(i), _rowcost[i], srow);
+        DEBUGU("PST row: {} {}: {}", index.ton(i), rc[i], srow);
     }
 }
 

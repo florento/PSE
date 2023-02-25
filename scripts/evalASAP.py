@@ -170,7 +170,7 @@ def Waldstein():
     #sp.debug(True)
     #ps.add_tons(0, sp)
     #sp.add_notes(ln1[:61], sp)
-    #sp.respell()
+    #sp.spell()
 
 
 
@@ -327,7 +327,7 @@ def get_table(subdir,file):
 #ln = ps.extract_notes(part)
 #sp = ps.Speller()
 #ps.add_notes(ln, sp)
-#sp.respell()
+#sp.spell()
 #
 # for p in ln:
 #    print('sp.add(', p[0].pitch.midi, ',', p[1],')')

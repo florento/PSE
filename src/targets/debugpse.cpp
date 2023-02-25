@@ -41,7 +41,7 @@ int main(int argc, const char* argv[])
     Waldstein(sp);
     
     std::cout << sp.size() << " notes" << std::endl;
-    bool status = sp.respell();
+    bool status = sp.spell();
 
     std::cout << sp.size() << " spelled notes" << std::endl;
     for (size_t i = 0; i < sp.size(); ++i)

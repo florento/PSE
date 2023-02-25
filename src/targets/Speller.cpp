@@ -11,12 +11,14 @@
 namespace pse {
 
 
-Speller::Speller(bool finit):
+Speller::Speller(size_t nbTons, bool dflag):
 _enum(0, 0),
-_table(_enum),
-_global(0) // C maj
+_table(_enum, nbTons, dflag),
+_global(0, Ton::Mode::Maj), // C maj default
+_debug(dflag)
 {
     spdlog_setVerbosity(4);
+    debug(dflag);
     spdlog_setPattern();
     
     // init table with default vector of tons
@@ -121,7 +123,13 @@ void Speller::addTon(int ks, Ton::Mode mode)
 }
 
 
-bool Speller::respell()
+void Speller::setGlobal(size_t i)
+{
+    _table.setGlobal(i);
+}
+
+
+bool Speller::spell()
 {
     //DEBUGU("Speller respell: nb tonalities in table: {}", _table.nbTons());
     if (_table.index.size() == 0)
@@ -150,19 +158,19 @@ bool Speller::respell()
     }
 
     TRACE("pitch-spelling: {} bars", _table.size());
-    // estimate global tonality for table
-    TRACE("pitch-spelling: start global tonality estimation");
-    status = _table.estimateGlobal();
-    if (status == false)
-    {
-        ERROR("Pitch Spelling: failed to extract global tonality, abort.");
-        return false;
-    }
-    const pse::Ton& gton = _table.global();
-    _global = gton;
-    DEBUGU("Pitch Spelling: estimated global tonality: {} ({})",
-          gton, gton.fifths());
 
+    // estimate global tonality candidates from table
+    if (! _table.estimatedGlobals())
+    {
+        TRACE("pitch-spelling: start estimation of global tonality candidates");
+        status = _table.estimateGlobals();
+        if (status == false)
+        {
+            ERROR("Pitch Spelling: failed to extract global tonality, abort.");
+            return false;
+        }
+    }
+    
     // extract local tonality for each column of table
     DEBUGU("pitch-spelling: start local tonalities estimation");
     status = _table.estimateLocals();
@@ -171,6 +179,15 @@ bool Speller::respell()
         ERROR("Pitch Spelling: failed to extract local tonalities, abort.");
         return false;
     }
+
+    if (! _table.estimatedGlobal())
+    {
+        const pse::Ton& gton = _table.global();
+        _global = gton;
+        DEBUGU("Pitch Spelling: estimated global tonality: {} ({})",
+               gton, gton.fifths());
+    }
+
 
     // will update the lists _names, _accids and _octave
     TRACE("pitch-spelling: start renaming");

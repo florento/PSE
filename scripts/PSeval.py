@@ -602,7 +602,7 @@ def eval_part(part, stat, nbtons=0, debug=False, mark=False):
     for (n, b, s) in ln:   # note, bar number, simultaneous flag
         sp.add(midi=n.pitch.midi, bar=b, simultaneous=s)
     stat.start_timer()
-    sp.respell()
+    sp.spell()
     stat.stop_timer()
     if (sp.sig() == k0.sharps):
         print('global ton: OK:', '(', sp.sig(), '),', end=' ')
@@ -688,7 +688,7 @@ def empty_difflist(lld):
 #    for (n, b, s) in ln:   # note, bar number, simultaneous flag
 #        sp.add(midi=n.pitch.midi, bar=b, simultaneous=s)
 #    t0 = time.time()
-#    sp.respell()
+#    sp.spell()
 #    self._current_time = time.time() - t0
 #    self._current_ks_est = sp.sig()
 #    ld = diff(ln, sp)
@@ -740,8 +740,8 @@ def empty_difflist(lld):
 #    sp = pse.Speller()
 #    sp.debug(True)
 #    add_notes(ln, sp)
-#    print('respell')
-#    sp.respell()
+#    print('spell')
+#    sp.spell()
 
 
 #bachBundle = corpus.corpora.CoreCorpus().search('bach', 'composer')

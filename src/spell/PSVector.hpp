@@ -76,43 +76,43 @@ public:
     
     ~PSV();
   
-    /// bag of target configs for best paths for the ton of given index,
-    /// according to the cost of path (nb of accidentals)
-    /// @param i index in array of tonalities. must be smaller than NBTONS.
-    const PSB& best0(size_t i) const;
-
-    /// bag of target configs for best paths for the ton of given index,
-    /// according to
-    /// - the cost of path (nb of accidentals), and
-    /// - the distance to local tonality.
-    /// @param i index in array of tonalities. must be smaller than NBTONS.
-    const PSB& best1(size_t i);
-    
     /// first id of enumerator
     inline size_t first() const { return psenum().first(); }
 
     /// one after last id of enumerator
     inline size_t stop()  const { return psenum().stop(); }
 
-    /// index of the estimated local tonality for this vector, in 0..NBTONS-1.
-    /// @return the estimated local tonality for this vector,
-    /// or NBTONS in case of error.
-    /// @warning estimLocal() must have been called successfully.
-    size_t local() const;
-    
-    /// estimate the local tonality from PS bags in this vector.
-    /// @param iton index of the local tonality of the previous PSV
+    /// bag of target configs for best paths for the ton of given index.
+    /// @param step number of step, 0 or 1.
+    /// @param i index in array of tonalities. must be smaller than index.size().
+    const PSB& best(size_t step, size_t i);
+
+    /// estimate the local tonality, from PS bags, in this vector,
+    /// assuming a global tonality.
+    /// @param ig index in the TonIndex of an assumed global tonality.
+    /// @param iprev index of the local tonality of the previous PSV
     /// or global tonality for the initial PSV.
     /// @return whether estimation of the local tonality successed.
-    bool estimateLocal(size_t iton);
+    bool estimateLocal(size_t ig, size_t iprev);
+        
+    /// index (in the TonIndex) of the estimated local tonality,
+    /// for the current bar,
+    /// assuming a global tonality (also represented by an index).
+    /// @param i index in the TonIndex of an assumed global tonality.
+    /// @return the estimated local tonality for the global tonality i:
+    /// - TonIndex::UNDEF if it was not estimated yet.
+    /// - TonIndex::FAILED if its estimation failed.
+    /// - an integer value between 0 and index.size() otherwise.
+    /// @warning estimLocal() must have been called successfully.
+    size_t local(size_t i) const;
     
     /// rename all notes read to build this PS vector.
     /// local tonality is estimated if this was not done before.
-    /// @param i index in array of tonalities. must be smaller than NBTONS.
+    /// @param i index in array of tonalities. must be smaller than index.size().
     /// @return whether renaming succeeded for this measure.
     bool rename(size_t i);
     
-private:
+private: // data
     
     /// header of rows: vector of tonalities.
     /// copy of the index of the embedding table.
@@ -125,26 +125,25 @@ private:
     /// enumerator of notes transmitted to embedded PSB's.
     const std::unique_ptr<PSEnum> _enum;
 
-    /// one bag of best paths (target configs) per ton,
-    /// paths are ordered according to their cost (nb of accidentals).
-    std::vector<std::unique_ptr<const PSB>> _psb0;
+    /// vector of bags of best paths (target configs), one bag for each ton.
+    /// best paths computed with partial ordering.
+    std::vector<std::shared_ptr<const PSB>> _psb_partial;
 
-    /// one bag of best paths (target configs) per ton,
-    /// paths are ordered according to
-    /// - their cost (nb of accidentals),
-    /// - the distance to local tonality.
-    std::vector<std::unique_ptr<const PSB>> _psb1;
+    /// vector of bags of best paths (target configs), one bag for each ton.
+    /// best paths computed with total ordering.
+    std::vector<std::shared_ptr<const PSB>> _psb_total;
 
-    /// index of local tonality in TONS.
+    /// index (in the TonIndex) of the estimated local tonality, for each
+    /// global tonality (also represented by an index).
+    /// _local[i] is the estimated best local tonality for the current bar,
+    /// assuminng that i is the inndexx of the globabl tonality.
     /// - TonIndex::UNDEF if it was not estimated yet.
     /// - TonIndex::FAILED if its estimation failed.
     /// - an integer value between 0 and index.size() otherwise.
-    size_t _local;
-    /// @todo std::vector<std::pair<size_t, size_t>> _local;
-    /// mapping global -> local for this PSvec
-        
-    /// debug counter: nb of tie break fails.
-    unsigned int _tiebfail;
+    std::vector<size_t> _local;
+    
+    /// debug counter: nb of tie break fails for estimation of local ton.
+    size_t _tiebfail;
     
     // the local tonality has been estimated
     // @todo rm or estimated()
@@ -168,6 +167,9 @@ private:
     /// @param i an index in array of tonalities. must be smaller than NBTONS.
     const Ton& ton(size_t i) const;
 
+    /// return value for best step 1 in case of error.
+    const PSB& best1ERROR(size_t i) const;
+    
 };
 
 

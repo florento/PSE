@@ -33,8 +33,10 @@ class Speller
 public:
     
     /// main constructor. initially empty list of notes to spell.
-    /// @param finit use a default list of tonalities for pitch spelling.
-    Speller(bool finit=true);
+    /// @param nbTons use default list of tonalities (default: empty).
+    /// @param dflag debug mode.
+    /// @see PSTable
+    Speller(size_t nbTons=0, bool dflag=false);
 
     // Speller for the given input notes.
     // @param ln Python list of Music 21 Note objects (references).
@@ -86,7 +88,11 @@ public:
         
     /// compute the best pitch spelling for the input notes.
     /// @return whether computation was succesfull.
-    bool respell();
+    bool spell();
+    
+    /// force global tonality. it wont be estimated.
+    /// @param i index of tonality set as global.
+    void setGlobal(size_t i);
     
     /// estimated global tonality
     /// @warning respell() must have been called.
@@ -125,6 +131,9 @@ private: // data
     
     /// evaluated global tonality
     pse::Ton _global;
+    
+    /// debug mode activated
+    bool _debug;
     
 private:
         

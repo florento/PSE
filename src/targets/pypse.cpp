@@ -84,7 +84,8 @@ PYBIND11_MODULE(pse, m)
         .def("add_ton",
              static_cast<void (pse::Speller::*)(int, pse::Ton::Mode)>(&pse::Speller::addTon),
              "add a tonality for pitch spelling", py::arg("ks"), py::arg("mode"))
-        .def("respell", &pse::Speller::respell, "respell notes")
+        .def("set_global", &pse::Speller::setGlobal, "force global tonality")
+        .def("spell", &pse::Speller::spell, "spell notes")
         .def("sig", &pse::Speller::fifths, "estimated global tonality")
         .def("name",  &pse::Speller::name, "estimated name of note",
              py::arg("i"))

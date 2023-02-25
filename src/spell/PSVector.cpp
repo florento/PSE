@@ -19,14 +19,14 @@ namespace pse {
 PSV::PSV(const TonIndex& i, const PSEnum& e):
 index(i),
 _enum(e.clone()),
-_psb0(),
-_psb1(),
-_local(TonIndex::UNDEF), // undef (value out of range)
-//_estimated(false),
+_psb_partial(),
+_psb_total(),
+_local(), // empty
 _tiebfail(0)
 {
-    // _psb0.fill(nullptr);
-    // _psb1.fill(nullptr);
+    _psb_partial.assign(index.size(), nullptr);
+    _psb_total.assign(index.size(), nullptr);
+    _local.assign(index.size(), TonIndex::UNDEF);
     init();
 }
 
@@ -34,14 +34,15 @@ _tiebfail(0)
 PSV::PSV(const TonIndex& i, const PSEnum& e, size_t i0, size_t i1):
 index(i),
 _enum(e.clone(i0, i1)),
-_psb0(),
-_psb1(),
-_local(TonIndex::UNDEF), // undef (value out of range)
-//_estimated(false),
+_psb_partial(),
+_psb_total(),
+_local(), // empty
 _tiebfail(0)
 {
-    // _psb0.fill(nullptr);
-    // _psb1.fill(nullptr);
+    // give the vector their definitive size (to use as arrays)
+    _psb_partial.assign(index.size(), nullptr);
+    _psb_total.assign(index.size(), nullptr);
+    _local.assign(index.size(), TonIndex::UNDEF);
     init();
 }
 
@@ -49,14 +50,15 @@ _tiebfail(0)
 PSV::PSV(const TonIndex& i, const PSEnum& e, size_t i0):
 index(i),
 _enum(e.clone(i0)),
-_psb0(),
-_psb1(),
-_local(TonIndex::UNDEF), // undef (value out of range)
-//_estimated(false),
+_psb_partial(),
+_psb_total(),
+_local(), // empty
 _tiebfail(0)
 {
-    // _psb0.fill(nullptr);
-    // _psb1.fill(nullptr);
+    // give the vector their definitive size (to use as arrays)
+    _psb_partial.assign(index.size(), nullptr);
+    _psb_total.assign(index.size(), nullptr);
+    _local.assign(index.size(), TonIndex::UNDEF);
     init();
 }
 
@@ -65,6 +67,8 @@ PSV::~PSV()
 {
     TRACE("delete PS Vector {}-{}", psenum().first(), psenum().stop());
     // implicit destructor for array _tons
+    _psb_partial.clear(); // deallocate smart pointers
+    _psb_total.clear();
 }
 
 
@@ -75,17 +79,17 @@ PSEnum& PSV::psenum() const
 }
 
 
-// compute _psb0
+// compute _psb_partial
 void PSV::init()
 {
     for (size_t i = 0; i < index.size(); ++i)
     {
         // PS Bag is empty if first() = last()
         TRACE("PSV {}-{} ton {}", psenum().first(), psenum().stop(), ton(i));
-        _psb0[i] = std::make_unique<const PSB>(ton(i), psenum());
-        _psb1[i] = nullptr; // std::make_shared<const PSB>(ton(i), psenum());
+        _psb_partial[i] = std::make_shared<const PSB>(ton(i), psenum());
+        _psb_total[i] = nullptr; // std::make_shared<const PSB>(ton(i), psenum());
         TRACE("compute the best spelling for notes {}-{}, ton = {}: {} accid",
-              psenum().first(), psenum().stop(), ton(i), _psb0[i]->cost());
+              psenum().first(), psenum().stop(), ton(i), _psb_partial[i]->cost());
     }
 }
 
@@ -103,148 +107,180 @@ const Ton& PSV::ton(size_t i) const
 //}
 
 
-const PSB& PSV::best0(size_t i) const
+const PSB& PSV::best(size_t step, size_t i)
 {
+    assert(step == 0 || step == 1);
     assert(i < index.size());
-    assert(_psb0[i]);   // is a std::unique_ptr<const PSB>
-    return *(_psb0[i]);
+
+    if (step == 0)
+    {
+        assert(_psb_partial[i]);   // is a std::unique_ptr<const PSB>
+        return *(_psb_partial[i]);
+    }
+    else if (step == 1)
+    {
+        assert(i < _local.size());
+
+        if (_local[i] == TonIndex::UNDEF)
+        {
+            ERROR("PSV: best1 {} local ton for {} must be estimated", i, i);
+            return best1ERROR(i);
+        }
+        else if (_local[i] == TonIndex::FAILED)
+        {
+            ERROR("PSV: best1 {}: estimation of local ton for {} failed", i, i);
+            return best1ERROR(i);
+        }
+
+        if (_psb_total[i] == nullptr) // not tabulated yet
+        {
+            assert(_local[i] < index.size());
+            const Ton& lton = ton(_local[i]);
+            const Ton& gton = ton(i);
+            // PS Bag is empty if first() = last()
+            _psb_total[i] = std::make_shared<const PSB>(gton, lton, psenum());
+        }
+            
+        assert(_psb_total[i]);
+        return *(_psb_total[i]);
+    }
+    else // should not happen
+    {
+        ERROR("PSV best : unexpected step number {}", step);
+        return best1ERROR(i);
+    }
 }
 
 
-const PSB& PSV::best1(size_t i)
+const PSB& PSV::best1ERROR(size_t i) const
 {
-    assert(i < index.size());
-    
-    if (_local == TonIndex::UNDEF)
-    {
-        ERROR("PSV: best1: local ton must be estimated");
-        assert(_psb0[i]);   // is a std::unique_ptr<const PSB>
-        return *(_psb0[i]);
-    }
-    else if (_local == TonIndex::FAILED)
-    {
-        ERROR("PSV: best1: estimation of local ton failed");
-        assert(_psb0[i]);   // is a std::unique_ptr<const PSB>
-        return *(_psb0[i]);
-    }
-
-    if (_psb1[i] == nullptr) // not tabulated yet
-    {
-        assert(_local < index.size());
-        const Ton& lton = ton(_local);
-        const Ton& gton = ton(i);
-        // PS Bag is empty if first() = last()
-        _psb1[i] = std::make_unique<const PSB>(gton, lton, psenum());
-    }
-        
-    assert(_psb1[i]);
-    return *(_psb1[i]);
+    assert(_psb_partial[i]);  // is a std::unique_ptr<const PSB>
+    return *(_psb_partial[i]);
 }
 
 
-size_t PSV::local() const
+size_t PSV::local(size_t i) const
 {
-    if (_local == TonIndex::UNDEF)
+    assert(i < index.size());
+    assert(i < _local.size());
+    if (_local[i] == TonIndex::UNDEF)
     {
         ERROR("PSV: local ton must be estimated before accessed");
     }
-    else if (_local == TonIndex::FAILED)
+    else if (_local[i] == TonIndex::FAILED)
     {
         ERROR("PSV: estimation of local ton failed");
     }
-
-    return _local;
+    assert(_local[i] < index.size());
+    return _local[i];
 }
 
 
-// compute _local
-bool PSV::estimateLocal(size_t prev)
+// compute _local for global ig
+bool PSV::estimateLocal(size_t ig, size_t iprev)
 {
-    if (_local != TonIndex::UNDEF)
+    if (_local[ig] == TonIndex::FAILED)
     {
-        WARN("PSV: re-estimation of local tonality. ignored.");
-        return true;
-    }
-    else if (_local != TonIndex::FAILED)
-    {
-        WARN("PSV: failure in estimation of local tonality.");
+        WARN("PSV: the estimation of local tonality for global {} failed.", ig);
         return false;
     }
-    
-    if (psenum().first() == psenum().stop()) // psenum().empty
+    else if (_local[ig] != TonIndex::UNDEF)
     {
-        DEBUGU("PSV: estimate local: empty vector {}-{}",
-              psenum().first(), psenum().stop());
-        // we stay in the previous local tonality
-        _local = prev;
-        //_estimated = true;
+        WARN("PSV: re-estimation of local tonality for {}. ignored.", ig);
         return true;
     }
     
-    assert(prev < index.size());
-    const Ton& pton = ton(prev);
-    // const PSB& ppsb = *(_psb0[prev]);
+    if (psenum().empty())
+    {
+        DEBUGU("PSV: estimate local for {}: empty vector {}-{}, keeping previous {}",
+              ig, psenum().first(), psenum().stop(), iprev);
+        // we stay in the previous local tonality
+        _local[ig] = iprev;
+        return true;
+    }
+    
+    assert(iprev != TonIndex::UNDEF);
+    assert(iprev != TonIndex::FAILED);
+    assert(iprev < index.size());
+    
+    const Ton& pton = ton(iprev);
+    const Ton& gton = ton(ig);
 
     // index of the current best local tonality.
     size_t ibest = TonIndex::UNDEF; // out of range. initialized to avoid warning.
 
     // cost for the current best local tonality.
-    PSCost cbest; // initialized to avoid warning. // was -1
+    PSCost cbest;            // WARNING: initialized to 0.
     
-    // current best distance
+    // current best distance to previous local ton. for ig
     unsigned int dbest = -1; // initialized to avoid warning
 
-    for (size_t i = 0; i < index.size(); ++i)
-    {
-        assert(_psb0[i]);
-        const PSB& psb = *(_psb0[i]);
-        // iff first() == last(), in this case all the bags are empty.
-        assert(! psb.empty());
+    // current best distance to previous global ton. ig
+    unsigned int dgbest = -1; // initialized to avoid warning
 
+    for (size_t j = 0; j < index.size(); ++j)
+    {
+        const Ton& jton = ton(j);
+        assert(_psb_partial[j]);
+        const PSB& psb = *(_psb_partial[j]);
+        assert(! psb.empty());
+        // occurs iff first() == last(), and in this case all the bags are empty.
         PSCost cost = psb.cost();
         
         // new best cost
-        if ((i == 0) || (cost < cbest))
+        if ((j == 0) || (cost < cbest)) // cbest = 0 when j = 0
         {
-            ibest = i;
+            ibest = j;
             cbest = cost;
-            dbest = pton.distDiatonic(ton(i));
+            dbest = pton.distDiatonic(jton);
+            dgbest = gton.distDiatonic(jton);
             continue;
         }
         // tie break
         else if (cost == cbest)
         {
             // criteria 1:
-            // best distance between the previous local tonality and
-            // the current tonality i
-            unsigned int dist = pton.distDiatonic(ton(i));
+            // best distance (of current tonality j) to the previous local tonality for ig
+            unsigned int dist = pton.distDiatonic(jton);
             if (dist < dbest)
             {
-                ibest = i;
+                ibest = j;
                 dbest = dist;
             }
             // criteria 2: none
-            // ALT: best distance between the global tonality and
-            // the current tonality i
-            // ALT: best distance between the previous local tonality and
-            // a config in bag for the current tonality i
+            // best distance (of current tonality j) to the global tonality ig
             else if (dist == dbest)
             {
-                 //const Ton& toni = ton(i);
-                //const Ton& tonbest = ton(ibest);
-                WARN("PSV {}-{}, estimation locals, tie break fail {} vs {}, cost=[{}], prevton={}, (dist: {} vs {})",
-                     psenum().first(), psenum().stop(),
-                     ton(i), ton(ibest), // ton(i).fifths(), ton(ibest).fifths(),
-                     cost, pton, dist, dbest);
+                // const Ton& toni = ton(i);
+                // const Ton& tonbest = ton(ibest);
+                unsigned int dist = gton.distDiatonic(jton);
+                if (dist < dgbest)
+                {
+                    ibest = j;
+                    dgbest = dist;
+                }
+                // criteria 3: none.
+                // ALT: best distance between the previous local tonality and
+                // a config in bag for the current tonality j
+                else if (dist == dgbest)
+                {
+                    WARN("PSV {}-{}, estimation locals, tie break fail {} vs {}, cost=[{}], prevton={}, (dist: {} vs {})",
+                         psenum().first(), psenum().stop(),
+                         ton(j), ton(ibest), cost, pton, dist, dbest);
+                    _tiebfail++;
+                }
+                // otherwise keep the current best
+                assert(dist > dgbest); // we did not forget a case
             }
-            // otherwise keep the current best
+            // otherwisse keep the current best
+            assert(dist > dbest); // we did not forget a case
         }
     }
 
     assert(ibest != TonIndex::UNDEF);
     assert(ibest != TonIndex::FAILED);
     assert(ibest < index.size());
-    _local = ibest;
+    _local[ig] = ibest;
     // _estimated = true;
     return true;
 }
@@ -281,7 +317,7 @@ bool PSV::estimateLocal(size_t prev)
 bool PSV::rename(size_t i)
 {
     // bool status = true;
-    const PSB& psb = best1(i);
+    const PSB& psb = best(1, i);
     if (psb.empty() && (! psenum().empty()))
     {
         ERROR("PST rename {}-{}: no best path found",
@@ -317,7 +353,6 @@ bool PSV::rename(size_t i)
     }
     return true;
 }
-
 
 } // end namespace pse
 

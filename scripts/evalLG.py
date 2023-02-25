@@ -261,7 +261,7 @@ def eval_item(id, tons=0, dflag=False):
 #ln = ps.extract_notes(part)
 #sp = ps.Speller()
 #ps.add_notes(ln, sp)
-#sp.respell()
+#sp.spell()
 #
 # for p in ln:
 #    print('sp.add(', p[0].pitch.midi, ',', p[1],')')
