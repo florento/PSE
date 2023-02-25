@@ -12,7 +12,7 @@
 #include "PSCost.hpp"
 #include "PSConfig1.hpp"
 #include "PSConfig2.hpp"
-
+#include <cmath>        // std::abs
 
 namespace pse {
 
@@ -130,6 +130,124 @@ bool PSCost::operator>=(const PSCost& rhs) const
 {
     return !operator<(rhs);
 }
+
+
+// static private
+bool PSCost::approxeq(size_t a1, size_t a2, size_t base)
+{
+    assert(base > 0);
+    double d = std::abs((double) a2 - (double) a1);
+    return (d / (double) base < 0.03);
+}
+
+
+bool PSCost::eq_approx(const PSCost& rhs, size_t base) const
+{
+    return (approxeq(_accid, rhs._accid, base) &&
+            (_ndia  == rhs._ndia)  &&
+            (_dist  == rhs._dist)  &&
+            (_color  == rhs._color));
+}
+
+
+bool PSCost::neq_approx(const PSCost& rhs, size_t base) const
+{
+    return !eq_approx(rhs, base);
+}
+
+
+bool PSCost::less_approx(const PSCost& rhs, size_t base) const
+{
+    if (approxeq(_accid, rhs._accid, base))
+    {
+        if (_ndia == rhs._ndia)
+        {
+            if (_dist == rhs._dist)
+            {
+                return (_color < rhs._color);
+            }
+            else
+                return (_dist < rhs._dist);
+        }
+        else
+            return (_ndia < rhs._ndia);
+    }
+    else
+        return (_accid < rhs._accid);
+}
+
+
+bool PSCost::leq_approx(const PSCost& rhs, size_t base) const
+{
+    return !greater_approx(rhs, base);
+}
+
+
+bool PSCost::greater_approx(const PSCost& rhs, size_t base) const
+{
+    return rhs.less_approx(*this, base);
+}
+
+
+bool PSCost::geq_approx(const PSCost& rhs, size_t base) const
+{
+    return !less_approx(rhs, base);
+}
+
+
+
+
+
+
+
+bool PSCost::eq_cumul(const PSCost& rhs) const
+{
+    return ((_accid+_ndia, rhs._accid + rhs._ndia) &&
+            (_dist  == rhs._dist)  &&
+            (_color  == rhs._color));
+}
+
+
+bool PSCost::neq_cumul(const PSCost& rhs) const
+{
+    return !eq_cumul(rhs);
+}
+
+
+bool PSCost::less_cumul(const PSCost& rhs) const
+{
+    if (_accid + _ndia == rhs._accid + rhs._ndia)
+    {
+        if (_dist == rhs._dist)
+        {
+            return (_color < rhs._color);
+        }
+        else
+            return (_dist < rhs._dist);
+    }
+    else
+        return (_accid + _ndia < rhs._accid + rhs._ndia);
+}
+
+
+bool PSCost::leq_cumul(const PSCost& rhs) const
+{
+    return !greater_cumul(rhs);
+}
+
+
+bool PSCost::greater_cumul(const PSCost& rhs) const
+{
+    return rhs.less_cumul(*this);
+}
+
+
+bool PSCost::geq_cumul(const PSCost& rhs) const
+{
+    return !less_cumul(rhs);
+}
+
+
 
 
 void PSCost::update(const PSC1& c, const PSEnum& e, const Ton& ton)

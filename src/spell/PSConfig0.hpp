@@ -186,6 +186,9 @@ protected:
     // in the minimal path to this config.
     // unsigned int _disj;
     
+    
+
+    
 private:
     
     /// allocate every config reached by one transition from this config,

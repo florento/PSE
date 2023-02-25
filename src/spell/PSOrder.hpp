@@ -24,7 +24,7 @@ namespace pse {
 
 
 /// ordering for PS Config0 based on lexico combination of
-/// - cost (nb accidents, dist. to local tonality, number of disjoint moves, color)
+/// - cost (nb accidents, dist. to local tonality, number of disjoint moves, color), ordered lexxicographically
 /// - index in enumerator
 PSCCompare PSClex =
 [](std::shared_ptr<const PSC0>& lhs, std::shared_ptr<const PSC0>& rhs)
@@ -54,6 +54,23 @@ PSCCompare PSClex =
 //        return (lhs->accidentals() > rhs->accidentals());  // smallest cost
 
 
+/// ordering for PS Config0 based on lexico combination of
+/// - cost (nb accidents, dist. to local tonality, number of disjoint moves, color), ordered lexicographically,
+/// withh cumul of number of accids and non-diatoinc moves.
+/// - index in enumerator
+PSCCompare PSCcumul =
+[](std::shared_ptr<const PSC0>& lhs, std::shared_ptr<const PSC0>& rhs)
+{
+    assert (lhs);
+    assert (rhs);
+    if (lhs->cost().eq_cumul(rhs->cost()))
+        return (lhs->id() < rhs->id()); // largest index
+    else
+        return (lhs->cost().greater_cumul(rhs->cost()));
+        // smallest cost
+};
+
+
 /// ordering for PS Config0 based on nb of accidents only.
 PSCCompare PSCacc =
 [](std::shared_ptr<const PSC0>& lhs, std::shared_ptr<const PSC0>& rhs)
@@ -69,7 +86,7 @@ PSCCompare PSCacc =
 
 /// ordering for PS Config0 based on nb of accidents and
 /// number of non-diatonic moves only
-PSCCompare PSCaccdia =
+PSCCompare PSCad =
 [](std::shared_ptr<const PSC0>& lhs, std::shared_ptr<const PSC0>& rhs)
 {
     assert (lhs);
@@ -83,6 +100,31 @@ PSCCompare PSCaccdia =
     }
     else
         return (lhs->cost().getAccid() > rhs->cost().getAccid());
+};
+
+
+/// ordering for PS Config0
+PSCCompare PSCaplusd =
+[](std::shared_ptr<const PSC0>& lhs, std::shared_ptr<const PSC0>& rhs)
+{
+    assert (lhs);
+    assert (rhs);
+    if (lhs->cost().getAccid() + lhs->cost().getDia() ==
+        rhs->cost().getAccid() + rhs->cost().getDia())
+    {
+        if (lhs->cost().getDist() == rhs->cost().getDist())
+        {
+            if (lhs->cost().getColor() == rhs->cost().getColor())
+                return (lhs->id() < rhs->id()); // largest index
+            else
+                return (lhs->cost().getColor() > rhs->cost().getColor());
+       }
+        else
+            return (lhs->cost().getDist() > rhs->cost().getDist());
+    }
+    else
+        return (lhs->cost().getAccid() + lhs->cost().getDia() >
+                rhs->cost().getAccid() + rhs->cost().getDia());
 };
 
 

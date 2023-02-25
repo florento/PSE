@@ -49,13 +49,14 @@ public:
     /// sum operator (const).
     PSCost operator+(const PSCost& rhs) const;
     
-    /// same costs
+    /// same cost componnents (exactly)
     bool operator==(const PSCost& rhs) const;
     
     /// different costs
     bool operator!=(const PSCost& rhs) const;
 
-    /// lexicographic ordering for costs
+    /// lexicographic ordering for costs.
+    /// default ordering.
     bool operator<(const PSCost& rhs) const;
 
     /// lexicographic ordering for costs
@@ -67,16 +68,50 @@ public:
     /// lexicographic ordering for costs
     bool operator>=(const PSCost& rhs) const;
     
-    /// @todo operators operator+ (externe), operator+= (non const)
+     
+    /// equality with cumul of number of accid
+    /// and non-diatoinc moves.
+    bool eq_cumul(const PSCost& rhs) const;
 
+    /// negation of eq_cumul
+    bool neq_cumul(const PSCost& rhs) const;
+
+    /// lexicographhic with with cumul of number of accid
+    /// and non-diatoinc moves.
+    bool less_cumul(const PSCost& rhs) const;
+
+    bool leq_cumul(const PSCost& rhs) const;
+
+    bool greater_cumul(const PSCost& rhs) const;
+
+    bool geq_cumul(const PSCost& rhs) const;
+       
+    
+    /// equality with approximate same nunmber of accid.
+    /// @warning experimental
+    bool eq_approx(const PSCost& rhs, size_t base) const;
+
+    /// negation of eq_approx
+    bool neq_approx(const PSCost& rhs, size_t base) const;
+
+    /// lexicographhic with approximate same nunmber of accid.
+    /// @warning experimental
+    bool less_approx(const PSCost& rhs, size_t base) const;
+
+    bool leq_approx(const PSCost& rhs, size_t base) const;
+
+    bool greater_approx(const PSCost& rhs, size_t base) const;
+
+    bool geq_approx(const PSCost& rhs, size_t base) const;
+    
     /// access cumulated number of accidents.
     inline size_t getAccid() const { return _accid; }
     
-    /// access cumulated distance to tonic.
-    inline size_t getDist() const { return _dist; }
-
     /// cumulated number of non-conjoint moves.
     inline size_t getDia() const { return _ndia; }
+
+    /// access cumulated distance to tonic.
+    inline size_t getDist() const { return _dist; }
 
     /// cumulated number of accidentals with color different from global ton.
     inline size_t getColor() const { return _color; }
@@ -126,7 +161,9 @@ private:
     
     // internal constructor.
     // PSCost(size_t a, size_t n, size_t d, size_t c);
-
+    
+    static bool approxeq(size_t a1, size_t a2, size_t base);
+    
 };
 
 
