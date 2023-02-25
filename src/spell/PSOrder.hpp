@@ -67,6 +67,25 @@ PSCCompare PSCacc =
 };
 
 
+/// ordering for PS Config0 based on nb of accidents and
+/// number of non-diatonic moves only
+PSCCompare PSCaccdia =
+[](std::shared_ptr<const PSC0>& lhs, std::shared_ptr<const PSC0>& rhs)
+{
+    assert (lhs);
+    assert (rhs);
+    if (lhs->cost().getAccid() == rhs->cost().getAccid())
+    {
+        if (lhs->cost().getDia() == rhs->cost().getDia())
+            return (lhs->id() < rhs->id());  // largest index
+        else
+            return (lhs->cost().getDia() > rhs->cost().getDia());
+    }
+    else
+        return (lhs->cost().getAccid() > rhs->cost().getAccid());
+};
+
+
 /// ordering for base PSConfig0 based on dist.
 /// @todo TBR
 /// @todo mv to PSC0

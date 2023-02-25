@@ -79,7 +79,7 @@ void PSB::init(const Ton& ton, const Ton& lton, bool fsucc)
     if (fsucc)
         q = PSCQueue(PSClex); // empty
     else
-        q = PSCQueue(PSCacc); // empty
+        q = PSCQueue(PSCaccdia); // empty
     
     // initial configuration
     q.push(std::make_shared<const PSC0>(ton, _enum.first())); // n0

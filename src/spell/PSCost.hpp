@@ -81,19 +81,23 @@ public:
     /// cumulated number of accidentals with color different from global ton.
     inline size_t getColor() const { return _color; }
 
+    /// update this cost for doing a transition into the given config.
+    /// the note read for the transition is the id of the config minus one.
     void update(const PSC1& c, const PSEnum& e, const Ton& ton);
 
+    /// update this cost for doing a transition into the given config.
+    /// the note read for the transition is the id of the config minus one.
     void update(const PSC1& c, const PSEnum& e,
                 const Ton& ton, const Ton& lton);
 
     /// modify cumulated number of accidents.
     inline void incrAccid(size_t a=1) { _accid += a; }
     
+    /// modify number of non-conjoint moves.
+    inline void incrDia(size_t d=1) { _ndia += d; }
+
     /// modify cumulated distance to tonic.
     inline void incrDist(size_t d=1) { _dist += d; }
-
-    /// modify number of non-conjoint moves.
-    inline void incrDisj(size_t d=1) { _ndia += d; }
     
     /// modify number of accidentals with color different from global ton.
     inline void incrColor(size_t d=1) { _color += d; }

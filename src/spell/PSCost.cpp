@@ -19,16 +19,16 @@ namespace pse {
 
 PSCost::PSCost():
 _accid(0),
-_dist(0),
 _ndia(0),
+_dist(0),
 _color(0)
 {}
 
 
 PSCost::PSCost(const PSCost& c):
 _accid(c._accid),
-_dist(c._dist),
 _ndia(c._ndia),
+_dist(c._dist),
 _color(c._color)
 {}
 
@@ -80,8 +80,8 @@ PSCost PSCost::operator+(const PSCost& rhs) const
 bool PSCost::operator==(const PSCost& rhs) const
 {
     return ((_accid == rhs._accid) &&
-            (_dist  == rhs._dist)  &&
             (_ndia  == rhs._ndia)  &&
+            (_dist  == rhs._dist)  &&
             (_color  == rhs._color));
 }
 
@@ -96,17 +96,17 @@ bool PSCost::operator<(const PSCost& rhs) const
 {
     if (_accid == rhs._accid)
     {
-        if (_dist == rhs._dist)
+        if (_ndia == rhs._ndia)
         {
-            if (_ndia == rhs._ndia)
+            if (_dist == rhs._dist)
             {
                 return (_color < rhs._color);
             }
             else
-                return (_ndia < rhs._ndia);
+                return (_dist < rhs._dist);
         }
         else
-            return (_dist < rhs._dist);
+            return (_ndia < rhs._ndia);
     }
     else
         return (_accid < rhs._accid);
@@ -135,7 +135,7 @@ bool PSCost::operator>=(const PSCost& rhs) const
 void PSCost::update(const PSC1& c, const PSEnum& e, const Ton& ton)
 {
     // count the cost
-    bool cc = false;
+    // bool cc = false;
 
     const NoteName& name = c.name();
     const Accid& accid = c.accidental();
@@ -195,15 +195,19 @@ void PSCost::update(const PSC1& c, const PSEnum& e, const Ton& ton)
     // non-diatonic move from conjoint previous note
     const PSC0* previous = c.previous();
     assert(previous);
-    if (previous->fromNote())
+    // c is successor of a single note and is not the last note of enum
+    if (previous->fromNote() && (c.id() < e.stop()))
     {
         assert(! previous->initial());
-        unsigned int mp = e.midipitch(c.id()); // c.midi();
+        // note read for transition from c into next config
+        unsigned int mp = e.midipitch(c.id());
         const PSC1* pc = dynamic_cast<const PSC1*>(previous);
         assert(pc);
         assert(e.inside(pc->id()));
         // previous note (before mp)
-        unsigned int pmp = e.midipitch(pc->id());  // pc->midi();
+        // read for transition from previous config into c
+        unsigned int pmp = e.midipitch(pc->id());
+        assert(pc->id() == c.id()-1);
         int mdist = std::abs((int) mp - (int) pmp);
         // distance at most 1 ton
         if ((0 < mdist) && (mdist < 3) &&
@@ -219,7 +223,7 @@ void PSCost::update(const PSC1& c, const PSEnum& e, const Ton& ton)
 void PSCost::update(const PSC1& c, const PSEnum& e,
                     const Ton& ton, const Ton& lton)
 {
-    assert(e.inside(c.id()));
+    // assert(e.inside(c.id()));
     const Accid& accid = c.accidental();
     
     // distance to conjectured local ton.

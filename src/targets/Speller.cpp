@@ -152,7 +152,7 @@ bool Speller::spell()
     bool status = _table.init();
     if (status == false)
     {
-        ERROR("PST: fail to compute spelling table {}-{}",
+        ERROR("Speller: failed to compute spelling table {}-{}",
               _enum.first(), _enum.stop());
         return false;
     }
@@ -166,7 +166,7 @@ bool Speller::spell()
         status = _table.estimateGlobals();
         if (status == false)
         {
-            ERROR("Pitch Spelling: failed to extract global tonality, abort.");
+            ERROR("Pitch Spelling: failed to extract global tonality candidates, abort.");
             return false;
         }
     }
@@ -182,11 +182,19 @@ bool Speller::spell()
 
     if (! _table.estimatedGlobal())
     {
-        const pse::Ton& gton = _table.global();
-        _global = gton;
-        DEBUGU("Pitch Spelling: estimated global tonality: {} ({})",
-               gton, gton.fifths());
+        TRACE("pitch-spelling: start estimation of global tonality ");
+        status = _table.estimateGlobal();
+        if (status == false)
+        {
+            ERROR("Pitch Spelling: failed to extract global tonality, abort.");
+            return false;
+        }
     }
+
+    const pse::Ton& gton = _table.global();
+    _global = gton;
+    DEBUGU("Pitch Spelling: estimated global tonality: {} ({})",
+           gton, gton.fifths());
 
 
     // will update the lists _names, _accids and _octave

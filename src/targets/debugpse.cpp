@@ -43,14 +43,21 @@ int main(int argc, const char* argv[])
     std::cout << sp.size() << " notes" << std::endl;
     bool status = sp.spell();
 
-    std::cout << sp.size() << " spelled notes" << std::endl;
-    for (size_t i = 0; i < sp.size(); ++i)
+    if (status)
     {
-        std::cout << i << ' ';
-        std::cout << sp.name(i);
-        std::cout << sp.octave(i);
-        std::cout << sp.accidental(i);
-        std::cout << std::endl;
+        std::cout << sp.size() << " spelled notes" << std::endl;
+        for (size_t i = 0; i < sp.size(); ++i)
+        {
+            std::cout << i << ' ';
+            std::cout << sp.name(i);
+            std::cout << sp.octave(i);
+            std::cout << sp.accidental(i);
+            std::cout << std::endl;
+        }
+    }
+    else
+    {
+        ERROR("spell failure");
     }
 
     return 0;

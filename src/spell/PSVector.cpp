@@ -171,7 +171,10 @@ size_t PSV::local(size_t i) const
     {
         ERROR("PSV: estimation of local ton failed");
     }
-    assert(_local[i] < index.size());
+    else
+    {
+        assert(_local[i] < index.size());
+    }
     return _local[i];
 }
 
@@ -234,7 +237,6 @@ bool PSV::estimateLocal(size_t ig, size_t iprev)
             cbest = cost;
             dbest = pton.distDiatonic(jton);
             dgbest = gton.distDiatonic(jton);
-            continue;
         }
         // tie break
         else if (cost == cbest)
@@ -246,6 +248,7 @@ bool PSV::estimateLocal(size_t ig, size_t iprev)
             {
                 ibest = j;
                 dbest = dist;
+                continue;
             }
             // criteria 2: none
             // best distance (of current tonality j) to the global tonality ig
@@ -253,16 +256,16 @@ bool PSV::estimateLocal(size_t ig, size_t iprev)
             {
                 // const Ton& toni = ton(i);
                 // const Ton& tonbest = ton(ibest);
-                unsigned int dist = gton.distDiatonic(jton);
-                if (dist < dgbest)
+                unsigned int distg = gton.distDiatonic(jton);
+                if (distg < dgbest)
                 {
                     ibest = j;
-                    dgbest = dist;
+                    dgbest = distg;
                 }
                 // criteria 3: none.
                 // ALT: best distance between the previous local tonality and
                 // a config in bag for the current tonality j
-                else if (dist == dgbest)
+                else if (distg == dgbest)
                 {
                     WARN("PSV {}-{}, estimation locals, tie break fail {} vs {}, cost=[{}], prevton={}, (dist: {} vs {})",
                          psenum().first(), psenum().stop(),
@@ -270,10 +273,19 @@ bool PSV::estimateLocal(size_t ig, size_t iprev)
                     _tiebfail++;
                 }
                 // otherwise keep the current best
-                assert(dist > dgbest); // we did not forget a case
+                assert(distg > dgbest); // we did not forget a case
+                continue;
             }
             // otherwisse keep the current best
-            assert(dist > dbest); // we did not forget a case
+            else
+            {
+                assert(dist > dbest); // we did not forget a case
+            }
+        }
+        // otherwisse keep the current best
+        else
+        {
+            assert(cost > cbest); // we did not forget a case
         }
     }
 

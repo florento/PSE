@@ -399,7 +399,7 @@ bool PST::estimateLocals(size_t ig)
         bool lstatus = psv.estimateLocal(ig, pre);
         if (lstatus) // local succesfully estimated
         {
-            pre = psv.local(i);
+            pre = psv.local(ig); // next pre
         }
         // otherwise, do not update the pre.
         else
@@ -500,7 +500,7 @@ bool PST::estimateGlobal()
 
 bool PST::rename()
 {
-    bool status = false;
+    bool status = true;
     
     if (! estimatedGlobals())
     {
