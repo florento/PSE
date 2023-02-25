@@ -22,7 +22,9 @@
 		432657E4294E2FB100515080 /* Weber.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 432657E1294E2FB000515080 /* Weber.cpp */; };
 		432657E5294E2FB100515080 /* Weber.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 432657E2294E2FB100515080 /* Weber.hpp */; };
 		432EF6AD292D405400C620CF /* Speller.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 432EF6AB292D405400C620CF /* Speller.cpp */; };
-		432EF6AE292D405400C620CF /* Speller.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 432EF6AC292D405400C620CF /* Speller.hpp */; };
+		43316F2229AA73D7000160EA /* TonIndex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 435406A229A8D4BB0075B3B7 /* TonIndex.cpp */; };
+		43316F2329AA73D8000160EA /* TonIndex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 435406A229A8D4BB0075B3B7 /* TonIndex.cpp */; };
+		43316F2429AA73DC000160EA /* TonIndex.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 435406A329A8D4BB0075B3B7 /* TonIndex.hpp */; };
 		4342FD102926781E004E914F /* PWO.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 4342FD0F2926781E004E914F /* PWO.hpp */; };
 		4342FD1229267895004E914F /* MidiNum.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4342FD1129267895004E914F /* MidiNum.cpp */; };
 		4342FD142926789C004E914F /* MidiNum.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 4342FD132926789C004E914F /* MidiNum.hpp */; };
@@ -35,9 +37,6 @@
 		434B1E01298FD4FE001CE41C /* PSChord.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 434B1DFF298FD4FE001CE41C /* PSChord.cpp */; };
 		434B1E02298FD4FE001CE41C /* PSChord.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 434B1DFF298FD4FE001CE41C /* PSChord.cpp */; };
 		434B1E03298FD4FE001CE41C /* PSChord.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 434B1E00298FD4FE001CE41C /* PSChord.hpp */; };
-		435406A429A8D4BB0075B3B7 /* TonIndex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 435406A229A8D4BB0075B3B7 /* TonIndex.cpp */; };
-		435406A529A8D4BB0075B3B7 /* TonIndex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 435406A229A8D4BB0075B3B7 /* TonIndex.cpp */; };
-		435406A629A8D4BB0075B3B7 /* TonIndex.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 435406A329A8D4BB0075B3B7 /* TonIndex.hpp */; };
 		4397A5DE29A6CDB300C2CC9A /* PSOrder.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 4397A5DC29A6CDB300C2CC9A /* PSOrder.hpp */; };
 		43A2544029280D8900D559D2 /* trace.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43A2543E29280D8900D559D2 /* trace.cpp */; };
 		43A2544129280D8900D559D2 /* trace.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 43A2543F29280D8900D559D2 /* trace.hpp */; };
@@ -429,6 +428,7 @@
 				43DD954B2945E223006DC553 /* PSCost.hpp in Headers */,
 				43ABA53029242418002AC1D4 /* PSConfig0.hpp in Headers */,
 				43ABA52B29242418002AC1D4 /* PSConfig.hpp in Headers */,
+				43316F2429AA73DC000160EA /* TonIndex.hpp in Headers */,
 				43ABA52A29242418002AC1D4 /* PSBag.hpp in Headers */,
 				4397A5DE29A6CDB300C2CC9A /* PSOrder.hpp in Headers */,
 				434B1DFE298ED394001CE41C /* PSConfig2.hpp in Headers */,
@@ -440,8 +440,6 @@
 				434B1E03298FD4FE001CE41C /* PSChord.hpp in Headers */,
 				4315863A2983EDD900918B1B /* PSRawEnum.hpp in Headers */,
 				431586382983E89B00918B1B /* PSNoteEnum.hpp in Headers */,
-				435406A629A8D4BB0075B3B7 /* TonIndex.hpp in Headers */,
-				432EF6AE292D405400C620CF /* Speller.hpp in Headers */,
 				4342FD1929268C78004E914F /* pypse.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -533,7 +531,7 @@
 				43C2BA192999529E0084AB3B /* PWO.cpp in Sources */,
 				430CDFF12924E6D800A84650 /* KeyFifth.cpp in Sources */,
 				43ABA509292423E8002AC1D4 /* Ton.cpp in Sources */,
-				435406A429A8D4BB0075B3B7 /* TonIndex.cpp in Sources */,
+				43316F2329AA73D8000160EA /* TonIndex.cpp in Sources */,
 				434B1DF8298ECCF1001CE41C /* PSConfig1.cpp in Sources */,
 				432657E3294E2FB100515080 /* Weber.cpp in Sources */,
 				43ABA52E29242418002AC1D4 /* PSState.cpp in Sources */,
@@ -569,7 +567,7 @@
 				43C2BA1A2999529E0084AB3B /* PWO.cpp in Sources */,
 				43FBEACB2930CEDD008FC486 /* Fifths.cpp in Sources */,
 				434B1E02298FD4FE001CE41C /* PSChord.cpp in Sources */,
-				435406A529A8D4BB0075B3B7 /* TonIndex.cpp in Sources */,
+				43316F2229AA73D7000160EA /* TonIndex.cpp in Sources */,
 				43FBEACC2930CEDD008FC486 /* KeyFifth.cpp in Sources */,
 				43FBEACD2930CEDD008FC486 /* Ton.cpp in Sources */,
 				434B1DF9298ED0A0001CE41C /* PSConfig1.cpp in Sources */,

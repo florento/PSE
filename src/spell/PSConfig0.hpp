@@ -34,8 +34,8 @@ namespace pse {
 class PSC0;
 
 /// type of orderings for container of PS Configs
-using PSCCompare = std::function<bool(std::shared_ptr<const PSC0>,
-                                      std::shared_ptr<const PSC0>)>;
+using PSCCompare = std::function<bool(std::shared_ptr<const PSC0>&,
+                                      std::shared_ptr<const PSC0>&)>;
 
 
 /// priority queue of PS Configs

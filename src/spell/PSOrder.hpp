@@ -27,7 +27,7 @@ namespace pse {
 /// - cost (nb accidents, dist. to local tonality, number of disjoint moves, color)
 /// - index in enumerator
 PSCCompare PSClex =
-[](std::shared_ptr<const PSC0> lhs, std::shared_ptr<const PSC0> rhs)
+[](std::shared_ptr<const PSC0>& lhs, std::shared_ptr<const PSC0>& rhs)
 {
     assert (lhs);
     assert (rhs);
@@ -56,7 +56,7 @@ PSCCompare PSClex =
 
 /// ordering for PS Config0 based on nb of accidents only.
 PSCCompare PSCacc =
-[](std::shared_ptr<const PSC0> lhs, std::shared_ptr<const PSC0> rhs)
+[](std::shared_ptr<const PSC0>& lhs, std::shared_ptr<const PSC0>& rhs)
 {
     assert (lhs);
     assert (rhs);
@@ -71,7 +71,7 @@ PSCCompare PSCacc =
 /// @todo TBR
 /// @todo mv to PSC0
 PSCCompare PSCdist =
-[](std::shared_ptr<const PSC0> lhs, std::shared_ptr<const PSC0> rhs)
+[](std::shared_ptr<const PSC0>& lhs, std::shared_ptr<const PSC0>& rhs)
 {
     assert (lhs);
     assert (rhs);

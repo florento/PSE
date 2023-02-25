@@ -18,6 +18,7 @@
 #include "NoteName.hpp"
 #include "Accidental.hpp"
 #include "Ton.hpp"
+#include "TonIndex.hpp"
 #include "PSRawEnum.hpp"
 #include "PSTable.hpp"
 

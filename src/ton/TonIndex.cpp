@@ -10,6 +10,12 @@
 
 namespace pse {
 
+const size_t TonIndex::MAXTONS = 900;
+
+const size_t TonIndex::UNDEF  = MAXTONS+1;
+
+const size_t TonIndex::FAILED = MAXTONS+2;
+
 TonIndex::TonIndex(size_t n):
 _tons() // empty vector
 {
@@ -61,6 +67,17 @@ const Ton& TonIndex::ton(size_t i) const
 }
 
 
+size_t TonIndex::find(const Ton& ton) const
+{
+    for (size_t i = 0; i < _tons.size(); ++i)
+        if (_tons.at(i) == ton)
+            return i;
+
+    ERROR("TonIndex find: {} not found", ton);
+    return -1;
+}
+
+
 void TonIndex::reset()
 {
     TRACE("TonIndex: empty the list of tonalities (row headers)");
@@ -70,13 +87,19 @@ void TonIndex::reset()
 
 void TonIndex::add(const Ton& ton)
 {
-    _tons.push_back(ton); // copy
+    if (_tons.size() < MAXTONS)
+        _tons.push_back(ton); // copy
+    else
+        ERROR("TonIndex: array of tons overfull");
 }
 
 
 void TonIndex::add(int ks, const Ton::Mode& mode)
 {
-    _tons.emplace_back(ks, mode);
+    if (_tons.size() < MAXTONS)
+        _tons.emplace_back(ks, mode);
+    else
+        ERROR("TonIndex: array of tons overfull");
 }
 
 

@@ -17,24 +17,23 @@ namespace pse {
 
 
 // copy and update
-PSC1::PSC1(std::shared_ptr<const PSC0> c, const PSEnum& e,
+PSC1::PSC1(std::shared_ptr<const PSC0>& c, const PSEnum& e,
            const NoteName& name, const Accid& accid,
            const Ton& ton):
 PSC(c),
-//_midi(e.midipitch(c->id()+1)),
 _name(name),
 _print(false)
 {
     assert(c);
     _print = _state.update(name, accid);
     _id = c->id()+1; // next note in enum
-    assert(_id < e.stop());
+    assert(_id <= e.stop());
     assert(defined(accid));
     _cost.update(*this, e, ton);
 }
 
 
-PSC1::PSC1(std::shared_ptr<const PSC0> c, const PSEnum& e,
+PSC1::PSC1(std::shared_ptr<const PSC0>& c, const PSEnum& e,
            const NoteName& name, const Accid& accid,
            const Ton& ton, const Ton& lton):
 PSC1(c, e, name, accid, ton)

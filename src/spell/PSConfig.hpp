@@ -35,8 +35,8 @@ class PSC : public PSC0
 public:
 
     /// target PS config for a transition from given (previous) config.
-    /// @param c previous config (origin), to be updated with the transition.
-    PSC(std::shared_ptr<const PSC0> c);
+    /// @param c previous config (origin), the transition will be an update of which.
+    PSC(std::shared_ptr<const PSC0>& c);
 
     /// copy constructor
     PSC(const PSC& c);

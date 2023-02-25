@@ -17,7 +17,7 @@ namespace pse {
 
 
 // copy and update
-PSC::PSC(std::shared_ptr<const PSC0> c):
+PSC::PSC(std::shared_ptr<const PSC0>& c):
 PSC0(*c),
 _pred(c)
 {

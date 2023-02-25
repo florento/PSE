@@ -33,13 +33,13 @@ class TonIndex
 public:
     
     /// maximal number of tonalities considered for Pitch Spelling.
-    static const size_t MAXTONS = 900;
+    static const size_t MAXTONS;
     
     /// a tonality that was ont estimated yet.
-    static const size_t UNDEF = MAXTONS+1;
+    static const size_t UNDEF; // = MAXTONS+1;
 
     /// a tonality whose estimation failed.
-    static const size_t FAILED = MAXTONS+2;
+    static const size_t FAILED; // = MAXTONS+2;
     
     /// main constructor
     /// @param nb default list of tonalities.
@@ -54,7 +54,6 @@ public:
 
     /// destructor
     virtual ~TonIndex();
-
     
     /// number of tons in this index.
     size_t size() const;
@@ -66,6 +65,11 @@ public:
     /// @param i an index in array of tonalities. must be smaller than NBTONS.
     const Ton& ton(size_t i) const;
     
+    /// find the index of a ton in current array of tons.
+    /// @param ton a given tonality.
+    /// @return the index of ton or -1 if not found.
+    size_t find(const Ton& ton) const;
+
     /// empty this index of tonalities.
     /// @see addTon
     void reset();
