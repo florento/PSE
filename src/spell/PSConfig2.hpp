@@ -61,7 +61,7 @@ public:
     /// @param name chosen name for the received pitch, in 0..6 (0 is 'C', 6 is 'B').
     /// @param accid chosen alteration for the received pitch, in -2..2.
     /// @param ton conjectured main (global) tonality (key signature).
-    PSC2(const PSC2& c,
+    PSC2(std::shared_ptr<const PSC2>& c,
          const NoteName& name, const Accid& accid,
          const Ton& ton);
 
@@ -75,7 +75,7 @@ public:
     /// @param acc chosen alteration for the received pitch, in -2..2.
     /// @param ton conjectured main (global) tonality (key signature).
     /// @param lton conjectured local tonality.
-    PSC2(const PSC2& c,
+    PSC2(std::shared_ptr<const PSC2>& c,
          const NoteName& name, const Accid& acc,
          const Ton& ton, const Ton& lton);
 
@@ -153,7 +153,7 @@ public:
     /// Always true for this class.
     virtual bool fromChord() const;
     
-private:
+private: // data
         
     // MIDI pitchs of the notes read for the transition to this config.
     // std::vector<unsigned int> _midi;
@@ -182,6 +182,8 @@ private:
     // update the cumulated number of accidents for this Config,
     // with the number of printed alterations of this config.
     // void updateAccidents();
+
+private:
     
     /// state of previous config in shortest path to this config.
     const PSState& prevState() const;

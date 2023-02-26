@@ -273,8 +273,10 @@ bool PSV::estimateLocal(size_t ig, size_t iprev)
                     _tiebfail++;
                 }
                 // otherwise keep the current best
-                assert(distg > dgbest); // we did not forget a case
-                continue;
+                else
+                {
+                    assert(distg > dgbest); // we did not forget a case
+                }
             }
             // otherwisse keep the current best
             else

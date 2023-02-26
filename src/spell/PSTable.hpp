@@ -51,10 +51,11 @@ public:
     
     /// main constructor.
     /// @param e an enumerator of notes for transitions of configs.
-    /// @param nbTons default list of tonalities.
+    /// @param nbTons use default list of tonalities (default: empty).
+    /// @param dflag debug mode (display table during construction).)
     /// @see TonIndex for supported values.
     /// @warning the enumerator cannot be changed once the object created.
-    PST(PSEnum& e, size_t nbTons=0);
+    PST(PSEnum& e, size_t nbTons=0, bool dflag=false);
 
     // main constructor.
     // @param e an enumerator of notes for transitions of configs.
@@ -72,11 +73,7 @@ public:
     // PST(PSEnum& e, size_t n0);
 
     virtual ~PST();
-       
-    /// compute the columns (PS Vectors) of this table, fill with cost values.
-    /// @return wether the computation was successful.
-    bool init();
-    
+          
     /// number of columns (PS Vectors) in this table (i.e. nb of measures).
     size_t size() const;
         
@@ -84,63 +81,66 @@ public:
     /// @param i column number. must be smaller than size().
     PSV& column(size_t i);
     
-    // number of rows (dimension of PS Vectors) in this table
-    // (i.e. nb of tonalities considered).
-    // @todo TBR (repl. by TonIndex)
-    // size_t nbTons() const;
-
-    // Row header = tonality corresponding to the given row index.
-    // @param i an index in array of tonalities. must be smaller than NBTONS.
-    // @todo TBR (repl. by TonIndex)
-    // const Ton& ton(size_t i) const;
+    /// compute the columns (PS Vectors) of this table, fill with cost values.
+    /// @return wether the computation was successful.
+    bool init();
     
-    // empty the list of row headers (tonalities).
-    // @see addTon
-    // @todo TBR (repl. by TonIndex)
-    // void resetTons();
-
-    // add a tonality to the list of row headers.
-    // @todo TBR (repl. by TonIndex)
-    // void addTon(const Ton ton);
-    
-    // add a tonality to the list of row headers.
-    // @param ks number of flats if negative int,
-    // or number of sharps if positive int. must be in -7..7.
-    // @param mode mode of this tonality.
-    // @see Ton
-    // @todo TBR (repl. by TonIndex)
-    // void addTon(int ks, Ton::Mode mode = Ton::Mode::Maj);
-    
-    /// estimate the global tonality for this table.
+    /// estimate the global tonality candidate for this table (first step).
     /// @return whether the estimation of the global tonality successed.
+    bool estimateGlobals();
+    
+    /// force a global tonality.
+    /// @param ig index of global tonality.
+    void setGlobal(size_t ig);
+
+    /// estimate a local tonality for each column of this table,
+    /// for all candidate global tonalities in _globals.
+    /// @return whether estimation of the local tonalities successed.
+    /// @warning estimGlobals() must have been called successfully.
+    bool estimateLocals();
+    
+    /// estimate a local tonality for each column of this table,
+    /// for an assumed global tonality ig.
+    /// @param ig the index of a candidate global tonality.
+    /// @return whether estimation of the local tonalities successed.
+    /// @warning estimGlobal() must have been called successfully.
+    bool estimateLocals(size_t ig);
+
+    /// estimated local tonality for one candidate global tonality and one bar.
+    /// @param i row index = index of candidate global tonality.
+    /// must be smaller than size().
+    /// @param j column index = bar number. must be smaller than index.size().
+    /// @warning estimLocals() must have been called.
+    const Ton& local(size_t i, size_t j) const;
+
+    /// estimate the best global tonality for this table
+    /// (second step, after estimation local tonalities).
+    /// @return whether the estimation of the global tonality successed.
+    /// @warning estimLocals() must have been called.
     bool estimateGlobal();
 
     /// estimated global tonality for this table, in 0..NBTONS.
     /// @warning estimGlobal() must have been called successfully.
     /// @todo change to const Ton& global(size_t i) const; (ith-best)
     const Ton& global() const;
-
-    /// estimate a local tonality for each column of this table.
-    /// @return whether estimation of the local tonalities successed.
-    /// @warning estimGlobal() must have been called successfully.
-    /// @todo change to estimateLocals(size_t i) const;
-    /// (for ith-best global)
-    /// or estimateLocals(Ton& global)
-    bool estimateLocals();
-
-    /// estimated local tonality for the ith column of this table,
-    /// in 0..nbtons().
-    /// @param i column number. must be smaller than size().
-    /// @warning estimLocals() must have been called.
-    /// @todo change to estimateLocals(size_t i, size_t j) const;
-    /// (for jth-best global)
-    /// or estimateLocals(size_t i, Ton& global)
-    const Ton& local(size_t i) const;
     
+    /// an set of candidate global tonalities is known.
+    /// estimateGlobals or setGlobal was called.
+    bool estimatedGlobals() const;
+
+    /// local tonalities are known.
+    /// estimateLocals was called.
+    bool estimatedLocals() const;
+
+    /// global tonality is known.
+    /// estimateGlobal or setGlobal was called
+    bool estimatedGlobal() const;
+
     /// rename all notes read to build this PS table.
     /// estimateGlobal() and estimateLocals() are called
     /// if this was not done before.
     /// @return whether renaming succeded for all measures.
+    /// @warning Global() must have been called.
     bool rename();
     
 private: // data
@@ -152,39 +152,49 @@ private: // data
     /// enumerator of notes used to build this PS table.
     PSEnum& _enum;
     
-    /// columnns:
-    /// one vector of bags of best paths (target configs) per measure
+    /// columnns: one vector of bags of best paths (target configs) per measure
     std::vector<std::unique_ptr<PSV>> _psvs;
 
+    /// index of candidates best global tonality.
+    /// if empty and _estimated_globals == false: it was not estimated yet.
+    /// if empty and _estimated_globals == true: it was estimated but estimation failed.
+    /// @todo ordered list?
+    /// if it is empty and _global == UNDEF, then estimateGlobals was not called
+    /// if it is empty and _global == FAILED, then extimation failed.
+    std::vector<size_t> _globals;
+
+    // the list of global candidates has been estimated,
+    // i.e. estimateGlobals() was called.
+    // bool _estimated_globals;
+    
     /// index of estimated global tonality.
     /// - TonIndex::UNDEF if it was not estimated yet.
     /// - TonIndex::FAILED if its estimation failed.
     /// - an integer value between 0 and index.size() otherwise.
     size_t _global;
-    /// @todo replace by vect<size_t> ordered list of best tons
     
-    /// the global tonality has been estimated,
-    /// i.e. estimateGlobal() was called.
-    /// @todo TBR (replaced by _globbal != TonIndex::UNDEF)
-    bool _estimated_global;
-
     /// the local tonalities have been estimated,
     /// i.e. estimateLocals() was called.
-    /// @todo TBR
+    /// @todo TBR. replace by psvs[i].local[j] == UNDEF (or FAIL)
     bool _estimated_locals;
     
-    /// intermediate vector of the sum of costs for each row
-    /// every row of the table corresponds to a tonality.
-    /// @todo change to vect<PSCost>
-    std::vector<unsigned int> _rowcost;
-
-    /// @todo
-    /// second _rowcost : cost re-evaluated (complete cost)
-    /// for the each row
-    /// or UNDEF Cost if nont evaluated.
+    /// debug mode.
+    bool _debug;
     
-    /// flags : whether _rowcost was really estimated
-    std::vector<bool> _frowcost;
+    // intermediate vector of the sum of costs for each row
+    // every row of the table corresponds to a tonality.
+    // @todo change to vect<PSCost>
+    // @todo local variable?
+    // std::vector<unsigned int> _rowcost;
+
+    // second _rowcost : cost re-evaluated (complete cost)
+    // for the each row
+    // or UNDEF Cost if nont evaluated.
+    // @todo local variable?
+
+    // flags : whether _rowcost was really estimated
+    // @todo TBR
+    // std::vector<bool> _frowcost;
     
 private:
     
@@ -193,36 +203,42 @@ private:
     /// @return the index of the first note of the next bar, or the total
     /// number of note (index of last note + 1) if end of part is reached.
     size_t bound_measure(size_t bar, size_t i0);
-
-    /// cumul sum of every row.
-    /// @warning: the table must not be empty
-    void computeRowcost();
+  
+    /// cumulative sum of cost of one row.
+    /// @param step number of step (category of psb (is psv) to sum): 0 or 1.
+    /// @param i row number (index of ton)
+    PSCost rowCost(size_t step, size_t i);
     
-    /// accessor to the tabulated sum of costs for row (ton) of given index.
-    unsigned int rowcost(size_t i) const;
+    // accessor to the tabulated sum of costs for row (ton) of given index.
+    //unsigned int rowcost(size_t i) const;
 
-    /// accessor to the flag for sum of costs for row (ton) of given index.
-    bool frowcost(size_t i) const;
+    // accessor to the flag for sum of costs for row (ton) of given index.
+    // bool frowcost(size_t i) const;
 
     /// index of the estimated global tonality for this table,
     /// in 0..nbtons().
     /// @warning estimGlobal() must have been called successfully.
     size_t iglobal() const;
     
-    /// index of the estimated local tonality for the ith column of this table,
-    /// in 0..nbtons().
-    /// @param i column number. must be smaller than size().
+    /// index of the estimated local tonality for one candidate global tonality
+    /// and one bar.
+    /// @param i row index = index of candidate global tonality.
+    /// must be smaller than size().
+    /// @param j column index = bar number. must be smaller than index.size().
     /// @warning estimLocals() must have been called.
-    size_t ilocal(size_t i) const;
+    size_t ilocal(size_t i, size_t j) const;
 
     /// debug: one row cost at least has been estimated.
-    bool check_rowcost() const;
+    /// if one psb is empty, the whole column is empty
+    /// hence if a whole row could no be estimated, all columns are empty
+    /// hence the table is empty.
+    // bool check_rowcost(const std::vector<PSCost>& rc) const;
 
     /// debug: print the array of row costs.
-    void dump_rowcost() const;
-
+    void dump_rowcost(const std::vector<PSCost>& rc) const;
+   
     /// debug: print the cottent of the table.
-    void dump_table() const;
+    void dump_table(const std::vector<PSCost>& rc) const;
     
 };
 

@@ -270,7 +270,7 @@ void PSB::succ2(std::shared_ptr<const PSC0>& c, // PSEnum& e,
                 // case of 8 and (short list) 1, 3, 6, 10
                 if (defined(name) && defined(accid) &&
                     c2->consistent(name, accid))
-                    cs.push(std::make_shared<PSC2>(*c2, name, accid, ton));
+                    cs.push(std::make_shared<PSC2>(c2, name, accid, ton));
             }
         }
     }
@@ -341,7 +341,7 @@ void PSB::succ2(std::shared_ptr<const PSC0>& c, // PSEnum& e,
                 // case of 8 and (short list) 1, 3, 6, 10
                 if (defined(name) && defined(accid) &&
                     c2->consistent(name, accid))
-                    cs.push(std::make_shared<PSC2>(*c2, name, accid, ton, lton));
+                    cs.push(std::make_shared<PSC2>(c2, name, accid, ton, lton));
             }
         }
     }

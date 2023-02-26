@@ -26,10 +26,10 @@ _prints(_chord->size(), false)           // empty
 }
 
 
-PSC2::PSC2(const PSC2& c,
+PSC2::PSC2(std::shared_ptr<const PSC2>& c,
            const NoteName& name, const Accid& accid,
            const Ton& ton):
-PSC2(c) // copy of current
+PSC2(*c) // copy of current
 {
     assert(consistent(name, accid));
     
@@ -41,10 +41,10 @@ PSC2(c) // copy of current
 }
 
 
-PSC2::PSC2(const PSC2& c,
+PSC2::PSC2(std::shared_ptr<const PSC2>& c,
            const NoteName& name, const Accid& accid,
            const Ton& ton, const Ton& lton):
-PSC2(c) // copy of current
+PSC2(*c) // copy of current
 {
     assert(consistent(name, accid));
     

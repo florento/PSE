@@ -14,6 +14,22 @@ import music21 as m21
 import PSeval as ps
 
 
+# global variables
+
+# root of evaluation dir
+_eval_root = '../../PSeval'
+# or '..' if we assume that we are in dir script/ of the evaluation dir
+
+# path to LG dataset
+_dataset_root = _eval_root+'/../../Datasets/Lamarque-Goudard/'
+
+# name of dir for evaluation output
+_output_dir = 'LG/230226'   
+
+# MuseScore commandline executable
+_mscore = '/Applications/MuseScore\ 4.app/Contents/MacOS/mscore'
+
+
 #################################
 ##                             ##
 ## extraction of dataset files ##
@@ -22,9 +38,6 @@ import PSeval as ps
 
 # sys.path.insert(0, "/jacquema/Datasets/Lamarque-Goudard")
 
-# global variables
-# path to LG dataset
-_dataset_root = _eval_root+'/../../Datasets/Lamarque-Goudard/'
 
 def search_xml(directory_path):
     """search for a MusicXML file in a directory path"""
@@ -72,7 +85,7 @@ def LG_map(root):
     for directory in ld:
         prefix = directory[:3]
         if (not prefix.isdigit()):
-            print(directory, 'excluded')
+            # print(directory, 'excluded')
             continue
         directory_path = dataset_path / directory
         files = os.listdir(directory_path)
@@ -81,13 +94,13 @@ def LG_map(root):
             directory_path = directory_path / 'ref'
             file = search_xml(directory_path)
             if (file == None):
-                print(directory, 'has no XML file')
+                # print(directory, 'has no XML file')
                 continue
             filepath = directory_path / file
             id = int(prefix)        
             dataset[id] = filepath            
         else:
-            print(directory, 'has no ref/')
+            #print(directory, 'has no ref/')
             continue
         #print(directory, id)
     dataset = dict(sorted(dataset.items()))
@@ -101,17 +114,6 @@ def LG_map(root):
 ##                                       ##
 ###########################################
 
-# global variables
-
-# root of evaluation dir
-_eval_root = '../../PSeval'
-# or '..' if we assume that we are in dir script/ of the evaluation dir
-
-# name of dir for evaluation output
-_output_dir = 'LG/230228_300'   
-
-# MuseScore commandline executable
-_mscore = '/Applications/MuseScore\ 4.app/Contents/MacOS/mscore'
 
 # these opus might cause complexity issues (extreme measures)
 skip = [441, 470, 472, 473, 475, 478]
@@ -119,7 +121,6 @@ skip = [441, 470, 472, 473, 475, 478]
 # 441:
 # raise MusicXMLExportException('Cannot convert inexpressible durations to MusicXML.')
 # MusicXMLExportException: In part (Voice), measure (11): Cannot convert inexpressible durations to MusicXML.
-
 
 def eval_LG(stat, tons=26, debug=False, mark=False):
     global _dataset_root
@@ -146,7 +147,19 @@ def eval_LG(stat, tons=26, debug=False, mark=False):
         if mark and not ps.empty_difflist(lld):
             write_score(s, t)
    
-def eval_item(id, tons=26, dflag=False, mflag=False):
+def eval_export(filename, tons=26, debug=True, mark=True):
+    global _eval_root
+    global _output_dir
+    filename = _eval_root+'/'+_output_dir+'/'+filename
+    stat = ps.Stats()    
+    eval_LG(stat, tons, debug, mark)
+    stat.show()    
+    df = stat.get_dataframe() # create pands dataframe
+    df.pop('part') # del column part number (always 0)
+    df.to_csv(filename, header=True, index=False)
+
+    
+def eval_item(id, tons=26, dflag=True, mflag=False):
     global _dataset_root
     dataset = LG_map(_dataset_root)
     file = dataset[id]
@@ -156,8 +169,9 @@ def eval_item(id, tons=26, dflag=False, mflag=False):
     if (not ps.spellable(part)):
         print('FAIL, cannot spell', flush=True)
         return
-    # grounnd truth ks, estimated ks, nnb of nontes and list of diff notes
-    (ks_gt, gs_est, nn, ld) = ps.eval_part(part=part, nbtons=tons, 
+    stat = ps.Stats()
+    # ground truth ks, estimated ks, nnb of nontes and list of diff notes
+    (ks_gt, gs_est, nn, ld) = ps.eval_part(part=part, stat=stat, nbtons=tons, 
                                            debug=dflag, mark=mflag)
     filep = file.parts
     if (filep[-2] == 'ref'):
@@ -184,19 +198,9 @@ def write_score(score, outname):
     # pdffile = dirname+'/'+outname+'.pdf'
     # os.system(_mscore + ' -o ' + pdffile + ' ' + xmlfile)
  
-def eval_export(filename, tons=26, debug=False, mark=False):
-    global _eval_root
-    global _output_dir
-    filename = _eval_root+'/'+_output_dir+'/'+filename
-    stat = ps.Stats()    
-    eval_LG(stat, tons, debug, mark)
-    stat.show()    
-    df = stat.get_dataframe() # create pands dataframe
-    df.pop('part') # del column part number (always 0)
-    df.to_csv(filename, header=True, index=False)
+
 
 def complete_table(df):
-    
     return
         
 
@@ -213,31 +217,31 @@ def complete_table(df):
 #li = sorted(list(dataset)) # list of index in dataset    
 
 # old, TBR
-def eval_item(id, tons=0, dflag=False):
-    global _dataset_root
-    dataset = LG_map(_dataset_root)
-    file = dataset[id]
-    score = m21.converter.parse(file.as_posix())
-    print(id, score.metadata.composer, score.metadata.title, end=' ')
-    part = first_part(score)
-    if (not ps.spellable(part)):
-        print('FAIL, cannot spell', flush=True)
-        return
-    # estimated ks and list of diff notes
-    (k, ld) = ps.pseval_part(part=part, nbtons=tons, debug=dflag)
-    if (len(ld) > 0):
-        score.show()
-        tb = m21.text.TextBox('estimated key signature = '+str(k), 30, 30)
-        score.append(tb)
-        fpart = part.flatten()
-        ln = fpart.getElementsByClass(m21.note.Note) 
-        for (i, n, a, o, p) in ld:
-            ln[i].style.color = 'red'
-            ln[i].pitch.step = ps.mk_step(n)
-            if ((a != ps.pse.Accid.Natural) or (p == True)):
-                ln[i].pitch.accidental = ps.mk_accid(a)
-            ln[i].pitch.octave = o                
-        score.show()
+#def eval_item(id, tons=0, dflag=False):
+#    global _dataset_root
+#    dataset = LG_map(_dataset_root)
+#    file = dataset[id]
+#    score = m21.converter.parse(file.as_posix())
+#    print(id, score.metadata.composer, score.metadata.title, end=' ')
+#    part = first_part(score)
+#    if (not ps.spellable(part)):
+#        print('FAIL, cannot spell', flush=True)
+#        return
+#    # estimated ks and list of diff notes
+#    (k, ld) = ps.pseval_part(part=part, nbtons=tons, debug=dflag)
+#    if (len(ld) > 0):
+#        score.show()
+#        tb = m21.text.TextBox('estimated key signature = '+str(k), 30, 30)
+#        score.append(tb)
+#        fpart = part.flatten()
+#        ln = fpart.getElementsByClass(m21.note.Note) 
+#        for (i, n, a, o, p) in ld:
+#            ln[i].style.color = 'red'
+#            ln[i].pitch.step = ps.mk_step(n)
+#            if ((a != ps.pse.Accid.Natural) or (p == True)):
+#                ln[i].pitch.accidental = ps.mk_accid(a)
+#            ln[i].pitch.octave = o                
+#        score.show()
                 
 
 #TESTI=128
@@ -266,3 +270,12 @@ def eval_item(id, tons=0, dflag=False):
 # for p in ln:
 #    print('sp.add(', p[0].pitch.midi, ',', p[1],')')
 
+#275 (chord)
+dataset = LG_map(_dataset_root)
+file = dataset[275]
+score = m21.converter.parse(file.as_posix())
+#score.show('text')
+part = first_part(score)
+ln = ps.extract_notes(part)
+#for (n, b) in ln:
+#    print('sp.add(', n.pitch.midi, ',', b, ')')

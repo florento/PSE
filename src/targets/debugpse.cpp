@@ -18,9 +18,10 @@ void WeberTable()
     godfried.dump();
 }
 
-void Waldstein(pse::Speller& sp);
-void LG470(pse::Speller& sp);
 void LG128(pse::Speller& sp);
+void LG275(pse::Speller& sp);
+void LG470(pse::Speller& sp);
+void Waldstein(pse::Speller& sp);
 
 
 int main(int argc, const char* argv[])
@@ -36,8 +37,7 @@ int main(int argc, const char* argv[])
     
     pse::Speller sp = pse::Speller();
        
-    LG128(sp);
-    // LG470(sp);
+    LG275(sp);
     // Waldstein(sp);
     
     std::cout << sp.size() << " notes" << std::endl;
@@ -163,6 +163,131 @@ void LG128(pse::Speller& sp)
     sp.add(72, 15);
 }
 
+// 275-Bartok-danceRoumaine1
+// 1 chord (final)
+void LG275(pse::Speller& sp)
+{
+    sp.add(72, 0, false);
+    sp.add(71, 1, false);
+    sp.add(72, 1, false);
+    sp.add(74, 1, false);
+    sp.add(72, 1, false);
+    sp.add(74, 2, false);
+    sp.add(76, 2, false);
+    sp.add(76, 2, false);
+    sp.add(78, 2, false);
+    sp.add(78, 3, false);
+    sp.add(79, 3, false);
+    sp.add(79, 3, false);
+    sp.add(77, 3, false);
+    sp.add(76, 3, false);
+    sp.add(76, 4, false);
+    sp.add(74, 4, false);
+    sp.add(72, 4, false);
+    sp.add(72, 4, false);
+    sp.add(71, 5, false);
+    sp.add(72, 5, false);
+    sp.add(74, 5, false);
+    sp.add(74, 5, false);
+    sp.add(71, 5, false);
+    sp.add(74, 5, false);
+    sp.add(72, 6, false);
+    sp.add(69, 6, false);
+    sp.add(71, 6, false);
+    sp.add(67, 6, false);
+    sp.add(69, 7, false);
+    sp.add(57, 8, false);
+    sp.add(72, 8, false);
+    sp.add(71, 9, false);
+    sp.add(72, 9, false);
+    sp.add(74, 9, false);
+    sp.add(72, 9, false);
+    sp.add(74, 10, false);
+    sp.add(76, 10, false);
+    sp.add(76, 10, false);
+    sp.add(78, 10, false);
+    sp.add(78, 11, false);
+    sp.add(79, 11, false);
+    sp.add(79, 11, false);
+    sp.add(77, 11, false);
+    sp.add(76, 11, false);
+    sp.add(76, 12, false);
+    sp.add(74, 12, false);
+    sp.add(72, 12, false);
+    sp.add(72, 12, false);
+    sp.add(71, 13, false);
+    sp.add(72, 13, false);
+    sp.add(74, 13, false);
+    sp.add(74, 13, false);
+    sp.add(71, 13, false);
+    sp.add(72, 14, false);
+    sp.add(72, 14, false);
+    sp.add(69, 14, false);
+    sp.add(71, 14, false);
+    sp.add(71, 14, false);
+    sp.add(67, 14, false);
+    sp.add(69, 15, false);
+    sp.add(57, 16, false);
+    sp.add(67, 16, false);
+    sp.add(69, 17, false);
+    sp.add(72, 17, false);
+    sp.add(71, 17, false);
+    sp.add(72, 17, false);
+    sp.add(74, 18, false);
+    sp.add(69, 18, false);
+    sp.add(74, 18, false);
+    sp.add(71, 18, false);
+    sp.add(72, 19, false);
+    sp.add(71, 19, false);
+    sp.add(72, 20, false);
+    sp.add(76, 20, false);
+    sp.add(81, 20, false);
+    sp.add(83, 20, false);
+    sp.add(84, 21, false);
+    sp.add(83, 21, false);
+    sp.add(81, 21, false);
+    sp.add(79, 21, false);
+    sp.add(77, 22, false);
+    sp.add(76, 22, false);
+    sp.add(74, 22, false);
+    sp.add(71, 22, false);
+    sp.add(74, 23, false);
+    sp.add(72, 23, false);
+    sp.add(72, 23, false);
+    sp.add(71, 23, false);
+    sp.add(72, 24, false);
+    sp.add(71, 24, false);
+    sp.add(72, 24, false);
+    sp.add(67, 24, false);
+    sp.add(69, 25, false);
+    sp.add(72, 25, false);
+    sp.add(71, 25, false);
+    sp.add(72, 25, false);
+    sp.add(74, 26, false);
+    sp.add(69, 26, false);
+    sp.add(74, 26, false);
+    sp.add(71, 26, false);
+    sp.add(74, 27, false);
+    sp.add(72, 27, false);
+    sp.add(72, 27, false);
+    sp.add(74, 27, false);
+    sp.add(72, 27, false);
+    sp.add(74, 27, false);
+    sp.add(76, 28, false);
+    sp.add(72, 28, false);
+    sp.add(67, 28, false);
+    sp.add(69, 29, false);
+    sp.add(76, 29, false);
+    sp.add(69, 29, false);
+    sp.add(76, 29, false);
+    sp.add(69, 30, false);
+    sp.add(76, 30, false);
+    sp.add(69, 30, false);
+    sp.add(76, 30, false);
+    sp.add(69, 31, false);
+    sp.add(55, 32, true);
+    sp.add(57, 32, false);
+}
 
 // content of LG 470 (to debug a loop)
 void LG470(pse::Speller& sp)

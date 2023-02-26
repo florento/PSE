@@ -135,70 +135,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "AEE63674-CB3C-40E1-A13A-C749AF259881"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "src/spell/PSConfig2.cpp"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "34"
-            endingLineNumber = "34"
-            landmarkName = "PSC2::PSC2(c, name, accid, ton)"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "AEE63674-CB3C-40E1-A13A-C749AF259881 - 498dee5c1d27b845"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "pse::PSC2::PSC2(pse::PSC2 const&amp;, pse::NoteName const&amp;, pse::Accid const&amp;, pse::Ton const&amp;)"
-                  moduleName = "debugpse"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/jacquema/Code/PSE/src/spell/PSConfig2.cpp"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "34"
-                  endingLineNumber = "34"
-                  offsetFromSymbolStart = "49">
-               </Location>
-               <Location
-                  uuid = "AEE63674-CB3C-40E1-A13A-C749AF259881 - 498dee5c1d27b845"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "pse::PSC2::PSC2(pse::PSC2 const&amp;, pse::NoteName const&amp;, pse::Accid const&amp;, pse::Ton const&amp;)"
-                  moduleName = "debugpse"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/jacquema/Code/PSE/src/spell/PSConfig2.cpp"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "34"
-                  endingLineNumber = "34"
-                  offsetFromSymbolStart = "49">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "F034EA0B-6C46-49F3-BD1C-0CFAAA3E5AFE"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "src/spell/PSConfig2.cpp"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "24"
-            endingLineNumber = "24"
-            landmarkName = "PSC2::PSC2(c, e, i0)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "5B2986B4-8859-4C8C-A3F4-16BEC6E1267B"
             shouldBeEnabled = "No"
             ignoreCount = "0"
@@ -225,6 +161,22 @@
             startingLineNumber = "87"
             endingLineNumber = "87"
             landmarkName = "PSV::init()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "1B16FE7F-62C7-4EF4-A706-ACDA7AA14F4F"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "src/spell/PSConfig2.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "60"
+            endingLineNumber = "60"
+            landmarkName = "PSC2::PSC2(rhs)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

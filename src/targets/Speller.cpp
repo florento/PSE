@@ -172,7 +172,7 @@ bool Speller::spell()
     }
     
     // extract local tonality for each column of table
-    DEBUGU("pitch-spelling: start local tonalities estimation");
+    TRACE("pitch-spelling: start local tonalities estimation");
     status = _table.estimateLocals();
     if (status == false)
     {
@@ -193,7 +193,7 @@ bool Speller::spell()
 
     const pse::Ton& gton = _table.global();
     _global = gton;
-    DEBUGU("Pitch Spelling: estimated global tonality: {} ({})",
+    TRACE("Pitch Spelling: estimated global tonality: {} ({})",
            gton, gton.fifths());
 
 

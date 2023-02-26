@@ -526,14 +526,14 @@ bool PST::rename()
     
     assert(_global < index.size());
     const Ton& gton = index.ton(_global);
-    DEBUGU("PST: estimated global ton: {}", gton);
+    TRACE("PST: estimated global ton: {}", gton);
     
     for (size_t i = 0; i < _psvs.size(); ++i)
     {
         assert(_psvs[i]);
         PSV& psv = *(_psvs[i]);
         // std::cout << "PST: rename vector " << i << std::endl;
-        DEBUGU("PST: renaming bar {}({}-{}) (local ton = {})",
+        TRACE("PST: renaming bar {}({}-{}) (local ton = {})",
               i, psv.first(), psv.stop(), index.ton(psv.local(_global)));
         status = psv.rename(_global);
     }
