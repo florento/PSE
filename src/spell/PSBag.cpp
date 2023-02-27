@@ -254,14 +254,20 @@ void PSB::succ2(std::shared_ptr<const PSC0>& c, // PSEnum& e,
         std::shared_ptr<const PSC2> c2 = cs.top();
         cs.pop();
         assert(c2);
+        
+        // finished to process chord: add config2 to queue of successors
         if (c2->complete())
-            q.push(c2);
+            q.push(c2); // copy of shared ptr
+        // continue processing of the chord
         else
         {
             unsigned int m = c2->current(); // chroma in 0..11
             assert(0 <= m);
             assert(m < 12);
 
+            assert(c2);
+            const PSC2& rc2 = *c2;
+            
             // 3 enharmonics
             for (int j = 0; j < 3; ++j)
             {
@@ -269,8 +275,10 @@ void PSB::succ2(std::shared_ptr<const PSC0>& c, // PSEnum& e,
                 Accid accid = Enharmonics::accid(m, j);
                 // case of 8 and (short list) 1, 3, 6, 10
                 if (defined(name) && defined(accid) &&
-                    c2->consistent(name, accid))
-                    cs.push(std::make_shared<PSC2>(c2, name, accid, ton));
+                    rc2.consistent(name, accid))
+                {
+                    cs.push(std::make_shared<PSC2>(rc2, name, accid, ton));
+                }
             }
         }
     }
@@ -333,6 +341,9 @@ void PSB::succ2(std::shared_ptr<const PSC0>& c, // PSEnum& e,
             assert(0 <= m);
             assert(m < 12);
 
+            assert(c2);
+            const PSC2& rc2 = *c2;
+            
             // 3 enharmonics
             for (int j = 0; j < 3; ++j)
             {
@@ -340,8 +351,8 @@ void PSB::succ2(std::shared_ptr<const PSC0>& c, // PSEnum& e,
                 Accid accid = Enharmonics::accid(m, j);
                 // case of 8 and (short list) 1, 3, 6, 10
                 if (defined(name) && defined(accid) &&
-                    c2->consistent(name, accid))
-                    cs.push(std::make_shared<PSC2>(c2, name, accid, ton, lton));
+                    rc2.consistent(name, accid))
+                    cs.push(std::make_shared<PSC2>(rc2, name, accid, ton, lton));
             }
         }
     }

@@ -17,7 +17,8 @@ namespace pse {
 
 
 // copy and update
-PSC1::PSC1(std::shared_ptr<const PSC0>& c, const PSEnum& e,
+// @todo TBR
+PSC1::PSC1(std::shared_ptr<const PSC0> c, const PSEnum& e,
            const NoteName& name, const Accid& accid,
            const Ton& ton):
 PSC(c),
@@ -33,7 +34,23 @@ _print(false)
 }
 
 
-PSC1::PSC1(std::shared_ptr<const PSC0>& c, const PSEnum& e,
+//PSC1::PSC1(const PSC0& c, const PSEnum& e,
+//           const NoteName& name, const Accid& accid,
+//           const Ton& ton):
+//PSC(c),
+//_name(name),
+//_print(false)
+//{
+//    _print = _state.update(name, accid);
+//    _id = c.id()+1; // next note in enum
+//    assert(_id <= e.stop());
+//    assert(defined(accid));
+//    _cost.update(*this, e, ton);
+//}
+
+
+// @todo TBR
+PSC1::PSC1(std::shared_ptr<const PSC0> c, const PSEnum& e,
            const NoteName& name, const Accid& accid,
            const Ton& ton, const Ton& lton):
 PSC1(c, e, name, accid, ton)
@@ -43,10 +60,19 @@ PSC1(c, e, name, accid, ton)
 }
 
 
+//PSC1::PSC1(const PSC0& c, const PSEnum& e,
+//           const NoteName& name, const Accid& accid,
+//           const Ton& ton, const Ton& lton):
+//PSC1(c, e, name, accid, ton)
+//{
+//    // complete the update
+//    _cost.update(*this, e, ton, lton);
+//}
+
+
 // copy
 PSC1::PSC1(const PSC1& c):
 PSC(c),
-//_midi(c._midi), // TBR
 _name(c._name),
 _print(c._print)
 { }

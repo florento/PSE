@@ -111,7 +111,7 @@ public:
     virtual void rename(size_t i, const NoteName& name, const Accid& accid,
                         int oct, bool altprint);
     
-private:
+private: // data
 
     /// underlying enumerator
     const PSEnum& _enum;
@@ -119,7 +119,7 @@ private:
     /// sequence of vectors of index of occurrences, for each pitch class,
     /// in the sequence of simultaneous notes.
     /// the vectors of index are ordered by pitch of the corresponding notes.
-    /// the indnexx are indnex of the ennum used to construct this chord.
+    /// every index is an index in the enum used to construct this chord.
     std::array<std::vector<size_t>, 12> _occurences;
     //std::array<std::vector<bool>, 12> _occurences;
 
@@ -131,9 +131,12 @@ private:
     // index, in enumerator, of the bass of chord (lowest pitch)
     // size_t _bass;
 
-    /// ordered list of index of consitutive notes of the chord,
+    /// ordered list of index of constitutive notes of the chord,
     /// starting from the bass.
+    /// every index is
     std::vector<size_t> _constitution;
+
+private:
     
     /// @return the index of the first note in enumerator
     /// not simultaneous (and after) the note of index i0,
@@ -147,6 +150,8 @@ private:
     /// simultaneous with i0.
     static size_t _length(const PSEnum& e, size_t i0);
 
+    /// insert note index i (in enum) into the list _occurences[c]
+    /// at the right position (pitch-wise).
     void insert_occurrence(int c, size_t i);
     
     /// initialize the table of occurrences and bass

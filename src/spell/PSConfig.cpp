@@ -17,13 +17,22 @@ namespace pse {
 
 
 // copy and update
-PSC::PSC(std::shared_ptr<const PSC0>& c):
+/// @todo TBR
+PSC::PSC(std::shared_ptr<const PSC0> c):
 PSC0(*c),
 _pred(c)
 {
     assert(_pred);
     assert(_pred->initial() || _pred->fromNote() || _pred->fromChord());
 }
+
+
+//PSC::PSC(const PSC0& c):
+//PSC0(c),
+//_pred(std::shared_ptr<const PSC0>(&c))
+//{
+//    assert(c.initial() || c.fromNote() || c.fromChord());
+//}
 
 
 PSC::PSC(const PSC& c):

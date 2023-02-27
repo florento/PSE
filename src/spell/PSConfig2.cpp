@@ -14,22 +14,22 @@ namespace pse {
 
 
 //PSC2::PSC2(const PSC0& c, const PSChord& e):
-PSC2::PSC2(std::shared_ptr<const PSC0>& c, PSEnum& e, size_t i0):
+PSC2::PSC2(std::shared_ptr<const PSC0> c, PSEnum& e, size_t i0):
 PSC(c),
 _chord(std::make_shared<const PSChord>(e, i0)),
 _current(firstChroma()),             // jump to the first non-empty pitch class
-_names(_chord->size(), NoteName::Undef), // empty
-_prints(_chord->size(), false)           // empty
+_names(_chord->size(), NoteName::Undef), // fix size
+_prints(_chord->size(), false)
 {
     assert(e.length() > 1);
     _id = _chord->stop();          // first note after chord
 }
 
 
-PSC2::PSC2(std::shared_ptr<const PSC2>& c,
+PSC2::PSC2(const PSC2& c,
            const NoteName& name, const Accid& accid,
            const Ton& ton):
-PSC2(*c) // copy of current
+PSC2(c) // copy of current
 {
     assert(consistent(name, accid));
     
@@ -41,10 +41,10 @@ PSC2(*c) // copy of current
 }
 
 
-PSC2::PSC2(std::shared_ptr<const PSC2>& c,
+PSC2::PSC2(const PSC2& c,        
            const NoteName& name, const Accid& accid,
            const Ton& ton, const Ton& lton):
-PSC2(*c) // copy of current
+PSC2(c) // copy of current
 {
     assert(consistent(name, accid));
     
@@ -69,7 +69,7 @@ _prints(rhs._prints)    // vector copy
 PSC2::~PSC2()
 {
     assert(_chord);
-    TRACE("delete PSConfig2 from notes {}..{}",
+    TRACE("delete PSConfig2 for notes {}..{}",
           _chord->first(), _chord->stop());
 }
 
@@ -79,7 +79,7 @@ PSC2& PSC2::operator=(const PSC2& rhs)
     if (this != &rhs)
     {
         PSC::operator=(rhs);
-        _chord        = rhs._chord;
+        _chord        = rhs._chord;   // shared ptr copy (const chord)
         _current      = rhs._current;
         _names        = rhs._names;
         _prints       = rhs._prints;
@@ -245,10 +245,15 @@ size_t PSC2::setNames(const NoteName& name, bool print)
 
     for (size_t i = 0; i < nbocc; ++i)
     {
-        size_t j = _chord->occurence(_current, i);
+        // index in enumerator (chord is an enumerator)
+        size_t jo = _chord->occurence(_current, i);
+        assert(_chord->first() <= jo);
+        assert(jo < _chord->stop());
+        size_t j = jo - _chord->first();
+        assert(j < _names.size());
         _names[j]  = name;
+        assert(j < _prints.size());
         _prints[j] = print;
-        
     }
     return nbocc;
 }

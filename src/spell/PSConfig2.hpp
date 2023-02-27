@@ -49,7 +49,7 @@ public:
     /// @param c previous config, to be updated with the received chord.
     /// @param e note enumerator containing the notes of the read chord.
     /// @param i0 index of the first note of chord in the given enumerator.
-    PSC2(std::shared_ptr<const PSC0>& c, PSEnum& e, size_t i0);
+    PSC2(std::shared_ptr<const PSC0> c, PSEnum& e, size_t i0);
     //PSC2(const PSC0& c, const PSChord& e);
 
     /// target PS config for a transition from given (previous) config,
@@ -61,7 +61,7 @@ public:
     /// @param name chosen name for the received pitch, in 0..6 (0 is 'C', 6 is 'B').
     /// @param accid chosen alteration for the received pitch, in -2..2.
     /// @param ton conjectured main (global) tonality (key signature).
-    PSC2(std::shared_ptr<const PSC2>& c,
+    PSC2(const PSC2& c,                  // std::shared_ptr<const PSC2> c,
          const NoteName& name, const Accid& accid,
          const Ton& ton);
 
@@ -75,7 +75,7 @@ public:
     /// @param acc chosen alteration for the received pitch, in -2..2.
     /// @param ton conjectured main (global) tonality (key signature).
     /// @param lton conjectured local tonality.
-    PSC2(std::shared_ptr<const PSC2>& c,
+    PSC2(const PSC2& c,                     // std::shared_ptr<const PSC2> c,
          const NoteName& name, const Accid& acc,
          const Ton& ton, const Ton& lton);
 

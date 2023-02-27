@@ -40,7 +40,7 @@ void PSChord::init()
     //unsigned int bass = _enum.midipitch(first());
     size_t bass = first();
     
-    // traverse all notes in this sequence
+    // enumerate all notes in this sequence
     for (size_t i = first(); i < stop(); ++i)
     {
         unsigned int pm = _enum.midipitch(i);
@@ -61,6 +61,8 @@ void PSChord::insert_occurrence(int c, size_t i)
     std::vector<size_t>& vo = _occurences[c];
     unsigned int pmi = _enum.midipitch(i);
     
+    // search the correct position to insert i
+    // to have _occurences[c] sorted by pitch
     for (auto it = vo.begin(); it != vo.end(); ++it)
     {
         if (pmi <= _enum.midipitch(*it))
@@ -69,9 +71,8 @@ void PSChord::insert_occurrence(int c, size_t i)
             return;
         }
     }
-    // i was not inserted
+    // i was not inserted : insert it at the end
     vo.push_back(i);
-    //ERROR("Chord insert_occurrence: nont inserted");
 }
 
 
@@ -79,15 +80,18 @@ void PSChord::init_constitution(size_t bass)
 {
     assert(first() <= bass);
     assert(bass < stop());
+    
     // pitch class of bass note, in 0..11
     int c0 = _enum.midipitch(bass) % 12;
     assert(! _occurences[c0].empty());
     for (int c = c0; c < 12; ++c)
     {
         if (! _occurences[c].empty())
-            _constitution.push_back(_occurences[c][0]);
+        {
+            // we add the lowest (first) pitch in occurrence class of c
             /// @todo does the choice of occurrence matter?
-            /// shall we take the lowest pitch ?
+            _constitution.push_back(_occurences[c][0]);
+        }
     }
     for (int c = 0; c < c0; ++c)
     {
@@ -95,7 +99,6 @@ void PSChord::init_constitution(size_t bass)
             _constitution.push_back(_occurences[c][0]);
     }
 }
-
 
 
 // should not be called
