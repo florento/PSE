@@ -6,9 +6,14 @@ Created on Wed Nov 23 13:18:18 2022
 @author: jacquema
 """
 
+#
+# DEPRECATED
+# use PSeval.py
+#
+
+
 #import sys
 import music21 as m21
-
 
 
 # import module with full path

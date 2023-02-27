@@ -10,23 +10,40 @@ Created on Fri Jan 27 16:50:52 2023
 #import logging
 import os
 from pathlib import Path, PosixPath
+from datetime import datetime
 import re
 from operator import itemgetter, attrgetter
 
 import pandas as pd
 import music21 as m21
-
 import PSeval as ps
+
+
+########################
+##                    ##
+##  global variables  ##
+##                    ##
+########################
+
+# path to ASAP dataset
+_dataset_root = '../../../Datasets/ASAP'
+
+ # default score file name
+_generic_score = 'xml_score.musicxml'  
+
+# root of evaluation dir
+_eval_root = '../../PSeval'
+
+# name of dir for evaluation output
+_output_dir = 'ASAP'
+
+# or '..' if we assume that we are in dir script/ of the evaluation dir
 
 #################################
 ##                             ##
 ## extraction of dataset files ##
 ##                             ##
 #################################
-
-# global variables
-_dataset_root = '../../../Datasets/ASAP/'  # path to ASAP
-_generic_score = 'xml_score.musicxml'      # default score file name
 
 def get_score(score_path):
     global _dataset_root
@@ -36,20 +53,6 @@ def get_score(score_path):
 
 def get_parts(score):
     return score.getElementsByClass(m21.stream.Part)
-
-
-###########################################
-##                                       ##
-## automatic evaluation of ASAP dataset  ##
-##                                       ##
-###########################################
-
-# root of evaluation dir
-_eval_root = '../../PSeval'
-# or '..' if we assume that we are in dir script/ of the evaluation dir
-
-# name of dir for evaluation output
-_output_dir = 'ASAP'   
 
 class Opus:
     def __init__(self, nb, mvt, file):
@@ -64,19 +67,34 @@ def multisort(xs, specs):
         sorted(xs, key=attrgetter(key), reverse=reverse)
     return xs
 
-def write_score(score, title='title', composer='Unknown'):
+
+###########################################
+##                                       ##
+## automatic evaluation of ASAP dataset  ##
+##                                       ##
+###########################################
+#
+# the evaluation files are organized as follows
+# _eval_root/_output_dir/composer
+
+def output_dir(composer='Unknown'):
     global _eval_root
     global _output_dir
     assert(len(_output_dir) > 0)
-    dirname = _eval_root+'/'+_output_dir+'/'+composer
-    if not os.path.isdir(dirname):
-        os.mkdir(dirname)
-    xmlfile = dirname+'/'+title+'.musicxml'
-    score.write('musicxml', fp=xmlfile)
+    outpath = Path(_eval_root)/_output_dir/composer	
+    if not os.path.isdir(outpath):
+        os.mkdir(outpath)
+    return outpath;
+
+def output_xml(title='title', composer='Unknown'):
+    return output_dir(composer)/(title+'.musicxml')
+
+def write_score(score, title='title', composer='Unknown'):
+    score.write('musicxml', fp=output_dir(composer)/(title+'.musicxml'))
     # pdffile = dirname+'/'+outname+'.pdf'
     # os.system(_mscore + ' -o ' + pdffile + ' ' + xmlfile)
     
-def eval_asapscore(sid, file, stat, title='title', composer='Unknown',
+def eval_asapscore(sid, file, stat, title='title', composer='composer',
                    tons=0, dflag=False, mflag=False):
     s = m21.converter.parse(file)
     (ls, lld) = ps.eval_score(score=s, sid=sid, title=title, composer=composer,
@@ -98,18 +116,21 @@ def revise_table_asap(df):
     #df.insert(4, 'hand', df['part'].apply(str_hands))
     #df.pop('part')   
 
+def get_table(file, composer='Unknown'):	
+    fp = output_dir(composer)/file
+    assert(os.path.isfile(fp))
+    df = pd.read_csv(fp)
+    return df
 
 
-
-########################
-##                    ##
-##  Beethoven Sonata  ##
-##                    ##
-########################
+#########################
+##                     ##
+##  Beethoven Sonatas  ##
+##                     ##
+#########################
 
 def Beethoven_list():
-    """list of Beethoven Sonata in ASAP, 
-		in the form of triplets (sonata nb, mvt nb, path)"""
+    """list of Opus (sonata nb, mvt, file) of Beethoven Sonatas in ASAP"""
     global _dataset_root
     global _generic_score
     dir_re = re.compile("(\d+)-(\d)_?\d?$")
@@ -128,23 +149,25 @@ def Beethoven_list():
 
 Beethoven_skip = []
 
-def eval_Beethoven(stat, tons=0, dflag=False, mflag=False):
+def eval_Beethoven(stat=ps.Stats(), nbtons=0, dflag=True, mflag=True):
+    """"evaluation of Beethoven Sonatas in ASAP"""
+    ludwig = 'Beethoven'
     if stat == None:
         stat = ps.Stats()
-    for s in Beethoven_list():
-        if (s.nb, s.mvt) in Beethoven_skip:
-            print(s.nb, s.mvt, ': SKIP')           
+    for o in Beethoven_list():
+        if (o.nb, o.mvt) in Beethoven_skip:
+            print(o.nb, o.mvt, ': SKIP')           
             continue
         else:
-            print(s.nb, s.mvt, ':', s.file)
-            eval_asapscore(sid=s.nb*10+s.mvt, file=s.file, stat=stat,
-                           title='Sonata '+str(s.nb)+'_'+str(s.mvt), composer='Beethoven',
-                           tons=tons, debug=dflag, mark=mflag)
+            print(o.nb, o.mvt, ':', o.file)
+            eval_asapscore(sid=o.nb*10+o.mvt, file=o.file, stat=stat,
+                           title='Sonata '+str(o.nb)+'_'+str(o.mvt), composer=ludwig,
+                           tons=nbtons, dflag=dflag, mflag=mflag)
+    # write table and summary to files and display stats
     df = stat.get_dataframe()
     revise_table_asap(df)
-    # write table and summary to files and display stats
-    df.to_csv(_dataset_root+'/Beethoven/Beethoven.csv', header=True, index=False)
-    stat.write_datasum(_dataset_root+'/Beethoven/Beethoven_sum.csv')
+    df.to_csv(output_dir(composer=ludwig)/(ludwig+'_sonata.csv'), header=True, index=False)
+    stat.write_datasum(output_dir(composer=ludwig)/(ludwig+'_sonata_sum.csv'))
     stat.show()
 
 # Waldstein chords in 2 first bars (for C++ debug)
@@ -173,7 +196,6 @@ def Waldstein():
     #sp.spell()
 
 
-
 ######################################
 ##                                  ##
 ## Bach Das Wohltemperierte Klavier ##
@@ -196,8 +218,7 @@ def DWK_sublist(p, sublist):
     return bl	
 
 def DWK_list():
-    """list of Bach WK preludes and fugues in ASAP, 
-    in the form of triplets (BWV nb, prelude or fugue, path)"""
+    """list Opus (BWV nb, 'prelude' or 'fugue', path) of Bach WK preludes and fugues in ASAP"""
     global _dataset_root
     p = Path(_dataset_root)/'Bach'
     bl = DWK_sublist(p, 'Prelude') + DWK_sublist(p, 'Fugue')
@@ -265,10 +286,11 @@ lBach = [#(846, 'Prelude', '../../../Datasets/ASAP/Bach/Prelude/bwv_846/xml_scor
          #(893, 'Fugue', '../../../Datasets/ASAP/Bach/Fugue/bwv_893/xml_score.musicxml')
          ]
 
+# the following cause a complexity explosion. TBC.
 # (866, 'Prelude') lonnnng
 Bach_skip = [(856, 'Prelude'), (873, 'Prelude'), ]
 
-def eval1_Bach(nb, mvt, file, stat, tons=25, dflag=False, mflag=False):
+def eval1_Bach(nb, mvt, file, stat, tons=25, dflag=True, mflag=True):
     global _dataset_root
     global _generic_score
     if file == None:
@@ -281,23 +303,28 @@ def eval1_Bach(nb, mvt, file, stat, tons=25, dflag=False, mflag=False):
                    title='BWV'+str(nb)+'_'+str(mvt), composer='Bach',
                    tons=tons, dflag=dflag, mflag=mflag)
     
-def eval_Bach(tons=25, dflag=False, mflag=False): 
+def eval_Bach(stat=ps.Stats(), nbtons=25, dflag=True, mflag=True): 
     global Bach_skip
-    global _dataset_root
-    stat = ps.Stats()
-    for s in DWK_list():
-        if (s.nb, s.mvt) in Bach_skip:
+    for o in DWK_list():
+        if (o.nb, o.mvt) in Bach_skip:
             continue
         else:
-            eval1_Bach(nb=s.nb, mvt=s.mvt, file=s.file, stat=stat, 
-                       tons=tons, dflag=dflag, mflag=mflag)
+            print('\n', flush=True)
+            eval1_Bach(nb=o.nb, mvt=o.mvt, file=o.file, stat=stat, 
+                       tons=nbtons, dflag=dflag, mflag=mflag)
     df = stat.get_dataframe()
     revise_table_asap(df)
     # write table and summary to files and display stats
-    df.to_csv(_dataset_root+'/Bach/DWK.csv', header=True, index=False)
-    stat.write_datasum(_dataset_root+'/Bach/DWK_sum.csv')
+    df.to_csv(output_dir(composer='Bach')/'DWK.csv', header=True, index=False)
+    stat.write_datasum(output_dir(composer='Bach')/'DWK_sum.csv')
     stat.show()
 
+
+#########################
+##                     ##
+##    Chopin Etudes    ##
+##                     ##
+#########################
 
 # bl = Beethoven_list()
 #beethoven1_1 = get_score('Beethoven/Piano_Sonatas/1-1')
@@ -308,12 +335,6 @@ def eval_Bach(tons=25, dflag=False, mflag=False):
 
 #import pse
 
-def get_table(subdir,file):
-    global _eval_root
-    fp = Path(_eval_root)/'ASAP'/subdir/file
-    assert(os.path.isfile(fp))
-    df = pd.read_csv(fp)
-    return df
 
 #stat.eval_score(b, 0)  # 0 : standard list of 26 tons
 #stat.show()

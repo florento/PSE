@@ -5,6 +5,11 @@ Spyder Editor
 This is a temporary script file.
 """
 
+#
+# DEPRECATED
+# use evalASAP.py
+#
+
 import os
 from pathlib import Path, PosixPath
 from music21 import *

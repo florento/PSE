@@ -12,11 +12,16 @@ import os
 from pathlib import Path, PosixPath
 from datetime import datetime
 
+import pandas as pd
 import music21 as m21
 import PSeval as ps
 
 
-# global variables
+########################
+##                    ##
+##  global variables  ##
+##                    ##
+########################
 
 # root of evaluation dir
 _eval_root = '../../PSeval'
@@ -135,10 +140,6 @@ def eval_LG(nbtons=26, output_dir='', filename='', debug=True, mark=True):
         os.mkdir(output_path)
     else:
         print('WARNING: dir', output_path, 'exists')
-    # default table file name
-    if filename == '':
-       filename =  'LGeval'+str(nbtons)+'_'+timestamp+'.csv'
-    file_path = output_path/filename
     stat = ps.Stats()   
     dataset = LG_map()
     li = sorted(list(dataset)) # list of index in dataset   
@@ -163,10 +164,15 @@ def eval_LG(nbtons=26, output_dir='', filename='', debug=True, mark=True):
                                   debug=debug, mark=mark)
         if mark and not ps.empty_difflist(lld):
             write_score(s, output_path, t)
+    # display and save evaluation table
+    # default table file name
+    if filename == '':
+       filename =  'LGeval'+str(nbtons)+'_'+timestamp
     stat.show()    
     df = stat.get_dataframe() # create pands dataframe
     df.pop('part') # del column part number (always 0)
-    df.to_csv(file_path, header=True, index=False)
+    df.to_csv(output_path/(filename+'.csv') , header=True, index=False)
+    stat.write_datasum(output_path/(filename+'_sum.csv'))
    
 def write_score(score, output_path, outname):
     assert(len(outname) > 0)
@@ -180,23 +186,11 @@ def write_score(score, output_path, outname):
     # pdffile = dirname+'/'+outname+'.pdf'
     # os.system(_mscore + ' -o ' + pdffile + ' ' + xmlfile)
     
-def eval_export(filename, tons=26, debug=True, mark=True):
-    global _eval_root
-    global _output_dir
-    filename = _eval_root+'/'+_output_dir+'/'+filename
-    stat = ps.Stats()    
-    eval_LG(stat, tons, debug, mark)
-    stat.show()    
-    df = stat.get_dataframe() # create pands dataframe
-    df.pop('part') # del column part number (always 0)
-    df.to_csv(filename, header=True, index=False)
-
 def eval_item(id, tons=26, dflag=True, mflag=False):
-    global _dataset_root
-    dataset = LG_map(_dataset_root)
+    dataset = LG_map()
     file = dataset[id]
     score = m21.converter.parse(file.as_posix())
-    print(id, score.metadata.composer, score.metadata.title, end=' ')
+    print(id, score.metadata.title, end=' ')
     part = first_part(score)
     if (not ps.spellable(part)):
         print('FAIL, cannot spell', flush=True)
@@ -212,16 +206,8 @@ def eval_item(id, tons=26, dflag=True, mflag=False):
         t = str(id)+'_eval'
     if mflag and len(ld) > 0:
         score.show()
-        write_score(score, t)
+        write_score(score, os.getcwd(), t)
                     
- 
-
-
-def complete_table(df):
-    return
-        
-
-
 #######################
 ##                   ## 
 ##       test        ##

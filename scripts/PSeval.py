@@ -516,16 +516,16 @@ class Stats:
 
     def write_dataframe(self, file):
         """write the evaluation table into a cvs file, after some formatting"""
-        df = self.get_dataframe(self)
+        df = self.get_dataframe()
         df.fillna('').to_csv(file, header=True, index=False)
     
     # useless, there are accessors for that
     def get_datasum(self):
         """return a summary of the evaluation as a dictionary"""
-        df = self.get_dataframe(self)
+        df = self.get_dataframe()
         #df.loc[df['KSgt'] == df['KSest'], 'KSest'] = np.nan
         # sums and errors
-        total = { 'nb_KS'    : len(df['KSgt']),
+        total = { 'nb_KS'    : [len(df['KSgt'])],
                   'err_KS'   : [df['KSest'].count()], 
                   'nb_note'  : [df['notes'].sum()], 
                   'err_note' : [df['err'].sum()] }
@@ -533,7 +533,7 @@ class Stats:
         #df = df.astype({"KSgt": int, "notes": int, "err": int})        
         #df = df.convert_dtypes()
         #df = df.fillna('')
-        percent = { 'KS_rate'  : [ pcformat(total['err_KS'][0] * 100 / total['nb_KS'][0]) ], 
+        percent = { 'KS_rate'  : [ pcformat((total['err_KS'][0] * 100) / total['nb_KS'][0]) ], 
                     'err_rate' : [ pcformat(total['err_note'][0] * 100 / total['nb_note'][0]) ] }
         #df = df.append(pd.DataFrame.from_dict(percent), ignore_index=True)
         # replace NaN by empty string
@@ -545,7 +545,7 @@ class Stats:
 
     def write_datasum(self, file):
         """write a summary of the evaluation into a cvs file (1 line)"""
-        df = self.get_datasum(self)
+        df = self.get_datasum()
         df.to_csv(file, header=True, index=False)
     
 def pcformat(x):    
@@ -765,4 +765,11 @@ def empty_difflist(lld):
 # part.show()
 #pseval(part)
 #bach0.show()
+
+
+#ks2 = m21.key.KeySignature(2)
+#stat = ps.Stats()
+#stat.new_score(0, 'pipo', 'Mario')
+#stat.record_part(0, ks2, -1, 111, 2)
+#stat.record_part(1, ks2, 2, 192, 5)
 
