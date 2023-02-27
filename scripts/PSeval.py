@@ -632,8 +632,7 @@ def eval_score(score, sid, title, composer,
     ls = []
     lld = []
     for i in range(nbparts):    
-        print('\n')
-        print(score.metadata.composer, score.metadata.title, end=' ')
+        print(score.metadata.title, score.metadata.composer, end=' ')
         part = lp[i]
         if (nbparts > 1):
             print('part', i+1, '/', len(lp), end=' ', flush=True)

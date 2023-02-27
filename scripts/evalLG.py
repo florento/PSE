@@ -10,6 +10,8 @@ Created on Mon Nov 28 12:16:20 2022
 #import logging
 import os
 from pathlib import Path, PosixPath
+from datetime import datetime
+
 import music21 as m21
 import PSeval as ps
 
@@ -21,10 +23,10 @@ _eval_root = '../../PSeval'
 # or '..' if we assume that we are in dir script/ of the evaluation dir
 
 # path to LG dataset
-_dataset_root = _eval_root+'/../../Datasets/Lamarque-Goudard/'
+_dataset_root = '../../../Datasets/Lamarque-Goudard/'
 
 # name of dir for evaluation output
-_output_dir = 'LG/230226'   
+#_output_dir = 'LG/230226'   
 
 # MuseScore commandline executable
 _mscore = '/Applications/MuseScore\ 4.app/Contents/MacOS/mscore'
@@ -37,7 +39,6 @@ _mscore = '/Applications/MuseScore\ 4.app/Contents/MacOS/mscore'
 #################################
 
 # sys.path.insert(0, "/jacquema/Datasets/Lamarque-Goudard")
-
 
 def search_xml(directory_path):
     """search for a MusicXML file in a directory path"""
@@ -62,9 +63,9 @@ def first_part(score):
         return
     return lp[0]
 
-def key_changes(root):
+def key_changes():
     """find scores in data set with key changes"""
-    dataset = LG_map(root)
+    dataset = LG_map()
     li = sorted(list(dataset))  # list of index in dataset
     for i in li:
         file = dataset[i]
@@ -77,8 +78,9 @@ def key_changes(root):
                   score.metadata.composer, score.metadata.title)
     return kex
 
-def LG_map(root):
-    dataset_path = Path(root)
+def LG_map():
+    global _dataset_root
+    dataset_path = Path(_dataset_root)
     assert isinstance(dataset_path, PosixPath)
     ld = os.listdir(dataset_path)
     dataset = dict()
@@ -122,31 +124,62 @@ skip = [441, 470, 472, 473, 475, 478]
 # raise MusicXMLExportException('Cannot convert inexpressible durations to MusicXML.')
 # MusicXMLExportException: In part (Voice), measure (11): Cannot convert inexpressible durations to MusicXML.
 
-def eval_LG(stat, tons=26, debug=False, mark=False):
+def eval_LG(nbtons=26, output_dir='', filename='', debug=True, mark=True):
     global _dataset_root
-    # stat.nbtons = tons
-    dataset = LG_map(_dataset_root)
+    timestamp = datetime.today().strftime('%Y%m%d-%H%M')
+    # default output dir name
+    if output_dir == '':
+       output_dir =  timestamp
+    output_path = Path(_eval_root)/'LG'/output_dir
+    if not os.path.isdir(output_path):
+        os.mkdir(output_path)
+    else:
+        print('WARNING: dir', output_path, 'exists')
+    # default table file name
+    if filename == '':
+       filename =  'LGeval'+str(nbtons)+'_'+timestamp+'.csv'
+    file_path = output_path/filename
+    stat = ps.Stats()   
+    dataset = LG_map()
     li = sorted(list(dataset)) # list of index in dataset   
     print('\n')
-    print('starting evaluation')
+    print('starting evaluation of LG dataset -', len(li), 'entries')
     print('\n')    
     for i in li:
         if (i in skip):
             continue
         file = dataset[i]
-        print('\n')
-        print(file)
         filep = file.parts
         t = ''
         if (filep[-2] == 'ref'):
             t = filep[-3]
+        else:
+            continue
+        print('\n')
+        print(t)
         s = m21.converter.parse(file.as_posix())
         (ls, lld) = ps.eval_score(score=s, sid=i, title=t, composer='', 
-                                  stat=stat, tons=tons, debug=debug, 
-                                  mark=mark)
+                                  stat=stat, tons=nbtons, 
+                                  debug=debug, mark=mark)
         if mark and not ps.empty_difflist(lld):
-            write_score(s, t)
+            write_score(s, output_path, t)
+    stat.show()    
+    df = stat.get_dataframe() # create pands dataframe
+    df.pop('part') # del column part number (always 0)
+    df.to_csv(file_path, header=True, index=False)
    
+def write_score(score, output_path, outname):
+    assert(len(outname) > 0)
+    if not os.path.isdir(output_path):
+        os.mkdir(output_path)
+    output_path = output_path/outname
+    if not os.path.isdir(output_path):
+        os.mkdir(output_path)
+    xmlfile = output_path/(outname+'.musicxml')
+    score.write('musicxml', fp=xmlfile)
+    # pdffile = dirname+'/'+outname+'.pdf'
+    # os.system(_mscore + ' -o ' + pdffile + ' ' + xmlfile)
+    
 def eval_export(filename, tons=26, debug=True, mark=True):
     global _eval_root
     global _output_dir
@@ -158,7 +191,6 @@ def eval_export(filename, tons=26, debug=True, mark=True):
     df.pop('part') # del column part number (always 0)
     df.to_csv(filename, header=True, index=False)
 
-    
 def eval_item(id, tons=26, dflag=True, mflag=False):
     global _dataset_root
     dataset = LG_map(_dataset_root)
@@ -182,21 +214,6 @@ def eval_item(id, tons=26, dflag=True, mflag=False):
         score.show()
         write_score(score, t)
                     
-def write_score(score, outname):
-    global _eval_root
-    global _output_dir
-    #global _mscore
-    assert(len(_output_dir) > 0)
-    dirname = _eval_root+'/'+_output_dir
-    if not os.path.isdir(dirname):
-        os.mkdir(dirname)
-    dirname = dirname+'/'+outname
-    if not os.path.isdir(dirname):
-        os.mkdir(dirname)
-    xmlfile = dirname+'/'+outname+'.musicxml'
-    score.write('musicxml', fp=xmlfile)
-    # pdffile = dirname+'/'+outname+'.pdf'
-    # os.system(_mscore + ' -o ' + pdffile + ' ' + xmlfile)
  
 
 
@@ -271,11 +288,12 @@ def complete_table(df):
 #    print('sp.add(', p[0].pitch.midi, ',', p[1],')')
 
 #275 (chord)
-dataset = LG_map(_dataset_root)
-file = dataset[275]
-score = m21.converter.parse(file.as_posix())
+#dataset = LG_map(_dataset_root)
+#file = dataset[275]
+#score = m21.converter.parse(file.as_posix())
 #score.show('text')
-part = first_part(score)
-ln = ps.extract_notes(part)
-#for (n, b) in ln:
-#    print('sp.add(', n.pitch.midi, ',', b, ')')
+#part = first_part(score)
+#ln = ps.extract_part(part)
+#for p in ln:
+#    print('sp.add(', p[0].pitch.midi, ',', p[1], 'true' if p[2] else 'false',')')
+
