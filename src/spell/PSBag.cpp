@@ -75,11 +75,13 @@ void PSB::init(const Ton& ton, const Ton& lton, bool fsucc)
     // other configurations are moved to _visited (except if the cost is
     // larger than cost of a best path)
     // @todo limtit _visited to non-final configurations in a best path
-    PSCQueue q;
-    if (fsucc)
-        q = PSCQueue(PSClex); // empty
-    else
-        q = PSCQueue(PSCad); // empty
+
+    // use the default ordering > (and ==) on PSCost
+    PSCQueue q = PSCQueue(PSClex);
+//    if (fsucc)
+//        q = PSCQueue(PSClex); // empty
+//    else
+//        q = PSCQueue(PSCad); // empty
     
     // initial configuration
     q.push(std::make_shared<const PSC0>(ton, _enum.first())); // n0

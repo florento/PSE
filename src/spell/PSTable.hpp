@@ -74,9 +74,15 @@ public:
 
     virtual ~PST();
           
-    /// number of columns (PS Vectors) in this table (i.e. nb of measures).
+    /// number of columns (PS Vectors) in this table, i.e. nb of measures spelled.
     size_t size() const;
-        
+    
+    /// number of rows in this table, i.e. nb of tons considered for spelling.
+    inline size_t nbTons() const { return index.size(); }
+
+    /// tonality associated to the ith row of this table.
+    inline const Ton& ton(size_t i) const { return index.ton(i); }
+
     /// access the ith column (PS vector) of this table.
     /// @param i column number. must be smaller than size().
     PSV& column(size_t i);
@@ -89,6 +95,10 @@ public:
     /// @return whether the estimation of the global tonality successed.
     bool estimateGlobals();
     
+    /// a set of candidate global tonalities is known.
+    /// estimateGlobals or setGlobal was called.
+    bool estimatedGlobals() const;
+
     /// force a global tonality.
     /// @param ig index of global tonality.
     void setGlobal(size_t ig);
@@ -99,6 +109,10 @@ public:
     /// @warning estimGlobals() must have been called successfully.
     bool estimateLocals();
     
+    /// local tonalities are known.
+    /// estimateLocals was called.
+    bool estimatedLocals() const;
+
     /// estimate a local tonality for each column of this table,
     /// for an assumed global tonality ig.
     /// @param ig the index of a candidate global tonality.
@@ -108,34 +122,51 @@ public:
 
     /// estimated local tonality for one candidate global tonality and one bar.
     /// @param i row index = index of candidate global tonality.
-    /// must be smaller than size().
+    /// must be smaller than index.size().
     /// @param j column index = bar number. must be smaller than index.size().
     /// @warning estimLocals() must have been called.
     const Ton& local(size_t i, size_t j) const;
 
+    /// index of the estimated local tonality for one candidate global tonality
+    /// and one bar.
+    /// @param i row index = index of candidate global tonality.
+    /// must be smaller than size().
+    /// @param j column index = bar number. must be smaller than index.size().
+    /// @warning estimLocals() must have been called.
+    size_t ilocal(size_t i, size_t j) const;
+    
+    /// macro: cost equality for the estimation of global
+    /// @warning static choice
+    inline bool eGlobal_eq(const PSCost& lhs, const PSCost& rhs) const
+    { return (lhs == rhs); }
+    // ALT { return lhs.eq_approx(rhs, _enum.length()); }
+    
+    /// macro: cost ordering for the estimation of global
+    /// @warning static choice
+    inline bool eGlobal_less(const PSCost& lhs, const PSCost& rhs) const
+    { return (lhs < rhs); }
+    // ALT { return lhs.less_approx(rhs, _enum.length()); }
+    
     /// estimate the best global tonality for this table
     /// (second step, after estimation local tonalities).
     /// @return whether the estimation of the global tonality successed.
     /// @warning estimLocals() must have been called.
     bool estimateGlobal();
-
-    /// estimated global tonality for this table, in 0..NBTONS.
-    /// @warning estimGlobal() must have been called successfully.
-    /// @todo change to const Ton& global(size_t i) const; (ith-best)
-    const Ton& global() const;
     
-    /// an set of candidate global tonalities is known.
-    /// estimateGlobals or setGlobal was called.
-    bool estimatedGlobals() const;
-
-    /// local tonalities are known.
-    /// estimateLocals was called.
-    bool estimatedLocals() const;
-
     /// global tonality is known.
     /// estimateGlobal or setGlobal was called
     bool estimatedGlobal() const;
 
+    /// estimated global tonality for this table, in 0..index.size().
+    /// @warning estimGlobal() must have been called successfully.
+    /// @todo change to const Ton& global(size_t i) const; (ith-best)
+    const Ton& global() const;
+    
+    /// index of the estimated global tonality for this table,
+    /// in 0..index.size().
+    /// @warning estimGlobal() must have been called successfully.
+    size_t iglobal() const;
+    
     /// rename all notes read to build this PS table.
     /// estimateGlobal() and estimateLocals() are called
     /// if this was not done before.
@@ -214,19 +245,6 @@ private:
 
     // accessor to the flag for sum of costs for row (ton) of given index.
     // bool frowcost(size_t i) const;
-
-    /// index of the estimated global tonality for this table,
-    /// in 0..nbtons().
-    /// @warning estimGlobal() must have been called successfully.
-    size_t iglobal() const;
-    
-    /// index of the estimated local tonality for one candidate global tonality
-    /// and one bar.
-    /// @param i row index = index of candidate global tonality.
-    /// must be smaller than size().
-    /// @param j column index = bar number. must be smaller than index.size().
-    /// @warning estimLocals() must have been called.
-    size_t ilocal(size_t i, size_t j) const;
 
     /// debug: one row cost at least has been estimated.
     /// if one psb is empty, the whole column is empty

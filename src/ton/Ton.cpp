@@ -10,10 +10,12 @@
 #include <algorithm>    // std::max
 
 #include "Ton.hpp"
+#include "Accidental.hpp"
 //#include "Pitch.hpp"
 #include "Fifths.hpp"
 //#include "PSState.hpp"
 #include "Weber.hpp" // Weber distance
+
 
 namespace pse {
 
@@ -91,9 +93,6 @@ const std::array<std::array<Accid, 7>, 15> Ton::MIN_MEL =
     { _2S, __U, __U, __U, __U, __U, _1S }, //  6  D# min mel
     { __U, __U, __U, _2S, _2S, __U, __U },  // 7  A# min mel
 }};
-
-
-
 
 
 Ton::Ton(int ks, Mode mode):
@@ -408,9 +407,8 @@ std::string Ton::tostring(const Ton::Mode& m)
 }
 
 
-void Ton::print(std::ostream& o) const
+int Ton::tonic() const
 {
-    // number of tonic in array of fifths
     int i = 99;
     switch (_mode)
     {
@@ -461,6 +459,17 @@ void Ton::print(std::ostream& o) const
             break;
         }
     }
+    
+    if (i < -15 || 19 < i)
+        ERROR("Ton: tonic = {}", i);
+
+    return i;
+}
+
+
+void Ton::print(std::ostream& o) const
+{
+    int i = tonic();
     
     if ((-15 <= i) && (i <= 19))
     {

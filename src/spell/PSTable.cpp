@@ -97,7 +97,7 @@ bool PST::init()
         // the current bar b is empty (i0 is after b)
         if (_enum.measure(i0) > b)
         {
-            DEBUGU("PST init: bar {} EMPTY", b);
+            TRACE("PST init: bar {} EMPTY", b);
             // vector of empty bags
             _psvs.push_back(std::make_unique<PSV>(index, _enum, i0, i0));
             ++b;
@@ -456,14 +456,17 @@ bool PST::estimateGlobal()
     {
         size_t ig = _globals[i];
         PSCost rc = rowCost(1, ig);
+
         // new best global
-        if ((i == 0) || (rc < cbest))
+        // ALT: else if (rc.less_approx(cbest, _enum.length()))
+        if ((i == 0) || eGlobal_less(rc, cbest))    // (rc < cbest)
         {
             ibest = ig;
             cbest = rc;
         }
         // tie
-        else if (rc == cbest)
+        // ALT: else if (rc.eq_approx(cbest, _enum.length()))
+        else if (eGlobal_eq(rc, cbest)) // (rc == cbest)
         {
             const Ton& ton = index.ton(ig);
             const Ton& tonbest = index.ton(ibest);
@@ -478,6 +481,11 @@ bool PST::estimateGlobal()
                 // keep ibest (arbitrarily)
             }
             // otherwise ibest unchanged
+        }
+        // otherwise ibest unchanged
+        else
+        {
+            assert(eGlobal_less(cbest, rc));
         }
     }
     

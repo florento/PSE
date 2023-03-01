@@ -117,6 +117,12 @@ public:
     
     inline Mode mode() const { return _mode; }
 
+    /// note name of this tonality
+    inline const NoteName name() const { return Fifths::name(tonic()); }
+
+    /// accidental name of this tonality
+    inline const Accid accidental() const { return Fifths::accid(tonic()); }
+    
     /// accidental in the key signature of this ton for a given pitch name.
     /// @param n an encapsulated note name
     /// @return the number of accidents, in the key signature, for n, in -2..2.
@@ -162,7 +168,6 @@ public:
     /// @see Weber.hpp
     unsigned int distWeber(const Ton& rhs) const;
 
-
     // distance, in the array of fifths, between the note (given by name)
     // and the tonic of the given tonality.
     // @param name a note name in 0..6 (0 is 'C', 6 is 'B').
@@ -170,8 +175,9 @@ public:
     // @param sig a key signature in -7..7.
     // static int dist(int name, int alt, int sig);
 
+    /// string of mode.
     static std::string tostring(const Mode& m);
-    
+
     void print(std::ostream& o) const;
     
 protected:
@@ -220,6 +226,8 @@ private:
     /// @return the accidental, in scale, for n, in -2..2.
     Accid accidDia(int n) const;
     
+    /// number of the tonic of this ton in the array of fifths.
+    int tonic() const;
     
 };
 

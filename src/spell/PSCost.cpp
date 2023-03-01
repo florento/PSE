@@ -17,20 +17,30 @@
 namespace pse {
 
 
-PSCost::PSCost():
+PSCost::PSCost(): // const CostOrdering& co
 _accid(0),
 _ndia(0),
 _dist(0),
 _color(0)
+//_order(co)
 {}
 
 
-PSCost::PSCost(const PSCost& c):
-_accid(c._accid),
-_ndia(c._ndia),
-_dist(c._dist),
-_color(c._color)
+PSCost::PSCost(const PSCost& rhs):
+_accid(rhs._accid),
+_ndia(rhs._ndia),
+_dist(rhs._dist),
+_color(rhs._color)
+//_order(rhs._order)
 {}
+
+
+//PSCost::PSCost(size_t a, size_t n, size_t d, size_t c):
+//_accid(a),
+//_dist(n),
+//_ndia(d),
+//_color(c)
+//{ }
 
 
 PSCost::~PSCost()
@@ -47,6 +57,7 @@ PSCost& PSCost::operator=(const PSCost& rhs)
         _ndia  = rhs._ndia;
         _dist  = rhs._dist;
         _color  = rhs._color;
+        //_order  = rhs._order;
     }
     return *this;
 }
@@ -62,14 +73,6 @@ PSCost& PSCost::operator+=(const PSCost& rhs)
 }
 
 
-//PSCost::PSCost(size_t a, size_t n, size_t d, size_t c):
-//_accid(a),
-//_dist(n),
-//_ndia(d),
-//_color(c)
-//{ }
-
-
 PSCost PSCost::operator+(const PSCost& rhs) const
 {
     PSCost copy(*this);
@@ -77,13 +80,42 @@ PSCost PSCost::operator+(const PSCost& rhs) const
 }
 
 
-bool PSCost::operator==(const PSCost& rhs) const
+PSCost operator+(const PSCost& c1, const PSCost& c2)
 {
-    return ((_accid == rhs._accid) &&
-            (_ndia  == rhs._ndia)  &&
-            (_dist  == rhs._dist)  &&
-            (_color  == rhs._color));
+    return c1.operator+(c2);
 }
+
+
+//bool PSCost::operator==(const PSCost& rhs) const
+//{
+//    switch (_order)
+//    {
+//        case CostOrdering::Default:
+//            return eq_lex(rhs);
+//
+//        case CostOrdering::Lex:
+//            return eq_lex(rhs);
+//
+//        case CostOrdering::Cumul:
+//            return eq_cumul(rhs);
+//
+//        case CostOrdering::Approx:
+//            // pb: needs ar. base
+//            return eq_approx(rhs);
+//
+//        case CostOrdering::Undef:
+//        {
+//            ERROR("PSCost: undef ordering code");
+//            return false;
+//        }
+//
+//        default:
+//        {
+//            ERROR("PSCost: unknown ordering code");
+//            return false;
+//        }
+//    }
+//}
 
 
 bool PSCost::operator!=(const PSCost& rhs) const
@@ -92,25 +124,36 @@ bool PSCost::operator!=(const PSCost& rhs) const
 }
 
 
-bool PSCost::operator<(const PSCost& rhs) const
-{
-    if (_accid == rhs._accid)
-    {
-        if (_ndia == rhs._ndia)
-        {
-            if (_dist == rhs._dist)
-            {
-                return (_color < rhs._color);
-            }
-            else
-                return (_dist < rhs._dist);
-        }
-        else
-            return (_ndia < rhs._ndia);
-    }
-    else
-        return (_accid < rhs._accid);
-}
+//bool PSCost::operator<(const PSCost& rhs) const
+//{
+//    switch (_order)
+//    {
+//        case CostOrdering::Default:
+//            return less_lex(rhs);
+//
+//        case CostOrdering::Lex:
+//            return less_lex(rhs);
+//
+//        case CostOrdering::Cumul:
+//            return less_cumul(rhs);
+//
+//        case CostOrdering::Approx:
+//            // pb: needs ar. base
+//            return less_approx(rhs);
+//
+//        case CostOrdering::Undef:
+//        {
+//            ERROR("PSCost: undef ordering code");
+//            return false;
+//        }
+//
+//        default:
+//        {
+//            ERROR("PSCost: unknown ordering code");
+//            return false;
+//        }
+//    }
+//}
 
 
 bool PSCost::operator<=(const PSCost& rhs) const
@@ -132,12 +175,95 @@ bool PSCost::operator>=(const PSCost& rhs) const
 }
 
 
+
+// lexicographic ordering
+
+bool PSCost::eq_lex(const PSCost& rhs) const
+{
+    return ((_accid == rhs._accid) &&
+            (_ndia  == rhs._ndia)  &&
+            (_dist  == rhs._dist)  &&
+            (_color  == rhs._color));
+}
+
+
+bool PSCost::neq_lex(const PSCost& rhs) const
+{
+    return !eq_lex(rhs);
+}
+
+
+bool PSCost::less_lex(const PSCost& rhs) const
+{
+    if (_accid == rhs._accid)
+    {
+        if (_ndia == rhs._ndia)
+        {
+            if (_dist == rhs._dist)
+            {
+                return (_color < rhs._color);
+            }
+            else
+                return (_dist < rhs._dist);
+        }
+        else
+            return (_ndia < rhs._ndia);
+    }
+    else
+        return (_accid < rhs._accid);
+}
+
+
+bool PSCost::leq_lex(const PSCost& rhs) const
+{
+    return !greater_lex(rhs);
+}
+
+
+bool PSCost::greater_lex(const PSCost& rhs) const
+{
+    return rhs.less_lex(*this);
+}
+
+
+bool PSCost::geq_lex(const PSCost& rhs) const
+{
+    return !less_lex(rhs);
+}
+
+
+
+
+// approx ordering
+
+// default value of approx degree (static)
+double PSCost::approx_degree = 0.02;
+
+
+// static
+double PSCost::getApproxDegree()
+{
+    return approx_degree;
+}
+
+
+// static
+void PSCost::setApproxDegree(double d)
+{
+    if (d > 0)
+        approx_degree = d;
+    else
+        ERROR("PSCost: Approx Degree must be > 0. keeping {}",
+              approx_degree);
+}
+
+
 // static private
 bool PSCost::approxeq(size_t a1, size_t a2, size_t base)
 {
     assert(base > 0);
     double d = std::abs((double) a2 - (double) a1);
-    return (d / (double) base < 0.03);
+    return (d / (double) base < approx_degree);
 }
 
 
@@ -202,7 +328,7 @@ bool PSCost::geq_approx(const PSCost& rhs, size_t base) const
 
 bool PSCost::eq_cumul(const PSCost& rhs) const
 {
-    return ((_accid+_ndia, rhs._accid + rhs._ndia) &&
+    return ((_accid +_ndia == rhs._accid + rhs._ndia) &&
             (_dist  == rhs._dist)  &&
             (_color  == rhs._color));
 }
@@ -362,12 +488,6 @@ void PSCost::print(std::ostream& o) const
     o << "dist=" << _dist << ',';
     o << "disj=" << _ndia << ',';
     o << "color=" << _color;
-}
-
-
-PSCost operator+(const PSCost& c1, const PSCost& c2)
-{
-    return c1.operator+(c2);
 }
 
 

@@ -97,7 +97,13 @@ public:
     
     /// estimated global tonality
     /// @warning respell() must have been called.
-    inline const Ton& global() const { return _global; }
+    const Ton& global() const;
+    
+    /// index of the estimated global tonality.
+    size_t iglobal() const;
+    
+    /// estimated local tonality for one candidate global tonality and one bar.
+    const Ton& local(size_t i, size_t j) const; // { return _table.local(i, j); }
     
     /// @return distance in the array of fifths between
     /// from estimated global tonality and
@@ -130,8 +136,8 @@ private: // data
     /// Pitch Spelling table
     pse::PST _table;
     
-    /// evaluated global tonality
-    pse::Ton _global;
+    // evaluated global tonality
+    //pse::Ton _global;
     
     /// debug mode activated
     bool _debug;

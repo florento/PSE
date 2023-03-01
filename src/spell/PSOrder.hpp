@@ -23,6 +23,31 @@
 namespace pse {
 
 
+/// ordering relationships for costs.
+enum class CostOrdering
+{
+    /// default ordering definned byb operator== and operator<
+    Default,
+    
+    /// lexicographic ordering (on cost components)
+    Lex,
+    
+    /// lexicographhic ordering with first component
+    /// a cumul of number of accid and non-diatonic moves,
+    /// and the nnext components.
+    Cumul,
+    
+    /// lexicographhic with approximate same number of accid.
+    Approx,
+    
+    /// unknown
+    Undef
+};
+
+
+std::ostream& operator<<(std::ostream& o, const CostOrdering& co);
+
+
 /// ordering for PS Config0 based on lexico combination of
 /// - cost (nb accidents, dist. to local tonality, number of disjoint moves, color), ordered lexxicographically
 /// - index in enumerator
@@ -138,9 +163,6 @@ PSCCompare PSCdist =
     assert (rhs);
     return (lhs->cost().getDist() > rhs->cost().getDist());
 };
-
-
-
 
 
 

@@ -44,20 +44,16 @@ print(pse.excuseme)
 
 # Key object is the more expressive (tonic, mode...)
 # KeySignature object is just the number of sharps (> 0) or flats, < 0)
-def extract_keys(part):
-    """extract the list of all keys or key signatures occurring in a music21 part"""    
-    fpart = part.flatten()
-    kl = fpart.getElementsByClass([m21.key.Key, m21.key.KeySignature])
-    return kl
-
 def key_changes(part):
     """check whether a music21 part contains one key signature change"""
-    kl = extract_keys(part)
+    fpart = part.flatten()
+    kl = fpart.getElementsByClass([m21.key.Key, m21.key.KeySignature])
     return (len(kl) - 1)
 
 def get_key(part):
     """return the key signature of a music21 part, if unique, otherwise None"""
-    kl = extract_keys(part)
+    #kl = part.flatten().getElementsByClass(m21.key.Key)
+    kl = part.flatten().getElementsByClass([m21.key.Key, m21.key.KeySignature])
     if (len(kl) == 1):
         return kl[0]
     else:
@@ -205,19 +201,19 @@ def get_pitches(sp):
     """extract the list of music21 pitches from a speller"""    
     pl = []
     for i in range(sp.size()):
-        p = mk_pitch(name = sp.name(i),  
+        p = m21_pitch(name = sp.name(i),  
                      accid = sp.accidental(i),
                      octave =sp.octave(i))
         pl.append(p)
     return pl
 
-def mk_pitch(name, accid, octave):
+def m21_pitch(name, accid, octave):
     """construct a music21.pitch from a PSE NoteName, a PSE Accidental ad an octave number"""    
-    return  m21.pitch.Pitch(step=mk_step(name), 
-                            accidental=mk_accid(accid), 
+    return  m21.pitch.Pitch(step=m21_step(name), 
+                            accidental=m21_accid(accid), 
                             octave=octave)
 
-def mk_step(nn):
+def m21_step(nn):
     """cast a PSE NoteName into a music21 character"""
     if (nn == pse.NoteName.A):
         return 'A'
@@ -237,7 +233,7 @@ def mk_step(nn):
         print('Invalid argument')
         return 'X'
 
-def mk_accid(a):
+def m21_accid(a):
     """cast a PSE Accidental into a music21.pitch.Accidental"""
     if (a == pse.Accid.TripleSharp):
         return m21.pitch.Accidental('triple-sharp')
@@ -264,6 +260,38 @@ def mk_accid(a):
     else: 
         print('Invalid argument')
 
+def m21_mode(m):
+    """cast a PSE Ton::Mode into a music21 mode name"""
+    if (m == pse.Mode.Major):
+        return 'major'
+    elif (m == pse.Mode.Minor):
+        return 'minor'
+    elif (m == pse.Mode.MinorNat):
+        return 'minor'   # not found
+    elif (m == pse.Mode.MinMel):
+        return 'minor'   # not found
+    elif (m == pse.Mode.Ionian):
+        return 'ionian'
+    elif (m == pse.Mode.Dorian):
+        return 'dorian'
+    elif (m == pse.Mode.Phrygian):
+        return 'phrygian'
+    elif (m == pse.Mode.Lydian):
+        return 'lydian'
+    elif (m == pse.Mode.Mixolydian):
+        return 'mixolydian'
+    elif (m == pse.Mode.Eolian):
+        return 'eolian'
+    elif (m == pse.Mode.Locrian):
+        return 'locrian'
+    else: 
+        print('Invalid argument')
+        
+def m21_key(ton):
+    """cast a PSE Ton into a music21.key.Key"""
+#    p = m21.pitch.Pitch(name = m21_step(ton.name()), 
+#                        accidental = m21_accid(ton.accidental()))
+    return m21.key.KeySignature(ton.fifths()).asKey(m21_mode(ton.mode()))
 
 ####################
 ##                ##
@@ -273,7 +301,7 @@ def mk_accid(a):
 
 def compare_name(n, pse_name):
     """compare the name of a music21 note and a PSE note name"""    
-    return (n.step == mk_step(pse_name))
+    return (n.step == m21_step(pse_name))
 
 def compare_accid(n, pse_accid, print_flag):
     """compare the accidental of a music21 note and a PSE accidental"""    
@@ -286,7 +314,18 @@ def compare_accid(n, pse_accid, print_flag):
         else:
             return False
     else:
-        return (n.pitch.accidental == mk_accid(pse_accid))
+        return (n.pitch.accidental == m21_accid(pse_accid))
+
+# k can be a Key or a KeySignature
+def compare_key(k, ton):
+    """compare a music21 key PSE ton"""    
+    if isinstance(k, m21.key.Key):
+        return (k.sharps == ton.fifths() and k.mode == m21_mode(ton.mode()))
+    elif isinstance(k, m21.key.KeySignature):
+        return (k.sharps == ton.fifths())
+    else:
+        print('ERROR"', k, 'of unexpected type')
+        return False
 
 def diff(ln, sp):
     """compare a list of barred notes and the list of notes of a speller"""    
@@ -344,18 +383,36 @@ def anote_diff(ln, ld):
     if (len(ld) > 0):
         for (i, n, a, o, p) in ld:
             ln[i][0].style.color = 'red'
-            ln[i][0].pitch.step = mk_step(n)
+            ln[i][0].pitch.step = m21_step(n)
             if ((a != pse.Accid.Natural) or (p == True)):
-                ln[i][0].pitch.accidental = mk_accid(a)
+                ln[i][0].pitch.accidental = m21_accid(a)
             ln[i][0].pitch.octave = o                
 
-def anote_ks_part(part, k):
-    e = m21.expressions.TextExpression('ks='+str(k))    
-    ml = part.getElementsByClass(m21.stream.Measure)
-    ml[0].insert(0, e)
+def strk(k):
+    if isinstance(k, m21.key.Key):
+        return str(k)+' ('+str(k.sharps)+')'
+    elif isinstance(k, m21.key.KeySignature):
+        return '('+str(k.sharps)+')'
+
+
+def anote_global_part(part, sp):
+    k = m21_key(sp.global_ton())
+    e = m21.expressions.TextExpression('est. global: '+strk(k))    
+    e.style.fontWeight = 'bold'
     e.placement = 'above'
     e.style.color = 'red'   
+    ml = part.getElementsByClass(m21.stream.Measure)    
+    ml[0].insert(0, e)
 
+def anote_local_part(part, sp):
+    i = sp.iglobal_ton()
+    ml = part.getElementsByClass(m21.stream.Measure)    
+    for j in range(len(ml)):
+        k = m21_key(sp.local_ton(i, j))
+        e = m21.expressions.TextExpression(strk(k))
+        e.style.fontStyle = 'italic'
+        ml[j].insert(0, e)
+        
 def anote_part(part, ld):
     """mark mispells in red in a part, based on a diff-list"""
     fpart = part.flatten()
@@ -442,12 +499,12 @@ class Stats:
     def stop_timer(self):
         self._current_time = time.time() - self._current_t0
                  
-    def record_part(self, part_id, k_gt, k_est, nb_notes, nb_err):
+    def record_part(self, part_id, k_gt, ton_est, nb_notes, nb_err):
         """add a new row in evaluation table"""
         self._global_parts += 1
         self._global_notes += nb_notes
         self._global_nerr += nb_err
-        if (k_est == k_gt.sharps):
+        if compare_key(k_gt, ton_est):
             self._global_nerr_ks += nb_err
         else:
             self._global_kserr += 1
@@ -455,10 +512,13 @@ class Stats:
         row.append(self._current_id)
         row.append(self._current_title)
         row.append(self._current_composer)
-        row.append(part_id)       # current part id
-        row.append(k_gt.sharps)   # current ks gt
-        row.append(k_est)         # current ks estimation
-        row.append(nb_notes)      # nb notes in part 
+        row.append(part_id)                # current part id        
+        if compare_key(k_gt, ton_est):
+            row.append('')
+        else:
+            row.append(strk(k_gt))         # current key gt
+        row.append(strk(m21_key(ton_est))) # current key estimation
+        row.append(nb_notes)               # nb notes in part 
         row.append(nb_err)
         row.append(self._current_time)
         self._table.append(row)
@@ -510,7 +570,8 @@ class Stats:
         df.columns = ['id', 'title','composer', 'part', 'KSgt', 'KSest', 'notes', 'err', 'time']
         df['time'] = df['time'].map('{:,.3f}'.format)
         # every KSestimated identical to corresp. KSgt becomes NaN
-        df.loc[df['KSgt'] == df['KSest'], 'KSest'] = np.nan
+        #df.loc[df['KSgt'] == df['KSest'], 'KSest'] = np.nan
+        df.loc[df['KSgt'] == '', 'KSgt'] = np.nan
         # d = df['KSgt'].compare(df['KSest'], keep_shape=True)['other'].fillna('')        
         return df
 
@@ -525,8 +586,8 @@ class Stats:
         df = self.get_dataframe()
         #df.loc[df['KSgt'] == df['KSest'], 'KSest'] = np.nan
         # sums and errors
-        total = { 'nb_KS'    : [len(df['KSgt'])],
-                  'err_KS'   : [df['KSest'].count()], 
+        total = { 'nb_KS'    : [len(df['KSest'])],
+                  'err_KS'   : [df['KSgt'].count()], 
                   'nb_note'  : [df['notes'].sum()], 
                   'err_note' : [df['err'].sum()] }
         #df = df.append(pd.DataFrame.from_dict(total), ignore_index=True)
@@ -554,8 +615,8 @@ def pcformat(x):
     else:
         return round(x,2)
             
-def ks_errors(df):
-    return len(df['KSgt'].compare(df['KSest'], keep_shape=False))
+#def ks_errors(df):
+#    return len(df['KSgt'].compare(df['KSest'], keep_shape=False))
 
 def sp_errors(df):
     return df['err'].sum() / df['notes'].sum()
@@ -577,8 +638,9 @@ def sp_errors(df):
 
 def spellable(part):
     """the given part can be pitch spelled"""
-    if (get_key(part) == None):
-        print(key_changes(part), 'key changes', end =' ')
+    c = key_changes(part)
+    if (c > 0):
+        print(c, 'key changes', end =' ')
         return False
     #elif (count_chords(part)):
     #    print('chords', end =' ')
@@ -604,18 +666,19 @@ def eval_part(part, stat, nbtons=0, debug=False, mark=False):
     stat.start_timer()
     sp.spell()
     stat.stop_timer()
-    if (sp.sig() == k0.sharps):
-        print('global ton: OK:', '(', sp.sig(), '),', end=' ')
+    gt = sp.global_ton()
+    if compare_key(k0, gt):
+        print('global ton: OK:', '(', m21_key(gt), '),', end=' ')
     else:
-        print('global ton: NO:', '(', sp.sig(), 'was', k0, '),', end=' ')
+        print('global ton: NO:', '(', m21_key(gt), 'was', k0, '),', end=' ')
+        if mark:
+            anote_global_part(part, sp) 
     ld = diff(ln, sp)
     print('diff:', len(ld), end='\n', flush=True)
     if mark:
         anote_diff(ln, ld)
-        if (sp.sig() != k0.sharps):
-            # k0.style.color = 'red' 
-            anote_ks_part(part, sp.sig())
-    return (k0, sp.sig(), len(ln), ld)
+        anote_local_part(part, sp)            
+    return (k0, sp.global_ton(), len(ln), ld)
 
 def eval_score(score, sid, title, composer,
                stat, tons=0, debug=False, mark=False):
@@ -637,9 +700,9 @@ def eval_score(score, sid, title, composer,
         if (nbparts > 1):
             print('part', i+1, '/', len(lp), end=' ', flush=True)
         if (spellable(part)):
-            (ks_gt, ks_est, nn, ld) = eval_part(part, stat, tons, debug, mark)
-            stat.record_part(i, ks_gt, ks_est, nn, len(ld))
-            ls.append(ks_est)
+            (k_gt, ton_est, nn, ld) = eval_part(part, stat, tons, debug, mark)
+            stat.record_part(i, k_gt, ton_est, nn, len(ld))
+            ls.append(ton_est)
             lld.append(ld)
         else:
             print('cannot spell, skip', flush=True)
@@ -772,4 +835,9 @@ def empty_difflist(lld):
 #stat.new_score(0, 'pipo', 'Mario')
 #stat.record_part(0, ks2, -1, 111, 2)
 #stat.record_part(1, ks2, 2, 192, 5)
+
+s = m21.converter.parse('109-Kuhlau-sonatineop60n1.musicxml')
+lp = s.getElementsByClass(m21.stream.Part)
+#eval_part(lp[0], nbtons=0, debug=True, mark=True, stat=None)
+
 

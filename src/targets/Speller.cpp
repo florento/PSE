@@ -14,7 +14,7 @@ namespace pse {
 Speller::Speller(size_t nbTons, bool dflag):
 _enum(0, 0),
 _table(_enum, nbTons, dflag),
-_global(0, Ton::Mode::Maj), // C maj default
+//_global(0, Ton::Mode::Maj), // C maj default
 _debug(dflag)
 {
     spdlog_setVerbosity(4);
@@ -191,10 +191,8 @@ bool Speller::spell()
         }
     }
 
-    const pse::Ton& gton = _table.global();
-    _global = gton;
     TRACE("Pitch Spelling: estimated global tonality: {} ({})",
-           gton, gton.fifths());
+          _table.global(), _table.global().fifths());
 
 
     // will update the lists _names, _accids and _octave
@@ -204,12 +202,22 @@ bool Speller::spell()
 }
 
 
-//const Ton& Speller::global() const
-//{
-//    return _global;
-//}
+const Ton& Speller::global() const
+{
+    return _table.global();
+}
 
 
+size_t Speller::iglobal() const
+{
+    return _table.iglobal();
+}
+
+
+const Ton& Speller::local(size_t i, size_t j) const
+{
+    return _table.local(i, j);
+}
 
 
 // TBR not used

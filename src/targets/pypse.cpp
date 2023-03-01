@@ -67,6 +67,13 @@ PYBIND11_MODULE(pse, m)
         .value("Locrian", pse::Ton::Mode::Locrian, "Locrian")
         .export_values();
     
+    py::class_<pse::Ton>(m, "Ton")
+        //.def(py::init<>(), "Ton", py::arg("ks"))
+        .def("mode", &pse::Ton::mode, "get mode")
+        .def("name", &pse::Ton::name, "get note name")
+        .def("accidental", &pse::Ton::accidental, "get accidental")
+        .def("fifths", &pse::Ton::fifths, "get key signature");
+
     py::class_<pse::Speller>(m, "Speller")
         .def(py::init<>(), "Spell Checker")
         .def("debug", &pse::Speller::debug, "set debug mode", py::arg("on"))
@@ -77,16 +84,18 @@ PYBIND11_MODULE(pse, m)
              "number of tonalities considered for pitch spelling")
         .def("reset_tons", &pse::Speller::resetTons,
              "clear the array of tonalities for pitch spelling")
-        //.def("addton", &pse::Speller::addTon,
-        //     "add a tonality for pitch spelling",
-        //     py::arg("ks"), py::arg("mode"))
         // disambiguate overloaded method
         .def("add_ton",
              static_cast<void (pse::Speller::*)(int, pse::Ton::Mode)>(&pse::Speller::addTon),
              "add a tonality for pitch spelling", py::arg("ks"), py::arg("mode"))
         .def("set_global", &pse::Speller::setGlobal, "force global tonality")
         .def("spell", &pse::Speller::spell, "spell notes")
-        .def("sig", &pse::Speller::fifths, "estimated global tonality")
+        .def("global_ton", &pse::Speller::global, "get estimated global tonality")
+        .def("iglobal_ton", &pse::Speller::iglobal,
+             "get index of estimated global tonality")
+        .def("keysig", &pse::Speller::fifths, "estimated global tonality")
+        .def("local_ton", &pse::Speller::local, "get estimated local tonality",
+             py::arg("ton"), py::arg("bar"))
         .def("name",  &pse::Speller::name, "estimated name of note",
              py::arg("i"))
         .def("accidental", &pse::Speller::accidental,

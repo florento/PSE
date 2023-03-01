@@ -21,7 +21,6 @@
 
 namespace pse {
 
-
 class PSC1;
 class PSC2;
 
@@ -33,7 +32,7 @@ struct PSCost
 public:
 
     /// null cost (neutral element for plus).
-    PSCost();
+    PSCost();   // const CostOrdering& co = CostOrdering::Default
     
     /// copy constructor
     PSCost(const PSCost& c);
@@ -44,65 +43,114 @@ public:
     PSCost& operator=(const PSCost& rhs);
     
     /// sum operator (non const).
+    /// update this cost adding rhs.
+    /// @param rhs a cost to add.
+    /// @warning the ordering of this cost is preserved,
+    /// the ordering of rhs is ignored.
     PSCost& operator+=(const PSCost& rhs);
 
     /// sum operator (const).
+    /// @param rhs a cost to add.
+    /// @return a copy of this cost to which rhs is added.
+    /// @warning the ordering of the result is the ordering
+    /// of this cost, the ordering of rhs is ignored.
     PSCost operator+(const PSCost& rhs) const;
     
-    /// same cost componnents (exactly)
-    bool operator==(const PSCost& rhs) const;
+    // default cost equality, according to the ordering code of this cost.
+    // @warning the ordering of rhs is ignored.
+    /// default cost equality.
+    /// @warning static choice (at compile time).
+    inline bool operator==(const PSCost& rhs) const
+    { return eq_lex(rhs); }  // ALT { return eq_cumul(rhs); }
     
-    /// different costs
+    /// negation of ==.
     bool operator!=(const PSCost& rhs) const;
 
-    /// lexicographic ordering for costs.
-    /// default ordering.
-    bool operator<(const PSCost& rhs) const;
+    // default ordering for costs, according to the ordering code of this cost.
+    // @warning the ordering of rhs is ignored.
+    /// default ordering for costs.
+    /// @warning static choice (at compile time).
+    inline bool operator<(const PSCost& rhs) const
+    { return less_lex(rhs); }  // ALT { return less_cumul(rhs); }
 
-    /// lexicographic ordering for costs
+    /// negation of >.
     bool operator<=(const PSCost& rhs) const;
 
-    /// lexicographic ordering for costs
+    /// inverse (commutation) of <.
     bool operator>(const PSCost& rhs) const;
 
-    /// lexicographic ordering for costs
+    /// negation of <.
     bool operator>=(const PSCost& rhs) const;
+    
+    
+    /// same cost components (exactly).
+    bool eq_lex(const PSCost& rhs) const;
+
+    /// negation of eq_lex.
+    bool neq_lex(const PSCost& rhs) const;
+
+    /// lexicographic ordering for costs.
+    bool less_lex(const PSCost& rhs) const;
+
+    /// negation of greater_lex.
+    bool leq_lex(const PSCost& rhs) const;
+
+    /// inverse (commutation) of less_lex.
+    bool greater_lex(const PSCost& rhs) const;
+
+    /// negation of less_lex.
+    bool geq_lex(const PSCost& rhs) const;
     
      
     /// equality with cumul of number of accid
-    /// and non-diatoinc moves.
+    /// and non-diatonic moves.
     bool eq_cumul(const PSCost& rhs) const;
 
     /// negation of eq_cumul
     bool neq_cumul(const PSCost& rhs) const;
 
     /// lexicographhic with with cumul of number of accid
-    /// and non-diatoinc moves.
+    /// and non-diatonic moves.
     bool less_cumul(const PSCost& rhs) const;
 
+    /// negation of greater_cumul.
     bool leq_cumul(const PSCost& rhs) const;
 
+    /// inverse (commutation) of less_cumul.
     bool greater_cumul(const PSCost& rhs) const;
 
+    /// negation of less_cumul.
     bool geq_cumul(const PSCost& rhs) const;
-       
+
     
-    /// equality with approximate same nunmber of accid.
+    /// degree of approximation.
+    /// percent under which 2 costs componnents are considered equal.
+    static double getApproxDegree();
+
+    /// degree of approximation.
+    /// percent under which 2 costs componnents are considered equal.
+    static void setApproxDegree(double d);
+        
+    /// equality with approximate same number of accid.
     /// @warning experimental
     bool eq_approx(const PSCost& rhs, size_t base) const;
 
-    /// negation of eq_approx
+    /// negation of eq_approx.
     bool neq_approx(const PSCost& rhs, size_t base) const;
 
-    /// lexicographhic with approximate same nunmber of accid.
+    /// lexicographhic with approximate same number of accid.
     /// @warning experimental
     bool less_approx(const PSCost& rhs, size_t base) const;
 
+    /// negation of greater_approx.
     bool leq_approx(const PSCost& rhs, size_t base) const;
 
+    /// inverse (commutation) of less_approx.
     bool greater_approx(const PSCost& rhs, size_t base) const;
 
+    /// negation of less_approx.
     bool geq_approx(const PSCost& rhs, size_t base) const;
+    
     
     /// access cumulated number of accidents.
     inline size_t getAccid() const { return _accid; }
@@ -159,11 +207,16 @@ private:
     /// in the minimal path to this config.
     size_t _color;
     
-    // internal constructor.
-    // PSCost(size_t a, size_t n, size_t d, size_t c);
+    //CostOrdering _order;
     
+    /// degree of approximation.
+    /// percent under which 2 costs componnents are considered equal.
+    static double approx_degree;
+
     static bool approxeq(size_t a1, size_t a2, size_t base);
     
+    // internal constructor.
+    // PSCost(size_t a, size_t n, size_t d, size_t c);
 };
 
 

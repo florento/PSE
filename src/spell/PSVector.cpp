@@ -195,7 +195,7 @@ bool PSV::estimateLocal(size_t ig, size_t iprev)
     
     if (psenum().empty())
     {
-        DEBUGU("PSV: estimate local for {}: empty vector {}-{}, keeping previous {}",
+        TRACE("PSV: estimate local for {}: empty vector {}-{}, keeping previous {}",
               ig, psenum().first(), psenum().stop(), iprev);
         // we stay in the previous local tonality
         _local[ig] = iprev;
