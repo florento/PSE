@@ -93,9 +93,15 @@ PYBIND11_MODULE(pse, m)
         .def("global_ton", &pse::Speller::global, "get estimated global tonality")
         .def("iglobal_ton", &pse::Speller::iglobal,
              "get index of estimated global tonality")
-        .def("keysig", &pse::Speller::fifths, "estimated global tonality")
+        .def("keysig", &pse::Speller::fifths, "get estimated global key signature")
         .def("local_ton", &pse::Speller::local, "get estimated local tonality",
              py::arg("ton"), py::arg("bar"))
+        .def("global_cands", &pse::Speller::globalCands,
+             "get number of candidates (ties) for the estimatation of the global tonality")
+        .def("global_cand_ton", &pse::Speller::globalCand,
+             "get candidate global tonality ")
+        .def("iglobal_cand_ton", &pse::Speller::iglobalCand,
+             "get index of candidate global tonality ")
         .def("name",  &pse::Speller::name, "estimated name of note",
              py::arg("i"))
         .def("accidental", &pse::Speller::accidental,

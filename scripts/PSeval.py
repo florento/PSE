@@ -397,10 +397,21 @@ def strk(k):
 
 def anote_global_part(part, sp):
     k = m21_key(sp.global_ton())
-    e = m21.expressions.TextExpression('est. global: '+strk(k))    
+    text = 'est. global: '+strk(k)
+    nc = sp.global_cands()
+    if nc > 1:
+        text += ' ' 
+        text += '(' 
+        text += str(nc) 
+        text += ' candidates: '         
+        for i in range(nc):
+            text += strk(m21_key(sp.global_cand_ton(i)))
+            text += ' '
+        text += ')'            
+    e = m21.expressions.TextExpression(text)    
     e.style.fontWeight = 'bold'
     e.placement = 'above'
-    e.style.color = 'red'   
+    e.style.color = 'gray'   
     ml = part.getElementsByClass(m21.stream.Measure)    
     ml[0].insert(0, e)
 

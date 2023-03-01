@@ -305,43 +305,34 @@ bool PST::estimateGlobals()
 }
 
 
-void PST::setGlobal(size_t ig)
+bool PST::estimatedGlobals() const
 {
+    return ((! _globals.empty()) || (_global != TonIndex::UNDEF));
+}
+
+
+size_t PST::globalCands() const
+{
+    if (! estimatedGlobals())
+        WARN("PST: globalCands: globals have not been estimated.");
+    return _globals.size();
+}
+
+
+size_t PST::iglobalCand(size_t i) const
+{
+    if (! estimatedGlobals())
+        WARN("PST: globalCands: globals have not been estimated.");
+    assert(i < _globals.size());
+    return _globals.at(i);
+}
+
+
+const Ton& PST::globalCand(size_t i) const
+{
+    size_t ig = iglobalCand(i);
     assert(ig < index.size());
-    assert(ig != TonIndex::UNDEF);
-    assert(ig != TonIndex::FAILED);
-    if ((! _globals.empty()) || (_global != TonIndex::UNDEF))
-    {
-        WARN("PST setGlobal: global tonality candidates already estimated or set, wiped");
-        _globals.clear();
-    }
-    assert(_globals.empty());
-    _globals.push_back(ig);
-    _global = ig;
-    assert(estimatedGlobals()); // the checker is well defined
-    assert(estimatedGlobal()); // the checker is well defined
-}
-
-
-size_t PST::iglobal() const
-{
-    if (! estimatedGlobal())  // (_global == TonIndex::UNDEF)
-    {
-        ERROR("PST: global ton must be estimated before accessed");
-    }
-    else if (_global == TonIndex::FAILED)  // (_estimated_global == false)
-    {
-        ERROR("PST: estimated pf global ton failed");
-    }
-    
-    return _global;
-}
-
-
-const Ton& PST::global() const
-{
-    assert(iglobal() < index.size());
-    return index.ton(iglobal());
+    return index.ton(ig);
 }
 
 
@@ -411,6 +402,12 @@ bool PST::estimateLocals(size_t ig)
 }
 
 
+bool PST::estimatedLocals() const
+{
+    return _estimated_locals;
+}
+
+
 size_t PST::ilocal(size_t i, size_t j) const
 {
     if (_estimated_locals == false)
@@ -427,6 +424,24 @@ size_t PST::ilocal(size_t i, size_t j) const
 const Ton& PST::local(size_t i, size_t j) const
 {
     return index.ton(ilocal(i, j));
+}
+
+
+void PST::setGlobal(size_t ig)
+{
+    assert(ig < index.size());
+    assert(ig != TonIndex::UNDEF);
+    assert(ig != TonIndex::FAILED);
+    if ((! _globals.empty()) || (_global != TonIndex::UNDEF))
+    {
+        WARN("PST setGlobal: global tonality candidates already estimated or set, wiped");
+        _globals.clear();
+    }
+    assert(_globals.empty());
+    _globals.push_back(ig);
+    _global = ig;
+    assert(estimatedGlobals()); // the checker is well defined
+    assert(estimatedGlobal()); // the checker is well defined
 }
 
 
@@ -506,6 +521,35 @@ bool PST::estimateGlobal()
 }
 
 
+bool PST::estimatedGlobal() const
+{
+    return (_global != TonIndex::UNDEF);
+}
+
+
+size_t PST::iglobal() const
+{
+    if (! estimatedGlobal())  // (_global == TonIndex::UNDEF)
+    {
+        ERROR("PST: global ton must be estimated before accessed");
+    }
+    else if (_global == TonIndex::FAILED)  // (_estimated_global == false)
+    {
+        ERROR("PST: estimated pf global ton failed");
+    }
+    
+    return _global;
+}
+
+
+const Ton& PST::global() const
+{
+    size_t ig = iglobal();
+    assert(ig < index.size());
+    return index.ton(ig);
+}
+
+
 bool PST::rename()
 {
     bool status = true;
@@ -546,24 +590,6 @@ bool PST::rename()
         status = psv.rename(_global);
     }
     return status;
-}
-
-
-bool PST::estimatedGlobals() const
-{
-    return ((! _globals.empty()) || (_global != TonIndex::UNDEF));
-}
-
-
-bool PST::estimatedLocals() const
-{
-    return _estimated_locals;
-}
-
-
-bool PST::estimatedGlobal() const
-{
-    return (_global != TonIndex::UNDEF);
 }
 
 

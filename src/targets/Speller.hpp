@@ -94,6 +94,19 @@ public:
     /// force global tonality. it wont be estimated.
     /// @param i index of tonality set as global.
     void setGlobal(size_t i);
+
+    /// number of candidates (ties) for the estimatation of the global tonality.
+    size_t globalCands() const;
+    
+    /// candidate global tonality for this table.
+    /// @param i candidate number, must be in 0..globalCands().
+    const Ton& globalCand(size_t i) const;
+
+    /// index of a candidate global tonality for this table, in 0..index.size().
+    size_t iglobalCand(size_t i) const;
+ 
+    /// estimated local tonality for one candidate global tonality and one bar.
+    const Ton& local(size_t i, size_t j) const; // { return _table.local(i, j); }
     
     /// estimated global tonality
     /// @warning respell() must have been called.
@@ -101,9 +114,6 @@ public:
     
     /// index of the estimated global tonality.
     size_t iglobal() const;
-    
-    /// estimated local tonality for one candidate global tonality and one bar.
-    const Ton& local(size_t i, size_t j) const; // { return _table.local(i, j); }
     
     /// @return distance in the array of fifths between
     /// from estimated global tonality and

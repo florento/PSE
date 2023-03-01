@@ -91,6 +91,10 @@ public:
     /// @return wether the computation was successful.
     bool init();
     
+    /// force a global tonality.
+    /// @param ig index of global tonality.
+    void setGlobal(size_t ig);
+
     /// estimate the global tonality candidate for this table (first step).
     /// @return whether the estimation of the global tonality successed.
     bool estimateGlobals();
@@ -99,10 +103,20 @@ public:
     /// estimateGlobals or setGlobal was called.
     bool estimatedGlobals() const;
 
-    /// force a global tonality.
-    /// @param ig index of global tonality.
-    void setGlobal(size_t ig);
+    /// number of candidates (ties) for the estimatation of the global tonality.
+    /// @warning estimateGlobals() must have been called successfully.
+    size_t globalCands() const;
 
+    /// candidate global tonality for this table.
+    /// @param i candidate number, must be in 0..globalCands().
+    /// @warning estimateGlobal() must have been called successfully.
+    /// @warning estimateGlobal() must have been called successfully.
+    const Ton& globalCand(size_t i) const;
+    
+    /// index of a candidate global tonality for this table, in 0..index.size().
+    /// @warning estimGlobal() must have been called successfully.
+    size_t iglobalCand(size_t i) const;
+        
     /// estimate a local tonality for each column of this table,
     /// for all candidate global tonalities in _globals.
     /// @return whether estimation of the local tonalities successed.

@@ -202,6 +202,30 @@ bool Speller::spell()
 }
 
 
+size_t Speller::globalCands() const
+{
+    return _table.globalCands();
+}
+
+
+const Ton& Speller::globalCand(size_t i) const
+{
+    return _table.globalCand(i);
+}
+
+
+size_t Speller::iglobalCand(size_t i) const
+{
+    return _table.iglobalCand(i);
+}
+
+
+const Ton& Speller::local(size_t i, size_t j) const
+{
+    return _table.local(i, j);
+}
+
+
 const Ton& Speller::global() const
 {
     return _table.global();
@@ -211,12 +235,6 @@ const Ton& Speller::global() const
 size_t Speller::iglobal() const
 {
     return _table.iglobal();
-}
-
-
-const Ton& Speller::local(size_t i, size_t j) const
-{
-    return _table.local(i, j);
 }
 
 
