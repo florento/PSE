@@ -250,7 +250,7 @@ bool PSV::estimateLocal(size_t ig, size_t iprev)
                 dbest = dist;
                 continue;
             }
-            // criteria 2: none
+            // criteria 2:
             // best distance (of current tonality j) to the global tonality ig
             else if (dist == dbest)
             {
@@ -267,9 +267,9 @@ bool PSV::estimateLocal(size_t ig, size_t iprev)
                 // a config in bag for the current tonality j
                 else if (distg == dgbest)
                 {
-                    WARN("PSV {}-{}, estimation locals, tie break fail {} vs {}, cost=[{}], prevton={}, (dist: {} vs {})",
+                    WARN("PSV {}-{}, estimation locals, tie break fail {} vs {}, cost=[{}],   prevton={}, (dist prev={}, dist global({})={})",
                          psenum().first(), psenum().stop(),
-                         ton(j), ton(ibest), cost, pton, dist, dbest);
+                         ton(j), ton(ibest), cost, pton, dist, gton, distg);
                     _tiebfail++;
                 }
                 // otherwise keep the current best

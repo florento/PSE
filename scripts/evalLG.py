@@ -130,11 +130,10 @@ skip = [441, 470, 472, 473, 475, 478]
 # MusicXMLExportException: In part (Voice), measure (11): Cannot convert inexpressible durations to MusicXML.
 
 def eval_LG(nbtons=26, output_dir='', filename='', debug=True, mark=True):
-    global _dataset_root
     timestamp = datetime.today().strftime('%Y%m%d-%H%M')
     # default output dir name
     if output_dir == '':
-       output_dir =  timestamp
+       output_dir = timestamp
     output_path = Path(_eval_root)/'LG'/output_dir
     if not os.path.isdir(output_path):
         os.mkdir(output_path)
@@ -173,7 +172,29 @@ def eval_LG(nbtons=26, output_dir='', filename='', debug=True, mark=True):
     df.pop('part') # del column part number (always 0)
     df.to_csv(output_path/(filename+'.csv') , header=True, index=False)
     stat.write_datasum(output_path/(filename+'_sum.csv'))
-   
+      
+def eval_LGitem(i, nbtons=26, dflag=True, mflag=True):
+    stat = ps.Stats()   
+    dataset = LG_map()
+    file = dataset[i]
+    filep = file.parts
+    if (filep[-2] == 'ref'):
+        t = filep[-3]+'_eval'
+    else:
+        t = str(i)+'_eval'
+    s = m21.converter.parse(file.as_posix())
+    # ground truth ks, estimated ks, nnb of nontes and list of diff notes
+    #(k_gt, gt_est, nn, ld) = ps.eval_part(part=part, stat=stat, nbtons=tons, 
+    #                                      debug=dflag, mark=mflag)
+    (ls, lld) = ps.eval_score(score=s, sid=i, title=t, composer='', 
+                              stat=stat, tons=nbtons, 
+                              debug=dflag, mark=mflag)  
+    stat.show()   
+    assert(len(lld) == 1) # always 1 unique part in LG dataset
+    if mflag and len(lld[0]) > 0:
+        s.show()
+        write_score(s, Path(os.getcwd()), t)
+        
 def write_score(score, output_path, outname):
     assert(len(outname) > 0)
     if not os.path.isdir(output_path):
@@ -185,28 +206,7 @@ def write_score(score, output_path, outname):
     score.write('musicxml', fp=xmlfile)
     # pdffile = dirname+'/'+outname+'.pdf'
     # os.system(_mscore + ' -o ' + pdffile + ' ' + xmlfile)
-    
-def eval_item(id, tons=26, dflag=True, mflag=False):
-    dataset = LG_map()
-    file = dataset[id]
-    score = m21.converter.parse(file.as_posix())
-    print(id, score.metadata.title, end=' ')
-    part = first_part(score)
-    if (not ps.spellable(part)):
-        print('FAIL, cannot spell', flush=True)
-        return
-    stat = ps.Stats()
-    # ground truth ks, estimated ks, nnb of nontes and list of diff notes
-    (ks_gt, gs_est, nn, ld) = ps.eval_part(part=part, stat=stat, nbtons=tons, 
-                                           debug=dflag, mark=mflag)
-    filep = file.parts
-    if (filep[-2] == 'ref'):
-        t = filep[-3]+'_eval'
-    else:
-        t = str(id)+'_eval'
-    if mflag and len(ld) > 0:
-        score.show()
-        write_score(score, os.getcwd(), t)
+        
                     
 #######################
 ##                   ## 
@@ -214,6 +214,28 @@ def eval_item(id, tons=26, dflag=True, mflag=False):
 ## manual evaluation ##
 ##                   ##
 #######################
+
+def debug(i):    
+    dataset = LG_map()
+    file = dataset[i]
+    score = m21.converter.parse(file)
+    lp = score.getElementsByClass(m21.stream.Part)
+    ln = ps.extract_part(lp[0]) # first and unique part
+    for (n, b, s) in ln:   
+        a = 'sp.add('
+        a += str(n.pitch.midi)
+        a += ', '
+        a += str(b)
+        a += ', '
+        a += 'true' if s else 'false'
+        a += ');'
+        print(a)        
+    #sp = ps.Speller()
+    #sp.debug(True)
+    #ps.add_tons(0, sp)
+    #sp.add_notes(ln1[:61], sp)
+    #sp.spell()
+
 
 # TBR
 #_dataset = init(dataset_root)

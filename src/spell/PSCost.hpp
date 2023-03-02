@@ -61,7 +61,8 @@ public:
     /// default cost equality.
     /// @warning static choice (at compile time).
     inline bool operator==(const PSCost& rhs) const
-    { return eq_lex(rhs); }  // ALT { return eq_cumul(rhs); }
+    { return eq_lex(rhs); }
+    //{ return eq_cumul(rhs); }
     
     /// negation of ==.
     bool operator!=(const PSCost& rhs) const;
@@ -71,7 +72,8 @@ public:
     /// default ordering for costs.
     /// @warning static choice (at compile time).
     inline bool operator<(const PSCost& rhs) const
-    { return less_lex(rhs); }  // ALT { return less_cumul(rhs); }
+    { return less_lex(rhs); }
+    //{ return less_cumul(rhs); }
 
     /// negation of >.
     bool operator<=(const PSCost& rhs) const;
@@ -130,7 +132,10 @@ public:
     /// degree of approximation.
     /// percent under which 2 costs componnents are considered equal.
     static void setApproxDegree(double d);
-        
+
+    /// diff between a1 and a2 over base is less than approx degree.
+    static bool approxeq(size_t a1, size_t a2, size_t base);
+    
     /// equality with approximate same number of accid.
     /// @warning experimental
     bool eq_approx(const PSCost& rhs, size_t base) const;
@@ -138,7 +143,7 @@ public:
     /// negation of eq_approx.
     bool neq_approx(const PSCost& rhs, size_t base) const;
 
-    /// lexicographhic with approximate same number of accid.
+    /// lexicographic with approximate same number of accid.
     /// @warning experimental
     bool less_approx(const PSCost& rhs, size_t base) const;
 
@@ -213,8 +218,6 @@ private:
     /// percent under which 2 costs componnents are considered equal.
     static double approx_degree;
 
-    static bool approxeq(size_t a1, size_t a2, size_t base);
-    
     // internal constructor.
     // PSCost(size_t a, size_t n, size_t d, size_t c);
 };

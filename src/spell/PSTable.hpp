@@ -97,6 +97,8 @@ public:
 
     /// estimate the global tonality candidate for this table (first step).
     /// @return whether the estimation of the global tonality successed.
+    /// @warning call eGlobals_eq and eGlobals_less variants to operator==
+    /// and operator<  on cost.
     bool estimateGlobals();
     
     /// a set of candidate global tonalities is known.
@@ -148,19 +150,7 @@ public:
     /// @param j column index = bar number. must be smaller than index.size().
     /// @warning estimLocals() must have been called.
     size_t ilocal(size_t i, size_t j) const;
-    
-    /// macro: cost equality for the estimation of global
-    /// @warning static choice
-    inline bool eGlobal_eq(const PSCost& lhs, const PSCost& rhs) const
-    { return (lhs == rhs); }
-    // ALT { return lhs.eq_approx(rhs, _enum.length()); }
-    
-    /// macro: cost ordering for the estimation of global
-    /// @warning static choice
-    inline bool eGlobal_less(const PSCost& lhs, const PSCost& rhs) const
-    { return (lhs < rhs); }
-    // ALT { return lhs.less_approx(rhs, _enum.length()); }
-    
+        
     /// estimate the best global tonality for this table
     /// (second step, after estimation local tonalities).
     /// @return whether the estimation of the global tonality successed.
@@ -242,6 +232,28 @@ private: // data
     // std::vector<bool> _frowcost;
     
 private:
+    
+    /// macro: cost equality for the estimation of global.
+    /// use if Cost.operator== is eq_lex.
+    /// @warning static choice
+    bool eGlobals_eq_lex(const PSCost& lhs, const PSCost& rhs) const;
+
+    /// macro: cost equality for the estimation of global.
+    /// use if Cost.operator== is eq_cumul.
+    /// @warning static choice
+    inline bool eGlobals_eq_cumul(const PSCost& lhs, const PSCost& rhs) const;
+
+    // macro: cost equality for the estimation of global
+    // @warning static choice
+    // inline bool eGlobals_neq(const PSCost& lhs, const PSCost& rhs) const
+    // { return (lhs != rhs); }
+    // { return lhs.neq_approx(rhs, _enum.length()); }
+    
+    // macro: cost ordering for the estimation of global
+    // @warning static choice
+    // inline bool eGlobals_less(const PSCost& lhs, const PSCost& rhs) const
+    // { return (lhs < rhs); }
+    // { return lhs.less_approx(rhs, _enum.length()); }
     
     /// @param bar measure number (first is 0)
     /// @param i0 index of first note of the measure (wrt the enumerator)

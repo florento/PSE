@@ -237,7 +237,7 @@ bool PSCost::geq_lex(const PSCost& rhs) const
 // approx ordering
 
 // default value of approx degree (static)
-double PSCost::approx_degree = 0.02;
+double PSCost::approx_degree = 0.05;
 
 
 // static
@@ -282,6 +282,9 @@ bool PSCost::neq_approx(const PSCost& rhs, size_t base) const
 }
 
 
+/// @todo TBR
+/// not correct when
+/// lhs._accid < rhs._accid and lhs._accid approx_eq rhs._accid
 bool PSCost::less_approx(const PSCost& rhs, size_t base) const
 {
     if (approxeq(_accid, rhs._accid, base))
@@ -374,9 +377,7 @@ bool PSCost::geq_cumul(const PSCost& rhs) const
 }
 
 
-
-
-void PSCost::update(const PSC1& c, const PSEnum& e, const Ton& ton)
+void PSCost::update(const PSC1& c, const PSEnum& e, const Ton& gton)
 {
     // count the cost
     // bool cc = false;
@@ -389,21 +390,21 @@ void PSCost::update(const PSC1& c, const PSEnum& e, const Ton& ton)
     
     // for min harm and min mel
     // count cost for a lead note if its accidental is not the one of the scale
-//    if (ton.lead(name))
+//    if (gton.lead(name))
 //    {
-//        cc = (ton.accidDia(name) != accid);
-//        // if (ton == Ton(-3, Ton::Mode::Min))
+//        cc = (gton.accidDia(name) != accid);
+//        // if (gton == Ton(-3, Ton::Mode::Min))
 //          // DEBUGU("PSC: {} lead {}: {} != {}",
-//          //        ton, name, ton.accidDia(name), accid);
+//          //        gton, name, gton.accidDia(name), accid);
 //          // DEBUGU("PSC: {}, {}: {} {}",
-//          //       ton, name, ((ton.lead(name))?"lead":"not lead"),
-//          //       ((ton.accidDia(name) != accid)?"!=":"=="));
+//          //       gton, name, ((gton.lead(name))?"lead":"not lead"),
+//          //       ((gton.accidDia(name) != accid)?"!=":"=="));
 //    }
 //    // otherwise, count a cost for every printed accidental
 //    else
 //        cc = c.printed();
 
-    if ((ton.lead(name) && ton.accidDia(name) != accid) || c.printed())
+    if (c.printed() && !(gton.lead(name) && gton.accidDia(name) == accid))
     {
         // int a = toint(accid);
         // assert(-2 <= a);
@@ -461,32 +462,29 @@ void PSCost::update(const PSC1& c, const PSEnum& e, const Ton& ton)
         }
     }
     // otherwise no previous note, _disj not updated
-}
-
-
-void PSCost::update(const PSC1& c, const PSEnum& e,
-                    const Ton& ton, const Ton& lton)
-{
-    // assert(e.inside(c.id()));
-    const Accid& accid = c.accidental();
-    
-    // distance to conjectured local ton.
-    _dist += c.state().dist(lton);
     
     // color of accident and color of global ton
-    if (((ton.fifths() >= 0) && (flat(accid))) ||
-        ((ton.fifths() < 0) && (sharp(accid))))
+    if (((gton.fifths() >= 0) && (flat(c.accidental()))) ||
+        ((gton.fifths() < 0) && (sharp(c.accidental()))))
     {
         _color += 1;
     }
 }
 
 
+void PSCost::update(const PSC1& c, const PSEnum& e,
+                    const Ton& gton, const Ton& lton)
+{
+    // distance to conjectured local ton.
+    _dist += c.state().dist(lton);
+}
+
+
 void PSCost::print(std::ostream& o) const
 {
     o << "accid=" << _accid << ',';
-    o << "dist=" << _dist << ',';
     o << "disj=" << _ndia << ',';
+    o << "dist=" << _dist << ',';
     o << "color=" << _color;
 }
 

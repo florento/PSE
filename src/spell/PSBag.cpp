@@ -25,14 +25,14 @@ _cost()   // zero
 }
 
 
-PSB::PSB(const Ton& ton, const Ton& lton, PSEnum& e):
+PSB::PSB(const Ton& gton, const Ton& lton, PSEnum& e):
 _enum(e),
 _bests(),   // empty
 _cost()    // zero
 //_visited()  // empty
 {
     if (! e.empty())
-        init(ton, lton, true);
+        init(gton, lton, true);
     // otherwise n0 == n1, no note, leave _best empty
 }
 
@@ -78,6 +78,7 @@ void PSB::init(const Ton& ton, const Ton& lton, bool fsucc)
 
     // use the default ordering > (and ==) on PSCost
     PSCQueue q = PSCQueue(PSClex);
+    
 //    if (fsucc)
 //        q = PSCQueue(PSClex); // empty
 //    else

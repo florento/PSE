@@ -37,7 +37,7 @@ public:
     /// @param nbTons use default list of tonalities (default: empty).
     /// @param dflag debug mode.
     /// @see PSTable
-    Speller(size_t nbTons=0, bool dflag=false);
+    Speller(size_t nbTons=0, bool dflag=true);
 
     // Speller for the given input notes.
     // @param ln Python list of Music 21 Note objects (references).

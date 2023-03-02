@@ -48,12 +48,11 @@ we assume that every accidental may be printed or not, according to the usual co
 It means that we have an additional boolean flag (called *printed*) for each note.
 
 ## Tonalities
+Key signature and mode...
 
-K.S. and modes...
+Lead degrees in minor modes...
 
-lead tons in minor modes...
-
-Tonality distance...
+Tonality distance (Weber etc)...
 
 ## Measures of cost
 
@@ -74,11 +73,13 @@ and the note $e$.
 
 TBC: extend the notion to class 1 (and in the def of GC, HC) ?
 
-- (GC) graphical cost:  number of printed accidentals.  
-  For every note (in $S_i$), except lead if $t$ in minor modes:
-  (GC) is the number of printed accidentals, 0 or 1 or 2.
+- (GC) graphical cost:  with several sub-measures, 
+    some depend on the (estimated) tonality, local or global) in which the notes of the part $\bar{S}$ are written.
+	- (A) number of printed accidentals.  
+	  For every note (in $S_i$), except lead if $t$ in minor modes:
+  	  (A) is the number of printed accidentals, 0 or 1 or 2.
+	- (C) color of accident: ...
 
-Depends on the tonality $t$  in which the notes of the part $\bar{S}$ are written.
 
 - (HC) horizontal cost: number of non-diatonic stepwise (conjunct) melodic motions.  
   For every single note $S_i$ such that $S_{i-1}$ is also a single note, 
@@ -100,18 +101,6 @@ TBC: extend to the case where $S_{i-1}$ and $S_i$ of class 1 or 2 (interval).
 
 Categories: chords of 5, 7, 9 with notes of the scale + inverse + missing root
 and some "conventional" chords with accidents (aug. 6te...).
-
-REF: cf classical textbook on music theory: 
-
-- [Claude Abromont](https://www.fayard.fr/musique/guide-de-la-theorie-de-la-musique-9782213609775)
-- [Alison Latham](https://www.oxfordmusiconline.com/page/1826)
-- Eric Taylor "Music Theory in Practice"
-- ?  
-
-other open refs:  
-
-- `muted.io`
-- https://open.umn.edu/opentextbooks/textbooks/1101 ...
 
 TBC: details about octaves and class $K$...
 
@@ -169,9 +158,7 @@ Spell($N$, $C$):
    Compute a bag $SP[t][b]$ of shortest paths for each tonality $t \in T$ and each bar $b \in 1..m$.
    There might be several paths of identical cost for each $t$ and $b$.  
    For the computation of the table $SP$, we consider a cost measure $C$, wich can be either :
-   
-       - the lexicographic composition of (GC), (HC) and (VC) (called $C_\ell$),
-   
+	- the lexicographic composition of (GC), (HC) and (VC) (called $C_\ell$),
    - the integral sum of  (GC), (HC) and (VC) (called $C_+$).
 
 2. Estimation of a set of $N$ candidate global tonalities $T^g = \{ t^g_1,..., t^g_N \} \subseteq T$.  
@@ -189,9 +176,8 @@ Next, for all $t^g \in T^g$, do the following.
    - for all $b \in 1..m$, we select $t^\ell_b \in T$ such that has the best cost in the column $(SP[t][b])_{t \in T}$.  
    
    In case of tie break, we use furthermore the lexicographic composition of the 2 following criteria:
-   
-        - the tonality distance to the previous estimated local tonality $t^\ell_{b-1}$, 
-        - the tonality distance to the global tonality $t^g$.
+   - the tonality distance to the previous estimated local tonality $t^\ell_{b-1}$, 
+   - the tonality distance to the global tonality $t^g$.
 
 4. Spelling.  
    For all bar $b \in 1..m$, we recompute one best path, following a cost measure defined as a lexicographic composition of:

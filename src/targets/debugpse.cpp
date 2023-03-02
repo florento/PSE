@@ -19,7 +19,10 @@ void WeberTable()
 }
 
 void LG128(pse::Speller& sp);
+void LG228(pse::Speller& sp);
 void LG275(pse::Speller& sp);
+void LG349(pse::Speller& sp);
+void LG405(pse::Speller& sp);
 void LG470(pse::Speller& sp);
 void Waldstein(pse::Speller& sp);
 
@@ -35,9 +38,9 @@ int main(int argc, const char* argv[])
     // godfried.dump();
     // return 0;
     
-    pse::Speller sp = pse::Speller();
+    pse::Speller sp = pse::Speller(26, true);
        
-    LG275(sp);
+    LG349(sp);
     // Waldstein(sp);
     
     std::cout << sp.size() << " notes" << std::endl;
@@ -163,7 +166,78 @@ void LG128(pse::Speller& sp)
     sp.add(72, 15);
 }
 
-// 275-Bartok-danceRoumaine1
+
+// content of LG 228
+// 228 Schuman Myrthen 7 op25
+// 62 notes
+void LG228(pse::Speller& sp)
+{
+    sp.add(68, 0, false);
+    sp.add(68, 1, false);
+    sp.add(66, 1, false);
+    sp.add(66, 1, false);
+    sp.add(65, 1, false);
+    sp.add(64, 1, false);
+    sp.add(65, 2, false);
+    sp.add(65, 2, false);
+    sp.add(56, 3, false);
+    sp.add(56, 3, false);
+    sp.add(61, 3, false);
+    sp.add(63, 3, false);
+    sp.add(65, 3, false);
+    sp.add(61, 4, false);
+    sp.add(68, 5, false);
+    sp.add(68, 5, false);
+    sp.add(66, 5, false);
+    sp.add(66, 5, false);
+    sp.add(65, 5, false);
+    sp.add(64, 5, false);
+    sp.add(65, 6, false);
+    sp.add(65, 6, false);
+    sp.add(65, 6, false);
+    sp.add(63, 7, false);
+    sp.add(63, 7, false);
+    sp.add(63, 7, false);
+    sp.add(63, 7, false);
+    sp.add(65, 7, false);
+    sp.add(67, 7, false);
+    sp.add(68, 8, false);
+    sp.add(68, 8, false);
+    sp.add(68, 9, false);
+    sp.add(66, 9, false);
+    sp.add(69, 9, false);
+    sp.add(68, 9, false);
+    sp.add(66, 9, false);
+    sp.add(66, 10, false);
+    sp.add(64, 10, false);
+    sp.add(68, 10, false);
+    sp.add(68, 11, false);
+    sp.add(66, 11, false);
+    sp.add(66, 11, false);
+    sp.add(69, 11, false);
+    sp.add(68, 11, false);
+    sp.add(66, 11, false);
+    sp.add(68, 12, false);
+    sp.add(68, 12, false);
+    sp.add(68, 13, false);
+    sp.add(68, 13, false);
+    sp.add(68, 13, false);
+    sp.add(70, 13, false);
+    sp.add(72, 13, false);
+    sp.add(73, 14, false);
+    sp.add(73, 14, false);
+    sp.add(73, 14, false);
+    sp.add(73, 15, false);
+    sp.add(70, 15, false);
+    sp.add(66, 15, false);
+    sp.add(63, 15, false);
+    sp.add(65, 15, false);
+    sp.add(66, 15, false);
+    sp.add(65, 16, false);
+}
+
+// content of LG 275
+// 275 Bartok dance Roumaine 1
 // 1 chord (final)
 void LG275(pse::Speller& sp)
 {
@@ -287,6 +361,219 @@ void LG275(pse::Speller& sp)
     sp.add(69, 31, false);
     sp.add(55, 32, true);
     sp.add(57, 32, false);
+}
+
+
+void LG349(pse::Speller& sp)
+{
+    sp.add(61, 0, false);
+    sp.add(66, 1, false);
+    sp.add(70, 1, false);
+    sp.add(73, 1, false);
+    sp.add(70, 1, false);
+    sp.add(66, 1, false);
+    sp.add(78, 2, false);
+    sp.add(75, 2, false);
+    sp.add(71, 2, false);
+    sp.add(73, 2, false);
+    sp.add(70, 2, false);
+    sp.add(66, 2, false);
+    sp.add(65, 3, false);
+    sp.add(66, 3, false);
+    sp.add(71, 3, false);
+    sp.add(70, 3, false);
+    sp.add(68, 4, false);
+    sp.add(71, 4, false);
+    sp.add(70, 4, false);
+    sp.add(68, 4, false);
+    sp.add(61, 4, false);
+    sp.add(66, 5, false);
+    sp.add(70, 5, false);
+    sp.add(73, 5, false);
+    sp.add(70, 5, false);
+    sp.add(66, 5, false);
+    sp.add(78, 6, false);
+    sp.add(75, 6, false);
+    sp.add(71, 6, false);
+    sp.add(73, 6, false);
+    sp.add(70, 6, false);
+    sp.add(66, 6, false);
+    sp.add(75, 7, false);
+    sp.add(63, 7, false);
+    sp.add(65, 7, false);
+    sp.add(66, 7, false);
+    sp.add(68, 7, false);
+    sp.add(70, 8, false);
+    sp.add(70, 8, false);
+    sp.add(68, 8, false);
+    sp.add(66, 8, false);
+    sp.add(68, 8, false);
+    sp.add(70, 8, false);
+    sp.add(66, 9, false);
+    sp.add(73, 9, false);
+    sp.add(68, 10, false);
+    sp.add(61, 10, false);
+    sp.add(71, 10, false);
+    sp.add(70, 10, false);
+    sp.add(68, 10, false);
+    sp.add(73, 10, false);
+    sp.add(66, 11, false);
+    sp.add(61, 11, false);
+    sp.add(70, 11, false);
+    sp.add(68, 11, false);
+    sp.add(66, 11, false);
+    sp.add(73, 11, false);
+    sp.add(68, 12, false);
+    sp.add(61, 12, false);
+    sp.add(71, 12, false);
+    sp.add(70, 12, false);
+    sp.add(68, 12, false);
+    sp.add(73, 12, false);
+    sp.add(70, 13, false);
+    sp.add(66, 13, false);
+    sp.add(73, 13, false);
+    sp.add(70, 13, false);
+    sp.add(73, 13, false);
+    sp.add(78, 13, false);
+    sp.add(73, 13, false);
+    sp.add(82, 13, false);
+    sp.add(80, 13, false);
+    sp.add(78, 14, false);
+    sp.add(80, 14, false);
+    sp.add(78, 14, false);
+    sp.add(77, 14, false);
+    sp.add(78, 14, false);
+    sp.add(80, 14, false);
+    sp.add(77, 14, false);
+    sp.add(82, 14, false);
+    sp.add(78, 14, false);
+    sp.add(75, 15, false);
+    sp.add(77, 15, false);
+    sp.add(75, 15, false);
+    sp.add(74, 15, false);
+    sp.add(75, 15, false);
+    sp.add(77, 15, false);
+    sp.add(74, 15, false);
+    sp.add(70, 15, false);
+    sp.add(75, 16, false);
+    sp.add(78, 16, false);
+    sp.add(82, 16, false);
+    sp.add(80, 16, false);
+    sp.add(78, 16, false);
+    sp.add(77, 16, false);
+    sp.add(75, 16, false);
+    sp.add(73, 17, false);
+    sp.add(72, 17, false);
+}
+
+
+// content of LG 405
+// 405 Bach prelude 13
+// 102 notes, 12 bars
+void LG405(pse::Speller& sp)
+{
+    sp.add(66, 0, false);
+    sp.add(70, 0, false);
+    sp.add(73, 0, false);
+    sp.add(70, 0, false);
+    sp.add(66, 0, false);
+    sp.add(73, 0, false);
+    sp.add(73, 0, false);
+    sp.add(73, 1, false);
+    sp.add(70, 1, false);
+    sp.add(71, 1, false);
+    sp.add(73, 1, false);
+    sp.add(70, 1, false);
+    sp.add(75, 1, false);
+    sp.add(68, 1, false);
+    sp.add(70, 1, false);
+    sp.add(66, 1, false);
+    sp.add(66, 2, false);
+    sp.add(71, 2, false);
+    sp.add(65, 2, false);
+    sp.add(71, 2, false);
+    sp.add(63, 2, false);
+    sp.add(71, 2, false);
+    sp.add(61, 2, false);
+    sp.add(65, 2, false);
+    sp.add(68, 2, false);
+    sp.add(71, 2, false);
+    sp.add(70, 3, false);
+    sp.add(66, 3, false);
+    sp.add(72, 3, false);
+    sp.add(66, 3, false);
+    sp.add(73, 3, false);
+    sp.add(66, 3, false);
+    sp.add(75, 3, false);
+    sp.add(68, 3, false);
+    sp.add(77, 3, false);
+    sp.add(77, 4, false);
+    sp.add(80, 4, false);
+    sp.add(73, 4, false);
+    sp.add(75, 4, false);
+    sp.add(72, 4, false);
+    sp.add(73, 4, false);
+    sp.add(77, 4, false);
+    sp.add(73, 4, false);
+    sp.add(73, 4, false);
+    sp.add(77, 4, false);
+    sp.add(75, 4, false);
+    sp.add(73, 4, false);
+    sp.add(73, 5, false);
+    sp.add(82, 5, false);
+    sp.add(73, 5, false);
+    sp.add(75, 5, false);
+    sp.add(72, 5, false);
+    sp.add(73, 5, false);
+    sp.add(77, 5, false);
+    sp.add(80, 5, false);
+    sp.add(77, 5, false);
+    sp.add(73, 5, false);
+    sp.add(80, 5, false);
+    sp.add(80, 6, false);
+    sp.add(80, 6, false);
+    sp.add(77, 6, false);
+    sp.add(78, 6, false);
+    sp.add(80, 6, false);
+    sp.add(77, 6, false);
+    sp.add(77, 7, false);
+    sp.add(82, 7, false);
+    sp.add(75, 7, false);
+    sp.add(77, 7, false);
+    sp.add(74, 7, false);
+    sp.add(78, 7, false);
+    sp.add(70, 7, false);
+    sp.add(71, 7, false);
+    sp.add(73, 7, false);
+    sp.add(70, 7, false);
+    sp.add(70, 8, false);
+    sp.add(75, 8, false);
+    sp.add(68, 8, false);
+    sp.add(70, 8, false);
+    sp.add(66, 8, false);
+    sp.add(71, 8, false);
+    sp.add(64, 8, false);
+    sp.add(66, 8, false);
+    sp.add(63, 8, false);
+    sp.add(68, 9, false);
+    sp.add(62, 9, false);
+    sp.add(63, 9, false);
+    sp.add(61, 9, false);
+    sp.add(68, 9, false);
+    sp.add(65, 9, false);
+    sp.add(71, 9, false);
+    sp.add(68, 9, false);
+    sp.add(77, 9, false);
+    sp.add(77, 10, false);
+    sp.add(65, 10, false);
+    sp.add(66, 10, false);
+    sp.add(70, 10, false);
+    sp.add(75, 10, false);
+    sp.add(65, 10, false);
+    sp.add(68, 10, false);
+    sp.add(70, 10, false);
+    sp.add(74, 10, false);
+    sp.add(75, 11, false);
 }
 
 // content of LG 470 (to debug a loop)

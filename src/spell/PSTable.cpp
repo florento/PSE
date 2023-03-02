@@ -213,6 +213,22 @@ PSCost PST::rowCost(size_t step, size_t i)
 }
 
 
+bool PST::eGlobals_eq_lex(const PSCost& lhs, const PSCost& rhs) const
+{
+    //return lhs.eq_approx(rhs, _enum.length());
+    return PSCost::approxeq(lhs.getAccid(),  rhs.getAccid(), _enum.length());
+}
+
+
+bool PST::eGlobals_eq_cumul(const PSCost& lhs, const PSCost& rhs) const
+{
+    //return lhs.eq_cumul(rhs, _enum.length());
+    return PSCost::approxeq(lhs.getAccid() + lhs.getDia(),
+                            rhs.getAccid() + rhs.getDia(),
+                            2 * _enum.length());
+}
+
+
 bool PST::estimateGlobals()
 {
     if (estimatedGlobals()) // ((! _globals.empty()) || (_global != TonIndex::UNDEF))
@@ -246,8 +262,9 @@ bool PST::estimateGlobals()
     {
         RowCost.push_back(rowCost(0, i));
     }
-    
-    if (_debug) dump_table(RowCost);
+
+    // DEBUG output
+    // if (_debug) dump_table(RowCost);
     
     // candidate list for best global
     // _globals is empty
@@ -255,27 +272,38 @@ bool PST::estimateGlobals()
     _globals.push_back(0);
     
     // estimate the best tonality wrt costs (nb accidentals)
-    for (size_t i = 0; i < index.size(); ++i)
+    for (size_t i = 1; i < index.size(); ++i)
     {
         assert(i < RowCost.size());
         assert(! _globals.empty());
         // all elements of cands have same cost
         const PSCost bestCost = RowCost[_globals[0]];
+        const PSCost& rc = RowCost[i];
         // new best ton
-        if (RowCost[i] < bestCost)
+        if  (rc < bestCost) // (eGlobals_less(rc, bestCost))
         {
-            _globals.clear();
-            _globals.push_back(i);
+            // rc far under bestCost
+            if (! eGlobals_eq_lex(rc, bestCost))
+                _globals.clear();
+            // push front
+            _globals.insert(_globals.begin(), i);
+            //_globals.push_back(i);
         }
         // tie
-        else if (RowCost[i] == bestCost)
+        else if (eGlobals_eq_lex(rc, bestCost))
         {
             _globals.push_back(i);
         }
         // otherwise do nothing
+        else
+        {
+            //assert(eGlobals_less(bestCost, rc));
+            assert(rc > bestCost);
+        }
     }
     assert(! _globals.empty());
     assert(estimatedGlobals()); // the checker is well defined
+    INFO("PST: candidates global: {}", _globals.size());
     return true;
     
     // deprecated: tie break solving
@@ -467,6 +495,15 @@ bool PST::estimateGlobal()
     PSCost cbest; // zero
     size_t ibest = TonIndex::UNDEF;
     
+  
+    // DEBUG output
+    // std::vector<PSCost> RowCost;
+    // for (size_t i = 0; i < index.size(); ++i)
+    //    RowCost.push_back(rowCost(1, i));
+    // if (_debug) dump_table(RowCost);
+    
+    // select the best global candidate according to
+    // distance component of the (cumulated) cost.
     for (size_t i = 0; i < _globals.size(); ++i)
     {
         size_t ig = _globals[i];
@@ -474,14 +511,14 @@ bool PST::estimateGlobal()
 
         // new best global
         // ALT: else if (rc.less_approx(cbest, _enum.length()))
-        if ((i == 0) || eGlobal_less(rc, cbest))    // (rc < cbest)
+        if ((i == 0) || (rc.getDist() < cbest.getDist()))
         {
             ibest = ig;
             cbest = rc;
         }
         // tie
         // ALT: else if (rc.eq_approx(cbest, _enum.length()))
-        else if (eGlobal_eq(rc, cbest)) // (rc == cbest)
+        else if (rc.getDist() == cbest.getDist())
         {
             const Ton& ton = index.ton(ig);
             const Ton& tonbest = index.ton(ibest);
@@ -500,7 +537,7 @@ bool PST::estimateGlobal()
         // otherwise ibest unchanged
         else
         {
-            assert(eGlobal_less(cbest, rc));
+            assert(rc.getDist() > cbest.getDist());
         }
     }
     
@@ -610,7 +647,7 @@ void PST::dump_rowcost(const std::vector<PSCost>& rc) const
     DEBUGU("PST: Row Costs:");
     for (size_t i = 0; i < index.size(); ++i)
     {
-        DEBUGU("PST row: {} cost {}", index.ton(i), rc[i]);
+        DEBUGU("PST row {} cost {}", index.ton(i), rc[i]);
     }
 }
 
@@ -648,7 +685,7 @@ void PST::dump_table(const std::vector<PSCost>& rc) const
         }
         std::string hrow; // header
         
-        DEBUGU("PST row: {} {}: {}", index.ton(i), rc[i], srow);
+        DEBUGU("PST row {} {}: {}", index.ton(i), rc[i], srow);
     }
 }
 
