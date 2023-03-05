@@ -41,6 +41,9 @@
 - [x]  ajout chords : dans enumerator
    dans binding M21
 
+- [ ] write score: afficher (lyrics) spelling sous les erreurs
+     (des anomalies d'affichage avec musesscore)
+
  mesures trop longues: 
 
 - [ ]  enumerator cutoff (constructor?) 

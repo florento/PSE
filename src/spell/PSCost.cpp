@@ -272,7 +272,7 @@ bool PSCost::eq_approx(const PSCost& rhs, size_t base) const
     return (approxeq(_accid, rhs._accid, base) &&
             (_ndia  == rhs._ndia)  &&
             (_dist  == rhs._dist)  &&
-            (_color  == rhs._color));
+            (_color == rhs._color));
 }
 
 
@@ -333,7 +333,7 @@ bool PSCost::eq_cumul(const PSCost& rhs) const
 {
     return ((_accid +_ndia == rhs._accid + rhs._ndia) &&
             (_dist  == rhs._dist)  &&
-            (_color  == rhs._color));
+            (_color == rhs._color));
 }
 
 
@@ -387,23 +387,6 @@ void PSCost::update(const PSC1& c, const PSEnum& e, const Ton& gton)
     
     // update cost when accident for the name was updated
     // discount for lead degree
-    
-    // for min harm and min mel
-    // count cost for a lead note if its accidental is not the one of the scale
-//    if (gton.lead(name))
-//    {
-//        cc = (gton.accidDia(name) != accid);
-//        // if (gton == Ton(-3, Ton::Mode::Min))
-//          // DEBUGU("PSC: {} lead {}: {} != {}",
-//          //        gton, name, gton.accidDia(name), accid);
-//          // DEBUGU("PSC: {}, {}: {} {}",
-//          //       gton, name, ((gton.lead(name))?"lead":"not lead"),
-//          //       ((gton.accidDia(name) != accid)?"!=":"=="));
-//    }
-//    // otherwise, count a cost for every printed accidental
-//    else
-//        cc = c.printed();
-
     if (c.printed() && !(gton.lead(name) && gton.accidDia(name) == accid))
     {
         // int a = toint(accid);
@@ -460,12 +443,12 @@ void PSCost::update(const PSC1& c, const PSEnum& e, const Ton& gton)
         {
             _ndia += 1;
         }
-    }
-    // otherwise no previous note, _disj not updated
+    } // otherwise no previous note, _disj not updated
     
     // color of accident and color of global ton
-    if (((gton.fifths() >= 0) && (flat(c.accidental()))) ||
-        ((gton.fifths() < 0) && (sharp(c.accidental()))))
+    int ks = gton.fifths();
+    const Accid& a = c.accidental();
+    if (((ks >= 0) && (flat(a))) || ((ks <  0) && (sharp(a))))
     {
         _color += 1;
     }

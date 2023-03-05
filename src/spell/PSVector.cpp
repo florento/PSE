@@ -262,15 +262,29 @@ bool PSV::estimateLocal(size_t ig, size_t iprev)
                     ibest = j;
                     dgbest = distg;
                 }
-                // criteria 3: none.
+                // criteria 3:
+                // smallest of key signature
                 // ALT: best distance between the previous local tonality and
                 // a config in bag for the current tonality j
                 else if (distg == dgbest)
                 {
-                    WARN("PSV {}-{}, estimation locals, tie break fail {} vs {}, cost=[{}],   prevton={}, (dist prev={}, dist global({})={})",
-                         psenum().first(), psenum().stop(),
-                         ton(j), ton(ibest), cost, pton, dist, gton, distg);
-                    _tiebfail++;
+                    const Ton& bton = ton(ibest);
+                    if (std::abs(jton.fifths()) < std::abs(bton.fifths()))
+                    {
+                        ibest = j;
+                    }
+                    else if (std::abs(jton.fifths()) == std::abs(bton.fifths()))
+                    {
+                        WARN("PSV {}-{}, estimation locals, tie break fail {} vs {}, cost=[{}],   prevton={}, (dist prev={}, dist global({})={})",
+                             psenum().first(), psenum().stop(),
+                             ton(j), ton(ibest), cost, pton, dist, gton, distg);
+                        _tiebfail++;
+                    }
+                    // otherwise keep the current best
+                    else
+                    {
+                        assert(std::abs(jton.fifths()) > std::abs(bton.fifths()));
+                    }
                 }
                 // otherwise keep the current best
                 else

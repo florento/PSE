@@ -847,8 +847,8 @@ def empty_difflist(lld):
 #stat.record_part(0, ks2, -1, 111, 2)
 #stat.record_part(1, ks2, 2, 192, 5)
 
-s = m21.converter.parse('109-Kuhlau-sonatineop60n1.musicxml')
-lp = s.getElementsByClass(m21.stream.Part)
+#s = m21.converter.parse('109-Kuhlau-sonatineop60n1.musicxml')
+#lp = s.getElementsByClass(m21.stream.Part)
 #eval_part(lp[0], nbtons=0, debug=True, mark=True, stat=None)
 
 
