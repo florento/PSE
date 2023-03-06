@@ -19,6 +19,15 @@ Redondance 2-6 et 5-7 ?
 en définissant la distance comme nb noms du state avec accid diff. KS.
 
 
+## chromatic harmonic scale
+double tous les noms sauf tonique et dominante, 
+avec modification comme suit (par rapport à gamme majeure)
+
+```
+1 b2 2 b3 3 4 #4 5 #6 6 b7 7 8
+```
+
+
 ## algo
 
 -  (1) computation of all costs $PS[i][j]$, including
