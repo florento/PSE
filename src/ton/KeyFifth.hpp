@@ -21,7 +21,7 @@
 namespace pse {
 
 
-/// @brief Key signature eepresented as an integer in -7..7
+/// @brief Key signature represented as an integer in -7..7
 /// = the number of sharps (if positive) or flats (if negative).
 /// = distance in the line of fifths to the signature with no accidentals.
 ///

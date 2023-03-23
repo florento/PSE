@@ -259,7 +259,8 @@ size_t PSC2::setNames(const NoteName& name, bool print)
 }
 
 
-/// @todo mv to PSCost: update(const PSC1& c, const PSEnum& e, const Ton& gton)
+/// @todo mv to PSCost:
+/// update(const PSC1& c, const PSEnum& e, const Ton& gton)
 bool PSC2::updateCost(const NoteName& name, const Accid& accid, bool print,
                       size_t nbocc, const Ton& ton)
 {

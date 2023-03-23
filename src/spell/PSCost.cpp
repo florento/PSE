@@ -175,7 +175,6 @@ bool PSCost::operator>=(const PSCost& rhs) const
 }
 
 
-
 // lexicographic ordering
 
 bool PSCost::eq_lex(const PSCost& rhs) const
@@ -327,7 +326,7 @@ bool PSCost::geq_approx(const PSCost& rhs, size_t base) const
 
 
 
-
+// ordering based on cumul of criteria
 
 bool PSCost::eq_cumul(const PSCost& rhs) const
 {

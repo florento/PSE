@@ -157,6 +157,8 @@ public:
     bool geq_approx(const PSCost& rhs, size_t base) const;
     
     
+    
+    
     /// access cumulated number of accidents.
     inline size_t getAccid() const { return _accid; }
     
@@ -169,6 +171,7 @@ public:
     /// cumulated number of accidentals with color different from global ton.
     inline size_t getColor() const { return _color; }
 
+    
     /// update this cost for doing a transition into the given config.
     /// the note read for the transition is the id of the config minus one.
     void update(const PSC1& c, const PSEnum& e, const Ton& ton);
@@ -198,6 +201,7 @@ private:
     /// in the minimal path to this config.
     size_t _accid; // unsigned int
     
+    /// horizontal cost
     /// cumulated number of non-diatonic moves
     /// in the minimal path to this config.
     /// conjoint move = adjacent pitch letters (stepwise figures as a scale)
@@ -222,7 +226,6 @@ private:
     // PSCost(size_t a, size_t n, size_t d, size_t c);
 };
 
-
 // Note Spelling Conventions in Behind Bars (page 85)
 // other rules
 //
@@ -235,11 +238,9 @@ private:
 // - Spell stepwise figures as a scale, i.e. as adjacent pitch letters.
 //   e.g. D#, E, Fb and not Eb, Enat, E#
 
-
 PSCost operator+(const PSCost& c1, const PSCost& c2);
 
 std::ostream& operator<<(std::ostream& o, const PSCost& c);
-
 
 } // namespace pse
 

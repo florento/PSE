@@ -237,6 +237,22 @@ def debug(i):
     #sp.spell()
 
 
+def find_chords():
+    dataset = LG_map()
+    li = sorted(list(dataset)) # list of index in dataset   
+    for i in li:
+        file = dataset[i]
+        filep = file.parts
+        t = ''
+        if (filep[-2] == 'ref'):
+            t = filep[-3]
+        else:
+            continue
+        s = m21.converter.parse(file.as_posix())
+        lc = first_part(s).flatten().getElementsByClass(m21.chord.Chord)
+        if (len(lc) > 0):
+            print(t)
+
 # TBR
 #_dataset = init(dataset_root)
 #li = sorted(list(dataset)) # list of index in dataset    
