@@ -12,7 +12,7 @@ le choix d'alteration, entre enharmoniques, dépend du contexte musicale dans le
 
 - contexte harmonique
 
-→ altération donne souvent une indication sur l'intention du compositeur.
+→ l'altération donne souvent une indication sur l'intention du compositeur.
 
 ## Representations of notes
 
