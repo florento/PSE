@@ -139,41 +139,41 @@ PSState::PSState(const Ton& ton, bool joker)
     assert(-7 <= k);
     assert(k <= 7);
     size_t i = k + 7;
-    const Ton::Mode m = ton.mode();
+    const ModeName m = ton.mode();
     if (joker)
     {
         switch (m)
         {
-            case Ton::Mode::Maj:
+            case ModeName::Maj:
                 _state.fill(Accid::Undef);
                 break;
                 
-            case Ton::Mode::Min:
+            case ModeName::Min:
                 _state = MIN_HARM[i];
                 break;
                 
-            case Ton::Mode::MinNat:
+            case ModeName::MinNat:
                 _state = MIN_NAT[i];
                 break;
                 
-            case Ton::Mode::MinMel:
+            case ModeName::MinMel:
                 _state = MIN_MEL[i];
                 break;
                 
-            case Ton::Mode::Ionian:
-            case Ton::Mode::Dorian:
-            case Ton::Mode::Phrygian:
-            case Ton::Mode::Lydian:
-            case Ton::Mode::Mixolydian:
-            case Ton::Mode::Eolian:
-            case Ton::Mode::Locrian:
+            case ModeName::Ionian:
+            case ModeName::Dorian:
+            case ModeName::Phrygian:
+            case ModeName::Lydian:
+            case ModeName::Mixolydian:
+            case ModeName::Eolian:
+            case ModeName::Locrian:
             {
                 WARN("PSState Accid::undef for mode"); // m
                 _state.fill(Accid::Undef);
                 break;
             }
                 
-            case Ton::Mode::Undef:
+            case ModeName::Undef:
             default:
             {
                 ERROR("unexpected Ton mode");
@@ -185,25 +185,25 @@ PSState::PSState(const Ton& ton, bool joker)
     {
         switch (m)
         {
-            case Ton::Mode::Maj:
-            case Ton::Mode::Min:
-            case Ton::Mode::MinNat:
-            case Ton::Mode::MinMel:
+            case ModeName::Maj:
+            case ModeName::Min:
+            case ModeName::MinNat:
+            case ModeName::MinMel:
                 _state = KEYS[i];
                 break;
                 
-            case Ton::Mode::Ionian:
-            case Ton::Mode::Dorian:
-            case Ton::Mode::Phrygian:
-            case Ton::Mode::Lydian:
-            case Ton::Mode::Mixolydian:
-            case Ton::Mode::Eolian:
-            case Ton::Mode::Locrian:
+            case ModeName::Ionian:
+            case ModeName::Dorian:
+            case ModeName::Phrygian:
+            case ModeName::Lydian:
+            case ModeName::Mixolydian:
+            case ModeName::Eolian:
+            case ModeName::Locrian:
                 WARN("PSState Accid::undef for mode");
                 _state.fill(Accid::Undef);
                 break;
                 
-            case Ton::Mode::Undef:
+            case ModeName::Undef:
             default:
                 ERROR("unexpected Ton mode");
                 break;

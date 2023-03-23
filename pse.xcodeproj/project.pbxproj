@@ -78,6 +78,9 @@
 		43DD95492945E223006DC553 /* PSCost.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43DD95472945E223006DC553 /* PSCost.cpp */; };
 		43DD954A2945E223006DC553 /* PSCost.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43DD95472945E223006DC553 /* PSCost.cpp */; };
 		43DD954B2945E223006DC553 /* PSCost.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 43DD95482945E223006DC553 /* PSCost.hpp */; };
+		43F9BE6429CC423E00B0A7F8 /* ModeName.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43F9BE6229CC423E00B0A7F8 /* ModeName.cpp */; };
+		43F9BE6529CC423E00B0A7F8 /* ModeName.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43F9BE6229CC423E00B0A7F8 /* ModeName.cpp */; };
+		43F9BE6629CC423E00B0A7F8 /* ModeName.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 43F9BE6329CC423E00B0A7F8 /* ModeName.hpp */; };
 		43FBEAC42930CEDD008FC486 /* debugpse.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43FBEAB52930CB16008FC486 /* debugpse.cpp */; };
 		43FBEAC52930CEDD008FC486 /* Speller.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 432EF6AB292D405400C620CF /* Speller.cpp */; };
 		43FBEAC62930CEDD008FC486 /* trace.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43A2543E29280D8900D559D2 /* trace.cpp */; };
@@ -191,6 +194,8 @@
 		43D8A9EF29AFA16B00B260DA /* PSOrder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PSOrder.cpp; path = src/spell/PSOrder.cpp; sourceTree = "<group>"; };
 		43DD95472945E223006DC553 /* PSCost.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = PSCost.cpp; path = src/spell/PSCost.cpp; sourceTree = "<group>"; };
 		43DD95482945E223006DC553 /* PSCost.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = PSCost.hpp; path = src/spell/PSCost.hpp; sourceTree = "<group>"; };
+		43F9BE6229CC423E00B0A7F8 /* ModeName.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ModeName.cpp; sourceTree = "<group>"; };
+		43F9BE6329CC423E00B0A7F8 /* ModeName.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ModeName.hpp; sourceTree = "<group>"; };
 		43FBEAB52930CB16008FC486 /* debugpse.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = debugpse.cpp; path = src/targets/debugpse.cpp; sourceTree = "<group>"; };
 		43FBEABD2930CD21008FC486 /* debugpse */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = debugpse; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -220,6 +225,8 @@
 				43ABA502292423E8002AC1D4 /* Fifths.cpp */,
 				430CDFF02924E6D700A84650 /* KeyFifth.hpp */,
 				430CDFEF2924E6D700A84650 /* KeyFifth.cpp */,
+				43F9BE6329CC423E00B0A7F8 /* ModeName.hpp */,
+				43F9BE6229CC423E00B0A7F8 /* ModeName.cpp */,
 				43ABA506292423E8002AC1D4 /* Ton.hpp */,
 				43ABA4FF292423E8002AC1D4 /* Ton.cpp */,
 				435406A329A8D4BB0075B3B7 /* TonIndex.hpp */,
@@ -417,6 +424,7 @@
 				43A2544129280D8900D559D2 /* trace.hpp in Headers */,
 				431586392983ED5B00918B1B /* NoteName.hpp in Headers */,
 				43ABA50B292423E8002AC1D4 /* Accidental.hpp in Headers */,
+				43F9BE6629CC423E00B0A7F8 /* ModeName.hpp in Headers */,
 				4342FD142926789C004E914F /* MidiNum.hpp in Headers */,
 				43ABA50D292423E8002AC1D4 /* Enharmonic.hpp in Headers */,
 				43ABA50A292423E8002AC1D4 /* Fifths.hpp in Headers */,
@@ -527,6 +535,7 @@
 				43A2544029280D8900D559D2 /* trace.cpp in Sources */,
 				43ABA4FE292423C5002AC1D4 /* NoteName.cpp in Sources */,
 				43ABA50F292423E8002AC1D4 /* Accidental.cpp in Sources */,
+				43F9BE6429CC423E00B0A7F8 /* ModeName.cpp in Sources */,
 				4342FD1229267895004E914F /* MidiNum.cpp in Sources */,
 				43ABA511292423E8002AC1D4 /* Enharmonic.cpp in Sources */,
 				43ABA50C292423E8002AC1D4 /* Fifths.cpp in Sources */,
@@ -563,6 +572,7 @@
 				434B1DFD298ED394001CE41C /* PSConfig2.cpp in Sources */,
 				43FBEAC62930CEDD008FC486 /* trace.cpp in Sources */,
 				43FBEAC72930CEDD008FC486 /* NoteName.cpp in Sources */,
+				43F9BE6529CC423E00B0A7F8 /* ModeName.cpp in Sources */,
 				43FBEAC82930CEDD008FC486 /* Accidental.cpp in Sources */,
 				43FBEAC92930CEDD008FC486 /* MidiNum.cpp in Sources */,
 				43FBEACA2930CEDD008FC486 /* Enharmonic.cpp in Sources */,

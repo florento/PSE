@@ -17,6 +17,7 @@
 #include "trace.hpp"
 #include "NoteName.hpp"
 #include "Accidental.hpp"
+#include "ModeName.hpp"
 #include "Ton.hpp"
 #include "TonIndex.hpp"
 #include "PSRawEnum.hpp"
@@ -82,7 +83,7 @@ public:
     /// or number of sharps if positive int. must be in -7..7.
     /// @param mode mode of the tonality added.
     /// @see Ton
-    void addTon(int ks, Ton::Mode mode = Ton::Mode::Maj);
+    void addTon(int ks, ModeName mode = ModeName::Maj);
 
     /// add a tonality for pitch spelling.
     void addTon(const Ton& ton);

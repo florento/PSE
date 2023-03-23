@@ -20,6 +20,7 @@
 #include "trace.hpp"
 //#include "Pitch.hpp"
 #include "KeyFifth.hpp"
+#include "ModeName.hpp"
 #include "Ton.hpp"
 
 namespace pse {
@@ -82,7 +83,7 @@ public:
     /// or number of sharps if positive int. must be in -7..7.
     /// @param mode mode of this tonality.
     /// @see Ton
-    void add(int ks, const Ton::Mode& mode = Ton::Mode::Maj);
+    void add(int ks, const ModeName& mode = ModeName::Maj);
     
 private: // data
     
@@ -90,12 +91,12 @@ private: // data
     std::vector<const Ton> _tons;
 
     /// default array of 13 tonalities, ks between -6 and 6.
-    /// @param mode must not be Ton::Mode::Undef.
-    void init13(const Ton::Mode& mode);
+    /// @param mode must not be ModeName::Undef.
+    void init13(const ModeName& mode);
 
     /// default array of 15 tonalities, ks between -7 and 7.
-    /// @param mode must not be Ton::Mode::Undef.
-    void init15(const Ton::Mode& mode);
+    /// @param mode must not be ModeName::Undef.
+    void init15(const ModeName& mode);
     
     /// array of tonalities of Bach's Wohltemperierte Clavier.
     /// major          KS -4 to 7 : C, C#, D, Eb, E, F, F#, G, Ab, A, Bb, B

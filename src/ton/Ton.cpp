@@ -95,19 +95,19 @@ const std::array<std::array<Accid, 7>, 15> Ton::MIN_MEL =
 }};
 
 
-Ton::Ton(int ks, Mode mode):
+Ton::Ton(int ks, ModeName mode):
 KeyFifth(ks),
 _mode(mode)
 {
-    assert(mode != Mode::Undef);
+    assert(mode != ModeName::Undef);
 }
 
 
-Ton::Ton(const KeyFifth& ks, Mode mode):
+Ton::Ton(const KeyFifth& ks, ModeName mode):
 KeyFifth(ks),
 _mode(mode)
 {
-    assert(mode != Mode::Undef);
+    assert(mode != ModeName::Undef);
 }
 
 
@@ -170,28 +170,28 @@ Accid Ton::accidDia(int n) const
 
     switch (_mode)
     {
-        case Mode::Undef:
+        case ModeName::Undef:
             return Accid::Undef;
             
-        case Ton::Mode::Maj:
+        case ModeName::Maj:
             return KEYS[_sig + 7][n];
             
-        case Ton::Mode::Min:  // harmonic
+        case ModeName::Min:  // harmonic
             return MIN_HARM[_sig + 7][n];
             
-        case Ton::Mode::MinNat:
+        case ModeName::MinNat:
             return KEYS[_sig + 7][n];
             
-        case Ton::Mode::MinMel:
+        case ModeName::MinMel:
             return MIN_MEL[_sig + 7][n];
             
-        case Ton::Mode::Ionian:
-        case Ton::Mode::Dorian:
-        case Ton::Mode::Phrygian:
-        case Ton::Mode::Lydian:
-        case Ton::Mode::Mixolydian:
-        case Ton::Mode::Eolian:
-        case Ton::Mode::Locrian:
+        case ModeName::Ionian:
+        case ModeName::Dorian:
+        case ModeName::Phrygian:
+        case ModeName::Lydian:
+        case ModeName::Mixolydian:
+        case ModeName::Eolian:
+        case ModeName::Locrian:
             return KEYS[_sig + 7][n];
             
         default:
@@ -220,13 +220,13 @@ bool Ton::lead(const NoteName& name) const
     assert(_sig <= 7);
 
     // harmonic minor
-    if (_mode == Ton::Mode::Min)
+    if (_mode == ModeName::Min)
     {
         // DEBUGU("{} ({}) is lead of {}", name, n, *this);
         return (KEYS[_sig + 7][n] != MIN_HARM[_sig + 7][n]);
     }
     // melodic minor
-    else if (_mode == Ton::Mode::MinMel)
+    else if (_mode == ModeName::MinMel)
     {
         // DEBUGU("{} ({}) is lead of {}", name, n, *this);
         return (KEYS[_sig + 7][n] != MIN_MEL[_sig + 7][n]);
@@ -305,7 +305,7 @@ unsigned int Ton::distWeber(const Ton& rhs) const
 
 //unsigned int Ton::dist(const Ton& rhs) const
 //{
-//    if (_mode == Mode::Undef)
+//    if (_mode == ModeName::Undef)
 //    {
 //        WARN("Ton distance {} {}: one undef mode", *this, rhs);
 //        return std::abs(fifths() - rhs.fifths());
@@ -315,7 +315,7 @@ unsigned int Ton::distWeber(const Ton& rhs) const
 //        // dist in array of fifths
 //        return std::abs(fifths() - rhs.fifths());
 //    }
-//    else if (_mode == Mode::Maj)
+//    else if (_mode == ModeName::Maj)
 //    {
 //
 //    }
@@ -357,54 +357,6 @@ unsigned int Ton::distWeber(const Ton& rhs) const
 //}
 
 
-// static
-std::string Ton::tostring(const Ton::Mode& m)
-{
-    switch (m)
-    {
-        case Ton::Mode::Undef:
-            return "undef";
-
-        case Ton::Mode::Maj:
-            return "maj";
-
-        case Ton::Mode::Min:
-            return "min";
-
-        case Ton::Mode::MinNat:
-            return "min nat";
-
-        case Ton::Mode::MinMel:
-            return "min mel";
-
-        case Ton::Mode::Ionian:
-            return "Ionian";
-
-        case Ton::Mode::Dorian:
-            return "Dorian";
-
-        case Ton::Mode::Phrygian:
-            return "Phrygian";
-
-        case Ton::Mode::Lydian:
-            return "Lydian";
-
-        case Ton::Mode::Mixolydian:
-            return "Mixolydian";
-            
-        case Ton::Mode::Eolian:
-            return "Eolian";
-
-        case Ton::Mode::Locrian:
-            return "Locrian";
-
-        default:
-        {
-            ERROR("unknown Ton mode");
-            return "ERROR";
-        }
-    }
-}
 
 
 int Ton::tonic() const
@@ -412,44 +364,44 @@ int Ton::tonic() const
     int i = 99;
     switch (_mode)
     {
-        case Ton::Mode::Undef:
+        case ModeName::Undef:
             break;
 
-        case Ton::Mode::Maj:
+        case ModeName::Maj:
             i = fifths();
             break;
 
-        case Ton::Mode::Min:
-        case Ton::Mode::MinNat:
-        case Ton::Mode::MinMel:
+        case ModeName::Min:
+        case ModeName::MinNat:
+        case ModeName::MinMel:
             i = fifths()+3;
             break;
             
-        case Ton::Mode::Ionian:
+        case ModeName::Ionian:
             i = fifths();
             break;
 
-        case Ton::Mode::Dorian:
+        case ModeName::Dorian:
             i = fifths(); // + 2;
             break;
 
-        case Ton::Mode::Phrygian:
+        case ModeName::Phrygian:
             i = fifths(); // + 4;
             break;
 
-        case Ton::Mode::Lydian:
+        case ModeName::Lydian:
             i = fifths();
             break;
 
-        case Ton::Mode::Mixolydian:
+        case ModeName::Mixolydian:
             i = fifths();
             break;
             
-        case Ton::Mode::Eolian:
+        case ModeName::Eolian:
             i = fifths();
             break;
 
-        case Ton::Mode::Locrian:
+        case ModeName::Locrian:
             i = fifths();
             break;
 
@@ -484,13 +436,6 @@ void Ton::print(std::ostream& o) const
     }
     else
         o << "ERROR";
-}
-
-
-std::ostream& operator<<(std::ostream& o, const Ton::Mode& mode)
-{
-    o << Ton::tostring(mode);
-    return o;
 }
 
 

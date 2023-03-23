@@ -23,6 +23,7 @@
 #include "Accidental.hpp"
 //#include "Pitch.hpp"
 //#include "KeyFifth.hpp"
+#include "Ton.hpp"
 #include "PSState.hpp"
 #include "PSEnum.hpp"
 #include "PSCost.hpp"

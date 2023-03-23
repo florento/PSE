@@ -13,6 +13,7 @@
 
 #include "NoteName.hpp"
 #include "Accidental.hpp"
+#include "ModeName.hpp"
 #include "Ton.hpp"
 #include "Speller.hpp"
 
@@ -53,18 +54,18 @@ PYBIND11_MODULE(pse, m)
         .value("Accid_Undef", pse::Accid::Undef, "Unkown")
         .export_values();
 
-    py::enum_<pse::Ton::Mode>(m, "Mode", "Modes")
-        .value("Major", pse::Ton::Mode::Maj, "Major")
-        .value("Minor", pse::Ton::Mode::Min, "Minor Harmonic")
-        .value("MinorNat", pse::Ton::Mode::MinNat, "Minor Natural")
-        .value("MinMel", pse::Ton::Mode::Maj, "Minor Melodic")
-        .value("Ionian", pse::Ton::Mode::Ionian, "Ionian")
-        .value("Dorian", pse::Ton::Mode::Dorian, "Dorian")
-        .value("Phrygian", pse::Ton::Mode::Phrygian, "Phrygian")
-        .value("Lydian", pse::Ton::Mode::Lydian, "Lydian")
-        .value("Mixolydian", pse::Ton::Mode::Mixolydian, "Mixolydian")
-        .value("Eolian", pse::Ton::Mode::Eolian, "Eolian")
-        .value("Locrian", pse::Ton::Mode::Locrian, "Locrian")
+    py::enum_<pse::ModeName>(m, "Mode", "Modes")
+        .value("Major", pse::ModeName::Maj, "Major")
+        .value("Minor", pse::ModeName::Min, "Minor Harmonic")
+        .value("MinorNat", pse::ModeName::MinNat, "Minor Natural")
+        .value("MinMel", pse::ModeName::Maj, "Minor Melodic")
+        .value("Ionian", pse::ModeName::Ionian, "Ionian")
+        .value("Dorian", pse::ModeName::Dorian, "Dorian")
+        .value("Phrygian", pse::ModeName::Phrygian, "Phrygian")
+        .value("Lydian", pse::ModeName::Lydian, "Lydian")
+        .value("Mixolydian", pse::ModeName::Mixolydian, "Mixolydian")
+        .value("Eolian", pse::ModeName::Eolian, "Eolian")
+        .value("Locrian", pse::ModeName::Locrian, "Locrian")
         .export_values();
     
     py::class_<pse::Ton>(m, "Ton")
@@ -86,7 +87,7 @@ PYBIND11_MODULE(pse, m)
              "clear the array of tonalities for pitch spelling")
         // disambiguate overloaded method
         .def("add_ton",
-             static_cast<void (pse::Speller::*)(int, pse::Ton::Mode)>(&pse::Speller::addTon),
+             static_cast<void (pse::Speller::*)(int, pse::ModeName)>(&pse::Speller::addTon),
              "add a tonality for pitch spelling", py::arg("ks"), py::arg("mode"))
         .def("set_global", &pse::Speller::setGlobal, "force global tonality")
         .def("spell", &pse::Speller::spell, "spell notes")

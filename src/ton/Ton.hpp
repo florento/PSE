@@ -19,6 +19,7 @@
 #include "Accidental.hpp"
 #include "Fifths.hpp"
 #include "KeyFifth.hpp"
+#include "ModeName.hpp"
 
 
 namespace pse {
@@ -51,57 +52,16 @@ class Ton : public KeyFifth
     
 public:
     
-    /// modes for scales
-    /// @see https://www.w3.org/2021/06/musicxml40/musicxml-reference/data-types/mode/
-    enum class Mode
-    {
-        /// unknown
-        Undef,
-
-        /// major
-        Maj,
-        
-        /// harmonic minor
-        Min,
-
-        /// natural minor (melodique descendant)
-        MinNat,
-
-        /// melodic minor (melodique ascendant)
-        MinMel,
-
-        /// mode of C
-        Ionian,
-
-        /// mode of D
-        Dorian,
-
-        /// mode of E
-        Phrygian,
-        
-        /// mode of F
-        Lydian,
-
-        /// mode of G
-        Mixolydian,
-
-        /// mode of A
-        Eolian,
-
-        /// mode of B
-        Locrian
-    };
-    
     /// main constructor
     /// @param ks number of flats if negative int,
     /// or number of sharps if positive int. must be in -7..7.
     /// @param mode mode of this tonality.
-    Ton(int ks, Mode mode = Mode::Maj);
+    Ton(int ks, ModeName mode = ModeName::Maj);
 
     /// upgrade of key signature.
     /// @param ks a key signature on which this tonality will be based.
     /// @param mode mode of this tonality.
-    Ton(const KeyFifth& ks, Mode mode = Mode::Maj);
+    Ton(const KeyFifth& ks, ModeName mode = ModeName::Maj);
 
     /// copy constructor
     Ton(const Ton& ton);
@@ -115,7 +75,7 @@ public:
     bool operator==(const Ton& rhs) const;
     bool operator!=(const Ton& rhs) const;
     
-    inline Mode mode() const { return _mode; }
+    inline ModeName mode() const { return _mode; }
 
     /// note name of this tonality
     inline const NoteName name() const { return Fifths::name(tonic()); }
@@ -175,15 +135,12 @@ public:
     // @param sig a key signature in -7..7.
     // static int dist(int name, int alt, int sig);
 
-    /// string of mode.
-    static std::string tostring(const Mode& m);
-
     void print(std::ostream& o) const;
     
 protected:
 
     /// mode of this tonality.
-    Mode _mode;
+    ModeName _mode;
        
 private:
     
@@ -231,7 +188,6 @@ private:
     
 };
 
-std::ostream& operator<<(std::ostream& o, const Ton::Mode& m);
 
 std::ostream& operator<<(std::ostream& o, const Ton& ton);
 

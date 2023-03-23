@@ -25,7 +25,7 @@ _state(ton, false),
 _id(id),
 _cost() // zero
 {
-    assert(ton.mode() != Ton::Mode::Undef);
+    assert(ton.mode() != ModeName::Undef);
 }
 
 

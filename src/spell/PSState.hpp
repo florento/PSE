@@ -20,6 +20,7 @@
 #include "Accidental.hpp"
 //#include "Pitch.hpp"
 #include "KeyFifth.hpp"
+#include "ModeName.hpp"
 #include "Ton.hpp"
 
 

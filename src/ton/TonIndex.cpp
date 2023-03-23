@@ -27,13 +27,13 @@ _tons() // empty vector
             init25();
 
         case 26:
-            init13(Ton::Mode::Maj);
-            init13(Ton::Mode::Min);
+            init13(ModeName::Maj);
+            init13(ModeName::Min);
             break;
 
         case 30:
-            init15(Ton::Mode::Maj);
-            init15(Ton::Mode::Min);
+            init15(ModeName::Maj);
+            init15(ModeName::Min);
             break;
 
         default:
@@ -94,7 +94,7 @@ void TonIndex::add(const Ton& ton)
 }
 
 
-void TonIndex::add(int ks, const Ton::Mode& mode)
+void TonIndex::add(int ks, const ModeName& mode)
 {
     if (_tons.size() < MAXTONS)
         _tons.emplace_back(ks, mode);
@@ -103,17 +103,17 @@ void TonIndex::add(int ks, const Ton::Mode& mode)
 }
 
 
-void TonIndex::init13(const Ton::Mode& mode)
+void TonIndex::init13(const ModeName& mode)
 {
-    assert(mode != Ton::Mode::Undef);
+    assert(mode != ModeName::Undef);
     for (int ks = -6; ks <= 6; ++ks)
         _tons.emplace_back(ks, mode);
 }
 
 
-void TonIndex::init15(const Ton::Mode& mode)
+void TonIndex::init15(const ModeName& mode)
 {
-    assert(mode != Ton::Mode::Undef);
+    assert(mode != ModeName::Undef);
     _tons.emplace_back(-7, mode);
     init13(mode);
     _tons.emplace_back(7, mode);
@@ -123,75 +123,75 @@ void TonIndex::init15(const Ton::Mode& mode)
 void TonIndex::init25()
 {
     for (int ks = -4; ks <= 7; ++ks)
-        _tons.emplace_back(ks, Ton::Mode::Maj);
+        _tons.emplace_back(ks, ModeName::Maj);
     for (int ks = -6; ks <= 6; ++ks)
-        _tons.emplace_back(ks, Ton::Mode::Min);
+        _tons.emplace_back(ks, ModeName::Min);
 }
 
 
 //const std::vector<const Ton> TonIndex::TONS30 =
 //{
-//    Ton(-7, Ton::Mode::Maj),
-//    Ton(-6, Ton::Mode::Maj),
-//    Ton(-5, Ton::Mode::Maj),
-//    Ton(-4, Ton::Mode::Maj),
-//    Ton(-3, Ton::Mode::Maj),
-//    Ton(-2, Ton::Mode::Maj),
-//    Ton(-1, Ton::Mode::Maj),
-//    Ton(0,  Ton::Mode::Maj),
-//    Ton(1,  Ton::Mode::Maj),
-//    Ton(2,  Ton::Mode::Maj),
-//    Ton(3,  Ton::Mode::Maj),
-//    Ton(4,  Ton::Mode::Maj),
-//    Ton(5,  Ton::Mode::Maj),
-//    Ton(6,  Ton::Mode::Maj),
-//    Ton(7,  Ton::Mode::Maj),
-//    Ton(-7, Ton::Mode::Min),
-//    Ton(-6, Ton::Mode::Min),
-//    Ton(-5, Ton::Mode::Min),
-//    Ton(-4, Ton::Mode::Min),
-//    Ton(-3, Ton::Mode::Min),
-//    Ton(-2, Ton::Mode::Min),
-//    Ton(-1, Ton::Mode::Min),
-//    Ton(0,  Ton::Mode::Min),
-//    Ton(1,  Ton::Mode::Min),
-//    Ton(2,  Ton::Mode::Min),
-//    Ton(3,  Ton::Mode::Min),
-//    Ton(4,  Ton::Mode::Min),
-//    Ton(5,  Ton::Mode::Min),
-//    Ton(6,  Ton::Mode::Min),
-//    Ton(7,  Ton::Mode::Min)
+//    Ton(-7, ModeName::Maj),
+//    Ton(-6, ModeName::Maj),
+//    Ton(-5, ModeName::Maj),
+//    Ton(-4, ModeName::Maj),
+//    Ton(-3, ModeName::Maj),
+//    Ton(-2, ModeName::Maj),
+//    Ton(-1, ModeName::Maj),
+//    Ton(0,  ModeName::Maj),
+//    Ton(1,  ModeName::Maj),
+//    Ton(2,  ModeName::Maj),
+//    Ton(3,  ModeName::Maj),
+//    Ton(4,  ModeName::Maj),
+//    Ton(5,  ModeName::Maj),
+//    Ton(6,  ModeName::Maj),
+//    Ton(7,  ModeName::Maj),
+//    Ton(-7, ModeName::Min),
+//    Ton(-6, ModeName::Min),
+//    Ton(-5, ModeName::Min),
+//    Ton(-4, ModeName::Min),
+//    Ton(-3, ModeName::Min),
+//    Ton(-2, ModeName::Min),
+//    Ton(-1, ModeName::Min),
+//    Ton(0,  ModeName::Min),
+//    Ton(1,  ModeName::Min),
+//    Ton(2,  ModeName::Min),
+//    Ton(3,  ModeName::Min),
+//    Ton(4,  ModeName::Min),
+//    Ton(5,  ModeName::Min),
+//    Ton(6,  ModeName::Min),
+//    Ton(7,  ModeName::Min)
 //};
 //
 //
 //const std::vector<const Ton> TonIndex::TONS26 =
 //{
-//    Ton(-6, Ton::Mode::Maj),
-//    Ton(-5, Ton::Mode::Maj),
-//    Ton(-4, Ton::Mode::Maj),
-//    Ton(-3, Ton::Mode::Maj),
-//    Ton(-2, Ton::Mode::Maj),
-//    Ton(-1, Ton::Mode::Maj),
-//    Ton(0,  Ton::Mode::Maj),
-//    Ton(1,  Ton::Mode::Maj),
-//    Ton(2,  Ton::Mode::Maj),
-//    Ton(3,  Ton::Mode::Maj),
-//    Ton(4,  Ton::Mode::Maj),
-//    Ton(5,  Ton::Mode::Maj),
-//    Ton(6,  Ton::Mode::Maj),
-//    Ton(-6, Ton::Mode::Min),
-//    Ton(-5, Ton::Mode::Min),
-//    Ton(-4, Ton::Mode::Min),
-//    Ton(-3, Ton::Mode::Min),
-//    Ton(-2, Ton::Mode::Min),
-//    Ton(-1, Ton::Mode::Min),
-//    Ton(0,  Ton::Mode::Min),
-//    Ton(1,  Ton::Mode::Min),
-//    Ton(2,  Ton::Mode::Min),
-//    Ton(3,  Ton::Mode::Min),
-//    Ton(4,  Ton::Mode::Min),
-//    Ton(5,  Ton::Mode::Min),
-//    Ton(6,  Ton::Mode::Min),
+//    Ton(-6, ModeName::Maj),
+//    Ton(-5, ModeName::Maj),
+//    Ton(-4, ModeName::Maj),
+//    Ton(-3, ModeName::Maj),
+//    Ton(-2, ModeName::Maj),
+//    Ton(-1, ModeName::Maj),
+//    Ton(0,  ModeName::Maj),
+//    Ton(1,  ModeName::Maj),
+//    Ton(2,  ModeName::Maj),
+//    Ton(3,  ModeName::Maj),
+//    Ton(4,  ModeName::Maj),
+//    Ton(5,  ModeName::Maj),
+//    Ton(6,  ModeName::Maj),
+//    Ton(-6, ModeName::Min),
+//    Ton(-5, ModeName::Min),
+//    Ton(-4, ModeName::Min),
+//    Ton(-3, ModeName::Min),
+//    Ton(-2, ModeName::Min),
+//    Ton(-1, ModeName::Min),
+//    Ton(0,  ModeName::Min),
+//    Ton(1,  ModeName::Min),
+//    Ton(2,  ModeName::Min),
+//    Ton(3,  ModeName::Min),
+//    Ton(4,  ModeName::Min),
+//    Ton(5,  ModeName::Min),
+//    Ton(6,  ModeName::Min),
 //};
 
 } // end namespace pse

@@ -14,7 +14,7 @@ namespace pse {
 Speller::Speller(size_t nbTons, bool dflag):
 _enum(0, 0),
 _table(_enum, nbTons, dflag),
-//_global(0, Ton::Mode::Maj), // C maj default
+//_global(0, ModeName::Maj), // C maj default
 _debug(dflag)
 {
     spdlog_setVerbosity(4);
@@ -112,7 +112,7 @@ void Speller::addTon(const Ton& ton)
 }
 
 
-void Speller::addTon(int ks, Ton::Mode mode)
+void Speller::addTon(int ks, ModeName mode)
 {
     if (ks < -7 || 7 < ks)
     {
@@ -136,9 +136,9 @@ bool Speller::spell()
     {
         TRACE("Speller respell: no tonality added, use default tonality array");
         for (int ks = -7; ks <= 7; ++ks)
-            _table.index.add(ks, Ton::Mode::Maj);
+            _table.index.add(ks, ModeName::Maj);
         for (int ks = -7; ks <= 7; ++ks)
-            _table.index.add(ks, Ton::Mode::Min);
+            _table.index.add(ks, ModeName::Min);
     }
     
     //    if (finit)
