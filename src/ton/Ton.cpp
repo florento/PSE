@@ -173,16 +173,16 @@ Accid Ton::accidDia(int n) const
         case ModeName::Undef:
             return Accid::Undef;
             
-        case ModeName::Maj:
+        case ModeName::Major:
             return KEYS[_sig + 7][n];
             
-        case ModeName::Min:  // harmonic
+        case ModeName::Minor:  // harmonic
             return MIN_HARM[_sig + 7][n];
             
-        case ModeName::MinNat:
+        case ModeName::MinorNat:
             return KEYS[_sig + 7][n];
             
-        case ModeName::MinMel:
+        case ModeName::MinorMel:
             return MIN_MEL[_sig + 7][n];
             
         case ModeName::Ionian:
@@ -190,7 +190,7 @@ Accid Ton::accidDia(int n) const
         case ModeName::Phrygian:
         case ModeName::Lydian:
         case ModeName::Mixolydian:
-        case ModeName::Eolian:
+        case ModeName::Aeolian:
         case ModeName::Locrian:
             return KEYS[_sig + 7][n];
             
@@ -220,13 +220,13 @@ bool Ton::lead(const NoteName& name) const
     assert(_sig <= 7);
 
     // harmonic minor
-    if (_mode == ModeName::Min)
+    if (_mode == ModeName::Minor)
     {
         // DEBUGU("{} ({}) is lead of {}", name, n, *this);
         return (KEYS[_sig + 7][n] != MIN_HARM[_sig + 7][n]);
     }
     // melodic minor
-    else if (_mode == ModeName::MinMel)
+    else if (_mode == ModeName::MinorMel)
     {
         // DEBUGU("{} ({}) is lead of {}", name, n, *this);
         return (KEYS[_sig + 7][n] != MIN_MEL[_sig + 7][n]);
@@ -367,13 +367,13 @@ int Ton::tonic() const
         case ModeName::Undef:
             break;
 
-        case ModeName::Maj:
+        case ModeName::Major:
             i = fifths();
             break;
 
-        case ModeName::Min:
-        case ModeName::MinNat:
-        case ModeName::MinMel:
+        case ModeName::Minor:
+        case ModeName::MinorNat:
+        case ModeName::MinorMel:
             i = fifths()+3;
             break;
             
@@ -397,7 +397,7 @@ int Ton::tonic() const
             i = fifths();
             break;
             
-        case ModeName::Eolian:
+        case ModeName::Aeolian:
             i = fifths();
             break;
 

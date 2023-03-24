@@ -136,9 +136,9 @@ bool Speller::spell()
     {
         TRACE("Speller respell: no tonality added, use default tonality array");
         for (int ks = -7; ks <= 7; ++ks)
-            _table.index.add(ks, ModeName::Maj);
+            _table.index.add(ks, ModeName::Major);
         for (int ks = -7; ks <= 7; ++ks)
-            _table.index.add(ks, ModeName::Min);
+            _table.index.add(ks, ModeName::Minor);
     }
     
     //    if (finit)

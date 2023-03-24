@@ -83,7 +83,7 @@ public:
     /// or number of sharps if positive int. must be in -7..7.
     /// @param mode mode of this tonality.
     /// @see Ton
-    void add(int ks, const ModeName& mode = ModeName::Maj);
+    void add(int ks, const ModeName& mode = ModeName::Major);
     
 private: // data
     

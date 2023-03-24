@@ -144,19 +144,19 @@ PSState::PSState(const Ton& ton, bool joker)
     {
         switch (m)
         {
-            case ModeName::Maj:
+            case ModeName::Major:
                 _state.fill(Accid::Undef);
                 break;
                 
-            case ModeName::Min:
+            case ModeName::Minor:
                 _state = MIN_HARM[i];
                 break;
                 
-            case ModeName::MinNat:
+            case ModeName::MinorNat:
                 _state = MIN_NAT[i];
                 break;
                 
-            case ModeName::MinMel:
+            case ModeName::MinorMel:
                 _state = MIN_MEL[i];
                 break;
                 
@@ -165,7 +165,7 @@ PSState::PSState(const Ton& ton, bool joker)
             case ModeName::Phrygian:
             case ModeName::Lydian:
             case ModeName::Mixolydian:
-            case ModeName::Eolian:
+            case ModeName::Aeolian:
             case ModeName::Locrian:
             {
                 WARN("PSState Accid::undef for mode"); // m
@@ -185,10 +185,10 @@ PSState::PSState(const Ton& ton, bool joker)
     {
         switch (m)
         {
-            case ModeName::Maj:
-            case ModeName::Min:
-            case ModeName::MinNat:
-            case ModeName::MinMel:
+            case ModeName::Major:
+            case ModeName::Minor:
+            case ModeName::MinorNat:
+            case ModeName::MinorMel:
                 _state = KEYS[i];
                 break;
                 
@@ -197,7 +197,7 @@ PSState::PSState(const Ton& ton, bool joker)
             case ModeName::Phrygian:
             case ModeName::Lydian:
             case ModeName::Mixolydian:
-            case ModeName::Eolian:
+            case ModeName::Aeolian:
             case ModeName::Locrian:
                 WARN("PSState Accid::undef for mode");
                 _state.fill(Accid::Undef);

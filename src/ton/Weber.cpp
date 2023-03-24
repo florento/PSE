@@ -237,13 +237,13 @@ void Weber::dump() const
 // static
 size_t Weber::index(const Ton& ton)
 {
-    if (ton.mode() == ModeName::Maj)
+    if (ton.mode() == ModeName::Major)
     {
         return ton.fifths() + 7;
     }
-    else if (ton.mode() == ModeName::Min    ||
-             ton.mode() == ModeName::MinNat ||
-             ton.mode() == ModeName::MinMel)
+    else if (ton.mode() == ModeName::Minor    ||
+             ton.mode() == ModeName::MinorNat ||
+             ton.mode() == ModeName::MinorMel)
     {
         return ton.fifths() + 22;
     }

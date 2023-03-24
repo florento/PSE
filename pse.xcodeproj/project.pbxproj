@@ -81,6 +81,12 @@
 		43F9BE6429CC423E00B0A7F8 /* ModeName.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43F9BE6229CC423E00B0A7F8 /* ModeName.cpp */; };
 		43F9BE6529CC423E00B0A7F8 /* ModeName.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43F9BE6229CC423E00B0A7F8 /* ModeName.cpp */; };
 		43F9BE6629CC423E00B0A7F8 /* ModeName.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 43F9BE6329CC423E00B0A7F8 /* ModeName.hpp */; };
+		43F9BE6929CC696C00B0A7F8 /* Mode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43F9BE6729CC696C00B0A7F8 /* Mode.cpp */; };
+		43F9BE6A29CC696C00B0A7F8 /* Mode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43F9BE6729CC696C00B0A7F8 /* Mode.cpp */; };
+		43F9BE6B29CC696C00B0A7F8 /* Mode.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 43F9BE6829CC696C00B0A7F8 /* Mode.hpp */; };
+		43F9BE6E29CC7DB000B0A7F8 /* ModeFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43F9BE6C29CC7DB000B0A7F8 /* ModeFactory.cpp */; };
+		43F9BE6F29CC7DB000B0A7F8 /* ModeFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43F9BE6C29CC7DB000B0A7F8 /* ModeFactory.cpp */; };
+		43F9BE7029CC7DB000B0A7F8 /* ModeFactory.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 43F9BE6D29CC7DB000B0A7F8 /* ModeFactory.hpp */; };
 		43FBEAC42930CEDD008FC486 /* debugpse.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43FBEAB52930CB16008FC486 /* debugpse.cpp */; };
 		43FBEAC52930CEDD008FC486 /* Speller.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 432EF6AB292D405400C620CF /* Speller.cpp */; };
 		43FBEAC62930CEDD008FC486 /* trace.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43A2543E29280D8900D559D2 /* trace.cpp */; };
@@ -196,6 +202,10 @@
 		43DD95482945E223006DC553 /* PSCost.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = PSCost.hpp; path = src/spell/PSCost.hpp; sourceTree = "<group>"; };
 		43F9BE6229CC423E00B0A7F8 /* ModeName.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ModeName.cpp; sourceTree = "<group>"; };
 		43F9BE6329CC423E00B0A7F8 /* ModeName.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ModeName.hpp; sourceTree = "<group>"; };
+		43F9BE6729CC696C00B0A7F8 /* Mode.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Mode.cpp; sourceTree = "<group>"; };
+		43F9BE6829CC696C00B0A7F8 /* Mode.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Mode.hpp; sourceTree = "<group>"; };
+		43F9BE6C29CC7DB000B0A7F8 /* ModeFactory.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ModeFactory.cpp; sourceTree = "<group>"; };
+		43F9BE6D29CC7DB000B0A7F8 /* ModeFactory.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ModeFactory.hpp; sourceTree = "<group>"; };
 		43FBEAB52930CB16008FC486 /* debugpse.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = debugpse.cpp; path = src/targets/debugpse.cpp; sourceTree = "<group>"; };
 		43FBEABD2930CD21008FC486 /* debugpse */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = debugpse; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -218,6 +228,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4310526429CDAE2400694D5A /* scale */ = {
+			isa = PBXGroup;
+			children = (
+				43F9BE6329CC423E00B0A7F8 /* ModeName.hpp */,
+				43F9BE6229CC423E00B0A7F8 /* ModeName.cpp */,
+				43F9BE6829CC696C00B0A7F8 /* Mode.hpp */,
+				43F9BE6729CC696C00B0A7F8 /* Mode.cpp */,
+				43F9BE6D29CC7DB000B0A7F8 /* ModeFactory.hpp */,
+				43F9BE6C29CC7DB000B0A7F8 /* ModeFactory.cpp */,
+			);
+			path = scale;
+			sourceTree = "<group>";
+		};
 		431586182983E65A00918B1B /* ton */ = {
 			isa = PBXGroup;
 			children = (
@@ -225,8 +248,6 @@
 				43ABA502292423E8002AC1D4 /* Fifths.cpp */,
 				430CDFF02924E6D700A84650 /* KeyFifth.hpp */,
 				430CDFEF2924E6D700A84650 /* KeyFifth.cpp */,
-				43F9BE6329CC423E00B0A7F8 /* ModeName.hpp */,
-				43F9BE6229CC423E00B0A7F8 /* ModeName.cpp */,
 				43ABA506292423E8002AC1D4 /* Ton.hpp */,
 				43ABA4FF292423E8002AC1D4 /* Ton.cpp */,
 				435406A329A8D4BB0075B3B7 /* TonIndex.hpp */,
@@ -355,6 +376,7 @@
 				43A2543929280A6600D559D2 /* pitch */,
 				434D5CFC299FCFD900AEB02F /* interval */,
 				434D5CFD299FCFF100AEB02F /* chord */,
+				4310526429CDAE2400694D5A /* scale */,
 				431586182983E65A00918B1B /* ton */,
 				431586192983E6BF00918B1B /* spell */,
 				4315861C2983E82300918B1B /* KrumhanslSchmuckler */,
@@ -423,9 +445,11 @@
 				43A2544529280E1600D559D2 /* config.h in Headers */,
 				43A2544129280D8900D559D2 /* trace.hpp in Headers */,
 				431586392983ED5B00918B1B /* NoteName.hpp in Headers */,
+				43F9BE6B29CC696C00B0A7F8 /* Mode.hpp in Headers */,
 				43ABA50B292423E8002AC1D4 /* Accidental.hpp in Headers */,
 				43F9BE6629CC423E00B0A7F8 /* ModeName.hpp in Headers */,
 				4342FD142926789C004E914F /* MidiNum.hpp in Headers */,
+				43F9BE7029CC7DB000B0A7F8 /* ModeFactory.hpp in Headers */,
 				43ABA50D292423E8002AC1D4 /* Enharmonic.hpp in Headers */,
 				43ABA50A292423E8002AC1D4 /* Fifths.hpp in Headers */,
 				43C2BA12299946150084AB3B /* Interval.hpp in Headers */,
@@ -541,6 +565,7 @@
 				43ABA50C292423E8002AC1D4 /* Fifths.cpp in Sources */,
 				43C2BA192999529E0084AB3B /* PWO.cpp in Sources */,
 				430CDFF12924E6D800A84650 /* KeyFifth.cpp in Sources */,
+				43F9BE6929CC696C00B0A7F8 /* Mode.cpp in Sources */,
 				43ABA509292423E8002AC1D4 /* Ton.cpp in Sources */,
 				43316F2329AA73D8000160EA /* TonIndex.cpp in Sources */,
 				434B1DF8298ECCF1001CE41C /* PSConfig1.cpp in Sources */,
@@ -560,6 +585,7 @@
 				43ABA52629242418002AC1D4 /* PSPath.cpp in Sources */,
 				431586332983E89B00918B1B /* PSEnum.cpp in Sources */,
 				431586352983E89B00918B1B /* PSRawEnum.cpp in Sources */,
+				43F9BE6E29CC7DB000B0A7F8 /* ModeFactory.cpp in Sources */,
 				432EF6AD292D405400C620CF /* Speller.cpp in Sources */,
 				43B4939B2948D9F9006435B1 /* pypse.cpp in Sources */,
 			);
@@ -578,6 +604,7 @@
 				43FBEACA2930CEDD008FC486 /* Enharmonic.cpp in Sources */,
 				43C2BA1A2999529E0084AB3B /* PWO.cpp in Sources */,
 				43FBEACB2930CEDD008FC486 /* Fifths.cpp in Sources */,
+				43F9BE6A29CC696C00B0A7F8 /* Mode.cpp in Sources */,
 				434B1E02298FD4FE001CE41C /* PSChord.cpp in Sources */,
 				43316F2229AA73D7000160EA /* TonIndex.cpp in Sources */,
 				43FBEACC2930CEDD008FC486 /* KeyFifth.cpp in Sources */,
@@ -597,6 +624,7 @@
 				43FBEAD42930CEDD008FC486 /* PSPath.cpp in Sources */,
 				4315863B2983F15400918B1B /* PSEnum.cpp in Sources */,
 				4315863D2983F15400918B1B /* PSRawEnum.cpp in Sources */,
+				43F9BE6F29CC7DB000B0A7F8 /* ModeFactory.cpp in Sources */,
 				43FBEAC52930CEDD008FC486 /* Speller.cpp in Sources */,
 				43FBEAC42930CEDD008FC486 /* debugpse.cpp in Sources */,
 			);

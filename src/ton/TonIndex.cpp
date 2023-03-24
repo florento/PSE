@@ -27,13 +27,13 @@ _tons() // empty vector
             init25();
 
         case 26:
-            init13(ModeName::Maj);
-            init13(ModeName::Min);
+            init13(ModeName::Major);
+            init13(ModeName::Minor);
             break;
 
         case 30:
-            init15(ModeName::Maj);
-            init15(ModeName::Min);
+            init15(ModeName::Major);
+            init15(ModeName::Minor);
             break;
 
         default:
@@ -123,9 +123,9 @@ void TonIndex::init15(const ModeName& mode)
 void TonIndex::init25()
 {
     for (int ks = -4; ks <= 7; ++ks)
-        _tons.emplace_back(ks, ModeName::Maj);
+        _tons.emplace_back(ks, ModeName::Major);
     for (int ks = -6; ks <= 6; ++ks)
-        _tons.emplace_back(ks, ModeName::Min);
+        _tons.emplace_back(ks, ModeName::Minor);
 }
 
 

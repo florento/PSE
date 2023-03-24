@@ -83,7 +83,7 @@ public:
     /// or number of sharps if positive int. must be in -7..7.
     /// @param mode mode of the tonality added.
     /// @see Ton
-    void addTon(int ks, ModeName mode = ModeName::Maj);
+    void addTon(int ks, ModeName mode = ModeName::Major);
 
     /// add a tonality for pitch spelling.
     void addTon(const Ton& ton);

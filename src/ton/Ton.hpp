@@ -26,7 +26,7 @@ namespace pse {
 
 // class PSState;
 
-/// A tonality is the combination of  by a Key Signature in -7..7 and a Mode.
+/// A tonality is the combination of a Key Signature in -7..7 and a Mode.
 /// | ks | Maj | Min  | sens (harm) |
 /// |:--:|:---:|:----:|:------------|
 /// | -7 | Cb  | Ab   | Gnat        |
@@ -56,12 +56,12 @@ public:
     /// @param ks number of flats if negative int,
     /// or number of sharps if positive int. must be in -7..7.
     /// @param mode mode of this tonality.
-    Ton(int ks, ModeName mode = ModeName::Maj);
+    Ton(int ks, ModeName mode = ModeName::Major);
 
     /// upgrade of key signature.
     /// @param ks a key signature on which this tonality will be based.
     /// @param mode mode of this tonality.
-    Ton(const KeyFifth& ks, ModeName mode = ModeName::Maj);
+    Ton(const KeyFifth& ks, ModeName mode = ModeName::Major);
 
     /// copy constructor
     Ton(const Ton& ton);

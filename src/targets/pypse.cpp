@@ -55,16 +55,16 @@ PYBIND11_MODULE(pse, m)
         .export_values();
 
     py::enum_<pse::ModeName>(m, "Mode", "Modes")
-        .value("Major", pse::ModeName::Maj, "Major")
-        .value("Minor", pse::ModeName::Min, "Minor Harmonic")
-        .value("MinorNat", pse::ModeName::MinNat, "Minor Natural")
-        .value("MinMel", pse::ModeName::Maj, "Minor Melodic")
+        .value("Major", pse::ModeName::Major, "Major")
+        .value("Minor", pse::ModeName::Minor, "Minor Harmonic")
+        .value("MinorNat", pse::ModeName::MinorNat, "Minor Natural")
+        .value("MinMel", pse::ModeName::Major, "Minor Melodic")
         .value("Ionian", pse::ModeName::Ionian, "Ionian")
         .value("Dorian", pse::ModeName::Dorian, "Dorian")
         .value("Phrygian", pse::ModeName::Phrygian, "Phrygian")
         .value("Lydian", pse::ModeName::Lydian, "Lydian")
         .value("Mixolydian", pse::ModeName::Mixolydian, "Mixolydian")
-        .value("Eolian", pse::ModeName::Eolian, "Eolian")
+        .value("Aeolian", pse::ModeName::Aeolian, "Aeolian")
         .value("Locrian", pse::ModeName::Locrian, "Locrian")
         .export_values();
     
