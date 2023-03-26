@@ -15,7 +15,7 @@
 namespace pse {
 
 // static
-NoteName Enharmonics::name(int c, int i)
+enum NoteName Enharmonics::name(int c, int i)
 {
     assert(0 <= c);
     assert(c <= 11);
@@ -26,7 +26,7 @@ NoteName Enharmonics::name(int c, int i)
   
 
 // static
-Accid Enharmonics::accid(int c, int i)
+enum Accid Enharmonics::accid(int c, int i)
 {
     assert(0 <= c);
     assert(c <= 11);
@@ -37,22 +37,22 @@ Accid Enharmonics::accid(int c, int i)
 
 
 // static abbreviations for note names
-const NoteName Enharmonics::_C = NoteName::C;
-const NoteName Enharmonics::_D = NoteName::D;
-const NoteName Enharmonics::_E = NoteName::E;
-const NoteName Enharmonics::_F = NoteName::F;
-const NoteName Enharmonics::_G = NoteName::G;
-const NoteName Enharmonics::_A = NoteName::A;
-const NoteName Enharmonics::_B = NoteName::B;
-const NoteName Enharmonics::_X = NoteName::Undef;
+const enum NoteName Enharmonics::_C = NoteName::C;
+const enum NoteName Enharmonics::_D = NoteName::D;
+const enum NoteName Enharmonics::_E = NoteName::E;
+const enum NoteName Enharmonics::_F = NoteName::F;
+const enum NoteName Enharmonics::_G = NoteName::G;
+const enum NoteName Enharmonics::_A = NoteName::A;
+const enum NoteName Enharmonics::_B = NoteName::B;
+const enum NoteName Enharmonics::_X = NoteName::Undef;
 
 // static abbreviations for accidentals
-const Accid Enharmonics::_2F = Accid::DoubleFlat;
-const Accid Enharmonics::_1F = Accid::Flat;
-const Accid Enharmonics::_0N = Accid::Natural;
-const Accid Enharmonics::_1S = Accid::Sharp;
-const Accid Enharmonics::_2S = Accid::DoubleSharp;
-const Accid Enharmonics::_UA = Accid::Undef;
+const enum Accid Enharmonics::_2F = Accid::DoubleFlat;
+const enum Accid Enharmonics::_1F = Accid::Flat;
+const enum Accid Enharmonics::_0N = Accid::Natural;
+const enum Accid Enharmonics::_1S = Accid::Sharp;
+const enum Accid Enharmonics::_2S = Accid::DoubleSharp;
+const enum Accid Enharmonics::_UA = Accid::Undef;
 
 // static
 const int Enharmonics::ENHARMONIC_UNDEF = 9;

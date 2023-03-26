@@ -115,7 +115,7 @@ size_t PSC0::id() const
 }
 
 
-const Accid PSC0::accidental(const NoteName&  name) const
+const enum Accid PSC0::accidental(const enum NoteName&  name) const
 {
     return _state.accid(name);
 }

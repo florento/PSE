@@ -27,7 +27,7 @@ public:
     PWO();
     
     /// main constructor
-    PWO(const NoteName& n, const Accid& a);
+    PWO(const enum NoteName& n, const enum Accid& a);
     
     /// @brief copy constructor.
     PWO(const PWO& p);
@@ -55,7 +55,7 @@ public: // data
     /// @brief note name betwen 'A' and 'G'.
     /// @see MusicXML step https://usermanuals.musicxml.com/MusicXML/Content/EL-MusicXML-step.htm
     /// @todo revise with NoteName
-    NoteName name;
+    enum NoteName name;
 
     /// @brief alteration in [-2, 2] where 1.0 is half tone.
     /// e.g. -1 for flat, 1 for sharp
@@ -63,7 +63,7 @@ public: // data
     /// e.g. 0.5 for quarter tone sharp
     /// @see MusicXML alter https://usermanuals.musicxml.com/MusicXML/Content/EL-MusicXML-alter.htm
     /// revision: @see https://www.w3.org/2021/06/musicxml40/musicxml-reference/data-types/accidental-value/
-    Accid alteration;
+    enum Accid alteration;
     
 };
 

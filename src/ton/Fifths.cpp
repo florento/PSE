@@ -16,7 +16,7 @@
 namespace pse {
 
 // static
-NoteName Fifths::name(int i)
+enum NoteName Fifths::name(int i)
 {
     assert(-15 <= i);
     assert(i <= 19);
@@ -26,7 +26,7 @@ NoteName Fifths::name(int i)
 
 
 // static
-Accid Fifths::accid(int i)
+enum Accid Fifths::accid(int i)
 {
     assert(-15 <= i);
     assert(i <= 19);
@@ -39,7 +39,7 @@ Accid Fifths::accid(int i)
 
 
 // static
-int Fifths::index(const NoteName& name, const Accid& accid)
+int Fifths::index(const enum NoteName& name, const enum Accid& accid)
 {
     int mod = 11;
     for (int i = 0; i < 7; ++i)
@@ -61,26 +61,26 @@ int Fifths::index(const NoteName& name, const Accid& accid)
 
 
 // static
-const NoteName Fifths::MODI[7] = { _F, _C, _G, _D, _A, _E, _B };
+const enum NoteName Fifths::MODI[7] = { _F, _C, _G, _D, _A, _E, _B };
 
 //const char Fifths::MODC[7] = { 'F', 'C', 'G', 'D', 'A', 'E', 'B' };
 
 // abbreviations for note names
-const NoteName Fifths::_C = NoteName::C;
-const NoteName Fifths::_D = NoteName::D;
-const NoteName Fifths::_E = NoteName::E;
-const NoteName Fifths::_F = NoteName::F;
-const NoteName Fifths::_G = NoteName::G;
-const NoteName Fifths::_A = NoteName::A;
-const NoteName Fifths::_B = NoteName::B;
-const NoteName Fifths::_X = NoteName::Undef;
+const enum NoteName Fifths::_C = NoteName::C;
+const enum NoteName Fifths::_D = NoteName::D;
+const enum NoteName Fifths::_E = NoteName::E;
+const enum NoteName Fifths::_F = NoteName::F;
+const enum NoteName Fifths::_G = NoteName::G;
+const enum NoteName Fifths::_A = NoteName::A;
+const enum NoteName Fifths::_B = NoteName::B;
+const enum NoteName Fifths::_X = NoteName::Undef;
 
 // abbreviations for accidentals
-const Accid Fifths::_2F = Accid::DoubleFlat;
-const Accid Fifths::_1F = Accid::Flat;
-const Accid Fifths::_0N = Accid::Natural;
-const Accid Fifths::_1S = Accid::Sharp;
-const Accid Fifths::_2S = Accid::DoubleSharp;
+const enum Accid Fifths::_2F = Accid::DoubleFlat;
+const enum Accid Fifths::_1F = Accid::Flat;
+const enum Accid Fifths::_0N = Accid::Natural;
+const enum Accid Fifths::_1S = Accid::Sharp;
+const enum Accid Fifths::_2S = Accid::DoubleSharp;
 
 const PWO Fifths::FIFTHS[35] =
 {

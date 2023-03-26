@@ -66,7 +66,7 @@ PSP::~PSP()
 }
 
 
-const NoteName& PSP::name(size_t i) const
+const enum NoteName& PSP::name(size_t i) const
 {
     assert(_enum.inside(i));
     //if (_names.empty()) init();
@@ -75,7 +75,7 @@ const NoteName& PSP::name(size_t i) const
 }
 
 
-const Accid& PSP::alteration(size_t i) const
+const enum Accid& PSP::alteration(size_t i) const
 {
     // if (_accids.empty()) init();
     assert(_enum.inside(i));
@@ -122,7 +122,7 @@ void PSP::record_path(const PSC0& c)
             const PSC2* com = dynamic_cast<const PSC2*>(co);
             assert(com);
             // assert(com->size() > 1);
-            std::vector<Accid> accids;
+            std::vector<enum Accid> accids;
             for (size_t i = 0; i < com->size(); ++i)
                 accids.push_back(com->accidental(i));
 
@@ -151,8 +151,8 @@ void PSP::rename()
     
     for (size_t i = _enum.first(); i < _enum.stop(); ++i)
     {
-        const NoteName& name = _names[i - _enum.first()];
-        const Accid& accid = _accids[i - _enum.first()];
+        const enum NoteName& name = _names[i - _enum.first()];
+        const enum Accid& accid = _accids[i - _enum.first()];
         unsigned int mp = _enum.midipitch(i);
         int oct = midi_to_octave(mp, name, accid);
         assert(-2 <= oct);

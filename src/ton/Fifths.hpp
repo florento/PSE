@@ -38,18 +38,18 @@ public:
     /// name of the ith entry in the array of fifth.
     /// @param i index in the array of fifth, between -15 and 19 (0 is 'C').
     /// @return a note name in 'A' .. 'G'.
-    static NoteName name(int i);
+    static enum NoteName name(int i);
       
     /// alterations for the ith entry in the array of fifth.
     /// @param i index in the array of fifth, between -15 and 19 (0 is 'C').
     /// @return an alteration number in -2..2.
-    static Accid accid(int i);
+    static enum Accid accid(int i);
 
     /// index in the array of fifth of the note with given name and alteration.
     /// @param n a note name in 0..6 for C, D, E, F, G, A, B
     /// @param a an alteration number in -2..2.
     /// @return index in the array of fifth, between -15 and 19 (0 is 'C').
-    static int index(const NoteName& n, const Accid& a);
+    static int index(const enum NoteName& n, const enum Accid& a);
     
     // index in the array of fifth of the note with given name and alteration.
     // @param name a note name in 'A' .. 'G'.
@@ -60,26 +60,26 @@ public:
 private:
 
     /// abbreviations for note names
-    static const NoteName _C;
-    static const NoteName _D;
-    static const NoteName _E;
-    static const NoteName _F;
-    static const NoteName _G;
-    static const NoteName _A;
-    static const NoteName _B;
-    static const NoteName _X;
+    static const enum NoteName _C;
+    static const enum NoteName _D;
+    static const enum NoteName _E;
+    static const enum NoteName _F;
+    static const enum NoteName _G;
+    static const enum NoteName _A;
+    static const enum NoteName _B;
+    static const enum NoteName _X;
 
     /// abbreviations for accidentals
-    static const Accid _2F;
-    static const Accid _1F;
-    static const Accid _0N;
-    static const Accid _1S;
-    static const Accid _2S;
+    static const enum Accid _2F;
+    static const enum Accid _1F;
+    static const enum Accid _0N;
+    static const enum Accid _1S;
+    static const enum Accid _2S;
 
     //static const int FIFTHS[35][2];
     static const PWO FIFTHS[35];
 
-    static const NoteName MODI[7];
+    static const enum NoteName MODI[7];
     
     // static const char MODC[7];
     

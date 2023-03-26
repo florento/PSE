@@ -46,19 +46,22 @@ char tochar(const NoteName& n);
 /// the given note name is between 'A' and 'G'
 bool defined(const NoteName& n);
 
-/// the distance between the 2 note names is diatonic
+/// the distance between the 2 note names is diatonic.
 bool diatonicStep(const NoteName& n1, const NoteName& n2);
+
+/// note name at distance d from n.
+enum NoteName operator+(const enum NoteName& n, int d);
 
 /// constructor of note name
 /// @param c char between 'A' and 'G' or 'X' for Undef.
 /// @todo TBR obsolete
-NoteName NNofchar(char c);
+enum NoteName NoteName(char c);
 
 /// constructor of note name
 /// @param i int between 0 ('C') and 6 ('B') or 9 for Undef.
-NoteName NNofint(int i);
+enum NoteName NoteName(int i);
     
-std::ostream& operator<<(std::ostream& o, const NoteName& c);
+std::ostream& operator<<(std::ostream& o, const enum NoteName& c);
 
 
 } // namespace pse

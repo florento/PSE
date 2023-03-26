@@ -27,7 +27,7 @@ _prints(_chord->size(), false)
 
 
 PSC2::PSC2(const PSC2& c,
-           const NoteName& name, const Accid& accid,
+           const enum NoteName& name, const enum Accid& accid,
            const Ton& ton):
 PSC2(c) // copy of current
 {
@@ -42,7 +42,7 @@ PSC2(c) // copy of current
 
 
 PSC2::PSC2(const PSC2& c,        
-           const NoteName& name, const Accid& accid,
+           const enum NoteName& name, const enum Accid& accid,
            const Ton& ton, const Ton& lton):
 PSC2(c) // copy of current
 {
@@ -128,29 +128,29 @@ unsigned int PSC2::midi(size_t i) const
 }
 
 
-NoteName PSC2::name(size_t i) const
+enum NoteName PSC2::name(size_t i) const
 {
     assert(i < _names.size());
     return _names.at(i);
 }
 
 
-std::vector<NoteName>::const_iterator PSC2::cbeginName() const
+std::vector<enum NoteName>::const_iterator PSC2::cbeginName() const
 {
     return _names.cbegin();
 }
 
 
-std::vector<NoteName>::const_iterator PSC2::cendName() const
+std::vector<enum NoteName>::const_iterator PSC2::cendName() const
 {
     return _names.cend();
 }
 
 
-Accid PSC2::accidental(size_t i) const
+enum Accid PSC2::accidental(size_t i) const
 {
     assert(i < _names.size());
-    const NoteName& n = name(i);
+    const enum NoteName& n = name(i);
     assert(n != NoteName::Undef);
     return _state.accid(n);
 }
@@ -223,7 +223,7 @@ unsigned int PSC2::nextChroma() const
 }
 
 
-bool PSC2::consistent(const NoteName& name, const Accid& accid) const
+bool PSC2::consistent(const enum NoteName& name, const enum Accid& accid) const
 {
     assert(previous());
     // the accidental has not been changed for that name yet
@@ -235,7 +235,7 @@ bool PSC2::consistent(const NoteName& name, const Accid& accid) const
 }
 
 
-size_t PSC2::setNames(const NoteName& name, bool print)
+size_t PSC2::setNames(const enum NoteName& name, bool print)
 {
     assert(_chord);
     assert(0 <= _current);
@@ -261,7 +261,8 @@ size_t PSC2::setNames(const NoteName& name, bool print)
 
 /// @todo mv to PSCost:
 /// update(const PSC1& c, const PSEnum& e, const Ton& gton)
-bool PSC2::updateCost(const NoteName& name, const Accid& accid, bool print,
+bool PSC2::updateCost(const enum NoteName& name, const enum Accid& accid,
+                      bool print,
                       size_t nbocc, const Ton& ton)
 {
     // whether the cost has to be changed
@@ -302,7 +303,8 @@ bool PSC2::updateCost(const NoteName& name, const Accid& accid, bool print,
 
 
 /// @todo mv to PSCost: update(const PSC1& c, const PSEnum& e, const Ton& gton, const Ton& lton)
-bool PSC2::updateCost(const NoteName& name, const Accid& accid, bool print,
+bool PSC2::updateCost(const enum NoteName& name, const enum Accid& accid,
+                      bool print,
                       size_t nbocc, const Ton& ton, const Ton& lton)
 {
     // update number of accid

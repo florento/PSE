@@ -18,8 +18,8 @@ PSEnum(i0, i1), // empty
 _notes(new std::vector<int>), // empty initial vector
 _barnum(new std::vector<int>),
 _simult(new std::vector<bool>),
-_names(new std::vector<NoteName>),
-_accids(new std::vector<Accid>),
+_names(new std::vector<enum NoteName>),
+_accids(new std::vector<enum Accid>),
 _octs(new std::vector<int>),
 _prints(new std::vector<bool>)
 { }
@@ -38,7 +38,7 @@ _prints(new std::vector<bool>)
 
 
 PSRawEnum::PSRawEnum(const PSRawEnum& e):
-PSEnum(e),
+PSEnum(e), // copy
 _notes(e._notes),  // vector copy (same vector elements)
 _barnum(e._barnum),
 _simult(e._simult),
@@ -181,7 +181,7 @@ bool PSRawEnum::simultaneous(size_t i) const
 }
 
 
-pse::NoteName PSRawEnum::name(size_t i) const
+enum NoteName PSRawEnum::name(size_t i) const
 {
     assert(_names);
     if (i < _names->size())
@@ -194,7 +194,7 @@ pse::NoteName PSRawEnum::name(size_t i) const
 }
 
 
-pse::Accid PSRawEnum::accidental(size_t i) const
+enum Accid PSRawEnum::accidental(size_t i) const
 {
     assert(_accids);
     if (i < _accids->size())
@@ -233,8 +233,9 @@ bool PSRawEnum::printed(size_t i) const
 }
 
 
-void PSRawEnum::rename(size_t i, const pse::NoteName& name,
-                       const pse::Accid& accid, int oct, bool altprint)
+void PSRawEnum::rename(size_t i,
+                       const enum NoteName& name, const enum Accid& accid,
+                       int oct, bool altprint)
 {
     assert(sanity_check());
     // const py::object& pynote = _import[i];

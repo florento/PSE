@@ -13,13 +13,13 @@
 namespace pse {
 
 
-bool defined(const Accid& a)
+bool defined(const enum Accid& a)
 {
     return (a != Accid::Undef);
 }
 
 
-int toint(const Accid& a)
+int toint(const enum Accid& a)
 {
     switch (a)
     {
@@ -68,7 +68,7 @@ int toint(const Accid& a)
 }
 
 
-Accid accidofint(int a)
+enum Accid Accid(int a)
 {
     switch (a)
     {
@@ -101,7 +101,7 @@ Accid accidofint(int a)
 }
 
 
-unsigned int accidDist(const Accid& lhs, const Accid& rhs)
+unsigned int accidDist(const enum Accid& lhs, const enum Accid& rhs)
 {
     // one undef: just ignore
     if (lhs == Accid::Undef || rhs == Accid::Undef)
@@ -145,7 +145,7 @@ unsigned int accidDist(const Accid& lhs, const Accid& rhs)
 }
 
 
-unsigned int accidDistSigned(const Accid& lhs, const Accid& rhs)
+unsigned int accidDistSigned(const enum Accid& lhs, const enum Accid& rhs)
 {
     // one undef: just ignore
     if (lhs == Accid::Undef || rhs == Accid::Undef)
@@ -188,7 +188,7 @@ unsigned int accidDistSigned(const Accid& lhs, const Accid& rhs)
 
 
 
-bool flat(const Accid& a)
+bool flat(const enum Accid& a)
 {
     switch (a)
     {
@@ -205,7 +205,7 @@ bool flat(const Accid& a)
 }
 
 
-bool natural(const Accid& a)
+bool natural(const enum Accid& a)
 {
     switch (a)
     {
@@ -218,7 +218,7 @@ bool natural(const Accid& a)
 }
 
 
-bool sharp(const Accid& a)
+bool sharp(const enum Accid& a)
 {
     switch (a)
     {
@@ -235,7 +235,7 @@ bool sharp(const Accid& a)
 }
 
 
-std::string tostring(const Accid& a)
+std::string tostring(const enum Accid& a)
 {
     switch (a)
     {
@@ -296,7 +296,7 @@ std::string tostring(const Accid& a)
 }
 
 
-std::ostream& operator<<(std::ostream& o, const Accid& a)
+std::ostream& operator<<(std::ostream& o, const enum Accid& a)
 {
     o << tostring(a);
     return o;

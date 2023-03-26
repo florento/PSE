@@ -14,9 +14,9 @@
 namespace pse {
 
 const unsigned int  Pitch::UNDEF_MIDICENT        = 12800;
-const NoteName      Pitch::UNDEF_NOTE_NAME       = NoteName::Undef;
+const enum NoteName Pitch::UNDEF_NOTE_NAME       = NoteName::Undef;
 const int           Pitch::UNDEF_NOTE_OCTAVE     = 128;
-const Accid         Pitch::UNDEF_NOTE_ALTERATION = Accid::Undef;
+const enum Accid    Pitch::UNDEF_NOTE_ALTERATION = Accid::Undef;
 
 // note name for each index
 const char Pitch::NAME[7] =
@@ -49,7 +49,7 @@ _midi(UNDEF_MIDICENT)
 { };
 
 
-Pitch::Pitch(const NoteName& name, const Accid& accid, int oct):
+Pitch::Pitch(const enum NoteName& name, const enum Accid& accid, int oct):
 PWO(name, accid),
 //name(name),
 //alteration(accid),
@@ -154,7 +154,7 @@ bool Pitch::named() const
 }
 
 
-void Pitch::rename(const NoteName& nam, const Accid& acc,
+void Pitch::rename(const enum NoteName& nam, const enum Accid& acc,
                    int oct, bool altpr)
 {
     //char n;
@@ -184,23 +184,23 @@ void Pitch::rename(const NoteName& nam, const Accid& acc,
     
 // static
 // revise to MIDIcent
-NoteName Pitch::midi_to_name(unsigned int k)
+enum NoteName Pitch::midi_to_name(unsigned int k)
 {
     unsigned int p = int(floor(k / 100));
     assert ((0 <= p) && (p <= 127));
     char n = NAMESHARP[p % 12];
-    return NNofchar(n);
+    return NoteName(n);
 }
 
 
 // static
-Accid Pitch::midi_to_alt(unsigned int k)
+enum Accid Pitch::midi_to_alt(unsigned int k)
 {
     unsigned int p = int(floor(k / 100));
     assert(0 <= p);
     assert(p <= 127);
     int a = SHARP[p%12] +  (k - (p*100))/100;
-    return accidofint(a);
+    return Accid(a);
 }
 
 
@@ -224,13 +224,14 @@ int Pitch::midi_to_octave(unsigned int k)
 
 
 // static
-int Pitch::midi_to_octave(unsigned int m, const NoteName& n, const Accid& a)
+int Pitch::midi_to_octave(unsigned int m,
+                          const enum NoteName& n, const enum Accid& a)
 {
-    return midi_to_octave(m, n, a);
+    return midi_to_octave(m);
 }
 
 
-unsigned int Pitch::pitchClass(const NoteName& name)
+unsigned int Pitch::pitchClass(const enum NoteName& name)
 {
     char c = tochar(name);  // toupper(n);
     for (int i = 0; i < 12; ++i)
@@ -243,7 +244,8 @@ unsigned int Pitch::pitchClass(const NoteName& name)
 
 
 // TBC
-unsigned int Pitch::to_midi(const NoteName& name, const Accid& accid, int oct)
+unsigned int Pitch::to_midi(const enum NoteName& name, const enum Accid& accid,
+                            int oct)
 {
     int alt = toint(accid);
     assert(-2 <= alt);

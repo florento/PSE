@@ -65,11 +65,11 @@ public:
     /// name for the pitch of the note of given index in the best path,
     /// in 0..6 (0 is 'C', 6 is 'B').
     /// @param i index of note in enumerator, must be between first and last.
-    const NoteName& name(size_t i) const;
+    const enum NoteName& name(size_t i) const;
     
     /// alteration for pitch of note of given index in the best path, in -2..2.
     /// @param i index of note in enumerator, must be between first and last.
-    const Accid& alteration(size_t i) const;
+    const enum Accid& alteration(size_t i) const;
     
     /// print flag for pitch of note of given index in the best path.
     /// @param i index of note in enumerator, must be between first and last.
@@ -96,10 +96,10 @@ private:
     PSEnum& _enum;
     
     /// list of note names (in 0..6) on the best path from note n0 to note n1.
-    std::vector<NoteName> _names;
+    std::vector<enum NoteName> _names;
 
     /// list of accidents (in -2..2) on the best path from note n0 to note n1.
-    std::vector<Accid> _accids;
+    std::vector<enum Accid> _accids;
 
     /// list of flag print for the best path from note n0 to note n1.
     std::vector<bool> _prints;

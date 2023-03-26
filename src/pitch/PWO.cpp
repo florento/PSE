@@ -14,7 +14,7 @@ name(NoteName::Undef),
 alteration(Accid::Undef)
 { }
 
-PWO::PWO(const NoteName& n, const Accid& a):
+PWO::PWO(const enum NoteName& n, const enum Accid& a):
 name(n),
 alteration(a)
 { }

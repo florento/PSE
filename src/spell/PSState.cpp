@@ -23,15 +23,15 @@ namespace pse {
 // int PSState::tripleflat  = -3;
 
 // static abbreviations for accidentals
-const Accid PSState::_2F = Accid::DoubleFlat;
-const Accid PSState::_1F = Accid::Flat;
-const Accid PSState::_0N = Accid::Natural;
-const Accid PSState::_1S = Accid::Sharp;
-const Accid PSState::_2S = Accid::DoubleSharp;
-const Accid PSState::__U = Accid::Undef;
+const enum Accid PSState::_2F = Accid::DoubleFlat;
+const enum Accid PSState::_1F = Accid::Flat;
+const enum Accid PSState::_0N = Accid::Natural;
+const enum Accid PSState::_1S = Accid::Sharp;
+const enum Accid PSState::_2S = Accid::DoubleSharp;
+const enum Accid PSState::__U = Accid::Undef;
 
 // key signatures for major and minor tonalities
-const std::array<std::array<Accid, 7>, 15> PSState::KEYS =
+const std::array<std::array<enum Accid, 7>, 15> PSState::KEYS =
 {{
     { _1F, _1F, _1F, _1F, _1F, _1F, _1F }, // -7  Cb maj / Ab min
     { _1F, _1F, _1F, _0N, _1F, _1F, _1F }, // -6  Gb maj / Eb min
@@ -71,7 +71,7 @@ const std::array<std::array<Accid, 7>, 15> PSState::KEYS =
 
 // accidentals in minor harmonic.__U == no accid.
 // min harm scale = MAJ + this mask
-const std::array<std::array<Accid, 7>, 15> PSState::MIN_HARM =
+const std::array<std::array<enum Accid, 7>, 15> PSState::MIN_HARM =
 {{
     { __U, __U, __U, __U, _0N, __U, __U }, // -7  Ab min harm
     { __U, _0N, __U, __U, __U, __U, __U }, // -6  Eb min harm
@@ -91,7 +91,7 @@ const std::array<std::array<Accid, 7>, 15> PSState::MIN_HARM =
 }};
 
 // accidentals in minor natural.__U == no accid.
-const std::array<std::array<Accid, 7>, 15> PSState::MIN_NAT =
+const std::array<std::array<enum Accid, 7>, 15> PSState::MIN_NAT =
 {{
     { __U, __U, __U, __U, __U, __U, __U }, // -7  Ab min harm
     { __U, __U, __U, __U, __U, __U, __U }, // -6  Eb min harm
@@ -112,7 +112,7 @@ const std::array<std::array<Accid, 7>, 15> PSState::MIN_NAT =
 
 // accidentals in minor melodic.__U == no accid.
 // min mel scale = MAJ + this mask
-const std::array<std::array<Accid, 7>, 15> PSState::MIN_MEL =
+const std::array<std::array<enum Accid, 7>, 15> PSState::MIN_MEL =
 {{
     { __U, __U, __U, _0N, _0N, __U, __U }, // -7  Ab min harm
     { _0N, _0N, __U, __U, __U, __U, __U }, // -6  Eb min harm
@@ -243,7 +243,7 @@ _state(as._state)
 
 
 PSState::PSState(const PSState& as,
-                       const NoteName& name, const Accid& accid):
+                 const enum NoteName& name, const enum Accid& accid):
 _state(as._state)
 {
     int n = toint(name);
@@ -292,7 +292,7 @@ bool PSState::equal(const PSState& rhs) const
 }
 
 
-Accid PSState::accid(int n) const
+enum Accid PSState::accid(int n) const
 {
     assert(0 <= n);
     assert(n <= 6);
@@ -300,14 +300,13 @@ Accid PSState::accid(int n) const
 }
 
 
-const Accid PSState::accid(const NoteName& name) const
+const enum Accid PSState::accid(const enum NoteName& name) const
 {
-    return Accid(accid(toint(name)));
+    return accid(toint(name));
 }
 
 
-bool PSState::member(const NoteName& name,
-                        const Accid& accid) const
+bool PSState::member(const enum NoteName& name, const enum Accid& accid) const
 {
     int n = toint(name);
     assert(0 <= n);
@@ -316,7 +315,7 @@ bool PSState::member(const NoteName& name,
 }
 
 
-bool PSState::update(const NoteName& name, const Accid& accid)
+bool PSState::update(const enum NoteName& name, const enum Accid& accid)
 {
     int n = toint(name);
     assert(0 <= n);
@@ -355,7 +354,7 @@ unsigned int PSState::dist(const Ton& ton) const
     
     for (int i = 0; i < 7; ++i) // pitch names
     {
-        NoteName n = NNofint(i); // encapsulation
+        enum NoteName n = NoteName(i); // encapsulation
         if (_state[i] != ton.accidDia(n)) // or ton.accidKey(i) ?
         {
             res += 1;
@@ -406,14 +405,14 @@ unsigned int PSState::dist(const PSState& astate1,
     
     for (int i = 0; i < 7; ++i) // pitch names
     {
-        const NoteName n = NNofint(i); // encapsulation
-        const Accid& jo1 = ajoker1.accid(n);
-        const Accid& jo2 = ajoker2.accid(n);
+        const enum NoteName n = NoteName(i); // encapsulation
+        const enum Accid& jo1 = ajoker1.accid(n);
+        const enum Accid& jo2 = ajoker2.accid(n);
         // assert(astate1.accid(i) != Accid::undef);
         // assert(astate2.accid(i) != Accid::undef);
 
-        const Accid& a1 = (defined(jo1))?jo1:astate1.accid(n);
-        const Accid& a2 = (defined(jo2))?jo2:astate2.accid(n);
+        const enum Accid& a1 = (defined(jo1))?jo1:astate1.accid(n);
+        const enum Accid& a2 = (defined(jo2))?jo2:astate2.accid(n);
         assert(a1 != Accid::Undef);
         assert(a2 != Accid::Undef);
         res += accidDist(a1, a2);

@@ -19,7 +19,7 @@ namespace pse {
 // copy and update
 // @todo TBR
 PSC1::PSC1(std::shared_ptr<const PSC0> c, const PSEnum& e,
-           const NoteName& name, const Accid& accid,
+           const enum NoteName& name, const enum Accid& accid,
            const Ton& ton):
 PSC(c),
 _name(name),
@@ -51,7 +51,7 @@ _print(false)
 
 // @todo TBR
 PSC1::PSC1(std::shared_ptr<const PSC0> c, const PSEnum& e,
-           const NoteName& name, const Accid& accid,
+           const enum NoteName& name, const enum Accid& accid,
            const Ton& ton, const Ton& lton):
 PSC1(c, e, name, accid, ton)
 {
@@ -126,16 +126,16 @@ bool PSC1::operator!=(const PSC1& rhs) const
 //}
 
 
-NoteName PSC1::name() const
+enum NoteName PSC1::name() const
 {
     assert(defined(_name));
     return _name;
 }
 
 
-Accid PSC1::accidental() const
+enum Accid PSC1::accidental() const
 {
-    Accid accid(_state.accid(_name)); // copy
+    enum Accid accid(_state.accid(_name)); // copy
     //assert(-2 <= toint(accid));
     //assert(toint(accid) <= 2);
     return accid; // cast to float format for Pitch ?

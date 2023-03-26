@@ -13,7 +13,8 @@ namespace pse {
 //namespace MidiNum {
 
 // static
-int midi_to_octave(unsigned int m, const pse::NoteName& n, const pse::Accid& a)
+int midi_to_octave(unsigned int m,
+                   const enum pse::NoteName& n, const enum pse::Accid& a)
 {
     assert(0 <= m);
     assert(m <= 128);

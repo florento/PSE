@@ -20,16 +20,16 @@
 namespace pse {
 
 // static abbreviations for accidentals
-const Accid Ton::_2F = Accid::DoubleFlat;
-const Accid Ton::_1F = Accid::Flat;
-const Accid Ton::_0N = Accid::Natural;
-const Accid Ton::_1S = Accid::Sharp;
-const Accid Ton::_2S = Accid::DoubleSharp;
-const Accid Ton::__U = Accid::Undef;
+const enum Accid Ton::_2F = Accid::DoubleFlat;
+const enum Accid Ton::_1F = Accid::Flat;
+const enum Accid Ton::_0N = Accid::Natural;
+const enum Accid Ton::_1S = Accid::Sharp;
+const enum Accid Ton::_2S = Accid::DoubleSharp;
+const enum Accid Ton::__U = Accid::Undef;
 
 // accidentals in key signatures
 // and major or minor natural scales, for each key signature.
-const std::array<std::array<Accid, 7>, 15> Ton::KEYS =
+const std::array<std::array<enum Accid, 7>, 15> Ton::KEYS =
 {{
     { _1F, _1F, _1F, _1F, _1F, _1F, _1F }, // -7  Cb maj / Ab min nat
     { _1F, _1F, _1F, _0N, _1F, _1F, _1F }, // -6  Gb maj / Eb min nat
@@ -55,7 +55,7 @@ const std::array<int, 15> Ton::LEAD_HARM =
 //  Ab Eb Bb F  C  G  D  A  E  B  F# C# G# D# A#
 
 // accidentals in minor harmonic scales for each key signature.
-const std::array<std::array<Accid, 7>, 15> Ton::MIN_HARM =
+const std::array<std::array<enum Accid, 7>, 15> Ton::MIN_HARM =
 {{
     { _1F, _1F, _1F, _1F, _0N, _1F, _1F }, // -7  Ab min harm
     { _1F, _0N, _1F, _0N, _1F, _1F, _1F }, // -6  Eb min harm
@@ -75,7 +75,7 @@ const std::array<std::array<Accid, 7>, 15> Ton::MIN_HARM =
 }};
 
 // accidentals in minor melodic scales for each key signature.
-const std::array<std::array<Accid, 7>, 15> Ton::MIN_MEL =
+const std::array<std::array<enum Accid, 7>, 15> Ton::MIN_MEL =
 {{
     { __U, __U, __U, _0N, _0N, __U, __U }, // -7  Ab min mel
     { _0N, _0N, __U, __U, __U, __U, __U }, // -6  Eb min mel
@@ -144,7 +144,7 @@ bool Ton::operator!=(const Ton& rhs) const
 }
 
 
-Accid Ton::accidKey(int n) const
+enum Accid Ton::accidKey(int n) const
 {
     assert(-7 <= _sig);
     assert(_sig <= 7);
@@ -154,14 +154,14 @@ Accid Ton::accidKey(int n) const
 }
 
 
-Accid Ton::accidKey(const NoteName& name) const
+enum Accid Ton::accidKey(const enum NoteName& name) const
 {
     assert(defined(name));
     return accidKey(toint(name));
 }
 
 
-Accid Ton::accidDia(int n) const
+enum Accid Ton::accidDia(int n) const
 {
     assert(-7 <= _sig);
     assert(_sig <= 7);
@@ -203,14 +203,14 @@ Accid Ton::accidDia(int n) const
 }
 
 
-Accid Ton::accidDia(const NoteName& name) const
+enum Accid Ton::accidDia(const enum NoteName& name) const
 {
     assert(defined(name));
     return accidDia(toint(name));
 }
 
 
-bool Ton::lead(const NoteName& name) const
+bool Ton::lead(const enum NoteName& name) const
 {
     assert(defined(name));
     int n = toint(name);
@@ -236,7 +236,7 @@ bool Ton::lead(const NoteName& name) const
 }
 
 
-unsigned int Ton::dist(const NoteName& name, const Accid& accid) const
+unsigned int Ton::dist(const enum NoteName& name, const enum Accid& accid) const
 {
     assert(defined(name));
     assert(defined(accid));
@@ -266,9 +266,9 @@ unsigned int Ton::distHamming(const Ton& rhs) const
     
     for (int i = 0; i < 7; ++i) // pitch names
     {
-        const NoteName n = NNofint(i);
-        const Accid& this_ai = accidDia(n);
-        const Accid& rhs_ai  = rhs.accidDia(n);
+        const enum NoteName n = NoteName(i);
+        const enum Accid& this_ai = accidDia(n);
+        const enum Accid& rhs_ai  = rhs.accidDia(n);
         assert(this_ai != Accid::Undef);
         assert(rhs_ai != Accid::Undef);
         if (this_ai != rhs_ai)
@@ -284,9 +284,9 @@ unsigned int Ton::distDiatonic(const Ton& rhs) const
     
     for (int i = 0; i < 7; ++i) // pitch names
     {
-        const NoteName n = NNofint(i);
-        const Accid& this_ai = accidDia(n);
-        const Accid& rhs_ai  = rhs.accidDia(n);
+        const enum NoteName n = NoteName(i);
+        const enum Accid& this_ai = accidDia(n);
+        const enum Accid& rhs_ai  = rhs.accidDia(n);
         assert(this_ai != Accid::Undef);
         assert(rhs_ai != Accid::Undef);
         res += accidDist(this_ai, rhs_ai);

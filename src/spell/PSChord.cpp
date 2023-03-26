@@ -189,7 +189,8 @@ bool PSChord::simultaneous(size_t i) const
 
 
 // should not be called. do nothing.
-void PSChord::rename(size_t i, const NoteName& name, const Accid& accid,
+void PSChord::rename(size_t i,
+                     const enum NoteName& name, const enum Accid& accid,
                      int oct, bool altprint)
 {
     ERROR("PSChord rename {}", i);

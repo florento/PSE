@@ -65,43 +65,43 @@ enum class Accid
 };
 
 /// this accidental is not undef.
-bool defined(const Accid& a);
+bool defined(const enum Accid& a);
 
 /// distance between two accidentals, in 1/2 tons.
 /// @param lhs a defined accidental.
 /// @param rhs a defined accidental.
-unsigned int accidDist(const Accid& lhs, const Accid& rhs);
+unsigned int accidDist(const enum Accid& lhs, const enum Accid& rhs);
    
 /// distance between two accidentals.
 /// @param lhs a defined accidental.
 /// @param rhs a defined accidental.
-unsigned int accidDistSigned(const Accid& lhs, const Accid& rhs);
+unsigned int accidDistSigned(const enum Accid& lhs, const enum Accid& rhs);
 
 /// cast accidental value.
 /// only for internal use.
-int toint(const Accid& a);
+int toint(const enum Accid& a);
 
 /// accidental is one or more flats
-bool flat(const Accid& a);
+bool flat(const enum Accid& a);
 
 /// accidental is a natural
-bool natural(const Accid& a);
+bool natural(const enum Accid& a);
 
 /// accidental is one or more sharps
-bool sharp(const Accid& a);
+bool sharp(const enum Accid& a);
 
 /// constructor of accidental value.
 /// only for internal use.
 /// @param a an integral number of 1/2 tons,
 /// positive for sharps, negative for flat.
 /// must be between -3 and 3 (included, otherwise, undef.
-Accid accidofint(int a);
+enum Accid Accid(int a);
 
 /// cast accidental value for printing.
-std::string tostring(const Accid& a);
+std::string tostring(const enum Accid& a);
 
 /// print accidental value.
-std::ostream& operator<<(std::ostream& o, const Accid& c);
+std::ostream& operator<<(std::ostream& o, const enum Accid& c);
 
 } // namespace pse
 

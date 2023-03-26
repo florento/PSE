@@ -62,7 +62,7 @@ public:
     /// @param accid chosen alteration for the received pitch, in -2..2.
     /// @param ton conjectured main (global) tonality (key signature).
     PSC2(const PSC2& c,                  // std::shared_ptr<const PSC2> c,
-         const NoteName& name, const Accid& accid,
+         const enum NoteName& name, const enum Accid& accid,
          const Ton& ton);
 
     /// alternative target PS config for a transition
@@ -76,7 +76,7 @@ public:
     /// @param ton conjectured main (global) tonality (key signature).
     /// @param lton conjectured local tonality.
     PSC2(const PSC2& c,                     // std::shared_ptr<const PSC2> c,
-         const NoteName& name, const Accid& acc,
+         const enum NoteName& name, const enum Accid& acc,
          const Ton& ton, const Ton& lton);
 
     /// copy constructor
@@ -93,7 +93,7 @@ public:
     /// configs have different list of accidentals
     bool operator!=(const PSC2& rhs) const;
     
-    bool acceptable(const NoteName& name, const Accid& accid) const;
+    bool acceptable(const enum NoteName& name, const enum Accid& accid) const;
     
     /// number of simultaneous note read to reach this config.
     size_t size() const;
@@ -106,7 +106,7 @@ public:
     inline unsigned int current() const { return _current; };
 
     /// the proposed update is compatible with this config.
-    bool consistent(const NoteName& name, const Accid& accid) const;
+    bool consistent(const enum NoteName& name, const enum Accid& accid) const;
 
     /// midi pitch of the ith note read for the transition
     /// from this config's predecessor.
@@ -118,20 +118,20 @@ public:
     /// @param i index of the note in the input chord in 0..size()-1.
     /// @see NoteName.hpp
     /// @warning not formatted for a Pitch object.
-    NoteName name(size_t i) const;
+    enum NoteName name(size_t i) const;
 
     /// const iterator pointig to the first name of note in this config.
-    std::vector<NoteName>::const_iterator cbeginName() const;
+    std::vector<enum NoteName>::const_iterator cbeginName() const;
 
     /// const iterator pointig to the one after last name of note in this config.
-    std::vector<NoteName>::const_iterator cendName() const;
+    std::vector<enum NoteName>::const_iterator cendName() const;
 
     /// accidental of the note read for the transition
     /// from this config's predecessor. in -2..2
     /// @param i index of the note in the input chord in 0..size()-1.
     /// @see Accidental.hpp
     /// @warning not formatted for a Pitch object.
-    Accid accidental(size_t i) const;
+    enum Accid accidental(size_t i) const;
 
     /// whether the accidental of the note (read for the transition from predecessor)
     /// must be printed or not.
@@ -169,7 +169,7 @@ private: // data
     
     /// chosen pitch names, in 0..6 (0 is 'C', 6 is 'B'),
     /// for the notes read for the transition to this config.
-    std::vector<NoteName> _names;
+    std::vector<enum NoteName> _names;
     
     // a chosen number of accidents, in -2..2.
     // @todo TBR: it is _state[_name] by construction
@@ -200,7 +200,7 @@ private:
     
     /// all occurrences of the same note receive same name and accid
     /// @return the number of names assigned
-    size_t setNames(const NoteName& name, bool print);
+    size_t setNames(const enum NoteName& name, bool print);
     
     /// update the spelling cost for one pitch class in the current chord.
     /// @param name chosen name for the received pitch, in 0..6 (0 is 'C', 6 is 'B').
@@ -209,8 +209,8 @@ private:
     /// @param nbocc nb of occurrence of the note (pitch class) in this chord.
     /// @param ton conjectured main (global) tonality (key signature).
     /// @return wheter the cost value of this config was increased
-    bool updateCost(const NoteName& name, const Accid& accid, bool print,
-                    size_t nbocc, const Ton& ton);
+    bool updateCost(const enum NoteName& name, const enum Accid& accid,
+                    bool print, size_t nbocc, const Ton& ton);
 
     /// update the spelling cost for one pitch class in the current chord.
     /// @param name chosen name for the received pitch, in 0..6 (0 is 'C', 6 is 'B').
@@ -220,8 +220,8 @@ private:
     /// @param ton conjectured main (global) tonality (key signature).
     /// @param lton conjectured local tonality.
     /// @return wheter the cost value of this config was increased
-    bool updateCost(const NoteName& name, const Accid& accid, bool print,
-                    size_t nbocc, const Ton& ton, const Ton& lton);
+    bool updateCost(const enum NoteName& name, const enum Accid& accid,
+                    bool print, size_t nbocc, const Ton& ton, const Ton& lton);
 
 };
 

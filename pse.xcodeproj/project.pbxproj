@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		430CDFF12924E6D800A84650 /* KeyFifth.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 430CDFEF2924E6D700A84650 /* KeyFifth.cpp */; };
 		430CDFF22924E6D800A84650 /* KeyFifth.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 430CDFF02924E6D700A84650 /* KeyFifth.hpp */; };
+		4310526729CDD15000694D5A /* Scale.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4310526529CDD15000694D5A /* Scale.cpp */; };
+		4310526829CDD15000694D5A /* Scale.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4310526529CDD15000694D5A /* Scale.cpp */; };
+		4310526929CDD15000694D5A /* Scale.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 4310526629CDD15000694D5A /* Scale.hpp */; };
 		431586332983E89B00918B1B /* PSEnum.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4315862B2983E89B00918B1B /* PSEnum.cpp */; };
 		431586342983E89B00918B1B /* PSM21Enum.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 4315862C2983E89B00918B1B /* PSM21Enum.hpp */; };
 		431586352983E89B00918B1B /* PSRawEnum.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4315862D2983E89B00918B1B /* PSRawEnum.cpp */; };
@@ -121,13 +124,15 @@
 /* Begin PBXFileReference section */
 		430CDFEF2924E6D700A84650 /* KeyFifth.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = KeyFifth.cpp; path = src/ton/KeyFifth.cpp; sourceTree = "<group>"; };
 		430CDFF02924E6D700A84650 /* KeyFifth.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = KeyFifth.hpp; path = src/ton/KeyFifth.hpp; sourceTree = "<group>"; };
+		4310526529CDD15000694D5A /* Scale.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Scale.cpp; sourceTree = "<group>"; };
+		4310526629CDD15000694D5A /* Scale.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Scale.hpp; sourceTree = "<group>"; };
 		431586172983E57F00918B1B /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		4315861D2983E84D00918B1B /* KeyFind.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = KeyFind.hpp; path = src/KrumhanslSchmuckler/KeyFind.hpp; sourceTree = "<group>"; };
 		4315861E2983E84D00918B1B /* KeyFind.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = KeyFind.cpp; path = src/KrumhanslSchmuckler/KeyFind.cpp; sourceTree = "<group>"; };
-		431586212983E86E00918B1B /* Spiral.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Spiral.hpp; path = src/spiral/Spiral.hpp; sourceTree = "<group>"; };
-		431586222983E86E00918B1B /* InputSegmentSpiral.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = InputSegmentSpiral.hpp; path = src/spiral/InputSegmentSpiral.hpp; sourceTree = "<group>"; };
-		431586232983E86E00918B1B /* InputSegmentSpiral.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = InputSegmentSpiral.cpp; path = src/spiral/InputSegmentSpiral.cpp; sourceTree = "<group>"; };
-		431586242983E86E00918B1B /* Spiral.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Spiral.cpp; path = src/spiral/Spiral.cpp; sourceTree = "<group>"; };
+		431586212983E86E00918B1B /* Spiral.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Spiral.hpp; path = src/Spiral/Spiral.hpp; sourceTree = "<group>"; };
+		431586222983E86E00918B1B /* InputSegmentSpiral.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = InputSegmentSpiral.hpp; path = src/Spiral/InputSegmentSpiral.hpp; sourceTree = "<group>"; };
+		431586232983E86E00918B1B /* InputSegmentSpiral.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = InputSegmentSpiral.cpp; path = src/Spiral/InputSegmentSpiral.cpp; sourceTree = "<group>"; };
+		431586242983E86E00918B1B /* Spiral.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Spiral.cpp; path = src/Spiral/Spiral.cpp; sourceTree = "<group>"; };
 		431586292983E89B00918B1B /* PSRawEnum.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = PSRawEnum.hpp; path = src/spell/import/PSRawEnum.hpp; sourceTree = "<group>"; };
 		4315862A2983E89B00918B1B /* PSNoteEnum.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PSNoteEnum.cpp; path = src/spell/import/PSNoteEnum.cpp; sourceTree = "<group>"; };
 		4315862B2983E89B00918B1B /* PSEnum.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PSEnum.cpp; path = src/spell/import/PSEnum.cpp; sourceTree = "<group>"; };
@@ -153,7 +158,7 @@
 		434B1DFF298FD4FE001CE41C /* PSChord.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = PSChord.cpp; path = src/spell/PSChord.cpp; sourceTree = "<group>"; };
 		434B1E00298FD4FE001CE41C /* PSChord.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = PSChord.hpp; path = src/spell/PSChord.hpp; sourceTree = "<group>"; };
 		4354069F29A8D2F90075B3B7 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = src/chord/README.md; sourceTree = "<group>"; };
-		435406A029A8D3530075B3B7 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = src/spiral/README.md; sourceTree = "<group>"; };
+		435406A029A8D3530075B3B7 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = src/Spiral/README.md; sourceTree = "<group>"; };
 		435406A129A8D4050075B3B7 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = src/KrumhanslSchmuckler/README.md; sourceTree = "<group>"; };
 		435406A229A8D4BB0075B3B7 /* TonIndex.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = TonIndex.cpp; path = src/ton/TonIndex.cpp; sourceTree = "<group>"; };
 		435406A329A8D4BB0075B3B7 /* TonIndex.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = TonIndex.hpp; path = src/ton/TonIndex.hpp; sourceTree = "<group>"; };
@@ -237,6 +242,8 @@
 				43F9BE6729CC696C00B0A7F8 /* Mode.cpp */,
 				43F9BE6D29CC7DB000B0A7F8 /* ModeFactory.hpp */,
 				43F9BE6C29CC7DB000B0A7F8 /* ModeFactory.cpp */,
+				4310526629CDD15000694D5A /* Scale.hpp */,
+				4310526529CDD15000694D5A /* Scale.cpp */,
 			);
 			path = scale;
 			sourceTree = "<group>";
@@ -455,6 +462,7 @@
 				43C2BA12299946150084AB3B /* Interval.hpp in Headers */,
 				4342FD102926781E004E914F /* PWO.hpp in Headers */,
 				43C2BA1529994F630084AB3B /* Pitch.hpp in Headers */,
+				4310526929CDD15000694D5A /* Scale.hpp in Headers */,
 				430CDFF22924E6D800A84650 /* KeyFifth.hpp in Headers */,
 				43ABA510292423E8002AC1D4 /* Ton.hpp in Headers */,
 				432657E5294E2FB100515080 /* Weber.hpp in Headers */,
@@ -571,6 +579,7 @@
 				434B1DF8298ECCF1001CE41C /* PSConfig1.cpp in Sources */,
 				432657E3294E2FB100515080 /* Weber.cpp in Sources */,
 				43ABA52E29242418002AC1D4 /* PSState.cpp in Sources */,
+				4310526729CDD15000694D5A /* Scale.cpp in Sources */,
 				43DD95492945E223006DC553 /* PSCost.cpp in Sources */,
 				43ABA53129242418002AC1D4 /* PSConfig0.cpp in Sources */,
 				43C2BA1D299A5FEE0084AB3B /* IntervalSimple.cpp in Sources */,
@@ -610,6 +619,7 @@
 				43FBEACC2930CEDD008FC486 /* KeyFifth.cpp in Sources */,
 				43FBEACD2930CEDD008FC486 /* Ton.cpp in Sources */,
 				434B1DF9298ED0A0001CE41C /* PSConfig1.cpp in Sources */,
+				4310526829CDD15000694D5A /* Scale.cpp in Sources */,
 				432657E4294E2FB100515080 /* Weber.cpp in Sources */,
 				43FBEACE2930CEDD008FC486 /* PSState.cpp in Sources */,
 				43C2BA1E299A5FEE0084AB3B /* IntervalSimple.cpp in Sources */,

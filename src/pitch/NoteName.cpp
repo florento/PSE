@@ -26,13 +26,34 @@ namespace pse {
 
 
 
-bool defined(const NoteName& n)
+bool defined(const enum NoteName& n)
 {
     return (n != NoteName::Undef);
 }
 
 
-NoteName NNofint(int i)
+enum NoteName operator+(const enum NoteName& n, int d)
+{
+    if (n == NoteName::Undef)
+        return NoteName::Undef;
+    else
+    {
+        int i = toint(n);
+        assert(0 <= i);
+        assert(i <= 6);
+        int r = (i+d) % 6;
+        // the remainder can be < 0 when i+d < 0
+        // @see https://stackoverflow.com/questions/11630321/why-does-c-output-negative-numbers-when-using-modulo
+        // @see https://stackoverflow.com/questions/7594508/modulo-operator-with-negative-values
+        if (r < 0) r += 7;
+        assert(0 <= r);
+        assert(r <= 6);
+        return NoteName(r);
+    }
+}
+
+
+enum NoteName NoteName(int i)
 {
     switch (i)
     {
@@ -63,7 +84,7 @@ NoteName NNofint(int i)
 }
 
 
-NoteName NNofchar(char c)
+enum NoteName NoteName(char c)
 {
     switch (c)
     {
@@ -101,7 +122,7 @@ NoteName NNofchar(char c)
 }
 
 
-int toint(const NoteName& n)
+int toint(const enum NoteName& n)
 {
     switch (n)
     {
@@ -138,7 +159,7 @@ int toint(const NoteName& n)
 }
 
 
-char tochar(const NoteName& n)
+char tochar(const enum NoteName& n)
 {
     switch (n)
     {
@@ -175,7 +196,7 @@ char tochar(const NoteName& n)
 }
 
 
-bool diatonicStep(const NoteName& n1, const NoteName& n2)
+bool diatonicStep(const enum NoteName& n1, const enum NoteName& n2)
 {
     switch (n1)
     {
@@ -210,7 +231,7 @@ bool diatonicStep(const NoteName& n1, const NoteName& n2)
 }
 
 
-std::ostream& operator<<(std::ostream& o, const NoteName& n)
+std::ostream& operator<<(std::ostream& o, const enum NoteName& n)
 {
     o << tochar(n);
     return o;

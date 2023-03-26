@@ -165,7 +165,8 @@ namespace pse {
 /// @brief a accidental in [-2, 2], where 1.0 is a half tone.
 /// @return octave number, in -2..9, for the note of given midi key, name
 /// and accidental.
-int midi_to_octave(unsigned int m, const pse::NoteName& n, const pse::Accid& a);
+int midi_to_octave(unsigned int m,
+                   const enum pse::NoteName& n, const enum pse::Accid& a);
 
 
 //} // namespace MidiNum

@@ -99,7 +99,7 @@ public:
 
     /// accidental for the given note name recorded in this config.
     /// @param name note nate coded in 0..6 (0 is 'C', 6 is 'B').
-    const Accid accidental(const NoteName& name) const;
+    const enum Accid accidental(const enum NoteName& name) const;
 
     // enumerator this transition was built from
     // PSEnum& psenum() const;

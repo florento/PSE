@@ -28,7 +28,7 @@ PYBIND11_MODULE(pse, m)
     py::object what = py::cast("What?");
     m.attr("excuseme") = what;
     
-    py::enum_<pse::NoteName>(m, "NoteName", "Note Names")
+    py::enum_<enum pse::NoteName>(m, "NoteName", "Note Names")
         .value("C",     pse::NoteName::C,    "note C")
         .value("D",     pse::NoteName::D,    "note D")
         .value("E",     pse::NoteName::E,    "note E")
@@ -39,7 +39,7 @@ PYBIND11_MODULE(pse, m)
         .value("NN_Undef", pse::NoteName::Undef, "Unkown")
         .export_values();
 
-    py::enum_<pse::Accid>(m, "Accid", "Note Names")
+    py::enum_<enum pse::Accid>(m, "Accid", "Note Names")
         .value("TripleSharp", pse::Accid::TripleSharp, "Triple Sharp")
         .value("DoubleSharp", pse::Accid::DoubleSharp, "Double Sharp")
         .value("ThreeQuartersSharp", pse::Accid::ThreeQuartersSharp, "Three Quarters Sharp")
@@ -54,7 +54,7 @@ PYBIND11_MODULE(pse, m)
         .value("Accid_Undef", pse::Accid::Undef, "Unkown")
         .export_values();
 
-    py::enum_<pse::ModeName>(m, "Mode", "Modes")
+    py::enum_<enum pse::ModeName>(m, "Mode", "Modes")
         .value("Major", pse::ModeName::Major, "Major")
         .value("Minor", pse::ModeName::Minor, "Minor Harmonic")
         .value("MinorNat", pse::ModeName::MinorNat, "Minor Natural")

@@ -381,8 +381,8 @@ void PSCost::update(const PSC1& c, const PSEnum& e, const Ton& gton)
     // count the cost
     // bool cc = false;
 
-    const NoteName& name = c.name();
-    const Accid& accid = c.accidental();
+    const enum NoteName& name = c.name();
+    const enum Accid& accid = c.accidental();
     
     // update cost when accident for the name was updated
     // discount for lead degree
@@ -446,7 +446,7 @@ void PSCost::update(const PSC1& c, const PSEnum& e, const Ton& gton)
     
     // color of accident and color of global ton
     int ks = gton.fifths();
-    const Accid& a = c.accidental();
+    const enum Accid& a = c.accidental();
     if (((ks >= 0) && (flat(a))) || ((ks <  0) && (sharp(a))))
     {
         _color += 1;

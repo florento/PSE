@@ -124,11 +124,11 @@ public:
     /// estimated name for the note of given index in the best path,
     /// in 0..6 (0 is 'C', 6 is 'B').
     /// @param i index of note in the list of input notes.
-    inline pse::NoteName name(size_t i) const { return _enum.name(i); }
+    inline enum NoteName name(size_t i) const { return _enum.name(i); }
 
     /// estimated name for the note of given index in the best path, in -2..2.
     /// @param i index of note in the list of input notes.
-    inline pse::Accid accidental(size_t i) const {  return _enum.accidental(i); }
+    inline enum Accid accidental(size_t i) const {  return _enum.accidental(i); }
 
     /// estimated octave for the note of given index in the best path, in -2..9.
     /// @param i index of note in the list of input notes.

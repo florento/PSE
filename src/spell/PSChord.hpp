@@ -108,7 +108,8 @@ public:
     /// @param oct octave number in -10..10
     /// @param altprint whether the accidental must be printed.
     /// @warning should not be called for this enumerator.
-    virtual void rename(size_t i, const NoteName& name, const Accid& accid,
+    virtual void rename(size_t i,
+                        const enum NoteName& name, const enum Accid& accid,
                         int oct, bool altprint);
     
 private: // data

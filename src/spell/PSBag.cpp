@@ -234,8 +234,8 @@ void PSB::succ1(std::shared_ptr<const PSC0>& c, // PSEnum& e,
 
     for (int j = 0; j < 3; ++j)
     {
-        NoteName name = Enharmonics::name(m, j);
-        Accid accid = Enharmonics::accid(m, j);
+        enum NoteName name = Enharmonics::name(m, j);
+        enum Accid accid = Enharmonics::accid(m, j);
         // case of 8 and (short list) 1, 3, 6, 10
         if (defined(name) && defined(accid))
             q.push(std::make_shared<PSC1>(c, _enum, name, accid, ton));
@@ -274,8 +274,8 @@ void PSB::succ2(std::shared_ptr<const PSC0>& c, // PSEnum& e,
             // 3 enharmonics
             for (int j = 0; j < 3; ++j)
             {
-                NoteName name = Enharmonics::name(m, j);
-                Accid accid = Enharmonics::accid(m, j);
+                enum NoteName name = Enharmonics::name(m, j);
+                enum Accid accid = Enharmonics::accid(m, j);
                 // case of 8 and (short list) 1, 3, 6, 10
                 if (defined(name) && defined(accid) &&
                     rc2.consistent(name, accid))
@@ -313,8 +313,8 @@ void PSB::succ1(std::shared_ptr<const PSC0>& c, // PSEnum& e,
 
     for (int j = 0; j < 3; ++j)
     {
-        NoteName name = Enharmonics::name(m, j);
-        Accid accid = Enharmonics::accid(m, j);
+        enum NoteName name = Enharmonics::name(m, j);
+        enum Accid accid = Enharmonics::accid(m, j);
         // case of 8 and (short list) 1, 3, 6, 10
         if (defined(name) && defined(accid))
             q.push(std::make_shared<PSC1>(c, _enum, name, accid, ton, lton));
@@ -350,8 +350,8 @@ void PSB::succ2(std::shared_ptr<const PSC0>& c, // PSEnum& e,
             // 3 enharmonics
             for (int j = 0; j < 3; ++j)
             {
-                NoteName name = Enharmonics::name(m, j);
-                Accid accid = Enharmonics::accid(m, j);
+                enum NoteName name = Enharmonics::name(m, j);
+                enum Accid accid = Enharmonics::accid(m, j);
                 // case of 8 and (short list) 1, 3, 6, 10
                 if (defined(name) && defined(accid) &&
                     rc2.consistent(name, accid))

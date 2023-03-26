@@ -44,10 +44,10 @@ public:
     static const unsigned int UNDEF_MIDICENT;
     
     /// @todo TBR (mv to NoteName.hpp)
-    static const NoteName     UNDEF_NOTE_NAME;
+    static const enum NoteName     UNDEF_NOTE_NAME;
 
     /// @todo TBR (mv to Accid.hpp)
-    static const Accid        UNDEF_NOTE_ALTERATION;
+    static const enum Accid        UNDEF_NOTE_ALTERATION;
 
     /// code for undefuned octave value
     static const int          UNDEF_NOTE_OCTAVE;
@@ -60,8 +60,8 @@ public:
     /// @param accid in [-2, 2] where 1.0 is half tone
     /// @param oct in -10..10
     /// @see table Pitch::NAME
-    Pitch(const NoteName& name,
-          const Accid& accid,
+    Pitch(const enum NoteName& name,
+          const enum Accid& accid,
           int oct = 0);
 
     /// @brief construct note from MIDI pitch
@@ -94,7 +94,7 @@ public:
     bool named() const;
     
     //void rename(char n, float alt, int oct, bool altprint);
-    void rename(const NoteName& name, const Accid& accid, int oct,
+    void rename(const enum NoteName& name, const enum Accid& accid, int oct,
                 bool altprint);
     
     /// @brief value in MIDIcent.
@@ -152,11 +152,11 @@ private: // non unique
     
     /// @todo TBR replaced by with NoteName
     // static char midi_to_name(unsigned int);
-    static NoteName midi_to_name(unsigned int m);
+    static enum NoteName midi_to_name(unsigned int m);
 
     /// @todo TBR replaced by with Accid
     // static float midi_to_alt(unsigned int);
-    static Accid midi_to_alt(unsigned int m);
+    static enum Accid midi_to_alt(unsigned int m);
 
 public:  // unique
 
@@ -175,19 +175,19 @@ public:  // unique
     /// and accidental.
     /// @todo mv to MidiNum
     static int midi_to_octave(unsigned int m,
-                              const NoteName& n,
-                              const Accid& a);
+                              const enum NoteName& n,
+                              const enum Accid& a);
 
     /// midi cent value corresponding to the given note name.
     /// @todo mv to MidiNum
-    static unsigned int to_midi(const NoteName& name,
-                                const Accid& accid,
+    static unsigned int to_midi(const enum NoteName& name,
+                                const enum Accid& accid,
                                 int octave);
     //static unsigned int to_midi(char, float, int);
 
     /// pitch class, in 0..11, of the given note name.
     /// @todo TBR mv to NoteName
-    static unsigned int pitchClass(const NoteName& name);
+    static unsigned int pitchClass(const enum NoteName& name);
     
     /// encoding of given note name in 0..6 (0 is 'C', 6 is 'B').
     /// @param n note name in 'A'..'G'.

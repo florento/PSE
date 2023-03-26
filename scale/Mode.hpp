@@ -14,10 +14,6 @@
 #include <vector>
 
 #include "trace.hpp"
-//#include "NoteName.hpp"
-//#include "Accidental.hpp"
-//#include "Fifths.hpp"
-//#include "KeyFifth.hpp"
 #include "ModeName.hpp"
 
 
@@ -27,9 +23,14 @@ class Mode
 {
 public:
     /// main constructor.
-    /// @param ls list of numbers of 1/2 tones between one degree and the next. must not be empty.
-    /// @param ln list of numbers of names between one degree and the next. must have same size as ls.
-    Mode(const std::vector<int>& ls, const std::vector<int>& ln);
+    /// @param name code of this mode.
+    /// @param ls list of numbers of 1/2 tones between one degree and the next.
+    /// must not be empty.
+    /// @param ln list of numbers of names between one degree and the next.
+    /// must have same size as ls.
+    Mode(const ModeName& name,
+         const std::vector<const int>& ls,
+         const std::vector<const int>& ln);
 
     /// copy constructor
     Mode(const Mode& rhs);
@@ -40,23 +41,38 @@ public:
     /// number of degrees
     size_t size() const;
     
+    /// code of this mode
+    inline ModeName name() const { return _name; }
+
+    /// code of this mode
+    inline ModeName code() const { return name(); }
+    
+    /// distance in 1/2 tones to the tonic
+    const int semitonDistance(size_t i) const;
+
+    /// distance in number of names to the tonic
+    const int nameDistance(size_t i) const;
+
 protected:
+
+    /// code of this mode
+    ModeName _name;
+    
     /// number of 1/2 tones between one degree and the next
-    std::vector<int> _semitons;
+    std::vector<const int> _semitons;
       
     /// distance to tonic, in 1/2 tones
     std::vector<int> _csemitons;
 
     /// number of names between one degree and the next
-    std::vector<int> _names;
+    std::vector<const int> _names;
     
     /// distance to tonic, in number of names.
     std::vector<int> _cnames;
 
 };
 
-
-//std::ostream& operator<<(std::ostream& o, const Ton& ton);
+//std::ostream& operator<<(std::ostream& o, const Mode& ton);
 
 } // end namespace pse
 

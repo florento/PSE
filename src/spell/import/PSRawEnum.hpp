@@ -129,18 +129,19 @@ public:
     /// @see Pitch::rename()
     /// @warning the notes cannot be renamed in place because the Python
     /// lists in argument contain const objects.
-    virtual void rename(size_t i, const pse::NoteName& name,
-                        const pse::Accid& accid, int oct, bool altprint);
+    virtual void rename(size_t i,
+                        const enum NoteName& name, const enum Accid& accid,
+                        int oct, bool altprint);
     
     /// estimated name for the note of given index in the best path,
     /// in 0..6 (0 is 'C', 6 is 'B').
     /// @param i index of note in the list of input notes.
-    pse::NoteName name(size_t i) const;
+    enum NoteName name(size_t i) const;
     
     /// estimated alteration for the note of given index in the best path,
     /// in -2..2.
     /// @param i index of note in the list of input notes.
-    pse::Accid accidental(size_t i) const;
+    enum Accid accidental(size_t i) const;
     
     /// estimated octave for the note of given index in the best path, in -2..9.
     /// @param i index of note in the list of input notes.
@@ -166,12 +167,12 @@ private: // data (shared by all copies of this enumerator)
     /// list of the estimated best note name (in 0..6) for each input note.
     /// copy of the values of the PSPaths (best paths) in the columns of table,
     /// temporaly stored by rename, because the input notes are const protected.
-    std::shared_ptr<std::vector<NoteName>> _names;
+    std::shared_ptr<std::vector<enum NoteName>> _names;
 
     /// list of the estimated best accident (in -2..2) for each input note.
     /// copy of the values of the PSPaths (best paths) in the columns of table,
     /// temporaly stored by rename, because the input notes are const protected.
-    std::shared_ptr<std::vector<Accid>> _accids;
+    std::shared_ptr<std::vector<enum Accid>> _accids;
 
     /// list of the estimated best octave (in -2..9) for each input note.
     /// copy of the values of the PSPaths (best paths) in the columns of table,

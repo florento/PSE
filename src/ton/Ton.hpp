@@ -78,20 +78,20 @@ public:
     inline ModeName mode() const { return _mode; }
 
     /// note name of this tonality
-    inline const NoteName name() const { return Fifths::name(tonic()); }
+    inline const enum NoteName name() const { return Fifths::name(tonic()); }
 
     /// accidental name of this tonality
-    inline const Accid accidental() const { return Fifths::accid(tonic()); }
+    inline const enum Accid accidental() const { return Fifths::accid(tonic()); }
     
     /// accidental in the key signature of this ton for a given pitch name.
     /// @param n an encapsulated note name
     /// @return the number of accidents, in the key signature, for n, in -2..2.
-    Accid accidKey(const NoteName& n) const;
+    enum Accid accidKey(const enum NoteName& n) const;
 
     /// accidental in the scale of this ton for a given pitch name.
     /// @param n an encapsulated note name
     /// @return the number of accidents, in scale, for n, in -2..2.
-    Accid accidDia(const NoteName& n) const;
+    enum Accid accidDia(const enum NoteName& n) const;
 
     /// a note is a lead in this Ton if
     /// it has an accidental in the scale different
@@ -100,14 +100,14 @@ public:
     /// It is equivalent to accidKey(n) != accidDia(n)
     /// @param n a pitch name, in 0..6 (0 is 'C', 6 is 'B').
     /// @return wether the note n is a lead in this Ton.
-    bool lead(const NoteName& n) const;
+    bool lead(const enum NoteName& n) const;
 
     /// distance, in the array of fifths, between the note
     /// (given by name and accidental) and the tonic of this tonality.
     /// @param name a note name in 0..6 (0 is 'C', 6 is 'B').
     /// @param accid alteration in -2..2 (-2 = double flats, 2 = double sharps).
     /// @todo TBR, unused.
-    unsigned int dist(const NoteName& name, const Accid& accid) const;
+    unsigned int dist(const enum NoteName& name, const enum Accid& accid) const;
 
     /// distance, in the array of fifths,
     /// between this tonality and another tonality.
@@ -145,17 +145,17 @@ protected:
 private:
     
     /// abbreviations for accidentals
-    static const Accid _2F;
-    static const Accid _1F;
-    static const Accid _0N;
-    static const Accid _1S;
-    static const Accid _2S;
-    static const Accid __U;
+    static const enum Accid _2F;
+    static const enum Accid _1F;
+    static const enum Accid _0N;
+    static const enum Accid _1S;
+    static const enum Accid _2S;
+    static const enum Accid __U;
     
     /// list of accidents in key signatures,
     /// for every pitch name in 0..6 (0 is 'C', 6 is 'B'),
     /// for every key signature in -7..7.
-    static const std::array<std::array<Accid, 7>, 15> KEYS;
+    static const std::array<std::array<enum Accid, 7>, 15> KEYS;
 
     /// lead node in minor harmonic tons
     /// one pitch name in 0..6 (0 is 'C', 6 is 'B'),
@@ -165,23 +165,23 @@ private:
     /// list of accidents in minor harmonic mode,
     /// for every pitch name in 0..6 (0 is 'C', 6 is 'B'),
     /// for every key signature in -7..7.
-    static const std::array<std::array<Accid, 7>, 15> MIN_HARM;
+    static const std::array<std::array<enum Accid, 7>, 15> MIN_HARM;
 
     /// list of accidents in minor melodic mode,
     /// for every pitch name in 0..6 (0 is 'C', 6 is 'B'),
     /// for every key signature in -7..7.
-    static const std::array<std::array<Accid, 7>, 15> MIN_MEL;
+    static const std::array<std::array<enum Accid, 7>, 15> MIN_MEL;
     
     /// accidental in the key signature of this ton for a given pitch name.
     /// @param n a note name, in 0..6 (0 is 'C', 6 is 'B').
     /// @return the accidental, in the key signature, for n, in -2..2.
     /// @todo TBR
-    Accid accidKey(int n) const;
+    enum Accid accidKey(int n) const;
     
     /// accidental in the scale of this ton for a given pitch name.
     /// @param n a note name, in 0..6 (0 is 'C', 6 is 'B').
     /// @return the accidental, in scale, for n, in -2..2.
-    Accid accidDia(int n) const;
+    enum Accid accidDia(int n) const;
     
     /// number of the tonic of this ton in the array of fifths.
     int tonic() const;

@@ -64,7 +64,7 @@ public:
 
     /// copy and update given name with given accident
     PSState(const PSState& as,
-               const NoteName& name, const Accid& accid);
+            const enum NoteName& name, const enum Accid& accid);
 
     ~PSState();
     
@@ -83,18 +83,18 @@ public:
     /// accidental in this state for a given pitch name.
     /// @param n a pitch name, in 0..6 (0 is 'C', 6 is 'B').
     /// @return the number of accidents, in state, for n, in -2..2.
-    const Accid accid(const NoteName& n) const;
+    const enum Accid accid(const enum NoteName& n) const;
     
     /// the given note (given by name and alt) belongs to this state.
     /// @param name a note name in 0..6 (0 is 'C', 6 is 'B').
     /// @param accid accidental in -2..2 (-2 = double flats, 2 = double sharps).
-    bool member(const NoteName& name, const Accid& accid) const;
+    bool member(const enum NoteName& name, const enum Accid& accid) const;
     
     /// update this state, setting the given accident for the given name.
     /// @param n a pitch name, in 0..6 (0 is 'C', 6 is 'B').
     /// @param a a number of accidentals, for n, in -2..2.
     /// @return whether this state was effectively modified.
-    bool update(const NoteName&  n, const Accid& a);
+    bool update(const enum NoteName&  n, const enum Accid& a);
     
     // distance from other state of accidentals
     // unsigned int dist(const PSState& rhs) const;
@@ -134,19 +134,19 @@ private:
 
     /// association to each pitch name (in 0..6)
     /// of an accidental (in -2..2).
-    std::array<Accid, 7> _state; // _state[7]
+    std::array<enum Accid, 7> _state; // _state[7]
        
     /// abbreviations for accidentals
-    static const Accid _2F;
-    static const Accid _1F;
-    static const Accid _0N;
-    static const Accid _1S;
-    static const Accid _2S;
-    static const Accid __U;
+    static const enum Accid _2F;
+    static const enum Accid _1F;
+    static const enum Accid _0N;
+    static const enum Accid _1S;
+    static const enum Accid _2S;
+    static const enum Accid __U;
     
     /// key signatures, formatted for _state, in major and minor harm modes,
     /// for every key signature in -7..7.
-    static const std::array<std::array<Accid, 7>, 15> KEYS;
+    static const std::array<std::array<enum Accid, 7>, 15> KEYS;
     // static const int TON[15][7];
 
     // key signatures, formatted for _state, in minor modes,
@@ -158,26 +158,26 @@ private:
     /// formatted for _state, for every minor harmonic mode
     /// with key signature in -7..7.
     /// accidental in -2..2 or 9 = no accidental.
-    static const std::array<std::array<Accid, 7>, 15> MIN_HARM;
+    static const std::array<std::array<enum Accid, 7>, 15> MIN_HARM;
 
     /// accidentals in minor natural mode
     /// = leading-tone, or subsemitone, or sensible;
     /// formatted for _state, for every minor harmonic mode
     /// with key signature in -7..7.
     /// accidental in -2..2 or 9 = no accidental.
-    static const std::array<std::array<Accid, 7>, 15> MIN_NAT;
+    static const std::array<std::array<enum Accid, 7>, 15> MIN_NAT;
 
     /// accidentals in minor melodic mode
     /// = leading-tone, or subsemitone, or sensible;
     /// formatted for _state, for every minor harmonic mode
     /// with key signature in -7..7.
     /// accidental in -2..2 or 9 = no accidental.
-    static const std::array<std::array<Accid, 7>, 15> MIN_MEL;
+    static const std::array<std::array<enum Accid, 7>, 15> MIN_MEL;
 
     /// accidental in this state for a given pitch name.
     /// @param n a pitch name, in 0..6 (0 is 'C', 6 is 'B').
     /// @return the number of accidents, in state, for n, in -2..2.
-    Accid accid(int n) const;
+    enum Accid accid(int n) const;
 
 };
 
