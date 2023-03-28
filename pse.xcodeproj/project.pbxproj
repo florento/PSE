@@ -245,7 +245,8 @@
 				4310526629CDD15000694D5A /* Scale.hpp */,
 				4310526529CDD15000694D5A /* Scale.cpp */,
 			);
-			path = scale;
+			name = scale;
+			path = src/scale;
 			sourceTree = "<group>";
 		};
 		431586182983E65A00918B1B /* ton */ = {

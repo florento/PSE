@@ -33,7 +33,7 @@ public:
     /// note name for given degree.
     /// @param deg degree in this scale. the first degree is 0 (not 1).
     /// @return the note name for the given degree, in A..G.
-    ModeName name(size_t deg) const;
+    enum NoteName name(size_t deg) const;
 
     /// accidental name for given degree.
     /// @param deg degree in this scale. the first degree is 0 (not 1).
@@ -44,6 +44,11 @@ public:
     /// @param deg degree in this scale. the first degree is 0 (not 1).
     /// @return number of pitch class in 0..11.
     int pitchClass(size_t deg) const;
+
+    /// this scale contains the note of given name and accidental.
+    /// @param n note name in 'A'..'G'.
+    /// @brief a accidental in [-2, 2], where 1.0 is a half tone.
+    bool contains(const enum NoteName& n, const enum Accid& a) const;
 
     /// distance to C maj in the line of fifths
     /// @return the key signature in -7..7
@@ -63,7 +68,10 @@ protected:
    
     /// name of every degree
     std::vector<enum NoteName> _names;
-    
+
+    /// accidental of every degree
+    std::vector<enum Accid> _accids;
+
     /// key signature for diatonic scales (0 for others)
     KeyFifth _ks;
 

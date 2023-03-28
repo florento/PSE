@@ -157,7 +157,6 @@ namespace pse {
 /// | 128  |       |       | Ab9   | G#9   |       |  8     |
 
 
-//namespace MidiNum {
 
 /// octave number for a given MIDI key.
 /// @param m midi number
@@ -168,8 +167,15 @@ namespace pse {
 int midi_to_octave(unsigned int m,
                    const enum pse::NoteName& n, const enum pse::Accid& a);
 
+namespace MidiNum{
 
-//} // namespace MidiNum
+/// accidental for the given pitch class and given name.
+/// @param c a pitch class in 0..11.
+/// @param n a note name, must not be Undef.
+/// @return the accidental corresponding to c and n, or Undef if there is none.
+enum Accid accid(int c, const enum NoteName& n);
+
+} // namespace MidiNum
 
 
 } // namespace pse

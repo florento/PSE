@@ -50,6 +50,43 @@ int midi_to_octave(unsigned int m,
     }
 }
 
+namespace MidiNum{
+
+enum Accid accid(int c, const enum NoteName& n)
+{
+    // pitch class for each note name in 0 (C) .. 7 (B)
+    //                  C  D  E  F  G  A  B
+    const int PC[7] = { 0, 2, 4, 5, 7, 9, 11 };
+
+    assert(0 <= c);
+    assert(c <= 11);
+    int ni = toint(n);
+    assert(0 <= ni);
+    assert(ni <= 6);
+    switch (c - PC[ni])
+    {
+        case -3:
+            return Accid::TripleFlat;
+        case -2:
+            return Accid::DoubleFlat;
+        case -1:
+            return Accid::Flat;
+        case  0:
+            return Accid::Natural;
+        case  1:
+            return Accid::Sharp;
+        case  2:
+            return Accid::DoubleSharp;
+        case  3:
+            return Accid::TripleSharp;
+        default:
+            return Accid::Undef;
+    }
+}
+
+} // namespace MidiNum
+
+
 //} // namespace MidiNum
 
 } // end namespace pse
