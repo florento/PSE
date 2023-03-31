@@ -21,8 +21,14 @@ namespace pse {
 
 class Mode
 {
+    //friend class ModeFactory;
+    
 public:
-    /// main constructor.
+    
+    /// predefined mode of given name.
+    Mode(const ModeName& name);
+    
+    /// internal constructor.
     /// @param name code of this mode.
     /// @param ls list of numbers of 1/2 tones between one degree and the next.
     /// must not be empty.
@@ -69,6 +75,16 @@ protected:
     
     /// distance to tonic, in number of names.
     std::vector<int> _cnames;
+    
+private:
+    
+    /// @param name code of a mode.
+    /// @return list of numbers of 1/2 tones between one degree and the next.
+    std::vector<const int> predefined_semitons(const ModeName& name);
+    
+    /// @param name code of a mode.
+    /// @return list of number of names between one degree and the next.
+    std::vector<const int> predefined_names(const ModeName& name);
 
 };
 

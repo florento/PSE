@@ -124,6 +124,7 @@ public:
     virtual bool simultaneous(size_t i) const = 0;
 
     /// rename the note of given index
+    /// @param i index of a note in this enumerator.
     /// @param name note name in 'A'..'G'.
     /// @param accid accidental in [-2, 2] where 1 is a half tone
     /// @param oct octave number in -10..10

@@ -21,6 +21,7 @@
 #include "trace.hpp"
 #include "NoteName.hpp"
 #include "Accidental.hpp"
+#include "MidiNum.hpp"
 #include "PSEnum.hpp"
 //#include "Stream.hpp"
 
@@ -121,17 +122,32 @@ public:
     /// @param i index of a note. must be inside the interval of this enumerator.
     virtual bool simultaneous(size_t i) const;
 
-    /// record new NoteName, Accid, Octave, print_flag for the note of given index.
-    /// @param name note name in 'A'..'G'.
-    /// @param accid accidetal in [-2, 2] where 1 is a half tone
-    /// @param oct octave number in -10..10
+    /// record new NoteName, Accid, Octave, print flag for the note of given index.
+    /// @param i index of a note. must be inside the interval of this enumerator.
+    /// @param n note name in 'A'..'G'.
+    /// @param a accidental in [-2, 2] where 1 is a half tone
+    /// @param o octave number in -10..10
     /// @param altprint whether the accidental must be printed.
     /// @see Pitch::rename()
+    /// @warning the triplet n, a, o must correspond to the midi value
+    /// of this pitch.
     /// @warning the notes cannot be renamed in place because the Python
     /// lists in argument contain const objects.
     virtual void rename(size_t i,
-                        const enum NoteName& name, const enum Accid& accid,
-                        int oct, bool altprint);
+                        const enum NoteName& n, const enum Accid& a, int o,
+                        bool altprint);
+    
+    /// record new note name, accidental, octave, print flag for the note
+    /// of given index. The accidental and octave are deduced from
+    /// @param i index of a note. must be inside the interval of this enumerator.
+    /// @param n note name in 'A'..'G'.
+    /// @see Pitch::rename()
+    /// @warning the name n must be a possible name for the current midi value
+    /// of this pitch.
+    /// @warning the alt-print flag is set arbitrarily to true.
+    /// @warning the notes cannot be renamed in place because the Python
+    /// lists in argument contain const objects.
+    virtual void rename(size_t i, const enum NoteName& n, bool altprint=true);
     
     /// estimated name for the note of given index in the best path,
     /// in 0..6 (0 is 'C', 6 is 'B').
@@ -155,13 +171,13 @@ public:
 private: // data (shared by all copies of this enumerator)
        
     /// list of MIDI pitch of all notes in input.
-    /// extracted from the list of Music 21 notes.
+    /// entered with method add().
     std::shared_ptr<std::vector<int>> _notes;
 
-    /// list of bar number for each note
+    /// list of bar number to which belongs each input note.
     std::shared_ptr<std::vector<int>> _barnum;
     
-    /// list of simultaneity with next, for each ntoe
+    /// list of simultaneity with next note, for each input note
     std::shared_ptr<std::vector<bool>> _simult;
     
     /// list of the estimated best note name (in 0..6) for each input note.

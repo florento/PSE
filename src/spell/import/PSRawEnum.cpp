@@ -234,45 +234,66 @@ bool PSRawEnum::printed(size_t i) const
 
 
 void PSRawEnum::rename(size_t i,
-                       const enum NoteName& name, const enum Accid& accid,
-                       int oct, bool altprint)
+                       const enum NoteName& n, const enum Accid& a, int o,
+                       bool altprint)
 {
+    assert(_notes);
+    assert(i < _notes->size());
+    if (MidiNum::to_midi(n, a, o) == _notes->at(i))
+    {
+        ERROR("PSRawEnum: MIDI pitch {} cannot be named by {}{} {}",
+              _notes->at(i), n, a, o);
+        return;
+    }
+
     assert(sanity_check());
     // const py::object& pynote = _import[i];
-    
     // possible to call non const methods on pynote (dirty) ?
-    assert(name != NoteName::Undef);
+    assert(n != NoteName::Undef);
     assert(_names);
     assert(i < _names->size());
     if (_names->at(i) != NoteName::Undef)
     {
         WARN("PSRawEnum overwriting {} with {} (was {})",
-             i, name, _names->at(i));
+             i, n, _names->at(i));
     }
-    _names->at(i) = name;
+    _names->at(i) = n;
     
-    assert(accid != Accid::Undef);
+    assert(a != Accid::Undef);
     assert(_accids);
     assert(i < _accids->size());
     if (_accids->at(i) != Accid::Undef)
     {
-        WARN("PSRawEnum overwriting {} with {} (was {})",
-             i, accid, _accids->at(i));
+        WARN("PSRawEnum overwriting {} with {} (was {})", i, a, _accids->at(i));
     }
-    _accids->at(i) = accid;
+    _accids->at(i) = a;
     
-    assert(oct != OCTAVE_UNDEF);
+    assert(o != OCTAVE_UNDEF);
     assert(_octs);
     assert(i < _octs->size());
     if (_octs->at(i) != OCTAVE_UNDEF)
     {
-        WARN("PSRawEnum overwriting {} with {} (was {})", i, oct, _octs->at(i));
+        WARN("PSRawEnum overwriting {} with {} (was {})", i, o, _octs->at(i));
     }
-    _octs->at(i) = oct;
+    _octs->at(i) = o;
     
     assert(_prints);
     assert(i < _prints->size());
     _prints->at(i) = altprint;
+}
+
+
+void PSRawEnum::rename(size_t i, const enum NoteName& n, bool altprint)
+{
+    int m = _notes->at(i);
+    enum Accid a = MidiNum::accid(m%12, n);
+    if (a == Accid::Undef)
+    {
+        ERROR("pitch {} cannot be named by {}", m, n);
+        return;
+    }
+    int o = MidiNum::midi_to_octave(m, n);
+    rename(i, n, a, o, altprint);
 }
 
 

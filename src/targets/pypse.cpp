@@ -16,6 +16,7 @@
 #include "ModeName.hpp"
 #include "Ton.hpp"
 #include "Speller.hpp"
+#include "PSE.hpp"
 
 namespace py = pybind11;
 using namespace pybind11::literals;
@@ -75,40 +76,40 @@ PYBIND11_MODULE(pse, m)
         .def("accidental", &pse::Ton::accidental, "get accidental")
         .def("fifths", &pse::Ton::fifths, "get key signature");
 
-    py::class_<pse::Speller>(m, "Speller")
+    py::class_<pse::PSE>(m, "PSE")
         .def(py::init<>(), "Spell Checker")
-        .def("debug", &pse::Speller::debug, "set debug mode", py::arg("on"))
-        .def("size", &pse::Speller::size, "number notes to spell")
-        .def("add", &pse::Speller::add, "add a new note to spell",
+        .def("debug", &pse::PSE::debug, "set debug mode", py::arg("on"))
+        .def("size", &pse::PSE::size, "number notes to spell")
+        .def("add", &pse::PSE::add, "add a new note to spell",
              py::arg("midi"), py::arg("bar"), py::arg("simultaneous"))
-        .def("nb_tons", &pse::Speller::nbTons,
+        .def("nb_tons", &pse::PSE::nbTons,
              "number of tonalities considered for pitch spelling")
-        .def("reset_tons", &pse::Speller::resetTons,
+        .def("reset_tons", &pse::PSE::resetTons,
              "clear the array of tonalities for pitch spelling")
         // disambiguate overloaded method
         .def("add_ton",
-             static_cast<void (pse::Speller::*)(int, pse::ModeName)>(&pse::Speller::addTon),
+             static_cast<void (pse::PSE::*)(int, pse::ModeName)>(&pse::PSE::addTon),
              "add a tonality for pitch spelling", py::arg("ks"), py::arg("mode"))
-        .def("set_global", &pse::Speller::setGlobal, "force global tonality")
-        .def("spell", &pse::Speller::spell, "spell notes")
-        .def("global_ton", &pse::Speller::global, "get estimated global tonality")
-        .def("iglobal_ton", &pse::Speller::iglobal,
+        .def("set_global", &pse::PSE::setGlobal, "force global tonality")
+        .def("spell", &pse::PSE::spell, "spell notes")
+        .def("global_ton", &pse::PSE::global, "get estimated global tonality")
+        .def("iglobal_ton", &pse::PSE::iglobal,
              "get index of estimated global tonality")
-        .def("keysig", &pse::Speller::fifths, "get estimated global key signature")
-        .def("local_ton", &pse::Speller::local, "get estimated local tonality",
+        .def("keysig", &pse::PSE::fifths, "get estimated global key signature")
+        .def("local_ton", &pse::PSE::local, "get estimated local tonality",
              py::arg("ton"), py::arg("bar"))
-        .def("global_cands", &pse::Speller::globalCands,
+        .def("global_cands", &pse::PSE::globalCands,
              "get number of candidates (ties) for the estimatation of the global tonality")
-        .def("global_cand_ton", &pse::Speller::globalCand,
+        .def("global_cand_ton", &pse::PSE::globalCand,
              "get candidate global tonality ")
-        .def("iglobal_cand_ton", &pse::Speller::iglobalCand,
+        .def("iglobal_cand_ton", &pse::PSE::iglobalCand,
              "get index of candidate global tonality ")
-        .def("name",  &pse::Speller::name, "estimated name of note",
+        .def("name",  &pse::PSE::name, "estimated name of note",
              py::arg("i"))
-        .def("accidental", &pse::Speller::accidental,
+        .def("accidental", &pse::PSE::accidental,
              "estimated accidental of note", py::arg("i"))
-        .def("octave", &pse::Speller::octave, "estimated octave of note",
+        .def("octave", &pse::PSE::octave, "estimated octave of note",
              py::arg("i"))
-        .def("printed", &pse::Speller::printed, "estimated print flag of note",
+        .def("printed", &pse::PSE::printed, "estimated print flag of note",
              py::arg("i"));
 }

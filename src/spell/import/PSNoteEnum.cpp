@@ -158,7 +158,7 @@ void PSNoteEnum::rename(size_t i, const pse::NoteName& name,
     int mp = n->pitch().midi();
     assert(0 <= mp);
     assert(mp <= 128);
-    n->namePitch(name, accid, Pitch::midi_to_octave(mp, name, accid), altprint);
+    n->namePitch(name, accid, MidiNum::midi_to_octave(mp, name), altprint);
 }
 
 

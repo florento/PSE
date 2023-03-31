@@ -16,6 +16,11 @@ added with `git subtree`
   branch: master  
   see https://github.com/gabime/spdlog   
   
+  
+- **googletest**
+  https://github.com/google/googletest.git
+  branch: main
+  
 
 update code with  
 ```shell

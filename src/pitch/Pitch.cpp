@@ -154,31 +154,47 @@ bool Pitch::named() const
 }
 
 
-void Pitch::rename(const enum NoteName& nam, const enum Accid& acc,
-                   int oct, bool altpr)
+void Pitch::rename(const enum NoteName& n, const enum Accid& a, int o,
+                   bool altpr)
 {
-    //char n;
-    //float alt;
+    if (MidiNum::to_midi(n, a, o) == midi())
+    {
+        ERROR("pitch {} cannot be named by {}{} {}", midi(), n, a, o);
+        return;
+    }
     if (name != UNDEF_NOTE_NAME)
     {
-        TRACE("Pitch rename: aleady named, replace name.");
+        TRACE("Pitch rename: aleady named, replace name by {}.", name);
         TRACE("former pitch name : (MIDI {}%{}) {}", midi(), midi()%12, *this);
     }
     //assert('A' <= n);
     //assert(n <= 'G');
-    assert(defined(nam));
-    name = nam;
+    assert(defined(n));
+    name = n;
     //assert(-2.0 <= alt);
     //assert(alt <= 2.0);
-    assert(defined(acc));
-    alteration = acc;
-    assert(-10 <= oct);
-    assert(oct <= 10);
-    octave = oct;
+    assert(defined(a));
+    alteration = a;
+    assert(-10 <= o);
+    assert(o <= 10);
+    octave = o;
     altprint = altpr;
-    TRACE("Pitch rename: new pitch name : (MIDI {}%{}) {}",
-          midi(), midi()%12,  *this);
+    TRACE("Pitch rename: (MIDI {}%{}): {}", midi(), midi()%12,  *this);
     // assert(name_to_midi(name, alteration, octave) == midi());
+}
+
+
+void Pitch::rename(const enum NoteName& n)
+{
+    int m = midi();
+    enum Accid a = MidiNum::accid(m%12, n);
+    if (a == Accid::Undef)
+    {
+        ERROR("pitch {} cannot be named by {}", m, n);
+        return;
+    }
+    int o = MidiNum::midi_to_octave(m, n);
+    rename(n, a, o, true);
 }
 
     
@@ -214,21 +230,22 @@ int Pitch::midicent_to_octave(unsigned int k)
 }
 
 
-int Pitch::midi_to_octave(unsigned int k)
-{
-    int oct = int(floor(k/12)) - 1;
-    assert(-1 <= oct);
-    assert(oct <= 9);
-    return oct;
-}
+// @todo TBR (incorrect)
+//int Pitch::midi_to_octave(unsigned int k)
+//{
+//    int oct = int(floor(k/12)) - 1;
+//    assert(-1 <= oct);
+//    assert(oct <= 9);
+//    return oct;
+//}
 
 
 // static
-int Pitch::midi_to_octave(unsigned int m,
-                          const enum NoteName& n, const enum Accid& a)
-{
-    return midi_to_octave(m);
-}
+//int Pitch::midi_to_octave(unsigned int m,
+//                          const enum NoteName& n, const enum Accid& a)
+//{
+//    return midi_to_octave(m);
+//}
 
 
 unsigned int Pitch::pitchClass(const enum NoteName& name)

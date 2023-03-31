@@ -93,9 +93,23 @@ public:
     /// the name/alteration/octave values are set.
     bool named() const;
     
-    //void rename(char n, float alt, int oct, bool altprint);
-    void rename(const enum NoteName& name, const enum Accid& accid, int oct,
+    /// set the given name/alteration/octave values.
+    /// @param n note name in 'A'..'G'.
+    /// @param a accidental in [-2, 2] where 1 is one half tone
+    /// @param o octave number, in -10..10
+    /// @param altprint whether the accidental must be printed.
+    /// @warning the triplet n, a, o must correspond to the midi value
+    /// of this pitch.
+    void rename(const enum NoteName& n, const enum Accid& a, int o,
                 bool altprint);
+    //void rename(char n, float alt, int oct, bool altprint);
+
+    /// set the given name value and the alteration and octave accordingly.
+    /// @param n a note name in A..G. must be defined.
+    /// @warning the name n must be a possible name for the current midi value
+    /// of this pitch.
+    /// @warning the alt-print flag is set arbitrarily to true.
+    void rename(const enum NoteName& n);
     
     /// @brief value in MIDIcent.
     unsigned int midicent() const { return _midi; };
@@ -160,23 +174,23 @@ private: // non unique
 
 public:  // unique
 
-    /// @param m midi number
-    /// @todo TBR (incorrect)
-    static int midi_to_octave(unsigned int m);
+    // @param m midi number
+    // @todo TBR (incorrect)
+    // static int midi_to_octave(unsigned int m);
 
     /// @param m midicent number
     /// @todo TBR (incorrect)
     static int midicent_to_octave(unsigned int m);
 
-    /// @param m midi number
-    /// @param n note name in 'A'..'G'.
-    /// @brief a accidental in [-2, 2], where 1.0 is a half tone.
-    /// @return octave number, in -2..9, for the note of given midi nb, name
-    /// and accidental.
-    /// @todo mv to MidiNum
-    static int midi_to_octave(unsigned int m,
-                              const enum NoteName& n,
-                              const enum Accid& a);
+    // @param m midi number
+    // @param n note name in 'A'..'G'.
+    // @brief a accidental in [-2, 2], where 1.0 is a half tone.
+    // @return octave number, in -2..9, for the note of given midi nb, name
+    // and accidental.
+    // @todo mv to MidiNum
+    // static int midi_to_octave(unsigned int m,
+    //                           const enum NoteName& n,
+    //                           const enum Accid& a);
 
     /// midi cent value corresponding to the given note name.
     /// @todo mv to MidiNum

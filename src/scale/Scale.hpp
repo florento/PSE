@@ -89,6 +89,7 @@ protected:
 
 std::ostream& operator<<(std::ostream& o, const Scale& s);
 
+
 } // end namespace pse
 
 #endif /* Scale_hpp */

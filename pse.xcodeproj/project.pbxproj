@@ -24,6 +24,11 @@
 		432657E3294E2FB100515080 /* Weber.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 432657E1294E2FB000515080 /* Weber.cpp */; };
 		432657E4294E2FB100515080 /* Weber.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 432657E1294E2FB000515080 /* Weber.cpp */; };
 		432657E5294E2FB100515080 /* Weber.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 432657E2294E2FB100515080 /* Weber.hpp */; };
+		432E7A4E29D427FD000E2B72 /* PSE.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 432E7A4C29D427FD000E2B72 /* PSE.cpp */; };
+		432E7A4F29D427FD000E2B72 /* PSE.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 432E7A4C29D427FD000E2B72 /* PSE.cpp */; };
+		432E7A5429D45FE2000E2B72 /* PS13.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 432E7A5229D45FE2000E2B72 /* PS13.cpp */; };
+		432E7A5529D45FE2000E2B72 /* PS13.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 432E7A5229D45FE2000E2B72 /* PS13.cpp */; };
+		432E7A5629D45FE2000E2B72 /* PS13.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 432E7A5329D45FE2000E2B72 /* PS13.hpp */; };
 		432EF6AD292D405400C620CF /* Speller.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 432EF6AB292D405400C620CF /* Speller.cpp */; };
 		43316F2229AA73D7000160EA /* TonIndex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 435406A229A8D4BB0075B3B7 /* TonIndex.cpp */; };
 		43316F2329AA73D8000160EA /* TonIndex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 435406A229A8D4BB0075B3B7 /* TonIndex.cpp */; };
@@ -40,6 +45,8 @@
 		434B1E01298FD4FE001CE41C /* PSChord.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 434B1DFF298FD4FE001CE41C /* PSChord.cpp */; };
 		434B1E02298FD4FE001CE41C /* PSChord.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 434B1DFF298FD4FE001CE41C /* PSChord.cpp */; };
 		434B1E03298FD4FE001CE41C /* PSChord.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 434B1E00298FD4FE001CE41C /* PSChord.hpp */; };
+		435081D629D6C09A00465943 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 435081D529D6C09A00465943 /* main.cpp */; };
+		435081DA29D6C0B600465943 /* TestScale.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 435081CE29D6C04600465943 /* TestScale.cpp */; };
 		4397A5DE29A6CDB300C2CC9A /* PSOrder.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 4397A5DC29A6CDB300C2CC9A /* PSOrder.hpp */; };
 		43A2544029280D8900D559D2 /* trace.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43A2543E29280D8900D559D2 /* trace.cpp */; };
 		43A2544129280D8900D559D2 /* trace.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 43A2543F29280D8900D559D2 /* trace.hpp */; };
@@ -110,6 +117,15 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		435081D129D6C09A00465943 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
 		43FBEABB2930CD21008FC486 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -143,8 +159,13 @@
 		431586302983E89B00918B1B /* PSNoteEnum.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = PSNoteEnum.hpp; path = src/spell/import/PSNoteEnum.hpp; sourceTree = "<group>"; };
 		432657E1294E2FB000515080 /* Weber.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Weber.cpp; path = src/ton/Weber.cpp; sourceTree = "<group>"; };
 		432657E2294E2FB100515080 /* Weber.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Weber.hpp; path = src/ton/Weber.hpp; sourceTree = "<group>"; };
-		432EF6AB292D405400C620CF /* Speller.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Speller.cpp; path = src/targets/Speller.cpp; sourceTree = "<group>"; };
-		432EF6AC292D405400C620CF /* Speller.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Speller.hpp; path = src/targets/Speller.hpp; sourceTree = "<group>"; };
+		432E7A4C29D427FD000E2B72 /* PSE.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = PSE.cpp; path = src/targets/PSE.cpp; sourceTree = "<group>"; };
+		432E7A4D29D427FD000E2B72 /* PSE.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = PSE.hpp; path = src/targets/PSE.hpp; sourceTree = "<group>"; };
+		432E7A5229D45FE2000E2B72 /* PS13.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PS13.cpp; sourceTree = "<group>"; };
+		432E7A5329D45FE2000E2B72 /* PS13.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = PS13.hpp; sourceTree = "<group>"; };
+		432E7A5829D494AE000E2B72 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		432EF6AB292D405400C620CF /* Speller.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Speller.cpp; path = src/general/Speller.cpp; sourceTree = "<group>"; };
+		432EF6AC292D405400C620CF /* Speller.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Speller.hpp; path = src/general/Speller.hpp; sourceTree = "<group>"; };
 		4342FD0F2926781E004E914F /* PWO.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = PWO.hpp; path = src/pitch/PWO.hpp; sourceTree = "<group>"; };
 		4342FD1129267895004E914F /* MidiNum.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MidiNum.cpp; path = src/pitch/MidiNum.cpp; sourceTree = "<group>"; };
 		4342FD132926789C004E914F /* MidiNum.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = MidiNum.hpp; path = src/pitch/MidiNum.hpp; sourceTree = "<group>"; };
@@ -157,11 +178,16 @@
 		434B1DFB298ED394001CE41C /* PSConfig2.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = PSConfig2.hpp; path = src/spell/PSConfig2.hpp; sourceTree = "<group>"; };
 		434B1DFF298FD4FE001CE41C /* PSChord.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = PSChord.cpp; path = src/spell/PSChord.cpp; sourceTree = "<group>"; };
 		434B1E00298FD4FE001CE41C /* PSChord.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = PSChord.hpp; path = src/spell/PSChord.hpp; sourceTree = "<group>"; };
+		435081CE29D6C04600465943 /* TestScale.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TestScale.cpp; sourceTree = "<group>"; };
+		435081D329D6C09A00465943 /* testpse */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = testpse; sourceTree = BUILT_PRODUCTS_DIR; };
+		435081D529D6C09A00465943 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		435081DB29D6C53D00465943 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = extern/README.md; sourceTree = "<group>"; };
 		4354069F29A8D2F90075B3B7 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = src/chord/README.md; sourceTree = "<group>"; };
 		435406A029A8D3530075B3B7 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = src/Spiral/README.md; sourceTree = "<group>"; };
 		435406A129A8D4050075B3B7 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = src/KrumhanslSchmuckler/README.md; sourceTree = "<group>"; };
 		435406A229A8D4BB0075B3B7 /* TonIndex.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = TonIndex.cpp; path = src/ton/TonIndex.cpp; sourceTree = "<group>"; };
 		435406A329A8D4BB0075B3B7 /* TonIndex.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = TonIndex.hpp; path = src/ton/TonIndex.hpp; sourceTree = "<group>"; };
+		4363442C29D31D8700F5D628 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		436C6C3D2924016F00152D8C /* pse.cpython-310-darwin.so */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = "pse.cpython-310-darwin.so"; sourceTree = BUILT_PRODUCTS_DIR; };
 		436C6C4D2924023100152D8C /* NoteName.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = NoteName.hpp; path = src/pitch/NoteName.hpp; sourceTree = "<group>"; };
 		4397A5DC29A6CDB300C2CC9A /* PSOrder.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = PSOrder.hpp; path = src/spell/PSOrder.hpp; sourceTree = "<group>"; };
@@ -216,6 +242,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		435081D029D6C09A00465943 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		436C6C3B2924016F00152D8C /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -313,7 +346,7 @@
 			name = import;
 			sourceTree = "<group>";
 		};
-		4315861B2983E80400918B1B /* spiral */ = {
+		4315861B2983E80400918B1B /* Spiral */ = {
 			isa = PBXGroup;
 			children = (
 				435406A029A8D3530075B3B7 /* README.md */,
@@ -322,7 +355,7 @@
 				431586212983E86E00918B1B /* Spiral.hpp */,
 				431586242983E86E00918B1B /* Spiral.cpp */,
 			);
-			name = spiral;
+			name = Spiral;
 			sourceTree = "<group>";
 		};
 		4315861C2983E82300918B1B /* KrumhanslSchmuckler */ = {
@@ -333,6 +366,23 @@
 				4315861E2983E84D00918B1B /* KeyFind.cpp */,
 			);
 			name = KrumhanslSchmuckler;
+			sourceTree = "<group>";
+		};
+		432E7A5129D45F78000E2B72 /* test */ = {
+			isa = PBXGroup;
+			children = (
+				432E7A5729D4946F000E2B72 /* unit */,
+			);
+			path = test;
+			sourceTree = "<group>";
+		};
+		432E7A5729D4946F000E2B72 /* unit */ = {
+			isa = PBXGroup;
+			children = (
+				432E7A5829D494AE000E2B72 /* README.md */,
+				435081CE29D6C04600465943 /* TestScale.cpp */,
+			);
+			path = unit;
 			sourceTree = "<group>";
 		};
 		434D5CFC299FCFD900AEB02F /* interval */ = {
@@ -354,13 +404,34 @@
 			name = chord;
 			sourceTree = "<group>";
 		};
+		435081D429D6C09A00465943 /* test */ = {
+			isa = PBXGroup;
+			children = (
+				435081D529D6C09A00465943 /* main.cpp */,
+			);
+			path = test;
+			sourceTree = "<group>";
+		};
+		4363442B29D31D3500F5D628 /* PS13 */ = {
+			isa = PBXGroup;
+			children = (
+				4363442C29D31D8700F5D628 /* README.md */,
+				432E7A5329D45FE2000E2B72 /* PS13.hpp */,
+				432E7A5229D45FE2000E2B72 /* PS13.cpp */,
+			);
+			name = PS13;
+			path = src/PS13;
+			sourceTree = "<group>";
+		};
 		436C6C342924016E00152D8C = {
 			isa = PBXGroup;
 			children = (
 				431586172983E57F00918B1B /* README.md */,
 				4342FD1A2926B925004E914F /* CMakeLists.txt */,
 				43A2544A292CC61100D559D2 /* Makefile */,
+				432E7A5129D45F78000E2B72 /* test */,
 				436C6C4B292401BC00152D8C /* sources */,
+				435081D429D6C09A00465943 /* test */,
 				436C6C3E2924016F00152D8C /* Products */,
 			);
 			sourceTree = "<group>";
@@ -370,6 +441,7 @@
 			children = (
 				436C6C3D2924016F00152D8C /* pse.cpython-310-darwin.so */,
 				43FBEABD2930CD21008FC486 /* debugpse */,
+				435081D329D6C09A00465943 /* testpse */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -388,7 +460,8 @@
 				431586182983E65A00918B1B /* ton */,
 				431586192983E6BF00918B1B /* spell */,
 				4315861C2983E82300918B1B /* KrumhanslSchmuckler */,
-				4315861B2983E80400918B1B /* spiral */,
+				4363442B29D31D3500F5D628 /* PS13 */,
+				4315861B2983E80400918B1B /* Spiral */,
 			);
 			name = sources;
 			sourceTree = "<group>";
@@ -400,8 +473,8 @@
 				43FBEAB52930CB16008FC486 /* debugpse.cpp */,
 				4342FD1729268C78004E914F /* pypse.hpp */,
 				4342FD1629268C78004E914F /* pypse.cpp */,
-				432EF6AC292D405400C620CF /* Speller.hpp */,
-				432EF6AB292D405400C620CF /* Speller.cpp */,
+				432E7A4D29D427FD000E2B72 /* PSE.hpp */,
+				432E7A4C29D427FD000E2B72 /* PSE.cpp */,
 			);
 			name = pybind;
 			sourceTree = "<group>";
@@ -409,6 +482,7 @@
 		436C6C9729240D8300152D8C /* extern */ = {
 			isa = PBXGroup;
 			children = (
+				435081DB29D6C53D00465943 /* README.md */,
 				43ABA53D292425AD002AC1D4 /* spdlog */,
 			);
 			name = extern;
@@ -439,6 +513,8 @@
 				43A2544329280E1600D559D2 /* config.h */,
 				43A2543F29280D8900D559D2 /* trace.hpp */,
 				43A2543E29280D8900D559D2 /* trace.cpp */,
+				432EF6AC292D405400C620CF /* Speller.hpp */,
+				432EF6AB292D405400C620CF /* Speller.cpp */,
 			);
 			name = general;
 			sourceTree = "<group>";
@@ -464,6 +540,7 @@
 				4342FD102926781E004E914F /* PWO.hpp in Headers */,
 				43C2BA1529994F630084AB3B /* Pitch.hpp in Headers */,
 				4310526929CDD15000694D5A /* Scale.hpp in Headers */,
+				432E7A5629D45FE2000E2B72 /* PS13.hpp in Headers */,
 				430CDFF22924E6D800A84650 /* KeyFifth.hpp in Headers */,
 				43ABA510292423E8002AC1D4 /* Ton.hpp in Headers */,
 				432657E5294E2FB100515080 /* Weber.hpp in Headers */,
@@ -490,6 +567,23 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		435081D229D6C09A00465943 /* testpse */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 435081D729D6C09A00465943 /* Build configuration list for PBXNativeTarget "testpse" */;
+			buildPhases = (
+				435081CF29D6C09A00465943 /* Sources */,
+				435081D029D6C09A00465943 /* Frameworks */,
+				435081D129D6C09A00465943 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = testpse;
+			productName = test;
+			productReference = 435081D329D6C09A00465943 /* testpse */;
+			productType = "com.apple.product-type.tool";
+		};
 		436C6C3C2924016F00152D8C /* pse */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 436C6C482924016F00152D8C /* Build configuration list for PBXNativeTarget "pse" */;
@@ -533,6 +627,9 @@
 				BuildIndependentTargetsInParallel = 1;
 				LastUpgradeCheck = 1420;
 				TargetAttributes = {
+					435081D229D6C09A00465943 = {
+						CreatedOnToolsVersion = 14.2;
+					};
 					436C6C3C2924016F00152D8C = {
 						CreatedOnToolsVersion = 14.1;
 					};
@@ -556,11 +653,21 @@
 			targets = (
 				436C6C3C2924016F00152D8C /* pse */,
 				43FBEABC2930CD21008FC486 /* debugpse */,
+				435081D229D6C09A00465943 /* testpse */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXSourcesBuildPhase section */
+		435081CF29D6C09A00465943 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				435081DA29D6C0B600465943 /* TestScale.cpp in Sources */,
+				435081D629D6C09A00465943 /* main.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		436C6C3A2924016F00152D8C /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -577,12 +684,14 @@
 				43F9BE6929CC696C00B0A7F8 /* Mode.cpp in Sources */,
 				43ABA509292423E8002AC1D4 /* Ton.cpp in Sources */,
 				43316F2329AA73D8000160EA /* TonIndex.cpp in Sources */,
+				432E7A4E29D427FD000E2B72 /* PSE.cpp in Sources */,
 				434B1DF8298ECCF1001CE41C /* PSConfig1.cpp in Sources */,
 				432657E3294E2FB100515080 /* Weber.cpp in Sources */,
 				43ABA52E29242418002AC1D4 /* PSState.cpp in Sources */,
 				4310526729CDD15000694D5A /* Scale.cpp in Sources */,
 				43DD95492945E223006DC553 /* PSCost.cpp in Sources */,
 				43ABA53129242418002AC1D4 /* PSConfig0.cpp in Sources */,
+				432E7A5429D45FE2000E2B72 /* PS13.cpp in Sources */,
 				43C2BA1D299A5FEE0084AB3B /* IntervalSimple.cpp in Sources */,
 				43ABA52729242418002AC1D4 /* PSConfig.cpp in Sources */,
 				43C2BA1629994F630084AB3B /* Pitch.cpp in Sources */,
@@ -617,12 +726,14 @@
 				43F9BE6A29CC696C00B0A7F8 /* Mode.cpp in Sources */,
 				434B1E02298FD4FE001CE41C /* PSChord.cpp in Sources */,
 				43316F2229AA73D7000160EA /* TonIndex.cpp in Sources */,
+				432E7A4F29D427FD000E2B72 /* PSE.cpp in Sources */,
 				43FBEACC2930CEDD008FC486 /* KeyFifth.cpp in Sources */,
 				43FBEACD2930CEDD008FC486 /* Ton.cpp in Sources */,
 				434B1DF9298ED0A0001CE41C /* PSConfig1.cpp in Sources */,
 				4310526829CDD15000694D5A /* Scale.cpp in Sources */,
 				432657E4294E2FB100515080 /* Weber.cpp in Sources */,
 				43FBEACE2930CEDD008FC486 /* PSState.cpp in Sources */,
+				432E7A5529D45FE2000E2B72 /* PS13.cpp in Sources */,
 				43C2BA1E299A5FEE0084AB3B /* IntervalSimple.cpp in Sources */,
 				43DD954A2945E223006DC553 /* PSCost.cpp in Sources */,
 				43C2BA1729994F630084AB3B /* Pitch.cpp in Sources */,
@@ -644,6 +755,40 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
+		435081D829D6C09A00465943 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = DYPCUZH3W2;
+				ENABLE_HARDENED_RUNTIME = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.1;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				USER_HEADER_SEARCH_PATHS = (
+					include,
+					extern/pybind11/include,
+					extern/spdlog/include,
+					extern/googletest/googletest/include,
+				);
+			};
+			name = Debug;
+		};
+		435081D929D6C09A00465943 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = DYPCUZH3W2;
+				ENABLE_HARDENED_RUNTIME = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.1;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				USER_HEADER_SEARCH_PATHS = (
+					include,
+					extern/pybind11/include,
+					extern/spdlog/include,
+					extern/googletest/googletest/include,
+				);
+			};
+			name = Release;
+		};
 		436C6C462924016F00152D8C /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -914,6 +1059,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		435081D729D6C09A00465943 /* Build configuration list for PBXNativeTarget "testpse" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				435081D829D6C09A00465943 /* Debug */,
+				435081D929D6C09A00465943 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		436C6C382924016F00152D8C /* Build configuration list for PBXProject "pse" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
