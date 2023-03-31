@@ -8,7 +8,8 @@ cmake_minimum_required(VERSION 3.4...3.18)
 project(pse LANGUAGES CXX)
 
 # can be 11, 14, 17, 20
-set(CMAKE_CXX_STANDARD 14 CACHE STRING "C++ version selection") 
+# GoogleTest requires at least C++14
+set(CMAKE_CXX_STANDARD 14 CACHE STRING "C++ version selection")
 
 # optional, ensure standard is supported
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -20,6 +21,9 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 # # set LD flags
 # set( CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} -pthread" )
+
+
+
 
 # ###############################
 # include
@@ -57,9 +61,9 @@ add_definitions(
   -DPSE_PLATFORM=PLATFORM_${CMAKE_UPPER_SYSTEM_NAME}
 )
 
-# ###############################
+################################
 # spdlog
-# ###############################
+################################
 # build subtree spdlog
 #add_subdirectory(extern/spdlog)
 
@@ -69,11 +73,33 @@ add_definitions(
 #    find_package(spdlog REQUIRED)
 #endif()
 
+################################
+# googletest
+################################
+include(FetchContent)
+FetchContent_Declare(
+  googletest
+  URL https://github.com/google/googletest/archive/03597a01ee50ed33e9dfd640b249b4be3799d395.zip
+)
+
+enable_testing()
+
+add_executable(
+  unit_test
+  TestScale.cpp
+)
+target_link_libraries(
+  hello_test
+  GTest::gtest_main
+)
+
+include(GoogleTest)
+gtest_discover_tests(unit_test)
 
 
-# ###############################
+################################
 # Project PSE binder
-# ###############################
+################################
 find_package(Python 3.10 COMPONENTS Interpreter Development REQUIRED)
 
 # import the pybind11 project (from git subtree in extern)

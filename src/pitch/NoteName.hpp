@@ -35,7 +35,8 @@ enum class NoteName
     Undef
 };
 
-///  cast to 0..6 (0 is 'C', 6 is 'B'), or 9 for `Undef`.
+///  cast to 0..6 for C..B or 9 for Undef.
+///  @return 0 for 'C' ... 6 for 'B' or 9 for `Undef`.
 ///  only for internal use.
 int toint(const NoteName& n);
 
@@ -46,8 +47,11 @@ char tochar(const NoteName& n);
 /// the given note name is between 'A' and 'G'
 bool defined(const NoteName& n);
 
-/// the distance between the 2 note names is diatonic.
-bool diatonicStep(const NoteName& n1, const NoteName& n2);
+/// the distance between the 2 note names is diatonic (ascending case).
+bool diatonicStepUp(const NoteName& n1, const NoteName& n2);
+
+/// the distance between the 2 note names is diatonic (descending case).
+bool diatonicStepDown(const NoteName& n1, const NoteName& n2);
 
 /// note name at distance d from n.
 enum NoteName operator+(const enum NoteName& n, int d);

@@ -45,8 +45,32 @@
 		434B1E01298FD4FE001CE41C /* PSChord.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 434B1DFF298FD4FE001CE41C /* PSChord.cpp */; };
 		434B1E02298FD4FE001CE41C /* PSChord.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 434B1DFF298FD4FE001CE41C /* PSChord.cpp */; };
 		434B1E03298FD4FE001CE41C /* PSChord.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 434B1E00298FD4FE001CE41C /* PSChord.hpp */; };
-		435081D629D6C09A00465943 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 435081D529D6C09A00465943 /* main.cpp */; };
 		435081DA29D6C0B600465943 /* TestScale.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 435081CE29D6C04600465943 /* TestScale.cpp */; };
+		435081DF29D6C96800465943 /* unit_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 435081DD29D6C93000465943 /* unit_test.cpp */; };
+		435081E929D6CFE300465943 /* libgtest.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 435081E729D6CFCD00465943 /* libgtest.a */; };
+		435081EA29D6CFF800465943 /* libgtest_main.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 435081E829D6CFCD00465943 /* libgtest_main.a */; };
+		435081EB29D6D74800465943 /* Ton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43ABA4FF292423E8002AC1D4 /* Ton.cpp */; };
+		435081EC29D6D74E00465943 /* KeyFifth.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 430CDFEF2924E6D700A84650 /* KeyFifth.cpp */; };
+		435081ED29D6D75100465943 /* Fifths.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43ABA502292423E8002AC1D4 /* Fifths.cpp */; };
+		435081EE29D6D75600465943 /* Scale.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4310526529CDD15000694D5A /* Scale.cpp */; };
+		435081EF29D6D75A00465943 /* Mode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43F9BE6729CC696C00B0A7F8 /* Mode.cpp */; };
+		435081F029D6D75D00465943 /* ModeName.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43F9BE6229CC423E00B0A7F8 /* ModeName.cpp */; };
+		435081F129D6D76100465943 /* Pitch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43C2BA1429994F630084AB3B /* Pitch.cpp */; };
+		435081F229D6D76500465943 /* PWO.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43C2BA182999529E0084AB3B /* PWO.cpp */; };
+		435081F329D6D76800465943 /* Enharmonic.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43ABA507292423E8002AC1D4 /* Enharmonic.cpp */; };
+		435081F429D6D76C00465943 /* MidiNum.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4342FD1129267895004E914F /* MidiNum.cpp */; };
+		435081F529D6D76F00465943 /* Accidental.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43ABA505292423E8002AC1D4 /* Accidental.cpp */; };
+		435081F629D6D77200465943 /* NoteName.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43ABA4FD292423C5002AC1D4 /* NoteName.cpp */; };
+		435081F729D6D78000465943 /* PSEnum.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4315862B2983E89B00918B1B /* PSEnum.cpp */; };
+		435081F829D6D78200465943 /* PSChord.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 434B1DFF298FD4FE001CE41C /* PSChord.cpp */; };
+		435081FA29D6D78900465943 /* PSRawEnum.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4315862D2983E89B00918B1B /* PSRawEnum.cpp */; };
+		435081FB29D6D7DF00465943 /* TonIndex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 435406A229A8D4BB0075B3B7 /* TonIndex.cpp */; };
+		435081FC29D6D7E300465943 /* Weber.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 432657E1294E2FB000515080 /* Weber.cpp */; };
+		435081FD29D6D7F600465943 /* Interval.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43C2BA0E299946150084AB3B /* Interval.cpp */; };
+		435081FE29D6D7F900465943 /* IntervalSimple.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43C2BA1B299A5FEE0084AB3B /* IntervalSimple.cpp */; };
+		435081FF29D6D80B00465943 /* Speller.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 432EF6AB292D405400C620CF /* Speller.cpp */; };
+		4350820129D6D85100465943 /* trace.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43A2543E29280D8900D559D2 /* trace.cpp */; };
+		4350820329D6E3AB00465943 /* TestNoteName.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4350820229D6E3AB00465943 /* TestNoteName.cpp */; };
 		4397A5DE29A6CDB300C2CC9A /* PSOrder.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 4397A5DC29A6CDB300C2CC9A /* PSOrder.hpp */; };
 		43A2544029280D8900D559D2 /* trace.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43A2543E29280D8900D559D2 /* trace.cpp */; };
 		43A2544129280D8900D559D2 /* trace.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 43A2543F29280D8900D559D2 /* trace.hpp */; };
@@ -180,8 +204,12 @@
 		434B1E00298FD4FE001CE41C /* PSChord.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = PSChord.hpp; path = src/spell/PSChord.hpp; sourceTree = "<group>"; };
 		435081CE29D6C04600465943 /* TestScale.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TestScale.cpp; sourceTree = "<group>"; };
 		435081D329D6C09A00465943 /* testpse */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = testpse; sourceTree = BUILT_PRODUCTS_DIR; };
-		435081D529D6C09A00465943 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		435081DB29D6C53D00465943 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = extern/README.md; sourceTree = "<group>"; };
+		435081DC29D6C93000465943 /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
+		435081DD29D6C93000465943 /* unit_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = unit_test.cpp; sourceTree = "<group>"; };
+		435081E729D6CFCD00465943 /* libgtest.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgtest.a; path = extern/googletest/build/lib/libgtest.a; sourceTree = "<group>"; };
+		435081E829D6CFCD00465943 /* libgtest_main.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgtest_main.a; path = extern/googletest/build/lib/libgtest_main.a; sourceTree = "<group>"; };
+		4350820229D6E3AB00465943 /* TestNoteName.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TestNoteName.cpp; sourceTree = "<group>"; };
 		4354069F29A8D2F90075B3B7 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = src/chord/README.md; sourceTree = "<group>"; };
 		435406A029A8D3530075B3B7 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = src/Spiral/README.md; sourceTree = "<group>"; };
 		435406A129A8D4050075B3B7 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = src/KrumhanslSchmuckler/README.md; sourceTree = "<group>"; };
@@ -246,6 +274,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				435081EA29D6CFF800465943 /* libgtest_main.a in Frameworks */,
+				435081E929D6CFE300465943 /* libgtest.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -380,6 +410,9 @@
 			isa = PBXGroup;
 			children = (
 				432E7A5829D494AE000E2B72 /* README.md */,
+				435081DC29D6C93000465943 /* CMakeLists.txt */,
+				435081DD29D6C93000465943 /* unit_test.cpp */,
+				4350820229D6E3AB00465943 /* TestNoteName.cpp */,
 				435081CE29D6C04600465943 /* TestScale.cpp */,
 			);
 			path = unit;
@@ -404,12 +437,13 @@
 			name = chord;
 			sourceTree = "<group>";
 		};
-		435081D429D6C09A00465943 /* test */ = {
+		435081E429D6CFA800465943 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				435081D529D6C09A00465943 /* main.cpp */,
+				435081E829D6CFCD00465943 /* libgtest_main.a */,
+				435081E729D6CFCD00465943 /* libgtest.a */,
 			);
-			path = test;
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		4363442B29D31D3500F5D628 /* PS13 */ = {
@@ -431,8 +465,8 @@
 				43A2544A292CC61100D559D2 /* Makefile */,
 				432E7A5129D45F78000E2B72 /* test */,
 				436C6C4B292401BC00152D8C /* sources */,
-				435081D429D6C09A00465943 /* test */,
 				436C6C3E2924016F00152D8C /* Products */,
+				435081E429D6CFA800465943 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -663,8 +697,30 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4350820329D6E3AB00465943 /* TestNoteName.cpp in Sources */,
+				435081EE29D6D75600465943 /* Scale.cpp in Sources */,
+				435081EB29D6D74800465943 /* Ton.cpp in Sources */,
+				435081FC29D6D7E300465943 /* Weber.cpp in Sources */,
+				435081F229D6D76500465943 /* PWO.cpp in Sources */,
+				435081F429D6D76C00465943 /* MidiNum.cpp in Sources */,
+				435081ED29D6D75100465943 /* Fifths.cpp in Sources */,
+				435081FD29D6D7F600465943 /* Interval.cpp in Sources */,
+				435081FE29D6D7F900465943 /* IntervalSimple.cpp in Sources */,
+				435081F729D6D78000465943 /* PSEnum.cpp in Sources */,
+				435081F129D6D76100465943 /* Pitch.cpp in Sources */,
+				435081F029D6D75D00465943 /* ModeName.cpp in Sources */,
+				435081FF29D6D80B00465943 /* Speller.cpp in Sources */,
+				435081F329D6D76800465943 /* Enharmonic.cpp in Sources */,
 				435081DA29D6C0B600465943 /* TestScale.cpp in Sources */,
-				435081D629D6C09A00465943 /* main.cpp in Sources */,
+				435081FB29D6D7DF00465943 /* TonIndex.cpp in Sources */,
+				435081DF29D6C96800465943 /* unit_test.cpp in Sources */,
+				4350820129D6D85100465943 /* trace.cpp in Sources */,
+				435081EF29D6D75A00465943 /* Mode.cpp in Sources */,
+				435081EC29D6D74E00465943 /* KeyFifth.cpp in Sources */,
+				435081FA29D6D78900465943 /* PSRawEnum.cpp in Sources */,
+				435081F629D6D77200465943 /* NoteName.cpp in Sources */,
+				435081F529D6D76F00465943 /* Accidental.cpp in Sources */,
+				435081F829D6D78200465943 /* PSChord.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -761,8 +817,24 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = DYPCUZH3W2;
 				ENABLE_HARDENED_RUNTIME = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"PLATFORM_DARWIN=1",
+					"PLATFORM_LINUX=2",
+					"PLATFORM_FREEBSD=3",
+					"PLATFORM_CYGWIN=4",
+					"PSE_PLATFORM=PLATFORM_DARWIN",
+					"$(inherited)",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/extern/googletest/build/lib",
+				);
 				MACOSX_DEPLOYMENT_TARGET = 13.1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SYSTEM_HEADER_SEARCH_PATHS = (
+					"$(LOCAL_LIBRARY_DIR)/Frameworks/Python.framework/Headers",
+					extern/spdlog/include,
+				);
 				USER_HEADER_SEARCH_PATHS = (
 					include,
 					extern/pybind11/include,
@@ -778,8 +850,24 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = DYPCUZH3W2;
 				ENABLE_HARDENED_RUNTIME = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"PLATFORM_DARWIN=1",
+					"PLATFORM_LINUX=2",
+					"PLATFORM_FREEBSD=3",
+					"PLATFORM_CYGWIN=4",
+					"PSE_PLATFORM=PLATFORM_DARWIN",
+					"$(inherited)",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/extern/googletest/build/lib",
+				);
 				MACOSX_DEPLOYMENT_TARGET = 13.1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SYSTEM_HEADER_SEARCH_PATHS = (
+					"$(LOCAL_LIBRARY_DIR)/Frameworks/Python.framework/Headers",
+					extern/spdlog/include,
+				);
 				USER_HEADER_SEARCH_PATHS = (
 					include,
 					extern/pybind11/include,
@@ -927,6 +1015,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					/usr/local/lib,
 					"$(PROJECT_DIR)/lib",
+					"$(PROJECT_DIR)/extern/googletest/build/lib",
 				);
 				OTHER_LDFLAGS = (
 					"-undefined",
@@ -973,6 +1062,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					/usr/local/lib,
 					"$(PROJECT_DIR)/lib",
+					"$(PROJECT_DIR)/extern/googletest/build/lib",
 				);
 				OTHER_LDFLAGS = (
 					"-undefined",

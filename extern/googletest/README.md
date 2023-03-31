@@ -31,9 +31,9 @@ GoogleTest team.
 
 #### Coming Soon
 
-*   We are planning to take a dependency on
-    [Abseil](https://github.com/abseil/abseil-cpp).
-*   More documentation improvements are planned.
+* We are planning to take a dependency on
+  [Abseil](https://github.com/abseil/abseil-cpp).
+* More documentation improvements are planned.
 
 ## Welcome to **GoogleTest**, Google's C++ test framework!
 
@@ -52,16 +52,16 @@ More information about building GoogleTest can be found at
 
 ## Features
 
-*   An [xUnit](https://en.wikipedia.org/wiki/XUnit) test framework.
-*   Test discovery.
-*   A rich set of assertions.
-*   User-defined assertions.
-*   Death tests.
-*   Fatal and non-fatal failures.
-*   Value-parameterized tests.
-*   Type-parameterized tests.
-*   Various options for running the tests.
-*   XML test report generation.
+* An [xUnit](https://en.wikipedia.org/wiki/XUnit) test framework.
+* Test discovery.
+* A rich set of assertions.
+* User-defined assertions.
+* Death tests.
+* Fatal and non-fatal failures.
+* Value-parameterized tests.
+* Type-parameterized tests.
+* Various options for running the tests.
+* XML test report generation.
 
 ## Supported Platforms
 
@@ -77,12 +77,12 @@ tools.
 In addition to many internal projects at Google, GoogleTest is also used by the
 following notable projects:
 
-*   The [Chromium projects](http://www.chromium.org/) (behind the Chrome browser
-    and Chrome OS).
-*   The [LLVM](http://llvm.org/) compiler.
-*   [Protocol Buffers](https://github.com/google/protobuf), Google's data
-    interchange format.
-*   The [OpenCV](http://opencv.org/) computer vision library.
+* The [Chromium projects](http://www.chromium.org/) (behind the Chrome browser
+  and Chrome OS).
+* The [LLVM](http://llvm.org/) compiler.
+* [Protocol Buffers](https://github.com/google/protobuf), Google's data
+  interchange format.
+* The [OpenCV](http://opencv.org/) computer vision library.
 
 ## Related Open Source Projects
 

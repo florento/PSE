@@ -36,20 +36,18 @@ enum NoteName operator+(const enum NoteName& n, int d)
 {
     if (n == NoteName::Undef)
         return NoteName::Undef;
-    else
-    {
-        int i = toint(n);
-        assert(0 <= i);
-        assert(i <= 6);
-        int r = (i+d) % 6;
-        // the remainder can be < 0 when i+d < 0
-        // @see https://stackoverflow.com/questions/11630321/why-does-c-output-negative-numbers-when-using-modulo
-        // @see https://stackoverflow.com/questions/7594508/modulo-operator-with-negative-values
-        if (r < 0) r += 7;
-        assert(0 <= r);
-        assert(r <= 6);
-        return NoteName(r);
-    }
+
+    int i = toint(n);
+    assert(0 <= i);
+    assert(i <= 6);
+    int r = (i+d) % 7;
+    // the remainder can be < 0 when i+d < 0
+    // @see https://stackoverflow.com/questions/11630321/why-does-c-output-negative-numbers-when-using-modulo
+    // @see https://stackoverflow.com/questions/7594508/modulo-operator-with-negative-values
+    if (r < 0) r += 7;
+    assert(0 <= r);
+    assert(r <= 6);
+    return NoteName(r);
 }
 
 
@@ -196,30 +194,65 @@ char tochar(const enum NoteName& n)
 }
 
 
-bool diatonicStep(const enum NoteName& n1, const enum NoteName& n2)
+bool diatonicStepUp(const enum NoteName& n1, const enum NoteName& n2)
 {
     switch (n1)
     {
         case NoteName::C:
-            return (n2 == NoteName::B || n2 == NoteName::D);
+            return (n2 == NoteName::D);
             
         case NoteName::D:
-            return (n2 == NoteName::E || n2 == NoteName::E);
+            return (n2 == NoteName::E);
 
         case NoteName::E:
-            return (n2 == NoteName::D || n2 == NoteName::F);
+            return (n2 == NoteName::F);
 
         case NoteName::F:
-            return (n2 == NoteName::E || n2 == NoteName::G);
+            return (n2 == NoteName::G);
 
         case NoteName::G:
-            return (n2 == NoteName::F || n2 == NoteName::A);
+            return (n2 == NoteName::A);
 
         case NoteName::A:
-            return (n2 == NoteName::G || n2 == NoteName::B);
+            return (n2 == NoteName::B);
 
         case NoteName::B:
-            return (n2 == NoteName::A || n2 == NoteName::C);
+            return (n2 == NoteName::C);
+
+        //case NoteName::Undef:
+        default:
+        {
+            WARN("diatonicStep: unexpected value");
+            return false;
+        }
+    }
+}
+
+
+bool diatonicStepDown(const enum NoteName& n1, const enum NoteName& n2)
+{
+    switch (n1)
+    {
+        case NoteName::C:
+            return (n2 == NoteName::B);
+            
+        case NoteName::D:
+            return (n2 == NoteName::C);
+
+        case NoteName::E:
+            return (n2 == NoteName::D);
+
+        case NoteName::F:
+            return (n2 == NoteName::E);
+
+        case NoteName::G:
+            return (n2 == NoteName::F);
+
+        case NoteName::A:
+            return (n2 == NoteName::G);
+
+        case NoteName::B:
+            return (n2 == NoteName::A);
 
         //case NoteName::Undef:
         default:

@@ -10,7 +10,7 @@
 
 namespace pse {
 
-//namespace MidiNum {
+namespace MidiNum{
 
 // static
 int midi_to_octave(unsigned int m, const enum pse::NoteName& n)
@@ -87,8 +87,6 @@ int midi_to_octave(unsigned int m,
         return oct;
     }
 }
-
-namespace MidiNum{
 
 enum Accid accid(int c, const enum NoteName& n)
 {

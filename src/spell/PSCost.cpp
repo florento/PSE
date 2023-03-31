@@ -435,10 +435,12 @@ void PSCost::update(const PSC1& c, const PSEnum& e, const Ton& gton)
         // read for transition from previous config into c
         unsigned int pmp = e.midipitch(pc->id());
         assert(pc->id() == c.id()-1);
-        int mdist = std::abs((int) mp - (int) pmp);
+        int mdist = ((int) mp) - ((int) pmp);
         // distance at most 1 ton
-        if ((0 < mdist) && (mdist < 3) &&
-            (! diatonicStep(pc->name(), c.name())))
+        if (((0 < mdist) && (mdist < 3) &&
+             (! diatonicStepUp(pc->name(), c.name()))) ||
+            ((-3 < mdist) && (mdist < 0) &&
+                 (! diatonicStepDown(pc->name(), c.name()))))
         {
             _ndia += 1;
         }
