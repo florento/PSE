@@ -44,30 +44,32 @@ public:
     /// destructor.
     virtual ~Mode();
 
-    /// number of degrees
+    /// number of degrees in this mode.
     size_t size() const;
     
-    /// code of this mode
+    /// code of this mode.
     inline ModeName name() const { return _name; }
 
-    /// code of this mode
+    /// code of this mode.
     inline ModeName code() const { return name(); }
     
-    /// distance in 1/2 tones to the tonic
-    const int semitonDistance(size_t i) const;
+    /// distance in 1/2 tones to the tonic.
+    /// @param d degree in this mode. the first degree is 0 (not 1).
+    const int semitonDistance(size_t d) const;
 
-    /// distance in number of names to the tonic
-    const int nameDistance(size_t i) const;
+    /// distance in number of names to the tonic.
+    /// @param d degree in this mode. the first degree is 0 (not 1).
+    const int nameDistance(size_t d) const;
 
 protected:
 
     /// code of this mode
     ModeName _name;
     
-    /// number of 1/2 tones between one degree and the next
+    /// number of 1/2 tones between one degree and the next.
     std::vector<const int> _semitons;
       
-    /// distance to tonic, in 1/2 tones
+    /// distance to tonic, in 1/2 tones.
     std::vector<int> _csemitons;
 
     /// number of names between one degree and the next

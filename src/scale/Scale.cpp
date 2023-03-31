@@ -11,6 +11,12 @@
 
 namespace pse {
 
+
+Scale::Scale(const ModeName& mode, int pc, const enum NoteName& name):
+Scale(Mode(mode), pc, name)
+{ }
+
+
 Scale::Scale(const Mode& mode, int pc, const enum NoteName& name):
 _mode(mode.name()),
 _pcs(),
@@ -20,14 +26,16 @@ _ks((major(mode)||minor(mode))?pc:0, !minor(mode))
 {
     assert(0 <= pc);
     assert(pc <= 11);
-    _pcs.push_back(pc); // first degree
-    _names.push_back(name); // first degree
-    for (size_t i = 0; i < mode.size()-1; ++i)
+    // degree 0
+    //_pcs.push_back(pc);
+    //_names.push_back(name);
+    // degree 0..last
+    for (size_t d = 0; d < mode.size(); ++d)
     {
-        assert(mode.semitonDistance(i) > 0);
-        int c = (pc + mode.semitonDistance(i)) % 12;
-        enum NoteName n = name + mode.nameDistance(i);
+        assert(mode.semitonDistance(d) >= 0);
+        int c = (pc + mode.semitonDistance(d)) % 12;
         _pcs.push_back(c);
+        enum NoteName n = name + mode.nameDistance(d);
         _names.push_back(n);
         assert(MidiNum::accid(c, n) != Accid::Undef);
         _accids.push_back(MidiNum::accid(c, n));

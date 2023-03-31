@@ -45,7 +45,6 @@
 		434B1E01298FD4FE001CE41C /* PSChord.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 434B1DFF298FD4FE001CE41C /* PSChord.cpp */; };
 		434B1E02298FD4FE001CE41C /* PSChord.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 434B1DFF298FD4FE001CE41C /* PSChord.cpp */; };
 		434B1E03298FD4FE001CE41C /* PSChord.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 434B1E00298FD4FE001CE41C /* PSChord.hpp */; };
-		435081DA29D6C0B600465943 /* TestScale.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 435081CE29D6C04600465943 /* TestScale.cpp */; };
 		435081DF29D6C96800465943 /* unit_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 435081DD29D6C93000465943 /* unit_test.cpp */; };
 		435081E929D6CFE300465943 /* libgtest.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 435081E729D6CFCD00465943 /* libgtest.a */; };
 		435081EA29D6CFF800465943 /* libgtest_main.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 435081E829D6CFCD00465943 /* libgtest_main.a */; };
@@ -71,6 +70,7 @@
 		435081FF29D6D80B00465943 /* Speller.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 432EF6AB292D405400C620CF /* Speller.cpp */; };
 		4350820129D6D85100465943 /* trace.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43A2543E29280D8900D559D2 /* trace.cpp */; };
 		4350820329D6E3AB00465943 /* TestNoteName.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4350820229D6E3AB00465943 /* TestNoteName.cpp */; };
+		4350820529D6FDA100465943 /* TestMode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4350820429D6FDA100465943 /* TestMode.cpp */; };
 		4397A5DE29A6CDB300C2CC9A /* PSOrder.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 4397A5DC29A6CDB300C2CC9A /* PSOrder.hpp */; };
 		43A2544029280D8900D559D2 /* trace.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43A2543E29280D8900D559D2 /* trace.cpp */; };
 		43A2544129280D8900D559D2 /* trace.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 43A2543F29280D8900D559D2 /* trace.hpp */; };
@@ -210,6 +210,7 @@
 		435081E729D6CFCD00465943 /* libgtest.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgtest.a; path = extern/googletest/build/lib/libgtest.a; sourceTree = "<group>"; };
 		435081E829D6CFCD00465943 /* libgtest_main.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgtest_main.a; path = extern/googletest/build/lib/libgtest_main.a; sourceTree = "<group>"; };
 		4350820229D6E3AB00465943 /* TestNoteName.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TestNoteName.cpp; sourceTree = "<group>"; };
+		4350820429D6FDA100465943 /* TestMode.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TestMode.cpp; sourceTree = "<group>"; };
 		4354069F29A8D2F90075B3B7 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = src/chord/README.md; sourceTree = "<group>"; };
 		435406A029A8D3530075B3B7 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = src/Spiral/README.md; sourceTree = "<group>"; };
 		435406A129A8D4050075B3B7 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = src/KrumhanslSchmuckler/README.md; sourceTree = "<group>"; };
@@ -413,6 +414,7 @@
 				435081DC29D6C93000465943 /* CMakeLists.txt */,
 				435081DD29D6C93000465943 /* unit_test.cpp */,
 				4350820229D6E3AB00465943 /* TestNoteName.cpp */,
+				4350820429D6FDA100465943 /* TestMode.cpp */,
 				435081CE29D6C04600465943 /* TestScale.cpp */,
 			);
 			path = unit;
@@ -707,11 +709,11 @@
 				435081FD29D6D7F600465943 /* Interval.cpp in Sources */,
 				435081FE29D6D7F900465943 /* IntervalSimple.cpp in Sources */,
 				435081F729D6D78000465943 /* PSEnum.cpp in Sources */,
+				4350820529D6FDA100465943 /* TestMode.cpp in Sources */,
 				435081F129D6D76100465943 /* Pitch.cpp in Sources */,
 				435081F029D6D75D00465943 /* ModeName.cpp in Sources */,
 				435081FF29D6D80B00465943 /* Speller.cpp in Sources */,
 				435081F329D6D76800465943 /* Enharmonic.cpp in Sources */,
-				435081DA29D6C0B600465943 /* TestScale.cpp in Sources */,
 				435081FB29D6D7DF00465943 /* TonIndex.cpp in Sources */,
 				435081DF29D6C96800465943 /* unit_test.cpp in Sources */,
 				4350820129D6D85100465943 /* trace.cpp in Sources */,

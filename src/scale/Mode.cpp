@@ -12,6 +12,13 @@
 namespace pse {
 
 
+Mode::Mode(const ModeName& code):
+Mode(code, predefined_semitons(code), predefined_names(code))
+{
+    assert(code != ModeName::Undef);
+}
+
+
 Mode::Mode(const ModeName& code,
            const std::vector<const int>& ls,
            const std::vector<const int>& ln):
@@ -21,27 +28,19 @@ _csemitons(),  // initially empty
 _names(ln),
 _cnames()
 {
-    assert(ls.size() == ln.size());
+    assert(_semitons.size() == _names.size());
+    // first degree (tonic)
     int cs = 0;
     int cn = 0;
-    for (size_t i = 0; i < ls.size(); ++i)
+    for (size_t i = 0; i < _semitons.size(); ++i)
     {
+        _csemitons.push_back(cs);
+        _cnames.push_back(cn);
         assert(_semitons.at(i) >= 0);
         cs += _semitons.at(i);
-        //const int ccs = cs;
-        _csemitons.push_back(cs);
         assert(_names.at(i) >= 0);
         cn += _names.at(i);
-        //const int ccn = cn;
-        _cnames.push_back(cn);
     }
-}
-
-
-Mode::Mode(const ModeName& code):
-Mode(code, predefined_semitons(code), predefined_names(code))
-{
-    assert(code != ModeName::Undef);
 }
 
 
@@ -68,21 +67,21 @@ Mode::~Mode()
 
 size_t Mode::size() const
 {
-    return _semitons.size()+1;
+    return _semitons.size();
 }
 
 
-const int Mode::semitonDistance(size_t i) const
+const int Mode::semitonDistance(size_t d) const
 {
-    assert(i < _csemitons.size());
-    return _csemitons.at(i);
+    assert(d < _csemitons.size());
+    return _csemitons.at(d);
 }
 
 
-const int Mode::nameDistance(size_t i) const
+const int Mode::nameDistance(size_t d) const
 {
-    assert(i < _cnames.size());
-    return _cnames.at(i);
+    assert(d < _cnames.size());
+    return _cnames.at(d);
 }
 
 
@@ -136,7 +135,7 @@ std::vector<const int> Mode::predefined_semitons(const ModeName& name)
         // Harmonic Chromatic
         // all notes are repeated except tonic and dominant
         case ModeName::Chromatic:
-        return std::vector<const int>{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
+        return std::vector<const int>{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
                 
         // Major Pentatonic = Major - 4th and 7th degrees
         /// @todo is it the correct spelling?  see https://muted.io/major-pentatonic-scale
@@ -215,7 +214,7 @@ std::vector<const int> Mode::predefined_names(const ModeName& name)
         // all notes are repeated except tonic and dominant
         case ModeName::Chromatic:
              return
-             std::vector<const int>{1, 1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1};
+            std::vector<const int>{1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1};
                 
         // Major Pentatonic = Major - 4th and 7th degrees
         /// @todo is it the correct spelling?  see https://muted.io/major-pentatonic-scale

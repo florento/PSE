@@ -24,26 +24,33 @@ namespace pse {
 class Scale  // public Mode
 {
 public:
+
     /// main constructor
+    /// @param mode mode of this scale
+    /// @param pc pitch class of tonic, in 0..11
+    /// @param name name of tonic, in A..G
+    Scale(const ModeName& mode, int pc, const enum NoteName& name);
+
+    /// constructor from mode
     /// @param mode mode of this scale
     /// @param pc pitch class of tonic, in 0..11
     /// @param name name of tonic, in A..G
     Scale(const Mode& mode, int pc, const enum NoteName& name);
     
     /// note name for given degree.
-    /// @param deg degree in this scale. the first degree is 0 (not 1).
+    /// @param d degree in this scale. the first degree is 0 (not 1).
     /// @return the note name for the given degree, in A..G.
-    enum NoteName name(size_t deg) const;
+    enum NoteName name(size_t d) const;
 
     /// accidental name for given degree.
-    /// @param deg degree in this scale. the first degree is 0 (not 1).
+    /// @param d degree in this scale. the first degree is 0 (not 1).
     /// @return the accidentals for the given degree, in -2..2.
-    enum Accid accid(size_t deg) const;
+    enum Accid accid(size_t d) const;
 
     /// pitch class for given degree
-    /// @param deg degree in this scale. the first degree is 0 (not 1).
+    /// @param d degree in this scale. the first degree is 0 (not 1).
     /// @return number of pitch class in 0..11.
-    int pitchClass(size_t deg) const;
+    int pitchClass(size_t d) const;
 
     /// this scale contains the note of given name and accidental.
     /// @param n note name in 'A'..'G'.
