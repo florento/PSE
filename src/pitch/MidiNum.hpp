@@ -157,41 +157,82 @@ namespace pse {
 /// | 128  |       |       | Ab9   | G#9   |       |  8     |
 
 
-namespace MidiNum{
-
-/// octave number for a given MIDI key and note name.
-/// @param m midi number
-/// @param n note name in 'A'..'G'.
-/// @return octave number, in -2..9, for the note of given midi key and name.
-int midi_to_octave(unsigned int m, const enum pse::NoteName& n);
-
-
-/// octave number for a given MIDI key.
-/// @param m midi number
-/// @param n note name in 'A'..'G'.
-/// @brief a accidental in [-2, 2], where 1.0 is a half tone.
-/// @return octave number, in -2..9, for the note of given midi key, name
-/// and accidental.
-int midi_to_octave(unsigned int m,
-                   const enum pse::NoteName& n, const enum pse::Accid& a);
-
-/// accidental for the given pitch class and given name.
-/// @param c a pitch class in 0..11.
-/// @param n a note name, must not be Undef.
-/// @return the accidental corresponding to c and n, or Undef if there is none.
-enum Accid accid(int c, const enum NoteName& n);
-
-/// pitch class, in 0..11, of the given note name.
-/// @param name a note name in A..G. must not be Undef.
-/// @return the pitch class corresponding to the note name, or 12 in case of
-/// error. The classes of C, D, E, F, G, A, B are resp.  0, 2, 4, 5, 7, 9, 11.
-unsigned int pitchClass(const enum NoteName& name);
-
-/// midi value corresponding to the given note name.
-unsigned int to_midi(const enum NoteName& name, const enum Accid& accid,
-                     int octave);
-
-} // namespace MidiNum
+/// fake class. a namespace with a private part.
+class MidiNum
+{
+    
+public:
+    
+    /// octave number for a given MIDI key and note name.
+    /// @param m midi number
+    /// @param n note name in 'A'..'G'.
+    /// @return octave number, in -2..9, for the note of given midi key and name.
+    static int midi_to_octave(unsigned int m, const enum pse::NoteName& n);
+    
+    
+    /// octave number for a given MIDI key.
+    /// @param m midi number
+    /// @param n note name in 'A'..'G'.
+    /// @brief a accidental in [-2, 2], where 1.0 is a half tone.
+    /// @return octave number, in -2..9, for the note of given midi key, name
+    /// and accidental.
+    static int midi_to_octave(unsigned int m,
+                              const enum pse::NoteName& n,
+                              const enum pse::Accid& a);
+    
+    /// accidental for the given pitch class and given name.
+    /// @param c a pitch class in 0..11.
+    /// @param n a note name, must not be Undef.
+    /// @return the accidental corresponding to c and n, or Undef if there is none.
+    static enum Accid accid(int c, const enum NoteName& n);
+    
+    /// pitch class, in 0..11, of the given note name.
+    /// @param name a note name in A..G. must not be Undef.
+    /// @return the pitch class corresponding to the note name, or 12 in case of
+    /// error. The classes of C, D, E, F, G, A, B are resp.  0, 2, 4, 5, 7, 9, 11.
+    static unsigned int pitchClass(const enum NoteName& name);
+    
+    /// midi value corresponding to the given note name.
+    static unsigned int to_midi(const enum NoteName& name,
+                                const enum Accid& accid,
+                                int octave);
+    
+private:
+    
+    /// abbreviations for accidental triple flat
+    static const enum Accid _3F;
+    
+    /// abbreviations for accidental double flat
+    static const enum Accid _2F;
+    
+    /// abbreviations for accidental single flat
+    static const enum Accid _1F;
+    
+    /// abbreviations for accidental natural
+    static const enum Accid _0N;
+    
+    /// abbreviations for accidental single flat
+    static const enum Accid _1S;
+    
+    /// abbreviations for accidental double flat
+    static const enum Accid _2S;
+    
+    /// abbreviations for accidental triple flat
+    static const enum Accid _3S;
+    
+    /// abbreviations for accidental undef
+    static const enum Accid __U;
+    
+    /// table of accidentals for pitch class and name.
+    static const enum Accid ACCID[12][7];
+    
+    /// table of pitch class for each note name in 0 (C) .. 7 (B)
+    static const int PC[7];
+    
+}; // end MidiNum
+    
+    
+//} // namespace MidiNum
 
 
 } // namespace pse

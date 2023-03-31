@@ -10,10 +10,10 @@
 
 namespace pse {
 
-namespace MidiNum{
+//namespace MidiNum{
 
 // static
-int midi_to_octave(unsigned int m, const enum pse::NoteName& n)
+int MidiNum::midi_to_octave(unsigned int m, const enum pse::NoteName& n)
 {
     assert(0 <= m);
     assert(m <= 128);
@@ -51,8 +51,8 @@ int midi_to_octave(unsigned int m, const enum pse::NoteName& n)
 
 
 // static
-int midi_to_octave(unsigned int m,
-                   const enum pse::NoteName& n, const enum pse::Accid& a)
+int MidiNum::midi_to_octave(unsigned int m,
+                            const enum pse::NoteName& n, const enum pse::Accid& a)
 {
     assert(0 <= m);
     assert(m <= 128);
@@ -88,40 +88,87 @@ int midi_to_octave(unsigned int m,
     }
 }
 
-enum Accid accid(int c, const enum NoteName& n)
-{
-    // pitch class for each note name in 0 (C) .. 7 (B)
-    //                  C  D  E  F  G  A  B
-    const int PC[7] = { 0, 2, 4, 5, 7, 9, 11 };
+const enum Accid MidiNum::_3F = Accid::TripleFlat;
+const enum Accid MidiNum::_2F = Accid::DoubleFlat;
+const enum Accid MidiNum::_1F = Accid::Flat;
+const enum Accid MidiNum::_0N = Accid::Natural;
+const enum Accid MidiNum::_1S = Accid::Sharp;
+const enum Accid MidiNum::_2S = Accid::DoubleSharp;
+const enum Accid MidiNum::_3S = Accid::TripleSharp;
+const enum Accid MidiNum::__U = Accid::Undef;
 
+
+//// static
+const enum Accid MidiNum::ACCID[12][7] =
+{
+//      C    D    E    F    G    A    B
+    { _0N, _2F, __U, __U, __U, _3S, _1S }, //   0 = C
+    { _1S, _1F, _3F, __U, __U, __U, _2S  }, //  1 = C#, Db
+    { _2S, _0N, _2F, __U, __U, __U, _3S  }, //  2 = D
+    { _3S, _1S, _1F, _2F, __U, __U, __U  }, //  3 = D#, Eb
+    { __U, _2S, _0N, _1F, _3F, __U, __U  }, //  4 = E
+    { __U, _3S, _1S, _0N, _2F, __U, __U  }, //  5 = F
+    { __U, __U, _2S, _1S, _1F, _3F, __U  }, //  6 = F#, Gb
+    { __U, __U, __U, _2S, _0N, _2F, __U  }, //  7 = G
+    { __U, __U, __U, _3S, _1S, _1F, _3F  }, //  8 = G#, Ab
+    { __U, __U, __U, __U, _2S, _0N, _2F  }, //  9 = A
+    { _2F, __U, __U, __U, _3S, _1S, _1F  }, // 10 = A#, Bb
+    { _1F, _3F, __U, __U, __U, _2S, _0N  }  // 11 = B
+};
+
+
+enum Accid MidiNum::accid(int c, const enum NoteName& n)
+{
     assert(0 <= c);
-    assert(c <= 11);
-    int ni = toint(n);
-    assert(0 <= ni);
-    assert(ni <= 6);
-    switch (c - PC[ni])
-    {
-        case -3:
-            return Accid::TripleFlat;
-        case -2:
-            return Accid::DoubleFlat;
-        case -1:
-            return Accid::Flat;
-        case  0:
-            return Accid::Natural;
-        case  1:
-            return Accid::Sharp;
-        case  2:
-            return Accid::DoubleSharp;
-        case  3:
-            return Accid::TripleSharp;
-        default:
-            return Accid::Undef;
-    }
+    assert(c < 12);
+    assert(n != NoteName::Undef);
+    int i = toint(n);
+    assert(0 <= i);
+    assert(i < 7);
+    return ACCID[c][i];
 }
 
 
-unsigned int pitchClass(const enum NoteName& name)
+// FAUX!!
+//enum Accid MidiNum::accid(int c, const enum NoteName& n)
+//{
+//    // pitch class for each note name in 0 (C) .. 7 (B)
+//    //                  C  D  E  F  G  A  B
+//    const int PC[7] = { 0, 2, 4, 5, 7, 9, 11 };
+//
+//    assert(0 <= c);
+//    assert(c <= 11);
+//    assert(n != NoteName::Undef);
+//    int ni = toint(n);
+//    assert(0 <= ni);
+//    assert(ni <= 6);
+//    int r = (c - PC[ni]) % 12;
+//    if (r < 0) r+= 12;
+//    assert(0 <= r);
+//    assert(r < 12);
+//    switch (r)
+//    {
+//        case -3:
+//            return Accid::TripleFlat;
+//        case -2:
+//            return Accid::DoubleFlat;
+//        case -1:
+//            return Accid::Flat;
+//        case  0:
+//            return Accid::Natural;
+//        case  1:
+//            return Accid::Sharp;
+//        case  2:
+//            return Accid::DoubleSharp;
+//        case  3:
+//            return Accid::TripleSharp;
+//        default:
+//            return Accid::Undef;
+//    }
+//}
+
+
+unsigned int MidiNum::pitchClass(const enum NoteName& name)
 {
     switch (name)
     {
@@ -149,27 +196,41 @@ unsigned int pitchClass(const enum NoteName& name)
 
 
 // TBC
-unsigned int to_midi(const enum NoteName& name, const enum Accid& accid, int oct)
+unsigned int MidiNum::to_midi(const enum NoteName& name,
+                              const enum Accid& accid,
+                              int oct)
 {
     int alt = toint(accid);
-    assert(-2 <= alt);
-    assert(alt <= 2);
-    assert(-1 <= oct);
+    assert(-3 <= alt);
+    assert(alt <= 3);
+    assert(-2 <= oct);
     assert(oct <= 9);
     
-    unsigned int i = pitchClass(name);
-    int falt = int(floor(alt)); // useless ?
-    int r = (i + falt)%12;
+    int i = pitchClass(name); // in 0..11
+    //int falt = int(floor(alt)); // useless ?
+    int r = i + alt;         // in -3..14
+    assert(-3 <= i);
+    assert(r <= 14);
+    if (r < 0)
+    {
+        --oct;
+        r += 12;
+    }
+    else if (11 < r)
+    {
+        ++oct;
+        r -= 12;   // r = r % 12;
+    }
     assert(0 <= r);
     assert(r <= 11);
-    unsigned int p = ((oct+1) * 12) + r;
+    int p = ((oct+1) * 12) + r;
     assert(0 <= p);
-    assert(p <= 127);
-    
-    return ((p)+ int((alt-falt)));
+    assert(p <= 128);
+    return p;
+    //return ((p)+ int((alt-falt)));
 }
 
-} // namespace MidiNum
+//} // namespace MidiNum
 
 
 //} // namespace MidiNum

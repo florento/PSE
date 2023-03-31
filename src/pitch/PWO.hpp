@@ -65,38 +65,6 @@ public: // data
     /// revision: @see https://www.w3.org/2021/06/musicxml40/musicxml-reference/data-types/accidental-value/
     enum Accid alteration;
     
-private:
-    
-    // abbreviations for accidental triple flat
-    // static const enum Accid _3F;
-
-    // abbreviations for accidental double flat
-    // static const enum Accid _2F;
-
-    // abbreviations for accidental single flat
-    // static const enum Accid _1F;
-
-    // abbreviations for accidental natural
-    // static const enum Accid _0N;
-
-    // abbreviations for accidental single flat
-    // static const enum Accid _1S;
-
-    // abbreviations for accidental double flat
-    // static const enum Accid _2S;
-
-    // abbreviations for accidental triple flat
-    // static const enum Accid _3S;
-
-    // abbreviations for accidental undef
-    // static const enum Accid __U;
-    
-    // table of accidentals for pitch class and name.
-    // static const enum Accid ACCID[12][7];
-
-    // table of pitch class for each note name in 0 (C) .. 7 (B)
-    // static const int PC[7];
-
 };
 
 // boolean operators
