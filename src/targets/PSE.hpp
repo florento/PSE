@@ -1,15 +1,14 @@
 //
-//  Speller.hpp
-//  pypse
+//  PSE.hpp
+//  pse
 //
-//  Created by Florent Jacquemard on 22/11/2022.
+//  Created by Florent Jacquemard on 29/03/2023.
 //
 /// @addtogroup pitch
 /// @{
 
-
-#ifndef Speller_hpp
-#define Speller_hpp
+#ifndef PSE_hpp
+#define PSE_hpp
 
 #include <assert.h>
 #include <memory>
@@ -21,16 +20,15 @@
 #include "Ton.hpp"
 #include "TonIndex.hpp"
 #include "PSRawEnum.hpp"
+#include "Speller.hpp"
 #include "PSTable.hpp"
 
-// TODO
-// - const ln & lb
 
 namespace pse {
 
-/// wrapper in top of PSRawEnum
-/// interface to pybind
-class Speller
+/// wrapper on top of PSRawEnum.
+/// interface to pybind.
+class PSE : public Speller
 {
 public:
     
@@ -38,33 +36,11 @@ public:
     /// @param nbTons use default list of tonalities (default: empty).
     /// @param dflag debug mode.
     /// @see PSTable
-    Speller(size_t nbTons=0, bool dflag=true);
-
-    // Speller for the given input notes.
-    // @param ln Python list of Music 21 Note objects (references).
-    // @param lb Python list of bar numbers (ints).
-    // @warning both list must be of same length.
-    // Speller(py::list& ln, const py::list& lb);
-
-    // Speller for a list of notes with midi pitch and bar number.
-    // Speller(const std::vector<int>& notes, const std::vector<int>& barnum);
+    PSE(size_t nbTons=0, bool dflag=true);
 
     /// destructor
-    virtual ~Speller();
+    virtual ~PSE();
 
-    /// set debug mode (log messages up to debug)
-    void debug(bool flag);
-
-    /// number of input notes to the list of notes to spell.
-    size_t size() const;
-
-    /// add a new input note to the list of notes to spell.
-    /// @param note MIDI key of the new input note.
-    /// @param bar bar number of the new input note.
-    /// @param simult whether the new input note is simultaneous with the
-    /// next note.
-    void add(int note, int bar, bool simult=false);
-    
     /// number of tonalities considered for pitch spelling.
     size_t nbTons() const;
 
@@ -121,37 +97,13 @@ public:
     /// a signature with no accidentals.
     inline int fifths() const { return global().fifths(); }
 
-    /// estimated name for the note of given index in the best path,
-    /// in 0..6 (0 is 'C', 6 is 'B').
-    /// @param i index of note in the list of input notes.
-    inline enum NoteName name(size_t i) const { return _enum.name(i); }
-
-    /// estimated name for the note of given index in the best path, in -2..2.
-    /// @param i index of note in the list of input notes.
-    inline enum Accid accidental(size_t i) const {  return _enum.accidental(i); }
-
-    /// estimated octave for the note of given index in the best path, in -2..9.
-    /// @param i index of note in the list of input notes.
-    inline int octave(size_t i) const {  return _enum.octave(i); }
-
-    /// estimated print flag for the note of given index in the best path.
-    /// This flags says wether the accidental of the note must be printed or not.
-    /// @param i index of note in the list of input notes.
-    inline bool printed(size_t i) const {  return _enum.printed(i); }
-
 private: // data
         
-    /// enumerator of the input notes
-    pse::PSRawEnum _enum;
-
     /// Pitch Spelling table
-    pse::PST _table;
+    PST _table;
     
     // evaluated global tonality
-    //pse::Ton _global;
-    
-    /// debug mode activated
-    bool _debug;
+    // Ton _global;
     
 private:
         
@@ -171,8 +123,9 @@ private:
 
 };
 
+
 } // namespace pse
 
-#endif /* Speller_hpp */
+#endif /* PSE_hpp */
 
 /// @}

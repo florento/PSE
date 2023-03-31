@@ -1,27 +1,22 @@
 //
-//  Speller.cpp
-//  pypse
+//  PSE.cpp
+//  pse
 //
-//  Created by Florent Jacquemard on 22/11/2022.
+//  Created by Florent Jacquemard on 29/03/2023.
 //
 
-#include "Speller.hpp"
+#include "PSE.hpp"
 
 
 namespace pse {
 
 
-Speller::Speller(size_t nbTons, bool dflag):
-_enum(0, 0),
-_table(_enum, nbTons, dflag),
+PSE::PSE(size_t nbTons, bool dflag):
+Speller(dflag),
+_table(_enum, nbTons, dflag)
 //_global(0, ModeName::Maj), // C maj default
-_debug(dflag)
 {
-    spdlog_setVerbosity(4);
-    debug(dflag);
-    spdlog_setPattern();
-    
-    // init table with default vector of tons
+// init table with default vector of tons
 //    if (finit)
 //    {
 //        for (auto ton : TONS) _tons.push_back(ton); // vector copy default tons
@@ -37,82 +32,38 @@ _debug(dflag)
 }
 
 
-Speller::~Speller()
+PSE::~PSE()
 {
-    TRACE("delete Speller");
+    TRACE("delete PSE");
 }
 
 
-//Speller::Speller(py::list& ln, const py::list& lb):
-//_names(ln.size(), pse::NoteName::Undef),
-//_accids(ln.size(), pse::Accid::Undef),
-//_octave(ln.size(), 100),
-//_enum(ln, lb)
-//{
-//    assert(ln.size() == lb.size());
-//}
-
-
-//Speller::Speller(const std::vector<int>& notes, const std::vector<int>& barnum):
-//_names(notes.size(), pse::NoteName::Undef),
-//_accids(notes.size(), pse::Accid::Undef),
-//_octave(notes.size(), 100),
-//_enum(notes, barnum)
-//{
-//    assert(notes.size() == barnum.size());
-//}
-
-
-void Speller::debug(bool flag)
-{
-    TRACE("Speller: debug mode {}", flag);
-    if (flag)
-        spdlog_setVerbosity(5);
-    else
-        spdlog_setVerbosity(4);
-}
-
-
-size_t Speller::size() const
-{
-    //TRACE("Speller::size");
-    return _enum.size();
-}
-
-
-void Speller::add(int note, int bar, bool simult)
-{
-    TRACE("Speller: add {} {}", note, bar);
-    _enum.add(note, bar, simult);
-}
-
-
-size_t Speller::nbTons() const
+size_t PSE::nbTons() const
 {
     return _table.index.size();  // nbTons();
 }
 
 
-const Ton& Speller::ton(size_t i) const
+const Ton& PSE::ton(size_t i) const
 {
     return _table.index.ton(i);
 }
 
 
-void Speller::resetTons()
+void PSE::resetTons()
 {
     _table.index.reset();
 }
 
 
-void Speller::addTon(const Ton& ton)
+void PSE::addTon(const Ton& ton)
 {
     TRACE("Speller: add tonality {}", ton);
     _table.index.add(ton);
 }
 
 
-void Speller::addTon(int ks, ModeName mode)
+void PSE::addTon(int ks, ModeName mode)
 {
     if (ks < -7 || 7 < ks)
     {
@@ -123,13 +74,13 @@ void Speller::addTon(int ks, ModeName mode)
 }
 
 
-void Speller::setGlobal(size_t i)
+void PSE::setGlobal(size_t i)
 {
     _table.setGlobal(i);
 }
 
 
-bool Speller::spell()
+bool PSE::spell()
 {
     //DEBUGU("Speller respell: nb tonalities in table: {}", _table.nbTons());
     if (_table.index.size() == 0)
@@ -202,37 +153,37 @@ bool Speller::spell()
 }
 
 
-size_t Speller::globalCands() const
+size_t PSE::globalCands() const
 {
     return _table.globalCands();
 }
 
 
-const Ton& Speller::globalCand(size_t i) const
+const Ton& PSE::globalCand(size_t i) const
 {
     return _table.globalCand(i);
 }
 
 
-size_t Speller::iglobalCand(size_t i) const
+size_t PSE::iglobalCand(size_t i) const
 {
     return _table.iglobalCand(i);
 }
 
 
-const Ton& Speller::local(size_t i, size_t j) const
+const Ton& PSE::local(size_t i, size_t j) const
 {
     return _table.local(i, j);
 }
 
 
-const Ton& Speller::global() const
+const Ton& PSE::global() const
 {
     return _table.global();
 }
 
 
-size_t Speller::iglobal() const
+size_t PSE::iglobal() const
 {
     return _table.iglobal();
 }
