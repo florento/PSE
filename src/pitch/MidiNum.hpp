@@ -162,30 +162,33 @@ class MidiNum
 {
     
 public:
-    
-    /// octave number for a given MIDI key and note name.
-    /// @param m midi number
-    /// @param n note name in 'A'..'G'.
-    /// @return octave number, in -2..9, for the note of given midi key and name.
-    static int midi_to_octave(unsigned int m, const enum pse::NoteName& n);
-    
-    
-    /// octave number for a given MIDI key.
-    /// @param m midi number
-    /// @param n note name in 'A'..'G'.
-    /// @brief a accidental in [-2, 2], where 1.0 is a half tone.
-    /// @return octave number, in -2..9, for the note of given midi key, name
-    /// and accidental.
-    static int midi_to_octave(unsigned int m,
-                              const enum pse::NoteName& n,
-                              const enum pse::Accid& a);
-    
+       
     /// accidental for the given pitch class and given name.
     /// @param c a pitch class in 0..11.
     /// @param n a note name, must not be Undef.
     /// @return the accidental corresponding to c and n, or Undef if there is none.
     static enum Accid accid(int c, const enum NoteName& n);
     
+    /// octave number for a given MIDI key and note name.
+    /// @param m midi number
+    /// @param n note name in 'A'..'G'.
+    /// @return octave number, in -2..9, for the note of given midi key and name.
+    static int midi_to_octave(unsigned int m, const enum NoteName& n);
+
+    /// octave number for a given MIDI key and note name,
+    /// and debug check accidental.
+    /// @param m midi number
+    /// @param n note name in 'A'..'G'.
+    /// @param a accidental in [-2, 2], where 1.0 is a half tone.
+    /// given only for debugging (asserts).
+    /// @param debug debug mode: the accidental is controlled. other it is ignored.
+    /// @return octave number, in -2..9, for the note of given midi key, name
+    /// and accidental.
+    static int midi_to_octave(unsigned int m,
+                              const enum NoteName& n,
+                              const enum Accid& a,
+                              bool debug = true);
+        
     /// pitch class, in 0..11, of the given note name.
     /// @param name a note name in A..G. must not be Undef.
     /// @return the pitch class corresponding to the note name, or 12 in case of

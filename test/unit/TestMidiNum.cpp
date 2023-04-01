@@ -164,7 +164,7 @@ TEST(MidiNum, accid)
     EXPECT_EQ(pse::MidiNum::accid(8, pse::NoteName::B), pse::Accid::TripleFlat);
 
     //  9 = A
-    EXPECT_EQ(pse::MidiNum::accid(9, pse::NoteName::C), pse::Accid::Undef);
+    EXPECT_EQ(pse::MidiNum::accid(9, pse::NoteName::C), pse::Accid::TripleFlat);
     EXPECT_EQ(pse::MidiNum::accid(9, pse::NoteName::D), pse::Accid::Undef);
     EXPECT_EQ(pse::MidiNum::accid(9, pse::NoteName::E), pse::Accid::Undef);
     EXPECT_EQ(pse::MidiNum::accid(9, pse::NoteName::F), pse::Accid::Undef);
@@ -208,7 +208,7 @@ TEST(MidiNum, pitchClass)
 // test that to_midi is the inverse of the above tested
 TEST(MidiNum, to_midi)
 {
-    for (int m = 0; m < 128; ++m)
+    for (int m = 0; m <= 128; ++m)
     {
         // pitch class
         int c = m % 12;
@@ -222,6 +222,7 @@ TEST(MidiNum, to_midi)
             {
                 // has been tested
                 int o = pse::MidiNum::midi_to_octave(m, n);
+                // std::cout << n << a << o << " MIDI:" << m << std::endl;
                 EXPECT_EQ(pse::MidiNum::to_midi(n, a, o), m);
             }
         }

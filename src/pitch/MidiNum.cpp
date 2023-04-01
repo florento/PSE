@@ -13,46 +13,17 @@ namespace pse {
 //namespace MidiNum{
 
 // static
-int MidiNum::midi_to_octave(unsigned int m, const enum pse::NoteName& n)
+int MidiNum::midi_to_octave(unsigned int m, const enum NoteName& n)
 {
-    assert(0 <= m);
-    assert(m <= 128);
-    int oct = int(floor(m/12)) - 1;
-    assert(-1 <= oct);
-    assert(oct <= 9);
-    int chroma = m % 12;
-    // adjust octave for extreme notes
-    if (chroma == 0 && n == pse::NoteName::B)
-    {
-        //assert(a == pse::Accid::Sharp);
-        return oct - 1;
-    }
-    else if (chroma == 1 && n == pse::NoteName::B)
-    {
-        //assert(a == pse::Accid::DoubleSharp);
-        return oct - 1;
-    }
-    else if (chroma == 10 && n == pse::NoteName::C)
-    {
-        //assert(a == pse::Accid::DoubleFlat);
-        return oct + 1;
-    }
-    else if (chroma == 11 && n == pse::NoteName::C)
-    {
-        //assert(a == pse::Accid::Flat);
-        return oct + 1;
-    }
-    else
-    {
-        // TBD assert the name // accid in the other cases
-        return oct;
-    }
+    return midi_to_octave(m, n, Accid::Undef, false); // no debug mode
 }
 
 
 // static
 int MidiNum::midi_to_octave(unsigned int m,
-                            const enum pse::NoteName& n, const enum pse::Accid& a)
+                            const enum NoteName& n,
+                            const enum Accid& a,
+                            bool debug)
 {
     assert(0 <= m);
     assert(m <= 128);
@@ -60,25 +31,48 @@ int MidiNum::midi_to_octave(unsigned int m,
     assert(-1 <= oct);
     assert(oct <= 9);
     int chroma = m % 12;
+    assert(!debug || a != Accid::Undef);
+    assert(!debug || a == accid(chroma, n));
+    
     // adjust octave for extreme notes
     if (chroma == 0 && n == pse::NoteName::B)
     {
-        assert(a == pse::Accid::Sharp);
+        assert(!debug || a == pse::Accid::Sharp);
+        return oct - 1;
+    }
+    if (chroma == 0 && n == pse::NoteName::A)
+    {
+        assert(!debug || a == pse::Accid::TripleSharp);
         return oct - 1;
     }
     else if (chroma == 1 && n == pse::NoteName::B)
     {
-        assert(a == pse::Accid::DoubleSharp);
+        assert(!debug || a == pse::Accid::DoubleSharp);
         return oct - 1;
+    }
+    else if (chroma == 2 && n == pse::NoteName::B)
+    {
+        assert(!debug || a == pse::Accid::TripleSharp);
+        return oct - 1;
+    }
+    else if (chroma == 9 && n == pse::NoteName::C)
+    {
+        assert(!debug || a == pse::Accid::TripleFlat);
+        return oct + 1;
     }
     else if (chroma == 10 && n == pse::NoteName::C)
     {
-        assert(a == pse::Accid::DoubleFlat);
+        assert(!debug || a == pse::Accid::DoubleFlat);
         return oct + 1;
     }
     else if (chroma == 11 && n == pse::NoteName::C)
     {
-        assert(a == pse::Accid::Flat);
+        assert(!debug || a == pse::Accid::Flat);
+        return oct + 1;
+    }
+    else if (chroma == 11 && n == pse::NoteName::D)
+    {
+        assert(!debug || a == pse::Accid::TripleFlat);
         return oct + 1;
     }
     else
@@ -111,7 +105,7 @@ const enum Accid MidiNum::ACCID[12][7] =
     { __U, __U, _2S, _1S, _1F, _3F, __U  }, //  6 = F#, Gb
     { __U, __U, __U, _2S, _0N, _2F, __U  }, //  7 = G
     { __U, __U, __U, _3S, _1S, _1F, _3F  }, //  8 = G#, Ab
-    { __U, __U, __U, __U, _2S, _0N, _2F  }, //  9 = A
+    { _3F, __U, __U, __U, _2S, _0N, _2F  }, //  9 = A
     { _2F, __U, __U, __U, _3S, _1S, _1F  }, // 10 = A#, Bb
     { _1F, _3F, __U, __U, __U, _2S, _0N  }  // 11 = B
 };

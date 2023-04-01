@@ -193,7 +193,7 @@ void Pitch::rename(const enum NoteName& n)
         ERROR("pitch {} cannot be named by {}", m, n);
         return;
     }
-    int o = MidiNum::midi_to_octave(m, n);
+    int o = MidiNum::midi_to_octave(m, n, a);
     rename(n, a, o, true);
 }
 

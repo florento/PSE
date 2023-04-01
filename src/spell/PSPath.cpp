@@ -154,7 +154,7 @@ void PSP::rename()
         const enum NoteName& name = _names[i - _enum.first()];
         const enum Accid& accid = _accids[i - _enum.first()];
         unsigned int mp = _enum.midipitch(i);
-        int oct = MidiNum::midi_to_octave(mp, name);
+        int oct = MidiNum::midi_to_octave(mp, name, accid);
         assert(-2 <= oct);
         assert(oct <= 9);
         bool altprint = _prints[i - _enum.first()];

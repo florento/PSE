@@ -292,7 +292,7 @@ void PSRawEnum::rename(size_t i, const enum NoteName& n, bool altprint)
         ERROR("pitch {} cannot be named by {}", m, n);
         return;
     }
-    int o = MidiNum::midi_to_octave(m, n);
+    int o = MidiNum::midi_to_octave(m, n, a);
     rename(i, n, a, o, altprint);
 }
 
