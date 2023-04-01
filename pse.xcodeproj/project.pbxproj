@@ -72,6 +72,8 @@
 		4350820329D6E3AB00465943 /* TestNoteName.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4350820229D6E3AB00465943 /* TestNoteName.cpp */; };
 		4350820529D6FDA100465943 /* TestMode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4350820429D6FDA100465943 /* TestMode.cpp */; };
 		4350820829D7032B00465943 /* TestMidiNum.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4350820729D7032B00465943 /* TestMidiNum.cpp */; };
+		43791C8E29D8392200DE8796 /* TestAccid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43791C8D29D8392200DE8796 /* TestAccid.cpp */; };
+		43791C8F29D83EE400DE8796 /* TestScale.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 435081CE29D6C04600465943 /* TestScale.cpp */; };
 		4397A5DE29A6CDB300C2CC9A /* PSOrder.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 4397A5DC29A6CDB300C2CC9A /* PSOrder.hpp */; };
 		43A2544029280D8900D559D2 /* trace.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43A2543E29280D8900D559D2 /* trace.cpp */; };
 		43A2544129280D8900D559D2 /* trace.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 43A2543F29280D8900D559D2 /* trace.hpp */; };
@@ -221,6 +223,7 @@
 		4363442C29D31D8700F5D628 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		436C6C3D2924016F00152D8C /* pse.cpython-310-darwin.so */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = "pse.cpython-310-darwin.so"; sourceTree = BUILT_PRODUCTS_DIR; };
 		436C6C4D2924023100152D8C /* NoteName.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = NoteName.hpp; path = src/pitch/NoteName.hpp; sourceTree = "<group>"; };
+		43791C8D29D8392200DE8796 /* TestAccid.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TestAccid.cpp; sourceTree = "<group>"; };
 		4397A5DC29A6CDB300C2CC9A /* PSOrder.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = PSOrder.hpp; path = src/spell/PSOrder.hpp; sourceTree = "<group>"; };
 		43A2543E29280D8900D559D2 /* trace.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = trace.cpp; path = src/general/trace.cpp; sourceTree = "<group>"; };
 		43A2543F29280D8900D559D2 /* trace.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = trace.hpp; path = src/general/trace.hpp; sourceTree = "<group>"; };
@@ -416,6 +419,7 @@
 				435081DC29D6C93000465943 /* CMakeLists.txt */,
 				435081DD29D6C93000465943 /* unit_test.cpp */,
 				4350820229D6E3AB00465943 /* TestNoteName.cpp */,
+				43791C8D29D8392200DE8796 /* TestAccid.cpp */,
 				4350820729D7032B00465943 /* TestMidiNum.cpp */,
 				4350820429D6FDA100465943 /* TestMode.cpp */,
 				435081CE29D6C04600465943 /* TestScale.cpp */,
@@ -708,6 +712,8 @@
 				435081FC29D6D7E300465943 /* Weber.cpp in Sources */,
 				435081F229D6D76500465943 /* PWO.cpp in Sources */,
 				435081F429D6D76C00465943 /* MidiNum.cpp in Sources */,
+				43791C8F29D83EE400DE8796 /* TestScale.cpp in Sources */,
+				43791C8E29D8392200DE8796 /* TestAccid.cpp in Sources */,
 				435081ED29D6D75100465943 /* Fifths.cpp in Sources */,
 				435081FD29D6D7F600465943 /* Interval.cpp in Sources */,
 				4350820829D7032B00465943 /* TestMidiNum.cpp in Sources */,

@@ -43,7 +43,7 @@ private: // data
     /// number of semitons in 0..14
     unsigned int _dist;
         
-    /// nunmber of octaves in composed interval
+    /// number of octaves in composed interval
     /// (0 for simple interval).
     unsigned int _octaves;
         

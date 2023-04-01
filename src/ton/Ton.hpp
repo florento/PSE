@@ -27,6 +27,8 @@ namespace pse {
 // class PSState;
 
 /// A tonality is the combination of a Key Signature in -7..7 and a Mode.
+/// (only diatonic scales)
+///
 /// | ks | Maj | Min  | sens (harm) |
 /// |:--:|:---:|:----:|:------------|
 /// | -7 | Cb  | Ab   | Gnat        |
@@ -90,8 +92,22 @@ public:
 
     /// accidental in the scale of this ton for a given pitch name.
     /// @param n an encapsulated note name
-    /// @return the number of accidents, in scale, for n, in -2..2.
+    /// @return the number of accidents, in scale, for degree d, in -2..2.
     enum Accid accidDia(const enum NoteName& n) const;
+
+    /// note name in the scale of this ton for a given degree.
+    /// @param d a degree in 0..6.
+    /// @return the note name in scale, for degree d, in 'C'..'B'.
+    /// @warning only for distonic scales: the mode must be
+    /// Major or Minor or MinorNat or MinorMel.
+    enum NoteName name(int d) const;
+
+    /// accidental in the scale of this ton for a given degree.
+    /// @param d a degree in 0..6.
+    /// @return the number of accidents, in scale, for n, in -2..2.
+    /// @warning only for distonic scales: the mode must be
+    /// Major or Minor or MinorNat or MinorMel.
+    enum Accid accid(int d) const;
 
     /// a note is a lead in this Ton if
     /// it has an accidental in the scale different

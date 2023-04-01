@@ -21,6 +21,27 @@
 
 namespace pse {
 
+
+/// Major and harmonic minor scapes for each pitch class
+/// with enharmonics
+///
+/// | pc | maj          | min          |
+/// |:--:|:------------:|:------------:|
+/// |  0 | C(0)         | C(-3)        |
+/// |  1 | C#(7) Db(-5) | C#(4)        |
+/// |  2 | D(2)         | D(-1)        |
+/// |  3 | Eb(-3)       | Eb(-6) D#(6) |
+/// |  4 | E(4)         | E(1)         |
+/// |  5 | F(-1)        | F(-4)        |
+/// |  6 | F#(6) Gb(-6) | F#(3)        |
+/// |  7 | G(1)         | G(-2)        |
+/// |  8 | Ab(-4)       | Ab(-7) G#(5) |
+/// |  9 | A(3)         | A(0)         |
+/// | 10 | Bb(-2)       | Bb(-5) A#(7) |
+/// | 11 | B(5) Cb(-7)  | B(2)         |
+
+
+/// a scale is defined by a mode, and the pitch class and name of tonic.
 class Scale  // public Mode
 {
 public:

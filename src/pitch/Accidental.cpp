@@ -235,6 +235,124 @@ bool sharp(const enum Accid& a)
 }
 
 
+enum Accid operator++(const enum Accid& a)
+{
+    switch (a)
+    {
+        case Accid::TripleFlat:
+            return Accid::DoubleFlat;
+
+        case Accid::DoubleFlat:
+            return Accid::Flat;
+            
+        case Accid::ThreeQuartersFlat:
+            return Accid::QuarterFlat;
+
+        case Accid::Flat:
+            return Accid::Natural;
+
+        case Accid::QuarterFlat:
+            return Accid::QuarterSharp;
+
+        case Accid::Natural:
+            return Accid::Sharp;
+
+        case Accid::QuarterSharp:
+            return Accid::ThreeQuartersSharp;
+
+        case Accid::Sharp:
+            return Accid::DoubleSharp;
+
+        case Accid::ThreeQuartersSharp:
+        {
+            ERROR("sharpenization of 3 quarter sharp impossible");
+            return Accid::ThreeQuartersSharp;
+        }
+
+        case Accid::DoubleSharp:
+            return Accid::TripleSharp;
+
+        case Accid::TripleSharp:
+        {
+            ERROR("sharpenization of triple sharp impossible");
+            return Accid::TripleSharp;
+        }
+
+        case Accid::Undef:
+        {
+            WARN("sharpenization of undef accidental");
+            return Accid::Undef;
+        }
+
+        // should not happen
+        default:
+        {
+            ERROR("sharpenization of accidental: unexpected code {}", a);
+            return Accid::Undef;
+        }
+    }
+}
+
+
+enum Accid operator--(const enum Accid& a)
+{
+    switch (a)
+    {
+        case Accid::TripleFlat:
+        {
+            ERROR("flattenization of triple flat impossible");
+            return Accid::TripleFlat;
+        }
+
+        case Accid::DoubleFlat:
+            return Accid::TripleFlat;
+            
+        case Accid::ThreeQuartersFlat:
+        {
+            ERROR("flattenization of 3 quarter flat impossible");
+            return Accid::ThreeQuartersFlat;
+        }
+
+        case Accid::Flat:
+            return Accid::DoubleFlat;
+
+        case Accid::QuarterFlat:
+            return Accid::ThreeQuartersFlat;
+
+        case Accid::Natural:
+            return Accid::Flat;
+
+        case Accid::QuarterSharp:
+            return Accid::QuarterFlat;
+
+        case Accid::Sharp:
+            return Accid::Natural;
+
+        case Accid::ThreeQuartersSharp:
+            return Accid::QuarterSharp;
+
+        case Accid::DoubleSharp:
+            return Accid::Sharp;
+
+        case Accid::TripleSharp:
+            return Accid::DoubleSharp;
+
+        case Accid::Undef:
+        {
+            WARN("flattenization of undef accidental");
+            return Accid::Undef;
+        }
+
+        // should not happen
+        default:
+        {
+            ERROR("flattenization of accidental: unexpected code {}", a);
+            return Accid::Undef;
+        }
+    }
+}
+
+
 std::string tostring(const enum Accid& a)
 {
     switch (a)
@@ -289,7 +407,7 @@ std::string tostring(const enum Accid& a)
 
         // should not happen
         default:
-            ERROR("Accid: unexpected code {}");
+            ERROR("Accid: unexpected code {}", a);
             return "ERROR";
             break;
     }

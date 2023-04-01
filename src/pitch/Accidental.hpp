@@ -90,6 +90,12 @@ bool natural(const enum Accid& a);
 /// accidental is one or more sharps
 bool sharp(const enum Accid& a);
 
+/// sharpenization of accidental.
+enum Accid operator++(const enum Accid& a);
+
+/// flattenization of accidental.
+enum Accid operator--(const enum Accid& a);
+
 /// constructor of accidental value.
 /// only for internal use.
 /// @param a an integral number of 1/2 tons,

@@ -210,6 +210,29 @@ enum Accid Ton::accidDia(const enum NoteName& name) const
 }
 
 
+enum NoteName Ton::name(int d) const
+{
+    // diatonic scale
+    assert(_mode == ModeName::Major ||
+           _mode == ModeName::Minor ||
+           _mode == ModeName::MinorNat ||
+           _mode == ModeName::MinorMel);
+    assert(d < 7);
+    return name() + d;
+}
+
+
+enum Accid Ton::accid(int d) const
+{
+//    assert(_mode == ModeName::Major ||
+//           _mode == ModeName::Minor ||
+//           _mode == ModeName::MinorNat ||
+//           _mode == ModeName::MinorMel);
+//    assert(d < 7); // diatonic scale
+    return accidDia(name(d));
+}
+
+
 bool Ton::lead(const enum NoteName& name) const
 {
     assert(defined(name));

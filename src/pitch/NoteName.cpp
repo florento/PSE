@@ -51,6 +51,12 @@ enum NoteName operator+(const enum NoteName& n, int d)
 }
 
 
+enum NoteName operator-(const enum NoteName& n, int d)
+{
+    return operator+(n, -d);
+}
+
+
 enum NoteName NoteName(int i)
 {
     switch (i)

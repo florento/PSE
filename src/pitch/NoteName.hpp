@@ -56,6 +56,9 @@ bool diatonicStepDown(const NoteName& n1, const NoteName& n2);
 /// note name at distance d from n.
 enum NoteName operator+(const enum NoteName& n, int d);
 
+/// note name at distance -d from n.
+enum NoteName operator-(const enum NoteName& n, int d);
+
 /// constructor of note name
 /// @param c char between 'A' and 'G' or 'X' for Undef.
 /// @todo TBR obsolete
