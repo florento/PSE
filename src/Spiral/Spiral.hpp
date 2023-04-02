@@ -140,7 +140,7 @@ public:
     
     static const SpiralName synonyms[12][3];
 
-    /// @brief ref to a SpiralName in table synonyms. */
+    /// @brief ref to a SpiralName in table synonyms.
     static const SpiralName& ofkey(int k);
     
     /// @brief note name (ref in table synonyms) corresponding to given midi pitch

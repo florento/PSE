@@ -1,8 +1,6 @@
 # David Meredith's PS13 pitch-spelling algorithm
 
-
 ## first step
-
 for a pitch class $p$,  
 a note $n$ (in the sequence of notes to spell),  
 a note name $\ell$ (in A..G)
@@ -22,8 +20,39 @@ a note name $\ell$ (in A..G)
 1 b2 2 b3 3 4 #4 5 #6 6 b7 7 8
 
 ## second step
+correct the "passing notes" 
+passing note = middle note in non-diatonic move between 3 close notes.
 
-correct the non-diatonic moves of 1/2 ton.
+[Meredith] 6 kinds, characterized by the distance in 1/2 tons between the 3 notes:
+- **a.** -1 +1   (broderie 1)  
+  ex. `C` `Cb` `C` $\to$ `C` `B` `C`
+- **b.** +1  -1  (broderie 2)  
+  ex. `C` `C#` `C` $\to$ `C` `Db` `C`
+- **c.** -1 -2  (descending 1)  
+  ex. `C` `Cb` `A` $\to$ `C` `B` `A`
+- **d.** +2 +1  (ascending 1)  
+  ex. `A` `Cb` `C` $\to$ `A` `B` `C`
+- **e.** -2 -1  (descending 2)  
+  ex. `C` `A#` `A` $\to$ `C` `Bb` `A`
+- **f.** +1 +2  (ascending 2)  
+  ex. `A` `A#` `C` $\to$ `A` `Bb` `C`
+
+could we add 2 more kinds?: chromatic
+- **g.** -1 -1  (descending chr.)  
+  ex. `C` `Cb` `A#` $\to$ `C` `B` `A#`  
+  ex. `B#` `Cb` `Bb` $\to$ `C` `B` `A#`  
+  contradicts the rule of thumb:  
+  chromatic descending $\to$ b  
+  ex. `C` `B` `Bb`  
+- **h.** +1 +1  (ascending chr.)  
+  ex. `A` `A#` `Cb` $\to$ `A` `Bb` `Cb`  
+  contradicts the rule of thumb:  
+  chromatic ascending $\to$ #  
+  ex. `A` `A#` `B`
+
+correction strategy: 
+- left to right? 
+- with overlapping?
 
 ## parameters
 

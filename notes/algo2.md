@@ -20,15 +20,16 @@ In this case, several cost values are associated to the transition,
 some of which are defined wrt a tonality $t$:
 
 - graphical costs:
-  - $ga(\tau)$: number of printed accidentals in $S'$ = the size of $s' \setminus s$,
+  - $ga(\tau)$: number of printed accidentals in $S'$ = the size of $q' \setminus q$,
     except for lead notes of $t$...
-  - $gd_t(\tau)$: the distance $d(s', t)$ 
+  - $gd_t(\tau)$: the distance $d(q', t)$ 
   - $gc_t(\tau)$: the number of notes in $S'$ not in the chromatic harmonic scale of same tonic as $t$.  
     when $t$ is a subset of this scale?  
-    redundant qith the previous?
+    redundant with the previous?
   - ~~$gc_t(\tau)$: nb of accidentals of $s' \setminus s$ of $\neq$ color than $t$~~.
 - horizontal cost:  
-  - $h(\tau)$: nb of non-diatonic moves, when $S$ and $S'$ are singleton set and
+  - $h(\tau)$: nb of non-diatonic moves, when $S$ and $S'$ are singleton set  
+    REVISE see `src/ps13/README.md`
 - vertical cost:  
   - $v(\tau)$ whether $|E'| > 1$ and chord uncategorizable...
 
