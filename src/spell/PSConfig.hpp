@@ -42,7 +42,7 @@ public:
     /// copy constructor
     PSC(const PSC& c);
     
-    virtual ~PSC();
+    virtual ~PSC(); 
     
     /// assignement operator
     PSC& operator=(const PSC& rhs);

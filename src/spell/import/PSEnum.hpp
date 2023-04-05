@@ -18,6 +18,7 @@
 #include "trace.hpp"
 #include "NoteName.hpp"
 #include "Accidental.hpp"
+#include "MidiNum.hpp"
 
 namespace pse {
 
@@ -123,6 +124,27 @@ public:
     /// @param i index of a note. must be inside the interval of this enumerator.
     virtual bool simultaneous(size_t i) const = 0;
 
+    /// name for the note of given index, if it has been set,
+    /// otherwise Undef.
+    /// @param i index of note in the list of input notes.
+    virtual enum NoteName name(size_t i) const = 0;
+    
+    /// accidental for the note of given index, if it has been set,
+    /// otherwise Undef.
+    /// @param i index of note in the list of input notes.
+    virtual enum Accid accidental(size_t i) const = 0;
+    
+    /// octave number for the note of given index, if it has been set,
+    /// otherwise 10.
+    /// @param i index of note in the list of input notes.
+    virtual int octave(size_t i) const = 0;
+
+    /// print flag for the note of given index, if it has been set,
+    /// otherwise true.
+    /// This flags says wether the accidental of the note must be printed or not.
+    /// @param i index of note in the list of input notes.
+    virtual bool printed(size_t i) const = 0;
+    
     /// rename the note of given index
     /// @param i index of a note in this enumerator.
     /// @param name note name in 'A'..'G'.
@@ -133,7 +155,45 @@ public:
     virtual void rename(size_t i,
                         const enum NoteName& name, const enum Accid& accid,
                         int oct, bool altprint) = 0;
-       
+    
+    /// rename the note of given index, given a name.
+    /// The accidental and octave number are deduced from the other parameters
+    /// (MIDI key and the name).
+    /// @param i index of a note in this enumerator.
+    /// @param name note name in 'A'..'G'.
+    /// @param altprint whether the accidental must be printed.
+    virtual void rename(size_t i, const enum NoteName& name,
+                        bool altprint=true);
+
+    /// count the number of occurrence of a pitch class in a window around
+    /// a given note.
+    /// @param c a pitch class in 0..11.
+    /// @param i index of a note in this enumerator.
+    /// @param pre number of notes to consider before i.
+    /// @param post number of notes to consider after i.
+    /// @return the number of occurrence of c in the interval
+    /// from i - pre (included) to i + post (excluded).
+    virtual size_t count(int c, size_t i, size_t pre, size_t post);
+    
+    /// correct the passing notes using 6 rewrite rules proposed by
+    /// D. Meredith in his PS13 Pitch-Spelling algorithm.
+    /// rules apply to trigrams of notes.
+    /// the lhs of every rule is defined by the distance in 1/2 tons between
+    /// the 3 notes:
+    /// - -1 +1  (broderie down)
+    ///   ex. `C` `Cb` `C` $\to$ `C` `B` `C`
+    /// - +1 -1  (broderie up)
+    ///   ex. `C` `C#` `C` $\to$ `C` `Db` `C`
+    /// - -1 -2  (descending 1)
+    ///   ex. `C` `Cb` `A` $\to$ `C` `B` `A`
+    /// - +1 +2  (ascending 1)
+    ///   ex. `A` `A#` `C` $\to$ `A` `Bb` `C`
+    /// - -2 -1  (descending 2)
+    ///   ex. `C` `A#` `A` $\to$ `C` `Bb` `A`
+    /// - +2 +1  (ascending 2)
+    ///   ex. `A` `Cb` `C` $\to$ `A` `B` `C`
+    void rewritePassing();
+    
 protected:
 
     /// index of the first note accessible by this enumerator.
@@ -151,7 +211,14 @@ protected:
     /// enumerator. optional (can be ommited for open PS Enum).
     /// if given it must be larger than or equal to first.
     void reset(size_t i0, size_t i1 = PSEnum::ID_INF);
+    
+private:
+    /// rewrite a trigram of notes starting at the given position.
+    /// @param i index of a note in this enumerator.
+    /// @see rewritePassing()
+    void rewritePassing(size_t i);
 
+    
 }; // class PSEnum
 
 } // namespace pse

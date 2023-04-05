@@ -48,6 +48,7 @@ class PSV
 
 public:
 
+    /// @todo param step number
     /// main constructor.
     /// @param index array of tonalities. dimension of this vector.
     /// @param e an enumerator of notes for transitions of configs.
@@ -55,6 +56,7 @@ public:
     PSV(const TonIndex& index,  // const std::vector<const Ton>& tons,
         const PSEnum& e);
     
+    /// @todo param step number
     /// main constructor.
     /// @param index array of tonalities. dimension of this vector.
     /// @param e an enumerator of notes for transitions of configs.
@@ -65,6 +67,7 @@ public:
     PSV(const TonIndex& index,  // const std::vector<const Ton>& tons,
         const PSEnum& e, size_t i0, size_t i1);
     
+    /// @todo param step number
     /// main constructor.
     /// @param index array of tonalities. dimension of this vector.
     /// @param e an enumerator of notes for transitions of configs.

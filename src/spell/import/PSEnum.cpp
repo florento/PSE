@@ -9,7 +9,7 @@
 /// @{
 
 #include "PSEnum.hpp"
-
+#include <stdlib.h>     /* abs */
 
 namespace pse {
 
@@ -116,6 +116,75 @@ bool PSEnum::inside(size_t i) const
 bool PSEnum::outside(size_t i) const
 {
     return (! inside(i));
+}
+
+
+size_t PSEnum::count(int c, size_t i, size_t pre, size_t post)
+{
+    WARN("cound called on abstract PSEnum");
+    return 0;
+}
+
+void PSEnum::rename(size_t i, const enum NoteName& n, bool altprint)
+{
+    const unsigned int m = midipitch(i);
+    int o = MidiNum::midi_to_octave(m, n);
+    enum Accid a = MidiNum::accid(m % 12, n);
+    rename(i, n, a, o, altprint);
+}
+
+void PSEnum::rewritePassing()
+{
+    for (size_t i = first(); i < stop(); ++i)
+        rewritePassing(i);
+}
+
+void PSEnum::rewritePassing(size_t i)
+{
+    assert(first() <= i);
+    assert(i < stop());
+
+    // not a trigram
+    if (stop() - i < 3) return;
+
+    int d0 = ((int) midipitch(i+1)) - ((int) midipitch(i));
+    int d1 = ((int) midipitch(i+2)) - ((int) midipitch(i+1));
+
+    if (d0 == 0 || d1 == 0) return;
+    if (abs(d0) > 2 || abs(d1) > 2) return;
+
+    const enum NoteName n0 = name(i);
+    const enum NoteName n1 = name(i+1);
+    const enum NoteName n2 = name(i+2);
+    assert(n0 != NoteName::Undef);
+    assert(n1 != NoteName::Undef);
+    assert(n2 != NoteName::Undef);
+
+    /// @todo TBC: overlapping cases?
+    
+    // broderie down
+    if (d0 == -1 & d1 == 1 && n2 == n0 && n1 == n0)
+        rename(i+1, n1-1);
+
+    // broderie up
+    else if (d0 == 1 & d1 == -1 && n2 == n0 && n1 == n0)
+        rename(i+1, n1+1);
+
+    // descending 1
+    else if (d0 == -1 & d1 == -2 && n1 == n0 && n2 == n0-2)
+        rename(i+1, n1-1);
+
+    // ascending 1
+    else if (d0 == 1 & d1 == 2 && n1 == n0 && n2 == n0+2)
+        rename(i+1, n1+1);
+
+    // descending 2
+    else if (d0 == -2 & d1 == -1 && n2 == n1 && n2 == n0-2)
+        rename(i+1, n1+1);
+
+    // ascending 2
+    else if (d0 == 2 & d1 == 1 && n2 == n1 && n2 == n0+2)
+        rename(i+1, n1-1);
 }
 
 

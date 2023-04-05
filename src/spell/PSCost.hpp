@@ -174,12 +174,38 @@ public:
     
     /// update this cost for doing a transition into the given config.
     /// the note read for the transition is the id of the config minus one.
-    void update(const PSC1& c, const PSEnum& e, const Ton& ton);
+    /// @param gton conjectured main (global) tonality (key signature).
+    void update(const PSC1& c, const PSEnum& e, const Ton& gton);
 
     /// update this cost for doing a transition into the given config.
     /// the note read for the transition is the id of the config minus one.
+    /// @param gton conjectured main (global) tonality (key signature).
+    /// @param lton conjectured local tonality.
     void update(const PSC1& c, const PSEnum& e,
-                const Ton& ton, const Ton& lton);
+                const Ton& gton, const Ton& lton);
+    
+    /// update this cost for doing a transition into the given chord config.
+    /// @param name chosen name for the received pitch, in 0..6 (0 is 'C', 6 is 'B').
+    /// @param accid chosen alteration for the received pitch, in -2..2.
+    /// @param print whether the acciental must be printed in score.
+    /// @param nbocc nb of occurrence of the note (pitch class) in this chord.
+    /// @param gton conjectured main (global) tonality (key signature).
+    void update(const PSC2& c, const PSEnum& e,
+                const enum NoteName& name, const enum Accid& accid,
+                bool print, size_t nbocc,
+                const Ton& gton);
+    
+    /// update this cost for doing a transition into the given chord config.
+    /// @param name chosen name for the received pitch, in 0..6 (0 is 'C', 6 is 'B').
+    /// @param accid chosen alteration for the received pitch, in -2..2.
+    /// @param print whether the acciental must be printed in score.
+    /// @param nbocc nb of occurrence of the note (pitch class) in this chord.
+    /// @param gton conjectured main (global) tonality (key signature).
+    /// @param lton conjectured local tonality.
+    void update(const PSC2& c, const PSEnum& e,
+                const enum NoteName& name, const enum Accid& accid,
+                bool print, size_t nbocc,
+                const Ton& gton, const Ton& lton);
 
     /// modify cumulated number of accidents.
     inline void incrAccid(size_t a=1) { _accid += a; }

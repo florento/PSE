@@ -85,20 +85,41 @@ public:
     /// midi key number in 0..128 of the note of the given index.
     /// @param i index of a note, inside the interval [first(), last() [
     /// of this enumerator.
-    virtual unsigned int midipitch(size_t i) const;
+    unsigned int midipitch(size_t i) const { return _enum.midipitch(i); }
 
     /// number of measure the note of given index belongs to.
     /// midi key number in 0..128 of the note of the given index.
     /// @param i index of a noteinside the interval [first(), last() [
     /// of this enumerator.
-    virtual long measure(size_t i) const;
+    long measure(size_t i) const { return _enum.measure(i); }
 
     /// whether the note of given index is simultaneous with the next note.
     /// @param i index of a note inside the interval [first(), last() [
     /// of this enumerator.
     /// @warning always true for the notes in this enumerator,
     /// except the last one.
-    virtual bool simultaneous(size_t i) const;
+    bool simultaneous(size_t i) const { return _enum.simultaneous(i); }
+    
+    /// name for the note of given index, if it has been set,
+    /// otherwise Undef.
+    /// @param i index of note in the list of input notes.
+    enum NoteName name(size_t i) const { return _enum.name(i); }
+    
+    /// accidental for the note of given index, if it has been set,
+    /// otherwise Undef.
+    /// @param i index of note in the list of input notes.
+    enum Accid accidental(size_t i) const { return _enum.accidental(i); }
+    
+    /// octave number for the note of given index, if it has been set,
+    /// otherwise 10.
+    /// @param i index of note in the list of input notes.
+    int octave(size_t i) const { return _enum.octave(i); }
+
+    /// print flag for the note of given index, if it has been set,
+    /// otherwise true.
+    /// This flags says wether the accidental of the note must be printed or not.
+    /// @param i index of note in the list of input notes.
+    bool printed(size_t i) const { return _enum.printed(i); }
     
     /// rename the note of given index.
     /// @param i note index inside the interval [first(), last() [

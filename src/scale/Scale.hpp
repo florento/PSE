@@ -41,7 +41,7 @@ namespace pse {
 /// | 11 | B(5) Cb(-7)  | B(2)         |
 
 
-/// a scale is defined by a mode, and the pitch class and name of tonic.
+/// a scale is defined by a mode, a pitch class and the name of tonic.
 class Scale  // public Mode
 {
 public:

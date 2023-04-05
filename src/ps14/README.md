@@ -29,6 +29,9 @@ in a row for pitch class $c$ and ton $n.a$ (note name, accidental), maj or min:
 - spell according to the chromatic harmonic scale of $n.a$
 - count the number of printed accidents, with the KS (and mode) for the row.
 
+rem: same algo as PSE, except for computation of successor configs:
+only 1 successor config instead of 3 (determinism)
+
 ### step 2.
 select the row with least number of printed accidents.  
 This is the estimated global ton for the piece.
@@ -51,5 +54,3 @@ Remark (variant more costly and redundant...):
 - step 1 can be replaced by the DP best path computation checking
   all possible spellings
 - in case of tie break, we use the chormatic scale criteria.
-
-

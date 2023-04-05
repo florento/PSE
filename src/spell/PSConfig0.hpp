@@ -114,6 +114,7 @@ public:
     inline const PSCost& cost() const { return _cost; }
     
     /// cumulated number of accidents in the minimal path to this config.
+    /// @todo remove
     size_t accidentals() const { return _cost.getAccid(); }
     
     /// cumulated distance to tonic in the minimal path to this config.

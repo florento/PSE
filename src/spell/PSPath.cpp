@@ -35,25 +35,25 @@ _computed(false)
 }
 
 
-/// @todo TBR obsolete
-bool PSP::init(const Ton& ton, const Ton& lton)
-{
-    // recompute best path with ton and lton
-    const PSB psb(ton, lton, _enum);
-    if (psb.empty())
-    {
-        ERROR("PSP {}-{}: no best path found", _enum.first(), _enum.stop());
-        return false;
-    }
-    else if (psb.size() > 1)
-    {
-        WARN("PSP {}-{}: tie break fail ({} bests)",
-             _enum.first(), _enum.stop(), psb.size());
-    }
-    const PSC0& psc = psb.top();
-    record_path(psc);
-    return true;
-}
+// @todo TBR obsolete
+//bool PSP::init(const Ton& ton, const Ton& lton)
+//{
+//    // recompute best path with ton and lton
+//    const PSB psb(ton, lton, _enum);
+//    if (psb.empty())
+//    {
+//        ERROR("PSP {}-{}: no best path found", _enum.first(), _enum.stop());
+//        return false;
+//    }
+//    else if (psb.size() > 1)
+//    {
+//        WARN("PSP {}-{}: tie break fail ({} bests)",
+//             _enum.first(), _enum.stop(), psb.size());
+//    }
+//    const PSC0& psc = psb.top();
+//    record_path(psc);
+//    return true;
+//}
 
 
 PSP::~PSP()

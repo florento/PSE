@@ -224,7 +224,7 @@
 		436C6C3D2924016F00152D8C /* pse.cpython-310-darwin.so */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = "pse.cpython-310-darwin.so"; sourceTree = BUILT_PRODUCTS_DIR; };
 		436C6C4D2924023100152D8C /* NoteName.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = NoteName.hpp; path = src/pitch/NoteName.hpp; sourceTree = "<group>"; };
 		43791C8D29D8392200DE8796 /* TestAccid.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TestAccid.cpp; sourceTree = "<group>"; };
-		43947D0029D972AF008EB20A /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = src/ps14/README.md; sourceTree = "<group>"; };
+		43947D0029D972AF008EB20A /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = src/ps14/README.md; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.markdown; };
 		4397A5DC29A6CDB300C2CC9A /* PSOrder.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = PSOrder.hpp; path = src/spell/PSOrder.hpp; sourceTree = "<group>"; };
 		43A2543E29280D8900D559D2 /* trace.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = trace.cpp; path = src/general/trace.cpp; sourceTree = "<group>"; };
 		43A2543F29280D8900D559D2 /* trace.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = trace.hpp; path = src/general/trace.hpp; sourceTree = "<group>"; };
@@ -340,10 +340,10 @@
 			isa = PBXGroup;
 			children = (
 				4315861A2983E7FB00918B1B /* import */,
-				43DD95482945E223006DC553 /* PSCost.hpp */,
-				43DD95472945E223006DC553 /* PSCost.cpp */,
 				43ABA51929242417002AC1D4 /* PSState.hpp */,
 				43ABA51E29242418002AC1D4 /* PSState.cpp */,
+				43DD95482945E223006DC553 /* PSCost.hpp */,
+				43DD95472945E223006DC553 /* PSCost.cpp */,
 				43ABA52029242418002AC1D4 /* PSConfig0.hpp */,
 				43ABA52129242418002AC1D4 /* PSConfig0.cpp */,
 				43ABA51B29242418002AC1D4 /* PSConfig.hpp */,
@@ -503,10 +503,10 @@
 				4310526429CDAE2400694D5A /* scale */,
 				431586182983E65A00918B1B /* ton */,
 				431586192983E6BF00918B1B /* spell */,
-				4315861C2983E82300918B1B /* KrumhanslSchmuckler */,
 				4363442B29D31D3500F5D628 /* PS13 */,
 				43947CFF29D97299008EB20A /* PS14 */,
 				4315861B2983E80400918B1B /* Spiral */,
+				4315861C2983E82300918B1B /* KrumhanslSchmuckler */,
 			);
 			name = sources;
 			sourceTree = "<group>";

@@ -297,5 +297,34 @@ void PSRawEnum::rename(size_t i, const enum NoteName& n, bool altprint)
 }
 
 
+size_t PSRawEnum::count(int c, size_t i, size_t pre, size_t post)
+{
+    assert(0 <= c);
+    assert(c < 12);
+    assert(! open());
+    assert(! empty());
+    size_t efirst = first();
+    size_t estop = stop();
+    assert(efirst <= i);
+    assert(i <= stop());
+    size_t left = (i - efirst >= pre)?(i - pre):efirst;
+    size_t right = (estop - i >= post)?(i + post):estop;
+    assert(left <= right);
+    size_t cpt = 0;
+    
+    for (size_t j = left; j < right; ++j)
+    {
+        assert(efirst <= j);
+        assert(j < estop);
+        unsigned int mp = midipitch(j);
+        assert(0 <= mp);
+        assert(mp <= 128);
+        if (mp%12 == c) ++cpt;
+    }
+    
+    return cpt;
+}
+
+
 } // namespace scoremodel
 

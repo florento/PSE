@@ -148,7 +148,7 @@ public:
     /// @warning the notes cannot be renamed in place because the Python
     /// lists in argument contain const objects.
     virtual void rename(size_t i, const enum NoteName& n, bool altprint=true);
-    
+       
     /// estimated name for the note of given index in the best path,
     /// in 0..6 (0 is 'C', 6 is 'B').
     /// @param i index of note in the list of input notes.
@@ -167,6 +167,16 @@ public:
     /// This flags says wether the accidental of the note must be printed or not.
     /// @param i index of note in the list of input notes.
     bool printed(size_t i) const;
+    
+    /// count the number of occurrence of a pitch class in a window around
+    /// a given note.
+    /// @param c a pitch class in 0..11.
+    /// @param i index of a note in this enumerator.
+    /// @param pre number of notes to consider before i.
+    /// @param post number of notes to consider after i.
+    /// @return the number of occurrence of c in the interval
+    /// from i - pre (included) to i + post (excluded).
+    virtual size_t count(int c, size_t i, size_t pre, size_t post);
     
 private: // data (shared by all copies of this enumerator)
        

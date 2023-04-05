@@ -188,17 +188,17 @@ private:
     /// state of previous config in shortest path to this config.
     const PSState& prevState() const;
 
-    /// first pitch class number to be processed in the input chord
+    /// first pitch class number to be processed in the input chord.
     unsigned int firstChroma() const;
 
-    /// next pitch class number to be processed in the input chord
+    /// next pitch class number to be processed in the input chord.
     unsigned int nextChroma() const;
 
     // the proposed update is compatible with this config.
     // bool valid(const NoteName& name, const Accid& accid,
     //           const Ton& ton, const Ton& lton) const;
     
-    /// all occurrences of the same note receive same name and accid
+    /// all occurrences of the same note receive same name and accid.
     /// @return the number of names assigned
     size_t setNames(const enum NoteName& name, bool print);
     

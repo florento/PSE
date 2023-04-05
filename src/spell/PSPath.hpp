@@ -116,19 +116,19 @@ private:
     /// @todo TBR obsolete
     bool init(const Ton& ton, const Ton& lton);
 
-    /// compute the bast path from the given bag of configs.
-    /// @param psb bag of best config, to compute one best path.
-    /// @todo TBR
-    void init(const PSB& psb);
+    // compute the bast path from the given bag of configs.
+    // @param psb bag of best config, to compute one best path.
+    // @todo TBR
+    // void init(const PSB& psb);
 
     // @todo TBR
     // void init();
 
-    /// compute the shortest paths wrt nb of accidents and dist
-    /// @param queue2 contains the complete paths best wrt nb of accidents.
-    /// must not be empty.
-    /// @todo TBR
-    void init2(PSCQueue& queue2);
+    // compute the shortest paths wrt nb of accidents and dist
+    // @param queue2 contains the complete paths best wrt nb of accidents.
+    // must not be empty.
+    // @todo TBR
+    // void init2(PSCQueue& queue2);
     
     void record_path(const PSC0& c);
 

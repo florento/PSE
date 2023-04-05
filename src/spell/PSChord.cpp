@@ -170,22 +170,22 @@ size_t PSChord::_length(const PSEnum& e, size_t i0)
 }
 
 
-unsigned int PSChord::midipitch(size_t i) const
-{
-    return _enum.midipitch(i);
-}
+//unsigned int PSChord::midipitch(size_t i) const
+//{
+//    return _enum.midipitch(i);
+//}
 
 
-long PSChord::measure(size_t i) const
-{
-    return _enum.measure(i);
-}
+//long PSChord::measure(size_t i) const
+//{
+//    return _enum.measure(i);
+//}
 
 
-bool PSChord::simultaneous(size_t i) const
-{
-    return _enum.simultaneous(i);
-}
+//bool PSChord::simultaneous(size_t i) const
+//{
+//    return _enum.simultaneous(i);
+//}
 
 
 // should not be called. do nothing.

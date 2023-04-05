@@ -49,6 +49,7 @@ public:
     /// header of rows: vector of tonalities (1 per row).
     TonIndex index;
     
+    /// @todo param step number (default 0)
     /// main constructor.
     /// @param e an enumerator of notes for transitions of configs.
     /// @param nbTons use default list of tonalities (default: empty).
@@ -87,6 +88,7 @@ public:
     /// @param i column number. must be smaller than size().
     PSV& column(size_t i);
     
+    /// @todo param step number (default 0)
     /// compute the columns (PS Vectors) of this table, fill with cost values.
     /// @return wether the computation was successful.
     bool init();

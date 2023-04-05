@@ -464,6 +464,67 @@ void PSCost::update(const PSC1& c, const PSEnum& e,
 }
 
 
+void PSCost::update(const PSC2& c, const PSEnum& e,
+                    const enum NoteName& name, const enum Accid& accid,
+                    bool print, size_t nbocc,
+                    const Ton& gton)
+{
+    // whether the cost has to be changed
+    //    bool cc = false;
+    //    if (gton.lead(name)) // sensible
+    //        cc = print && (gton.accidDia(name) != accid);
+    //    else
+    //        cc = print;
+    
+    if (print && !(gton.lead(name) && gton.accidDia(name) == accid))
+    {
+        switch (accid)
+        {
+            case Accid::DoubleSharp:
+            case Accid::DoubleFlat:
+                _accid += 2*nbocc;
+                break;
+                
+            case Accid::Sharp:
+            case Accid::Flat:
+            case Accid::Natural:
+                _accid += nbocc;
+                break;
+                
+            default:
+            {
+                ERROR("PSC: unexpected accidental"); // accid
+                break;
+            }
+        }
+    }
+    
+    // color of accident and color of global ton
+    int ks = gton.fifths();
+    if (((ks >= 0) && (flat(accid))) || ((ks < 0) && (sharp(accid))))
+    {
+        _color += nbocc;
+    }    
+}
+
+
+void PSCost::update(const PSC2& c, const PSEnum& e,
+                    const enum NoteName& name, const enum Accid& accid,
+                    bool print, size_t nbocc,
+                    const Ton& gton, const Ton& lton)
+{
+    // update number of accid
+    //bool res = updateCost(name, accid, print, nbocc, ton);;
+    
+    // complete the update
+
+    // distance to conjectured local ton.
+    _dist += c.state().dist(lton);
+
+    // no update of disjoint move _disj
+}
+
+
 void PSCost::print(std::ostream& o) const
 {
     o << "accid=" << _accid << ',';
