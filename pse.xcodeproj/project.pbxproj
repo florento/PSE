@@ -33,6 +33,7 @@
 		43316F2229AA73D7000160EA /* TonIndex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 435406A229A8D4BB0075B3B7 /* TonIndex.cpp */; };
 		43316F2329AA73D8000160EA /* TonIndex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 435406A229A8D4BB0075B3B7 /* TonIndex.cpp */; };
 		43316F2429AA73DC000160EA /* TonIndex.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 435406A329A8D4BB0075B3B7 /* TonIndex.hpp */; };
+		4331700029DD934E00BA534D /* TestEnharmonic.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43316FFF29DD934E00BA534D /* TestEnharmonic.cpp */; };
 		4342FD102926781E004E914F /* PWO.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 4342FD0F2926781E004E914F /* PWO.hpp */; };
 		4342FD1229267895004E914F /* MidiNum.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4342FD1129267895004E914F /* MidiNum.cpp */; };
 		4342FD142926789C004E914F /* MidiNum.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 4342FD132926789C004E914F /* MidiNum.hpp */; };
@@ -72,7 +73,7 @@
 		4350820329D6E3AB00465943 /* TestNoteName.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4350820229D6E3AB00465943 /* TestNoteName.cpp */; };
 		4350820529D6FDA100465943 /* TestMode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4350820429D6FDA100465943 /* TestMode.cpp */; };
 		4350820829D7032B00465943 /* TestMidiNum.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4350820729D7032B00465943 /* TestMidiNum.cpp */; };
-		43791C8E29D8392200DE8796 /* TestAccid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43791C8D29D8392200DE8796 /* TestAccid.cpp */; };
+		43791C8E29D8392200DE8796 /* TestAccidental.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43791C8D29D8392200DE8796 /* TestAccidental.cpp */; };
 		43791C8F29D83EE400DE8796 /* TestScale.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 435081CE29D6C04600465943 /* TestScale.cpp */; };
 		4397A5DE29A6CDB300C2CC9A /* PSOrder.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 4397A5DC29A6CDB300C2CC9A /* PSOrder.hpp */; };
 		43A2544029280D8900D559D2 /* trace.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43A2543E29280D8900D559D2 /* trace.cpp */; };
@@ -193,6 +194,7 @@
 		432E7A5829D494AE000E2B72 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		432EF6AB292D405400C620CF /* Speller.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Speller.cpp; path = src/general/Speller.cpp; sourceTree = "<group>"; };
 		432EF6AC292D405400C620CF /* Speller.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Speller.hpp; path = src/general/Speller.hpp; sourceTree = "<group>"; };
+		43316FFF29DD934E00BA534D /* TestEnharmonic.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TestEnharmonic.cpp; sourceTree = "<group>"; };
 		4342FD0F2926781E004E914F /* PWO.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = PWO.hpp; path = src/pitch/PWO.hpp; sourceTree = "<group>"; };
 		4342FD1129267895004E914F /* MidiNum.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MidiNum.cpp; path = src/pitch/MidiNum.cpp; sourceTree = "<group>"; };
 		4342FD132926789C004E914F /* MidiNum.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = MidiNum.hpp; path = src/pitch/MidiNum.hpp; sourceTree = "<group>"; };
@@ -223,7 +225,7 @@
 		4363442C29D31D8700F5D628 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		436C6C3D2924016F00152D8C /* pse.cpython-310-darwin.so */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = "pse.cpython-310-darwin.so"; sourceTree = BUILT_PRODUCTS_DIR; };
 		436C6C4D2924023100152D8C /* NoteName.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = NoteName.hpp; path = src/pitch/NoteName.hpp; sourceTree = "<group>"; };
-		43791C8D29D8392200DE8796 /* TestAccid.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TestAccid.cpp; sourceTree = "<group>"; };
+		43791C8D29D8392200DE8796 /* TestAccidental.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TestAccidental.cpp; sourceTree = "<group>"; };
 		43947D0029D972AF008EB20A /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = src/ps14/README.md; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.markdown; };
 		4397A5DC29A6CDB300C2CC9A /* PSOrder.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = PSOrder.hpp; path = src/spell/PSOrder.hpp; sourceTree = "<group>"; };
 		43A2543E29280D8900D559D2 /* trace.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = trace.cpp; path = src/general/trace.cpp; sourceTree = "<group>"; };
@@ -420,8 +422,9 @@
 				435081DC29D6C93000465943 /* CMakeLists.txt */,
 				435081DD29D6C93000465943 /* unit_test.cpp */,
 				4350820229D6E3AB00465943 /* TestNoteName.cpp */,
-				43791C8D29D8392200DE8796 /* TestAccid.cpp */,
+				43791C8D29D8392200DE8796 /* TestAccidental.cpp */,
 				4350820729D7032B00465943 /* TestMidiNum.cpp */,
+				43316FFF29DD934E00BA534D /* TestEnharmonic.cpp */,
 				4350820429D6FDA100465943 /* TestMode.cpp */,
 				435081CE29D6C04600465943 /* TestScale.cpp */,
 			);
@@ -723,7 +726,7 @@
 				435081F229D6D76500465943 /* PWO.cpp in Sources */,
 				435081F429D6D76C00465943 /* MidiNum.cpp in Sources */,
 				43791C8F29D83EE400DE8796 /* TestScale.cpp in Sources */,
-				43791C8E29D8392200DE8796 /* TestAccid.cpp in Sources */,
+				43791C8E29D8392200DE8796 /* TestAccidental.cpp in Sources */,
 				435081ED29D6D75100465943 /* Fifths.cpp in Sources */,
 				435081FD29D6D7F600465943 /* Interval.cpp in Sources */,
 				4350820829D7032B00465943 /* TestMidiNum.cpp in Sources */,
@@ -743,6 +746,7 @@
 				435081F629D6D77200465943 /* NoteName.cpp in Sources */,
 				435081F529D6D76F00465943 /* Accidental.cpp in Sources */,
 				435081F829D6D78200465943 /* PSChord.cpp in Sources */,
+				4331700029DD934E00BA534D /* TestEnharmonic.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

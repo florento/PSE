@@ -48,13 +48,14 @@ public:
     /// @param c a pitch class in 0..11
     /// @param i an index of enharmonics in 0..2
     /// @return a note name in 'A' .. 'G'
-    /// or 'X' (undef) is there is no enharmonic of index i.
+    /// or Undef is there is no enharmonic of index i.
     static enum NoteName name(int c, int i);
       
     /// accidental of the ith entry for pitch a class.
     /// @param c a pitch class in 0..11
     /// @param i an index of enharmonics in 0..2
-    /// @return an alteration number in -2..2.
+    /// @return an alteration number in -2..2
+    /// or Undef is there is no enharmonic of index i.
     static enum Accid accid(int c, int i);
     
 private:

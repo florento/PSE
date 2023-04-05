@@ -161,10 +161,25 @@ enum Accid MidiNum::accid(int c, const enum NoteName& n)
 //    }
 //}
 
-
-unsigned int MidiNum::pitchClass(const enum NoteName& name)
+unsigned int MidiNum::pitchClass(const enum NoteName& n, const enum Accid& a)
 {
-    switch (name)
+    assert(n != NoteName::Undef);
+    assert(a != Accid::Undef);
+    unsigned int m = to_midi(n, a, 2); // octave = 2
+    // assert(m < 128);
+    return (m % 12);
+}
+
+
+//unsigned int MidiNum::pitchClass(const enum NoteName& n)
+//{
+//    return pitchClass(n, Accid::Natural);
+//}
+
+
+unsigned int MidiNum::pitchClass(const enum NoteName& n)
+{
+    switch (n)
     {
         case NoteName::C:
             return 0;
@@ -182,7 +197,7 @@ unsigned int MidiNum::pitchClass(const enum NoteName& name)
             return 11;
         default:
         {
-            ERROR("pitchClass: wrong note name {}", name);
+            ERROR("pitchClass: wrong note name {}", n);
             return 12;
         }
     }
@@ -190,17 +205,18 @@ unsigned int MidiNum::pitchClass(const enum NoteName& name)
 
 
 // TBC
-unsigned int MidiNum::to_midi(const enum NoteName& name,
-                              const enum Accid& accid,
+unsigned int MidiNum::to_midi(const enum NoteName& n,
+                              const enum Accid& a,
                               int oct)
 {
-    int alt = toint(accid);
+    int alt = toint(a);
     assert(-3 <= alt);
     assert(alt <= 3);
     assert(-2 <= oct);
     assert(oct <= 9);
     
-    int i = pitchClass(name); // in 0..11
+    assert(n != NoteName::Undef);
+    int i = pitchClass(n); // in 0..11
     //int falt = int(floor(alt)); // useless ?
     int r = i + alt;         // in -3..14
     assert(-3 <= i);

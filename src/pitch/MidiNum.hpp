@@ -188,17 +188,28 @@ public:
                               const enum NoteName& n,
                               const enum Accid& a,
                               bool debug = true);
-        
-    /// pitch class, in 0..11, of the given note name.
-    /// @param name a note name in A..G. must not be Undef.
+
+    /// pitch class, in 0..11, of the given note name with given accidental.
+    /// @param n a note name in A..G. must not be Undef.
+
     /// @return the pitch class corresponding to the note name, or 12 in case of
     /// error. The classes of C, D, E, F, G, A, B are resp.  0, 2, 4, 5, 7, 9, 11.
-    static unsigned int pitchClass(const enum NoteName& name);
+    static unsigned int pitchClass(const enum NoteName& n);
+    
+    /// pitch class, in 0..11, of the given note name.
+    /// @param n a note name in A..G. must not be Undef.
+    /// @param a accidental in [-2, 2], where 1 is a half tone.
+    /// @return the pitch class corresponding to the note name, or 12 in case of
+    /// error.
+    static unsigned int pitchClass(const enum NoteName& n, const enum Accid& a);
     
     /// midi value corresponding to the given note name.
-    static unsigned int to_midi(const enum NoteName& name,
-                                const enum Accid& accid,
-                                int octave);
+    /// @param n a note name in A..G. must not be Undef.
+    /// @param a accidental in [-2, 2], where 1 is a half tone.
+    /// @param o octave number, in -2..9.
+    static unsigned int to_midi(const enum NoteName& n,
+                                const enum Accid& a,
+                                int o);
     
 private:
     
