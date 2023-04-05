@@ -113,7 +113,7 @@ _mode(mode)
 
 Ton::Ton(const Ton& ton):
 KeyFifth(ton),
-_mode(ton.mode())
+_mode(ton.getMode())
 { }
 
 
@@ -218,11 +218,11 @@ enum NoteName Ton::name(int d) const
            _mode == ModeName::MinorNat ||
            _mode == ModeName::MinorMel);
     assert(d < 7);
-    return name() + d;
+    return getName() + d;
 }
 
 
-enum Accid Ton::accid(int d) const
+enum Accid Ton::accidental(int d) const
 {
 //    assert(_mode == ModeName::Major ||
 //           _mode == ModeName::Minor ||

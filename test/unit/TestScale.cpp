@@ -494,29 +494,29 @@ TEST(Scale, C_chroma)
     pse::Ton nat(-3, pse::ModeName::MinorNat);
     
     EXPECT_EQ(s.name(0),  maj.name(0));     // degree I  (same for min)
-    EXPECT_EQ(s.accid(0),  maj.accid(0));
+    EXPECT_EQ(s.accid(0),  maj.accidental(0));
     EXPECT_EQ(s.name(1),  maj.name(1));     // flattened degree II
-    EXPECT_EQ(s.accid(1),  --(maj.accid(1)));
+    EXPECT_EQ(s.accid(1),  --(maj.accidental(1)));
     EXPECT_EQ(s.name(2),  maj.name(1));     // degree II (same for min)
-    EXPECT_EQ(s.accid(2),  maj.accid(1));
+    EXPECT_EQ(s.accid(2),  maj.accidental(1));
     EXPECT_EQ(s.name(3),  har.name(2));     // degree III
-    EXPECT_EQ(s.accid(3),  har.accid(2));
+    EXPECT_EQ(s.accid(3),  har.accidental(2));
     EXPECT_EQ(s.name(4),  maj.name(2));     // degree III
-    EXPECT_EQ(s.accid(4),  maj.accid(2));
+    EXPECT_EQ(s.accid(4),  maj.accidental(2));
     EXPECT_EQ(s.name(5),  maj.name(3));     // degree IV (same for min)
-    EXPECT_EQ(s.accid(5),  maj.accid(3));
+    EXPECT_EQ(s.accid(5),  maj.accidental(3));
     EXPECT_EQ(s.name(6),  maj.name(3));     // sharpened degree IV
-    EXPECT_EQ(s.accid(6),  ++(maj.accid(3)));
+    EXPECT_EQ(s.accid(6),  ++(maj.accidental(3)));
     EXPECT_EQ(s.name(7),  maj.name(4));     // degree V (same for min)
-    EXPECT_EQ(s.accid(7),  maj.accid(4));
+    EXPECT_EQ(s.accid(7),  maj.accidental(4));
     EXPECT_EQ(s.name(8),  har.name(5));     // degree VI
-    EXPECT_EQ(s.accid(8),  har.accid(5));
+    EXPECT_EQ(s.accid(8),  har.accidental(5));
     EXPECT_EQ(s.name(9),  maj.name(5));     // degree VI
-    EXPECT_EQ(s.accid(9),  maj.accid(5));
+    EXPECT_EQ(s.accid(9),  maj.accidental(5));
     EXPECT_EQ(s.name(10),  nat.name(6));    // degree VII
-    EXPECT_EQ(s.accid(10),  nat.accid(6));
+    EXPECT_EQ(s.accid(10),  nat.accidental(6));
     EXPECT_EQ(s.name(11),  har.name(6));    // degree VII (same for maj)
-    EXPECT_EQ(s.accid(11),  har.accid(6));
+    EXPECT_EQ(s.accid(11),  har.accidental(6));
 }
 
 TEST(Scale, Csharp_chroma)
@@ -527,29 +527,29 @@ TEST(Scale, Csharp_chroma)
     pse::Ton nat(4, pse::ModeName::MinorNat);
     
     EXPECT_EQ(s.name(0),  maj.name(0));     // degree I  (same for min)
-    EXPECT_EQ(s.accid(0),  maj.accid(0));
+    EXPECT_EQ(s.accid(0),  maj.accidental(0));
     EXPECT_EQ(s.name(1),  maj.name(1));     // flattened degree II
-    EXPECT_EQ(s.accid(1),  --(maj.accid(1)));
+    EXPECT_EQ(s.accid(1),  --(maj.accidental(1)));
     EXPECT_EQ(s.name(2),  maj.name(1));     // degree II (same for min)
-    EXPECT_EQ(s.accid(2),  maj.accid(1));
+    EXPECT_EQ(s.accid(2),  maj.accidental(1));
     EXPECT_EQ(s.name(3),  har.name(2));     // degree III
-    EXPECT_EQ(s.accid(3),  har.accid(2));
+    EXPECT_EQ(s.accid(3),  har.accidental(2));
     EXPECT_EQ(s.name(4),  maj.name(2));     // degree III
-    EXPECT_EQ(s.accid(4),  maj.accid(2));
+    EXPECT_EQ(s.accid(4),  maj.accidental(2));
     EXPECT_EQ(s.name(5),  maj.name(3));     // degree IV (same for min)
-    EXPECT_EQ(s.accid(5),  maj.accid(3));
+    EXPECT_EQ(s.accid(5),  maj.accidental(3));
     EXPECT_EQ(s.name(6),  maj.name(3));     // sharpened degree IV
-    EXPECT_EQ(s.accid(6),  ++(maj.accid(3)));
+    EXPECT_EQ(s.accid(6),  ++(maj.accidental(3)));
     EXPECT_EQ(s.name(7),  maj.name(4));     // degree V (same for min)
-    EXPECT_EQ(s.accid(7),  maj.accid(4));
+    EXPECT_EQ(s.accid(7),  maj.accidental(4));
     EXPECT_EQ(s.name(8),  har.name(5));     // degree VI
-    EXPECT_EQ(s.accid(8),  har.accid(5));
+    EXPECT_EQ(s.accid(8),  har.accidental(5));
     EXPECT_EQ(s.name(9),  maj.name(5));     // degree VI
-    EXPECT_EQ(s.accid(9),  maj.accid(5));
+    EXPECT_EQ(s.accid(9),  maj.accidental(5));
     EXPECT_EQ(s.name(10),  nat.name(6));    // degree VII
-    EXPECT_EQ(s.accid(10),  nat.accid(6));
+    EXPECT_EQ(s.accid(10),  nat.accidental(6));
     EXPECT_EQ(s.name(11),  har.name(6));    // degree VII (same for maj)
-    EXPECT_EQ(s.accid(11),  har.accid(6));
+    EXPECT_EQ(s.accid(11),  har.accidental(6));
 }
 
 TEST(Scale, D_chroma)
@@ -560,29 +560,29 @@ TEST(Scale, D_chroma)
     pse::Ton nat(-1, pse::ModeName::MinorNat);
     
     EXPECT_EQ(s.name(0),  maj.name(0));     // degree I  (same for min)
-    EXPECT_EQ(s.accid(0),  maj.accid(0));
+    EXPECT_EQ(s.accid(0),  maj.accidental(0));
     EXPECT_EQ(s.name(1),  maj.name(1));     // flattened degree II
-    EXPECT_EQ(s.accid(1),  --(maj.accid(1)));
+    EXPECT_EQ(s.accid(1),  --(maj.accidental(1)));
     EXPECT_EQ(s.name(2),  maj.name(1));     // degree II (same for min)
-    EXPECT_EQ(s.accid(2),  maj.accid(1));
+    EXPECT_EQ(s.accid(2),  maj.accidental(1));
     EXPECT_EQ(s.name(3),  har.name(2));     // degree III
-    EXPECT_EQ(s.accid(3),  har.accid(2));
+    EXPECT_EQ(s.accid(3),  har.accidental(2));
     EXPECT_EQ(s.name(4),  maj.name(2));     // degree III
-    EXPECT_EQ(s.accid(4),  maj.accid(2));
+    EXPECT_EQ(s.accid(4),  maj.accidental(2));
     EXPECT_EQ(s.name(5),  maj.name(3));     // degree IV (same for min)
-    EXPECT_EQ(s.accid(5),  maj.accid(3));
+    EXPECT_EQ(s.accid(5),  maj.accidental(3));
     EXPECT_EQ(s.name(6),  maj.name(3));     // sharpened degree IV
-    EXPECT_EQ(s.accid(6),  ++(maj.accid(3)));
+    EXPECT_EQ(s.accid(6),  ++(maj.accidental(3)));
     EXPECT_EQ(s.name(7),  maj.name(4));     // degree V (same for min)
-    EXPECT_EQ(s.accid(7),  maj.accid(4));
+    EXPECT_EQ(s.accid(7),  maj.accidental(4));
     EXPECT_EQ(s.name(8),  har.name(5));     // degree VI
-    EXPECT_EQ(s.accid(8),  har.accid(5));
+    EXPECT_EQ(s.accid(8),  har.accidental(5));
     EXPECT_EQ(s.name(9),  maj.name(5));     // degree VI
-    EXPECT_EQ(s.accid(9),  maj.accid(5));
+    EXPECT_EQ(s.accid(9),  maj.accidental(5));
     EXPECT_EQ(s.name(10),  nat.name(6));    // degree VII
-    EXPECT_EQ(s.accid(10),  nat.accid(6));
+    EXPECT_EQ(s.accid(10),  nat.accidental(6));
     EXPECT_EQ(s.name(11),  har.name(6));    // degree VII (same for maj)
-    EXPECT_EQ(s.accid(11),  har.accid(6));
+    EXPECT_EQ(s.accid(11),  har.accidental(6));
 }
 
 TEST(Scale, Eflat_chroma)
@@ -593,29 +593,29 @@ TEST(Scale, Eflat_chroma)
     pse::Ton nat(-6, pse::ModeName::MinorNat);
     
     EXPECT_EQ(s.name(0),  maj.name(0));     // degree I  (same for min)
-    EXPECT_EQ(s.accid(0),  maj.accid(0));
+    EXPECT_EQ(s.accid(0),  maj.accidental(0));
     EXPECT_EQ(s.name(1),  maj.name(1));     // flattened degree II
-    EXPECT_EQ(s.accid(1),  --(maj.accid(1)));
+    EXPECT_EQ(s.accid(1),  --(maj.accidental(1)));
     EXPECT_EQ(s.name(2),  maj.name(1));     // degree II (same for min)
-    EXPECT_EQ(s.accid(2),  maj.accid(1));
+    EXPECT_EQ(s.accid(2),  maj.accidental(1));
     EXPECT_EQ(s.name(3),  har.name(2));     // degree III
-    EXPECT_EQ(s.accid(3),  har.accid(2));
+    EXPECT_EQ(s.accid(3),  har.accidental(2));
     EXPECT_EQ(s.name(4),  maj.name(2));     // degree III
-    EXPECT_EQ(s.accid(4),  maj.accid(2));
+    EXPECT_EQ(s.accid(4),  maj.accidental(2));
     EXPECT_EQ(s.name(5),  maj.name(3));     // degree IV (same for min)
-    EXPECT_EQ(s.accid(5),  maj.accid(3));
+    EXPECT_EQ(s.accid(5),  maj.accidental(3));
     EXPECT_EQ(s.name(6),  maj.name(3));     // sharpened degree IV
-    EXPECT_EQ(s.accid(6),  ++(maj.accid(3)));
+    EXPECT_EQ(s.accid(6),  ++(maj.accidental(3)));
     EXPECT_EQ(s.name(7),  maj.name(4));     // degree V (same for min)
-    EXPECT_EQ(s.accid(7),  maj.accid(4));
+    EXPECT_EQ(s.accid(7),  maj.accidental(4));
     EXPECT_EQ(s.name(8),  har.name(5));     // degree VI
-    EXPECT_EQ(s.accid(8),  har.accid(5));
+    EXPECT_EQ(s.accid(8),  har.accidental(5));
     EXPECT_EQ(s.name(9),  maj.name(5));     // degree VI
-    EXPECT_EQ(s.accid(9),  maj.accid(5));
+    EXPECT_EQ(s.accid(9),  maj.accidental(5));
     EXPECT_EQ(s.name(10),  nat.name(6));    // degree VII
-    EXPECT_EQ(s.accid(10),  nat.accid(6));
+    EXPECT_EQ(s.accid(10),  nat.accidental(6));
     EXPECT_EQ(s.name(11),  har.name(6));    // degree VII (same for maj)
-    EXPECT_EQ(s.accid(11),  har.accid(6));
+    EXPECT_EQ(s.accid(11),  har.accidental(6));
 }
 
 TEST(Scale, E_chroma)
@@ -626,29 +626,29 @@ TEST(Scale, E_chroma)
     pse::Ton nat(1, pse::ModeName::MinorNat);
     
     EXPECT_EQ(s.name(0),  maj.name(0));     // degree I  (same for min)
-    EXPECT_EQ(s.accid(0),  maj.accid(0));
+    EXPECT_EQ(s.accid(0),  maj.accidental(0));
     EXPECT_EQ(s.name(1),  maj.name(1));     // flattened degree II
-    EXPECT_EQ(s.accid(1),  --(maj.accid(1)));
+    EXPECT_EQ(s.accid(1),  --(maj.accidental(1)));
     EXPECT_EQ(s.name(2),  maj.name(1));     // degree II (same for min)
-    EXPECT_EQ(s.accid(2),  maj.accid(1));
+    EXPECT_EQ(s.accid(2),  maj.accidental(1));
     EXPECT_EQ(s.name(3),  har.name(2));     // degree III
-    EXPECT_EQ(s.accid(3),  har.accid(2));
+    EXPECT_EQ(s.accid(3),  har.accidental(2));
     EXPECT_EQ(s.name(4),  maj.name(2));     // degree III
-    EXPECT_EQ(s.accid(4),  maj.accid(2));
+    EXPECT_EQ(s.accid(4),  maj.accidental(2));
     EXPECT_EQ(s.name(5),  maj.name(3));     // degree IV (same for min)
-    EXPECT_EQ(s.accid(5),  maj.accid(3));
+    EXPECT_EQ(s.accid(5),  maj.accidental(3));
     EXPECT_EQ(s.name(6),  maj.name(3));     // sharpened degree IV
-    EXPECT_EQ(s.accid(6),  ++(maj.accid(3)));
+    EXPECT_EQ(s.accid(6),  ++(maj.accidental(3)));
     EXPECT_EQ(s.name(7),  maj.name(4));     // degree V (same for min)
-    EXPECT_EQ(s.accid(7),  maj.accid(4));
+    EXPECT_EQ(s.accid(7),  maj.accidental(4));
     EXPECT_EQ(s.name(8),  har.name(5));     // degree VI
-    EXPECT_EQ(s.accid(8),  har.accid(5));
+    EXPECT_EQ(s.accid(8),  har.accidental(5));
     EXPECT_EQ(s.name(9),  maj.name(5));     // degree VI
-    EXPECT_EQ(s.accid(9),  maj.accid(5));
+    EXPECT_EQ(s.accid(9),  maj.accidental(5));
     EXPECT_EQ(s.name(10),  nat.name(6));    // degree VII
-    EXPECT_EQ(s.accid(10),  nat.accid(6));
+    EXPECT_EQ(s.accid(10),  nat.accidental(6));
     EXPECT_EQ(s.name(11),  har.name(6));    // degree VII (same for maj)
-    EXPECT_EQ(s.accid(11),  har.accid(6));
+    EXPECT_EQ(s.accid(11),  har.accidental(6));
 }
 
 TEST(Scale, F_chroma)
@@ -659,29 +659,29 @@ TEST(Scale, F_chroma)
     pse::Ton nat(-4, pse::ModeName::MinorNat);
     
     EXPECT_EQ(s.name(0),  maj.name(0));     // degree I  (same for min)
-    EXPECT_EQ(s.accid(0),  maj.accid(0));
+    EXPECT_EQ(s.accid(0),  maj.accidental(0));
     EXPECT_EQ(s.name(1),  maj.name(1));     // flattened degree II
-    EXPECT_EQ(s.accid(1),  --(maj.accid(1)));
+    EXPECT_EQ(s.accid(1),  --(maj.accidental(1)));
     EXPECT_EQ(s.name(2),  maj.name(1));     // degree II (same for min)
-    EXPECT_EQ(s.accid(2),  maj.accid(1));
+    EXPECT_EQ(s.accid(2),  maj.accidental(1));
     EXPECT_EQ(s.name(3),  har.name(2));     // degree III
-    EXPECT_EQ(s.accid(3),  har.accid(2));
+    EXPECT_EQ(s.accid(3),  har.accidental(2));
     EXPECT_EQ(s.name(4),  maj.name(2));     // degree III
-    EXPECT_EQ(s.accid(4),  maj.accid(2));
+    EXPECT_EQ(s.accid(4),  maj.accidental(2));
     EXPECT_EQ(s.name(5),  maj.name(3));     // degree IV (same for min)
-    EXPECT_EQ(s.accid(5),  maj.accid(3));
+    EXPECT_EQ(s.accid(5),  maj.accidental(3));
     EXPECT_EQ(s.name(6),  maj.name(3));     // sharpened degree IV
-    EXPECT_EQ(s.accid(6),  ++(maj.accid(3)));
+    EXPECT_EQ(s.accid(6),  ++(maj.accidental(3)));
     EXPECT_EQ(s.name(7),  maj.name(4));     // degree V (same for min)
-    EXPECT_EQ(s.accid(7),  maj.accid(4));
+    EXPECT_EQ(s.accid(7),  maj.accidental(4));
     EXPECT_EQ(s.name(8),  har.name(5));     // degree VI
-    EXPECT_EQ(s.accid(8),  har.accid(5));
+    EXPECT_EQ(s.accid(8),  har.accidental(5));
     EXPECT_EQ(s.name(9),  maj.name(5));     // degree VI
-    EXPECT_EQ(s.accid(9),  maj.accid(5));
+    EXPECT_EQ(s.accid(9),  maj.accidental(5));
     EXPECT_EQ(s.name(10),  nat.name(6));    // degree VII
-    EXPECT_EQ(s.accid(10),  nat.accid(6));
+    EXPECT_EQ(s.accid(10),  nat.accidental(6));
     EXPECT_EQ(s.name(11),  har.name(6));    // degree VII (same for maj)
-    EXPECT_EQ(s.accid(11),  har.accid(6));
+    EXPECT_EQ(s.accid(11),  har.accidental(6));
 }
 
 TEST(Scale, Fsharp_chroma)
@@ -692,29 +692,29 @@ TEST(Scale, Fsharp_chroma)
     pse::Ton nat(3, pse::ModeName::MinorNat);
     
     EXPECT_EQ(s.name(0),  maj.name(0));     // degree I  (same for min)
-    EXPECT_EQ(s.accid(0),  maj.accid(0));
+    EXPECT_EQ(s.accid(0),  maj.accidental(0));
     EXPECT_EQ(s.name(1),  maj.name(1));     // flattened degree II
-    EXPECT_EQ(s.accid(1),  --(maj.accid(1)));
+    EXPECT_EQ(s.accid(1),  --(maj.accidental(1)));
     EXPECT_EQ(s.name(2),  maj.name(1));     // degree II (same for min)
-    EXPECT_EQ(s.accid(2),  maj.accid(1));
+    EXPECT_EQ(s.accid(2),  maj.accidental(1));
     EXPECT_EQ(s.name(3),  har.name(2));     // degree III
-    EXPECT_EQ(s.accid(3),  har.accid(2));
+    EXPECT_EQ(s.accid(3),  har.accidental(2));
     EXPECT_EQ(s.name(4),  maj.name(2));     // degree III
-    EXPECT_EQ(s.accid(4),  maj.accid(2));
+    EXPECT_EQ(s.accid(4),  maj.accidental(2));
     EXPECT_EQ(s.name(5),  maj.name(3));     // degree IV (same for min)
-    EXPECT_EQ(s.accid(5),  maj.accid(3));
+    EXPECT_EQ(s.accid(5),  maj.accidental(3));
     EXPECT_EQ(s.name(6),  maj.name(3));     // sharpened degree IV
-    EXPECT_EQ(s.accid(6),  ++(maj.accid(3)));
+    EXPECT_EQ(s.accid(6),  ++(maj.accidental(3)));
     EXPECT_EQ(s.name(7),  maj.name(4));     // degree V (same for min)
-    EXPECT_EQ(s.accid(7),  maj.accid(4));
+    EXPECT_EQ(s.accid(7),  maj.accidental(4));
     EXPECT_EQ(s.name(8),  har.name(5));     // degree VI
-    EXPECT_EQ(s.accid(8),  har.accid(5));
+    EXPECT_EQ(s.accid(8),  har.accidental(5));
     EXPECT_EQ(s.name(9),  maj.name(5));     // degree VI
-    EXPECT_EQ(s.accid(9),  maj.accid(5));
+    EXPECT_EQ(s.accid(9),  maj.accidental(5));
     EXPECT_EQ(s.name(10),  nat.name(6));    // degree VII
-    EXPECT_EQ(s.accid(10),  nat.accid(6));
+    EXPECT_EQ(s.accid(10),  nat.accidental(6));
     EXPECT_EQ(s.name(11),  har.name(6));    // degree VII (same for maj)
-    EXPECT_EQ(s.accid(11),  har.accid(6));
+    EXPECT_EQ(s.accid(11),  har.accidental(6));
 }
 
 TEST(Scale, G_chroma)
@@ -725,29 +725,29 @@ TEST(Scale, G_chroma)
     pse::Ton nat(-2, pse::ModeName::MinorNat);
     
     EXPECT_EQ(s.name(0),  maj.name(0));     // degree I  (same for min)
-    EXPECT_EQ(s.accid(0),  maj.accid(0));
+    EXPECT_EQ(s.accid(0),  maj.accidental(0));
     EXPECT_EQ(s.name(1),  maj.name(1));     // flattened degree II
-    EXPECT_EQ(s.accid(1),  --(maj.accid(1)));
+    EXPECT_EQ(s.accid(1),  --(maj.accidental(1)));
     EXPECT_EQ(s.name(2),  maj.name(1));     // degree II (same for min)
-    EXPECT_EQ(s.accid(2),  maj.accid(1));
+    EXPECT_EQ(s.accid(2),  maj.accidental(1));
     EXPECT_EQ(s.name(3),  har.name(2));     // degree III
-    EXPECT_EQ(s.accid(3),  har.accid(2));
+    EXPECT_EQ(s.accid(3),  har.accidental(2));
     EXPECT_EQ(s.name(4),  maj.name(2));     // degree III
-    EXPECT_EQ(s.accid(4),  maj.accid(2));
+    EXPECT_EQ(s.accid(4),  maj.accidental(2));
     EXPECT_EQ(s.name(5),  maj.name(3));     // degree IV (same for min)
-    EXPECT_EQ(s.accid(5),  maj.accid(3));
+    EXPECT_EQ(s.accid(5),  maj.accidental(3));
     EXPECT_EQ(s.name(6),  maj.name(3));     // sharpened degree IV
-    EXPECT_EQ(s.accid(6),  ++(maj.accid(3)));
+    EXPECT_EQ(s.accid(6),  ++(maj.accidental(3)));
     EXPECT_EQ(s.name(7),  maj.name(4));     // degree V (same for min)
-    EXPECT_EQ(s.accid(7),  maj.accid(4));
+    EXPECT_EQ(s.accid(7),  maj.accidental(4));
     EXPECT_EQ(s.name(8),  har.name(5));     // degree VI
-    EXPECT_EQ(s.accid(8),  har.accid(5));
+    EXPECT_EQ(s.accid(8),  har.accidental(5));
     EXPECT_EQ(s.name(9),  maj.name(5));     // degree VI
-    EXPECT_EQ(s.accid(9),  maj.accid(5));
+    EXPECT_EQ(s.accid(9),  maj.accidental(5));
     EXPECT_EQ(s.name(10),  nat.name(6));    // degree VII
-    EXPECT_EQ(s.accid(10),  nat.accid(6));
+    EXPECT_EQ(s.accid(10),  nat.accidental(6));
     EXPECT_EQ(s.name(11),  har.name(6));    // degree VII (same for maj)
-    EXPECT_EQ(s.accid(11),  har.accid(6));
+    EXPECT_EQ(s.accid(11),  har.accidental(6));
 }
 
 TEST(Scale, Aflat_chroma)
@@ -758,29 +758,29 @@ TEST(Scale, Aflat_chroma)
     pse::Ton nat(-7, pse::ModeName::MinorNat);
     
     EXPECT_EQ(s.name(0),  maj.name(0));     // degree I  (same for min)
-    EXPECT_EQ(s.accid(0),  maj.accid(0));
+    EXPECT_EQ(s.accid(0),  maj.accidental(0));
     EXPECT_EQ(s.name(1),  maj.name(1));     // flattened degree II
-    EXPECT_EQ(s.accid(1),  --(maj.accid(1)));
+    EXPECT_EQ(s.accid(1),  --(maj.accidental(1)));
     EXPECT_EQ(s.name(2),  maj.name(1));     // degree II (same for min)
-    EXPECT_EQ(s.accid(2),  maj.accid(1));
+    EXPECT_EQ(s.accid(2),  maj.accidental(1));
     EXPECT_EQ(s.name(3),  har.name(2));     // degree III
-    EXPECT_EQ(s.accid(3),  har.accid(2));
+    EXPECT_EQ(s.accid(3),  har.accidental(2));
     EXPECT_EQ(s.name(4),  maj.name(2));     // degree III
-    EXPECT_EQ(s.accid(4),  maj.accid(2));
+    EXPECT_EQ(s.accid(4),  maj.accidental(2));
     EXPECT_EQ(s.name(5),  maj.name(3));     // degree IV (same for min)
-    EXPECT_EQ(s.accid(5),  maj.accid(3));
+    EXPECT_EQ(s.accid(5),  maj.accidental(3));
     EXPECT_EQ(s.name(6),  maj.name(3));     // sharpened degree IV
-    EXPECT_EQ(s.accid(6),  ++(maj.accid(3)));
+    EXPECT_EQ(s.accid(6),  ++(maj.accidental(3)));
     EXPECT_EQ(s.name(7),  maj.name(4));     // degree V (same for min)
-    EXPECT_EQ(s.accid(7),  maj.accid(4));
+    EXPECT_EQ(s.accid(7),  maj.accidental(4));
     EXPECT_EQ(s.name(8),  har.name(5));     // degree VI
-    EXPECT_EQ(s.accid(8),  har.accid(5));
+    EXPECT_EQ(s.accid(8),  har.accidental(5));
     EXPECT_EQ(s.name(9),  maj.name(5));     // degree VI
-    EXPECT_EQ(s.accid(9),  maj.accid(5));
+    EXPECT_EQ(s.accid(9),  maj.accidental(5));
     EXPECT_EQ(s.name(10),  nat.name(6));    // degree VII
-    EXPECT_EQ(s.accid(10),  nat.accid(6));
+    EXPECT_EQ(s.accid(10),  nat.accidental(6));
     EXPECT_EQ(s.name(11),  har.name(6));    // degree VII (same for maj)
-    EXPECT_EQ(s.accid(11),  har.accid(6));
+    EXPECT_EQ(s.accid(11),  har.accidental(6));
 }
 
 TEST(Scale, A_chroma)
@@ -791,29 +791,29 @@ TEST(Scale, A_chroma)
     pse::Ton nat(0, pse::ModeName::MinorNat);
     
     EXPECT_EQ(s.name(0),  maj.name(0));     // degree I  (same for min)
-    EXPECT_EQ(s.accid(0),  maj.accid(0));
+    EXPECT_EQ(s.accid(0),  maj.accidental(0));
     EXPECT_EQ(s.name(1),  maj.name(1));     // flattened degree II
-    EXPECT_EQ(s.accid(1),  --(maj.accid(1)));
+    EXPECT_EQ(s.accid(1),  --(maj.accidental(1)));
     EXPECT_EQ(s.name(2),  maj.name(1));     // degree II (same for min)
-    EXPECT_EQ(s.accid(2),  maj.accid(1));
+    EXPECT_EQ(s.accid(2),  maj.accidental(1));
     EXPECT_EQ(s.name(3),  har.name(2));     // degree III
-    EXPECT_EQ(s.accid(3),  har.accid(2));
+    EXPECT_EQ(s.accid(3),  har.accidental(2));
     EXPECT_EQ(s.name(4),  maj.name(2));     // degree III
-    EXPECT_EQ(s.accid(4),  maj.accid(2));
+    EXPECT_EQ(s.accid(4),  maj.accidental(2));
     EXPECT_EQ(s.name(5),  maj.name(3));     // degree IV (same for min)
-    EXPECT_EQ(s.accid(5),  maj.accid(3));
+    EXPECT_EQ(s.accid(5),  maj.accidental(3));
     EXPECT_EQ(s.name(6),  maj.name(3));     // sharpened degree IV
-    EXPECT_EQ(s.accid(6),  ++(maj.accid(3)));
+    EXPECT_EQ(s.accid(6),  ++(maj.accidental(3)));
     EXPECT_EQ(s.name(7),  maj.name(4));     // degree V (same for min)
-    EXPECT_EQ(s.accid(7),  maj.accid(4));
+    EXPECT_EQ(s.accid(7),  maj.accidental(4));
     EXPECT_EQ(s.name(8),  har.name(5));     // degree VI
-    EXPECT_EQ(s.accid(8),  har.accid(5));
+    EXPECT_EQ(s.accid(8),  har.accidental(5));
     EXPECT_EQ(s.name(9),  maj.name(5));     // degree VI
-    EXPECT_EQ(s.accid(9),  maj.accid(5));
+    EXPECT_EQ(s.accid(9),  maj.accidental(5));
     EXPECT_EQ(s.name(10),  nat.name(6));    // degree VII
-    EXPECT_EQ(s.accid(10),  nat.accid(6));
+    EXPECT_EQ(s.accid(10),  nat.accidental(6));
     EXPECT_EQ(s.name(11),  har.name(6));    // degree VII (same for maj)
-    EXPECT_EQ(s.accid(11),  har.accid(6));
+    EXPECT_EQ(s.accid(11),  har.accidental(6));
 }
 
 TEST(Scale, Bflat_chroma)
@@ -824,29 +824,29 @@ TEST(Scale, Bflat_chroma)
     pse::Ton nat(-5, pse::ModeName::MinorNat);
     
     EXPECT_EQ(s.name(0),  maj.name(0));     // degree I  (same for min)
-    EXPECT_EQ(s.accid(0),  maj.accid(0));
+    EXPECT_EQ(s.accid(0),  maj.accidental(0));
     EXPECT_EQ(s.name(1),  maj.name(1));     // flattened degree II
-    EXPECT_EQ(s.accid(1),  --(maj.accid(1)));
+    EXPECT_EQ(s.accid(1),  --(maj.accidental(1)));
     EXPECT_EQ(s.name(2),  maj.name(1));     // degree II (same for min)
-    EXPECT_EQ(s.accid(2),  maj.accid(1));
+    EXPECT_EQ(s.accid(2),  maj.accidental(1));
     EXPECT_EQ(s.name(3),  har.name(2));     // degree III
-    EXPECT_EQ(s.accid(3),  har.accid(2));
+    EXPECT_EQ(s.accid(3),  har.accidental(2));
     EXPECT_EQ(s.name(4),  maj.name(2));     // degree III
-    EXPECT_EQ(s.accid(4),  maj.accid(2));
+    EXPECT_EQ(s.accid(4),  maj.accidental(2));
     EXPECT_EQ(s.name(5),  maj.name(3));     // degree IV (same for min)
-    EXPECT_EQ(s.accid(5),  maj.accid(3));
+    EXPECT_EQ(s.accid(5),  maj.accidental(3));
     EXPECT_EQ(s.name(6),  maj.name(3));     // sharpened degree IV
-    EXPECT_EQ(s.accid(6),  ++(maj.accid(3)));
+    EXPECT_EQ(s.accid(6),  ++(maj.accidental(3)));
     EXPECT_EQ(s.name(7),  maj.name(4));     // degree V (same for min)
-    EXPECT_EQ(s.accid(7),  maj.accid(4));
+    EXPECT_EQ(s.accid(7),  maj.accidental(4));
     EXPECT_EQ(s.name(8),  har.name(5));     // degree VI
-    EXPECT_EQ(s.accid(8),  har.accid(5));
+    EXPECT_EQ(s.accid(8),  har.accidental(5));
     EXPECT_EQ(s.name(9),  maj.name(5));     // degree VI
-    EXPECT_EQ(s.accid(9),  maj.accid(5));
+    EXPECT_EQ(s.accid(9),  maj.accidental(5));
     EXPECT_EQ(s.name(10),  nat.name(6));    // degree VII
-    EXPECT_EQ(s.accid(10),  nat.accid(6));
+    EXPECT_EQ(s.accid(10),  nat.accidental(6));
     EXPECT_EQ(s.name(11),  har.name(6));    // degree VII (same for maj)
-    EXPECT_EQ(s.accid(11),  har.accid(6));
+    EXPECT_EQ(s.accid(11),  har.accidental(6));
 }
 
 TEST(Scale, B_chroma)
@@ -857,27 +857,27 @@ TEST(Scale, B_chroma)
     pse::Ton nat(2, pse::ModeName::MinorNat);
     
     EXPECT_EQ(s.name(0),  maj.name(0));     // degree I  (same for min)
-    EXPECT_EQ(s.accid(0),  maj.accid(0));
+    EXPECT_EQ(s.accid(0),  maj.accidental(0));
     EXPECT_EQ(s.name(1),  maj.name(1));     // flattened degree II
-    EXPECT_EQ(s.accid(1),  --(maj.accid(1)));
+    EXPECT_EQ(s.accid(1),  --(maj.accidental(1)));
     EXPECT_EQ(s.name(2),  maj.name(1));     // degree II (same for min)
-    EXPECT_EQ(s.accid(2),  maj.accid(1));
+    EXPECT_EQ(s.accid(2),  maj.accidental(1));
     EXPECT_EQ(s.name(3),  har.name(2));     // degree III
-    EXPECT_EQ(s.accid(3),  har.accid(2));
+    EXPECT_EQ(s.accid(3),  har.accidental(2));
     EXPECT_EQ(s.name(4),  maj.name(2));     // degree III
-    EXPECT_EQ(s.accid(4),  maj.accid(2));
+    EXPECT_EQ(s.accid(4),  maj.accidental(2));
     EXPECT_EQ(s.name(5),  maj.name(3));     // degree IV (same for min)
-    EXPECT_EQ(s.accid(5),  maj.accid(3));
+    EXPECT_EQ(s.accid(5),  maj.accidental(3));
     EXPECT_EQ(s.name(6),  maj.name(3));     // sharpened degree IV
-    EXPECT_EQ(s.accid(6),  ++(maj.accid(3)));
+    EXPECT_EQ(s.accid(6),  ++(maj.accidental(3)));
     EXPECT_EQ(s.name(7),  maj.name(4));     // degree V (same for min)
-    EXPECT_EQ(s.accid(7),  maj.accid(4));
+    EXPECT_EQ(s.accid(7),  maj.accidental(4));
     EXPECT_EQ(s.name(8),  har.name(5));     // degree VI
-    EXPECT_EQ(s.accid(8),  har.accid(5));
+    EXPECT_EQ(s.accid(8),  har.accidental(5));
     EXPECT_EQ(s.name(9),  maj.name(5));     // degree VI
-    EXPECT_EQ(s.accid(9),  maj.accid(5));
+    EXPECT_EQ(s.accid(9),  maj.accidental(5));
     EXPECT_EQ(s.name(10),  nat.name(6));    // degree VII
-    EXPECT_EQ(s.accid(10),  nat.accid(6));
+    EXPECT_EQ(s.accid(10),  nat.accidental(6));
     EXPECT_EQ(s.name(11),  har.name(6));    // degree VII (same for maj)
-    EXPECT_EQ(s.accid(11),  har.accid(6));
+    EXPECT_EQ(s.accid(11),  har.accidental(6));
 }

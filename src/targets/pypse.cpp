@@ -71,9 +71,9 @@ PYBIND11_MODULE(pse, m)
     
     py::class_<pse::Ton>(m, "Ton")
         //.def(py::init<>(), "Ton", py::arg("ks"))
-        .def("mode", &pse::Ton::mode, "get mode")
-        .def("name", &pse::Ton::name, "get note name")
-        .def("accidental", &pse::Ton::accidental, "get accidental")
+        .def("mode", &pse::Ton::getMode, "get mode of ton")
+        .def("name", &pse::Ton::getName, "get name of ton")
+        .def("accidental", &pse::Ton::getAccidental, "get accidental of ton")
         .def("fifths", &pse::Ton::fifths, "get key signature");
 
     py::class_<pse::PSE>(m, "PSE")

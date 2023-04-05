@@ -60,7 +60,7 @@ bool PS13::spell()
         unsigned int nc = _enum.midipitch(n)%12;
                 
         // counter for each candidate name for note n
-        std::array<int, 7> nname;
+        std::array<size_t, 7> nname;
         nname.fill(0);
         int maxi = 0; // name in 0..6 with maximal count
         
@@ -94,7 +94,7 @@ bool PS13::spell()
 }
 
 
-unsigned int PS13::count(int c, size_t n) const
+size_t PS13::count(int c, size_t n) const
 {
     return _enum.count(c, n, _Kpre, _Kpost);
 //    assert(0 <= c);

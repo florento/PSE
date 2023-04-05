@@ -139,7 +139,7 @@ PSState::PSState(const Ton& ton, bool joker)
     assert(-7 <= k);
     assert(k <= 7);
     size_t i = k + 7;
-    const ModeName m = ton.mode();
+    const ModeName m = ton.getMode();
     if (joker)
     {
         switch (m)

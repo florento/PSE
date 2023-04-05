@@ -57,7 +57,7 @@ private: // data
     const size_t _Kpost;
 
     /// count the number of occurrences of the pitch-class c in [n-Kpre, n+Kpost)
-    unsigned int count(int c, size_t n) const;
+    size_t count(int c, size_t n) const;
     
     void init_scales();
         

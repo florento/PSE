@@ -77,13 +77,13 @@ public:
     bool operator==(const Ton& rhs) const;
     bool operator!=(const Ton& rhs) const;
     
-    inline ModeName mode() const { return _mode; }
+    inline ModeName getMode() const { return _mode; }
 
     /// note name of this tonality
-    inline const enum NoteName name() const { return Fifths::name(tonic()); }
+    inline const enum NoteName getName() const { return Fifths::name(tonic()); }
 
     /// accidental name of this tonality
-    inline const enum Accid accidental() const { return Fifths::accid(tonic()); }
+    inline const enum Accid getAccidental() const { return Fifths::accid(tonic()); }
     
     /// accidental in the key signature of this ton for a given pitch name.
     /// @param n an encapsulated note name
@@ -107,7 +107,7 @@ public:
     /// @return the number of accidents, in scale, for n, in -2..2.
     /// @warning only for distonic scales: the mode must be
     /// Major or Minor or MinorNat or MinorMel.
-    enum Accid accid(int d) const;
+    enum Accid accidental(int d) const;
 
     /// a note is a lead in this Ton if
     /// it has an accidental in the scale different
