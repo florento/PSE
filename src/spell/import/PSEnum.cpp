@@ -119,10 +119,34 @@ bool PSEnum::outside(size_t i) const
 }
 
 
-size_t PSEnum::count(int c, size_t i, size_t pre, size_t post)
+size_t PSEnum::count(int c, size_t i, size_t pre, size_t post) const
 {
-    WARN("cound called on abstract PSEnum");
-    return 0;
+    //WARN("cound called on abstract PSEnum");     return 0;
+    assert(0 <= c);
+    assert(c < 12);
+    assert(! open());
+    assert(! empty());
+    size_t efirst = first();
+    size_t estop = stop();
+    assert(efirst <= i);
+    assert(i < estop);
+    // bounds of the interval to explore
+    size_t left = (i - efirst >= pre)?(i - pre):efirst;
+    size_t right = (estop - i >= post)?(i + post):estop;
+    assert(left <= right);
+    size_t cpt = 0;
+    
+    for (size_t j = left; j < right; ++j)
+    {
+        assert(efirst <= j);
+        assert(j < estop);
+        unsigned int mp = midipitch(j);
+        assert(0 <= mp);
+        assert(mp <= 128);
+        if (mp%12 == c) ++cpt;
+    }
+    
+    return cpt;
 }
 
 void PSEnum::rename(size_t i, const enum NoteName& n, bool altprint)
@@ -133,25 +157,27 @@ void PSEnum::rename(size_t i, const enum NoteName& n, bool altprint)
     rename(i, n, a, o, altprint);
 }
 
-void PSEnum::rewritePassing()
+bool PSEnum::rewritePassing()
 {
+    bool ret = false;
     for (size_t i = first(); i < stop(); ++i)
-        rewritePassing(i);
+        ret = ret && rewritePassing(i);
+    return ret;
 }
 
-void PSEnum::rewritePassing(size_t i)
+bool PSEnum::rewritePassing(size_t i)
 {
     assert(first() <= i);
     assert(i < stop());
 
     // not a trigram
-    if (stop() - i < 3) return;
+    if (stop() - i < 3) return false;
 
     int d0 = ((int) midipitch(i+1)) - ((int) midipitch(i));
     int d1 = ((int) midipitch(i+2)) - ((int) midipitch(i+1));
 
-    if (d0 == 0 || d1 == 0) return;
-    if (abs(d0) > 2 || abs(d1) > 2) return;
+    if (d0 == 0 || d1 == 0) return false;
+    if (abs(d0) > 2 || abs(d1) > 2) return false;
 
     const enum NoteName n0 = name(i);
     const enum NoteName n1 = name(i+1);
@@ -164,27 +190,48 @@ void PSEnum::rewritePassing(size_t i)
     
     // broderie down
     if (d0 == -1 & d1 == 1 && n2 == n0 && n1 == n0)
+    {
         rename(i+1, n1-1);
+        return true;
+    }
 
     // broderie up
     else if (d0 == 1 & d1 == -1 && n2 == n0 && n1 == n0)
+    {
         rename(i+1, n1+1);
+        return true;
+    }
 
     // descending 1
     else if (d0 == -1 & d1 == -2 && n1 == n0 && n2 == n0-2)
+    {
         rename(i+1, n1-1);
+        return true;
+    }
 
     // ascending 1
     else if (d0 == 1 & d1 == 2 && n1 == n0 && n2 == n0+2)
+    {
         rename(i+1, n1+1);
+        return true;
+    }
 
     // descending 2
     else if (d0 == -2 & d1 == -1 && n2 == n1 && n2 == n0-2)
+    {
         rename(i+1, n1+1);
+        return true;
+    }
 
     // ascending 2
     else if (d0 == 2 & d1 == 1 && n2 == n1 && n2 == n0+2)
+    {
         rename(i+1, n1-1);
+        return true;
+    }
+
+    else
+        return false;
 }
 
 

@@ -168,15 +168,15 @@ public:
     /// @param i index of note in the list of input notes.
     bool printed(size_t i) const;
     
-    /// count the number of occurrence of a pitch class in a window around
-    /// a given note.
-    /// @param c a pitch class in 0..11.
-    /// @param i index of a note in this enumerator.
-    /// @param pre number of notes to consider before i.
-    /// @param post number of notes to consider after i.
-    /// @return the number of occurrence of c in the interval
-    /// from i - pre (included) to i + post (excluded).
-    virtual size_t count(int c, size_t i, size_t pre, size_t post);
+    // count the number of occurrence of a pitch class in a window around
+    // a given note.
+    // @param c a pitch class in 0..11.
+    // @param i index of a note in this enumerator.
+    // @param pre number of notes to consider before i.
+    // @param post number of notes to consider after i.
+    // @return the number of occurrence of c in the interval
+    // from i - pre (included) to i + post (excluded).
+    // virtual size_t count(int c, size_t i, size_t pre, size_t post);
     
 private: // data (shared by all copies of this enumerator)
        

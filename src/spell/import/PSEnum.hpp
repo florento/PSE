@@ -173,7 +173,7 @@ public:
     /// @param post number of notes to consider after i.
     /// @return the number of occurrence of c in the interval
     /// from i - pre (included) to i + post (excluded).
-    virtual size_t count(int c, size_t i, size_t pre, size_t post);
+    size_t count(int c, size_t i, size_t pre, size_t post) const;
     
     /// correct the passing notes using 6 rewrite rules proposed by
     /// D. Meredith in his PS13 Pitch-Spelling algorithm.
@@ -192,7 +192,8 @@ public:
     ///   ex. `C` `A#` `A` $\to$ `C` `Bb` `A`
     /// - +2 +1  (ascending 2)
     ///   ex. `A` `Cb` `C` $\to$ `A` `B` `C`
-    void rewritePassing();
+    /// @return whether at least one rewriting was done.
+    bool rewritePassing();
     
 protected:
 
@@ -215,8 +216,9 @@ protected:
 private:
     /// rewrite a trigram of notes starting at the given position.
     /// @param i index of a note in this enumerator.
+    /// @return whether the trigram at i was rewritten.
     /// @see rewritePassing()
-    void rewritePassing(size_t i);
+    bool rewritePassing(size_t i);
 
     
 }; // class PSEnum
