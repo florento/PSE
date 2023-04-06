@@ -119,7 +119,10 @@ bool PSRawEnum::sanity_check() const
 size_t PSRawEnum::size() const
 {
     assert(sanity_check());
-    return _notes->size();
+    if (open())
+        return _notes->size() - first();
+    else
+        return stop() - first();
 }
 
 
@@ -153,7 +156,8 @@ void PSRawEnum::add(int note, int bar, bool simult)
     assert(_prints);
     _prints->push_back(false);
 
-    _stop++;
+    if (! open() && (_notes->size() > _stop))
+        _stop = _notes->size();
 }
 
 

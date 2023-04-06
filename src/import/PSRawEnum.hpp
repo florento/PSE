@@ -79,23 +79,27 @@ public:
     virtual ~PSRawEnum();
     
     /// clone this enumerator into a enumerator of the same type.
-    virtual std::unique_ptr<PSEnum> clone() const;
+    virtual std::unique_ptr<PSEnum> clone() const override;
     
     /// clone this enumerator and update the bounds with new values.
     /// @param i0 new index of the first note accessible by this enumerator.
     /// @param i1 new index of the note after the last note accessible by this
     /// enumerator. it must be larger than or equal to i0.
     /// The enumerated sequence of notes is empty if i0 == i1.
-    virtual std::unique_ptr<PSEnum> clone(size_t i0, size_t i1) const;
+    virtual std::unique_ptr<PSEnum> clone(size_t i0, size_t i1) const override;
 
     /// clone this enumerator and update the left bound of interval.
     /// @param i0 new index of the first note accessible by this enumerator.
     /// The enumeration starts at i0 and stops when there are no more notes
     /// to read in e.
-    virtual std::unique_ptr<PSEnum> clone(size_t i0) const;
+    virtual std::unique_ptr<PSEnum> clone(size_t i0) const override;
 
-    /// number of input notes in this enumerator.
-    size_t size() const;
+    /// number of notes accessible to this enumerator.
+    /// if the enumerator is open, it the real number of notes minus first(),
+    /// otherwise, it is stop() - first().
+    /// @warning it may not be smaller than the number of notes added
+    /// if first() > 0.
+    virtual size_t size() const override;
     
     /// add a new input note to the list of enumerated notes.
     /// @param note MIDI key of the new input note.

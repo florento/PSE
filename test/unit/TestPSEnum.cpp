@@ -44,7 +44,7 @@ TEST(PSEnum, empty)
     EXPECT_FALSE(e0.open());
     EXPECT_EQ(e0.first(), 0);
     EXPECT_EQ(e0.stop(), 0);
-    EXPECT_EQ(e0.length(), 0);
+    EXPECT_EQ(e0.size(), 0);
     EXPECT_FALSE(e0.inside(0));
     EXPECT_FALSE(e0.inside(1));
     EXPECT_TRUE(e0.outside(0));
