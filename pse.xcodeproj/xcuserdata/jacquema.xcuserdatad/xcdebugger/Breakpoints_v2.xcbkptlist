@@ -222,8 +222,8 @@
             filePath = "src/import/PSRawEnum.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "297"
-            endingLineNumber = "297"
+            startingLineNumber = "290"
+            endingLineNumber = "290"
             landmarkName = "PSRawEnum::rename(i, n, altprint)"
             landmarkType = "7">
             <Locations>
@@ -327,7 +327,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "12C31E20-DF85-4A4F-A8F9-D83446BA258A"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "src/import/PSEnum.cpp"
@@ -337,6 +337,102 @@
             endingLineNumber = "139"
             landmarkName = "PSEnum::count(c, i, pre, post)"
             landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "F40D2610-0C78-4220-9185-EA661732C410"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "src/import/PSEnum.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "181"
+            endingLineNumber = "181"
+            landmarkName = "PSEnum::rewritePassing(i)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "F40D2610-0C78-4220-9185-EA661732C410 - da3e7d43892a7279"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "pse::PSEnum::rewritePassing(unsigned long)"
+                  moduleName = "testpse"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Volumes/X8-FDRL/Users/jacquema/Code/PSE/src/import/PSEnum.cpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "181"
+                  endingLineNumber = "181"
+                  offsetFromSymbolStart = "240">
+               </Location>
+               <Location
+                  uuid = "F40D2610-0C78-4220-9185-EA661732C410 - da3e7d43892a725a"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "pse::PSEnum::rewritePassing(unsigned long)"
+                  moduleName = "testpse"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Volumes/X8-FDRL/Users/jacquema/Code/PSE/src/import/PSEnum.cpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "182"
+                  endingLineNumber = "182"
+                  offsetFromSymbolStart = "240">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "4F0974E9-1B8A-471B-B3D0-369235C877C2"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "src/import/PSEnum.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "167"
+            endingLineNumber = "167"
+            landmarkName = "PSEnum::rewritePassing()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "4F0974E9-1B8A-471B-B3D0-369235C877C2 - 9bcd5930e5fa9761"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "pse::PSEnum::rewritePassing()"
+                  moduleName = "testpse"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Volumes/X8-FDRL/Users/jacquema/Code/PSE/src/import/PSEnum.cpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "167"
+                  endingLineNumber = "167"
+                  offsetFromSymbolStart = "135">
+               </Location>
+               <Location
+                  uuid = "4F0974E9-1B8A-471B-B3D0-369235C877C2 - 9bcd5930e5fa9761"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "pse::PSEnum::rewritePassing()"
+                  moduleName = "testpse"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Volumes/X8-FDRL/Users/jacquema/Code/PSE/src/import/PSEnum.cpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "167"
+                  endingLineNumber = "167"
+                  offsetFromSymbolStart = "139">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

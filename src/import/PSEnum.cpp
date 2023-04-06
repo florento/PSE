@@ -160,18 +160,26 @@ void PSEnum::rename(size_t i, const enum NoteName& n, bool altprint)
 bool PSEnum::rewritePassing()
 {
     bool ret = false;
-    for (size_t i = first(); i < stop(); ++i)
-        ret = ret && rewritePassing(i);
+    size_t efirst = first();
+    size_t estop = open()?efirst+size():stop();
+    for (size_t i = efirst; i < estop; ++i)
+    {
+        bool rew = rewritePassing(i);
+        ret = (ret || rew);
+    }
     return ret;
 }
 
 bool PSEnum::rewritePassing(size_t i)
 {
-    assert(first() <= i);
-    assert(i < stop());
+    size_t efirst = first();
+    size_t estop = open()?efirst+size():stop();
+
+    assert(efirst <= i);
+    assert(i < estop);
 
     // not a trigram
-    if (stop() - i < 3) return false;
+    if (estop - i < 3) return false;
 
     int d0 = ((int) midipitch(i+1)) - ((int) midipitch(i));
     int d1 = ((int) midipitch(i+2)) - ((int) midipitch(i+1));

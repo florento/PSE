@@ -180,37 +180,37 @@ TEST(PSRawEnum, count)
 
     e.add(12, 4, false); // C0
 
-    e.rename(0, pse::NoteName::C); // 0
+    e.rename(0, pse::NoteName::C);
     e.rename(1, pse::NoteName::B);
     e.rename(2, pse::NoteName::C);
     e.rename(3, pse::NoteName::D);
     
-    e.rename(4, pse::NoteName::C); // 4
+    e.rename(4, pse::NoteName::C);
     e.rename(5, pse::NoteName::B);
     e.rename(6, pse::NoteName::C);
     e.rename(7, pse::NoteName::A);
     
-    e.rename(8, pse::NoteName::G); // 8
+    e.rename(8, pse::NoteName::G);
     e.rename(9, pse::NoteName::F); // F#
     e.rename(10, pse::NoteName::G);
     e.rename(11, pse::NoteName::E);
 
-    e.rename(12, pse::NoteName::F); // 12
+    e.rename(12, pse::NoteName::F);
     e.rename(13, pse::NoteName::D);
     e.rename(14, pse::NoteName::B);
     e.rename(15, pse::NoteName::G);
 
-    e.rename(16, pse::NoteName::C); // 16
+    e.rename(16, pse::NoteName::C);
     e.rename(17, pse::NoteName::B);
     e.rename(18, pse::NoteName::C);
     e.rename(19, pse::NoteName::A);
 
-    e.rename(20, pse::NoteName::G); // 20
+    e.rename(20, pse::NoteName::G);
     e.rename(21, pse::NoteName::E);
     e.rename(22, pse::NoteName::F);
     e.rename(23, pse::NoteName::D);
 
-    e.rename(24, pse::NoteName::C); // 24
+    e.rename(24, pse::NoteName::C);
     
     EXPECT_EQ(e.name(0), pse::NoteName::C);
     EXPECT_EQ(e.accidental(0), pse::Accid::Natural);
@@ -245,5 +245,304 @@ TEST(PSRawEnum, count)
     EXPECT_EQ(e.count(7, 16, 5, 5), 2);  // G in a window 11..20
     EXPECT_EQ(e.count(11, 16, 5, 5), 2); // B in a window 11..20
     EXPECT_EQ(e.count(6, 16, 5, 5), 0);  // F# in a window 11..20
+}
 
+TEST(PSRawEnum, rewritePassing_a)
+{
+    pse::PSRawEnum e(0); // open
+    
+    // midi key, bar nb, simult
+    e.add(48, 0, false); // C3
+    e.add(47, 0, false); // Cb3
+    e.add(48, 0, false); // C3
+    
+    e.rename(0, pse::NoteName::C);
+    e.rename(1, pse::NoteName::C);
+    e.rename(2, pse::NoteName::C);
+    
+    EXPECT_EQ(e.name(0), pse::NoteName::C);
+    EXPECT_EQ(e.accidental(0), pse::Accid::Natural);
+    EXPECT_EQ(e.octave(0), 3);
+
+    EXPECT_EQ(e.name(1), pse::NoteName::C);
+    EXPECT_EQ(e.accidental(1), pse::Accid::Flat);
+    EXPECT_EQ(e.octave(1), 3);
+
+    EXPECT_EQ(e.name(2), pse::NoteName::C);
+    EXPECT_EQ(e.accidental(2), pse::Accid::Natural);
+    EXPECT_EQ(e.octave(2), 3);
+
+    e.rewritePassing();
+    
+    EXPECT_EQ(e.name(0), pse::NoteName::C);
+    EXPECT_EQ(e.accidental(0), pse::Accid::Natural);
+    EXPECT_EQ(e.octave(0), 3);
+
+    EXPECT_EQ(e.name(1), pse::NoteName::B);
+    EXPECT_EQ(e.accidental(1), pse::Accid::Natural);
+    EXPECT_EQ(e.octave(1), 2);
+
+    EXPECT_EQ(e.name(2), pse::NoteName::C);
+    EXPECT_EQ(e.accidental(2), pse::Accid::Natural);
+    EXPECT_EQ(e.octave(2), 3);
+}
+
+TEST(PSRawEnum, rewritePassing_b)
+{
+    pse::PSRawEnum e(0); // open
+    
+    // midi key, bar nb, simult
+    e.add(48, 0, false); // C3
+    e.add(49, 0, false); // C#3
+    e.add(48, 0, false); // C3
+    
+    e.rename(0, pse::NoteName::C);
+    e.rename(1, pse::NoteName::C);
+    e.rename(2, pse::NoteName::C);
+    
+    EXPECT_EQ(e.name(0), pse::NoteName::C);
+    EXPECT_EQ(e.accidental(0), pse::Accid::Natural);
+    EXPECT_EQ(e.octave(0), 3);
+
+    EXPECT_EQ(e.name(1), pse::NoteName::C);
+    EXPECT_EQ(e.accidental(1), pse::Accid::Sharp);
+    EXPECT_EQ(e.octave(1), 3);
+
+    EXPECT_EQ(e.name(2), pse::NoteName::C);
+    EXPECT_EQ(e.accidental(2), pse::Accid::Natural);
+    EXPECT_EQ(e.octave(2), 3);
+
+    e.rewritePassing();
+    
+    EXPECT_EQ(e.name(0), pse::NoteName::C);
+    EXPECT_EQ(e.accidental(0), pse::Accid::Natural);
+    EXPECT_EQ(e.octave(0), 3);
+
+    EXPECT_EQ(e.name(1), pse::NoteName::D);
+    EXPECT_EQ(e.accidental(1), pse::Accid::Flat);
+    EXPECT_EQ(e.octave(1), 3);
+
+    EXPECT_EQ(e.name(2), pse::NoteName::C);
+    EXPECT_EQ(e.accidental(2), pse::Accid::Natural);
+    EXPECT_EQ(e.octave(2), 3);
+}
+
+TEST(PSRawEnum, rewritePassing_c)
+{
+    pse::PSRawEnum e(0); // open
+    
+    // midi key, bar nb, simult
+    e.add(48, 0, false); // C3
+    e.add(47, 0, false); // Cb3
+    e.add(45, 0, false); // A2
+    
+    e.rename(0, pse::NoteName::C);
+    e.rename(1, pse::NoteName::C);
+    e.rename(2, pse::NoteName::A);
+    
+    EXPECT_EQ(e.name(0), pse::NoteName::C);
+    EXPECT_EQ(e.accidental(0), pse::Accid::Natural);
+    EXPECT_EQ(e.octave(0), 3);
+
+    EXPECT_EQ(e.name(1), pse::NoteName::C);
+    EXPECT_EQ(e.accidental(1), pse::Accid::Flat);
+    EXPECT_EQ(e.octave(1), 3);
+
+    EXPECT_EQ(e.name(2), pse::NoteName::A);
+    EXPECT_EQ(e.accidental(2), pse::Accid::Natural);
+    EXPECT_EQ(e.octave(2), 2);
+
+    e.rewritePassing();
+    
+    EXPECT_EQ(e.name(0), pse::NoteName::C);
+    EXPECT_EQ(e.accidental(0), pse::Accid::Natural);
+    EXPECT_EQ(e.octave(0), 3);
+
+    EXPECT_EQ(e.name(1), pse::NoteName::B);
+    EXPECT_EQ(e.accidental(1), pse::Accid::Natural);
+    EXPECT_EQ(e.octave(1), 2);
+
+    EXPECT_EQ(e.name(2), pse::NoteName::A);
+    EXPECT_EQ(e.accidental(2), pse::Accid::Natural);
+    EXPECT_EQ(e.octave(2), 2);
+}
+
+TEST(PSRawEnum, rewritePassing_d)
+{
+    pse::PSRawEnum e(0); // open
+    
+    // midi key, bar nb, simult
+    e.add(45, 0, false); // A2
+    e.add(47, 0, false); // Cb3
+    e.add(48, 0, false); // C3
+    
+    e.rename(0, pse::NoteName::A);
+    e.rename(1, pse::NoteName::C);
+    e.rename(2, pse::NoteName::C);
+    
+    EXPECT_EQ(e.name(0), pse::NoteName::A);
+    EXPECT_EQ(e.accidental(0), pse::Accid::Natural);
+    EXPECT_EQ(e.octave(0), 2);
+
+    EXPECT_EQ(e.name(1), pse::NoteName::C);
+    EXPECT_EQ(e.accidental(1), pse::Accid::Flat);
+    EXPECT_EQ(e.octave(1), 3);
+
+    EXPECT_EQ(e.name(2), pse::NoteName::C);
+    EXPECT_EQ(e.accidental(2), pse::Accid::Natural);
+    EXPECT_EQ(e.octave(2), 3);
+
+    e.rewritePassing();
+    
+    EXPECT_EQ(e.name(0), pse::NoteName::A);
+    EXPECT_EQ(e.accidental(0), pse::Accid::Natural);
+    EXPECT_EQ(e.octave(0), 2);
+
+    EXPECT_EQ(e.name(1), pse::NoteName::B);
+    EXPECT_EQ(e.accidental(1), pse::Accid::Natural);
+    EXPECT_EQ(e.octave(1), 2);
+
+    EXPECT_EQ(e.name(2), pse::NoteName::C);
+    EXPECT_EQ(e.accidental(2), pse::Accid::Natural);
+    EXPECT_EQ(e.octave(2), 3);
+}
+
+TEST(PSRawEnum, rewritePassing_e)
+{
+    pse::PSRawEnum e(0); // open
+    
+    // midi key, bar nb, simult
+    e.add(48, 0, false); // C3
+    e.add(46, 0, false); // A#3
+    e.add(45, 0, false); // A2
+    
+    e.rename(0, pse::NoteName::C);
+    e.rename(1, pse::NoteName::A);
+    e.rename(2, pse::NoteName::A);
+    
+    EXPECT_EQ(e.name(0), pse::NoteName::C);
+    EXPECT_EQ(e.accidental(0), pse::Accid::Natural);
+    EXPECT_EQ(e.octave(0), 3);
+
+    EXPECT_EQ(e.name(1), pse::NoteName::A);
+    EXPECT_EQ(e.accidental(1), pse::Accid::Sharp);
+    EXPECT_EQ(e.octave(1), 2);
+
+    EXPECT_EQ(e.name(2), pse::NoteName::A);
+    EXPECT_EQ(e.accidental(2), pse::Accid::Natural);
+    EXPECT_EQ(e.octave(2), 2);
+
+    e.rewritePassing();
+    
+    EXPECT_EQ(e.name(0), pse::NoteName::C);
+    EXPECT_EQ(e.accidental(0), pse::Accid::Natural);
+    EXPECT_EQ(e.octave(0), 3);
+
+    EXPECT_EQ(e.name(1), pse::NoteName::B);
+    EXPECT_EQ(e.accidental(1), pse::Accid::Flat);
+    EXPECT_EQ(e.octave(1), 2);
+
+    EXPECT_EQ(e.name(2), pse::NoteName::A);
+    EXPECT_EQ(e.accidental(2), pse::Accid::Natural);
+    EXPECT_EQ(e.octave(2), 2);
+}
+
+TEST(PSRawEnum, rewritePassing_f)
+{
+    pse::PSRawEnum e(0); // open
+    
+    // midi key, bar nb, simult
+    e.add(45, 0, false); // A2
+    e.add(46, 0, false); // A#3
+    e.add(48, 0, false); // C3
+    
+    e.rename(0, pse::NoteName::A);
+    e.rename(1, pse::NoteName::A);
+    e.rename(2, pse::NoteName::C);
+    
+    EXPECT_EQ(e.name(0), pse::NoteName::A);
+    EXPECT_EQ(e.accidental(0), pse::Accid::Natural);
+    EXPECT_EQ(e.octave(0), 2);
+
+    EXPECT_EQ(e.name(1), pse::NoteName::A);
+    EXPECT_EQ(e.accidental(1), pse::Accid::Sharp);
+    EXPECT_EQ(e.octave(1), 2);
+
+    EXPECT_EQ(e.name(2), pse::NoteName::C);
+    EXPECT_EQ(e.accidental(2), pse::Accid::Natural);
+    EXPECT_EQ(e.octave(2), 3);
+
+    e.rewritePassing();
+    
+    EXPECT_EQ(e.name(0), pse::NoteName::A);
+    EXPECT_EQ(e.accidental(0), pse::Accid::Natural);
+    EXPECT_EQ(e.octave(0), 2);
+
+    EXPECT_EQ(e.name(1), pse::NoteName::B);
+    EXPECT_EQ(e.accidental(1), pse::Accid::Flat);
+    EXPECT_EQ(e.octave(1), 2);
+
+    EXPECT_EQ(e.name(2), pse::NoteName::C);
+    EXPECT_EQ(e.accidental(2), pse::Accid::Natural);
+    EXPECT_EQ(e.octave(2), 3);
+}
+
+TEST(PSRawEnum, rewritePassing_a4)
+{
+    pse::PSRawEnum e(0); // open
+    
+    // midi key, bar nb, simult
+    e.add(48, 0, false); // C3
+    e.add(48, 0, false); // C3    rewrite position
+    e.add(47, 0, false); // Cb3
+    e.add(48, 0, false); // C3
+    e.add(50, 0, false); // D3
+
+    e.rename(0, pse::NoteName::C);
+    e.rename(1, pse::NoteName::C);
+    e.rename(2, pse::NoteName::C);
+    e.rename(3, pse::NoteName::C);
+    e.rename(4, pse::NoteName::D);
+
+    EXPECT_EQ(e.name(0), pse::NoteName::C);
+    EXPECT_EQ(e.accidental(0), pse::Accid::Natural);
+    EXPECT_EQ(e.octave(0), 3);
+
+    EXPECT_EQ(e.name(1), pse::NoteName::C);
+    EXPECT_EQ(e.accidental(1), pse::Accid::Natural);
+    EXPECT_EQ(e.octave(1), 3);
+
+    EXPECT_EQ(e.name(2), pse::NoteName::C);
+    EXPECT_EQ(e.accidental(2), pse::Accid::Flat);
+    EXPECT_EQ(e.octave(2), 3);
+
+    EXPECT_EQ(e.name(3), pse::NoteName::C);
+    EXPECT_EQ(e.accidental(3), pse::Accid::Natural);
+    EXPECT_EQ(e.octave(3), 3);
+
+    EXPECT_EQ(e.name(4), pse::NoteName::D);
+    EXPECT_EQ(e.accidental(4), pse::Accid::Natural);
+    EXPECT_EQ(e.octave(4), 3);
+
+    e.rewritePassing();
+    
+    EXPECT_EQ(e.name(0), pse::NoteName::C);
+    EXPECT_EQ(e.accidental(0), pse::Accid::Natural);
+    EXPECT_EQ(e.octave(0), 3);
+
+    EXPECT_EQ(e.name(1), pse::NoteName::C);
+    EXPECT_EQ(e.accidental(1), pse::Accid::Natural);
+    EXPECT_EQ(e.octave(1), 3);
+
+    EXPECT_EQ(e.name(2), pse::NoteName::B);
+    EXPECT_EQ(e.accidental(2), pse::Accid::Natural);
+    EXPECT_EQ(e.octave(2), 2);
+
+    EXPECT_EQ(e.name(3), pse::NoteName::C);
+    EXPECT_EQ(e.accidental(3), pse::Accid::Natural);
+    EXPECT_EQ(e.octave(3), 3);
+
+    EXPECT_EQ(e.name(4), pse::NoteName::D);
+    EXPECT_EQ(e.accidental(4), pse::Accid::Natural);
+    EXPECT_EQ(e.octave(4), 3);
 }
