@@ -21,7 +21,7 @@ _current(firstChroma()),             // jump to the first non-empty pitch class
 _names(_chord->size(), NoteName::Undef), // fix size
 _prints(_chord->size(), false)
 {
-    assert(e.length() > 1);
+    assert(e.size() > 1);
     _id = _chord->stop();          // first note after chord
 }
 
@@ -110,7 +110,7 @@ bool PSC2::operator!=(const PSC2& rhs) const
 size_t PSC2::size() const
 {
     assert(_chord);
-    return _chord->length();
+    return _chord->size();
 }
 
 

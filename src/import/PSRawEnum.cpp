@@ -119,7 +119,10 @@ bool PSRawEnum::sanity_check() const
 size_t PSRawEnum::size() const
 {
     assert(sanity_check());
-    return _notes->size();
+    if (open())
+        return _notes->size() - first();
+    else
+        return stop() - first();
 }
 
 
@@ -153,7 +156,8 @@ void PSRawEnum::add(int note, int bar, bool simult)
     assert(_prints);
     _prints->push_back(false);
 
-    _stop++;
+    if (! open() && (_notes->size() > _stop))
+        _stop = _notes->size();
 }
 
 
@@ -239,7 +243,7 @@ void PSRawEnum::rename(size_t i,
 {
     assert(_notes);
     assert(i < _notes->size());
-    int m = MidiNum::to_midi(n, a, o);
+    // int m = MidiNum::to_midi(n, a, o);
     if (MidiNum::to_midi(n, a, o) != _notes->at(i))
     {
         ERROR("PSRawEnum: MIDI pitch {} cannot be named by {}{} {}",
@@ -253,29 +257,22 @@ void PSRawEnum::rename(size_t i,
     assert(n != NoteName::Undef);
     assert(_names);
     assert(i < _names->size());
-    if (_names->at(i) != NoteName::Undef)
-    {
-        WARN("PSRawEnum overwriting {} with {} (was {})",
-             i, n, _names->at(i));
-    }
+//    if (_names->at(i) != NoteName::Undef)
+//        WARN("PSRawEnum overwriting {} with {} (was {})", i, n, _names->at(i));
     _names->at(i) = n;
     
     assert(a != Accid::Undef);
     assert(_accids);
     assert(i < _accids->size());
-    if (_accids->at(i) != Accid::Undef)
-    {
-        WARN("PSRawEnum overwriting {} with {} (was {})", i, a, _accids->at(i));
-    }
+//    if (_accids->at(i) != Accid::Undef)
+//        WARN("PSRawEnum overwriting {} with {} (was {})", i, a, _accids->at(i));
     _accids->at(i) = a;
     
     assert(o != OCTAVE_UNDEF);
     assert(_octs);
     assert(i < _octs->size());
-    if (_octs->at(i) != OCTAVE_UNDEF)
-    {
-        WARN("PSRawEnum overwriting {} with {} (was {})", i, o, _octs->at(i));
-    }
+//    if (_octs->at(i) != OCTAVE_UNDEF)
+//        WARN("PSRawEnum overwriting {} with {} (was {})", i, o, _octs->at(i));
     _octs->at(i) = o;
     
     assert(_prints);

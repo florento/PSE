@@ -137,9 +137,9 @@ void PSP::record_path(const PSC0& c)
         assert(co->initial() || co->fromNote() || co->fromChord());
     }
     
-    assert(_names.size()  == _enum.length()); // number of notes
-    assert(_accids.size() == _enum.length());
-    assert(_prints.size() == _enum.length());
+    assert(_names.size()  == _enum.size()); // number of notes
+    assert(_accids.size() == _enum.size());
+    assert(_prints.size() == _enum.size());
 }
 
 

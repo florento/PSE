@@ -118,6 +118,7 @@
 		43DD95492945E223006DC553 /* PSCost.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43DD95472945E223006DC553 /* PSCost.cpp */; };
 		43DD954A2945E223006DC553 /* PSCost.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43DD95472945E223006DC553 /* PSCost.cpp */; };
 		43DD954B2945E223006DC553 /* PSCost.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 43DD95482945E223006DC553 /* PSCost.hpp */; };
+		43F566F129DED8460043546B /* exemple.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43A25446292B7D7E00D559D2 /* exemple.cpp */; };
 		43F9BE6429CC423E00B0A7F8 /* ModeName.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43F9BE6229CC423E00B0A7F8 /* ModeName.cpp */; };
 		43F9BE6529CC423E00B0A7F8 /* ModeName.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43F9BE6229CC423E00B0A7F8 /* ModeName.cpp */; };
 		43F9BE6629CC423E00B0A7F8 /* ModeName.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 43F9BE6329CC423E00B0A7F8 /* ModeName.hpp */; };
@@ -189,8 +190,8 @@
 		431586302983E89B00918B1B /* PSNoteEnum.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = PSNoteEnum.hpp; path = src/import/PSNoteEnum.hpp; sourceTree = "<group>"; };
 		432657E1294E2FB000515080 /* Weber.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Weber.cpp; path = src/ton/Weber.cpp; sourceTree = "<group>"; };
 		432657E2294E2FB100515080 /* Weber.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Weber.hpp; path = src/ton/Weber.hpp; sourceTree = "<group>"; };
-		432E7A4C29D427FD000E2B72 /* PSE.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = PSE.cpp; path = src/targets/PSE.cpp; sourceTree = "<group>"; };
-		432E7A4D29D427FD000E2B72 /* PSE.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = PSE.hpp; path = src/targets/PSE.hpp; sourceTree = "<group>"; };
+		432E7A4C29D427FD000E2B72 /* PSE.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PSE.cpp; sourceTree = "<group>"; };
+		432E7A4D29D427FD000E2B72 /* PSE.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = PSE.hpp; sourceTree = "<group>"; };
 		432E7A5229D45FE2000E2B72 /* PS13.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PS13.cpp; sourceTree = "<group>"; };
 		432E7A5329D45FE2000E2B72 /* PS13.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = PS13.hpp; sourceTree = "<group>"; };
 		432E7A5829D494AE000E2B72 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
@@ -227,7 +228,7 @@
 		435406A229A8D4BB0075B3B7 /* TonIndex.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = TonIndex.cpp; path = src/ton/TonIndex.cpp; sourceTree = "<group>"; };
 		435406A329A8D4BB0075B3B7 /* TonIndex.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = TonIndex.hpp; path = src/ton/TonIndex.hpp; sourceTree = "<group>"; };
 		4363442C29D31D8700F5D628 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		436C6C3D2924016F00152D8C /* pse.cpython-310-darwin.so */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = "pse.cpython-310-darwin.so"; sourceTree = BUILT_PRODUCTS_DIR; };
+		436C6C3D2924016F00152D8C /* pse.cpython-311-darwin.so */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = "pse.cpython-311-darwin.so"; sourceTree = BUILT_PRODUCTS_DIR; };
 		436C6C4D2924023100152D8C /* NoteName.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = NoteName.hpp; path = src/pitch/NoteName.hpp; sourceTree = "<group>"; };
 		43791C8D29D8392200DE8796 /* TestAccidental.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TestAccidental.cpp; sourceTree = "<group>"; };
 		43947D0029D972AF008EB20A /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = src/ps14/README.md; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.markdown; };
@@ -235,7 +236,7 @@
 		43A2543E29280D8900D559D2 /* trace.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = trace.cpp; path = src/general/trace.cpp; sourceTree = "<group>"; };
 		43A2543F29280D8900D559D2 /* trace.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = trace.hpp; path = src/general/trace.hpp; sourceTree = "<group>"; };
 		43A2544329280E1600D559D2 /* config.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = config.h; path = src/general/config.h; sourceTree = "<group>"; };
-		43A25446292B7D7E00D559D2 /* exemple.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = exemple.cpp; path = src/targets/exemple.cpp; sourceTree = "<group>"; };
+		43A25446292B7D7E00D559D2 /* exemple.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = exemple.cpp; sourceTree = "<group>"; };
 		43A25449292CC61100D559D2 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = src/README.md; sourceTree = "<group>"; };
 		43A2544A292CC61100D559D2 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
 		43ABA4FD292423C5002AC1D4 /* NoteName.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = NoteName.cpp; path = src/pitch/NoteName.cpp; sourceTree = "<group>"; };
@@ -272,13 +273,14 @@
 		43D8A9EF29AFA16B00B260DA /* PSOrder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PSOrder.cpp; sourceTree = "<group>"; };
 		43DD95472945E223006DC553 /* PSCost.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PSCost.cpp; sourceTree = "<group>"; };
 		43DD95482945E223006DC553 /* PSCost.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = PSCost.hpp; sourceTree = "<group>"; };
+		43F566F229DEDFC70043546B /* pybind11_tests.cpython-311-darwin.so */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.bundle"; name = "pybind11_tests.cpython-311-darwin.so"; path = "extern/pybind11/build/tests/pybind11_tests.cpython-311-darwin.so"; sourceTree = "<group>"; };
 		43F9BE6229CC423E00B0A7F8 /* ModeName.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ModeName.cpp; sourceTree = "<group>"; };
 		43F9BE6329CC423E00B0A7F8 /* ModeName.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ModeName.hpp; sourceTree = "<group>"; };
 		43F9BE6729CC696C00B0A7F8 /* Mode.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Mode.cpp; sourceTree = "<group>"; };
 		43F9BE6829CC696C00B0A7F8 /* Mode.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Mode.hpp; sourceTree = "<group>"; };
 		43F9BE6C29CC7DB000B0A7F8 /* ModeFactory.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ModeFactory.cpp; sourceTree = "<group>"; };
 		43F9BE6D29CC7DB000B0A7F8 /* ModeFactory.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ModeFactory.hpp; sourceTree = "<group>"; };
-		43FBEAB52930CB16008FC486 /* debugpse.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = debugpse.cpp; path = src/targets/debugpse.cpp; sourceTree = "<group>"; };
+		43FBEAB52930CB16008FC486 /* debugpse.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = debugpse.cpp; sourceTree = "<group>"; };
 		43FBEABD2930CD21008FC486 /* debugpse */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = debugpse; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -367,6 +369,8 @@
 				43ABA51F29242418002AC1D4 /* PSTable.cpp */,
 				43ABA51C29242418002AC1D4 /* PSPath.hpp */,
 				43ABA51629242417002AC1D4 /* PSPath.cpp */,
+				432E7A4D29D427FD000E2B72 /* PSE.hpp */,
+				432E7A4C29D427FD000E2B72 /* PSE.cpp */,
 			);
 			name = PSE;
 			path = src/PSE;
@@ -414,6 +418,7 @@
 		432E7A5129D45F78000E2B72 /* test */ = {
 			isa = PBXGroup;
 			children = (
+				43F566F029DED7E80043546B /* integration */,
 				432E7A5729D4946F000E2B72 /* unit */,
 			);
 			path = test;
@@ -459,6 +464,7 @@
 		435081E429D6CFA800465943 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				43F566F229DEDFC70043546B /* pybind11_tests.cpython-311-darwin.so */,
 				435081E829D6CFCD00465943 /* libgtest_main.a */,
 				435081E729D6CFCD00465943 /* libgtest.a */,
 			);
@@ -492,7 +498,7 @@
 		436C6C3E2924016F00152D8C /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				436C6C3D2924016F00152D8C /* pse.cpython-310-darwin.so */,
+				436C6C3D2924016F00152D8C /* pse.cpython-311-darwin.so */,
 				43FBEABD2930CD21008FC486 /* debugpse */,
 				435081D329D6C09A00465943 /* testpse */,
 			);
@@ -524,12 +530,8 @@
 		436C6C8E2924032000152D8C /* pybind */ = {
 			isa = PBXGroup;
 			children = (
-				43A25446292B7D7E00D559D2 /* exemple.cpp */,
-				43FBEAB52930CB16008FC486 /* debugpse.cpp */,
 				4342FD1729268C78004E914F /* pypse.hpp */,
 				4342FD1629268C78004E914F /* pypse.cpp */,
-				432E7A4D29D427FD000E2B72 /* PSE.hpp */,
-				432E7A4C29D427FD000E2B72 /* PSE.cpp */,
 			);
 			name = pybind;
 			sourceTree = "<group>";
@@ -580,6 +582,15 @@
 				432EF6AB292D405400C620CF /* Speller.cpp */,
 			);
 			name = general;
+			sourceTree = "<group>";
+		};
+		43F566F029DED7E80043546B /* integration */ = {
+			isa = PBXGroup;
+			children = (
+				43A25446292B7D7E00D559D2 /* exemple.cpp */,
+				43FBEAB52930CB16008FC486 /* debugpse.cpp */,
+			);
+			path = integration;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -661,7 +672,7 @@
 			);
 			name = pse;
 			productName = pse;
-			productReference = 436C6C3D2924016F00152D8C /* pse.cpython-310-darwin.so */;
+			productReference = 436C6C3D2924016F00152D8C /* pse.cpython-311-darwin.so */;
 			productType = "com.apple.product-type.library.dynamic";
 		};
 		43FBEABC2930CD21008FC486 /* debugpse */ = {
@@ -833,6 +844,7 @@
 				43C2BA11299946150084AB3B /* Interval.cpp in Sources */,
 				43FBEAD12930CEDD008FC486 /* PSBag.cpp in Sources */,
 				43FBEAD22930CEDD008FC486 /* PSVector.cpp in Sources */,
+				43F566F129DED8460043546B /* exemple.cpp in Sources */,
 				43FBEAD32930CEDD008FC486 /* PSTable.cpp in Sources */,
 				43FBEAD42930CEDD008FC486 /* PSPath.cpp in Sources */,
 				4315863B2983F15400918B1B /* PSEnum.cpp in Sources */,
@@ -866,6 +878,7 @@
 				);
 				MACOSX_DEPLOYMENT_TARGET = 13.1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SYMROOT = "$(PROJECT_DIR)/build";
 				SYSTEM_HEADER_SEARCH_PATHS = (
 					"$(LOCAL_LIBRARY_DIR)/Frameworks/Python.framework/Headers",
 					extern/spdlog/include,
@@ -899,6 +912,7 @@
 				);
 				MACOSX_DEPLOYMENT_TARGET = 13.1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SYMROOT = "$(PROJECT_DIR)/build";
 				SYSTEM_HEADER_SEARCH_PATHS = (
 					"$(LOCAL_LIBRARY_DIR)/Frameworks/Python.framework/Headers",
 					extern/spdlog/include,
@@ -1030,7 +1044,7 @@
 				DEAD_CODE_STRIPPING = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
-				EXECUTABLE_EXTENSION = "cpython-310-darwin.so";
+				EXECUTABLE_EXTENSION = "cpython-311-darwin.so";
 				EXECUTABLE_PREFIX = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1050,7 +1064,6 @@
 				LIBRARY_SEARCH_PATHS = (
 					/usr/local/lib,
 					"$(PROJECT_DIR)/lib",
-					"$(PROJECT_DIR)/extern/googletest/build/lib",
 				);
 				OTHER_LDFLAGS = (
 					"-undefined",
@@ -1077,7 +1090,7 @@
 				DEAD_CODE_STRIPPING = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
-				EXECUTABLE_EXTENSION = "cpython-310-darwin.so";
+				EXECUTABLE_EXTENSION = "cpython-311-darwin.so";
 				EXECUTABLE_PREFIX = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1097,7 +1110,6 @@
 				LIBRARY_SEARCH_PATHS = (
 					/usr/local/lib,
 					"$(PROJECT_DIR)/lib",
-					"$(PROJECT_DIR)/extern/googletest/build/lib",
 				);
 				OTHER_LDFLAGS = (
 					"-undefined",
@@ -1124,7 +1136,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = DYPCUZH3W2;
-				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_HARDENED_RUNTIME = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(LOCAL_LIBRARY_DIR)/Frameworks",
@@ -1133,6 +1145,10 @@
 				LIBRARY_SEARCH_PATHS = (
 					/usr/local/lib,
 					"$(PROJECT_DIR)/lib",
+				);
+				OTHER_LDFLAGS = (
+					"-undefined",
+					dynamic_lookup,
 				);
 				PRIVATE_HEADERS_FOLDER_PATH = /usr/local/include;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1156,7 +1172,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = DYPCUZH3W2;
-				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_HARDENED_RUNTIME = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(LOCAL_LIBRARY_DIR)/Frameworks",
@@ -1165,6 +1181,10 @@
 				LIBRARY_SEARCH_PATHS = (
 					/usr/local/lib,
 					"$(PROJECT_DIR)/lib",
+				);
+				OTHER_LDFLAGS = (
+					"-undefined",
+					dynamic_lookup,
 				);
 				PRIVATE_HEADERS_FOLDER_PATH = /usr/local/include;
 				PRODUCT_NAME = "$(TARGET_NAME)";

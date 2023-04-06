@@ -65,7 +65,7 @@ public:
     
     /// number of notes in this chord.
     /// @see PSEnum::length()
-    inline size_t size() const { return length(); }
+    inline size_t size() const { return size(); }
     
     /// category of the chord: 2 for interval, 3 for triad etc.
     inline size_t type() const { return _constitution.size(); }

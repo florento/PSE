@@ -216,7 +216,7 @@ PSCost PST::rowCost(size_t step, size_t i)
 bool PST::eGlobals_eq_lex(const PSCost& lhs, const PSCost& rhs) const
 {
     //return lhs.eq_approx(rhs, _enum.length());
-    return PSCost::approxeq(lhs.getAccid(),  rhs.getAccid(), _enum.length());
+    return PSCost::approxeq(lhs.getAccid(),  rhs.getAccid(), _enum.size());
 }
 
 
@@ -225,7 +225,7 @@ bool PST::eGlobals_eq_cumul(const PSCost& lhs, const PSCost& rhs) const
     //return lhs.eq_cumul(rhs, _enum.length());
     return PSCost::approxeq(lhs.getAccid() + lhs.getDia(),
                             rhs.getAccid() + rhs.getDia(),
-                            2 * _enum.length());
+                            2 * _enum.size());
 }
 
 

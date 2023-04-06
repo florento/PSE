@@ -7,7 +7,7 @@
 
 #include <iostream>
 
-#include "Speller.hpp"
+#include "PSE.hpp"
 #include "Weber.hpp"
 
 
@@ -38,7 +38,7 @@ int main(int argc, const char* argv[])
     // godfried.dump();
     // return 0;
     
-    pse::Speller sp = pse::Speller(26, true);
+    pse::PSE sp(26, true);
        
     LG349(sp);
     // Waldstein(sp);

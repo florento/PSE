@@ -96,7 +96,7 @@ public:
     /// number of notes accessible to this enumerator.
     /// @warning if this PS Enumerator is open, the return value is undeterminated.
     /// @see open()
-    size_t length() const;
+    virtual size_t size() const;
 
     /// no note is accessible by this PS Enumerator.
     bool empty() const;

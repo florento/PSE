@@ -77,13 +77,13 @@ size_t PSEnum::stop() const
 }
 
 
-size_t PSEnum::length() const
+size_t PSEnum::size() const
 {
     if (_stop != ID_INF)
         return (_stop - _first);
     else
     {
-        WARN("PSEnum size: def interval right open");
+        WARN("PSEnum size: definition interval right open");
         return ID_INF;
     }
 }
@@ -124,13 +124,13 @@ size_t PSEnum::count(int c, size_t i, size_t pre, size_t post) const
     //WARN("cound called on abstract PSEnum");     return 0;
     assert(0 <= c);
     assert(c < 12);
-    assert(! open());
+    // assert(! open());
     assert(! empty());
     size_t efirst = first();
-    size_t estop = stop();
+    size_t estop = open()?first()+size():stop();
     assert(efirst <= i);
     assert(i < estop);
-    // bounds of the interval to explore
+    // bounds of the interval to explore [i-pre, i+post)
     size_t left = (i - efirst >= pre)?(i - pre):efirst;
     size_t right = (estop - i >= post)?(i + post):estop;
     assert(left <= right);
@@ -160,18 +160,26 @@ void PSEnum::rename(size_t i, const enum NoteName& n, bool altprint)
 bool PSEnum::rewritePassing()
 {
     bool ret = false;
-    for (size_t i = first(); i < stop(); ++i)
-        ret = ret && rewritePassing(i);
+    size_t efirst = first();
+    size_t estop = open()?efirst+size():stop();
+    for (size_t i = efirst; i < estop; ++i)
+    {
+        bool rew = rewritePassing(i);
+        ret = (ret || rew);
+    }
     return ret;
 }
 
 bool PSEnum::rewritePassing(size_t i)
 {
-    assert(first() <= i);
-    assert(i < stop());
+    size_t efirst = first();
+    size_t estop = open()?efirst+size():stop();
+
+    assert(efirst <= i);
+    assert(i < estop);
 
     // not a trigram
-    if (stop() - i < 3) return false;
+    if (estop - i < 3) return false;
 
     int d0 = ((int) midipitch(i+1)) - ((int) midipitch(i));
     int d1 = ((int) midipitch(i+2)) - ((int) midipitch(i+1));

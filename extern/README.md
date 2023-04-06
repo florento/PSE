@@ -32,6 +32,9 @@ git subtree pull --prefix extern/googletest googletest main --squash
 see
 ```shell
 git remote -v
+git remote add spdlog https://github.com/gabime/spdlog.git
+git remote add pybind11 https://github.com/pybind/pybind11.git 
+git remote add googletest https://github.com/google/googletest.git
 ```
 
 

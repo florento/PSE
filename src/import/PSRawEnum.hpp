@@ -79,23 +79,27 @@ public:
     virtual ~PSRawEnum();
     
     /// clone this enumerator into a enumerator of the same type.
-    virtual std::unique_ptr<PSEnum> clone() const;
+    virtual std::unique_ptr<PSEnum> clone() const override;
     
     /// clone this enumerator and update the bounds with new values.
     /// @param i0 new index of the first note accessible by this enumerator.
     /// @param i1 new index of the note after the last note accessible by this
     /// enumerator. it must be larger than or equal to i0.
     /// The enumerated sequence of notes is empty if i0 == i1.
-    virtual std::unique_ptr<PSEnum> clone(size_t i0, size_t i1) const;
+    virtual std::unique_ptr<PSEnum> clone(size_t i0, size_t i1) const override;
 
     /// clone this enumerator and update the left bound of interval.
     /// @param i0 new index of the first note accessible by this enumerator.
     /// The enumeration starts at i0 and stops when there are no more notes
     /// to read in e.
-    virtual std::unique_ptr<PSEnum> clone(size_t i0) const;
+    virtual std::unique_ptr<PSEnum> clone(size_t i0) const override;
 
-    /// number of input notes in this enumerator.
-    size_t size() const;
+    /// number of notes accessible to this enumerator.
+    /// if the enumerator is open, it the real number of notes minus first(),
+    /// otherwise, it is stop() - first().
+    /// @warning it may not be smaller than the number of notes added
+    /// if first() > 0.
+    virtual size_t size() const override;
     
     /// add a new input note to the list of enumerated notes.
     /// @param note MIDI key of the new input note.
@@ -111,16 +115,16 @@ public:
 
     /// midi key number in 0..128 of the note of the given index.
     /// @param i index of a note. must be inside the interval of this enumerator.
-    virtual unsigned int midipitch(size_t i) const;
+    virtual unsigned int midipitch(size_t i) const override;
 
     /// number of measure the note of given index belongs to.
     /// midi key number in 0..128 of the note of the given index.
     /// @param i index of a note. must be inside the interval of this enumerator.
-    virtual long measure(size_t i) const;
+    virtual long measure(size_t i) const override;
 
     /// whether the note of given index is simultaneous with the next note.
     /// @param i index of a note. must be inside the interval of this enumerator.
-    virtual bool simultaneous(size_t i) const;
+    virtual bool simultaneous(size_t i) const override;
 
     /// record new NoteName, Accid, Octave, print flag for the note of given index.
     /// @param i index of a note. must be inside the interval of this enumerator.
@@ -135,7 +139,7 @@ public:
     /// lists in argument contain const objects.
     virtual void rename(size_t i,
                         const enum NoteName& n, const enum Accid& a, int o,
-                        bool altprint);
+                        bool altprint) override;
     
     /// record new note name, accidental, octave, print flag for the note
     /// of given index. The accidental and octave are deduced from
@@ -147,26 +151,26 @@ public:
     /// @warning the alt-print flag is set arbitrarily to true.
     /// @warning the notes cannot be renamed in place because the Python
     /// lists in argument contain const objects.
-    virtual void rename(size_t i, const enum NoteName& n, bool altprint=true);
+    virtual void rename(size_t i, const enum NoteName& n, bool altprint=true) override;
        
     /// estimated name for the note of given index in the best path,
     /// in 0..6 (0 is 'C', 6 is 'B').
     /// @param i index of note in the list of input notes.
-    enum NoteName name(size_t i) const;
+    enum NoteName name(size_t i) const override;
     
     /// estimated alteration for the note of given index in the best path,
     /// in -2..2.
     /// @param i index of note in the list of input notes.
-    enum Accid accidental(size_t i) const;
+    enum Accid accidental(size_t i) const override;
     
     /// estimated octave for the note of given index in the best path, in -2..9.
     /// @param i index of note in the list of input notes.
-    int octave(size_t i) const;
+    int octave(size_t i) const override;
 
     /// estimated print flag for the note of given index in the best path.
     /// This flags says wether the accidental of the note must be printed or not.
     /// @param i index of note in the list of input notes.
-    bool printed(size_t i) const;
+    bool printed(size_t i) const override;
     
     // count the number of occurrence of a pitch class in a window around
     // a given note.
