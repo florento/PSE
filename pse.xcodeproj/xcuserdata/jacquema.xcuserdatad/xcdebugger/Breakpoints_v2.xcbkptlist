@@ -212,5 +212,101 @@
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "4E3D7837-6A89-4943-8157-1C5FAD7A812F"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "src/import/PSRawEnum.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "293"
+            endingLineNumber = "293"
+            landmarkName = "PSRawEnum::rename(i, n, altprint)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "4E3D7837-6A89-4943-8157-1C5FAD7A812F - beecfe1ef8448bd8"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "pse::PSRawEnum::rename(unsigned long, pse::NoteName const&amp;, bool)"
+                  moduleName = "testpse"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/jacquema/Code/PSE/src/import/PSRawEnum.cpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "293"
+                  endingLineNumber = "293"
+                  offsetFromSymbolStart = "239">
+               </Location>
+               <Location
+                  uuid = "4E3D7837-6A89-4943-8157-1C5FAD7A812F - beecfe1ef8448bd8"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "pse::PSRawEnum::rename(unsigned long, pse::NoteName const&amp;, bool)"
+                  moduleName = "testpse"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/jacquema/Code/PSE/src/import/PSRawEnum.cpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "293"
+                  endingLineNumber = "293"
+                  offsetFromSymbolStart = "218">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "CDFDD3DA-0F6D-44EA-8109-08E777D34924"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "src/import/PSRawEnum.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "245"
+            endingLineNumber = "245"
+            landmarkName = "PSRawEnum::rename(i, n, a, o, altprint)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "CDFDD3DA-0F6D-44EA-8109-08E777D34924 - 72a787019e47146b"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "pse::PSRawEnum::rename(unsigned long, pse::NoteName const&amp;, pse::Accid const&amp;, int, bool)"
+                  moduleName = "testpse"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/jacquema/Code/PSE/src/import/PSRawEnum.cpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "246"
+                  endingLineNumber = "246"
+                  offsetFromSymbolStart = "565">
+               </Location>
+               <Location
+                  uuid = "CDFDD3DA-0F6D-44EA-8109-08E777D34924 - 72a787019e47144a"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "pse::PSRawEnum::rename(unsigned long, pse::NoteName const&amp;, pse::Accid const&amp;, int, bool)"
+                  moduleName = "testpse"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/jacquema/Code/PSE/src/import/PSRawEnum.cpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "245"
+                  endingLineNumber = "245"
+                  offsetFromSymbolStart = "529">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
    </Breakpoints>
 </Bucket>

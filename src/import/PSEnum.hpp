@@ -93,7 +93,7 @@ public:
     /// @see open()
     size_t stop() const;
     
-    /// number of notes accessible to this eumerator.
+    /// number of notes accessible to this enumerator.
     /// @warning if this PS Enumerator is open, the return value is undeterminated.
     /// @see open()
     size_t length() const;

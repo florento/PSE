@@ -51,7 +51,7 @@ public:
     /// @param i1 index of the note after the last note accessible by this
     /// enumerator. optional (can be ommited for open PS Enum).
     /// if given it must be larger than or equal to i0.
-    PSRawEnum(size_t i0, size_t i1);
+    PSRawEnum(size_t i0, size_t i1 = PSEnum::ID_INF);
 
     // Pitch Spelling enumerator from list of notes with midi pitch and bar number.
     // PSRawEnum(const std::vector<int>& notes, const std::vector<int>& barnum);

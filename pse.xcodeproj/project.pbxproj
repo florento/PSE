@@ -73,6 +73,8 @@
 		4350820329D6E3AB00465943 /* TestNoteName.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4350820229D6E3AB00465943 /* TestNoteName.cpp */; };
 		4350820529D6FDA100465943 /* TestMode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4350820429D6FDA100465943 /* TestMode.cpp */; };
 		4350820829D7032B00465943 /* TestMidiNum.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4350820729D7032B00465943 /* TestMidiNum.cpp */; };
+		4353AE3829DDAD3E00FAF8A3 /* TestPSEnum.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4353AE3729DDAD3E00FAF8A3 /* TestPSEnum.cpp */; };
+		4353AE3A29DDB2CC00FAF8A3 /* TestPSRawEnum.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4353AE3929DDB2CC00FAF8A3 /* TestPSRawEnum.cpp */; };
 		43791C8E29D8392200DE8796 /* TestAccidental.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43791C8D29D8392200DE8796 /* TestAccidental.cpp */; };
 		43791C8F29D83EE400DE8796 /* TestScale.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 435081CE29D6C04600465943 /* TestScale.cpp */; };
 		4397A5DE29A6CDB300C2CC9A /* PSOrder.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 4397A5DC29A6CDB300C2CC9A /* PSOrder.hpp */; };
@@ -177,14 +179,14 @@
 		431586222983E86E00918B1B /* InputSegmentSpiral.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = InputSegmentSpiral.hpp; path = src/Spiral/InputSegmentSpiral.hpp; sourceTree = "<group>"; };
 		431586232983E86E00918B1B /* InputSegmentSpiral.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = InputSegmentSpiral.cpp; path = src/Spiral/InputSegmentSpiral.cpp; sourceTree = "<group>"; };
 		431586242983E86E00918B1B /* Spiral.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Spiral.cpp; path = src/Spiral/Spiral.cpp; sourceTree = "<group>"; };
-		431586292983E89B00918B1B /* PSRawEnum.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = PSRawEnum.hpp; path = src/spell/import/PSRawEnum.hpp; sourceTree = "<group>"; };
-		4315862A2983E89B00918B1B /* PSNoteEnum.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PSNoteEnum.cpp; path = src/spell/import/PSNoteEnum.cpp; sourceTree = "<group>"; };
-		4315862B2983E89B00918B1B /* PSEnum.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PSEnum.cpp; path = src/spell/import/PSEnum.cpp; sourceTree = "<group>"; };
-		4315862C2983E89B00918B1B /* PSM21Enum.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = PSM21Enum.hpp; path = src/spell/import/PSM21Enum.hpp; sourceTree = "<group>"; };
-		4315862D2983E89B00918B1B /* PSRawEnum.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PSRawEnum.cpp; path = src/spell/import/PSRawEnum.cpp; sourceTree = "<group>"; };
-		4315862E2983E89B00918B1B /* PSEnum.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = PSEnum.hpp; path = src/spell/import/PSEnum.hpp; sourceTree = "<group>"; };
-		4315862F2983E89B00918B1B /* PSM21Enum.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PSM21Enum.cpp; path = src/spell/import/PSM21Enum.cpp; sourceTree = "<group>"; };
-		431586302983E89B00918B1B /* PSNoteEnum.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = PSNoteEnum.hpp; path = src/spell/import/PSNoteEnum.hpp; sourceTree = "<group>"; };
+		431586292983E89B00918B1B /* PSRawEnum.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = PSRawEnum.hpp; path = src/import/PSRawEnum.hpp; sourceTree = "<group>"; };
+		4315862A2983E89B00918B1B /* PSNoteEnum.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PSNoteEnum.cpp; path = src/import/PSNoteEnum.cpp; sourceTree = "<group>"; };
+		4315862B2983E89B00918B1B /* PSEnum.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PSEnum.cpp; path = src/import/PSEnum.cpp; sourceTree = "<group>"; };
+		4315862C2983E89B00918B1B /* PSM21Enum.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = PSM21Enum.hpp; path = src/import/PSM21Enum.hpp; sourceTree = "<group>"; };
+		4315862D2983E89B00918B1B /* PSRawEnum.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PSRawEnum.cpp; path = src/import/PSRawEnum.cpp; sourceTree = "<group>"; };
+		4315862E2983E89B00918B1B /* PSEnum.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = PSEnum.hpp; path = src/import/PSEnum.hpp; sourceTree = "<group>"; };
+		4315862F2983E89B00918B1B /* PSM21Enum.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PSM21Enum.cpp; path = src/import/PSM21Enum.cpp; sourceTree = "<group>"; };
+		431586302983E89B00918B1B /* PSNoteEnum.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = PSNoteEnum.hpp; path = src/import/PSNoteEnum.hpp; sourceTree = "<group>"; };
 		432657E1294E2FB000515080 /* Weber.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Weber.cpp; path = src/ton/Weber.cpp; sourceTree = "<group>"; };
 		432657E2294E2FB100515080 /* Weber.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Weber.hpp; path = src/ton/Weber.hpp; sourceTree = "<group>"; };
 		432E7A4C29D427FD000E2B72 /* PSE.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = PSE.cpp; path = src/targets/PSE.cpp; sourceTree = "<group>"; };
@@ -201,12 +203,12 @@
 		4342FD1629268C78004E914F /* pypse.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = pypse.cpp; path = src/targets/pypse.cpp; sourceTree = "<group>"; };
 		4342FD1729268C78004E914F /* pypse.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = pypse.hpp; path = src/targets/pypse.hpp; sourceTree = "<group>"; };
 		4342FD1A2926B925004E914F /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
-		434B1DF5298ECCF0001CE41C /* PSConfig1.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = PSConfig1.hpp; path = src/spell/PSConfig1.hpp; sourceTree = "<group>"; };
-		434B1DF6298ECCF0001CE41C /* PSConfig1.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PSConfig1.cpp; path = src/spell/PSConfig1.cpp; sourceTree = "<group>"; };
-		434B1DFA298ED394001CE41C /* PSConfig2.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = PSConfig2.cpp; path = src/spell/PSConfig2.cpp; sourceTree = "<group>"; };
-		434B1DFB298ED394001CE41C /* PSConfig2.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = PSConfig2.hpp; path = src/spell/PSConfig2.hpp; sourceTree = "<group>"; };
-		434B1DFF298FD4FE001CE41C /* PSChord.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = PSChord.cpp; path = src/spell/PSChord.cpp; sourceTree = "<group>"; };
-		434B1E00298FD4FE001CE41C /* PSChord.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = PSChord.hpp; path = src/spell/PSChord.hpp; sourceTree = "<group>"; };
+		434B1DF5298ECCF0001CE41C /* PSConfig1.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = PSConfig1.hpp; sourceTree = "<group>"; };
+		434B1DF6298ECCF0001CE41C /* PSConfig1.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PSConfig1.cpp; sourceTree = "<group>"; };
+		434B1DFA298ED394001CE41C /* PSConfig2.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PSConfig2.cpp; sourceTree = "<group>"; };
+		434B1DFB298ED394001CE41C /* PSConfig2.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = PSConfig2.hpp; sourceTree = "<group>"; };
+		434B1DFF298FD4FE001CE41C /* PSChord.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = PSChord.cpp; path = src/PSE/PSChord.cpp; sourceTree = "<group>"; };
+		434B1E00298FD4FE001CE41C /* PSChord.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = PSChord.hpp; path = src/PSE/PSChord.hpp; sourceTree = "<group>"; };
 		435081CE29D6C04600465943 /* TestScale.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TestScale.cpp; sourceTree = "<group>"; };
 		435081D329D6C09A00465943 /* testpse */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = testpse; sourceTree = BUILT_PRODUCTS_DIR; };
 		435081DB29D6C53D00465943 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = extern/README.md; sourceTree = "<group>"; };
@@ -217,6 +219,8 @@
 		4350820229D6E3AB00465943 /* TestNoteName.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TestNoteName.cpp; sourceTree = "<group>"; };
 		4350820429D6FDA100465943 /* TestMode.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TestMode.cpp; sourceTree = "<group>"; };
 		4350820729D7032B00465943 /* TestMidiNum.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TestMidiNum.cpp; sourceTree = "<group>"; };
+		4353AE3729DDAD3E00FAF8A3 /* TestPSEnum.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TestPSEnum.cpp; sourceTree = "<group>"; };
+		4353AE3929DDB2CC00FAF8A3 /* TestPSRawEnum.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TestPSRawEnum.cpp; sourceTree = "<group>"; };
 		4354069F29A8D2F90075B3B7 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = src/chord/README.md; sourceTree = "<group>"; };
 		435406A029A8D3530075B3B7 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = src/Spiral/README.md; sourceTree = "<group>"; };
 		435406A129A8D4050075B3B7 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = src/KrumhanslSchmuckler/README.md; sourceTree = "<group>"; };
@@ -227,7 +231,7 @@
 		436C6C4D2924023100152D8C /* NoteName.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = NoteName.hpp; path = src/pitch/NoteName.hpp; sourceTree = "<group>"; };
 		43791C8D29D8392200DE8796 /* TestAccidental.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TestAccidental.cpp; sourceTree = "<group>"; };
 		43947D0029D972AF008EB20A /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = src/ps14/README.md; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.markdown; };
-		4397A5DC29A6CDB300C2CC9A /* PSOrder.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = PSOrder.hpp; path = src/spell/PSOrder.hpp; sourceTree = "<group>"; };
+		4397A5DC29A6CDB300C2CC9A /* PSOrder.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = PSOrder.hpp; sourceTree = "<group>"; };
 		43A2543E29280D8900D559D2 /* trace.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = trace.cpp; path = src/general/trace.cpp; sourceTree = "<group>"; };
 		43A2543F29280D8900D559D2 /* trace.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = trace.hpp; path = src/general/trace.hpp; sourceTree = "<group>"; };
 		43A2544329280E1600D559D2 /* config.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = config.h; path = src/general/config.h; sourceTree = "<group>"; };
@@ -243,20 +247,20 @@
 		43ABA505292423E8002AC1D4 /* Accidental.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Accidental.cpp; path = src/pitch/Accidental.cpp; sourceTree = "<group>"; };
 		43ABA506292423E8002AC1D4 /* Ton.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Ton.hpp; path = src/ton/Ton.hpp; sourceTree = "<group>"; };
 		43ABA507292423E8002AC1D4 /* Enharmonic.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Enharmonic.cpp; path = src/pitch/Enharmonic.cpp; sourceTree = "<group>"; };
-		43ABA51329242417002AC1D4 /* PSBag.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PSBag.cpp; path = src/spell/PSBag.cpp; sourceTree = "<group>"; };
-		43ABA51429242417002AC1D4 /* PSVector.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = PSVector.hpp; path = src/spell/PSVector.hpp; sourceTree = "<group>"; };
-		43ABA51529242417002AC1D4 /* PSVector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PSVector.cpp; path = src/spell/PSVector.cpp; sourceTree = "<group>"; };
-		43ABA51629242417002AC1D4 /* PSPath.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PSPath.cpp; path = src/spell/PSPath.cpp; sourceTree = "<group>"; };
-		43ABA51729242417002AC1D4 /* PSConfig.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PSConfig.cpp; path = src/spell/PSConfig.cpp; sourceTree = "<group>"; };
-		43ABA51929242417002AC1D4 /* PSState.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = PSState.hpp; path = src/spell/PSState.hpp; sourceTree = "<group>"; };
-		43ABA51A29242417002AC1D4 /* PSBag.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = PSBag.hpp; path = src/spell/PSBag.hpp; sourceTree = "<group>"; };
-		43ABA51B29242418002AC1D4 /* PSConfig.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = PSConfig.hpp; path = src/spell/PSConfig.hpp; sourceTree = "<group>"; };
-		43ABA51C29242418002AC1D4 /* PSPath.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = PSPath.hpp; path = src/spell/PSPath.hpp; sourceTree = "<group>"; };
-		43ABA51E29242418002AC1D4 /* PSState.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PSState.cpp; path = src/spell/PSState.cpp; sourceTree = "<group>"; };
-		43ABA51F29242418002AC1D4 /* PSTable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PSTable.cpp; path = src/spell/PSTable.cpp; sourceTree = "<group>"; };
-		43ABA52029242418002AC1D4 /* PSConfig0.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = PSConfig0.hpp; path = src/spell/PSConfig0.hpp; sourceTree = "<group>"; };
-		43ABA52129242418002AC1D4 /* PSConfig0.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PSConfig0.cpp; path = src/spell/PSConfig0.cpp; sourceTree = "<group>"; };
-		43ABA52229242418002AC1D4 /* PSTable.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = PSTable.hpp; path = src/spell/PSTable.hpp; sourceTree = "<group>"; };
+		43ABA51329242417002AC1D4 /* PSBag.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PSBag.cpp; sourceTree = "<group>"; };
+		43ABA51429242417002AC1D4 /* PSVector.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = PSVector.hpp; sourceTree = "<group>"; };
+		43ABA51529242417002AC1D4 /* PSVector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PSVector.cpp; sourceTree = "<group>"; };
+		43ABA51629242417002AC1D4 /* PSPath.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PSPath.cpp; sourceTree = "<group>"; };
+		43ABA51729242417002AC1D4 /* PSConfig.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PSConfig.cpp; sourceTree = "<group>"; };
+		43ABA51929242417002AC1D4 /* PSState.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = PSState.hpp; sourceTree = "<group>"; };
+		43ABA51A29242417002AC1D4 /* PSBag.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = PSBag.hpp; sourceTree = "<group>"; };
+		43ABA51B29242418002AC1D4 /* PSConfig.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = PSConfig.hpp; sourceTree = "<group>"; };
+		43ABA51C29242418002AC1D4 /* PSPath.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = PSPath.hpp; sourceTree = "<group>"; };
+		43ABA51E29242418002AC1D4 /* PSState.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PSState.cpp; sourceTree = "<group>"; };
+		43ABA51F29242418002AC1D4 /* PSTable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PSTable.cpp; sourceTree = "<group>"; };
+		43ABA52029242418002AC1D4 /* PSConfig0.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = PSConfig0.hpp; sourceTree = "<group>"; };
+		43ABA52129242418002AC1D4 /* PSConfig0.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PSConfig0.cpp; sourceTree = "<group>"; };
+		43ABA52229242418002AC1D4 /* PSTable.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = PSTable.hpp; sourceTree = "<group>"; };
 		43ABA53D292425AD002AC1D4 /* spdlog */ = {isa = PBXFileReference; lastKnownFileType = folder; name = spdlog; path = extern/spdlog; sourceTree = "<group>"; };
 		43C2BA0E299946150084AB3B /* Interval.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Interval.cpp; path = src/interval/Interval.cpp; sourceTree = "<group>"; };
 		43C2BA0F299946150084AB3B /* Interval.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Interval.hpp; path = src/interval/Interval.hpp; sourceTree = "<group>"; };
@@ -265,9 +269,9 @@
 		43C2BA182999529E0084AB3B /* PWO.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = PWO.cpp; path = src/pitch/PWO.cpp; sourceTree = "<group>"; };
 		43C2BA1B299A5FEE0084AB3B /* IntervalSimple.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = IntervalSimple.cpp; path = src/interval/IntervalSimple.cpp; sourceTree = "<group>"; };
 		43C2BA1C299A5FEE0084AB3B /* IntervalSimple.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = IntervalSimple.hpp; path = src/interval/IntervalSimple.hpp; sourceTree = "<group>"; };
-		43D8A9EF29AFA16B00B260DA /* PSOrder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PSOrder.cpp; path = src/spell/PSOrder.cpp; sourceTree = "<group>"; };
-		43DD95472945E223006DC553 /* PSCost.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = PSCost.cpp; path = src/spell/PSCost.cpp; sourceTree = "<group>"; };
-		43DD95482945E223006DC553 /* PSCost.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = PSCost.hpp; path = src/spell/PSCost.hpp; sourceTree = "<group>"; };
+		43D8A9EF29AFA16B00B260DA /* PSOrder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PSOrder.cpp; sourceTree = "<group>"; };
+		43DD95472945E223006DC553 /* PSCost.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PSCost.cpp; sourceTree = "<group>"; };
+		43DD95482945E223006DC553 /* PSCost.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = PSCost.hpp; sourceTree = "<group>"; };
 		43F9BE6229CC423E00B0A7F8 /* ModeName.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ModeName.cpp; sourceTree = "<group>"; };
 		43F9BE6329CC423E00B0A7F8 /* ModeName.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ModeName.hpp; sourceTree = "<group>"; };
 		43F9BE6729CC696C00B0A7F8 /* Mode.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Mode.cpp; sourceTree = "<group>"; };
@@ -338,10 +342,9 @@
 			name = ton;
 			sourceTree = "<group>";
 		};
-		431586192983E6BF00918B1B /* spell */ = {
+		431586192983E6BF00918B1B /* PSE */ = {
 			isa = PBXGroup;
 			children = (
-				4315861A2983E7FB00918B1B /* import */,
 				43ABA51929242417002AC1D4 /* PSState.hpp */,
 				43ABA51E29242418002AC1D4 /* PSState.cpp */,
 				43DD95482945E223006DC553 /* PSCost.hpp */,
@@ -365,7 +368,8 @@
 				43ABA51C29242418002AC1D4 /* PSPath.hpp */,
 				43ABA51629242417002AC1D4 /* PSPath.cpp */,
 			);
-			name = spell;
+			name = PSE;
+			path = src/PSE;
 			sourceTree = "<group>";
 		};
 		4315861A2983E7FB00918B1B /* import */ = {
@@ -427,6 +431,8 @@
 				43316FFF29DD934E00BA534D /* TestEnharmonic.cpp */,
 				4350820429D6FDA100465943 /* TestMode.cpp */,
 				435081CE29D6C04600465943 /* TestScale.cpp */,
+				4353AE3729DDAD3E00FAF8A3 /* TestPSEnum.cpp */,
+				4353AE3929DDB2CC00FAF8A3 /* TestPSRawEnum.cpp */,
 			);
 			path = unit;
 			sourceTree = "<group>";
@@ -505,7 +511,8 @@
 				434D5CFD299FCFF100AEB02F /* chord */,
 				4310526429CDAE2400694D5A /* scale */,
 				431586182983E65A00918B1B /* ton */,
-				431586192983E6BF00918B1B /* spell */,
+				4315861A2983E7FB00918B1B /* import */,
+				431586192983E6BF00918B1B /* PSE */,
 				4363442B29D31D3500F5D628 /* PS13 */,
 				43947CFF29D97299008EB20A /* PS14 */,
 				4315861B2983E80400918B1B /* Spiral */,
@@ -733,11 +740,13 @@
 				435081FE29D6D7F900465943 /* IntervalSimple.cpp in Sources */,
 				435081F729D6D78000465943 /* PSEnum.cpp in Sources */,
 				4350820529D6FDA100465943 /* TestMode.cpp in Sources */,
+				4353AE3829DDAD3E00FAF8A3 /* TestPSEnum.cpp in Sources */,
 				435081F129D6D76100465943 /* Pitch.cpp in Sources */,
 				435081F029D6D75D00465943 /* ModeName.cpp in Sources */,
 				435081FF29D6D80B00465943 /* Speller.cpp in Sources */,
 				435081F329D6D76800465943 /* Enharmonic.cpp in Sources */,
 				435081FB29D6D7DF00465943 /* TonIndex.cpp in Sources */,
+				4353AE3A29DDB2CC00FAF8A3 /* TestPSRawEnum.cpp in Sources */,
 				435081DF29D6C96800465943 /* unit_test.cpp in Sources */,
 				4350820129D6D85100465943 /* trace.cpp in Sources */,
 				435081EF29D6D75A00465943 /* Mode.cpp in Sources */,

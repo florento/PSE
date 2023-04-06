@@ -105,7 +105,7 @@ bool PSEnum::inside(size_t i) const
 
     if (open())
     {
-        WARN("PSEnum: inside {} called for open enumerator", i);
+        //WARN("PSEnum: inside {} called for open enumerator", i);
         return true;
     }
     else

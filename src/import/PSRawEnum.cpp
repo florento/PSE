@@ -239,7 +239,8 @@ void PSRawEnum::rename(size_t i,
 {
     assert(_notes);
     assert(i < _notes->size());
-    if (MidiNum::to_midi(n, a, o) == _notes->at(i))
+    int m = MidiNum::to_midi(n, a, o);
+    if (MidiNum::to_midi(n, a, o) != _notes->at(i))
     {
         ERROR("PSRawEnum: MIDI pitch {} cannot be named by {}{} {}",
               _notes->at(i), n, a, o);
