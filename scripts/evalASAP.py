@@ -97,8 +97,9 @@ def write_score(score, title='title', composer='Unknown'):
 def eval_asapscore(sid, file, stat, title='title', composer='composer',
                    tons=0, dflag=False, mflag=False):
     s = m21.converter.parse(file)
-    (ls, lld) = ps.eval_score(score=s, sid=sid, title=title, composer=composer,
-                              stat=stat, tons=tons, debug=dflag, mark=mflag)
+    (ls, lld) = ps.eval_score(score=s, stat=stat, 
+                              sid=sid, title=title, composer=composer,
+                              tons=tons, debug=dflag, mark=mflag)
     if mflag: # and not ps.empty_difflist(lld):
         write_score(s, title, composer)
 

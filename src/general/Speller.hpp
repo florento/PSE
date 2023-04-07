@@ -28,15 +28,27 @@
 
 namespace pse {
 
+
+/// names of pitch spelling algos implemented
+enum class Algo
+{
+    Undef,
+    PSE,
+    PS13,
+    PS14
+};
+
+
 /// abstract class wrapping main pitch-spelling functionalities 
 class Speller
 {
 public:
     
     /// main constructor. initially empty list of notes to spell.
+    /// @param algo name of the algorithm implemented in speller class.
     /// @param dflag debug mode.
     /// @see PSTable
-    Speller(bool dflag=false);
+    Speller(const Algo& algo=Algo::Undef, bool dflag=false);
 
     // Speller for the given input notes.
     // @param ln Python list of Music 21 Note objects (references).
@@ -50,6 +62,10 @@ public:
     /// destructor
     virtual ~Speller();
 
+    /// name of algorithm implemented.
+    /// @return Algo::Undef by default.
+    const Algo& algo() const { return _algo; }
+    
     /// set debug mode (log messages up to debug)
     void debug(bool flag);
 
@@ -86,6 +102,9 @@ public:
 
 protected: // data
         
+    /// name of the algorithm implemented.
+    const Algo _algo;
+    
     /// enumerator of the input notes
     PSRawEnum _enum;
 

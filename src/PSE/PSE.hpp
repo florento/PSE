@@ -41,6 +41,10 @@ public:
     /// destructor
     virtual ~PSE();
 
+    // name of algorithm implemented
+    // @return Algo::PSE for this class.
+    // virtual Algo algo() const override;
+       
     /// number of tonalities considered for pitch spelling.
     size_t nbTons() const;
 
@@ -66,7 +70,7 @@ public:
         
     /// compute the best pitch spelling for the input notes.
     /// @return whether computation was succesfull.
-    bool spell();
+    bool spell() override;
     
     /// force global tonality. it wont be estimated.
     /// @param i index of tonality set as global.
@@ -85,7 +89,7 @@ public:
     /// estimated local tonality for one candidate global tonality and one bar.
     const Ton& local(size_t i, size_t j) const; // { return _table.local(i, j); }
     
-    /// estimated global tonality
+    /// estimated global tonality.
     /// @warning respell() must have been called.
     const Ton& global() const;
     

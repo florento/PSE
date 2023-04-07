@@ -77,6 +77,18 @@
 		4353AE3A29DDB2CC00FAF8A3 /* TestPSRawEnum.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4353AE3929DDB2CC00FAF8A3 /* TestPSRawEnum.cpp */; };
 		43791C8E29D8392200DE8796 /* TestAccidental.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43791C8D29D8392200DE8796 /* TestAccidental.cpp */; };
 		43791C8F29D83EE400DE8796 /* TestScale.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 435081CE29D6C04600465943 /* TestScale.cpp */; };
+		438A581129E03FBB0073A32C /* PS13.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 432E7A5229D45FE2000E2B72 /* PS13.cpp */; };
+		438A581229E03FC10073A32C /* PSE.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 432E7A4C29D427FD000E2B72 /* PSE.cpp */; };
+		438A581329E049020073A32C /* PSTable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43ABA51F29242418002AC1D4 /* PSTable.cpp */; };
+		438A581429E049190073A32C /* PSVector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43ABA51529242417002AC1D4 /* PSVector.cpp */; };
+		438A581529E0491D0073A32C /* PSBag.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43ABA51329242417002AC1D4 /* PSBag.cpp */; };
+		438A581629E049260073A32C /* PSConfig2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 434B1DFA298ED394001CE41C /* PSConfig2.cpp */; };
+		438A581729E0492A0073A32C /* PSConfig1.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 434B1DF6298ECCF0001CE41C /* PSConfig1.cpp */; };
+		438A581829E0492D0073A32C /* PSConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43ABA51729242417002AC1D4 /* PSConfig.cpp */; };
+		438A581929E049300073A32C /* PSConfig0.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43ABA52129242418002AC1D4 /* PSConfig0.cpp */; };
+		438A581A29E049330073A32C /* PSCost.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43DD95472945E223006DC553 /* PSCost.cpp */; };
+		438A581E29E049430073A32C /* PSState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43ABA51E29242418002AC1D4 /* PSState.cpp */; };
+		438A581F29E0496D0073A32C /* PSPath.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43ABA51629242417002AC1D4 /* PSPath.cpp */; };
 		4397A5DE29A6CDB300C2CC9A /* PSOrder.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 4397A5DC29A6CDB300C2CC9A /* PSOrder.hpp */; };
 		43A2544029280D8900D559D2 /* trace.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43A2543E29280D8900D559D2 /* trace.cpp */; };
 		43A2544129280D8900D559D2 /* trace.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 43A2543F29280D8900D559D2 /* trace.hpp */; };
@@ -118,7 +130,6 @@
 		43DD95492945E223006DC553 /* PSCost.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43DD95472945E223006DC553 /* PSCost.cpp */; };
 		43DD954A2945E223006DC553 /* PSCost.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43DD95472945E223006DC553 /* PSCost.cpp */; };
 		43DD954B2945E223006DC553 /* PSCost.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 43DD95482945E223006DC553 /* PSCost.hpp */; };
-		43F566F129DED8460043546B /* exemple.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43A25446292B7D7E00D559D2 /* exemple.cpp */; };
 		43F9BE6429CC423E00B0A7F8 /* ModeName.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43F9BE6229CC423E00B0A7F8 /* ModeName.cpp */; };
 		43F9BE6529CC423E00B0A7F8 /* ModeName.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43F9BE6229CC423E00B0A7F8 /* ModeName.cpp */; };
 		43F9BE6629CC423E00B0A7F8 /* ModeName.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 43F9BE6329CC423E00B0A7F8 /* ModeName.hpp */; };
@@ -737,10 +748,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				438A581229E03FC10073A32C /* PSE.cpp in Sources */,
 				4350820329D6E3AB00465943 /* TestNoteName.cpp in Sources */,
 				435081EE29D6D75600465943 /* Scale.cpp in Sources */,
 				435081EB29D6D74800465943 /* Ton.cpp in Sources */,
 				435081FC29D6D7E300465943 /* Weber.cpp in Sources */,
+				438A581629E049260073A32C /* PSConfig2.cpp in Sources */,
 				435081F229D6D76500465943 /* PWO.cpp in Sources */,
 				435081F429D6D76C00465943 /* MidiNum.cpp in Sources */,
 				43791C8F29D83EE400DE8796 /* TestScale.cpp in Sources */,
@@ -750,23 +763,33 @@
 				4350820829D7032B00465943 /* TestMidiNum.cpp in Sources */,
 				435081FE29D6D7F900465943 /* IntervalSimple.cpp in Sources */,
 				435081F729D6D78000465943 /* PSEnum.cpp in Sources */,
+				438A581A29E049330073A32C /* PSCost.cpp in Sources */,
 				4350820529D6FDA100465943 /* TestMode.cpp in Sources */,
+				438A581829E0492D0073A32C /* PSConfig.cpp in Sources */,
 				4353AE3829DDAD3E00FAF8A3 /* TestPSEnum.cpp in Sources */,
 				435081F129D6D76100465943 /* Pitch.cpp in Sources */,
 				435081F029D6D75D00465943 /* ModeName.cpp in Sources */,
+				438A581E29E049430073A32C /* PSState.cpp in Sources */,
 				435081FF29D6D80B00465943 /* Speller.cpp in Sources */,
+				438A581729E0492A0073A32C /* PSConfig1.cpp in Sources */,
+				438A581329E049020073A32C /* PSTable.cpp in Sources */,
 				435081F329D6D76800465943 /* Enharmonic.cpp in Sources */,
 				435081FB29D6D7DF00465943 /* TonIndex.cpp in Sources */,
+				438A581129E03FBB0073A32C /* PS13.cpp in Sources */,
 				4353AE3A29DDB2CC00FAF8A3 /* TestPSRawEnum.cpp in Sources */,
 				435081DF29D6C96800465943 /* unit_test.cpp in Sources */,
 				4350820129D6D85100465943 /* trace.cpp in Sources */,
 				435081EF29D6D75A00465943 /* Mode.cpp in Sources */,
 				435081EC29D6D74E00465943 /* KeyFifth.cpp in Sources */,
 				435081FA29D6D78900465943 /* PSRawEnum.cpp in Sources */,
+				438A581929E049300073A32C /* PSConfig0.cpp in Sources */,
 				435081F629D6D77200465943 /* NoteName.cpp in Sources */,
 				435081F529D6D76F00465943 /* Accidental.cpp in Sources */,
+				438A581429E049190073A32C /* PSVector.cpp in Sources */,
 				435081F829D6D78200465943 /* PSChord.cpp in Sources */,
 				4331700029DD934E00BA534D /* TestEnharmonic.cpp in Sources */,
+				438A581F29E0496D0073A32C /* PSPath.cpp in Sources */,
+				438A581529E0491D0073A32C /* PSBag.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -844,7 +867,6 @@
 				43C2BA11299946150084AB3B /* Interval.cpp in Sources */,
 				43FBEAD12930CEDD008FC486 /* PSBag.cpp in Sources */,
 				43FBEAD22930CEDD008FC486 /* PSVector.cpp in Sources */,
-				43F566F129DED8460043546B /* exemple.cpp in Sources */,
 				43FBEAD32930CEDD008FC486 /* PSTable.cpp in Sources */,
 				43FBEAD42930CEDD008FC486 /* PSPath.cpp in Sources */,
 				4315863B2983F15400918B1B /* PSEnum.cpp in Sources */,
@@ -1061,6 +1083,7 @@
 					"$(inherited)",
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
+				HEADER_SEARCH_PATHS = extern/spdlog/include;
 				LIBRARY_SEARCH_PATHS = (
 					/usr/local/lib,
 					"$(PROJECT_DIR)/lib",
@@ -1107,6 +1130,7 @@
 					"$(inherited)",
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
+				HEADER_SEARCH_PATHS = extern/spdlog/include;
 				LIBRARY_SEARCH_PATHS = (
 					/usr/local/lib,
 					"$(PROJECT_DIR)/lib",
@@ -1146,10 +1170,7 @@
 					/usr/local/lib,
 					"$(PROJECT_DIR)/lib",
 				);
-				OTHER_LDFLAGS = (
-					"-undefined",
-					dynamic_lookup,
-				);
+				OTHER_LDFLAGS = "";
 				PRIVATE_HEADERS_FOLDER_PATH = /usr/local/include;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PUBLIC_HEADERS_FOLDER_PATH = /usr/local/include;
@@ -1182,10 +1203,7 @@
 					/usr/local/lib,
 					"$(PROJECT_DIR)/lib",
 				);
-				OTHER_LDFLAGS = (
-					"-undefined",
-					dynamic_lookup,
-				);
+				OTHER_LDFLAGS = "";
 				PRIVATE_HEADERS_FOLDER_PATH = /usr/local/include;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PUBLIC_HEADERS_FOLDER_PATH = /usr/local/include;

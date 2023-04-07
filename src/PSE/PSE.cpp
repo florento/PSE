@@ -12,7 +12,7 @@ namespace pse {
 
 
 PSE::PSE(size_t nbTons, bool dflag):
-Speller(dflag),
+Speller(Algo::PSE, dflag),
 _table(_enum, nbTons, dflag)
 //_global(0, ModeName::Maj), // C maj default
 {
@@ -36,6 +36,12 @@ PSE::~PSE()
 {
     TRACE("delete PSE");
 }
+
+
+//Algo PSE::algo() const
+//{
+//    return Algo::PSE;
+//}
 
 
 size_t PSE::nbTons() const

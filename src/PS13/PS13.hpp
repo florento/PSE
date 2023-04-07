@@ -38,23 +38,37 @@ public:
     /// @param kpre parameter of PS13
     /// @param kpost parameter of PS13
     /// @see http://www.titanmusic.com/papers/public/ps-ircam.pdf section 10
-    PS13(bool dflag=true, size_t kpre = 33, size_t kpost = 23);
+    PS13(size_t kpre = 33, size_t kpost = 23, bool dflag=true);
     
     /// destructor
     virtual ~PS13();
     
+    // name of algorithm implemented
+    // @return Algo::PS13 for this class.
+    // virtual Algo algo() const override;
+    
+    /// set the Kpre parameter value.
+    void setKpre(size_t kpre) { _Kpre = kpre; }
+    
+    /// set the Kpost parameter value.
+    void setKpost(size_t kpost) { _Kpost = kpost; }
+
     /// compute the best pitch spelling for the input notes.
     /// @return whether computation was succesfull.
-    bool spell();
+    bool spell() override;
     
+    /// estimated global tonality.
+    /// @warning it is an undef Ton for PS13.
+    const Ton global() const { return Ton(); }
+
 private: // data
         
     /// Chromatic harmonic scale for each pitch class.
     std::vector<Scale> _scales;
     
-    const size_t _Kpre;
+    size_t _Kpre;
 
-    const size_t _Kpost;
+    size_t _Kpost;
 
     /// count the number of occurrences of the pitch-class c in [n-Kpre, n+Kpost)
     size_t count(int c, size_t n) const;

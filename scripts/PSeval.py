@@ -15,7 +15,6 @@ import pandas as pd
 import music21 as m21
 import pse
 
-
 # import module with full path
 # see https://www.geeksforgeeks.org/how-to-import-a-python-module-given-the-full-path/
 
@@ -658,7 +657,11 @@ def spellable(part):
     #    return False        
     return True
               
-def eval_part(part, stat, nbtons=0, debug=False, mark=False):
+def eval_part(part, stat, 
+              algo=pse.Algo_PSE,
+              nbtons=0,        # for PSE (default)
+              kpre=33, kpost=23, # for PS13 (window size)
+              debug=False, mark=False):
     """evaluate spelling for one part in a score and mark errors in red"""
     if stat == None:
         stat=Stats()
@@ -669,30 +672,46 @@ def eval_part(part, stat, nbtons=0, debug=False, mark=False):
         print('ERROR',  count_notes(part), len(ln))
         return
     print(len(ln), 'notes,', count_measures(part), 'bars,', end=' ')
-    sp = pse.Speller()
-    sp.debug(debug)
-    add_tons(nbtons, sp)
+    # create and initialize the speller (default is PSE)
+    if algo == pse.Algo_PS13:
+        sp = pse.PS13()
+        sp.set_Kpre(kpre)
+        sp.set_Kpost(kpost)
+    else:
+        sp = pse.PSE()
+        add_tons(nbtons, sp)
+    sp.debug(debug)           
+    # feed speller with input notes
     for (n, b, s) in ln:   # note, bar number, simultaneous flag
         sp.add(midi=n.pitch.midi, bar=b, simultaneous=s)
+    # spell
     stat.start_timer()
     sp.spell()
     stat.stop_timer()
+    # extract results
     gt = sp.global_ton()
-    if compare_key(k0, gt):
-        print('global ton: OK:', '(', m21_key(gt), '),', end=' ')
-    else:
-        print('global ton: NO:', '(', m21_key(gt), 'was', k0, '),', end=' ')
-        if mark:
-            anote_global_part(part, sp) 
+    if (sp.algo() == pse.Algo_PSE or sp.algo() == pse.Algo_PS14):
+        if compare_key(k0, gt):
+            print('global ton: OK:', '(', m21_key(gt), '),', end=' ')
+        else:
+            print('global ton: NO:', '(', m21_key(gt), 'was', k0, '),', end=' ')
+            if mark:
+                anote_global_part(part, sp) 
     ld = diff(ln, sp)
     print('diff:', len(ld), end='\n', flush=True)
+    # annotations
     if mark:
         anote_diff(ln, ld)
-        anote_local_part(part, sp)            
+        if (sp.algo() == pse.Algo_PSE or sp.algo() == pse.Algo_PS14):
+            anote_local_part(part, sp)            
     return (k0, sp.global_ton(), len(ln), ld)
 
-def eval_score(score, sid, title, composer,
-               stat, tons=0, debug=False, mark=False):
+def eval_score(score, stat, 
+               sid, title, composer,  
+               algo=pse.Algo_PSE,
+               nbtons=0,          # for PSE (default)
+               kpre=33, kpost=23, # for PS13 (window size)
+               debug=False, mark=False):
     """evaluate spelling for all parts in a score"""
     if stat == None:
         stat = Stats()
@@ -711,7 +730,9 @@ def eval_score(score, sid, title, composer,
         if (nbparts > 1):
             print('part', i+1, '/', len(lp), end=' ', flush=True)
         if (spellable(part)):
-            (k_gt, ton_est, nn, ld) = eval_part(part, stat, tons, debug, mark)
+            (k_gt, ton_est, nn, ld) = eval_part(part, stat, 
+                                                algo, nbtons, kpre, kpost, 
+                                                debug, mark)
             stat.record_part(i, k_gt, ton_est, nn, len(ld))
             ls.append(ton_est)
             lld.append(ld)

@@ -8,6 +8,7 @@
 #include <iostream>
 
 #include "PSE.hpp"
+#include "PS13.hpp"
 #include "Weber.hpp"
 
 
@@ -29,7 +30,7 @@ void Waldstein(pse::Speller& sp);
 
 int main(int argc, const char* argv[])
 {
-    std::cout << "Debug PSE\n";
+    std::cout << "Debug PS" << std::endl;
     
     spdlog_setVerbosity(5);
     spdlog_setPattern();
@@ -39,8 +40,10 @@ int main(int argc, const char* argv[])
     // return 0;
     
     pse::PSE sp(26, true);
-       
-    LG349(sp);
+    //pse::PS13 sp;
+
+    LG128(sp);
+    //LG349(sp);
     // Waldstein(sp);
     
     std::cout << sp.size() << " notes" << std::endl;

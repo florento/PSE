@@ -13,8 +13,8 @@
 namespace pse {
 
 
-PS13::PS13(bool dflag, size_t kpre, size_t kpost):
-Speller(dflag),
+PS13::PS13(size_t kpre, size_t kpost, bool dflag):
+Speller(Algo::PS13, dflag),
 _scales(),       // empty vector
 _Kpre(kpre),
 _Kpost(kpost)
@@ -25,6 +25,12 @@ _Kpost(kpost)
 
 PS13::~PS13()
 { }
+
+
+//Algo PS13::algo() const
+//{
+//    return Algo::PS13;
+//}
 
 
 void PS13::init_scales()
@@ -57,7 +63,7 @@ bool PS13::spell()
     for (size_t n = _enum.first(); n < _enum.stop(); ++n)
     {
         // pitch class of n
-        unsigned int nc = _enum.midipitch(n)%12;
+        // unsigned int nc = _enum.midipitch(n)%12;
                 
         // counter for each candidate name for note n
         std::array<size_t, 7> nname;

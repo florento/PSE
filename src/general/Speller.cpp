@@ -11,7 +11,8 @@
 namespace pse {
 
 
-Speller::Speller(bool dflag):
+Speller::Speller(const Algo& algo, bool dflag):
+_algo(algo),
 _enum(0, 0),
 _debug(dflag)
 {
@@ -44,6 +45,12 @@ Speller::~Speller()
 //_enum(notes, barnum)
 //{
 //    assert(notes.size() == barnum.size());
+//}
+
+
+//Algo Speller::algo() const
+//{
+//    return Algo::Undef;
 //}
 
 

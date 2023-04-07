@@ -129,7 +129,9 @@ skip = [441, 470, 472, 473, 475, 478]
 # raise MusicXMLExportException('Cannot convert inexpressible durations to MusicXML.')
 # MusicXMLExportException: In part (Voice), measure (11): Cannot convert inexpressible durations to MusicXML.
 
-def eval_LG(nbtons=26, output_dir='', filename='', debug=True, mark=True):
+def eval_LG(psalgo=ps.pse.PSE, nbtons=26, kpre=33, kpost=23,
+            output_dir='', filename='', 
+            debug=True, mark=True):
     timestamp = datetime.today().strftime('%Y%m%d-%H%M')
     # default output dir name
     if output_dir == '':
@@ -158,8 +160,11 @@ def eval_LG(nbtons=26, output_dir='', filename='', debug=True, mark=True):
         print('\n')
         print(t)
         s = m21.converter.parse(file.as_posix())
-        (ls, lld) = ps.eval_score(score=s, sid=i, title=t, composer='', 
-                                  stat=stat, tons=nbtons, 
+        (ls, lld) = ps.eval_score(score=s, stat=stat, 
+                                  sid=i, title=t, composer='', 
+                                  algo=psalgo,
+                                  nbtons=nbtons,            # for PSE 
+                                  kpre=kpre, kpost=kpost, # for PS13                                  
                                   debug=debug, mark=mark)
         if mark and not ps.empty_difflist(lld):
             write_score(s, output_path, t)
@@ -173,7 +178,8 @@ def eval_LG(nbtons=26, output_dir='', filename='', debug=True, mark=True):
     df.to_csv(output_path/(filename+'.csv') , header=True, index=False)
     stat.write_datasum(output_path/(filename+'_sum.csv'))
       
-def eval_LGitem(i, nbtons=26, dflag=True, mflag=True):
+def eval_LGitem(i, algo=ps.pse.PSE, nbtons=26, kpre=33, kpost=23, 
+                dflag=True, mflag=True):
     stat = ps.Stats()   
     dataset = LG_map()
     file = dataset[i]
@@ -186,9 +192,12 @@ def eval_LGitem(i, nbtons=26, dflag=True, mflag=True):
     # ground truth ks, estimated ks, nnb of nontes and list of diff notes
     #(k_gt, gt_est, nn, ld) = ps.eval_part(part=part, stat=stat, nbtons=tons, 
     #                                      debug=dflag, mark=mflag)
-    (ls, lld) = ps.eval_score(score=s, sid=i, title=t, composer='', 
-                              stat=stat, tons=nbtons, 
-                              debug=dflag, mark=mflag)  
+    (ls, lld) = ps.eval_score(score=s, stat=stat, 
+                              sid=i, title=t, composer='', 
+                              algo=ps.PSE,
+                              tons=nbtons,            # for PSE 
+                              kpre=kpre, kpost=kpost, # for PS13                                  
+                              debug=dflag, mark=mflag)
     stat.show()   
     assert(len(lld) == 1) # always 1 unique part in LG dataset
     if mflag and len(lld[0]) > 0:
