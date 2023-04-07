@@ -205,8 +205,21 @@ TEST(MidiNum, pitchClass)
     // EXPECT_EQ(pse::MidiNum::pitchClass(pse::NoteName::Undef), 12);
 }
 
-// test that to_midi is the inverse of the above tested
 TEST(MidiNum, to_midi)
+{
+    EXPECT_EQ(pse::MidiNum::to_midi(pse::NoteName::E, pse::Accid::Natural, 4), 64);
+    EXPECT_EQ(pse::MidiNum::to_midi(pse::NoteName::E, pse::Accid::Natural, 5), 76);
+    EXPECT_EQ(pse::MidiNum::to_midi(pse::NoteName::D, pse::Accid::Natural, 5), 74);
+    EXPECT_EQ(pse::MidiNum::to_midi(pse::NoteName::D, pse::Accid::Sharp, 5), 75);
+    EXPECT_EQ(pse::MidiNum::to_midi(pse::NoteName::F, pse::Accid::Sharp, 5), 78);
+    EXPECT_EQ(pse::MidiNum::to_midi(pse::NoteName::G, pse::Accid::Sharp, 5), 80);
+    EXPECT_EQ(pse::MidiNum::to_midi(pse::NoteName::A, pse::Accid::Natural, 5), 81);
+    EXPECT_EQ(pse::MidiNum::to_midi(pse::NoteName::C, pse::Accid::Sharp, 5), 73);
+    EXPECT_EQ(pse::MidiNum::to_midi(pse::NoteName::B, pse::Accid::Natural, 4), 71);
+}
+
+// test that to_midi is the inverse of the above tested
+TEST(MidiNum, to_midi_inv)
 {
     for (int m = 0; m <= 128; ++m)
     {
