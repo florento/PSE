@@ -10,6 +10,40 @@
 
 namespace pse {
 
+std::string tostring(const Algo& a)
+{
+    switch (a)
+    {
+        case Algo::Undef:
+            return "undef";
+
+        case Algo::PSE:
+            return "PSE";
+
+        case Algo::PS13:
+            return "PS13";
+
+        case Algo::PS14:
+            return "PS14";
+
+        case Algo::RewritePassing:
+            return "RewritePassing";
+
+        default:
+        {
+            ERROR("unknown Algo Name");
+            return "ERROR";
+        }
+    }
+}
+
+
+std::ostream& operator<<(std::ostream& o, const Algo& a)
+{
+    o << tostring(a);
+    return o;
+}
+
 
 Speller::Speller(const Algo& algo, bool dflag):
 _algo(algo),
@@ -22,9 +56,18 @@ _debug(dflag)
 }
 
 
+Speller::Speller(const Speller& rhs):
+_algo(rhs._algo),
+_enum(rhs._enum),
+_debug(rhs._debug)
+{
+    TRACE("Speller copy");
+}
+
+
 Speller::~Speller()
 {
-    TRACE("delete Speller");
+    TRACE("delete Speller of type {}", _algo);
 }
 
 
@@ -77,6 +120,35 @@ void Speller::add(int note, int bar, bool simult)
     _enum.add(note, bar, simult);
 }
 
+
+enum NoteName Speller::name(size_t i) const
+{
+    return _enum.name(i);
+}
+
+
+enum Accid Speller::accidental(size_t i) const
+{
+    return _enum.accidental(i);
+}
+
+
+int Speller::octave(size_t i) const
+{
+    return _enum.octave(i);
+}
+
+
+bool Speller::printed(size_t i) const
+{
+    return _enum.printed(i);
+}
+
+bool Speller::rewritePassing()
+{
+    TRACE("Rewriting passing notes");
+    return _enum.rewritePassing();
+}
 
 
 

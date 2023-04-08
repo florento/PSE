@@ -35,8 +35,14 @@ enum class Algo
     Undef,
     PSE,
     PS13,
-    PS14
+    PS14,
+    RewritePassing
 };
+
+/// string of algo name.
+std::string tostring(const Algo& m);
+
+std::ostream& operator<<(std::ostream& o, const Algo& m);
 
 
 /// abstract class wrapping main pitch-spelling functionalities 
@@ -49,6 +55,10 @@ public:
     /// @param dflag debug mode.
     /// @see PSTable
     Speller(const Algo& algo=Algo::Undef, bool dflag=false);
+
+    /// copy constructor.
+    /// makes a deep copy of the note enumerator.
+    Speller(const Speller& rhs);
 
     // Speller for the given input notes.
     // @param ln Python list of Music 21 Note objects (references).
@@ -83,22 +93,37 @@ public:
     /// @return whether computation was succesfull.
     virtual bool spell() = 0;
     
+    /// rewrite the passing notes using the 6 rewrite rules proposed by
+    /// D. Meredith in the PS13 Pitch-Spelling algorithm, step 2.
+    /// @return whether at least one rewriting was done.
+    /// @see PSEnum::rewritePassing()
+    bool rewritePassing();
+    
     /// estimated name for the note of given index, in 0..6 (0 is 'C', 6 is 'B').
     /// @param i index of note in the list of input notes.
-    inline enum NoteName name(size_t i) const { return _enum.name(i); }
+    enum NoteName name(size_t i) const;
 
     /// estimated name for the note of given index, in -2..2.
     /// @param i index of note in the list of input notes.
-    inline enum Accid accidental(size_t i) const {  return _enum.accidental(i); }
+    enum Accid accidental(size_t i) const;
 
     /// estimated octave for the note of given index in the best path, in -2..9.
     /// @param i index of note in the list of input notes.
-    inline int octave(size_t i) const {  return _enum.octave(i); }
+    int octave(size_t i) const;
 
     /// estimated print flag for the note of given index in the best path.
     /// This flags says wether the accidental of the note must be printed or not.
     /// @param i index of note in the list of input notes.
-    inline bool printed(size_t i) const {  return _enum.printed(i); }
+    bool printed(size_t i) const;
+    
+    /// estimated global tonality.
+    /// @warning spell() must have been called.
+     virtual const Ton& global() const = 0;
+
+    // estimated local tonality at note of given index.
+    // @param i index of note in the list of input notes.
+    // @warning spell() must have been called.
+    // virtual const Ton& local(size_t i) const = 0;
 
 protected: // data
         
