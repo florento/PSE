@@ -222,8 +222,8 @@
             filePath = "src/import/PSRawEnum.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "305"
-            endingLineNumber = "305"
+            startingLineNumber = "321"
+            endingLineNumber = "321"
             landmarkName = "PSRawEnum::rename(i, n, altprint)"
             landmarkType = "7">
             <Locations>
@@ -300,8 +300,8 @@
             filePath = "src/import/PSRawEnum.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "264"
-            endingLineNumber = "264"
+            startingLineNumber = "280"
+            endingLineNumber = "280"
             landmarkName = "PSRawEnum::rename(i, n, a, o, altprint)"
             landmarkType = "7">
             <Locations>
@@ -490,8 +490,8 @@
             filePath = "src/PS13/PS13.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "92"
-            endingLineNumber = "92"
+            startingLineNumber = "93"
+            endingLineNumber = "93"
             landmarkName = "PS13::spell()"
             landmarkType = "7">
             <Locations>

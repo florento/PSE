@@ -102,7 +102,7 @@ public:
 
     /// estimated global tonality.
     /// @warning spell() must have been called.
-    const Ton& global() const;
+    virtual const Ton& global() const override;
 
     /// @return distance in the array of fifths between
     /// from estimated global tonality and

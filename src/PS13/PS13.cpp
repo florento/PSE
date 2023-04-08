@@ -15,7 +15,8 @@ PS13::PS13(size_t kpre, size_t kpost, bool dflag):
 Speller(Algo::PS13, dflag),
 _scales(),       // empty vector
 _Kpre(kpre),
-_Kpost(kpost)
+_Kpost(kpost),
+_global()        // Undef TOn
 {
     init_scales();
 }
@@ -136,10 +137,10 @@ size_t PS13::count(int c, size_t n) const
 }
 
 
-//const Ton& PS13::global() const
-//{
-//    return _global; // Undef
-//}
+const Ton& PS13::global() const
+{
+    return _global; // Undef
+}
 
 
 //const Ton& PS13::local(size_t i) const

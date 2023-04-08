@@ -102,6 +102,7 @@ PYBIND11_MODULE(pse, m)
              "add a tonality for pitch spelling", py::arg("ks"), py::arg("mode"))
         .def("set_global", &pse::PSE::setGlobal, "force global tonality")
         .def("spell", &pse::PSE::spell, "spell notes")
+        .def("rewrite_passing", &pse::PSE::rewritePassing, "rewrite passing notes")
         .def("global_ton", &pse::PSE::global, "get estimated global tonality")
         .def("iglobal_ton", &pse::PSE::iglobal,
              "get index of estimated global tonality")
@@ -134,7 +135,7 @@ PYBIND11_MODULE(pse, m)
         .def("add", &pse::PS13::add, "add a new note to spell",
              py::arg("midi"), py::arg("bar"), py::arg("simultaneous"))
         .def("spell", &pse::PS13::spell, "spell notes")
-        //.def("global_ton", &pse::PS13::global, "estimated global tonality (undef)")
+        .def("rewrite_passing", &pse::PS13::rewritePassing, "rewrite passing notes")
         .def("name",  &pse::PS13::name, "estimated name of note",
              py::arg("i"))
         .def("accidental", &pse::PS13::accidental,
@@ -142,6 +143,6 @@ PYBIND11_MODULE(pse, m)
         .def("octave", &pse::PS13::octave, "estimated octave of note",
              py::arg("i"))
         .def("printed", &pse::PS13::printed, "estimated print flag of note",
-             py::arg("i"));
-
+             py::arg("i"))
+        .def("global_ton", &pse::PS13::global, "estimated global tonality (undef)");
 }

@@ -58,9 +58,9 @@ public:
     /// @return whether computation was succesfull.
     bool spell() override;
     
-    // estimated global tonality.
-    // @warning it is an undef Ton for PS13.
-    // virtual const Ton& global() const override; //  { return Ton(); }
+    /// estimated global tonality.
+    /// @warning it is always an undef Ton for PS13.
+    virtual const Ton& global() const override; //  { return Ton(); }
     
     // estimated local tonality at note of given index.
     // @param i index of note in the list of input notes.
@@ -78,9 +78,9 @@ private: // data
     /// Kpost parameter of PS13 (tonal window postfix).
     size_t _Kpost;
     
-    // estimated global tonality.
-    // @warning undef for PS13.
-    // const Ton _global;
+    /// estimated global tonality.
+    /// @warning undef for PS13.
+     const Ton _global;
     
     // one estimated local tonality for each note.
     // std::vector<Ton> _locals;

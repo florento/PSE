@@ -7,9 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		4302F7D329E1A9810002AD05 /* RewritePassing.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4302F7D129E1A9810002AD05 /* RewritePassing.cpp */; };
-		4302F7D429E1A9810002AD05 /* RewritePassing.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4302F7D129E1A9810002AD05 /* RewritePassing.cpp */; };
-		4302F7D529E1A9810002AD05 /* RewritePassing.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4302F7D129E1A9810002AD05 /* RewritePassing.cpp */; };
 		4302F7D629E1A9810002AD05 /* RewritePassing.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 4302F7D229E1A9810002AD05 /* RewritePassing.hpp */; };
 		430CDFF12924E6D800A84650 /* KeyFifth.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 430CDFEF2924E6D700A84650 /* KeyFifth.cpp */; };
 		430CDFF22924E6D800A84650 /* KeyFifth.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 430CDFF02924E6D700A84650 /* KeyFifth.hpp */; };
@@ -766,7 +763,6 @@
 				43791C8F29D83EE400DE8796 /* TestScale.cpp in Sources */,
 				43791C8E29D8392200DE8796 /* TestAccidental.cpp in Sources */,
 				435081ED29D6D75100465943 /* Fifths.cpp in Sources */,
-				4302F7D529E1A9810002AD05 /* RewritePassing.cpp in Sources */,
 				435081FD29D6D7F600465943 /* Interval.cpp in Sources */,
 				4350820829D7032B00465943 /* TestMidiNum.cpp in Sources */,
 				435081FE29D6D7F900465943 /* IntervalSimple.cpp in Sources */,
@@ -809,7 +805,6 @@
 				43ABA50F292423E8002AC1D4 /* Accidental.cpp in Sources */,
 				43F9BE6429CC423E00B0A7F8 /* ModeName.cpp in Sources */,
 				4342FD1229267895004E914F /* MidiNum.cpp in Sources */,
-				4302F7D329E1A9810002AD05 /* RewritePassing.cpp in Sources */,
 				43ABA511292423E8002AC1D4 /* Enharmonic.cpp in Sources */,
 				43ABA50C292423E8002AC1D4 /* Fifths.cpp in Sources */,
 				43C2BA192999529E0084AB3B /* PWO.cpp in Sources */,
@@ -872,7 +867,6 @@
 				43C2BA1729994F630084AB3B /* Pitch.cpp in Sources */,
 				43FBEACF2930CEDD008FC486 /* PSConfig0.cpp in Sources */,
 				43FBEAD02930CEDD008FC486 /* PSConfig.cpp in Sources */,
-				4302F7D429E1A9810002AD05 /* RewritePassing.cpp in Sources */,
 				43C2BA11299946150084AB3B /* Interval.cpp in Sources */,
 				43FBEAD12930CEDD008FC486 /* PSBag.cpp in Sources */,
 				43FBEAD22930CEDD008FC486 /* PSVector.cpp in Sources */,
