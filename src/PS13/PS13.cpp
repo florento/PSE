@@ -8,8 +8,6 @@
 #include "PS13.hpp"
 
 
-
-
 namespace pse {
 
 
@@ -54,6 +52,7 @@ void PS13::init_scales()
         // mode, pitch-class, name of tonic
         _scales.emplace_back(m, c, names[c]);
     }
+    // associate a Ton to each scale ?
 }
 
 
@@ -63,19 +62,24 @@ bool PS13::spell()
     for (size_t n = _enum.first(); n < _enum.stop(); ++n)
     {
         // pitch class of n
-        // unsigned int nc = _enum.midipitch(n)%12;
-                
+        int nm = _enum.midipitch(n);
+        assert(0 <= nm);
+        assert(nm <= 128);
+        unsigned int nc = nm % 12;
+
         // counter for each candidate name for note n
         std::array<size_t, 7> nname;
         nname.fill(0);
-        int maxi = 0; // name in 0..6 with maximal count
+        int maxi = -1; // name in 0..6 with maximal count
+        enum NoteName maxName = NoteName::Undef;
         
         // for all pitch class
         for (int p = 0; p < 11; ++p)
         {
+            
             // degree of n in the chromatic harmonic scale of p
-            size_t deg = (p <= n)?(n - p):(12-p+n);
-            assert(0 <= deg); // debug
+            size_t deg = (p <= nc)?(nc - p):(12-p+nc);
+            assert(0 <= deg); // debugÅ
             assert(deg < 12);
             // name of n in chromatic harmonic scale of p
             const enum NoteName nn = _scales[p].name(deg);
@@ -83,18 +87,20 @@ bool PS13::spell()
             int nni = toint(nn);
             assert(0 <= nni);
             assert(nni < 7);
+            //size_t cpn = count(p, n);
             nname[nni] += count(p, n);
-            if (nname[nni] > nname[maxi])
+            if (maxi == -1 || nname[nni] > nname[maxi])
+            {
                 maxi = nni;
+                maxName = nn;
+            }
         }
         // set name of n to maxi
         assert(0 <= maxi);
         assert(maxi < 7);
-        _enum.rename(n, NoteName(maxi));
+        assert(maxName != NoteName::Undef);
+        _enum.rename(n, maxName);
     }
-
-    // step 2: rewrite passing notes
-    _enum.rewritePassing();
     
     return true;
 }
@@ -128,6 +134,18 @@ size_t PS13::count(int c, size_t n) const
 //
 //    return cpt;
 }
+
+
+//const Ton& PS13::global() const
+//{
+//    return _global; // Undef
+//}
+
+
+//const Ton& PS13::local(size_t i) const
+//{
+//    return _global; // Undef
+//}
 
 
 } // namespace pse

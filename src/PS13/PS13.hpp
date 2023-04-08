@@ -14,6 +14,7 @@
 #include <assert.h>
 #include <memory>
 #include <array>
+#include <vector>
 
 #include "trace.hpp"
 #include "NoteName.hpp"
@@ -57,18 +58,32 @@ public:
     /// @return whether computation was succesfull.
     bool spell() override;
     
-    /// estimated global tonality.
-    /// @warning it is an undef Ton for PS13.
-    const Ton global() const { return Ton(); }
+    // estimated global tonality.
+    // @warning it is an undef Ton for PS13.
+    // virtual const Ton& global() const override; //  { return Ton(); }
+    
+    // estimated local tonality at note of given index.
+    // @param i index of note in the list of input notes.
+    // @warning spell() must have been called.
+    // virtual const Ton& local(size_t i) const override;
 
 private: // data
         
     /// Chromatic harmonic scale for each pitch class.
     std::vector<Scale> _scales;
     
+    /// Kpre parameter of PS13 (tonal window prefix).
     size_t _Kpre;
 
+    /// Kpost parameter of PS13 (tonal window postfix).
     size_t _Kpost;
+    
+    // estimated global tonality.
+    // @warning undef for PS13.
+    // const Ton _global;
+    
+    // one estimated local tonality for each note.
+    // std::vector<Ton> _locals;
 
     /// count the number of occurrences of the pitch-class c in [n-Kpre, n+Kpost)
     size_t count(int c, size_t n) const;

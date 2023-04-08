@@ -44,7 +44,14 @@ public:
     // name of algorithm implemented
     // @return Algo::PSE for this class.
     // virtual Algo algo() const override;
-       
+    
+    /// compute the best pitch spelling for the input notes.
+    /// @return whether computation was succesfull.
+    bool spell() override;
+
+    
+    // Index of tonalities
+    
     /// number of tonalities considered for pitch spelling.
     size_t nbTons() const;
 
@@ -67,10 +74,9 @@ public:
 
     /// add a tonality for pitch spelling.
     void addTon(const Ton& ton);
-        
-    /// compute the best pitch spelling for the input notes.
-    /// @return whether computation was succesfull.
-    bool spell() override;
+    
+
+    // Estimation of tonalities
     
     /// force global tonality. it wont be estimated.
     /// @param i index of tonality set as global.
@@ -84,22 +90,35 @@ public:
     const Ton& globalCand(size_t i) const;
 
     /// index of a candidate global tonality for this table, in 0..index.size().
+    /// @param i candidate number, must be in 0..globalCands().
+    /// @return the index of the global tonality candidate i,
+    /// in the index of tons, in 0..index.size().
     size_t iglobalCand(size_t i) const;
- 
-    /// estimated local tonality for one candidate global tonality and one bar.
-    const Ton& local(size_t i, size_t j) const; // { return _table.local(i, j); }
-    
-    /// estimated global tonality.
-    /// @warning respell() must have been called.
-    const Ton& global() const;
     
     /// index of the estimated global tonality.
+    /// @return the index of the estimated global tonality in the index of tons,
+    /// in 0..index.size().
     size_t iglobal() const;
-    
+
+    /// estimated global tonality.
+    /// @warning spell() must have been called.
+    const Ton& global() const;
+
     /// @return distance in the array of fifths between
     /// from estimated global tonality and
     /// a signature with no accidentals.
     inline int fifths() const { return global().fifths(); }
+ 
+    /// estimated local tonality for one bar.
+    /// @param j bar number.
+    /// @warning spell() must have been called.
+    const Ton& localBar(size_t j) const;
+
+    /// estimated local tonality at note of given index.
+    /// @param i index of note in the list of input notes.
+    /// @warning spell() must have been called.
+    const Ton& localNote(size_t i) const;
+    
 
 private: // data
         
@@ -108,8 +127,6 @@ private: // data
     
     // evaluated global tonality
     // Ton _global;
-    
-private:
         
     // default array of tonalities considered for Pitch Spelling.
     // @todo mv to TonIndex
@@ -124,6 +141,11 @@ private:
 
     // table of joker state vectors associated to tonalities in TON.
     // static std::array<const PSState, NBTONS> AJOKER;
+    
+    /// estimated local tonality for one candidate global tonality and one bar.
+    /// @param i index of candidate global tonality.
+    /// @param j bar number.
+    const Ton& localCandBar(size_t i, size_t j) const;
 
 };
 

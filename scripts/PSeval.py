@@ -317,8 +317,10 @@ def compare_accid(n, pse_accid, print_flag):
 
 # k can be a Key or a KeySignature
 def compare_key(k, ton):
-    """compare a music21 key PSE ton"""    
-    if isinstance(k, m21.key.Key):
+    """compare a music21 key PSE ton"""  
+    if ton.undef():
+        return False
+    elif isinstance(k, m21.key.Key):
         return (k.sharps == ton.fifths() and k.mode == m21_mode(ton.mode()))
     elif isinstance(k, m21.key.KeySignature):
         return (k.sharps == ton.fifths())
@@ -388,6 +390,7 @@ def anote_diff(ln, ld):
             ln[i][0].pitch.octave = o                
 
 def strk(k):
+    """string of m21.key"""
     if isinstance(k, m21.key.Key):
         return str(k)+' ('+str(k.sharps)+')'
     elif isinstance(k, m21.key.KeySignature):
@@ -418,7 +421,7 @@ def anote_local_part(part, sp):
     i = sp.iglobal_ton()
     ml = part.getElementsByClass(m21.stream.Measure)    
     for j in range(len(ml)):
-        k = m21_key(sp.local_ton(i, j))
+        k = m21_key(sp.local_bar(i, j))
         e = m21.expressions.TextExpression(strk(k))
         e.style.fontStyle = 'italic'
         ml[j].insert(0, e)
@@ -527,7 +530,10 @@ class Stats:
             row.append('')
         else:
             row.append(strk(k_gt))         # current key gt
-        row.append(strk(m21_key(ton_est))) # current key estimation
+        if ton_est.undef():
+            row.append('NaN')
+        else:
+            row.append(strk(m21_key(ton_est))) # current key estimation
         row.append(nb_notes)               # nb notes in part 
         row.append(nb_err)
         row.append(self._current_time)

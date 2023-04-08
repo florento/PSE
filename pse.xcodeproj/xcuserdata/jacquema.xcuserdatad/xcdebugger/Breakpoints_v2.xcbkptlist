@@ -222,8 +222,8 @@
             filePath = "src/import/PSRawEnum.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "290"
-            endingLineNumber = "290"
+            startingLineNumber = "305"
+            endingLineNumber = "305"
             landmarkName = "PSRawEnum::rename(i, n, altprint)"
             landmarkType = "7">
             <Locations>
@@ -272,6 +272,21 @@
                   endingLineNumber = "297"
                   offsetFromSymbolStart = "218">
                </Location>
+               <Location
+                  uuid = "4E3D7837-6A89-4943-8157-1C5FAD7A812F - e8c6784efca816fd"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "pse::PSRawEnum::rename(unsigned long, pse::NoteName const&amp;, bool)"
+                  moduleName = "debugpse"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/jacquema/Code/PSE/src/import/PSRawEnum.cpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "290"
+                  endingLineNumber = "290"
+                  offsetFromSymbolStart = "218">
+               </Location>
             </Locations>
          </BreakpointContent>
       </BreakpointProxy>
@@ -285,8 +300,8 @@
             filePath = "src/import/PSRawEnum.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "249"
-            endingLineNumber = "249"
+            startingLineNumber = "264"
+            endingLineNumber = "264"
             landmarkName = "PSRawEnum::rename(i, n, a, o, altprint)"
             landmarkType = "7">
             <Locations>
@@ -384,6 +399,21 @@
                   endingLineNumber = "182"
                   offsetFromSymbolStart = "240">
                </Location>
+               <Location
+                  uuid = "F40D2610-0C78-4220-9185-EA661732C410 - 39f8d1245cb74f44"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "pse::PSEnum::rewritePassing(unsigned long)"
+                  moduleName = "debugpse"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/jacquema/Code/PSE/src/import/PSEnum.cpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "182"
+                  endingLineNumber = "182"
+                  offsetFromSymbolStart = "240">
+               </Location>
             </Locations>
          </BreakpointContent>
       </BreakpointProxy>
@@ -431,6 +461,84 @@
                   startingLineNumber = "167"
                   endingLineNumber = "167"
                   offsetFromSymbolStart = "139">
+               </Location>
+               <Location
+                  uuid = "4F0974E9-1B8A-471B-B3D0-369235C877C2 - 780bf5573067a9ff"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "pse::PSEnum::rewritePassing()"
+                  moduleName = "debugpse"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/jacquema/Code/PSE/src/import/PSEnum.cpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "167"
+                  endingLineNumber = "167"
+                  offsetFromSymbolStart = "139">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "C92F42F6-389E-430F-B2AF-66ADD8B77D38"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "src/PS13/PS13.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "92"
+            endingLineNumber = "92"
+            landmarkName = "PS13::spell()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "C92F42F6-389E-430F-B2AF-66ADD8B77D38 - 13e1e37ccd3ae67e"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "pse::PS13::spell()"
+                  moduleName = "debugpse"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/jacquema/Code/PSE/src/PS13/PS13.cpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "94"
+                  endingLineNumber = "94"
+                  offsetFromSymbolStart = "788">
+               </Location>
+               <Location
+                  uuid = "C92F42F6-389E-430F-B2AF-66ADD8B77D38 - 13e1e37ccd3ae69f"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "pse::PS13::spell()"
+                  moduleName = "debugpse"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/jacquema/Code/PSE/src/PS13/PS13.cpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "93"
+                  endingLineNumber = "93"
+                  offsetFromSymbolStart = "755">
+               </Location>
+               <Location
+                  uuid = "C92F42F6-389E-430F-B2AF-66ADD8B77D38 - 13e1e37ccd3ae69f"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "pse::PS13::spell()"
+                  moduleName = "debugpse"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/jacquema/Code/PSE/src/PS13/PS13.cpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "93"
+                  endingLineNumber = "93"
+                  offsetFromSymbolStart = "756">
                </Location>
             </Locations>
          </BreakpointContent>

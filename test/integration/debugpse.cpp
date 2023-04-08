@@ -19,6 +19,7 @@ void WeberTable()
     godfried.dump();
 }
 
+void LG101(pse::Speller& sp);
 void LG128(pse::Speller& sp);
 void LG228(pse::Speller& sp);
 void LG275(pse::Speller& sp);
@@ -39,10 +40,10 @@ int main(int argc, const char* argv[])
     // godfried.dump();
     // return 0;
     
-    pse::PSE sp(26, true);
-    //pse::PS13 sp;
+    //pse::PSE sp(26, true);
+    pse::PS13 sp;
 
-    LG128(sp);
+    LG101(sp);
     //LG349(sp);
     // Waldstein(sp);
     
@@ -69,6 +70,81 @@ int main(int argc, const char* argv[])
     return 0;
 }
 
+
+// content of LG 101
+void LG101(pse::Speller& sp)
+{
+    sp.add(64, 0, false);
+    sp.add(76, 1, false);
+    sp.add(76, 1, false);
+    sp.add(76, 1, false);
+    sp.add(76, 2, false);
+    sp.add(75, 2, false);
+    sp.add(76, 2, false);
+    sp.add(78, 2, false);
+    sp.add(80, 2, false);
+    sp.add(81, 2, false);
+    sp.add(76, 2, false);
+    sp.add(76, 3, false);
+    sp.add(76, 3, false);
+    sp.add(76, 3, false);
+    sp.add(76, 4, false);
+    sp.add(75, 4, false);
+    sp.add(76, 4, false);
+    sp.add(78, 4, false);
+    sp.add(76, 4, false);
+    sp.add(74, 4, false);
+    sp.add(73, 4, false);
+    sp.add(71, 4, false);
+    sp.add(76, 5, false);
+    sp.add(76, 5, false);
+    sp.add(76, 5, false);
+    sp.add(76, 6, false);
+    sp.add(75, 6, false);
+    sp.add(76, 6, false);
+    sp.add(78, 6, false);
+    sp.add(80, 6, false);
+    sp.add(81, 6, false);
+    sp.add(76, 6, false);
+    sp.add(76, 7, false);
+    sp.add(76, 7, false);
+    sp.add(76, 7, false);
+    sp.add(69, 8, false);
+    sp.add(76, 9, false);
+    sp.add(74, 10, false);
+    sp.add(76, 10, false);
+    sp.add(74, 10, false);
+    sp.add(73, 10, false);
+    sp.add(71, 11, false);
+    sp.add(73, 11, false);
+    sp.add(71, 11, false);
+    sp.add(69, 11, false);
+    sp.add(76, 12, false);
+    sp.add(74, 12, false);
+    sp.add(73, 12, false);
+    sp.add(76, 12, false);
+    sp.add(74, 12, false);
+    sp.add(73, 12, false);
+    sp.add(71, 13, false);
+    sp.add(71, 13, false);
+    sp.add(64, 13, false);
+    sp.add(66, 13, false);
+    sp.add(68, 13, false);
+    sp.add(76, 14, false);
+    sp.add(76, 14, false);
+    sp.add(76, 14, false);
+    sp.add(76, 15, false);
+    sp.add(75, 15, false);
+    sp.add(76, 15, false);
+    sp.add(78, 15, false);
+    sp.add(80, 15, false);
+    sp.add(81, 15, false);
+    sp.add(76, 15, false);
+    sp.add(76, 16, false);
+    sp.add(76, 16, false);
+    sp.add(76, 16, false);
+    sp.add(69, 17, false);
+}
 
 // content of LG 128
 void LG128(pse::Speller& sp)

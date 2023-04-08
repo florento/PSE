@@ -176,7 +176,7 @@ public:
     size_t count(int c, size_t i, size_t pre, size_t post) const;
     
     /// correct the passing notes using 6 rewrite rules proposed by
-    /// D. Meredith in his PS13 Pitch-Spelling algorithm.
+    /// D. Meredith in the PS13 Pitch-Spelling algorithm, step 2.
     /// rules apply to trigrams of notes.
     /// the lhs of every rule is defined by the distance in 1/2 tons between
     /// the 3 notes:

@@ -177,9 +177,9 @@ size_t PSE::iglobalCand(size_t i) const
 }
 
 
-const Ton& PSE::local(size_t i, size_t j) const
+size_t PSE::iglobal() const
 {
-    return _table.local(i, j);
+    return _table.iglobal();
 }
 
 
@@ -189,9 +189,23 @@ const Ton& PSE::global() const
 }
 
 
-size_t PSE::iglobal() const
+const Ton& PSE::localCandBar(size_t i, size_t j) const
 {
-    return _table.iglobal();
+    return _table.local(i, j);
+}
+
+
+const Ton& PSE::localBar(size_t j) const
+{
+    return localCandBar(iglobal(), j);
+}
+
+
+const Ton& PSE::localNote(size_t i) const
+{
+    assert(_enum.inside(i));
+    size_t j = _enum.measure(i);
+    return localBar(j);
 }
 
 

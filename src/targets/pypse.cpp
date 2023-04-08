@@ -82,7 +82,8 @@ PYBIND11_MODULE(pse, m)
         .def("mode", &pse::Ton::getMode, "get mode of ton")
         .def("name", &pse::Ton::getName, "get name of ton")
         .def("accidental", &pse::Ton::getAccidental, "get accidental of ton")
-        .def("fifths", &pse::Ton::fifths, "get key signature");
+        .def("fifths", &pse::Ton::fifths, "get key signature")
+        .def("undef", &pse::Ton::undef, "ton is undef");
     
     py::class_<pse::PSE>(m, "PSE")
         .def(py::init<>(), "Spell Checker PSE")
@@ -105,8 +106,9 @@ PYBIND11_MODULE(pse, m)
         .def("iglobal_ton", &pse::PSE::iglobal,
              "get index of estimated global tonality")
         .def("keysig", &pse::PSE::fifths, "get estimated global key signature")
-        .def("local_ton", &pse::PSE::local, "get estimated local tonality",
-             py::arg("ton"), py::arg("bar"))
+        .def("local_bar", &pse::PSE::localBar, "estimated local tonality for a bar")
+             // py::arg("ton"), py::arg("bar"))
+        .def("local_note", &pse::PSE::localNote, "estimated local tonality for a note")
         .def("global_cands", &pse::PSE::globalCands,
              "get number of candidates (ties) for the estimatation of the global tonality")
         .def("global_cand_ton", &pse::PSE::globalCand,
@@ -132,7 +134,7 @@ PYBIND11_MODULE(pse, m)
         .def("add", &pse::PS13::add, "add a new note to spell",
              py::arg("midi"), py::arg("bar"), py::arg("simultaneous"))
         .def("spell", &pse::PS13::spell, "spell notes")
-        .def("global_ton", &pse::PS13::global, "estimated global tonality (undef)")
+        //.def("global_ton", &pse::PS13::global, "estimated global tonality (undef)")
         .def("name",  &pse::PS13::name, "estimated name of note",
              py::arg("i"))
         .def("accidental", &pse::PS13::accidental,

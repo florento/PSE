@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4302F7D329E1A9810002AD05 /* RewritePassing.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4302F7D129E1A9810002AD05 /* RewritePassing.cpp */; };
+		4302F7D429E1A9810002AD05 /* RewritePassing.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4302F7D129E1A9810002AD05 /* RewritePassing.cpp */; };
+		4302F7D529E1A9810002AD05 /* RewritePassing.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4302F7D129E1A9810002AD05 /* RewritePassing.cpp */; };
+		4302F7D629E1A9810002AD05 /* RewritePassing.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 4302F7D229E1A9810002AD05 /* RewritePassing.hpp */; };
 		430CDFF12924E6D800A84650 /* KeyFifth.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 430CDFEF2924E6D700A84650 /* KeyFifth.cpp */; };
 		430CDFF22924E6D800A84650 /* KeyFifth.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 430CDFF02924E6D700A84650 /* KeyFifth.hpp */; };
 		4310526729CDD15000694D5A /* Scale.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4310526529CDD15000694D5A /* Scale.cpp */; };
@@ -68,7 +72,6 @@
 		435081FC29D6D7E300465943 /* Weber.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 432657E1294E2FB000515080 /* Weber.cpp */; };
 		435081FD29D6D7F600465943 /* Interval.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43C2BA0E299946150084AB3B /* Interval.cpp */; };
 		435081FE29D6D7F900465943 /* IntervalSimple.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43C2BA1B299A5FEE0084AB3B /* IntervalSimple.cpp */; };
-		435081FF29D6D80B00465943 /* Speller.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 432EF6AB292D405400C620CF /* Speller.cpp */; };
 		4350820129D6D85100465943 /* trace.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43A2543E29280D8900D559D2 /* trace.cpp */; };
 		4350820329D6E3AB00465943 /* TestNoteName.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4350820229D6E3AB00465943 /* TestNoteName.cpp */; };
 		4350820529D6FDA100465943 /* TestMode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4350820429D6FDA100465943 /* TestMode.cpp */; };
@@ -140,7 +143,6 @@
 		43F9BE6F29CC7DB000B0A7F8 /* ModeFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43F9BE6C29CC7DB000B0A7F8 /* ModeFactory.cpp */; };
 		43F9BE7029CC7DB000B0A7F8 /* ModeFactory.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 43F9BE6D29CC7DB000B0A7F8 /* ModeFactory.hpp */; };
 		43FBEAC42930CEDD008FC486 /* debugpse.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43FBEAB52930CB16008FC486 /* debugpse.cpp */; };
-		43FBEAC52930CEDD008FC486 /* Speller.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 432EF6AB292D405400C620CF /* Speller.cpp */; };
 		43FBEAC62930CEDD008FC486 /* trace.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43A2543E29280D8900D559D2 /* trace.cpp */; };
 		43FBEAC72930CEDD008FC486 /* NoteName.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43ABA4FD292423C5002AC1D4 /* NoteName.cpp */; };
 		43FBEAC82930CEDD008FC486 /* Accidental.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43ABA505292423E8002AC1D4 /* Accidental.cpp */; };
@@ -180,6 +182,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		4302F7D129E1A9810002AD05 /* RewritePassing.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = RewritePassing.cpp; path = src/targets/RewritePassing.cpp; sourceTree = "<group>"; };
+		4302F7D229E1A9810002AD05 /* RewritePassing.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = RewritePassing.hpp; path = src/targets/RewritePassing.hpp; sourceTree = "<group>"; };
 		430CDFEF2924E6D700A84650 /* KeyFifth.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = KeyFifth.cpp; path = src/ton/KeyFifth.cpp; sourceTree = "<group>"; };
 		430CDFF02924E6D700A84650 /* KeyFifth.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = KeyFifth.hpp; path = src/ton/KeyFifth.hpp; sourceTree = "<group>"; };
 		4310526529CDD15000694D5A /* Scale.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Scale.cpp; sourceTree = "<group>"; };
@@ -206,8 +210,8 @@
 		432E7A5229D45FE2000E2B72 /* PS13.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PS13.cpp; sourceTree = "<group>"; };
 		432E7A5329D45FE2000E2B72 /* PS13.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = PS13.hpp; sourceTree = "<group>"; };
 		432E7A5829D494AE000E2B72 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		432EF6AB292D405400C620CF /* Speller.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Speller.cpp; path = src/general/Speller.cpp; sourceTree = "<group>"; };
-		432EF6AC292D405400C620CF /* Speller.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Speller.hpp; path = src/general/Speller.hpp; sourceTree = "<group>"; };
+		432EF6AB292D405400C620CF /* Speller.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Speller.cpp; path = src/targets/Speller.cpp; sourceTree = "<group>"; };
+		432EF6AC292D405400C620CF /* Speller.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Speller.hpp; path = src/targets/Speller.hpp; sourceTree = "<group>"; };
 		43316FFF29DD934E00BA534D /* TestEnharmonic.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TestEnharmonic.cpp; sourceTree = "<group>"; };
 		4342FD0F2926781E004E914F /* PWO.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = PWO.hpp; path = src/pitch/PWO.hpp; sourceTree = "<group>"; };
 		4342FD1129267895004E914F /* MidiNum.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MidiNum.cpp; path = src/pitch/MidiNum.cpp; sourceTree = "<group>"; };
@@ -543,6 +547,10 @@
 			children = (
 				4342FD1729268C78004E914F /* pypse.hpp */,
 				4342FD1629268C78004E914F /* pypse.cpp */,
+				432EF6AC292D405400C620CF /* Speller.hpp */,
+				432EF6AB292D405400C620CF /* Speller.cpp */,
+				4302F7D229E1A9810002AD05 /* RewritePassing.hpp */,
+				4302F7D129E1A9810002AD05 /* RewritePassing.cpp */,
 			);
 			name = pybind;
 			sourceTree = "<group>";
@@ -589,8 +597,6 @@
 				43A2544329280E1600D559D2 /* config.h */,
 				43A2543F29280D8900D559D2 /* trace.hpp */,
 				43A2543E29280D8900D559D2 /* trace.cpp */,
-				432EF6AC292D405400C620CF /* Speller.hpp */,
-				432EF6AB292D405400C620CF /* Speller.cpp */,
 			);
 			name = general;
 			sourceTree = "<group>";
@@ -641,6 +647,7 @@
 				43ABA53229242418002AC1D4 /* PSTable.hpp in Headers */,
 				43ABA52C29242418002AC1D4 /* PSPath.hpp in Headers */,
 				431586362983E89B00918B1B /* PSEnum.hpp in Headers */,
+				4302F7D629E1A9810002AD05 /* RewritePassing.hpp in Headers */,
 				431586342983E89B00918B1B /* PSM21Enum.hpp in Headers */,
 				434B1E03298FD4FE001CE41C /* PSChord.hpp in Headers */,
 				4315863A2983EDD900918B1B /* PSRawEnum.hpp in Headers */,
@@ -759,6 +766,7 @@
 				43791C8F29D83EE400DE8796 /* TestScale.cpp in Sources */,
 				43791C8E29D8392200DE8796 /* TestAccidental.cpp in Sources */,
 				435081ED29D6D75100465943 /* Fifths.cpp in Sources */,
+				4302F7D529E1A9810002AD05 /* RewritePassing.cpp in Sources */,
 				435081FD29D6D7F600465943 /* Interval.cpp in Sources */,
 				4350820829D7032B00465943 /* TestMidiNum.cpp in Sources */,
 				435081FE29D6D7F900465943 /* IntervalSimple.cpp in Sources */,
@@ -770,7 +778,6 @@
 				435081F129D6D76100465943 /* Pitch.cpp in Sources */,
 				435081F029D6D75D00465943 /* ModeName.cpp in Sources */,
 				438A581E29E049430073A32C /* PSState.cpp in Sources */,
-				435081FF29D6D80B00465943 /* Speller.cpp in Sources */,
 				438A581729E0492A0073A32C /* PSConfig1.cpp in Sources */,
 				438A581329E049020073A32C /* PSTable.cpp in Sources */,
 				435081F329D6D76800465943 /* Enharmonic.cpp in Sources */,
@@ -802,6 +809,7 @@
 				43ABA50F292423E8002AC1D4 /* Accidental.cpp in Sources */,
 				43F9BE6429CC423E00B0A7F8 /* ModeName.cpp in Sources */,
 				4342FD1229267895004E914F /* MidiNum.cpp in Sources */,
+				4302F7D329E1A9810002AD05 /* RewritePassing.cpp in Sources */,
 				43ABA511292423E8002AC1D4 /* Enharmonic.cpp in Sources */,
 				43ABA50C292423E8002AC1D4 /* Fifths.cpp in Sources */,
 				43C2BA192999529E0084AB3B /* PWO.cpp in Sources */,
@@ -864,6 +872,7 @@
 				43C2BA1729994F630084AB3B /* Pitch.cpp in Sources */,
 				43FBEACF2930CEDD008FC486 /* PSConfig0.cpp in Sources */,
 				43FBEAD02930CEDD008FC486 /* PSConfig.cpp in Sources */,
+				4302F7D429E1A9810002AD05 /* RewritePassing.cpp in Sources */,
 				43C2BA11299946150084AB3B /* Interval.cpp in Sources */,
 				43FBEAD12930CEDD008FC486 /* PSBag.cpp in Sources */,
 				43FBEAD22930CEDD008FC486 /* PSVector.cpp in Sources */,
@@ -872,7 +881,6 @@
 				4315863B2983F15400918B1B /* PSEnum.cpp in Sources */,
 				4315863D2983F15400918B1B /* PSRawEnum.cpp in Sources */,
 				43F9BE6F29CC7DB000B0A7F8 /* ModeFactory.cpp in Sources */,
-				43FBEAC52930CEDD008FC486 /* Speller.cpp in Sources */,
 				43FBEAC42930CEDD008FC486 /* debugpse.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
