@@ -8,7 +8,7 @@
 
 #include "PSBag.hpp"
 #include "Enharmonic.hpp"
-#include "PSorder.hpp"
+#include "PSOrder.hpp"
 
 
 namespace pse {

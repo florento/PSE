@@ -59,7 +59,8 @@ public:
     // @param s list of Music 21 Note objects (references).
     //PSRawEnum(py::list& s);
     
-    /// copy constructor
+    /// copy constructor.
+    /// deep copies of the containers.
     PSRawEnum(const PSRawEnum& e);
 
     /// copy and update left bound of interval.

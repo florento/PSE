@@ -141,7 +141,7 @@ public:
     /// estimated local tonality for one candidate global tonality and one bar.
     /// @param i row index = index of candidate global tonality.
     /// must be smaller than index.size().
-    /// @param j column index = bar number. must be smaller than index.size().
+    /// @param j column index = bar number. must be smaller than enum.size().
     /// @warning estimLocals() must have been called.
     const Ton& local(size_t i, size_t j) const;
 

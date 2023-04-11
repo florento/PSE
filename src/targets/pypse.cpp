@@ -17,6 +17,7 @@
 #include "Ton.hpp"
 #include "Speller.hpp"
 #include "PSE.hpp"
+#include "PS13.hpp"
 
 namespace py = pybind11;
 using namespace pybind11::literals;
@@ -24,22 +25,29 @@ using namespace pybind11::literals;
 PYBIND11_MODULE(pse, m)
 {
     m.doc() = "binder to PitchSpelling cpp library, for evaluation";
-
+    
     // test binding
     py::object what = py::cast("What?");
     m.attr("excuseme") = what;
-    
-    py::enum_<enum pse::NoteName>(m, "NoteName", "Note Names")
-        .value("C",     pse::NoteName::C,    "note C")
-        .value("D",     pse::NoteName::D,    "note D")
-        .value("E",     pse::NoteName::E,    "note E")
-        .value("F",     pse::NoteName::F,    "note F")
-        .value("G",     pse::NoteName::G,    "note G")
-        .value("A",     pse::NoteName::A,    "note A")
-        .value("B",     pse::NoteName::B,    "note B")
-        .value("NN_Undef", pse::NoteName::Undef, "Unkown")
+
+    py::enum_<enum pse::Algo>(m, "Algo", "Pitch Spelling Algo")
+        .value("Algo_PSE",   pse::Algo::PSE,   "Engraving based Pitch Spelling")
+        .value("Algo_PS13",  pse::Algo::PS13,  "PS 13")
+        .value("Algo_PS14",  pse::Algo::PS14,  "PS 14")
+        .value("Algo_Undef", pse::Algo::Undef, "Undef")
         .export_values();
 
+    py::enum_<enum pse::NoteName>(m, "NoteName", "Note Names")
+        .value("C", pse::NoteName::C, "note C")
+        .value("D", pse::NoteName::D, "note D")
+        .value("E", pse::NoteName::E, "note E")
+        .value("F", pse::NoteName::F, "note F")
+        .value("G", pse::NoteName::G, "note G")
+        .value("A", pse::NoteName::A, "note A")
+        .value("B", pse::NoteName::B, "note B")
+        .value("NN_Undef", pse::NoteName::Undef, "Unkown")
+        .export_values();
+    
     py::enum_<enum pse::Accid>(m, "Accid", "Note Names")
         .value("TripleSharp", pse::Accid::TripleSharp, "Triple Sharp")
         .value("DoubleSharp", pse::Accid::DoubleSharp, "Double Sharp")
@@ -54,7 +62,7 @@ PYBIND11_MODULE(pse, m)
         .value("TripleFlat", pse::Accid::TripleFlat, "Triple Flat")
         .value("Accid_Undef", pse::Accid::Undef, "Unkown")
         .export_values();
-
+    
     py::enum_<enum pse::ModeName>(m, "Mode", "Modes")
         .value("Major", pse::ModeName::Major, "Major")
         .value("Minor", pse::ModeName::Minor, "Minor Harmonic")
@@ -70,14 +78,16 @@ PYBIND11_MODULE(pse, m)
         .export_values();
     
     py::class_<pse::Ton>(m, "Ton")
-        //.def(py::init<>(), "Ton", py::arg("ks"))
+    //.def(py::init<>(), "Ton", py::arg("ks"))
         .def("mode", &pse::Ton::getMode, "get mode of ton")
         .def("name", &pse::Ton::getName, "get name of ton")
         .def("accidental", &pse::Ton::getAccidental, "get accidental of ton")
-        .def("fifths", &pse::Ton::fifths, "get key signature");
-
+        .def("fifths", &pse::Ton::fifths, "get key signature")
+        .def("undef", &pse::Ton::undef, "ton is undef");
+    
     py::class_<pse::PSE>(m, "PSE")
-        .def(py::init<>(), "Spell Checker")
+        .def(py::init<>(), "Spell Checker PSE")
+        .def("algo", &pse::PSE::algo, "name of spelling algorithm")
         .def("debug", &pse::PSE::debug, "set debug mode", py::arg("on"))
         .def("size", &pse::PSE::size, "number notes to spell")
         .def("add", &pse::PSE::add, "add a new note to spell",
@@ -86,18 +96,20 @@ PYBIND11_MODULE(pse, m)
              "number of tonalities considered for pitch spelling")
         .def("reset_tons", &pse::PSE::resetTons,
              "clear the array of tonalities for pitch spelling")
-        // disambiguate overloaded method
+    // disambiguate overloaded method
         .def("add_ton",
              static_cast<void (pse::PSE::*)(int, pse::ModeName)>(&pse::PSE::addTon),
              "add a tonality for pitch spelling", py::arg("ks"), py::arg("mode"))
         .def("set_global", &pse::PSE::setGlobal, "force global tonality")
         .def("spell", &pse::PSE::spell, "spell notes")
+        .def("rewrite_passing", &pse::PSE::rewritePassing, "rewrite passing notes")
         .def("global_ton", &pse::PSE::global, "get estimated global tonality")
         .def("iglobal_ton", &pse::PSE::iglobal,
              "get index of estimated global tonality")
         .def("keysig", &pse::PSE::fifths, "get estimated global key signature")
-        .def("local_ton", &pse::PSE::local, "get estimated local tonality",
-             py::arg("ton"), py::arg("bar"))
+        .def("local_bar", &pse::PSE::localBar, "estimated local tonality for a bar")
+             // py::arg("ton"), py::arg("bar"))
+        .def("local_note", &pse::PSE::localNote, "estimated local tonality for a note")
         .def("global_cands", &pse::PSE::globalCands,
              "get number of candidates (ties) for the estimatation of the global tonality")
         .def("global_cand_ton", &pse::PSE::globalCand,
@@ -112,4 +124,25 @@ PYBIND11_MODULE(pse, m)
              py::arg("i"))
         .def("printed", &pse::PSE::printed, "estimated print flag of note",
              py::arg("i"));
+    
+    py::class_<pse::PS13>(m, "PS13")
+        .def(py::init<>(), "Spell Checker PS13")
+        .def("algo", &pse::PS13::algo, "name of spelling algorithm")
+        .def("debug", &pse::PS13::debug, "set debug mode", py::arg("on"))
+        .def("size", &pse::PS13::size, "number notes to spell")
+        .def("set_Kpre", &pse::PS13::setKpre, "set the Kpre parameter of PS13")
+        .def("set_Kpost", &pse::PS13::setKpost, "set the Kpost parameter of PS13")
+        .def("add", &pse::PS13::add, "add a new note to spell",
+             py::arg("midi"), py::arg("bar"), py::arg("simultaneous"))
+        .def("spell", &pse::PS13::spell, "spell notes")
+        .def("rewrite_passing", &pse::PS13::rewritePassing, "rewrite passing notes")
+        .def("name",  &pse::PS13::name, "estimated name of note",
+             py::arg("i"))
+        .def("accidental", &pse::PS13::accidental,
+             "estimated accidental of note", py::arg("i"))
+        .def("octave", &pse::PS13::octave, "estimated octave of note",
+             py::arg("i"))
+        .def("printed", &pse::PS13::printed, "estimated print flag of note",
+             py::arg("i"))
+        .def("global_ton", &pse::PS13::global, "estimated global tonality (undef)");
 }

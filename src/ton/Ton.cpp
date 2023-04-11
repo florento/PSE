@@ -95,6 +95,12 @@ const std::array<std::array<enum Accid, 7>, 15> Ton::MIN_MEL =
 }};
 
 
+Ton::Ton():
+KeyFifth(0),
+_mode(ModeName::Undef)
+{ }
+
+
 Ton::Ton(int ks, ModeName mode):
 KeyFifth(ks),
 _mode(mode)
@@ -141,6 +147,13 @@ bool Ton::operator==(const Ton& rhs) const
 bool Ton::operator!=(const Ton& rhs) const
 {
     return (! operator==(rhs));
+}
+
+
+bool Ton::undef() const
+{
+    assert(_mode != ModeName::Undef || _sig == 0);
+    return (_mode == ModeName::Undef);
 }
 
 

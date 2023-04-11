@@ -54,6 +54,9 @@ class Ton : public KeyFifth
     
 public:
     
+    /// undefined tonality.
+    Ton();
+    
     /// main constructor
     /// @param ks number of flats if negative int,
     /// or number of sharps if positive int. must be in -7..7.
@@ -84,6 +87,9 @@ public:
 
     /// accidental name of this tonality
     inline const enum Accid getAccidental() const { return Fifths::accid(tonic()); }
+    
+    /// this tonality is undefined.
+    bool undef() const;
     
     /// accidental in the key signature of this ton for a given pitch name.
     /// @param n an encapsulated note name

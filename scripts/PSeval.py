@@ -15,7 +15,6 @@ import pandas as pd
 import music21 as m21
 import pse
 
-
 # import module with full path
 # see https://www.geeksforgeeks.org/how-to-import-a-python-module-given-the-full-path/
 
@@ -37,10 +36,10 @@ print(pse.excuseme)
 ##           ##
 ###############
 
-# a barred note is a pair made of 
+# a barred note is a triplet made of 
 # - a note and 
 # - the number of the  bar it belongs to
-# - a flag saying whether the onset of the note is the same as the onset of the nest note
+# - a flag saying whether the onset of the note is the same as the onset of the next note
 
 # Key object is the more expressive (tonic, mode...)
 # KeySignature object is just the number of sharps (> 0) or flats, < 0)
@@ -318,8 +317,10 @@ def compare_accid(n, pse_accid, print_flag):
 
 # k can be a Key or a KeySignature
 def compare_key(k, ton):
-    """compare a music21 key PSE ton"""    
-    if isinstance(k, m21.key.Key):
+    """compare a music21 key PSE ton"""  
+    if ton.undef():
+        return False
+    elif isinstance(k, m21.key.Key):
         return (k.sharps == ton.fifths() and k.mode == m21_mode(ton.mode()))
     elif isinstance(k, m21.key.KeySignature):
         return (k.sharps == ton.fifths())
@@ -349,7 +350,7 @@ def diffrec(ln, sp, i, ld):
     if (len(ln) == 0):
         return ld
     else:
-        (n, m) = ln[0]
+        (n, m, simult) = ln[0]
         if (compare_name(n, sp.name(i)) and
             compare_accid(n, sp.accidental(i), sp.printed(i)) and 
             n.octave == sp.octave(i)):
@@ -361,7 +362,7 @@ def diffrec(ln, sp, i, ld):
             return diffrec(ln[1:], sp, i+1, ld+[d])
 
 def diff_notes(ln, lp):
-    """compare a list of barred notes ad a list of pitches"""    
+    """compare a list of barred notes and a list of pitches"""    
     if (len(ln) == len(lp)):
         return diff_notes1(ln, lp, 0, [])        
     else:
@@ -378,17 +379,60 @@ def diff_notes1(ln, lp, i, ld):
         else:
             return diff_notes1(ln[1:], lp[1:], i+1, ld+[i])
 
-def anote_diff(ln, ld):
-    """mark mispells in red in a note list, based on a diff-list"""
+def colorizeo(ln, i, color):
+    assert(i < len(ln))
+    ln[i][0].style.color = color
+
+def colorize(ln, i, n, a, o, p, color):
+    assert(i < len(ln))
+    ln[i][0].style.color = color
+    ln[i][0].pitch.step = m21_step(n)
+    if ((a != pse.Accid.Natural) or (p == True)):
+        ln[i][0].pitch.accidental = m21_accid(a)
+    ln[i][0].pitch.octave = o                
+
+def anote_diff(ln, ld, color):
+    """mark mispells with color in a note list, based on a diff-list"""
     if (len(ld) > 0):
         for (i, n, a, o, p) in ld:
-            ln[i][0].style.color = 'red'
-            ln[i][0].pitch.step = m21_step(n)
-            if ((a != pse.Accid.Natural) or (p == True)):
-                ln[i][0].pitch.accidental = m21_accid(a)
-            ln[i][0].pitch.octave = o                
+            colorize(ln, i, n, a, o, p, color)
+
+def anote_rediff(ln, ld0, ld1):
+    """mark mispells with colors in a note list, based on 2 diff-list"""
+    if (len(ld0) == 0) and (len(ld1) == 0):
+        return
+    elif (len(ld0) == 0):          # mispell created by rewritting
+        assert(len(ld1) > 0)
+        (i, n, a, o, p) = ld1[0]
+        colorize(ln, i, n, a, o, p, 'violet')
+        anote_rediff(ln, ld0, ld1[1:])
+    elif (len(ld1) == 0):          # mispell fixed by rewritting
+        assert(len(ld0) > 0)
+        (i, n, a, o, p) = ld0[0]        
+        colorizeo(ln, i, 'green')
+        anote_rediff(ln, ld0[1:], ld1)
+    else:
+        assert(len(ld0) > 0)
+        assert(len(ld1) > 0)
+        (i0, n0, a0, o0, p0) = ld0[0]        
+        (i1, n1, a1, o1, p1) = ld1[0]   
+                                   # mispell not rewritten
+        if (i0 == i1) and (n0 == n1) and (a0 == a1) and (o0 == o1) and (p0 == p1):
+            colorize(ln, i0, n0, a0, o0, p0, 'red')
+            anote_rediff(ln, ld0[1:], ld1[1:])        
+        elif (i0 == i1):           # mispell rewritten but not fixed
+            colorize(ln, i1, n1, a1, o1, p1, 'orange')
+            anote_rediff(ln, ld0[1:], ld1[1:])
+        elif (i0 < i1):            # mispell fixed by rewritting
+            colorizeo(ln, i0, 'green')
+            anote_rediff(ln, ld0[1:], ld1)
+        else:                      # mispell created by rewritting
+            assert(i0 > i1)
+            colorize(ln, i1, n1, a1, o1, p1, 'violet')
+            anote_rediff(ln, ld0, ld1[1:])
 
 def strk(k):
+    """string of m21.key"""
     if isinstance(k, m21.key.Key):
         return str(k)+' ('+str(k.sharps)+')'
     elif isinstance(k, m21.key.KeySignature):
@@ -419,7 +463,7 @@ def anote_local_part(part, sp):
     i = sp.iglobal_ton()
     ml = part.getElementsByClass(m21.stream.Measure)    
     for j in range(len(ml)):
-        k = m21_key(sp.local_ton(i, j))
+        k = m21_key(sp.local_bar(i, j))
         e = m21.expressions.TextExpression(strk(k))
         e.style.fontStyle = 'italic'
         ml[j].insert(0, e)
@@ -428,7 +472,7 @@ def anote_part(part, ld):
     """mark mispells in red in a part, based on a diff-list"""
     fpart = part.flatten()
     ln = fpart.getElementsByClass(m21.note.Note) 
-    anote_diff(ln, ld)    
+    anote_diff(ln, ld, 'red')    
 
 def anote_score(score, k, lld):
     """print the given estimated key sign and mark mispells in score"""
@@ -528,7 +572,10 @@ class Stats:
             row.append('')
         else:
             row.append(strk(k_gt))         # current key gt
-        row.append(strk(m21_key(ton_est))) # current key estimation
+        if ton_est.undef():
+            row.append('NaN')
+        else:
+            row.append(strk(m21_key(ton_est))) # current key estimation
         row.append(nb_notes)               # nb notes in part 
         row.append(nb_err)
         row.append(self._current_time)
@@ -658,7 +705,11 @@ def spellable(part):
     #    return False        
     return True
               
-def eval_part(part, stat, nbtons=0, debug=False, mark=False):
+def eval_part(part, stat, 
+              algo=pse.Algo_PSE,
+              nbtons=0,        # for PSE (default)
+              kpre=33, kpost=23, # for PS13 (window size)
+              debug=False, mark=False):
     """evaluate spelling for one part in a score and mark errors in red"""
     if stat == None:
         stat=Stats()
@@ -669,30 +720,52 @@ def eval_part(part, stat, nbtons=0, debug=False, mark=False):
         print('ERROR',  count_notes(part), len(ln))
         return
     print(len(ln), 'notes,', count_measures(part), 'bars,', end=' ')
-    sp = pse.Speller()
-    sp.debug(debug)
-    add_tons(nbtons, sp)
+    # create and initialize the speller (default is PSE)
+    if algo == pse.Algo_PS13:
+        sp = pse.PS13()
+        sp.set_Kpre(kpre)
+        sp.set_Kpost(kpost)
+    else:
+        sp = pse.PSE()
+        add_tons(nbtons, sp)
+    sp.debug(debug)           
+    # feed speller with input notes
     for (n, b, s) in ln:   # note, bar number, simultaneous flag
         sp.add(midi=n.pitch.midi, bar=b, simultaneous=s)
+    # spell
     stat.start_timer()
     sp.spell()
     stat.stop_timer()
+    # compute diff list between reference score and respell
+    ld0 = diff(ln, sp) 
+    print('diff:', len(ld0), end='\n', flush=True)
+    # rewrite the passing notes
+    sp.rewrite_passing()
+    # compute diff list between reference score and rewritten
+    ld1 = diff(ln, sp)
+    print('diff:', len(ld0), end='\n', flush=True)
+    # extract tonality estimation results
     gt = sp.global_ton()
-    if compare_key(k0, gt):
-        print('global ton: OK:', '(', m21_key(gt), '),', end=' ')
-    else:
-        print('global ton: NO:', '(', m21_key(gt), 'was', k0, '),', end=' ')
-        if mark:
-            anote_global_part(part, sp) 
-    ld = diff(ln, sp)
-    print('diff:', len(ld), end='\n', flush=True)
+    if (sp.algo() == pse.Algo_PSE or sp.algo() == pse.Algo_PS14):
+        if compare_key(k0, gt):
+            print('global ton: OK:', '(', m21_key(gt), '),', end=' ')
+        else:
+            print('global ton: NO:', '(', m21_key(gt), 'was', k0, '),', end=' ')
+            if mark:
+                anote_global_part(part, sp) 
+    # annotations
     if mark:
-        anote_diff(ln, ld)
-        anote_local_part(part, sp)            
-    return (k0, sp.global_ton(), len(ln), ld)
+        anote_rediff(ln, ld0, ld1) # anote_diff(ln, ld0, 'red')
+        if (sp.algo() == pse.Algo_PSE or sp.algo() == pse.Algo_PS14):
+            anote_local_part(part, sp)            
+    return (k0, sp.global_ton(), len(ln), ld1)
 
-def eval_score(score, sid, title, composer,
-               stat, tons=0, debug=False, mark=False):
+def eval_score(score, stat, 
+               sid, title, composer,  
+               algo=pse.Algo_PSE,
+               nbtons=0,          # for PSE (default)
+               kpre=33, kpost=23, # for PS13 (window size)
+               debug=False, mark=False):
     """evaluate spelling for all parts in a score"""
     if stat == None:
         stat = Stats()
@@ -711,7 +784,9 @@ def eval_score(score, sid, title, composer,
         if (nbparts > 1):
             print('part', i+1, '/', len(lp), end=' ', flush=True)
         if (spellable(part)):
-            (k_gt, ton_est, nn, ld) = eval_part(part, stat, tons, debug, mark)
+            (k_gt, ton_est, nn, ld) = eval_part(part, stat, 
+                                                algo, nbtons, kpre, kpost, 
+                                                debug, mark)
             stat.record_part(i, k_gt, ton_est, nn, len(ld))
             ls.append(ton_est)
             lld.append(ld)

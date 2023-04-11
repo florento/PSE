@@ -39,14 +39,29 @@ _prints(new std::vector<bool>)
 
 PSRawEnum::PSRawEnum(const PSRawEnum& e):
 PSEnum(e), // copy
-_notes(e._notes),  // vector copy (same vector elements)
+_notes(e._notes),  // shallow copy of pointer
 _barnum(e._barnum),
 _simult(e._simult),
 _names(e._names),
 _accids(e._accids),
 _octs(e._octs),
 _prints(e._prints)
-{ }
+//_notes(new std::vector<int>(*(e._notes))),  // vector copy (same vector elements)
+//_barnum(new std::vector<int>(*(e._barnum))),
+//_simult(new std::vector<bool>(*(e._simult))),
+//_names(new std::vector<enum NoteName>(*(e._names))),
+//_accids(new std::vector<enum Accid>(*(e._accids))),
+//_octs(new std::vector<int>(*(e._octs))),
+//_prints(new std::vector<bool>(*(e._prints)))
+{
+    assert(e._notes);
+    assert(e._barnum);
+    assert(e._simult);
+    assert(e._names);
+    assert(e._accids);
+    assert(e._octs);
+    assert(e._prints);
+}
 
 
 std::unique_ptr<pse::PSEnum> PSRawEnum::clone() const
@@ -57,14 +72,22 @@ std::unique_ptr<pse::PSEnum> PSRawEnum::clone() const
 
 PSRawEnum::PSRawEnum(const PSRawEnum& e, size_t i0):
 PSEnum(e, i0),
-_notes(e._notes),  // vector copy (same vector object)
+_notes(e._notes),  // shallow copy of pointer
 _barnum(e._barnum),
 _simult(e._simult),
 _names(e._names),
 _accids(e._accids),
 _octs(e._octs),
 _prints(e._prints)
-{ }
+{
+    assert(e._notes);
+    assert(e._barnum);
+    assert(e._simult);
+    assert(e._names);
+    assert(e._accids);
+    assert(e._octs);
+    assert(e._prints);
+}
 
 
 std::unique_ptr<pse::PSEnum> PSRawEnum::clone(size_t i0) const
@@ -75,14 +98,22 @@ std::unique_ptr<pse::PSEnum> PSRawEnum::clone(size_t i0) const
 
 PSRawEnum::PSRawEnum(const PSRawEnum& e, size_t i0, size_t i1):
 PSEnum(e, i0, i1),
-_notes(e._notes),  // vector copy (same vector object)
+_notes(e._notes),  // shallow copy of pointer
 _barnum(e._barnum),
 _simult(e._simult),
 _names(e._names),
 _accids(e._accids),
 _octs(e._octs),
 _prints(e._prints)
-{ }
+{
+    assert(e._notes);
+    assert(e._barnum);
+    assert(e._simult);
+    assert(e._names);
+    assert(e._accids);
+    assert(e._octs);
+    assert(e._prints);
+}
 
 
 std::unique_ptr<pse::PSEnum> PSRawEnum::clone(size_t i0, size_t i1) const
@@ -287,7 +318,7 @@ void PSRawEnum::rename(size_t i, const enum NoteName& n, bool altprint)
     enum Accid a = MidiNum::accid(m%12, n);
     if (a == Accid::Undef)
     {
-        ERROR("pitch {} cannot be named by {}", m, n);
+        ERROR("PSRawEnum: pitch {} cannot be named by {}", m, n);
         return;
     }
     int o = MidiNum::midi_to_octave(m, n, a);
