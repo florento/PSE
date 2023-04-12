@@ -95,11 +95,15 @@ def write_score(score, title='title', composer='Unknown'):
     # os.system(_mscore + ' -o ' + pdffile + ' ' + xmlfile)
     
 def eval_asapscore(sid, file, stat, title='title', composer='composer',
-                   tons=0, dflag=False, mflag=False):
+                   psalgo=ps.pse.PSE, tons=26, kpre=33, kpost=23, 
+                   dflag=False, mflag=False):
     s = m21.converter.parse(file)
     (ls, lld) = ps.eval_score(score=s, stat=stat, 
                               sid=sid, title=title, composer=composer,
-                              tons=tons, debug=dflag, mark=mflag)
+                              algo=psalgo,                              
+                              nbtons=tons,              # for PSE 
+                              kpre=kpre, kpost=kpost, # for PS13
+                              debug=dflag, mark=mflag)
     if mflag: # and not ps.empty_difflist(lld):
         write_score(s, title, composer)
 
@@ -150,7 +154,10 @@ def Beethoven_list():
 
 Beethoven_skip = []
 
-def eval_Beethoven(stat=ps.Stats(), nbtons=0, dflag=True, mflag=True):
+def eval_Beethoven(stat=ps.Stats(), algo=ps.pse.PSE, 
+                   nbtons=0,          # for PSE 
+                   kpre=33, kpost=23, # for PS13  
+                   dflag=True, mflag=True):
     """"evaluation of Beethoven Sonatas in ASAP"""
     ludwig = 'Beethoven'
     if stat == None:
@@ -163,7 +170,8 @@ def eval_Beethoven(stat=ps.Stats(), nbtons=0, dflag=True, mflag=True):
             print(o.nb, o.mvt, ':', o.file)
             eval_asapscore(sid=o.nb*10+o.mvt, file=o.file, stat=stat,
                            title='Sonata '+str(o.nb)+'_'+str(o.mvt), composer=ludwig,
-                           tons=nbtons, dflag=dflag, mflag=mflag)
+                           psalgo=algo, tons=nbtons, kpre=kpre, kpost=kpost,
+                           dflag=dflag, mflag=mflag)
     # write table and summary to files and display stats
     df = stat.get_dataframe()
     revise_table_asap(df)
@@ -291,7 +299,9 @@ lBach = [#(846, 'Prelude', '../../../Datasets/ASAP/Bach/Prelude/bwv_846/xml_scor
 # (866, 'Prelude') lonnnng
 Bach_skip = [(856, 'Prelude'), (873, 'Prelude'), ]
 
-def eval1_Bach(nb, mvt, file, stat, tons=25, dflag=True, mflag=True):
+def eval1_Bach(nb, mvt, file, stat, 
+               algo=ps.pse.PSE, tons=25, kpre=33, kpost=23,
+               dflag=True, mflag=True):
     global _dataset_root
     global _generic_score
     if file == None:
@@ -302,9 +312,12 @@ def eval1_Bach(nb, mvt, file, stat, tons=25, dflag=True, mflag=True):
     c = 0 if mvt == 'Prelude' else 1            
     eval_asapscore(sid=nb*10+c, file=file, stat=stat,
                    title='BWV'+str(nb)+'_'+str(mvt), composer='Bach',
-                   tons=tons, dflag=dflag, mflag=mflag)
+                   psalgo=algo, tons=tons, kpre=33, kpost=23,
+                   dflag=dflag, mflag=mflag)
     
-def eval_Bach(stat=ps.Stats(), nbtons=25, dflag=True, mflag=True): 
+def eval_Bach(stat=ps.Stats(), 
+              algo=ps.pse.PSE, nbtons=25, kpre=33, kpost=23,
+              dflag=True, mflag=True): 
     global Bach_skip
     for o in DWK_list():
         if (o.nb, o.mvt) in Bach_skip:
@@ -312,7 +325,8 @@ def eval_Bach(stat=ps.Stats(), nbtons=25, dflag=True, mflag=True):
         else:
             print('\n', flush=True)
             eval1_Bach(nb=o.nb, mvt=o.mvt, file=o.file, stat=stat, 
-                       tons=nbtons, dflag=dflag, mflag=mflag)
+                       algo=algo, tons=nbtons, kpre=33, kpost=23,
+                       dflag=dflag, mflag=mflag)
     df = stat.get_dataframe()
     revise_table_asap(df)
     # write table and summary to files and display stats

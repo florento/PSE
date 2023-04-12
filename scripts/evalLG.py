@@ -163,8 +163,8 @@ def eval_LG(psalgo=ps.pse.PSE, nbtons=26, kpre=33, kpost=23,
         (ls, lld) = ps.eval_score(score=s, stat=stat, 
                                   sid=i, title=t, composer='', 
                                   algo=psalgo,
-                                  nbtons=nbtons,            # for PSE 
-                                  kpre=kpre, kpost=kpost, # for PS13                                  
+                                  nbtons=nbtons,           # for PSE 
+                                  kpre=kpre, kpost=kpost,  # for PS13                                  
                                   debug=debug, mark=mark)
         if mark and not ps.empty_difflist(lld):
             write_score(s, output_path, t)

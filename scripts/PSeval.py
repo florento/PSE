@@ -746,7 +746,7 @@ def eval_part(part, stat,
     print('diff:', len(ld0), end='\n', flush=True)
     # extract tonality estimation results
     gt = sp.global_ton()
-    if (sp.algo() == pse.Algo_PSE or sp.algo() == pse.Algo_PS14):
+    if (algo == pse.Algo_PSE or algo == pse.Algo_PS14):
         if compare_key(k0, gt):
             print('global ton: OK:', '(', m21_key(gt), '),', end=' ')
         else:
@@ -756,7 +756,7 @@ def eval_part(part, stat,
     # annotations
     if mark:
         anote_rediff(ln, ld0, ld1) # anote_diff(ln, ld0, 'red')
-        if (sp.algo() == pse.Algo_PSE or sp.algo() == pse.Algo_PS14):
+        if (algo == pse.Algo_PSE or algo == pse.Algo_PS14):
             anote_local_part(part, sp)            
     return (k0, sp.global_ton(), len(ln), ld1)
 
