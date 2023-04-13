@@ -129,7 +129,7 @@ skip = [441, 470, 472, 473, 475, 478]
 # raise MusicXMLExportException('Cannot convert inexpressible durations to MusicXML.')
 # MusicXMLExportException: In part (Voice), measure (11): Cannot convert inexpressible durations to MusicXML.
 
-def eval_LG(psalgo=ps.pse.PSE, nbtons=26, kpre=33, kpost=23,
+def eval_LG(psalgo=ps.pse.Algo_PSE, nbtons=26, kpre=33, kpost=23,
             output_dir='', filename='', 
             debug=True, mark=True):
     timestamp = datetime.today().strftime('%Y%m%d-%H%M')
@@ -178,7 +178,7 @@ def eval_LG(psalgo=ps.pse.PSE, nbtons=26, kpre=33, kpost=23,
     df.to_csv(output_path/(filename+'.csv') , header=True, index=False)
     stat.write_datasum(output_path/(filename+'_sum.csv'))
       
-def eval_LGitem(i, algo=ps.pse.PSE, nbtons=26, kpre=33, kpost=23, 
+def eval_LGitem(i, algo=ps.pse.Algo_PSE, nbtons=26, kpre=33, kpost=23, 
                 dflag=True, mflag=True):
     stat = ps.Stats()   
     dataset = LG_map()
@@ -194,7 +194,7 @@ def eval_LGitem(i, algo=ps.pse.PSE, nbtons=26, kpre=33, kpost=23,
     #                                      debug=dflag, mark=mflag)
     (ls, lld) = ps.eval_score(score=s, stat=stat, 
                               sid=i, title=t, composer='', 
-                              algo=ps.PSE,
+                              algo=algo,
                               tons=nbtons,            # for PSE 
                               kpre=kpre, kpost=kpost, # for PS13                                  
                               debug=dflag, mark=mflag)
