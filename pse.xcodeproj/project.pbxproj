@@ -210,6 +210,8 @@
 		432EF6AB292D405400C620CF /* Speller.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Speller.cpp; path = src/targets/Speller.cpp; sourceTree = "<group>"; };
 		432EF6AC292D405400C620CF /* Speller.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Speller.hpp; path = src/targets/Speller.hpp; sourceTree = "<group>"; };
 		43316FFF29DD934E00BA534D /* TestEnharmonic.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TestEnharmonic.cpp; sourceTree = "<group>"; };
+		433F8B6E2A0BE3D000085ABC /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		433F8B6F2A0BE47B00085ABC /* TODO.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = TODO.md; sourceTree = "<group>"; };
 		4342FD0F2926781E004E914F /* PWO.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = PWO.hpp; path = src/pitch/PWO.hpp; sourceTree = "<group>"; };
 		4342FD1129267895004E914F /* MidiNum.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MidiNum.cpp; path = src/pitch/MidiNum.cpp; sourceTree = "<group>"; };
 		4342FD132926789C004E914F /* MidiNum.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = MidiNum.hpp; path = src/pitch/MidiNum.hpp; sourceTree = "<group>"; };
@@ -359,6 +361,7 @@
 		431586192983E6BF00918B1B /* PSE */ = {
 			isa = PBXGroup;
 			children = (
+				433F8B6E2A0BE3D000085ABC /* README.md */,
 				43ABA51929242417002AC1D4 /* PSState.hpp */,
 				43ABA51E29242418002AC1D4 /* PSState.cpp */,
 				43DD95482945E223006DC553 /* PSCost.hpp */,
@@ -498,6 +501,7 @@
 			isa = PBXGroup;
 			children = (
 				431586172983E57F00918B1B /* README.md */,
+				433F8B6F2A0BE47B00085ABC /* TODO.md */,
 				4342FD1A2926B925004E914F /* CMakeLists.txt */,
 				43A2544A292CC61100D559D2 /* Makefile */,
 				432E7A5129D45F78000E2B72 /* test */,
