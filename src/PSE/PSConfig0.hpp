@@ -125,6 +125,9 @@ public:
     /// @todo remove
     size_t disjoint() const { return _cost.getDia(); }
 
+    
+    
+    
     /// allocate every config reached by one transition from this config,
     /// when reading one pitch or several simultaneous pitchs,
     /// and push it to the given queue.

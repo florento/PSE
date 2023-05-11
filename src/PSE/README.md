@@ -1,10 +1,6 @@
 # PSE algorithm
 Pitch Spelling based on measural info.
 
-
-
-
-
 ## étapes
 (révision de "procédure" ci-dessous)
 
@@ -110,9 +106,6 @@ all the configs in the bag have the same source
 
 -   `PSP` (path of PS Configs)  
     idem actuel
-  
-
-
 
 ## procédure
 (ancienne version, obsolete. void "étapes" ci-dessus)

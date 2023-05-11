@@ -171,7 +171,6 @@ public:
     /// cumulated number of accidentals with color different from global ton.
     inline size_t getColor() const { return _color; }
 
-    
     /// update this cost for doing a transition into the given config.
     /// the note read for the transition is the id of the config minus one.
     /// @param gton conjectured main (global) tonality (key signature).

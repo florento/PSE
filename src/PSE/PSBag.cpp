@@ -250,7 +250,7 @@ void PSB::succ2(std::shared_ptr<const PSC0>& c, // PSEnum& e,
     assert(c);
     //assert(c->size() > 1);
     std::stack<std::shared_ptr<const PSC2>> cs;
-    cs.push(std::make_shared<const PSC2>(c, _enum, c->id()));     // initial config
+    cs.push(std::make_shared<const PSC2>(c, _enum, c->id())); // initial config
     
     while (! cs.empty())
     {
@@ -329,15 +329,18 @@ void PSB::succ2(std::shared_ptr<const PSC0>& c, // PSEnum& e,
     assert(c);
     //assert(c->size() > 1);
     std::stack<std::shared_ptr<const PSC2>> cs;
-    cs.push(std::make_shared<const PSC2>(c, _enum, c->id()));     // initial config
+    cs.push(std::make_shared<const PSC2>(c, _enum, c->id())); // initial config
     
     while (! cs.empty())
     {
         std::shared_ptr<const PSC2> c2 = cs.top();
         cs.pop();
         assert(c2);
+        
+        // finished to process chord: add config2 to queue of successors
         if (c2->complete())
-            q.push(c2);
+            q.push(c2); // copy of shared ptr
+        // continue processing of the chord
         else
         {
             unsigned int m = c2->current(); // chroma in 0..11

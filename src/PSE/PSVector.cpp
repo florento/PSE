@@ -134,9 +134,10 @@ const PSB& PSV::best(size_t step, size_t i)
 
         if (_psb_total[i] == nullptr) // not tabulated yet
         {
+            assert(i < index.size());
+            const Ton& gton = ton(i);
             assert(_local[i] < index.size());
             const Ton& lton = ton(_local[i]);
-            const Ton& gton = ton(i);
             // PS Bag is empty if first() = last()
             _psb_total[i] = std::make_shared<const PSB>(gton, lton, psenum());
         }
