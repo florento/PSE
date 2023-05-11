@@ -44,6 +44,11 @@ public:
     /// @param i index in the array of fifth, between -15 and 19 (0 is 'C').
     /// @return an alteration number in -2..2.
     static enum Accid accid(int i);
+    
+    /// pitch class for the ith entry in the array of fifth.
+    /// @param i index in the array of fifth, between -15 and 19 (0 is 'C').
+    /// @return a pitch class in 0..11.
+    static int pitchClass(int i);
 
     /// index in the array of fifth of the note with given name and alteration.
     /// @param n a note name in 0..6 for C, D, E, F, G, A, B

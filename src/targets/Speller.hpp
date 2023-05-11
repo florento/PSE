@@ -22,27 +22,12 @@
 #include "TonIndex.hpp"
 #include "PSRawEnum.hpp"
 #include "PSTable.hpp"
+#include "AlgoName.hpp"
 
 // TODO
 // - const ln & lb
 
 namespace pse {
-
-
-/// names of pitch spelling algos implemented
-enum class Algo
-{
-    Undef,
-    PSE,
-    PS13,
-    PS14,
-    RewritePassing
-};
-
-/// string of algo name.
-std::string tostring(const Algo& m);
-
-std::ostream& operator<<(std::ostream& o, const Algo& m);
 
 
 /// abstract class wrapping main pitch-spelling functionalities 

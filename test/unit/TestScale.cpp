@@ -226,11 +226,6 @@ TEST(Scale, Cflat_maj)
     EXPECT_EQ(t.accidDia(pse::NoteName::B), s.accid(6));
 }
 
-
-
-
-
-
 TEST(Scale, C_min)
 {
     // tonic: pitch class 0 = C

@@ -11,7 +11,7 @@
 
 //#include "Pitch.hpp"
 #include "Fifths.hpp"
-
+#include "MidiNum.hpp"
 
 namespace pse {
 
@@ -36,6 +36,19 @@ enum Accid Fifths::accid(int i)
     //assert(a <= 2);
     //return accidofint(a);
 }
+
+
+// static
+int Fifths::pitchClass(int i)
+{
+    assert(-15 <= i);
+    assert(i <= 19);
+    unsigned int m = MidiNum::to_midi(name(i), accid(i), 0); // octave 0
+    assert(0 <= m);
+    assert(m < 128);
+    return m % 12;
+}
+
 
 
 // static
