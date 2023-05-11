@@ -19,7 +19,7 @@
 #include "KeyFifth.hpp"
 #include "ModeName.hpp"
 #include "Mode.hpp"
-#include "Ton.hpp"
+//#include "Ton.hpp"
 
 namespace pse {
 
@@ -73,18 +73,21 @@ public:
     Scale(const Ton& ton, const ModeName& mode);
 
     /// note name for given degree.
-    /// @param d degree in this scale. the first degree is 0 (not 1).
+    /// @param d degree in this scale, in 0..12.
     /// @return the note name for the given degree, in A..G.
+    /// @warning the first degree is 0 (not 1).
     enum NoteName name(size_t d) const;
 
     /// accidental name for given degree.
-    /// @param d degree in this scale. the first degree is 0 (not 1).
+    /// @param d degree in this scale, in 0..12.
     /// @return the accidentals for the given degree, in -2..2.
+    /// @warning the first degree is 0 (not 1).
     enum Accid accid(size_t d) const;
 
     /// pitch class for given degree
-    /// @param d degree in this scale. the first degree is 0 (not 1).
+    /// @param d degree in this scale, in 0..12.
     /// @return number of pitch class in 0..11.
+    /// @warning the first degree is 0 (not 1).
     int pitchClass(size_t d) const;
 
     /// this scale contains the note of given name and accidental.

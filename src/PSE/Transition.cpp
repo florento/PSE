@@ -7,7 +7,7 @@
 
 #include "Transition.hpp"
 #include "Enharmonic.hpp"
-#include "PSOrder.hpp"
+//#include "PSOrder.hpp"
 
 namespace pse {
 
@@ -17,8 +17,9 @@ _enum(e)
 { }
 
 
-void Transition::succ(std::shared_ptr<const PSC0>& c, // PSEnum& e,
-                      const Ton& ton, const Ton& lton, PSCQueue& q) const
+void Transition::succ(std::shared_ptr<const PSC0>& c,
+                      const Ton& ton, const Ton& lton,
+                      PSCQueue& q) const
 {
     assert(c);
     if (_enum.simultaneous(c->id()))
@@ -28,8 +29,9 @@ void Transition::succ(std::shared_ptr<const PSC0>& c, // PSEnum& e,
 }
 
 
-void Transition::succ1(std::shared_ptr<const PSC0>& c, // PSEnum& e,
-                       const Ton& ton, const Ton& lton, PSCQueue& q) const
+void Transition::succ1(std::shared_ptr<const PSC0>& c,
+                       const Ton& ton, const Ton& lton,
+                       PSCQueue& q) const
 {
     assert(c);
     // midi pitch of the note read for transition from this config
@@ -58,7 +60,18 @@ void Transition::succ1(std::shared_ptr<const PSC0>& c, // PSEnum& e,
     else if (_algo == Algo::PS14)
     {
         // only 1 potential successor in algo PS14
-        /// @todo TBC
+        // lton is ignored
+        const Scale& scale = ton.chromatic();
+        int p = scale.pitchClass(0); // pitch class of tonic of scale
+        // degree of m in the chromatic harmonic scale of p
+        size_t deg = (p <= m)?(m - p):(12-p+m);
+        assert(0 <= deg); // debug
+        assert(deg < 12);
+        enum NoteName name = scale.name(deg);
+        enum Accid accid = scale.accid(deg);
+        assert(defined(name));
+        assert(defined(accid));
+        q.push(std::make_shared<PSC1>(c, _enum, name, accid, ton));
     }
     else
     {
@@ -68,8 +81,9 @@ void Transition::succ1(std::shared_ptr<const PSC0>& c, // PSEnum& e,
 
 
 // static
-void Transition::succ2(std::shared_ptr<const PSC0>& c, // PSEnum& e,
-                const Ton& ton, const Ton& lton, PSCQueue& q) const
+void Transition::succ2(std::shared_ptr<const PSC0>& c,
+                       const Ton& ton, const Ton& lton,
+                       PSCQueue& q) const
 {
     assert(c);
     //assert(c->size() > 1);

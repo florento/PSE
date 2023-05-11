@@ -80,7 +80,7 @@ bool PS13::spell()
             
             // degree of n in the chromatic harmonic scale of p
             size_t deg = (p <= nc)?(nc - p):(12-p+nc);
-            assert(0 <= deg); // debugÅ
+            assert(0 <= deg); // debug
             assert(deg < 12);
             // name of n in chromatic harmonic scale of p
             const enum NoteName nn = _scales[p].name(deg);

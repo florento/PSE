@@ -15,7 +15,7 @@
 #include "Fifths.hpp"
 //#include "PSState.hpp"
 #include "Weber.hpp" // Weber distance
-#include "Scale.hpp" // dependency
+//#include "Scale.hpp" // dependency
 
 
 namespace pse {
@@ -99,14 +99,14 @@ const std::array<std::array<enum Accid, 7>, 15> Ton::MIN_MEL =
 Ton::Ton():
 KeyFifth(0),
 _mode(ModeName::Undef),
-_chromatic(nullptr) // computed on demand
+_chromatic(*this, ModeName::Chromatic)
 { }
 
 
 Ton::Ton(int ks, ModeName mode):
 KeyFifth(ks),
 _mode(mode),
-_chromatic(nullptr) // computed on demand
+_chromatic(*this, ModeName::Chromatic)
 {
     assert(mode != ModeName::Undef);
 }
@@ -115,7 +115,7 @@ _chromatic(nullptr) // computed on demand
 Ton::Ton(const KeyFifth& ks, ModeName mode):
 KeyFifth(ks),
 _mode(mode),
-_chromatic(nullptr) // computed on demand
+_chromatic(*this, ModeName::Chromatic)
 {
     assert(mode != ModeName::Undef);
 }
@@ -418,16 +418,21 @@ unsigned int Ton::distWeber(const Ton& rhs) const
 //}
 
 
-const Scale& Ton::chromatic()
-{
-    if (_chromatic == nullptr)
-    {
-        _chromatic = std::make_shared<Scale>(*this, ModeName::Chromatic);
-    }
-    assert(_chromatic);
-    return *(_chromatic);
-}
+// computation on demand
+//const Scale& Ton::chromatic()
+//{
+//    if (_chromatic == nullptr)
+//    {
+//        _chromatic = std::make_shared<Scale>(*this, ModeName::Chromatic);
+//    }
+//    assert(_chromatic);
+//    return *(_chromatic);
+//}
 
+const Scale& Ton::chromatic() const
+{
+    return _chromatic;
+}
 
 int Ton::tonic() const
 {

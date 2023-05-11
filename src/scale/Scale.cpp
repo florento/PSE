@@ -7,7 +7,7 @@
 
 #include "Scale.hpp"
 #include "NoteName.hpp"
-//#include "Ton.hpp"
+#include "Ton.hpp"
 
 namespace pse {
 

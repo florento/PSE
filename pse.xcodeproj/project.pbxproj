@@ -97,6 +97,12 @@
 		438A581A29E049330073A32C /* PSCost.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43DD95472945E223006DC553 /* PSCost.cpp */; };
 		438A581E29E049430073A32C /* PSState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43ABA51E29242418002AC1D4 /* PSState.cpp */; };
 		438A581F29E0496D0073A32C /* PSPath.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43ABA51629242417002AC1D4 /* PSPath.cpp */; };
+		438EFD7C2A0D451800FF3733 /* Transition.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 430960572A0CD7E80097487A /* Transition.cpp */; };
+		438EFD7D2A0D451900FF3733 /* Transition.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 430960572A0CD7E80097487A /* Transition.cpp */; };
+		438EFD7E2A0D451B00FF3733 /* Transition.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 430960572A0CD7E80097487A /* Transition.cpp */; };
+		438EFD7F2A0D4C8300FF3733 /* PSOrder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43D8A9EF29AFA16B00B260DA /* PSOrder.cpp */; };
+		438EFD802A0D4C8500FF3733 /* PSOrder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43D8A9EF29AFA16B00B260DA /* PSOrder.cpp */; };
+		438EFD812A0D4C8600FF3733 /* PSOrder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43D8A9EF29AFA16B00B260DA /* PSOrder.cpp */; };
 		4397A5DE29A6CDB300C2CC9A /* PSOrder.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 4397A5DC29A6CDB300C2CC9A /* PSOrder.hpp */; };
 		43A2544029280D8900D559D2 /* trace.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43A2543E29280D8900D559D2 /* trace.cpp */; };
 		43A2544129280D8900D559D2 /* trace.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 43A2543F29280D8900D559D2 /* trace.hpp */; };
@@ -387,10 +393,10 @@
 				434B1DF6298ECCF0001CE41C /* PSConfig1.cpp */,
 				434B1DFB298ED394001CE41C /* PSConfig2.hpp */,
 				434B1DFA298ED394001CE41C /* PSConfig2.cpp */,
-				430960582A0CD7E80097487A /* Transition.hpp */,
-				430960572A0CD7E80097487A /* Transition.cpp */,
 				4397A5DC29A6CDB300C2CC9A /* PSOrder.hpp */,
 				43D8A9EF29AFA16B00B260DA /* PSOrder.cpp */,
+				430960582A0CD7E80097487A /* Transition.hpp */,
+				430960572A0CD7E80097487A /* Transition.cpp */,
 				43ABA51A29242417002AC1D4 /* PSBag.hpp */,
 				43ABA51329242417002AC1D4 /* PSBag.cpp */,
 				43ABA51429242417002AC1D4 /* PSVector.hpp */,
@@ -807,6 +813,7 @@
 				4353AE3A29DDB2CC00FAF8A3 /* TestPSRawEnum.cpp in Sources */,
 				435081DF29D6C96800465943 /* unit_test.cpp in Sources */,
 				4350820129D6D85100465943 /* trace.cpp in Sources */,
+				438EFD7E2A0D451B00FF3733 /* Transition.cpp in Sources */,
 				435081EF29D6D75A00465943 /* Mode.cpp in Sources */,
 				435081EC29D6D74E00465943 /* KeyFifth.cpp in Sources */,
 				4309605F2A0D03C10097487A /* AlgoName.cpp in Sources */,
@@ -814,6 +821,7 @@
 				438A581929E049300073A32C /* PSConfig0.cpp in Sources */,
 				435081F629D6D77200465943 /* NoteName.cpp in Sources */,
 				43139F7C2A0D3D9D00A8E764 /* TestFifths.cpp in Sources */,
+				438EFD812A0D4C8600FF3733 /* PSOrder.cpp in Sources */,
 				435081F529D6D76F00465943 /* Accidental.cpp in Sources */,
 				438A581429E049190073A32C /* PSVector.cpp in Sources */,
 				435081F829D6D78200465943 /* PSChord.cpp in Sources */,
@@ -827,6 +835,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				438EFD7C2A0D451800FF3733 /* Transition.cpp in Sources */,
 				43A2544029280D8900D559D2 /* trace.cpp in Sources */,
 				43ABA4FE292423C5002AC1D4 /* NoteName.cpp in Sources */,
 				43ABA50F292423E8002AC1D4 /* Accidental.cpp in Sources */,
@@ -839,6 +848,7 @@
 				430CDFF12924E6D800A84650 /* KeyFifth.cpp in Sources */,
 				43F9BE6929CC696C00B0A7F8 /* Mode.cpp in Sources */,
 				43ABA509292423E8002AC1D4 /* Ton.cpp in Sources */,
+				438EFD7F2A0D4C8300FF3733 /* PSOrder.cpp in Sources */,
 				43316F2329AA73D8000160EA /* TonIndex.cpp in Sources */,
 				432E7A4E29D427FD000E2B72 /* PSE.cpp in Sources */,
 				434B1DF8298ECCF1001CE41C /* PSConfig1.cpp in Sources */,
@@ -870,6 +880,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				438EFD7D2A0D451900FF3733 /* Transition.cpp in Sources */,
 				434B1DFD298ED394001CE41C /* PSConfig2.cpp in Sources */,
 				43FBEAC62930CEDD008FC486 /* trace.cpp in Sources */,
 				43FBEAC72930CEDD008FC486 /* NoteName.cpp in Sources */,
@@ -882,6 +893,7 @@
 				43FBEACB2930CEDD008FC486 /* Fifths.cpp in Sources */,
 				43F9BE6A29CC696C00B0A7F8 /* Mode.cpp in Sources */,
 				434B1E02298FD4FE001CE41C /* PSChord.cpp in Sources */,
+				438EFD802A0D4C8500FF3733 /* PSOrder.cpp in Sources */,
 				43316F2229AA73D7000160EA /* TonIndex.cpp in Sources */,
 				432E7A4F29D427FD000E2B72 /* PSE.cpp in Sources */,
 				43FBEACC2930CEDD008FC486 /* KeyFifth.cpp in Sources */,

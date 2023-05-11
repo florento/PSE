@@ -21,11 +21,10 @@
 #include "ModeName.hpp"
 #include "Fifths.hpp"
 #include "KeyFifth.hpp"
+#include "Scale.hpp"
 
 
 namespace pse {
-
-class Scale;
 
 // class PSState;
 
@@ -164,8 +163,19 @@ public:
     // static int dist(int name, int alt, int sig);
     
     /// chromatic harmonic scale associated with this ton.
-    const Scale& chromatic();
-
+    /// the chromatic harmonic modal scale embeds the epsllings of all the
+    /// traditional seven-tone modes that contain a perfect fifth
+    /// above the tonic note, including:
+    /// - Harmonic Minor
+    /// - Melodic Minor,
+    /// - Ionian mode,
+    /// - Dorian mode,
+    /// - Phrygian mode,
+    /// - Lydian mode,
+    /// - Mixolydian mode,
+    /// - Aeolian mode.
+    /// @see https://www.jomarpress.com/nagel/articles/ChromaticModal.html
+    const Scale& chromatic() const;
 
     void print(std::ostream& o) const;
     
@@ -175,8 +185,9 @@ protected:
     ModeName _mode;
     
     /// memoization of the chromatic harmonic scale associated with this ton.
-    std::shared_ptr<Scale> _chromatic;
-       
+    // std::shared_ptr<Scale> _chromatic;
+    const Scale _chromatic;
+
 private:
     
     /// abbreviations for accidentals
