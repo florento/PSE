@@ -45,6 +45,11 @@ public:
     /// @return an alteration number in -2..2.
     static enum Accid accid(int i);
 
+    /// pitch class for the ith entry in the array of fifth.
+    /// @param i index in the array of fifth, between -15 and 19 (0 is 'C').
+    /// @return a pitch class in 0..11.
+    static int pc(int i);
+
     /// index in the array of fifth of the note with given name and alteration.
     /// @param n a note name in 0..6 for C, D, E, F, G, A, B
     /// @param a an alteration number in -2..2.
@@ -77,7 +82,11 @@ private:
     static const enum Accid _2S;
 
     //static const int FIFTHS[35][2];
+    /// PWO values (name, accidental) in the line of fifths from -15 to 19.
     static const PWO FIFTHS[35];
+
+    /// pitch class value (in 0..11) in the line of fifths from -15 to 19.
+    static const int PCFIFTHS[35];
 
     static const enum NoteName MODI[7];
     

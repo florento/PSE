@@ -39,6 +39,16 @@ enum Accid Fifths::accid(int i)
 
 
 // static
+int Fifths::pc(int i)
+{
+    assert(-15 <= i);
+    assert(i <= 19);
+
+    return PCFIFTHS[i+15];
+}
+
+
+// static
 int Fifths::index(const enum NoteName& name, const enum Accid& accid)
 {
     int mod = 11;
@@ -119,6 +129,45 @@ const PWO Fifths::FIFTHS[35] =
     {_A, _2S}, //  17  // A##
     {_E, _2S}, //  18  // E##
     {_B, _2S}  //  19  // B##
+};
+
+const int Fifths::PCFIFTHS[35] =
+{
+     3, // -15  // Fbb
+    10, // -14  // Cbb
+     5, // -13  // Gbb
+     0, // -12  // Dbb
+     7, // -11  // Abb
+     2, // -10  // Ebb
+     9, //  -9  // Bbb
+     4, //  -8  // Fb
+    11, //  -7  // Cb
+     6, //  -6  // Gb
+     1, //  -5  // Db
+     8, //  -4  // Ab
+     3, //  -3  // Eb
+    10, //  -2  // Bb
+     5, //  -1  // F
+     0, //   0  // C
+     7, //   1  // G
+     2, //   2  // D
+     9, //   3  // A
+     4, //   4  // E
+    11, //   5  // B
+     6, //   6  // F#
+     1, //   7  // C#
+     8, //   8  // G#
+     3, //   9  // D#
+    10, //  10  // A#
+     5, //  11  // E#
+     0, //  12  // B#
+     7, //  13  // F##
+     2, //  14  // C##
+     9, //  15  // G##
+     4, //  16  // D##
+    11, //  17  // A##
+     6, //  18  // E##
+     1  //  19  // B##
 };
 
 
