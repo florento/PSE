@@ -10,40 +10,6 @@
 
 namespace pse {
 
-std::string tostring(const Algo& a)
-{
-    switch (a)
-    {
-        case Algo::Undef:
-            return "undef";
-
-        case Algo::PSE:
-            return "PSE";
-
-        case Algo::PS13:
-            return "PS13";
-
-        case Algo::PS14:
-            return "PS14";
-
-        case Algo::RewritePassing:
-            return "RewritePassing";
-
-        default:
-        {
-            ERROR("unknown Algo Name");
-            return "ERROR";
-        }
-    }
-}
-
-
-std::ostream& operator<<(std::ostream& o, const Algo& a)
-{
-    o << tostring(a);
-    return o;
-}
-
 
 Speller::Speller(const Algo& algo, bool dflag):
 _algo(algo),

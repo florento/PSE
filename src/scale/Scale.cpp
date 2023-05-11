@@ -6,8 +6,8 @@
 //
 
 #include "Scale.hpp"
-#include "MidiNum.hpp"
-
+#include "NoteName.hpp"
+//#include "Ton.hpp"
 
 namespace pse {
 
@@ -22,7 +22,7 @@ _mode(mode.name()),
 _pcs(),
 _names(),
 _accids(),
-_ks((major(mode)||minor(mode))?pc:0, !minor(mode))
+_ks((major(mode)||minor(mode))?pc:0, major(mode))
 {
     assert(0 <= pc);
     assert(pc <= 11);
@@ -40,6 +40,29 @@ _ks((major(mode)||minor(mode))?pc:0, !minor(mode))
         assert(MidiNum::accid(c, n) != Accid::Undef);
         _accids.push_back(MidiNum::accid(c, n));
     }
+}
+
+
+Scale::Scale(const Ton& ton):
+Scale(ton.getMode(), ton.getPitchClass(), ton.getName())
+{
+    // @todo also for other modes?
+    assert ((ton.getMode() == ModeName::Major) ||
+            (ton.getMode() == ModeName::Minor) ||
+            (ton.getMode() == ModeName::MinorNat) ||
+            (ton.getMode() == ModeName::MinorMel));
+}
+
+
+Scale::Scale(const Ton& ton, const ModeName& mode):
+Scale(ModeName::Chromatic, ton.getPitchClass(), ton.getName())
+{
+    assert(mode == ModeName::Chromatic);
+    // @todo also for other modes?
+    assert ((ton.getMode() == ModeName::Major) ||
+            (ton.getMode() == ModeName::Minor) ||
+            (ton.getMode() == ModeName::MinorNat) ||
+            (ton.getMode() == ModeName::MinorMel));
 }
 
 

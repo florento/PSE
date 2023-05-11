@@ -14,13 +14,16 @@
 #include "trace.hpp"
 #include "NoteName.hpp"
 #include "Accidental.hpp"
+#include "MidiNum.hpp"
 //#include "Fifths.hpp"
 #include "KeyFifth.hpp"
 #include "ModeName.hpp"
 #include "Mode.hpp"
+#include "Ton.hpp"
 
 namespace pse {
 
+class Ton;
 
 /// Major and harmonic minor scapes for each pitch class
 /// with enharmonics
@@ -46,18 +49,29 @@ class Scale  // public Mode
 {
 public:
 
-    /// main constructor
+    /// main constructor.
     /// @param mode mode of this scale
     /// @param pc pitch class of tonic, in 0..11
     /// @param name name of tonic, in A..G
     Scale(const ModeName& mode, int pc, const enum NoteName& name);
 
-    /// constructor from mode
+    /// constructor from mode.
     /// @param mode mode of this scale
     /// @param pc pitch class of tonic, in 0..11
     /// @param name name of tonic, in A..G
     Scale(const Mode& mode, int pc, const enum NoteName& name);
-    
+
+    /// constructor of diatonic scale associated to a given ton.
+    /// @param ton a tonality, i.e. a diatonic scale
+    /// (defined by key signature and mode). Its mode must be diatonic.
+    Scale(const Ton& ton);
+
+    /// chromatic harmonic scale associated to a given ton.
+    /// @param ton a tonality, i.e. a diatonic scale
+    /// (defined by key signature and mode). Its mode must be diatonic.
+    /// @param mode must be ModeName::Chromatic.
+    Scale(const Ton& ton, const ModeName& mode);
+
     /// note name for given degree.
     /// @param d degree in this scale. the first degree is 0 (not 1).
     /// @return the note name for the given degree, in A..G.
@@ -123,4 +137,3 @@ std::ostream& operator<<(std::ostream& o, const Scale& s);
 #endif /* Scale_hpp */
 
 /// @} // end group pse
-

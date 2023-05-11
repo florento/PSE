@@ -15,6 +15,7 @@
 #include "Fifths.hpp"
 //#include "PSState.hpp"
 #include "Weber.hpp" // Weber distance
+#include "Scale.hpp" // dependency
 
 
 namespace pse {
@@ -97,13 +98,15 @@ const std::array<std::array<enum Accid, 7>, 15> Ton::MIN_MEL =
 
 Ton::Ton():
 KeyFifth(0),
-_mode(ModeName::Undef)
+_mode(ModeName::Undef),
+_chromatic(nullptr) // computed on demand
 { }
 
 
 Ton::Ton(int ks, ModeName mode):
 KeyFifth(ks),
-_mode(mode)
+_mode(mode),
+_chromatic(nullptr) // computed on demand
 {
     assert(mode != ModeName::Undef);
 }
@@ -111,7 +114,8 @@ _mode(mode)
 
 Ton::Ton(const KeyFifth& ks, ModeName mode):
 KeyFifth(ks),
-_mode(mode)
+_mode(mode),
+_chromatic(nullptr) // computed on demand
 {
     assert(mode != ModeName::Undef);
 }
@@ -119,12 +123,15 @@ _mode(mode)
 
 Ton::Ton(const Ton& ton):
 KeyFifth(ton),
-_mode(ton.getMode())
+_mode(ton.getMode()),
+_chromatic(ton._chromatic) // shared ptr copy
 { }
 
 
 Ton::~Ton()
-{ }
+{
+    // desalloc _chromatic
+}
 
 
 Ton& Ton::operator=(const Ton& rhs)
@@ -154,6 +161,24 @@ bool Ton::undef() const
 {
     assert(_mode != ModeName::Undef || _sig == 0);
     return (_mode == ModeName::Undef);
+}
+
+
+const enum NoteName Ton::getName() const
+{
+    return Fifths::name(tonic());
+}
+
+
+const enum Accid Ton::getAccidental() const
+{
+    return Fifths::accid(tonic());
+}
+
+
+int Ton::getPitchClass() const
+{
+    return Fifths::pc(tonic());
 }
 
 
@@ -241,7 +266,7 @@ enum Accid Ton::accidental(int d) const
 //           _mode == ModeName::Minor ||
 //           _mode == ModeName::MinorNat ||
 //           _mode == ModeName::MinorMel);
-//    assert(d < 7); // diatonic scale
+    assert(d < 7); // diatonic scale
     return accidDia(name(d));
 }
 
@@ -393,6 +418,15 @@ unsigned int Ton::distWeber(const Ton& rhs) const
 //}
 
 
+const Scale& Ton::chromatic()
+{
+    if (_chromatic == nullptr)
+    {
+        _chromatic = std::make_shared<Scale>(*this, ModeName::Chromatic);
+    }
+    assert(_chromatic);
+    return *(_chromatic);
+}
 
 
 int Ton::tonic() const

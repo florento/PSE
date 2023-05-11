@@ -13,16 +13,19 @@
 #define Ton_hpp
 
 #include <iostream>
+#include <memory>
 
 #include "trace.hpp"
 #include "NoteName.hpp"
 #include "Accidental.hpp"
+#include "ModeName.hpp"
 #include "Fifths.hpp"
 #include "KeyFifth.hpp"
-#include "ModeName.hpp"
 
 
 namespace pse {
+
+class Scale;
 
 // class PSState;
 
@@ -30,7 +33,7 @@ namespace pse {
 /// (only diatonic scales)
 ///
 /// | ks | Maj | Min  | sens (harm) |
-/// |:--:|:---:|:----:|:------------|
+/// |:--:|:---:|:----:|:-----------:|
 /// | -7 | Cb  | Ab   | Gnat        |
 /// | -6 | Gb  | Eb   | Dnat        |
 /// | -5 | Db  | Bb   | Anat        |
@@ -57,7 +60,7 @@ public:
     /// undefined tonality.
     Ton();
     
-    /// main constructor
+    /// main constructor.
     /// @param ks number of flats if negative int,
     /// or number of sharps if positive int. must be in -7..7.
     /// @param mode mode of this tonality.
@@ -82,12 +85,15 @@ public:
     
     inline ModeName getMode() const { return _mode; }
 
-    /// note name of this tonality
-    inline const enum NoteName getName() const { return Fifths::name(tonic()); }
+    /// note name of this tonality.
+    const enum NoteName getName() const;
 
-    /// accidental name of this tonality
-    inline const enum Accid getAccidental() const { return Fifths::accid(tonic()); }
-    
+    /// accidental name of this tonality.
+    const enum Accid getAccidental() const;
+
+    /// pitch class of this tonality.
+    int getPitchClass() const;
+
     /// this tonality is undefined.
     bool undef() const;
     
@@ -114,7 +120,7 @@ public:
     /// @warning only for distonic scales: the mode must be
     /// Major or Minor or MinorNat or MinorMel.
     enum Accid accidental(int d) const;
-
+  
     /// a note is a lead in this Ton if
     /// it has an accidental in the scale different
     /// from its accidental in the key signature.
@@ -156,6 +162,10 @@ public:
     // @param alt alteration in -2..2 (-2 = double flats, 2 = double sharps).
     // @param sig a key signature in -7..7.
     // static int dist(int name, int alt, int sig);
+    
+    /// chromatic harmonic scale associated with this ton.
+    const Scale& chromatic();
+
 
     void print(std::ostream& o) const;
     
@@ -163,6 +173,9 @@ protected:
 
     /// mode of this tonality.
     ModeName _mode;
+    
+    /// memoization of the chromatic harmonic scale associated with this ton.
+    std::shared_ptr<Scale> _chromatic;
        
 private:
     

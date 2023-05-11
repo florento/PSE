@@ -11,7 +11,7 @@
 
 //#include "Pitch.hpp"
 #include "Fifths.hpp"
-
+#include "MidiNum.hpp"
 
 namespace pse {
 
@@ -44,7 +44,11 @@ int Fifths::pc(int i)
     assert(-15 <= i);
     assert(i <= 19);
 
-    return PCFIFTHS[i+15];
+    //    unsigned int m = MidiNum::to_midi(name(i), accid(i), 0); // octave 0
+    //    assert(0 <= m);
+    //    assert(m < 128);
+    //    return m % 12;
+    return PCFIFTHS[i+15]; // tabulated
 }
 
 
