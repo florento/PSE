@@ -164,7 +164,6 @@ bool PSCost::operator<=(const PSCost& rhs) const
 
 bool PSCost::operator>(const PSCost& rhs) const
 {
-//  return (operator!=(rhs) && rhs.operator<(*this));
     return rhs.operator<(*this);
 }
 
@@ -182,7 +181,7 @@ bool PSCost::eq_lex(const PSCost& rhs) const
     return ((_accid == rhs._accid) &&
             (_ndia  == rhs._ndia)  &&
             (_dist  == rhs._dist)  &&
-            (_color  == rhs._color));
+            (_color == rhs._color));
 }
 
 

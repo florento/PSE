@@ -18,12 +18,12 @@
 #include <vector>
 
 #include "trace.hpp"
+#include "AlgoName.hpp"
 #include "PSEnum.hpp"
 #include "TonIndex.hpp"
 #include "PSVector.hpp"
 
 namespace pse {
-
 
 
 // table: tonindex (for rows) x header of psvect
@@ -52,11 +52,12 @@ public:
     /// @todo param step number (default 0)
     /// main constructor.
     /// @param e an enumerator of notes for transitions of configs.
+    /// @param a name of pitch-spelling algorithm implemented with this table.
     /// @param nbTons use default list of tonalities (default: empty).
     /// @param dflag debug mode (display table during construction).)
     /// @see TonIndex for supported values.
     /// @warning the enumerator cannot be changed once the object created.
-    PST(PSEnum& e, size_t nbTons=0, bool dflag=false);
+    PST(PSEnum& e, const Algo& a = Algo::PSE, size_t nbTons=0, bool dflag=false);
 
     // main constructor.
     // @param e an enumerator of notes for transitions of configs.
@@ -182,6 +183,9 @@ public:
     
 private: // data
 
+    /// name  of the pitch spelling algorithm implemented with this table.
+    const Algo& _algo;
+    
     // vector of tonalities = headers of rows of this table
     // std::vector<const Ton> _tons;
     // @todo replace by TonIndex

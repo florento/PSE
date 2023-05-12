@@ -20,6 +20,7 @@
 
 #include "trace.hpp"
 //#include "MTU.hpp"
+#include "AlgoName.hpp"
 //#include "Pitch.hpp"
 //#include "Part.hpp"
 //#include "AEVisitor.hpp"
@@ -50,32 +51,33 @@ public:
 
     /// @todo param step number
     /// main constructor.
+    /// @param a name of pitch-spelling algorithm implemented.
     /// @param index array of tonalities. dimension of this vector.
     /// @param e an enumerator of notes for transitions of configs.
     /// @warning the enumerator cannot be changed once the object created.
-    PSV(const TonIndex& index,  // const std::vector<const Ton>& tons,
-        const PSEnum& e);
+    PSV(const Algo& a, const TonIndex& index, const PSEnum& e);
     
     /// @todo param step number
     /// main constructor.
+    /// @param a name of pitch-spelling algorithm implemented.
     /// @param index array of tonalities. dimension of this vector.
     /// @param e an enumerator of notes for transitions of configs.
     /// @param i0 index of the first note to read in enumerator.
     /// @param i1 index of the note after the last note to read in enumerator.
     /// must be superior of equal to i0.
     /// the sequence is empty iff if i0 == i1.
-    PSV(const TonIndex& index,  // const std::vector<const Ton>& tons,
+    PSV(const Algo& a, const TonIndex& index,
         const PSEnum& e, size_t i0, size_t i1);
     
     /// @todo param step number
     /// main constructor.
+    /// @param a name of pitch-spelling algorithm implemented.
     /// @param index array of tonalities. dimension of this vector.
     /// @param e an enumerator of notes for transitions of configs.
     /// @param i0 index of the first note to read in enumerator.
     /// The enumeration starts at i0 and stops
     /// when there are no more notes to read in e.
-    PSV(const TonIndex& index,  // const std::vector<const Ton>& tons,
-        const PSEnum& e, size_t i0);
+    PSV(const Algo& a, const TonIndex& index, const PSEnum& e, size_t i0);
     
     ~PSV();
   
@@ -117,6 +119,9 @@ public:
     
 private: // data
     
+    /// name  of the pitch spelling algorithm implemented.
+    const Algo& _algo;
+    
     /// header of rows: vector of tonalities.
     /// copy of the index of the embedding table.
     const TonIndex& index;
@@ -139,7 +144,7 @@ private: // data
     /// index (in the TonIndex) of the estimated local tonality, for each
     /// global tonality (also represented by an index).
     /// _local[i] is the estimated best local tonality for the current bar,
-    /// assuminng that i is the inndexx of the globabl tonality.
+    /// assuminng that i is the index of the globabl tonality.
     /// - TonIndex::UNDEF if it was not estimated yet.
     /// - TonIndex::FAILED if its estimation failed.
     /// - an integer value between 0 and index.size() otherwise.

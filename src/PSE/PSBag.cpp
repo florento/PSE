@@ -9,30 +9,30 @@
 #include "PSBag.hpp"
 #include "Enharmonic.hpp"
 #include "PSOrder.hpp"
-
+#include "Transition.hpp"
 
 namespace pse {
 
-PSB::PSB(const Ton& ton, PSEnum& e):
-_enum(e),
-_bests(),  // empty
-_cost()   // zero
-//_visited() // empty
-{
-    if (! e.empty())
-        init(ton, ton, false); // second arg. ton is ignored
-    // otherwise n0 == n1, no note, leave the bag _bests empty
-}
+//PSB::PSB(const Ton& ton, PSEnum& e):
+//_enum(e),
+//_bests(),  // empty
+//_cost()   // zero
+////_visited() // empty
+//{
+//    if (! e.empty())
+//        init(ton, ton, false); // second arg. ton is ignored
+//    // otherwise n0 == n1, no note, leave the bag _bests empty
+//}
 
 
-PSB::PSB(const Ton& gton, const Ton& lton, PSEnum& e):
+PSB::PSB(const Ton& gton, const Ton& lton, PSEnum& e, const Algo& a):
 _enum(e),
 _bests(),   // empty
 _cost()    // zero
 //_visited()  // empty
 {
     if (! e.empty())
-        init(gton, lton, true);
+        init(gton, lton, a);
     // otherwise n0 == n1, no note, leave _best empty
 }
 
@@ -60,11 +60,14 @@ PSB::~PSB()
 
 
 // search of best path
-void PSB::init(const Ton& ton, const Ton& lton, bool fsucc)
+void PSB::init(const Ton& ton, const Ton& lton, const Algo& a)
 {
     // at least one note, the bag cannot be empty.
     assert(_enum.first() < _enum.stop());
 
+    assert((a == Algo::PSE0) || (a == Algo::PSE1) || (a == Algo::PS14));
+    Transition transition(a, _enum);
+    
     // backup of configurations during construction
     // to prevent deletion when pop from queue
     std::vector<std::shared_ptr<const PSC0>> visited;
@@ -134,10 +137,11 @@ void PSB::init(const Ton& ton, const Ton& lton, bool fsucc)
             // (c will be the prev of the succ computed here)
             visited.push_back(c);
             // add every possible successor configs to q
-            if (fsucc)
-                succ(c, ton, lton, q); //static
-            else
-                succ(c, ton, q);
+            transition.succ(c, ton, lton, q);
+//            if (fsucc)
+//                succ(c, ton, lton, q); //static
+//            else
+//                succ(c, ton, q);
         }
     }
 }
@@ -207,163 +211,6 @@ void PSB::addBest(std::shared_ptr<const PSC0>& c)
     assert(_bests.empty() || c->cost() <= _cost);
     _bests.push_back(c);
 }
-
-
-// static
-void PSB::succ(std::shared_ptr<const PSC0>& c, // PSEnum& e,
-               const Ton& ton, PSCQueue& q) const
-{
-    assert(c);
-    if (_enum.simultaneous(c->id()))
-        succ2(c, ton, q);    // chord
-    else
-        succ1(c, ton, q);    // single note
-}
-
-
-// static
-void PSB::succ1(std::shared_ptr<const PSC0>& c, // PSEnum& e,
-                const Ton& ton, PSCQueue& q) const
-{
-    assert(c);
-    // midi pitch of the note read for transition from this config
-    unsigned int pm = _enum.midipitch(c->id());
-    assert(0 <= pm);
-    assert(pm <= 127);
-    int m = pm % 12; // chroma in 0..11
-
-    for (int j = 0; j < 3; ++j)
-    {
-        enum NoteName name = Enharmonics::name(m, j);
-        enum Accid accid = Enharmonics::accid(m, j);
-        // case of 8 and (short list) 1, 3, 6, 10
-        if (defined(name) && defined(accid))
-            q.push(std::make_shared<PSC1>(c, _enum, name, accid, ton));
-    }
-}
-
-
-// static
-void PSB::succ2(std::shared_ptr<const PSC0>& c, // PSEnum& e,
-                const Ton& ton, PSCQueue& q) const
-{
-    assert(c);
-    //assert(c->size() > 1);
-    std::stack<std::shared_ptr<const PSC2>> cs;
-    cs.push(std::make_shared<const PSC2>(c, _enum, c->id())); // initial config
-    
-    while (! cs.empty())
-    {
-        std::shared_ptr<const PSC2> c2 = cs.top();
-        cs.pop();
-        assert(c2);
-        
-        // finished to process chord: add config2 to queue of successors
-        if (c2->complete())
-            q.push(c2); // copy of shared ptr
-        // continue processing of the chord
-        else
-        {
-            unsigned int m = c2->current(); // chroma in 0..11
-            assert(0 <= m);
-            assert(m < 12);
-
-            assert(c2);
-            const PSC2& rc2 = *c2;
-            
-            // 3 enharmonics
-            for (int j = 0; j < 3; ++j)
-            {
-                enum NoteName name = Enharmonics::name(m, j);
-                enum Accid accid = Enharmonics::accid(m, j);
-                // case of 8 and (short list) 1, 3, 6, 10
-                if (defined(name) && defined(accid) &&
-                    rc2.consistent(name, accid))
-                {
-                    cs.push(std::make_shared<PSC2>(rc2, name, accid, ton));
-                }
-            }
-        }
-    }
-}
-
-
-// static
-void PSB::succ(std::shared_ptr<const PSC0>& c, // PSEnum& e,
-               const Ton& ton, const Ton& lton, PSCQueue& q) const
-{
-    assert(c);
-    if (_enum.simultaneous(c->id()))
-        succ2(c, ton, lton, q);    // chord
-    else
-        succ1(c, ton, lton, q);    // single note
-}
-
-
-// static
-void PSB::succ1(std::shared_ptr<const PSC0>& c, // PSEnum& e,
-                const Ton& ton, const Ton& lton, PSCQueue& q) const
-{
-    assert(c);
-    // midi pitch of the note read for transition from this config
-    unsigned int pm = _enum.midipitch(c->id());
-    assert(0 <= pm);
-    assert(pm <= 127);
-    int m = pm % 12; // chroma in 0..11
-
-    for (int j = 0; j < 3; ++j)
-    {
-        enum NoteName name = Enharmonics::name(m, j);
-        enum Accid accid = Enharmonics::accid(m, j);
-        // case of 8 and (short list) 1, 3, 6, 10
-        if (defined(name) && defined(accid))
-            q.push(std::make_shared<PSC1>(c, _enum, name, accid, ton, lton));
-    }
-}
-
-
-// static
-void PSB::succ2(std::shared_ptr<const PSC0>& c, // PSEnum& e,
-                const Ton& ton, const Ton& lton, PSCQueue& q) const
-{
-    assert(c);
-    //assert(c->size() > 1);
-    std::stack<std::shared_ptr<const PSC2>> cs;
-    cs.push(std::make_shared<const PSC2>(c, _enum, c->id())); // initial config
-    
-    while (! cs.empty())
-    {
-        std::shared_ptr<const PSC2> c2 = cs.top();
-        cs.pop();
-        assert(c2);
-        
-        // finished to process chord: add config2 to queue of successors
-        if (c2->complete())
-            q.push(c2); // copy of shared ptr
-        // continue processing of the chord
-        else
-        {
-            unsigned int m = c2->current(); // chroma in 0..11
-            assert(0 <= m);
-            assert(m < 12);
-
-            assert(c2);
-            const PSC2& rc2 = *c2;
-            
-            // 3 enharmonics
-            for (int j = 0; j < 3; ++j)
-            {
-                enum NoteName name = Enharmonics::name(m, j);
-                enum Accid accid = Enharmonics::accid(m, j);
-                // case of 8 and (short list) 1, 3, 6, 10
-                if (defined(name) && defined(accid) &&
-                    rc2.consistent(name, accid))
-                    cs.push(std::make_shared<PSC2>(rc2, name, accid, ton, lton));
-            }
-        }
-    }
-}
-
 
 } // end namespace pse
 

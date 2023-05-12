@@ -103,6 +103,10 @@
 		438EFD7F2A0D4C8300FF3733 /* PSOrder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43D8A9EF29AFA16B00B260DA /* PSOrder.cpp */; };
 		438EFD802A0D4C8500FF3733 /* PSOrder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43D8A9EF29AFA16B00B260DA /* PSOrder.cpp */; };
 		438EFD812A0D4C8600FF3733 /* PSOrder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43D8A9EF29AFA16B00B260DA /* PSOrder.cpp */; };
+		438EFD852A0E41DD00FF3733 /* Cost.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 438EFD832A0E41DD00FF3733 /* Cost.cpp */; };
+		438EFD862A0E41DD00FF3733 /* Cost.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 438EFD832A0E41DD00FF3733 /* Cost.cpp */; };
+		438EFD872A0E41DD00FF3733 /* Cost.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 438EFD832A0E41DD00FF3733 /* Cost.cpp */; };
+		438EFD882A0E41DD00FF3733 /* Cost.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 438EFD842A0E41DD00FF3733 /* Cost.hpp */; };
 		4397A5DE29A6CDB300C2CC9A /* PSOrder.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 4397A5DC29A6CDB300C2CC9A /* PSOrder.hpp */; };
 		43A2544029280D8900D559D2 /* trace.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43A2543E29280D8900D559D2 /* trace.cpp */; };
 		43A2544129280D8900D559D2 /* trace.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 43A2543F29280D8900D559D2 /* trace.hpp */; };
@@ -264,6 +268,8 @@
 		436C6C3D2924016F00152D8C /* pse.cpython-311-darwin.so */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = "pse.cpython-311-darwin.so"; sourceTree = BUILT_PRODUCTS_DIR; };
 		436C6C4D2924023100152D8C /* NoteName.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = NoteName.hpp; path = src/pitch/NoteName.hpp; sourceTree = "<group>"; };
 		43791C8D29D8392200DE8796 /* TestAccidental.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TestAccidental.cpp; sourceTree = "<group>"; };
+		438EFD832A0E41DD00FF3733 /* Cost.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Cost.cpp; sourceTree = "<group>"; };
+		438EFD842A0E41DD00FF3733 /* Cost.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Cost.hpp; sourceTree = "<group>"; };
 		43947D0029D972AF008EB20A /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = src/ps14/README.md; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.markdown; };
 		4397A5DC29A6CDB300C2CC9A /* PSOrder.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = PSOrder.hpp; sourceTree = "<group>"; };
 		43A2543E29280D8900D559D2 /* trace.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = trace.cpp; path = src/general/trace.cpp; sourceTree = "<group>"; };
@@ -385,6 +391,8 @@
 				43ABA51E29242418002AC1D4 /* PSState.cpp */,
 				43DD95482945E223006DC553 /* PSCost.hpp */,
 				43DD95472945E223006DC553 /* PSCost.cpp */,
+				4397A5DC29A6CDB300C2CC9A /* PSOrder.hpp */,
+				43D8A9EF29AFA16B00B260DA /* PSOrder.cpp */,
 				43ABA52029242418002AC1D4 /* PSConfig0.hpp */,
 				43ABA52129242418002AC1D4 /* PSConfig0.cpp */,
 				43ABA51B29242418002AC1D4 /* PSConfig.hpp */,
@@ -393,8 +401,6 @@
 				434B1DF6298ECCF0001CE41C /* PSConfig1.cpp */,
 				434B1DFB298ED394001CE41C /* PSConfig2.hpp */,
 				434B1DFA298ED394001CE41C /* PSConfig2.cpp */,
-				4397A5DC29A6CDB300C2CC9A /* PSOrder.hpp */,
-				43D8A9EF29AFA16B00B260DA /* PSOrder.cpp */,
 				430960582A0CD7E80097487A /* Transition.hpp */,
 				430960572A0CD7E80097487A /* Transition.cpp */,
 				43ABA51A29242417002AC1D4 /* PSBag.hpp */,
@@ -556,6 +562,7 @@
 				4310526429CDAE2400694D5A /* scale */,
 				431586182983E65A00918B1B /* ton */,
 				4315861A2983E7FB00918B1B /* import */,
+				438EFD822A0E3EB200FF3733 /* cost */,
 				431586192983E6BF00918B1B /* PSE */,
 				4363442B29D31D3500F5D628 /* PS13 */,
 				43947CFF29D97299008EB20A /* PS14 */,
@@ -587,6 +594,15 @@
 				43ABA53D292425AD002AC1D4 /* spdlog */,
 			);
 			name = extern;
+			sourceTree = "<group>";
+		};
+		438EFD822A0E3EB200FF3733 /* cost */ = {
+			isa = PBXGroup;
+			children = (
+				438EFD842A0E41DD00FF3733 /* Cost.hpp */,
+				438EFD832A0E41DD00FF3733 /* Cost.cpp */,
+			);
+			path = cost;
 			sourceTree = "<group>";
 		};
 		43947CFF29D97299008EB20A /* PS14 */ = {
@@ -655,6 +671,7 @@
 				43C2BA12299946150084AB3B /* Interval.hpp in Headers */,
 				4342FD102926781E004E914F /* PWO.hpp in Headers */,
 				43C2BA1529994F630084AB3B /* Pitch.hpp in Headers */,
+				438EFD882A0E41DD00FF3733 /* Cost.hpp in Headers */,
 				4310526929CDD15000694D5A /* Scale.hpp in Headers */,
 				432E7A5629D45FE2000E2B72 /* PS13.hpp in Headers */,
 				430CDFF22924E6D800A84650 /* KeyFifth.hpp in Headers */,
@@ -801,6 +818,7 @@
 				4350820529D6FDA100465943 /* TestMode.cpp in Sources */,
 				438A581829E0492D0073A32C /* PSConfig.cpp in Sources */,
 				4353AE3829DDAD3E00FAF8A3 /* TestPSEnum.cpp in Sources */,
+				438EFD872A0E41DD00FF3733 /* Cost.cpp in Sources */,
 				435081F129D6D76100465943 /* Pitch.cpp in Sources */,
 				435081F029D6D75D00465943 /* ModeName.cpp in Sources */,
 				438A581E29E049430073A32C /* PSState.cpp in Sources */,
@@ -853,6 +871,7 @@
 				432E7A4E29D427FD000E2B72 /* PSE.cpp in Sources */,
 				434B1DF8298ECCF1001CE41C /* PSConfig1.cpp in Sources */,
 				432657E3294E2FB100515080 /* Weber.cpp in Sources */,
+				438EFD852A0E41DD00FF3733 /* Cost.cpp in Sources */,
 				43ABA52E29242418002AC1D4 /* PSState.cpp in Sources */,
 				4310526729CDD15000694D5A /* Scale.cpp in Sources */,
 				43DD95492945E223006DC553 /* PSCost.cpp in Sources */,
@@ -898,6 +917,7 @@
 				432E7A4F29D427FD000E2B72 /* PSE.cpp in Sources */,
 				43FBEACC2930CEDD008FC486 /* KeyFifth.cpp in Sources */,
 				43FBEACD2930CEDD008FC486 /* Ton.cpp in Sources */,
+				438EFD862A0E41DD00FF3733 /* Cost.cpp in Sources */,
 				434B1DF9298ED0A0001CE41C /* PSConfig1.cpp in Sources */,
 				4310526829CDD15000694D5A /* Scale.cpp in Sources */,
 				432657E4294E2FB100515080 /* Weber.cpp in Sources */,

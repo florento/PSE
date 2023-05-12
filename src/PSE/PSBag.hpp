@@ -17,6 +17,7 @@
 
 #include "trace.hpp"
 //#include "MTU.hpp"
+#include "AlgoName.hpp"
 //#include "Part.hpp"
 //#include "AEVisitor.hpp"
 //#include "Pitch.hpp"
@@ -45,12 +46,13 @@ class PSB
 {
 public:
     
-    /// bag of best target configs configs for a conjectured global tonality
-    /// (key sig) and a measure of notes.
-    /// @param ton conjectured global tonality (key sig),
-    /// used to define the initial config.
-    /// @param e an enumerator of notes for computing transitions between configs.
-    PSB(const Ton& ton, PSEnum& e);
+    // bag of best target configs configs for a conjectured global tonality
+    // (key sig) and a measure of notes.
+    // @param ton conjectured global tonality (key sig),
+    // used to define the initial config.
+    // @param e an enumerator of notes for computing transitions between configs.
+    // @todo TBR
+    // PSB(const Ton& ton, PSEnum& e, const Algo& a);
     
     /// bag of best target configs configs for a conjectured global tonality
     /// (key sig), a conjectured local tonality (tie break) and a measure of notes.
@@ -59,7 +61,8 @@ public:
     /// @param lton conjectured local tonality, to compute the cumulated
     /// distance value used for tie break.
     /// @param e an enumerator of notes for computing transitions between configs.
-    PSB(const Ton& ton, const Ton& lton, PSEnum& e);
+    /// @param a name of pitch-spelling algorithm implemented.
+    PSB(const Ton& ton, const Ton& lton, PSEnum& e, const Algo& a);
     
     ~PSB();
     
@@ -120,9 +123,10 @@ private:
     /// used to define the initial config.
     /// @param lton conjectured local tonality, to compute the cumulated
     /// dist value used for tie break.
-    /// @param fsucc flag, whether the successor is computed with ton only
-    /// or ton and lton.
-    void init(const Ton& ton, const Ton& lton, bool fsucc);
+    /// @param a name of pitch-spelling algorithm implemented.
+    // @param fsucc flag, whether the successor is computed with ton only
+    // or ton and lton.
+    void init(const Ton& ton, const Ton& lton, const Algo& a); // bool fsucc);
     // @param q priority queue for the computation of the best path.
     
     /// access one PS config in this bag.
@@ -133,66 +137,6 @@ private:
     
     void addBest(std::shared_ptr<const PSC0>& c);
     
-    /// allocate every config reached by one transition from the given config,
-    /// when reading one pitch or several simultaneous pitchs,
-    /// and push it to the given queue.
-    /// @param c source configuration.
-    /// this config.
-    /// @param ton conjectured main (global) tonality (key signature).
-    /// @param q queue receiving the target configs.
-    void succ(std::shared_ptr<const PSC0>& c,
-              const Ton& ton, PSCQueue& q) const;
-    
-    /// allocate every config reached by one transition from the given config,
-    /// when reading one pitch or several simultaneous pitchs,
-    /// and push it to the given queue.
-    /// @param c source configuration.
-    /// this config.
-    /// @param ton conjectured main (global) tonality (key signature).
-    /// @param lton conjectured local tonality.
-    /// @param q queue receiving the target configs.
-    void succ(std::shared_ptr<const PSC0>& c,
-              const Ton& ton, const Ton& lton, PSCQueue& q) const;
-    
-    /// allocate every config reached by one transition from the given config,
-    /// when reading one pitch and push it to the given queue.
-    /// @param c source configuration.
-    /// this config.
-    /// @param ton conjectured main (global) tonality (key signature).
-    /// @param q queue receiving the target configs.
-    void succ1(std::shared_ptr<const PSC0>& c,
-               const Ton& ton, PSCQueue& q) const;
-
-    /// allocate every config reached by one transition from the given config,
-    /// when reading several simultaneous pitchs (chord) and push it to
-    /// the given queue.
-    /// @param c source configuration.
-    /// this config.
-    /// @param ton conjectured main (global) tonality (key signature).
-    /// @param q queue receiving the target configs.
-    void succ2(std::shared_ptr<const PSC0>& c,
-               const Ton& ton, PSCQueue& q) const;
-    
-    /// allocate every config reached by one transition from the given config,
-    /// when reading one pitch and push it to the given queue.
-    /// @param c source configuration.
-    /// this config.
-    /// @param ton conjectured main (global) tonality (key signature).
-    /// @param lton conjectured local tonality.
-    /// @param q queue receiving the target configs.
-    void succ1(std::shared_ptr<const PSC0>& c,
-               const Ton& ton, const Ton& lton, PSCQueue& q) const;
-
-    /// allocate every config reached by one transition from the given config,
-    /// when reading several simultaneous pitchs (chord), and push it to
-    /// the given queue.
-    /// @param c source configuration.
-    /// this config.
-    /// @param ton conjectured main (global) tonality (key signature).
-    /// @param lton conjectured local tonality.
-    /// @param q queue receiving the target configs.
-    void succ2(std::shared_ptr<const PSC0>& c, 
-               const Ton& ton, const Ton& lton, PSCQueue& q) const;
 };
 
 

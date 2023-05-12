@@ -16,8 +16,9 @@
 namespace pse {
 
 
-PSV::PSV(const TonIndex& i, const PSEnum& e):
+PSV::PSV(const Algo& a, const TonIndex& i, const PSEnum& e):
 index(i),
+_algo(a),
 _enum(e.clone()),
 _psb_partial(),
 _psb_total(),
@@ -31,8 +32,10 @@ _tiebfail(0)
 }
 
 
-PSV::PSV(const TonIndex& i, const PSEnum& e, size_t i0, size_t i1):
+PSV::PSV(const Algo& a, const TonIndex& i,
+         const PSEnum& e, size_t i0, size_t i1):
 index(i),
+_algo(a),
 _enum(e.clone(i0, i1)),
 _psb_partial(),
 _psb_total(),
@@ -47,8 +50,9 @@ _tiebfail(0)
 }
 
 
-PSV::PSV(const TonIndex& i, const PSEnum& e, size_t i0):
+PSV::PSV(const Algo& a, const TonIndex& i, const PSEnum& e, size_t i0):
 index(i),
+_algo(a),
 _enum(e.clone(i0)),
 _psb_partial(),
 _psb_total(),
@@ -86,10 +90,27 @@ void PSV::init()
     {
         // PS Bag is empty if first() = last()
         TRACE("PSV {}-{} ton {}", psenum().first(), psenum().stop(), ton(i));
-        _psb_partial[i] = std::make_shared<const PSB>(ton(i), psenum());
+        const Ton& toni = ton(i);
+        if (_algo == Algo::PSE)
+        {
+            // arg local ton is ignored
+            _psb_partial[i] =
+                std::make_shared<const PSB>(toni, toni, psenum(), Algo::PSE0);
+        }
+        else if (_algo == Algo::PS14)
+        {
+            // arg local ton is ignored
+            _psb_partial[i] =
+                std::make_shared<const PSB>(toni, toni, psenum(), Algo::PS14);
+        }
+        else
+        {
+            ERROR("PSV best: unexpected algo {}", _algo);
+        }
         _psb_total[i] = nullptr;
         TRACE("compute the best spelling for notes {}-{}, ton = {}: {} accid",
-              psenum().first(), psenum().stop(), ton(i), _psb_partial[i]->cost());
+              psenum().first(), psenum().stop(), ton(i),
+              _psb_partial[i]->cost());
     }
 }
 
@@ -139,7 +160,21 @@ const PSB& PSV::best(size_t step, size_t i)
             assert(_local[i] < index.size());
             const Ton& lton = ton(_local[i]);
             // PS Bag is empty if first() = last()
-            _psb_total[i] = std::make_shared<const PSB>(gton, lton, psenum());
+            /// @todo pass algo
+            if (_algo == Algo::PSE)
+            {
+                _psb_total[i] =
+                 std::make_shared<const PSB>(gton, lton, psenum(), Algo::PSE1);
+            }
+            else if (_algo == Algo::PS14)
+            {
+                _psb_total[i] =
+                 std::make_shared<const PSB>(gton, lton, psenum(), Algo::PS14);
+            }
+            else
+            {
+                ERROR("PSV best: unexpected algo {}", _algo);
+            }
         }
             
         assert(_psb_total[i]);

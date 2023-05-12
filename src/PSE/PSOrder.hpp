@@ -44,124 +44,58 @@ enum class CostOrdering
     Undef
 };
 
-
 std::ostream& operator<<(std::ostream& o, const CostOrdering& co);
-
 
 /// ordering for PS Config0 based on lexico combination of
 /// - cost (nb accidents, dist. to local tonality, number of disjoint moves, color), ordered lexxicographically
-/// - index in enumerator
-PSCCompare PSClex =
-[](std::shared_ptr<const PSC0>& lhs, std::shared_ptr<const PSC0>& rhs)
+/// - index in enumerator.
+struct PSClex
 {
-    assert (lhs);
-    assert (rhs);
-    if (lhs->cost() == rhs->cost())
-        return (lhs->id() < rhs->id());      // largest index
-    else
-        return (lhs->cost() > rhs->cost());  // smallest cost
+    bool operator()(std::shared_ptr<const PSC0>& lhs,
+                    std::shared_ptr<const PSC0>& rhs);
+   
 };
-//    if (lhs->accidentals() == rhs->accidentals())
-//    {
-//        // dist, lexicographically
-//        if (lhs->dist() == rhs->dist())
-//        {
-//            // disjoint moves, lexicographically
-//            if (lhs->disjoint() == rhs->disjoint())
-//                return false; // tie break fail
-//            else
-//                return (lhs->disjoint() > rhs->disjoint());  // smallest nb mv disjoint moves
-//        }
-//        else
-//            return (lhs->dist() > rhs->dist());  // smallest dist
-//    }
-//    else
-//        return (lhs->accidentals() > rhs->accidentals());  // smallest cost
-
 
 /// ordering for PS Config0 based on lexico combination of
-/// - cost (nb accidents, dist. to local tonality, number of disjoint moves, color), ordered lexicographically,
-/// withh cumul of number of accids and non-diatoinc moves.
+/// - cost (nb accidents, dist. to local tonality,
+/// number of disjoint moves, color), ordered lexicographically,
+/// withh cumul of number of accids and non-diatonic moves.
 /// - index in enumerator
-PSCCompare PSCcumul =
-[](std::shared_ptr<const PSC0>& lhs, std::shared_ptr<const PSC0>& rhs)
+struct PSCcumul
 {
-    assert (lhs);
-    assert (rhs);
-    if (lhs->cost().eq_cumul(rhs->cost()))
-        return (lhs->id() < rhs->id()); // largest index
-    else
-        return (lhs->cost().greater_cumul(rhs->cost()));
-        // smallest cost
+    bool operator()(std::shared_ptr<const PSC0>& lhs,
+                    std::shared_ptr<const PSC0>& rhs);
 };
-
 
 /// ordering for PS Config0 based on nb of accidents only.
-PSCCompare PSCacc =
-[](std::shared_ptr<const PSC0>& lhs, std::shared_ptr<const PSC0>& rhs)
+struct PSCacc
 {
-    assert (lhs);
-    assert (rhs);
-    if (lhs->cost().getAccid() == rhs->cost().getAccid())
-        return (lhs->id() < rhs->id());  // largest index
-    else
-        return (lhs->cost().getAccid() > rhs->cost().getAccid());
+    bool operator()(std::shared_ptr<const PSC0>& lhs,
+                    std::shared_ptr<const PSC0>& rhs);
 };
-
 
 /// ordering for PS Config0 based on nb of accidents and
 /// number of non-diatonic moves only
-PSCCompare PSCad =
-[](std::shared_ptr<const PSC0>& lhs, std::shared_ptr<const PSC0>& rhs)
+struct PSCad
 {
-    assert (lhs);
-    assert (rhs);
-    if (lhs->cost().getAccid() == rhs->cost().getAccid())
-    {
-        if (lhs->cost().getDia() == rhs->cost().getDia())
-            return (lhs->id() < rhs->id());  // largest index
-        else
-            return (lhs->cost().getDia() > rhs->cost().getDia());
-    }
-    else
-        return (lhs->cost().getAccid() > rhs->cost().getAccid());
+    bool operator()(std::shared_ptr<const PSC0>& lhs,
+                    std::shared_ptr<const PSC0>& rhs);
 };
-
 
 /// ordering for PS Config0
-PSCCompare PSCaplusd =
-[](std::shared_ptr<const PSC0>& lhs, std::shared_ptr<const PSC0>& rhs)
+struct PSCaplusd
 {
-    assert (lhs);
-    assert (rhs);
-    if (lhs->cost().getAccid() + lhs->cost().getDia() ==
-        rhs->cost().getAccid() + rhs->cost().getDia())
-    {
-        if (lhs->cost().getDist() == rhs->cost().getDist())
-        {
-            if (lhs->cost().getColor() == rhs->cost().getColor())
-                return (lhs->id() < rhs->id()); // largest index
-            else
-                return (lhs->cost().getColor() > rhs->cost().getColor());
-       }
-        else
-            return (lhs->cost().getDist() > rhs->cost().getDist());
-    }
-    else
-        return (lhs->cost().getAccid() + lhs->cost().getDia() >
-                rhs->cost().getAccid() + rhs->cost().getDia());
+    bool operator()(std::shared_ptr<const PSC0>& lhs,
+                    std::shared_ptr<const PSC0>& rhs);
 };
-
 
 /// ordering for base PSConfig0 based on dist.
 /// @todo TBR
 /// @todo mv to PSC0
-PSCCompare PSCdist =
-[](std::shared_ptr<const PSC0>& lhs, std::shared_ptr<const PSC0>& rhs)
+struct PSCdist
 {
-    assert (lhs);
-    assert (rhs);
-    return (lhs->cost().getDist() > rhs->cost().getDist());
+    bool operator()(std::shared_ptr<const PSC0>& lhs,
+                    std::shared_ptr<const PSC0>& rhs);
 };
 
 

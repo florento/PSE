@@ -55,7 +55,7 @@ public:
     /// @param accid chosen alteration for the received pitch, in -2..2.
     /// @param ton conjectured main (global) tonality (key signature).
     PSC1(std::shared_ptr<const PSC0> c,
-         const PSEnum& e,               //unsigned int mp,
+         const PSEnum& e,
          const enum NoteName& name, const enum Accid& accid,
          const Ton& ton);
 
@@ -77,7 +77,7 @@ public:
     /// @param ton conjectured main (global) tonality (key signature).
     /// @param lton conjectured local tonality.
     PSC1(std::shared_ptr<const PSC0> c,
-         const PSEnum& e,               //unsigned int mp,
+         const PSEnum& e,               
          const enum NoteName& name, const enum Accid& acc,
          const Ton& ton, const Ton& lton);
 

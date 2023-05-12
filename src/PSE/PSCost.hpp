@@ -84,7 +84,7 @@ public:
     /// negation of <.
     bool operator>=(const PSCost& rhs) const;
     
-    
+
     /// same cost components (exactly).
     bool eq_lex(const PSCost& rhs) const;
 

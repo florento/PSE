@@ -14,16 +14,16 @@
 namespace pse {
 
 
-PST::PST(PSEnum& e, size_t n, bool dflag):
+PST::PST(PSEnum& e, const Algo& a, size_t n, bool dflag):
 index(n),    // empty
+_algo(a),
 _enum(e),
 _psvs(),     // empty
 _global(TonIndex::UNDEF), // undef (value out of range)
 _estimated_locals(false),
 _debug(dflag)
 {
-    TRACE("new PS Table");
-    
+    TRACE("new PS Table for {}", a);
 // init table with default vector of tons
 //    for (auto ton : TONS) _tons.push_back(ton); // vector copy default tons
 //    _rowcost.assign(nbtons(), 0);
@@ -99,7 +99,7 @@ bool PST::init()
         {
             TRACE("PST init: bar {} EMPTY", b);
             // vector of empty bags
-            _psvs.push_back(std::make_unique<PSV>(index, _enum, i0, i0));
+            _psvs.push_back(std::make_unique<PSV>(_algo, index, _enum, i0, i0));
             ++b;
             continue;
         }
@@ -112,7 +112,7 @@ bool PST::init()
         TRACE("PST: compute column of the best spelling table for measure {}\
               (notes {}-{})", b, i0, i1-1);
         // add a PS vector (column) for the measure b
-        _psvs.push_back(std::make_unique<PSV>(index, _enum, i0, i1));
+        _psvs.push_back(std::make_unique<PSV>(_algo, index, _enum, i0, i1));
         assert(_psvs.size() == b+1);
         // then start next measure
         i0 = i1; // index of first note of next bar
@@ -280,7 +280,7 @@ bool PST::estimateGlobals()
         const PSCost bestCost = RowCost[_globals[0]];
         const PSCost& rc = RowCost[i];
         // new best ton
-        if  (rc < bestCost) // (eGlobals_less(rc, bestCost))
+        if (rc < bestCost)
         {
             // rc far under bestCost
             if (! eGlobals_eq_lex(rc, bestCost))

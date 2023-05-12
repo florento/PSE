@@ -180,7 +180,7 @@ void PSP::rename()
 //    queue1.push(std::make_shared<const PSC0>(_ton, first()));
 //
 //    // heap of complete paths with minimal number of accidents
-//    PSCQueue queue2(PSCdist); // empty
+//    PSCQueue queue2(PSCdist()); // empty
 //
 //    while (! queue1.empty())
 //    {
