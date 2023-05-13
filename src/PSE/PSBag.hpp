@@ -56,13 +56,13 @@ public:
     
     /// bag of best target configs configs for a conjectured global tonality
     /// (key sig), a conjectured local tonality (tie break) and a measure of notes.
+    /// @param a name of pitch-spelling algorithm implemented.
+    /// @param e an enumerator of notes for computing transitions between configs.
     /// @param ton conjectured global tonality (key sig),
     /// used to define the initial config.
     /// @param lton conjectured local tonality, to compute the cumulated
     /// distance value used for tie break.
-    /// @param e an enumerator of notes for computing transitions between configs.
-    /// @param a name of pitch-spelling algorithm implemented.
-    PSB(const Ton& ton, const Ton& lton, PSEnum& e, const Algo& a);
+    PSB(const Algo& a, PSEnum& e, const Ton& ton, const Ton& lton);
     
     ~PSB();
     

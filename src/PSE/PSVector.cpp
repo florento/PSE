@@ -95,13 +95,13 @@ void PSV::init()
         {
             // arg local ton is ignored
             _psb_partial[i] =
-                std::make_shared<const PSB>(toni, toni, psenum(), Algo::PSE0);
+                std::make_shared<const PSB>(Algo::PSE0, psenum(), toni, toni);
         }
         else if (_algo == Algo::PS14)
         {
             // arg local ton is ignored
             _psb_partial[i] =
-                std::make_shared<const PSB>(toni, toni, psenum(), Algo::PS14);
+                std::make_shared<const PSB>(Algo::PS14, psenum(), toni, toni);
         }
         else
         {
@@ -164,12 +164,12 @@ const PSB& PSV::best(size_t step, size_t i)
             if (_algo == Algo::PSE)
             {
                 _psb_total[i] =
-                 std::make_shared<const PSB>(gton, lton, psenum(), Algo::PSE1);
+                 std::make_shared<const PSB>(Algo::PSE1, psenum(), gton, lton);
             }
             else if (_algo == Algo::PS14)
             {
                 _psb_total[i] =
-                 std::make_shared<const PSB>(gton, lton, psenum(), Algo::PS14);
+                 std::make_shared<const PSB>(Algo::PS14, psenum(), gton, lton);
             }
             else
             {
@@ -215,20 +215,66 @@ size_t PSV::local(size_t i) const
 }
 
 
-// compute _local for global ig
-bool PSV::estimateLocal(size_t ig, size_t iprev)
+// compute the table _local for first column
+bool PSV::estimateLocal(size_t ig)
 {
-    if (_local[ig] == TonIndex::FAILED)
+    assert(ig < _local.size());
+    if (_local[ig] != TonIndex::UNDEF)
     {
-        WARN("PSV: the estimation of local tonality for global {} failed.", ig);
+        ERROR("PSV: re-estimation of local tons, ignore.");
         return false;
     }
+
+    return estimateLocal(ig, ig);
+}
+
+
+// compute the table _local given previous column
+bool PSV::estimateLocal(size_t ig, const PSV& prev)
+{
+    assert(ig < _local.size());
+    if (_local[ig] != TonIndex::UNDEF)
+    {
+        ERROR("PSV: re-estimation of local tons, ignore.");
+        return false;
+    }
+
+    size_t iprev = prev._local[ig];
+    assert(iprev != TonIndex::UNDEF);
+    // propagate failure of prev.
+    if (iprev == TonIndex::FAILED)
+    {
+        _local[ig] = TonIndex::FAILED;
+        return false;
+    }
+    // estimate local from iprev
+    else
+    {
+        assert(iprev < index.size());
+        return estimateLocal(ig, iprev);
+    }
+}
+
+
+// compute _local[ig] where ig is a global ton. index
+bool PSV::estimateLocal(size_t ig, size_t iprev)
+{
+    assert(ig < _local.size());
+    // already estimated (and failed): ignore
+    if (_local[ig] == TonIndex::FAILED)
+    {
+        WARN("PSV: local tonality for {} alreadu estimated, and failed. ignored.", ig);
+        return false;
+    }
+    // already estimated (and not failed): ignore
     else if (_local[ig] != TonIndex::UNDEF)
     {
-        WARN("PSV: re-estimation of local tonality for {}. ignored.", ig);
-        return true;
+        WARN("PSV: local tonality for {} alreadu estimated. ignored.", ig);
+        return false;
     }
     
+    assert(iprev < index.size());
+    // empty input.
     if (psenum().empty())
     {
         TRACE("PSV: estimate local for {}: empty vector {}-{}, keeping previous {}",

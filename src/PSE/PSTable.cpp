@@ -405,6 +405,31 @@ bool PST::estimateLocals()
 }
 
 
+//bool PST::estimateLocals(size_t ig)
+//{
+//    bool status = true;
+//    assert(ig < index.size());
+//    // index of previous local tonality
+//    size_t pre = ig;
+//    for (size_t i = 0; i < _psvs.size(); ++i)
+//    {
+//        PSV& psv = column(i);
+//        assert(pre < index.size());
+//        bool lstatus = psv.estimateLocal(ig, pre);
+//        if (lstatus) // local succesfully estimated
+//        {
+//            pre = psv.local(ig); // next pre
+//        }
+//        // otherwise, do not update the pre.
+//        else
+//        {
+//            status = false;
+//        }
+//    }
+//    return status;
+//}
+
+
 bool PST::estimateLocals(size_t ig)
 {
     bool status = true;

@@ -193,7 +193,7 @@ private: // data
     /// enumerator of notes used to build this PS table.
     PSEnum& _enum;
     
-    /// columnns: one vector of bags of best paths (target configs) per measure
+    /// columnns: one vector of bags of best paths (target configs) per measure.
     std::vector<std::unique_ptr<PSV>> _psvs;
 
     /// index of candidates best global tonality.
