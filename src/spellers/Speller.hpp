@@ -47,7 +47,9 @@ public:
     /// @see TonIndex for supported values pf nbTons.
     /// @param dflag debug mode.
     /// @see PSTable
-    Speller(const Algo& algo=Algo::Undef, size_t nbTons=0, bool dflag=false);
+    Speller(const Algo& algo=Algo::Undef,
+            size_t nbTons=0,
+            bool dflag=false);
 
     /// copy constructor.
     /// makes a deep copy of the note enumerator.

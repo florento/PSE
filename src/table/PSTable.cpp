@@ -14,7 +14,7 @@
 namespace pse {
 
 
-PST::PST(const Algo& a, PSEnum& e, const TonIndex& i, bool dflag):
+PST::PST(const Algo& a, const TonIndex& i, PSEnum& e, bool dflag):
 _algo(a),
 _enum(e),
 _index(i),
@@ -99,7 +99,8 @@ bool PST::init()
         {
             TRACE("PST init: bar {} EMPTY", b);
             // vector of empty bags
-            _psvs.push_back(std::make_unique<PSV>(_algo, _index, _enum, i0, i0));
+            _psvs.emplace_back(std::unique_ptr<PSV>(new
+                               PSV(_algo, _index, _enum, i0, i0)));
             ++b;
             continue;
         }
@@ -112,7 +113,8 @@ bool PST::init()
         TRACE("PST: compute column of the best spelling table for measure {}\
               (notes {}-{})", b, i0, i1-1);
         // add a PS vector (column) for the measure b
-        _psvs.push_back(std::make_unique<PSV>(_algo, _index, _enum, i0, i1));
+        _psvs.emplace_back(std::unique_ptr<PSV>(new
+                           PSV(_algo, _index, _enum, i0, i1)));
         assert(_psvs.size() == b+1);
         // then start next measure
         i0 = i1; // index of first note of next bar

@@ -104,6 +104,13 @@ void Transition::succ2(std::shared_ptr<const PSC0>& c,
             q.push(c2); // copy of shared ptr
             continue;
         }
+        
+        /// @todo ALT:
+        /// construire un PSB contenant le chemin pour toutes les étapes
+        /// de l'accord, partant de c.
+        /// -> PSB sur: enum, c.id(), id premiere note apres accord.
+        /// opt: algo_name specifique pour traiter un accord ?
+        
         // otherwise continue processing of the chord
         unsigned int m = c2->current(); // chroma in 0..11
         assert(0 <= m);
