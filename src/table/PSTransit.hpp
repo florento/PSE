@@ -1,5 +1,5 @@
 //
-//  Transition.hpp
+//  PSTransit.hpp
 //  pse
 //
 //  Created by Florent on 11/05/2023.

@@ -9,20 +9,10 @@
 #include "PSBag.hpp"
 #include "Enharmonic.hpp"
 #include "PSOrder.hpp"
-#include "Transition.hpp"
+#include "PSTransit.hpp"
+
 
 namespace pse {
-
-//PSB::PSB(const Ton& ton, PSEnum& e):
-//_enum(e),
-//_bests(),  // empty
-//_cost()   // zero
-////_visited() // empty
-//{
-//    if (! e.empty())
-//        init(ton, ton, false); // second arg. ton is ignored
-//    // otherwise n0 == n1, no note, leave the bag _bests empty
-//}
 
 
 PSB::PSB(const Algo& a, PSEnum& e, const Ton& gton, const Ton& lton):

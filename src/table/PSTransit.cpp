@@ -1,11 +1,11 @@
 //
-//  Transition.cpp
+//  PSTransit.cpp
 //  pse
 //
 //  Created by Florent on 11/05/2023.
 //
 
-#include "Transition.hpp"
+#include "PSTransit.hpp"
 #include "Enharmonic.hpp"
 //#include "PSOrder.hpp"
 
