@@ -30,16 +30,24 @@
 namespace pse {
 
 
-/// abstract class wrapping main pitch-spelling functionalities 
+/// abstract class wrapping main pitch-spelling functionalities.
+/// interface between pitch spelling algorithm and structures.
+/// It contains:
+/// - one algorithm name.
+/// - a note enumerator. @see PSRawEnum
+/// - one array of tonalities considered for pitch spelling.
+/// - one debug flag.
 class Speller
 {
 public:
     
     /// main constructor. initially empty list of notes to spell.
     /// @param algo name of the algorithm implemented in speller class.
+    /// @param nbTons use default list of tonalities (default: empty).
+    /// @see TonIndex for supported values pf nbTons.
     /// @param dflag debug mode.
     /// @see PSTable
-    Speller(const Algo& algo=Algo::Undef, bool dflag=false);
+    Speller(const Algo& algo=Algo::Undef, size_t nbTons=0, bool dflag=false);
 
     /// copy constructor.
     /// makes a deep copy of the note enumerator.
@@ -73,15 +81,40 @@ public:
     /// @param simult whether the new input note is simultaneous with the
     /// next note.
     void add(int note, int bar, bool simult=false);
-           
-    /// compute the best pitch spelling for the input notes.
+
+    /// number of tonalities considered for pitch spelling.
+    /// It is the size of array of tonalities.
+    size_t nbTons() const;
+
+    /// tonality (for pitch spelling) of given index.
+    /// @param i an index in the array of tonalities.
+    /// must be smaller than nbtons().
+    /// @see nbTons()
+    const Ton& ton(size_t i) const;
+    
+    /// empty the array of tonalities considered for pitch-spelling vectors.
+    /// @see addTon
+    void resetTons();
+    
+    /// add one tonality to the array of tonalities considered for
+    /// pitch-spelling vectors.
+    /// @param ks number of flats if negative int,
+    /// or number of sharps if positive int. must be in -7..7.
+    /// @param mode mode of the tonality added.
+    /// @see Ton
+    void addTon(int ks, ModeName mode = ModeName::Major);
+
+    /// add a tonality for pitch spelling.
+    void addTon(const Ton& ton);
+    
+    /// compute the best pitch spelling for the input notes,
+    /// using the algorithm named in this class.
     /// @return whether computation was succesfull.
     virtual bool spell() = 0;
     
-    /// rewrite the passing notes using the 6 rewrite rules proposed by
-    /// D. Meredith in the PS13 Pitch-Spelling algorithm, step 2.
+    /// rewrite the passing notes in enumerator.
     /// @return whether at least one rewriting was done.
-    /// @see PSEnum::rewritePassing()
+    /// @see class RewritePassing
     bool rewritePassing();
     
     /// estimated name for the note of given index, in 0..6 (0 is 'C', 6 is 'B').
@@ -114,11 +147,14 @@ protected: // data
         
     /// name of the algorithm implemented.
     const Algo _algo;
-    
-    /// enumerator of the input notes
+
+    /// enumerator of the input notes.
     PSRawEnum _enum;
 
-    /// debug mode activated
+    /// array of tonalities that shall be considered for pitch spelling.
+    TonIndex _index;
+    
+    /// debug mode activated.
     bool _debug;
 
 };

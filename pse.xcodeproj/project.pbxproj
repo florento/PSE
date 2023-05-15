@@ -197,8 +197,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		4302F7D129E1A9810002AD05 /* RewritePassing.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = RewritePassing.cpp; path = src/targets/RewritePassing.cpp; sourceTree = "<group>"; };
-		4302F7D229E1A9810002AD05 /* RewritePassing.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = RewritePassing.hpp; path = src/targets/RewritePassing.hpp; sourceTree = "<group>"; };
+		4302F7D129E1A9810002AD05 /* RewritePassing.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RewritePassing.cpp; sourceTree = "<group>"; };
+		4302F7D229E1A9810002AD05 /* RewritePassing.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = RewritePassing.hpp; sourceTree = "<group>"; };
 		430960512A0CD2C60097487A /* AlgoName.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AlgoName.cpp; sourceTree = "<group>"; };
 		430960522A0CD2C60097487A /* AlgoName.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AlgoName.hpp; sourceTree = "<group>"; };
 		430960572A0CD7E80097487A /* Transition.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Transition.cpp; sourceTree = "<group>"; };
@@ -230,8 +230,8 @@
 		432E7A5229D45FE2000E2B72 /* PS13.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PS13.cpp; sourceTree = "<group>"; };
 		432E7A5329D45FE2000E2B72 /* PS13.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = PS13.hpp; sourceTree = "<group>"; };
 		432E7A5829D494AE000E2B72 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		432EF6AB292D405400C620CF /* Speller.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Speller.cpp; path = src/targets/Speller.cpp; sourceTree = "<group>"; };
-		432EF6AC292D405400C620CF /* Speller.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Speller.hpp; path = src/targets/Speller.hpp; sourceTree = "<group>"; };
+		432EF6AB292D405400C620CF /* Speller.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Speller.cpp; sourceTree = "<group>"; };
+		432EF6AC292D405400C620CF /* Speller.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Speller.hpp; sourceTree = "<group>"; };
 		43316FFF29DD934E00BA534D /* TestEnharmonic.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TestEnharmonic.cpp; sourceTree = "<group>"; };
 		433F8B6E2A0BE3D000085ABC /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		433F8B6F2A0BE47B00085ABC /* TODO.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = TODO.md; sourceTree = "<group>"; };
@@ -241,12 +241,13 @@
 		4342FD1629268C78004E914F /* pypse.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = pypse.cpp; path = src/targets/pypse.cpp; sourceTree = "<group>"; };
 		4342FD1729268C78004E914F /* pypse.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = pypse.hpp; path = src/targets/pypse.hpp; sourceTree = "<group>"; };
 		4342FD1A2926B925004E914F /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
+		434317272A1231F900D685A1 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		434B1DF5298ECCF0001CE41C /* PSConfig1.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = PSConfig1.hpp; sourceTree = "<group>"; };
 		434B1DF6298ECCF0001CE41C /* PSConfig1.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PSConfig1.cpp; sourceTree = "<group>"; };
 		434B1DFA298ED394001CE41C /* PSConfig2.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PSConfig2.cpp; sourceTree = "<group>"; };
 		434B1DFB298ED394001CE41C /* PSConfig2.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = PSConfig2.hpp; sourceTree = "<group>"; };
-		434B1DFF298FD4FE001CE41C /* PSChord.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = PSChord.cpp; path = src/PSE/PSChord.cpp; sourceTree = "<group>"; };
-		434B1E00298FD4FE001CE41C /* PSChord.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = PSChord.hpp; path = src/PSE/PSChord.hpp; sourceTree = "<group>"; };
+		434B1DFF298FD4FE001CE41C /* PSChord.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = PSChord.cpp; path = src/table/PSChord.cpp; sourceTree = "<group>"; };
+		434B1E00298FD4FE001CE41C /* PSChord.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = PSChord.hpp; path = src/table/PSChord.hpp; sourceTree = "<group>"; };
 		435081CE29D6C04600465943 /* TestScale.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TestScale.cpp; sourceTree = "<group>"; };
 		435081D329D6C09A00465943 /* testpse */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = testpse; sourceTree = BUILT_PRODUCTS_DIR; };
 		435081DB29D6C53D00465943 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = extern/README.md; sourceTree = "<group>"; };
@@ -259,7 +260,7 @@
 		4350820729D7032B00465943 /* TestMidiNum.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TestMidiNum.cpp; sourceTree = "<group>"; };
 		4353AE3729DDAD3E00FAF8A3 /* TestPSEnum.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TestPSEnum.cpp; sourceTree = "<group>"; };
 		4353AE3929DDB2CC00FAF8A3 /* TestPSRawEnum.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TestPSRawEnum.cpp; sourceTree = "<group>"; };
-		4354069F29A8D2F90075B3B7 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = src/chord/README.md; sourceTree = "<group>"; };
+		4354069F29A8D2F90075B3B7 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = chord/README.md; sourceTree = "<group>"; };
 		435406A029A8D3530075B3B7 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = src/Spiral/README.md; sourceTree = "<group>"; };
 		435406A129A8D4050075B3B7 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = src/KrumhanslSchmuckler/README.md; sourceTree = "<group>"; };
 		435406A229A8D4BB0075B3B7 /* TonIndex.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = TonIndex.cpp; path = src/ton/TonIndex.cpp; sourceTree = "<group>"; };
@@ -270,7 +271,7 @@
 		43791C8D29D8392200DE8796 /* TestAccidental.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TestAccidental.cpp; sourceTree = "<group>"; };
 		438EFD832A0E41DD00FF3733 /* Cost.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Cost.cpp; sourceTree = "<group>"; };
 		438EFD842A0E41DD00FF3733 /* Cost.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Cost.hpp; sourceTree = "<group>"; };
-		43947D0029D972AF008EB20A /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = src/ps14/README.md; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.markdown; };
+		43947D0029D972AF008EB20A /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = src/PS14/README.md; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.markdown; };
 		4397A5DC29A6CDB300C2CC9A /* PSOrder.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = PSOrder.hpp; sourceTree = "<group>"; };
 		43A2543E29280D8900D559D2 /* trace.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = trace.cpp; path = src/general/trace.cpp; sourceTree = "<group>"; };
 		43A2543F29280D8900D559D2 /* trace.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = trace.hpp; path = src/general/trace.hpp; sourceTree = "<group>"; };
@@ -383,7 +384,7 @@
 			name = ton;
 			sourceTree = "<group>";
 		};
-		431586192983E6BF00918B1B /* PSE */ = {
+		431586192983E6BF00918B1B /* table */ = {
 			isa = PBXGroup;
 			children = (
 				433F8B6E2A0BE3D000085ABC /* README.md */,
@@ -411,11 +412,9 @@
 				43ABA51F29242418002AC1D4 /* PSTable.cpp */,
 				43ABA51C29242418002AC1D4 /* PSPath.hpp */,
 				43ABA51629242417002AC1D4 /* PSPath.cpp */,
-				432E7A4D29D427FD000E2B72 /* PSE.hpp */,
-				432E7A4C29D427FD000E2B72 /* PSE.cpp */,
 			);
-			name = PSE;
-			path = src/PSE;
+			name = table;
+			path = src/table;
 			sourceTree = "<group>";
 		};
 		4315861A2983E7FB00918B1B /* import */ = {
@@ -485,6 +484,31 @@
 			path = unit;
 			sourceTree = "<group>";
 		};
+		434317252A1156F900D685A1 /* PSE */ = {
+			isa = PBXGroup;
+			children = (
+				434317272A1231F900D685A1 /* README.md */,
+				432E7A4D29D427FD000E2B72 /* PSE.hpp */,
+				432E7A4C29D427FD000E2B72 /* PSE.cpp */,
+			);
+			name = PSE;
+			path = src/PSE;
+			sourceTree = "<group>";
+		};
+		434317262A11579700D685A1 /* spellers */ = {
+			isa = PBXGroup;
+			children = (
+				430960522A0CD2C60097487A /* AlgoName.hpp */,
+				430960512A0CD2C60097487A /* AlgoName.cpp */,
+				432EF6AC292D405400C620CF /* Speller.hpp */,
+				432EF6AB292D405400C620CF /* Speller.cpp */,
+				4302F7D229E1A9810002AD05 /* RewritePassing.hpp */,
+				4302F7D129E1A9810002AD05 /* RewritePassing.cpp */,
+			);
+			name = spellers;
+			path = src/spellers;
+			sourceTree = "<group>";
+		};
 		434D5CFC299FCFD900AEB02F /* interval */ = {
 			isa = PBXGroup;
 			children = (
@@ -502,6 +526,7 @@
 				4354069F29A8D2F90075B3B7 /* README.md */,
 			);
 			name = chord;
+			path = src;
 			sourceTree = "<group>";
 		};
 		435081E429D6CFA800465943 /* Frameworks */ = {
@@ -563,7 +588,9 @@
 				431586182983E65A00918B1B /* ton */,
 				4315861A2983E7FB00918B1B /* import */,
 				438EFD822A0E3EB200FF3733 /* cost */,
-				431586192983E6BF00918B1B /* PSE */,
+				431586192983E6BF00918B1B /* table */,
+				434317262A11579700D685A1 /* spellers */,
+				434317252A1156F900D685A1 /* PSE */,
 				4363442B29D31D3500F5D628 /* PS13 */,
 				43947CFF29D97299008EB20A /* PS14 */,
 				4315861B2983E80400918B1B /* Spiral */,
@@ -577,12 +604,6 @@
 			children = (
 				4342FD1729268C78004E914F /* pypse.hpp */,
 				4342FD1629268C78004E914F /* pypse.cpp */,
-				430960522A0CD2C60097487A /* AlgoName.hpp */,
-				430960512A0CD2C60097487A /* AlgoName.cpp */,
-				432EF6AC292D405400C620CF /* Speller.hpp */,
-				432EF6AB292D405400C620CF /* Speller.cpp */,
-				4302F7D229E1A9810002AD05 /* RewritePassing.hpp */,
-				4302F7D129E1A9810002AD05 /* RewritePassing.cpp */,
 			);
 			name = pybind;
 			sourceTree = "<group>";
@@ -602,7 +623,8 @@
 				438EFD842A0E41DD00FF3733 /* Cost.hpp */,
 				438EFD832A0E41DD00FF3733 /* Cost.cpp */,
 			);
-			path = cost;
+			name = cost;
+			path = src/cost;
 			sourceTree = "<group>";
 		};
 		43947CFF29D97299008EB20A /* PS14 */ = {

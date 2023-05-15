@@ -134,7 +134,7 @@ private: // data
     
     /// header of rows: vector of tonalities.
     /// copy of the index of the embedding table.
-    const TonIndex& index;
+    const TonIndex& _index;
         
     // vector of tonalities = dimension of this vector
     // const std::vector<const Ton>& _tons;

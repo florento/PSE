@@ -11,9 +11,10 @@
 namespace pse {
 
 
-Speller::Speller(const Algo& algo, bool dflag):
+Speller::Speller(const Algo& algo, size_t nbt, bool dflag):
 _algo(algo),
 _enum(0, 0),
+_index(nbt),
 _debug(dflag)
 {
     spdlog_setVerbosity(4);
@@ -24,7 +25,8 @@ _debug(dflag)
 
 Speller::Speller(const Speller& rhs):
 _algo(rhs._algo),
-_enum(rhs._enum),
+_enum(rhs._enum),  /// @todo AV copy
+_index(rhs._index), /// @todo AV copy
 _debug(rhs._debug)
 {
     TRACE("Speller copy");
@@ -110,11 +112,49 @@ bool Speller::printed(size_t i) const
     return _enum.printed(i);
 }
 
+
 bool Speller::rewritePassing()
 {
     TRACE("Rewriting passing notes");
     return _enum.rewritePassing();
 }
+
+
+size_t Speller::nbTons() const
+{
+    return _index.size();  // nbTons();
+}
+
+
+const Ton& Speller::ton(size_t i) const
+{
+    return _index.ton(i);
+}
+
+
+void Speller::resetTons()
+{
+    _index.reset();
+}
+
+
+void Speller::addTon(const Ton& ton)
+{
+    TRACE("Speller: add tonality {}", ton);
+    _index.add(ton);
+}
+
+
+void Speller::addTon(int ks, ModeName mode)
+{
+    if (ks < -7 || 7 < ks)
+    {
+        ERROR("Speller addTon: wrong key signature value {}", ks);
+    }
+    TRACE("Speller: add tonality {} {}", ks, mode);
+    _index.add(ks, mode);
+}
+
 
 
 

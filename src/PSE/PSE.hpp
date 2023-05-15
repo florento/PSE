@@ -26,8 +26,8 @@
 
 namespace pse {
 
-/// wrapper on top of PSRawEnum.
-/// interface to pybind.
+
+/// specific structure for the PSE algorithm.
 class PSE : public Speller
 {
 public:
@@ -48,34 +48,7 @@ public:
     /// compute the best pitch spelling for the input notes.
     /// @return whether computation was succesfull.
     bool spell() override;
-
-    
-    // Index of tonalities
-    
-    /// number of tonalities considered for pitch spelling.
-    size_t nbTons() const;
-
-    /// tonality (for pitch spelling) of given index.
-    /// @param i an index in array of tonalities. must be smaller than nbtons().
-    /// @see nbTons()
-    const Ton& ton(size_t i) const;
-    
-    /// empty the array of tonalities considered for pitch-spelling vectors.
-    /// @see addTon
-    void resetTons();
-    
-    /// add one tonality to the array of tonalities considered for
-    /// pitch-spelling vectors.
-    /// @param ks number of flats if negative int,
-    /// or number of sharps if positive int. must be in -7..7.
-    /// @param mode mode of the tonality added.
-    /// @see Ton
-    void addTon(int ks, ModeName mode = ModeName::Major);
-
-    /// add a tonality for pitch spelling.
-    void addTon(const Ton& ton);
-    
-
+  
     // Estimation of tonalities
     
     /// force global tonality. it wont be estimated.

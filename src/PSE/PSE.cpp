@@ -12,8 +12,8 @@ namespace pse {
 
 
 PSE::PSE(size_t nbTons, bool dflag):
-Speller(Algo::PSE, dflag),
-_table(_enum, Algo::PSE, nbTons, dflag)
+Speller(Algo::PSE, nbTons, dflag),
+_table(Algo::PSE, _enum, _index, dflag)
 //_global(0, ModeName::Maj), // C maj default
 {
 // init table with default vector of tons
@@ -44,41 +44,6 @@ PSE::~PSE()
 //}
 
 
-size_t PSE::nbTons() const
-{
-    return _table.index.size();  // nbTons();
-}
-
-
-const Ton& PSE::ton(size_t i) const
-{
-    return _table.index.ton(i);
-}
-
-
-void PSE::resetTons()
-{
-    _table.index.reset();
-}
-
-
-void PSE::addTon(const Ton& ton)
-{
-    TRACE("Speller: add tonality {}", ton);
-    _table.index.add(ton);
-}
-
-
-void PSE::addTon(int ks, ModeName mode)
-{
-    if (ks < -7 || 7 < ks)
-    {
-        ERROR("Speller addTon: wrong key signature value {}", ks);
-    }
-    TRACE("Speller: add tonality {} {}", ks, mode);
-    _table.index.add(ks, mode);
-}
-
 
 void PSE::setGlobal(size_t i)
 {
@@ -89,13 +54,15 @@ void PSE::setGlobal(size_t i)
 bool PSE::spell()
 {
     //DEBUGU("Speller respell: nb tonalities in table: {}", _table.nbTons());
-    if (_table.index.size() == 0)
+    if (_index.size() == 0)
     {
+        /// reset to default
+        /// @todo mv to speller cstr?
         TRACE("Speller respell: no tonality added, use default tonality array");
         for (int ks = -7; ks <= 7; ++ks)
-            _table.index.add(ks, ModeName::Major);
+            _index.add(ks, ModeName::Major);
         for (int ks = -7; ks <= 7; ++ks)
-            _table.index.add(ks, ModeName::Minor);
+            _index.add(ks, ModeName::Minor);
     }
     
     //    if (finit)

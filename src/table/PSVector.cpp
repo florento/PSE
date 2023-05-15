@@ -17,7 +17,7 @@ namespace pse {
 
 
 PSV::PSV(const Algo& a, const TonIndex& i, const PSEnum& e):
-index(i),
+_index(i),
 _algo(a),
 _enum(e.clone()),
 _psb_partial(),
@@ -25,16 +25,16 @@ _psb_total(),
 _local(), // empty
 _tiebfail(0)
 {
-    _psb_partial.assign(index.size(), nullptr);
-    _psb_total.assign(index.size(), nullptr);
-    _local.assign(index.size(), TonIndex::UNDEF);
+    _psb_partial.assign(_index.size(), nullptr);
+    _psb_total.assign(_index.size(), nullptr);
+    _local.assign(_index.size(), TonIndex::UNDEF);
     init();
 }
 
 
 PSV::PSV(const Algo& a, const TonIndex& i,
          const PSEnum& e, size_t i0, size_t i1):
-index(i),
+_index(i),
 _algo(a),
 _enum(e.clone(i0, i1)),
 _psb_partial(),
@@ -43,15 +43,15 @@ _local(), // empty
 _tiebfail(0)
 {
     // give the vector their definitive size (to use as arrays)
-    _psb_partial.assign(index.size(), nullptr);
-    _psb_total.assign(index.size(), nullptr);
-    _local.assign(index.size(), TonIndex::UNDEF);
+    _psb_partial.assign(_index.size(), nullptr);
+    _psb_total.assign(_index.size(), nullptr);
+    _local.assign(_index.size(), TonIndex::UNDEF);
     init();
 }
 
 
 PSV::PSV(const Algo& a, const TonIndex& i, const PSEnum& e, size_t i0):
-index(i),
+_index(i),
 _algo(a),
 _enum(e.clone(i0)),
 _psb_partial(),
@@ -60,9 +60,9 @@ _local(), // empty
 _tiebfail(0)
 {
     // give the vector their definitive size (to use as arrays)
-    _psb_partial.assign(index.size(), nullptr);
-    _psb_total.assign(index.size(), nullptr);
-    _local.assign(index.size(), TonIndex::UNDEF);
+    _psb_partial.assign(_index.size(), nullptr);
+    _psb_total.assign(_index.size(), nullptr);
+    _local.assign(_index.size(), TonIndex::UNDEF);
     init();
 }
 
@@ -86,7 +86,7 @@ PSEnum& PSV::psenum() const
 // compute _psb_partial
 void PSV::init()
 {
-    for (size_t i = 0; i < index.size(); ++i)
+    for (size_t i = 0; i < _index.size(); ++i)
     {
         // PS Bag is empty if first() = last()
         TRACE("PSV {}-{} ton {}", psenum().first(), psenum().stop(), ton(i));
@@ -117,8 +117,8 @@ void PSV::init()
 
 const Ton& PSV::ton(size_t i) const
 {
-    assert(i < index.size());
-    return index.ton(i);
+    assert(i < _index.size());
+    return _index.ton(i);
 }
 
 
@@ -131,7 +131,7 @@ const Ton& PSV::ton(size_t i) const
 const PSB& PSV::best(size_t step, size_t i)
 {
     assert(step == 0 || step == 1);
-    assert(i < index.size());
+    assert(i < _index.size());
 
     if (step == 0)
     {
@@ -155,9 +155,9 @@ const PSB& PSV::best(size_t step, size_t i)
 
         if (_psb_total[i] == nullptr) // not tabulated yet
         {
-            assert(i < index.size());
+            assert(i < _index.size());
             const Ton& gton = ton(i);
-            assert(_local[i] < index.size());
+            assert(_local[i] < _index.size());
             const Ton& lton = ton(_local[i]);
             // PS Bag is empty if first() = last()
             /// @todo pass algo
@@ -197,7 +197,7 @@ const PSB& PSV::best1ERROR(size_t i) const
 
 size_t PSV::local(size_t i) const
 {
-    assert(i < index.size());
+    assert(i < _index.size());
     assert(i < _local.size());
     if (_local[i] == TonIndex::UNDEF)
     {
@@ -209,7 +209,7 @@ size_t PSV::local(size_t i) const
     }
     else
     {
-        assert(_local[i] < index.size());
+        assert(_local[i] < _index.size());
     }
     return _local[i];
 }
@@ -250,7 +250,7 @@ bool PSV::estimateLocal(size_t ig, const PSV& prev)
     // estimate local from iprev
     else
     {
-        assert(iprev < index.size());
+        assert(iprev < _index.size());
         return estimateLocal(ig, iprev);
     }
 }
@@ -273,7 +273,7 @@ bool PSV::estimateLocal(size_t ig, size_t iprev)
         return false;
     }
     
-    assert(iprev < index.size());
+    assert(iprev < _index.size());
     // empty input.
     if (psenum().empty())
     {
@@ -286,7 +286,7 @@ bool PSV::estimateLocal(size_t ig, size_t iprev)
     
     assert(iprev != TonIndex::UNDEF);
     assert(iprev != TonIndex::FAILED);
-    assert(iprev < index.size());
+    assert(iprev < _index.size());
     
     const Ton& pton = ton(iprev);
     const Ton& gton = ton(ig);
@@ -303,7 +303,7 @@ bool PSV::estimateLocal(size_t ig, size_t iprev)
     // current best distance to previous global ton. ig
     unsigned int dgbest = -1; // initialized to avoid warning
 
-    for (size_t j = 0; j < index.size(); ++j)
+    for (size_t j = 0; j < _index.size(); ++j)
     {
         const Ton& jton = ton(j);
         assert(_psb_partial[j]);
@@ -389,7 +389,7 @@ bool PSV::estimateLocal(size_t ig, size_t iprev)
 
     assert(ibest != TonIndex::UNDEF);
     assert(ibest != TonIndex::FAILED);
-    assert(ibest < index.size());
+    assert(ibest < _index.size());
     _local[ig] = ibest;
     // _estimated = true;
     return true;

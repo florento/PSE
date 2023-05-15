@@ -45,19 +45,15 @@ class PST
 {
     
 public:
-
-    /// header of rows: vector of tonalities (1 per row).
-    TonIndex index;
-    
+   
     /// @todo param step number (default 0)
     /// main constructor.
-    /// @param e an enumerator of notes for transitions of configs.
     /// @param a name of pitch-spelling algorithm implemented with this table.
-    /// @param nbTons use default list of tonalities (default: empty).
+    /// @param e an enumerator of notes for transitions of configs.
+    /// @param i array of tonalities = header of rows of this table.
     /// @param dflag debug mode (display table during construction).)
-    /// @see TonIndex for supported values.
     /// @warning the enumerator cannot be changed once the object created.
-    PST(PSEnum& e, const Algo& a = Algo::PSE, size_t nbTons=0, bool dflag=false);
+    PST(const Algo& a, PSEnum& e, const TonIndex& i, bool dflag=false);
 
     // main constructor.
     // @param e an enumerator of notes for transitions of configs.
@@ -80,10 +76,10 @@ public:
     size_t size() const;
     
     /// number of rows in this table, i.e. nb of tons considered for spelling.
-    inline size_t nbTons() const { return index.size(); }
+    inline size_t nbTons() const { return _index.size(); }
 
     /// tonality associated to the ith row of this table.
-    inline const Ton& ton(size_t i) const { return index.ton(i); }
+    inline const Ton& ton(size_t i) const { return _index.ton(i); }
 
     /// access the ith column (PS vector) of this table.
     /// @param i column number. must be smaller than size().
@@ -186,13 +182,12 @@ private: // data
     /// name  of the pitch spelling algorithm implemented with this table.
     const Algo& _algo;
     
-    // vector of tonalities = headers of rows of this table
-    // std::vector<const Ton> _tons;
-    // @todo replace by TonIndex
-
     /// enumerator of notes used to build this PS table.
     PSEnum& _enum;
     
+    /// header of rows: array of tonalities (1 per row).
+    const TonIndex& _index;
+
     /// columnns: one vector of bags of best paths (target configs) per measure.
     std::vector<std::unique_ptr<PSV>> _psvs;
 
