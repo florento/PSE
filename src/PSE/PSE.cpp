@@ -13,7 +13,7 @@ namespace pse {
 
 PSE::PSE(size_t nbTons, bool dflag):
 Speller(Algo::PSE, nbTons, dflag),
-_table(Algo::PSE, _enum, _index, dflag)
+_table(Algo::PSE, _index, _enum, dflag)
 //_global(0, ModeName::Maj), // C maj default
 {
 // init table with default vector of tons
