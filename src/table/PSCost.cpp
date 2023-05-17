@@ -447,8 +447,8 @@ void PSCost::update(const PSC1& c, const PSEnum& e, const Ton& gton)
     
     // color of accident and color of global ton
     int ks = gton.fifths();
-    const enum Accid& a = c.accidental();
-    if (((ks >= 0) && (flat(a))) || ((ks <  0) && (sharp(a))))
+    // const enum Accid& a = c.accidental();
+    if (((ks >= 0) && (flat(accid))) || ((ks <  0) && (sharp(accid))))
     {
         _color += 1;
     }
