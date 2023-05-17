@@ -27,6 +27,7 @@
 #include "PSState.hpp"
 #include "PSEnum.hpp"
 #include "PSCost.hpp"
+#include "Cost.hpp"
 
 
 namespace pse {

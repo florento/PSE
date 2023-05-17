@@ -4,6 +4,9 @@
 //
 //  Created by Florent Jacquemard on 11/12/2022.
 //
+// former version
+// replaced by Cost and descendant classes
+
 /// @addtogroup pitch
 /// @{
 

@@ -19,6 +19,7 @@
 #include "NoteName.hpp"
 #include "Accidental.hpp"
 #include "Ton.hpp"
+#include "Costu.hpp"
 
 
 namespace pse {
@@ -33,23 +34,13 @@ namespace pse {
 /// - cumul sum operator
 /// - functions of update for transition to PSConfig's
 template<class T>     // class Compare
-class Cost
+class Cost : public Costu
 {
 public:
     
     /// assignement operator (required).
     virtual T& operator=(const T& rhs) = 0;
     
-    /// sum operator (non const)  (required).
-    /// update this cost adding rhs.
-    /// @param rhs a cost to add.
-    /// @warning the ordering of this cost is preserved,
-    /// the ordering of rhs is ignored.
-    virtual T& operator+=(const T& rhs) = 0;
-    
-    /// sum operator.
-    T operator+(const T& rhs) const;
-
     /// equality (mandatory).
     virtual bool operator==(const T& rhs) const = 0;
 
@@ -67,6 +58,16 @@ public:
 
     /// negation of <.
     bool operator>=(const T& rhs) const;
+    
+    /// sum operator (non const)  (required).
+    /// update this cost adding rhs.
+    /// @param rhs a cost to add.
+    /// @warning the ordering of this cost is preserved,
+    /// the ordering of rhs is ignored.
+    virtual T& operator+=(const T& rhs) = 0;
+    
+    // sum operator.
+    // T operator+(const T& rhs) const;
     
 };
 
