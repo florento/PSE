@@ -73,7 +73,7 @@ bool PSE::spell()
     //    }
 
     TRACE("pitch-spelling: building pitch-spelling table");
-    bool status = _table.init();
+    bool status = true; // _table.init_psvs(); // STUB, initialization in constructor
     if (status == false)
     {
         ERROR("Speller: failed to compute spelling table {}-{}",
@@ -97,7 +97,7 @@ bool PSE::spell()
     
     // extract local tonality for each column of table
     TRACE("pitch-spelling: start local tonalities estimation");
-    status = _table.estimateLocals();
+    status = true; // _table.init_locals(); // STUB, initialization in constructor
     if (status == false)
     {
         ERROR("Pitch Spelling: failed to extract local tonalities, abort.");

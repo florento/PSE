@@ -88,7 +88,7 @@ public:
     const Ton& localBar(size_t j) const;
 
     /// estimated local tonality at note of given index.
-    /// @param i index of note in the list of input notes.
+    /// @param i index of note in the enumerator of input notes.
     /// @warning spell() must have been called.
     const Ton& localNote(size_t i) const;
     

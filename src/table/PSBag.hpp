@@ -89,6 +89,11 @@ public:
     /// iterator to the pointing to the past-the-end element in this bag.
     PSCHeap::const_iterator cend() const;
     
+    /// rename all notes in input used to build this bag,
+    /// according to the best path in the bag.
+    /// @return whether renaming succeeded for this bag.
+    bool rename();
+    
 private: // data
     
     // tonality of the best path, determines the source config of the best paths.

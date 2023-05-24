@@ -74,10 +74,10 @@ public:
     /// set debug mode (log messages up to debug)
     void debug(bool flag);
 
-    /// number of input notes to the list of notes to spell.
+    /// number of input notes in the enumerator of notes to spell.
     size_t size() const;
 
-    /// add a new input note to the list of notes to spell.
+    /// add a new input note to the enumerator of notes to spell.
     /// @param note MIDI key of the new input note.
     /// @param bar bar number of the new input note.
     /// @param simult whether the new input note is simultaneous with the
@@ -120,20 +120,20 @@ public:
     bool rewritePassing();
     
     /// estimated name for the note of given index, in 0..6 (0 is 'C', 6 is 'B').
-    /// @param i index of note in the list of input notes.
+    /// @param i index of note in the enumerator of input notes.
     enum NoteName name(size_t i) const;
 
     /// estimated name for the note of given index, in -2..2.
-    /// @param i index of note in the list of input notes.
+    /// @param i index of note in the enumerator of input notes.
     enum Accid accidental(size_t i) const;
 
     /// estimated octave for the note of given index in the best path, in -2..9.
-    /// @param i index of note in the list of input notes.
+    /// @param i index of note in the enumerator of input notes.
     int octave(size_t i) const;
 
     /// estimated print flag for the note of given index in the best path.
     /// This flags says wether the accidental of the note must be printed or not.
-    /// @param i index of note in the list of input notes.
+    /// @param i index of note in the enumerator of input notes.
     bool printed(size_t i) const;
     
     /// estimated global tonality.

@@ -74,24 +74,40 @@ public:
     // PST(PSEnum& e, size_t n0);
 
     virtual ~PST();
-          
-    /// number of columns (PS Vectors) in this table, i.e. nb of measures spelled.
-    size_t size() const;
+      
+    /// the table content has been correctly initialized.
+    bool status() const;
     
     /// number of rows in this table, i.e. nb of tons considered for spelling.
-    inline size_t nbRows() const { return _index.size(); }
+    inline size_t rowNb() const { return _index.size(); }
 
-    /// tonality associated to the ith row of this table.
-    inline const Ton& headerRow(size_t i) const { return _index.ton(i); }
+    /// tonality associated to the row of given index in this table.
+    /// @param i the index of a row (ie a candidate tonality).
+    /// @return the tonality associated to index i in the tonality array.
+    const Ton& rowHeader(size_t i) const;
 
-    /// access the ith column (PS vector) of this table.
-    /// @param i column number. must be smaller than size().
-    PSV& column(size_t i);
+    /// sum of the costs of all cells in row of given index in this table.
+    /// @param i the index of a row (ie a candidate tonality).
+    /// must be smaller than rowNb().
+    /// @return the sum of the costs of all cells in row i
+    /// or an indeterminate cost value if the computation failed.
+    const Cost& rowCost(size_t i);
     
-    /// @todo param step number (default 0)
-    /// compute the columns (PS Vectors) of this table, fill with cost values.
-    /// @return wether the computation was successful.
-    bool init();
+    /// number of columns (PS Vectors) in this table, i.e. nb of measures spelled.
+    size_t size() const;
+
+    /// number of columns (PS Vectors) in this table, i.e. nb of measures spelled.
+    inline size_t columnNb() const { return size(); }
+
+    /// the enumerator of input notes used to construict the column of given
+    /// index in this table.
+    /// @param j the index of a column (ie a bar number).
+    /// must be smaller than columnNb().
+    const PSEnum& columnHeader(size_t j) const;
+
+    /// access a column (PS vector) of this table.
+    /// @param j column number (number of bar). must be smaller than columnNb().
+    PSV& column(size_t j);
     
     /// force a global tonality.
     /// @param ig index of global tonality.
@@ -121,23 +137,6 @@ public:
     /// @warning estimGlobal() must have been called successfully.
     size_t iglobalCand(size_t i) const;
         
-    /// estimate a local tonality for each column of this table,
-    /// for all candidate global tonalities in _globals.
-    /// @return whether estimation of the local tonalities successed.
-    /// @warning estimGlobals() must have been called successfully.
-    bool estimateLocals();
-    
-    /// local tonalities are known.
-    /// estimateLocals was called.
-    bool estimatedLocals() const;
-
-    /// estimate a local tonality for each column of this table,
-    /// for an assumed global tonality ig.
-    /// @param ig the index of a candidate global tonality.
-    /// @return whether estimation of the local tonalities successed.
-    /// @warning estimGlobal() must have been called successfully.
-    bool estimateLocals(size_t ig);
-
     /// estimated local tonality for one candidate global tonality and one bar.
     /// @param i row index = index of candidate global tonality.
     /// must be smaller than index.size().
@@ -194,6 +193,12 @@ private: // data
     /// columnns: one vector of bags of best paths (target configs) per measure.
     std::vector<std::unique_ptr<PSV>> _psvs;
 
+    // intermediate vector of the sum of costs for each row
+    // every row of the table corresponds to a tonality.
+    // @todo change to vect<PSCost>
+    // @todo local variable?
+    // std::vector<std::shared_ptr<Cost>> _rowcost;
+    
     /// index of candidates best global tonality.
     /// if empty and _estimated_globals == false: it was not estimated yet.
     /// if empty and _estimated_globals == true: it was estimated but estimation failed.
@@ -220,12 +225,6 @@ private: // data
     /// debug mode.
     bool _debug;
     
-    // intermediate vector of the sum of costs for each row
-    // every row of the table corresponds to a tonality.
-    // @todo change to vect<PSCost>
-    // @todo local variable?
-    // std::vector<unsigned int> _rowcost;
-
     // second _rowcost : cost re-evaluated (complete cost)
     // for the each row
     // or UNDEF Cost if nont evaluated.
@@ -237,13 +236,39 @@ private: // data
     
 private:
     
+    /// compute the columns (PS Vectors) of this table,
+    /// filling cells with cost values.
+    /// @return wether the computation was successful.
+    bool init_psvs();
+    
+    /// estimate local tonalities in every column,
+    /// for each potential global tonality.
+    bool init_locals();
+
+    /// estimate a local tonality for each column of this table,
+    /// for all candidate global tonalities in _globals.
+    /// @return whether estimation of the local tonalities successed.
+    /// @warning estimGlobals() must have been called successfully.
+    bool init_locals_globals();
+    
+    /// estimate a local tonality for each column of this table,
+    /// for an assumed global tonality ig.
+    /// @param ig the index of a candidate global tonality.
+    /// @return whether estimation of the local tonalities successed.
+    /// @warning estimGlobal() must have been called successfully.
+    bool init_locals(size_t ig);
+
+    /// local tonalities are known.
+    /// estimateLocals was called.
+    bool estimatedLocals() const;
+
     /// macro: cost equality for the estimation of global.
-    /// use if Cost.operator== is eq_lex.
+    /// use if Costt.operator== is eq_lex.
     /// @warning static choice
     bool eGlobals_eq_lex(const PSCost& lhs, const PSCost& rhs) const;
 
     /// macro: cost equality for the estimation of global.
-    /// use if Cost.operator== is eq_cumul.
+    /// use if Costt.operator== is eq_cumul.
     /// @warning static choice
     inline bool eGlobals_eq_cumul(const PSCost& lhs, const PSCost& rhs) const;
 

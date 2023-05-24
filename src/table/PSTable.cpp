@@ -23,7 +23,28 @@ _global(TonIndex::UNDEF), // undef (value out of range)
 _estimated_locals(false),
 _debug(dflag)
 {
-    TRACE("new PS Table for {}", a);
+    TRACE("new PS Table {}-{} for {}", e.first(), e.stop(), a);
+    
+    if (a == Algo::PSE || a == Algo::PS14)
+    {
+        bool status = init_psvs();
+        if (status == false)
+        {
+            ERROR("PST: fail to compute spelling table {}-{} for {}",
+                  e.first(), e.stop(), a);
+        }
+    }
+    
+    if (a == Algo::PSE || a == Algo::PSE0)
+    {
+        bool status = init_locals();
+        if (status == false)
+        {
+            ERROR("PST: fail to estimate local tons for table {}-{}, {}",
+                  e.first(), e.stop(), a);
+        }
+    }
+
 // init table with default vector of tons
 //    for (auto ton : TONS) _tons.push_back(ton); // vector copy default tons
 //    _rowcost.assign(nbtons(), 0);
@@ -59,7 +80,13 @@ PST::~PST()
 }
 
 
-bool PST::init()
+bool PST::status() const
+{
+    return (! _psvs.empty());
+}
+
+
+bool PST::init_psvs()
 {
     TRACE("PST: computing spelling table {}-{}");
     assert(_psvs.empty()); // do not recompute
@@ -75,7 +102,7 @@ bool PST::init()
     // empty seq of notes
     if (_enum.outside(i0))
     {
-        WARN("PST init: empty sequence of notes");
+        ERROR("PST init: empty sequence of notes");
         return false;
     }
     
@@ -87,7 +114,6 @@ bool PST::init()
     
     // reset table
     _psvs.clear();
-    //_estimated_global = false;
     _global = TonIndex::UNDEF; // undef (value out of range)
     _estimated_locals = false;
     
@@ -124,6 +150,86 @@ bool PST::init()
 }
 
 
+bool PST::init_locals()
+{
+    TRACE("PST: computing local tonality estimations in table {}-{}, {}");
+    bool status = true;
+    for (size_t i = 0; i < _psvs.size(); ++i)
+    {
+        PSV& psv = column(i);
+        if (i == 0) // first bar
+            status = status && psv.estimateLocals();
+        else        // next bars
+            status = status && psv.estimateLocals(column(i-1));
+    }
+    
+    return status;
+}
+
+
+bool PST::init_locals(size_t ig)
+{
+    bool status = true;
+    assert(ig < _index.size());
+    // index of previous local tonality
+    size_t pre = ig;
+    
+    for (size_t i = 0; i < _psvs.size(); ++i)
+    {
+        PSV& psv = column(i);
+        assert(pre < _index.size());
+        bool lstatus;
+        
+        if (i == 0) // first bar
+            lstatus = psv.estimateLocal(ig);
+        else        // next bars
+            lstatus = psv.estimateLocal(ig, column(i-1));
+    }
+
+    return status;
+}
+
+
+bool PST::init_locals_globals()
+{
+    if (estimatedLocals()) // (_estimated_locals)
+    {
+        WARN("PST: re-estimation of local tonalities. ignored.");
+        return false;
+    }
+    
+    if (_globals.empty())
+    {
+        if (_global == TonIndex::UNDEF)
+        {
+            ERROR("PST: estimate global candidates ton before estimating local tons.");
+        }
+        else if (_global == TonIndex::FAILED)
+        {
+            ERROR("PST: failed to estimate global ton. cannot estimate local tons.");
+        }
+        else
+        {
+            ERROR("PST: unexpected state in local tons estimation.");
+        }
+        _estimated_locals = true;
+        return false;
+    }
+
+    if (_enum.empty()) // (first() == stop()))
+    {
+        ERROR("PST: estimation of local tonalities impossible: no entry");
+        _estimated_locals = true;
+        return false;
+    }
+
+    for (size_t ig : _globals)
+        init_locals(ig);
+
+    _estimated_locals = true;
+    return true;
+}
+
 size_t PST::bound_measure(size_t bar, size_t i0)
 {
     size_t i;
@@ -134,7 +240,31 @@ size_t PST::bound_measure(size_t bar, size_t i0)
 
     return i;
 }
-   
+
+
+const Ton& PST::rowHeader(size_t i) const
+{
+    assert(i < _index.size());
+    return _index.ton(i);
+}
+
+
+PSCost PST::rowCost(size_t step, size_t i)
+{
+    PSCost rc; // zero
+    // every column of the table corresponds to a measure
+    // for (std::unique_ptr<const PSV> psv : _psvs)
+    for (size_t j = 0; j < _psvs.size(); ++j)
+    {
+        assert(_psvs[j]);
+        PSV& psv = *(_psvs[j]);
+        const PSB& psb = psv.best(step, i);
+        if (! psb.empty())
+            rc += psb.cost();
+    }
+    return rc;
+}
+
 
 size_t PST::size() const
 {
@@ -142,11 +272,19 @@ size_t PST::size() const
 }
 
 
-PSV& PST::column(size_t i)
+PSV& PST::column(size_t j)
 {
-    assert(i < _psvs.size());
-    assert(_psvs.at(i) != nullptr);
-    return *(_psvs.at(i));
+    assert(j < _psvs.size());
+    assert(_psvs.at(j) != nullptr);
+    return *(_psvs.at(j));
+}
+
+
+const PSEnum& PST::columnHeader(size_t j) const
+{
+    assert(j < _psvs.size());
+    assert(_psvs.at(j) != nullptr);
+    return _psvs.at(j)->enumerator();
 }
 
 
@@ -196,23 +334,6 @@ PSV& PST::column(size_t i)
 //    assert(_frowcost.size() == _rowcost.size());
 //    return _frowcost.at(i);
 //}
-
-
-PSCost PST::rowCost(size_t step, size_t i)
-{
-    PSCost rc; // zero
-    // every column of the table corresponds to a measure
-    // for (std::unique_ptr<const PSV> psv : _psvs)
-    for (size_t j = 0; j < _psvs.size(); ++j)
-    {
-        assert(_psvs[j]);
-        PSV& psv = *(_psvs[j]);
-        const PSB& psb = psv.best(step, i);
-        if (! psb.empty())
-            rc += psb.cost();
-    }
-    return rc;
-}
 
 
 bool PST::eGlobals_eq_lex(const PSCost& lhs, const PSCost& rhs) const
@@ -366,97 +487,6 @@ const Ton& PST::globalCand(size_t i) const
 }
 
 
-bool PST::estimateLocals()
-{
-    if (estimatedLocals()) // (_estimated_locals)
-    {
-        WARN("PST: re-estimation of local tonalities. ignored.");
-        return false;
-    }
-    
-    if (_globals.empty())
-    {
-        if (_global == TonIndex::UNDEF)
-        {
-            ERROR("PST: estimate global candidates ton before estimating local tons.");
-        }
-        else if (_global == TonIndex::FAILED)
-        {
-            ERROR("PST: failed to estimate global ton. cannot estimate local tons.");
-        }
-        else
-        {
-            ERROR("PST: unexpected state in local tons estimation.");
-        }
-        _estimated_locals = true;
-        return false;
-    }
-
-    if (_enum.empty()) // (first() == stop()))
-    {
-        ERROR("PST: estimation of local tonalities impossible: no entry");
-        _estimated_locals = true;
-        return false;
-    }
-
-    for (size_t ig : _globals)
-        estimateLocals(ig);
-
-    _estimated_locals = true;
-    return true;
-}
-
-
-//bool PST::estimateLocals(size_t ig)
-//{
-//    bool status = true;
-//    assert(ig < index.size());
-//    // index of previous local tonality
-//    size_t pre = ig;
-//    for (size_t i = 0; i < _psvs.size(); ++i)
-//    {
-//        PSV& psv = column(i);
-//        assert(pre < index.size());
-//        bool lstatus = psv.estimateLocal(ig, pre);
-//        if (lstatus) // local succesfully estimated
-//        {
-//            pre = psv.local(ig); // next pre
-//        }
-//        // otherwise, do not update the pre.
-//        else
-//        {
-//            status = false;
-//        }
-//    }
-//    return status;
-//}
-
-
-bool PST::estimateLocals(size_t ig)
-{
-    bool status = true;
-    assert(ig < _index.size());
-    // index of previous local tonality
-    size_t pre = ig;
-    for (size_t i = 0; i < _psvs.size(); ++i)
-    {
-        PSV& psv = column(i);
-        assert(pre < _index.size());
-        bool lstatus = psv.estimateLocal(ig, pre);
-        if (lstatus) // local succesfully estimated
-        {
-            pre = psv.local(ig); // next pre
-        }
-        // otherwise, do not update the pre.
-        else
-        {
-            status = false;
-        }
-    }
-    return status;
-}
-
-
 bool PST::estimatedLocals() const
 {
     return _estimated_locals;
@@ -472,7 +502,7 @@ size_t PST::ilocal(size_t i, size_t j) const
     assert(i < _index.size());
     assert(i != TonIndex::UNDEF);
     assert(i != TonIndex::FAILED);
-    return _psvs[j]->local(i);
+    return _psvs[j]->ilocal(i);
 }
 
 
@@ -625,7 +655,7 @@ bool PST::rename()
         
     if (status && !estimatedLocals())
     {
-        status = estimateLocals();
+        status = init_locals();
     }
 
     if (status && !estimatedGlobal())
@@ -650,7 +680,7 @@ bool PST::rename()
         PSV& psv = *(_psvs[i]);
         // std::cout << "PST: rename vector " << i << std::endl;
         TRACE("PST: renaming bar {}({}-{}) (local ton = {})",
-              i, psv.first(), psv.stop(), _index.ton(psv.local(_global)));
+              i, psv.first(), psv.stop(), _index.ton(psv.ilocal(_global)));
         status = psv.rename(_global);
     }
     return status;
