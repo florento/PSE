@@ -1,5 +1,5 @@
 //
-//  Cost.tpp
+//  Costt.tpp
 //  pse
 //
 //  Created by Florent Jacquemard on 12/05/2023.
@@ -7,44 +7,44 @@
 
 namespace pse {
 
-//const Cost operator+(const Cost& lhs, const Cost& rhs)
+//const Costt operator+(const Costt& lhs, const Costt& rhs)
 //{
 //    return lhs.operator+(rhs);
 //}
 
 
 template<class T>
-bool Cost<T>::operator!=(const T& rhs) const
+bool Costt<T>::operator!=(const T& rhs) const
 {
     return !operator==(rhs);
 }
 
 
 template<class T>
-bool Cost<T>::operator<=(const T& rhs) const
+bool Costt<T>::operator<=(const T& rhs) const
 {
     return !operator>(rhs);
 }
 
 
 template<class T>
-bool Cost<T>::operator>(const T& rhs) const
+bool Costt<T>::operator>(const T& rhs) const
 {
     return rhs.operator<(*this); // rhs.Compare(*this);
 }
 
 
 template<class T>
-bool Cost<T>::operator>=(const T& rhs) const
+bool Costt<T>::operator>=(const T& rhs) const
 {
     return !operator<(rhs);
 }
 
 
 //template<class T>
-//T Cost<T>::operator+(const T& rhs) const
+//T Costt<T>::operator+(const T& rhs) const
 //{
-//    Cost<T> copy(*this);
+//    Costt<T> copy(*this);
 //    return copy.operator+=(rhs);
 //}
 

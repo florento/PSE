@@ -1,8 +1,8 @@
 //
-//  Costu.cpp
+//  Cost.cpp
 //  pse
 //
 //  Created by Florent on 16/05/2023.
 //
 
-#include "Costu.hpp"
+#include "Cost.hpp"

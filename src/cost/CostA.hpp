@@ -14,7 +14,7 @@
 #include <assert.h>
 
 #include "trace.hpp"
-#include "Cost.hpp"
+#include "Costt.hpp"
 
 
 namespace pse {
@@ -23,7 +23,7 @@ class PSC1;
 
 class PSC2;
 
-class CostA : public Cost<CostA>
+class CostA : public Costt<CostA>
 {
 
 public:
@@ -58,7 +58,7 @@ public:
 
     /// update this cost for doing a transition into the given config,
     /// from its previous config,
-    /// in given hypothetic global and local tonalities.
+    /// in the given hypothetic global and local tonalities.
     /// @see PSC.previous()
     /// @param gton conjectured main (global) tonality (key signature).
     /// @param lton conjectured local tonality.
