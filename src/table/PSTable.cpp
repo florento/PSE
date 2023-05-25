@@ -271,8 +271,7 @@ size_t PST::size() const
     return _psvs.size();
 }
 
-
-PSV& PST::column(size_t j)
+PSV& PST::column(size_t j) const
 {
     assert(j < _psvs.size());
     assert(_psvs.at(j) != nullptr);

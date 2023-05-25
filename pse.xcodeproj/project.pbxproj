@@ -139,6 +139,10 @@
 		43C2BA1A2999529E0084AB3B /* PWO.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43C2BA182999529E0084AB3B /* PWO.cpp */; };
 		43C2BA1D299A5FEE0084AB3B /* IntervalSimple.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43C2BA1B299A5FEE0084AB3B /* IntervalSimple.cpp */; };
 		43C2BA1E299A5FEE0084AB3B /* IntervalSimple.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43C2BA1B299A5FEE0084AB3B /* IntervalSimple.cpp */; };
+		43C4A6522A1E7EBB00925A99 /* PSTableTon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43C4A6502A1E7EBB00925A99 /* PSTableTon.cpp */; };
+		43C4A6532A1E7EBB00925A99 /* PSTableTon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43C4A6502A1E7EBB00925A99 /* PSTableTon.cpp */; };
+		43C4A6542A1E7EBB00925A99 /* PSTableTon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43C4A6502A1E7EBB00925A99 /* PSTableTon.cpp */; };
+		43C4A6552A1E7EBB00925A99 /* PSTableTon.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 43C4A6512A1E7EBB00925A99 /* PSTableTon.hpp */; };
 		43D31A0C2A13F28800234527 /* CostA.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43D31A0A2A13F28800234527 /* CostA.cpp */; };
 		43D31A0D2A13F28800234527 /* CostA.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43D31A0A2A13F28800234527 /* CostA.cpp */; };
 		43D31A0E2A13F28800234527 /* CostA.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43D31A0A2A13F28800234527 /* CostA.cpp */; };
@@ -312,6 +316,8 @@
 		43C2BA182999529E0084AB3B /* PWO.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = PWO.cpp; path = src/pitch/PWO.cpp; sourceTree = "<group>"; };
 		43C2BA1B299A5FEE0084AB3B /* IntervalSimple.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = IntervalSimple.cpp; path = src/interval/IntervalSimple.cpp; sourceTree = "<group>"; };
 		43C2BA1C299A5FEE0084AB3B /* IntervalSimple.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = IntervalSimple.hpp; path = src/interval/IntervalSimple.hpp; sourceTree = "<group>"; };
+		43C4A6502A1E7EBB00925A99 /* PSTableTon.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PSTableTon.cpp; sourceTree = "<group>"; };
+		43C4A6512A1E7EBB00925A99 /* PSTableTon.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = PSTableTon.hpp; sourceTree = "<group>"; };
 		43D31A0A2A13F28800234527 /* CostA.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CostA.cpp; sourceTree = "<group>"; };
 		43D31A0B2A13F28800234527 /* CostA.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CostA.hpp; sourceTree = "<group>"; };
 		43D31A102A1426A300234527 /* Cost.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Cost.cpp; sourceTree = "<group>"; };
@@ -414,6 +420,8 @@
 				43ABA51529242417002AC1D4 /* PSVector.cpp */,
 				43ABA52229242418002AC1D4 /* PSTable.hpp */,
 				43ABA51F29242418002AC1D4 /* PSTable.cpp */,
+				43C4A6512A1E7EBB00925A99 /* PSTableTon.hpp */,
+				43C4A6502A1E7EBB00925A99 /* PSTableTon.cpp */,
 				43ABA51C29242418002AC1D4 /* PSPath.hpp */,
 				43ABA51629242417002AC1D4 /* PSPath.cpp */,
 			);
@@ -705,6 +713,7 @@
 				4342FD102926781E004E914F /* PWO.hpp in Headers */,
 				43C2BA1529994F630084AB3B /* Pitch.hpp in Headers */,
 				4310526929CDD15000694D5A /* Scale.hpp in Headers */,
+				43C4A6552A1E7EBB00925A99 /* PSTableTon.hpp in Headers */,
 				432E7A5629D45FE2000E2B72 /* PS13.hpp in Headers */,
 				430CDFF22924E6D800A84650 /* KeyFifth.hpp in Headers */,
 				43ABA510292423E8002AC1D4 /* Ton.hpp in Headers */,
@@ -853,6 +862,7 @@
 				435081F029D6D75D00465943 /* ModeName.cpp in Sources */,
 				438A581E29E049430073A32C /* PSState.cpp in Sources */,
 				438A581729E0492A0073A32C /* PSConfig1.cpp in Sources */,
+				43C4A6542A1E7EBB00925A99 /* PSTableTon.cpp in Sources */,
 				4309605D2A0D034A0097487A /* Speller.cpp in Sources */,
 				438A581329E049020073A32C /* PSTable.cpp in Sources */,
 				435081F329D6D76800465943 /* Enharmonic.cpp in Sources */,
@@ -918,6 +928,7 @@
 				43C2BA10299946150084AB3B /* Interval.cpp in Sources */,
 				434B1E01298FD4FE001CE41C /* PSChord.cpp in Sources */,
 				43ABA52F29242418002AC1D4 /* PSTable.cpp in Sources */,
+				43C4A6522A1E7EBB00925A99 /* PSTableTon.cpp in Sources */,
 				434B1DFC298ED394001CE41C /* PSConfig2.cpp in Sources */,
 				43ABA52629242418002AC1D4 /* PSPath.cpp in Sources */,
 				431586332983E89B00918B1B /* PSEnum.cpp in Sources */,
@@ -965,6 +976,7 @@
 				43FBEAD02930CEDD008FC486 /* PSConfig.cpp in Sources */,
 				43C2BA11299946150084AB3B /* Interval.cpp in Sources */,
 				43FBEAD12930CEDD008FC486 /* PSBag.cpp in Sources */,
+				43C4A6532A1E7EBB00925A99 /* PSTableTon.cpp in Sources */,
 				43FBEAD22930CEDD008FC486 /* PSVector.cpp in Sources */,
 				43FBEAD32930CEDD008FC486 /* PSTable.cpp in Sources */,
 				43FBEAD42930CEDD008FC486 /* PSPath.cpp in Sources */,

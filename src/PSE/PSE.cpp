@@ -44,7 +44,6 @@ PSE::~PSE()
 //}
 
 
-
 void PSE::setGlobal(size_t i)
 {
     _table.setGlobal(i);

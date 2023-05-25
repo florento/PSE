@@ -68,6 +68,9 @@ public:
     
     // sum operator.
     // T operator+(const T& rhs) const;
+
+    /// null cost value.
+    virtual T zero() const = 0;
     
 };
 

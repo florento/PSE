@@ -78,6 +78,10 @@ public:
     /// the table content has been correctly initialized.
     bool status() const;
     
+    /// vector of tonalities associated to this vector.
+    /// it is the row-index of the embedding table.
+    inline const TonIndex& index() const { return _index; }
+    
     /// number of rows in this table, i.e. nb of tons considered for spelling.
     inline size_t rowNb() const { return _index.size(); }
 
@@ -107,7 +111,7 @@ public:
 
     /// access a column (PS vector) of this table.
     /// @param j column number (number of bar). must be smaller than columnNb().
-    PSV& column(size_t j);
+    PSV& column(size_t j) const;
     
     /// force a global tonality.
     /// @param ig index of global tonality.

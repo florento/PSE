@@ -48,6 +48,9 @@ public:
     /// cost inequality.
     /// @param rhs a cost to compare to.
     bool operator<(const CostA& rhs) const override;
+
+    /// null cost value.
+    CostA zero() const override { return CostA(); }
     
     /// update this cost for doing a transition into the given config,
     /// from its previous config, in a given hypothetic global tonality.

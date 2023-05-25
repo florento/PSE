@@ -104,7 +104,7 @@ public:
     /// bag of target configs for best paths for the ton of given index.
     /// @param i index in array of tonalities. must be smaller than index.size().
     /// @return the bag of configs at position i in this vector.
-    const PSB& bag(size_t i);
+    const PSB& bag(size_t i) const;
 
     /// bag of target configs for best paths for the ton of given index.
     /// @param step number of step, 0 or 1.
