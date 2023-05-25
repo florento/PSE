@@ -1,16 +1,16 @@
 //
-//  PSTableTon.cpp
+//  PSGrid.cpp
 //  pse
 //
 //  Created by Florent Jacquemard on 24/05/2023.
 //
 
-#include "PSTableTon.hpp"
+#include "PSGrid.hpp"
 
 namespace pse {
 
 
-PSTTon::PSTTon(const PST& tab, std::vector<bool> mask):
+PSG::PSG(const PST& tab, std::vector<bool> mask):
 _index(tab.index()),
 _content()
 {
@@ -19,17 +19,17 @@ _content()
 }
 
 
-PSTTon::~PSTTon()
+PSG::~PSG()
 { }
 
 
-size_t PSTTon::size() const
+size_t PSG::size() const
 {
     return _content.size();
 }
 
 
-size_t PSTTon::ilocal(size_t i, size_t j) const
+size_t PSG::ilocal(size_t i, size_t j) const
 {
     assert(j < _content.size());
     const std::vector<size_t>& col = _content.at(j);
@@ -38,9 +38,8 @@ size_t PSTTon::ilocal(size_t i, size_t j) const
 }
 
 
-void PSTTon::init(const PST& tab, std::vector<bool> mask)
+void PSG::init(const PST& tab, std::vector<bool> mask)
 {
-    bool status = true;
 
     for (size_t j = 0; j < tab.columnNb(); ++j)
     {
@@ -88,7 +87,7 @@ void PSTTon::init(const PST& tab, std::vector<bool> mask)
 }
 
 
-void PSTTon::extract_bests(const PSV& vec, std::set<size_t>& ties)
+void PSG::extract_bests(const PSV& vec, std::set<size_t>& ties)
 {
     assert(ties.empty());
     
@@ -133,7 +132,7 @@ void PSTTon::extract_bests(const PSV& vec, std::set<size_t>& ties)
 }
 
 
-size_t PSTTon::estimateLocal(size_t ig, size_t iprev, std::set<size_t>& cands)
+size_t PSG::estimateLocal(size_t ig, size_t iprev, std::set<size_t>& cands)
 {
     if (cands.empty())
         return TonIndex::FAILED; // TonIndex::UNDEF
@@ -200,7 +199,7 @@ size_t PSTTon::estimateLocal(size_t ig, size_t iprev, std::set<size_t>& cands)
                 }
                 else if (std::abs(jton.fifths()) == std::abs(bton.fifths()))
                 {
-                    WARN("PSTableTon, estimation local, tie break fail {} vs {} dist prev({})={}, dist global({})={})",
+                    WARN("PSGrid, estimation local, tie break fail {} vs {} dist prev({})={}, dist global({})={})",
                          jton, _index.ton(ibest), pton, dist, gton, distg);
                 }
                 // otherwise keep the current best

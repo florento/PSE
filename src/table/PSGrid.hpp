@@ -1,5 +1,5 @@
 //
-//  PSTableTon.hpp
+//  PSGrid.hpp
 //  pse
 //
 //  Created by Florent Jacquemard on 24/05/2023.
@@ -7,8 +7,8 @@
 /// @addtogroup pitch
 /// @{
 
-#ifndef PSTableTon_hpp
-#define PSTableTon_hpp
+#ifndef PSGrid_hpp
+#define PSGrid_hpp
 
 #include <iostream>
 #include <assert.h>
@@ -27,7 +27,7 @@ namespace pse {
 
 /// Grid of estimated local tonalities, for each measure (X) and
 /// each possible global tonality (Y) in a TonIndex.
-class PSTTon
+class PSG
 {
 public:
     
@@ -35,9 +35,9 @@ public:
     /// @param tab pitch spelling table used to estimated the locals.
     /// @param mask bitvector of global tonalities for which locals must
     /// be estimated. must be of the same length as the Ton index of tab.
-    PSTTon(const PST& tab, std::vector<bool> mask);
+    PSG(const PST& tab, std::vector<bool> mask);
     
-    virtual ~PSTTon();
+    virtual ~PSG();
     
     /// vector of tonalities (row-index) associated to this table.
     inline const TonIndex& index() const { return _index; }
@@ -96,6 +96,6 @@ private:
 
 } // namespace pse
 
-#endif /* PSTableTon_hpp */
+#endif /* PSGrid_hpp */
 
 /// @}
