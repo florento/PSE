@@ -21,7 +21,10 @@ _global1(nullptr)
 
 Speller2Pass::~Speller2Pass()
 {
-    // free pointers
+    if (_table1)
+        delete _table1;
+    if (_global1)
+        delete _global1;
 }
 
 

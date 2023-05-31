@@ -55,10 +55,10 @@ public:
 protected:
     
     /// Second Pitch Spelling table.
-    std::shared_ptr<PST> _table1;
+    PST* _table1; // std::shared_ptr<PST>
     
     /// Second estimation of global tonality (on table1).
-    std::shared_ptr<PSO> _global1;
+    PSO* _global1; // std::shared_ptr<PSO>
 
 };
 

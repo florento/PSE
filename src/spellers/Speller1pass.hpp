@@ -78,19 +78,19 @@ public:
 protected:
     
     /// First Pitch Spelling table.
-    std::shared_ptr<PST> _table0;
+    PST* _table0;  // std::shared_ptr<PST>
     
     /// First estimation of global tonality (on table0).
-    std::shared_ptr<PSO> _global0;
+    PSO* _global0; // std::shared_ptr<PSO>
     
     /// Grid of loval tonalities (estimated on table0).
-    std::shared_ptr<PSG> _locals0;
+    PSG* _locals0; // std::shared_ptr<PSG>
     
     // forced global ton
     // std::unique_ptr<size_t> _global;
     
     /// undefined tonality, for errors.
-    std::shared_ptr<Ton> _uton; // ();
+    Ton* _uton; // std::shared_ptr<Ton>
 
     
     /// estimated local tonality for one candidate global tonality and one bar.
@@ -98,13 +98,13 @@ protected:
     /// @param j bar number.
     const Ton& localCandBar(size_t i, size_t j) const;
    
-    void setGlobal(size_t i, std::shared_ptr<PSO> glo);
+    void setGlobal(size_t i, PSO* g); // std::shared_ptr<PSO>
     
-    size_t globals(const std::shared_ptr<PSO> glo) const;
+    size_t globals(const PSO* g) const; // std::shared_ptr<PSO>
     
-    const Ton& globalCand(size_t i, const std::shared_ptr<PSO> glo) const;
+    const Ton& globalCand(size_t i, const PSO* g) const; // std::shared_ptr<PSO>
     
-    size_t iglobalCand(size_t i, const std::shared_ptr<PSO> glo) const;
+    size_t iglobalCand(size_t i, const PSO* g) const; // std::shared_ptr<PSO>
     
 };
 

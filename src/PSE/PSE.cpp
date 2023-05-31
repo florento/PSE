@@ -70,37 +70,57 @@ bool PSE::spell()
     //        _rowcost.assign(nbtons(), 0);
     //        _frowcost.assign(nbtons(), false);
     //    }
+    
+    TRACE("pitch-spelling: building first pitch-spelling table");
     if (_table0 != nullptr)
     {
         WARN("PSE: re-spelling, PS table overrided");
+        delete _table0;
     }
-    
-    TRACE("pitch-spelling: building first pitch-spelling table");
     CostA seed0; // zero
-    _table0 = std::unique_ptr<PST>(new PST(Algo::PSE, seed0, _index, _enum,
-                                           _debug));
+    _table0 = new PST(Algo::PSE, seed0, _index, _enum, _debug); // std::unique_ptr<PST>
        
     TRACE("pitch-spelling: {} bars", _table0->size());
 
     TRACE("pitch-spelling: estimate first list of global tonality candidates");
-    _global0 = std::unique_ptr<PSO>(new PSO(*_table0, 0, _debug));
+    if (_global0 != nullptr)
+    {
+        WARN("PSE: re-spelling, PS global set overrided");
+        delete _global0;
+    }
+    _global0 = new PSO(*_table0, 0, _debug); // std::unique_ptr<PSO>
 
     // extract local tonality for each column of table
     TRACE("pitch-spelling: start local tonalities estimation");
-    _locals0 = std::unique_ptr<PSG>(new PSG(*_table0, _global0->getMask()));
-
-    if (status == false)
+    if (_locals0 != nullptr)
     {
-        ERROR("Pitch Spelling: failed to extract local tonalities, abort.");
-        return false;
+        WARN("PSE: re-spelling, PS local grid overrided");
+        delete _locals0;
     }
+    _locals0 = new PSG(*_table0, _global0->getMask()); // std::unique_ptr<PSG>
+
+//    if (status == false)
+//    {
+//        ERROR("Pitch Spelling: failed to extract local tonalities, abort.");
+//        return false;
+//    }
 
     TRACE("pitch-spelling: building second pitch-spelling table");
+    if (_table1 != nullptr)
+    {
+        WARN("PSE: re-spelling, 2d PS table overrided");
+        delete _table1;
+    }
     CostA seed1; // zero
-    _table1 = std::unique_ptr<PST>(new PST(*_table0, seed1, *_locals0, _debug));
+    _table1 = new PST(*_table0, seed1, *_locals0, _debug); // std::unique_ptr<PST>
 
     TRACE("pitch-spelling: estimate second list of global tonality candidates");
-    _global1 = std::unique_ptr<PSO>(new PSO(*_table1, 0, _debug));
+    if (_global1 != nullptr)
+    {
+        WARN("PSE: re-spelling, 2d PS global set overrided");
+        delete _global1;
+    }
+    _global1 = new PSO(*_table1, 0, _debug); // std::unique_ptr<PSO>
 
     TRACE("Pitch Spelling: estimated global tonality: {} ({})",
           global(), global().fifths());

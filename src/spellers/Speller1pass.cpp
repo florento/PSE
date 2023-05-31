@@ -20,11 +20,18 @@ _uton(new Ton())
 
 Speller1Pass::~Speller1Pass()
 {
-    // free pointers
+    if (_table0)
+        delete _table0;
+    if (_global0)
+        delete _global0;
+    if (_locals0)
+        delete _locals0;
+    assert(_uton);
+    delete _uton;
 }
 
 
-void Speller1Pass::setGlobal(size_t i, std::shared_ptr<PSO> g)
+void Speller1Pass::setGlobal(size_t i, PSO* g) // std::shared_ptr<PSO>
 {
     if (i >= _index.size())
     {
@@ -33,17 +40,18 @@ void Speller1Pass::setGlobal(size_t i, std::shared_ptr<PSO> g)
     }
     if (g == nullptr)
     {
-        g = std::unique_ptr<PSO>(new PSO(_index, _debug)); // empty
+        g = new PSO(_index, _debug); // empty
     }
     else
     {
-        WARN("Speller1Pass: set global {}: already global candidates", i);
+        WARN("Speller1Pass: set global {}: there are already () global candidates",
+             i, g->size());
     }
     g->setGlobal(i);
 }
  
 
-size_t Speller1Pass::globals(const std::shared_ptr<PSO> g) const
+size_t Speller1Pass::globals(const PSO* g) const // std::shared_ptr<PSO>
 {
     if (g == nullptr)
     {
@@ -56,7 +64,7 @@ size_t Speller1Pass::globals(const std::shared_ptr<PSO> g) const
 }
 
  
-const Ton& Speller1Pass::globalCand(size_t i, const std::shared_ptr<PSO> g) const
+const Ton& Speller1Pass::globalCand(size_t i, const PSO* g) const // std::shared_ptr<PSO>
 {
     // size_t it = iglobalCand(i);
     // if (it != TonIndex::UNDEF)
@@ -75,7 +83,7 @@ const Ton& Speller1Pass::globalCand(size_t i, const std::shared_ptr<PSO> g) cons
 }
  
 
-size_t Speller1Pass::iglobalCand(size_t i, const std::shared_ptr<PSO> g) const
+size_t Speller1Pass::iglobalCand(size_t i, const PSO* g) const // std::shared_ptr<PSO>
 {
     if (i < globals())
     {
@@ -151,8 +159,6 @@ const Ton& Speller1Pass::localNote(size_t i) const
     size_t j = _enum.measure(i);
     return local(j);
 }
-
-
 
 
 } // namespace pse
