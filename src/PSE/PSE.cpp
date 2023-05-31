@@ -12,12 +12,7 @@ namespace pse {
 
 
 PSE::PSE(size_t nbTons, bool dflag):
-Speller(Algo::PSE, nbTons, dflag),
-_table0(nullptr),
-_global0(nullptr),
-_locals0(nullptr),
-_table1(nullptr),
-_global1(nullptr)
+Speller2Pass(Algo::PSE, nbTons, dflag)
 {
 // init table with default vector of tons
 //    if (finit)
@@ -51,27 +46,6 @@ PSE::~PSE()
 //}
 
 
-void PSE::setGlobal(size_t i)
-{
-    if (i >= _index.size())
-    {
-        WARN("PSE: set global {}: not a ton (ignored)", i);
-        return;
-    }
-    if (_global0 == nullptr)
-    {
-        _global0 = std::unique_ptr<PSO>(new PSO(_index, _debug));
-        assert(_global1 == nullptr);
-        _global1 = std::unique_ptr<PSO>(new PSO(_index, _debug));
-    }
-    else
-    {
-        assert(_global1 != nullptr);
-        WARN("PSE: set global {}: already global candidates", i);
-    }
-    _global0->setGlobal(i);
-    _global1->setGlobal(i);
-}
 
 
 bool PSE::spell()
@@ -145,89 +119,6 @@ bool PSE::spell()
 }
 
 
-size_t PSE::globals() const
-{
-    if (_global1 == nullptr)
-    {
-        return 0;
-    }
-    else
-    {
-        return _global1->size();
-    }
-}
-
-
-const Ton& PSE::globalCand(size_t i) const
-{
-    // size_t it = iglobalCand(i);
-    // if (it != TonIndex::UNDEF)
-    if ((_global1 != nullptr) && (i <  _global1->size()))
-    {
-        assert(_index.size() == _global1->size());
-        return _global1->global(i);
-    }
-    else
-    {
-        ERROR("PSE: iglobal {}: no such global ton candidate", i);
-        std::shared_ptr<Ton> uton(new Ton()); // undefined tonality
-        return *uton;
-    }
-}
-
-
-size_t PSE::iglobalCand(size_t i) const
-{
-    if (i < globals())
-    {
-        return _global1->iglobal(i);
-    }
-    else
-    {
-        WARN("PSE: iglobal {}: no such global ton candidates (only {})",
-             i, globals());
-        return TonIndex::UNDEF;
-    }
-}
-
-
-
-const Ton& PSE::localCandBar(size_t i, size_t j) const
-{
-    if (_locals0 == nullptr)
-    {
-        ERROR("PSE local: call spell() first");
-    }
-    else if (j >= _locals0->columnNb())
-    {
-        ERROR("PSE local: no bar {}", j);
-    }
-    else
-    {
-        assert(i < _locals0->rowNb());
-        size_t it = _locals0->ilocal(i, j);
-        assert(it < _index.size());
-        return _index.ton(it);
-    }
-
-    // in case or error return undefined tonality
-    std::shared_ptr<Ton> uton(new Ton());
-    return *uton;
-}
-
-
-const Ton& PSE::local(size_t j) const
-{
-    return localCandBar(iglobal(), j);
-}
-
-
-const Ton& PSE::localNote(size_t i) const
-{
-    assert(_enum.inside(i));
-    size_t j = _enum.measure(i);
-    return local(j);
-}
 
 
 // TBR not used

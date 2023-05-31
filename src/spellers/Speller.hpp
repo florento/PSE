@@ -11,6 +11,7 @@
 #ifndef Speller_hpp
 #define Speller_hpp
 
+#include <iostream>
 #include <assert.h>
 #include <memory>
 
