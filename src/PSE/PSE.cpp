@@ -6,15 +6,18 @@
 //
 
 #include "PSE.hpp"
-
+#include "CostA.hpp"
 
 namespace pse {
 
 
 PSE::PSE(size_t nbTons, bool dflag):
 Speller(Algo::PSE, nbTons, dflag),
-_table(Algo::PSE, _index, _enum, dflag)
-//_global(0, ModeName::Maj), // C maj default
+_table0(nullptr),
+_global0(nullptr),
+_locals0(nullptr),
+_table1(nullptr),
+_global1(nullptr)
 {
 // init table with default vector of tons
 //    if (finit)
@@ -32,6 +35,10 @@ _table(Algo::PSE, _index, _enum, dflag)
 }
 
 
+//_table0(Algo::PSE, _index, _enum, dflag)
+
+
+
 PSE::~PSE()
 {
     TRACE("delete PSE");
@@ -46,7 +53,24 @@ PSE::~PSE()
 
 void PSE::setGlobal(size_t i)
 {
-    _table.setGlobal(i);
+    if (i >= _index.size())
+    {
+        WARN("PSE: set global {}: not a ton (ignored)", i);
+        return;
+    }
+    if (_global0 == nullptr)
+    {
+        _global0 = std::unique_ptr<PSO>(new PSO(_index, _debug));
+        assert(_global1 == nullptr);
+        _global1 = std::unique_ptr<PSO>(new PSO(_index, _debug));
+    }
+    else
+    {
+        assert(_global1 != nullptr);
+        WARN("PSE: set global {}: already global candidates", i);
+    }
+    _global0->setGlobal(i);
+    _global1->setGlobal(i);
 }
 
 
@@ -57,111 +81,142 @@ bool PSE::spell()
     {
         /// reset to default
         /// @todo mv to speller cstr?
-        TRACE("Speller respell: no tonality added, use default tonality array");
+        WARN("Speller respell: no tonality added, use default 30 tonality array");
         for (int ks = -7; ks <= 7; ++ks)
             _index.add(ks, ModeName::Major);
         for (int ks = -7; ks <= 7; ++ks)
             _index.add(ks, ModeName::Minor);
     }
     
+    bool status = true;
+
     //    if (finit)
     //    {
     //        for (auto ton : TONS) _tons.push_back(ton); // vector copy default tons
     //        _rowcost.assign(nbtons(), 0);
     //        _frowcost.assign(nbtons(), false);
     //    }
-
-    TRACE("pitch-spelling: building pitch-spelling table");
-    bool status = true; // _table.init_psvs(); // STUB, initialization in constructor
-    if (status == false)
+    if (_table0 != nullptr)
     {
-        ERROR("Speller: failed to compute spelling table {}-{}",
-              _enum.first(), _enum.stop());
-        return false;
-    }
-
-    TRACE("pitch-spelling: {} bars", _table.size());
-
-    // estimate global tonality candidates from table
-    if (! _table.estimatedGlobals())
-    {
-        TRACE("pitch-spelling: start estimation of global tonality candidates");
-        status = _table.estimateGlobals();
-        if (status == false)
-        {
-            ERROR("Pitch Spelling: failed to extract global tonality candidates, abort.");
-            return false;
-        }
+        WARN("PSE: re-spelling, PS table overrided");
     }
     
+    TRACE("pitch-spelling: building first pitch-spelling table");
+    CostA seed0; // zero
+    _table0 = std::unique_ptr<PST>(new PST(Algo::PSE, seed0, _index, _enum,
+                                           _debug));
+       
+    TRACE("pitch-spelling: {} bars", _table0->size());
+
+    TRACE("pitch-spelling: estimate first list of global tonality candidates");
+    _global0 = std::unique_ptr<PSO>(new PSO(*_table0, 0, _debug));
+
     // extract local tonality for each column of table
     TRACE("pitch-spelling: start local tonalities estimation");
-    status = true; // _table.init_locals(); // STUB, initialization in constructor
+    _locals0 = std::unique_ptr<PSG>(new PSG(*_table0, _global0->getMask()));
+
     if (status == false)
     {
         ERROR("Pitch Spelling: failed to extract local tonalities, abort.");
         return false;
     }
 
-    if (! _table.estimatedGlobal())
-    {
-        TRACE("pitch-spelling: start estimation of global tonality ");
-        status = _table.estimateGlobal();
-        if (status == false)
-        {
-            ERROR("Pitch Spelling: failed to extract global tonality, abort.");
-            return false;
-        }
-    }
+    TRACE("pitch-spelling: building second pitch-spelling table");
+    CostA seed1; // zero
+    _table1 = std::unique_ptr<PST>(new PST(*_table0, seed1, *_locals0, _debug));
+
+    TRACE("pitch-spelling: estimate second list of global tonality candidates");
+    _global1 = std::unique_ptr<PSO>(new PSO(*_table1, 0, _debug));
 
     TRACE("Pitch Spelling: estimated global tonality: {} ({})",
-          _table.global(), _table.global().fifths());
+          global(), global().fifths());
 
 
     // will update the lists _names, _accids and _octave
     TRACE("pitch-spelling: start renaming");
-    _table.rename();
-    return true;
+    _table1->rename(iglobal());
+
+    if (status == false)
+    {
+        ERROR("Speller: failed to compute spelling table {}-{}",
+              _enum.first(), _enum.stop());
+    }
+    return status;
 }
 
 
-size_t PSE::globalCands() const
+size_t PSE::globals() const
 {
-    return _table.globalCands();
+    if (_global1 == nullptr)
+    {
+        return 0;
+    }
+    else
+    {
+        return _global1->size();
+    }
 }
 
 
 const Ton& PSE::globalCand(size_t i) const
 {
-    return _table.globalCand(i);
+    // size_t it = iglobalCand(i);
+    // if (it != TonIndex::UNDEF)
+    if ((_global1 != nullptr) && (i <  _global1->size()))
+    {
+        assert(_index.size() == _global1->size());
+        return _global1->global(i);
+    }
+    else
+    {
+        ERROR("PSE: iglobal {}: no such global ton candidate", i);
+        std::shared_ptr<Ton> uton(new Ton()); // undefined tonality
+        return *uton;
+    }
 }
 
 
 size_t PSE::iglobalCand(size_t i) const
 {
-    return _table.iglobalCand(i);
+    if (i < globals())
+    {
+        return _global1->iglobal(i);
+    }
+    else
+    {
+        WARN("PSE: iglobal {}: no such global ton candidates (only {})",
+             i, globals());
+        return TonIndex::UNDEF;
+    }
 }
 
-
-size_t PSE::iglobal() const
-{
-    return _table.iglobal();
-}
-
-
-const Ton& PSE::global() const
-{
-    return _table.global();
-}
 
 
 const Ton& PSE::localCandBar(size_t i, size_t j) const
 {
-    return _table.local(i, j);
+    if (_locals0 == nullptr)
+    {
+        ERROR("PSE local: call spell() first");
+    }
+    else if (j >= _locals0->columnNb())
+    {
+        ERROR("PSE local: no bar {}", j);
+    }
+    else
+    {
+        assert(i < _locals0->rowNb());
+        size_t it = _locals0->ilocal(i, j);
+        assert(it < _index.size());
+        return _index.ton(it);
+    }
+
+    // in case or error return undefined tonality
+    std::shared_ptr<Ton> uton(new Ton());
+    return *uton;
 }
 
 
-const Ton& PSE::localBar(size_t j) const
+const Ton& PSE::local(size_t j) const
 {
     return localCandBar(iglobal(), j);
 }
@@ -171,7 +226,7 @@ const Ton& PSE::localNote(size_t i) const
 {
     assert(_enum.inside(i));
     size_t j = _enum.measure(i);
-    return localBar(j);
+    return local(j);
 }
 
 

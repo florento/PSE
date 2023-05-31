@@ -58,10 +58,11 @@ public:
     /// in given conjectured global tonality.
     /// only the cost (number of accidentals) is updated.
     /// @param c previous config (origin), to be updated with the received pitch in a chord.
+    /// @param e note enumerator containing the notes of the read chord.
     /// @param name chosen name for the received pitch, in 0..6 (0 is 'C', 6 is 'B').
     /// @param accid chosen alteration for the received pitch, in -2..2.
     /// @param ton conjectured main (global) tonality (key signature).
-    PSC2(const PSC2& c,                  // std::shared_ptr<const PSC2> c,
+    PSC2(const PSC2& c,  const PSEnum& e,      // std::shared_ptr<const PSC2> c,
          const enum NoteName& name, const enum Accid& accid,
          const Ton& ton);
 
@@ -71,11 +72,12 @@ public:
     /// in given conjectured global tonality and local tonality.
     /// the cost (number of accidentals) and distance (to local ton) are updated.
     /// @param c previous config, to be updated with the received pitch in a chord.
+    /// @param e note enumerator containing the notes of the read chord.
     /// @param name chosen name for the received pitch, in 0..6 (0 is 'C', 6 is 'B').
     /// @param acc chosen alteration for the received pitch, in -2..2.
     /// @param ton conjectured main (global) tonality (key signature).
     /// @param lton conjectured local tonality.
-    PSC2(const PSC2& c,                     // std::shared_ptr<const PSC2> c,
+    PSC2(const PSC2& c, const PSEnum& e,       // std::shared_ptr<const PSC2> c,
          const enum NoteName& name, const enum Accid& acc,
          const Ton& ton, const Ton& lton);
 
@@ -202,26 +204,26 @@ private:
     /// @return the number of names assigned
     size_t setNames(const enum NoteName& name, bool print);
     
-    /// update the spelling cost for one pitch class in the current chord.
-    /// @param name chosen name for the received pitch, in 0..6 (0 is 'C', 6 is 'B').
-    /// @param accid chosen alteration for the received pitch, in -2..2.
-    /// @param print whether the acciental must be printed in score.
-    /// @param nbocc nb of occurrence of the note (pitch class) in this chord.
-    /// @param ton conjectured main (global) tonality (key signature).
-    /// @return wheter the cost value of this config was increased
-    bool updateCost(const enum NoteName& name, const enum Accid& accid,
-                    bool print, size_t nbocc, const Ton& ton);
+    // update the spelling cost for one pitch class in the current chord.
+    // @param name chosen name for the received pitch, in 0..6 (0 is 'C', 6 is 'B').
+    // @param accid chosen alteration for the received pitch, in -2..2.
+    // @param print whether the acciental must be printed in score.
+    // @param nbocc nb of occurrence of the note (pitch class) in this chord.
+    // @param ton conjectured main (global) tonality (key signature).
+    // @return wheter the cost value of this config was increased
+    // bool updateCost(const enum NoteName& name, const enum Accid& accid,
+    //                 bool print, size_t nbocc, const Ton& ton);
 
-    /// update the spelling cost for one pitch class in the current chord.
-    /// @param name chosen name for the received pitch, in 0..6 (0 is 'C', 6 is 'B').
-    /// @param accid chosen alteration for the received pitch, in -2..2.
-    /// @param print whether the acciental must be printed in score.
-    /// @param nbocc nb of occurrence of the note (pitch class) in this chord.
-    /// @param ton conjectured main (global) tonality (key signature).
-    /// @param lton conjectured local tonality.
-    /// @return wheter the cost value of this config was increased
-    bool updateCost(const enum NoteName& name, const enum Accid& accid,
-                    bool print, size_t nbocc, const Ton& ton, const Ton& lton);
+    // update the spelling cost for one pitch class in the current chord.
+    // @param name chosen name for the received pitch, in 0..6 (0 is 'C', 6 is 'B').
+    // @param accid chosen alteration for the received pitch, in -2..2.
+    // @param print whether the acciental must be printed in score.
+    // @param nbocc nb of occurrence of the note (pitch class) in this chord.
+    // @param ton conjectured main (global) tonality (key signature).
+    // @param lton conjectured local tonality.
+    // @return wheter the cost value of this config was increased
+    // bool updateCost(const enum NoteName& name, const enum Accid& accid,
+    //                 bool print, size_t nbocc, const Ton& ton, const Ton& lton);
 
 };
 

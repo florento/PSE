@@ -26,7 +26,7 @@
 #include "Ton.hpp"
 #include "PSState.hpp"
 #include "PSEnum.hpp"
-#include "PSCost.hpp"
+#include "Cost.hpp"
 #include "Costt.hpp"
 
 
@@ -58,7 +58,9 @@ public:
     /// @param ton a tonality, used to defined the accident state of this initial config.
     /// @param id index (in a note enumerator) of the note to read
     /// in order to reach the successor configs from this config.
-    PSC0(const Ton& ton, size_t id);
+    /// @param seed cost value of specialized type used to create a null cost
+    /// of the same type.
+    PSC0(const Ton& ton, size_t id, const Cost& seed);
 
     // initial config for a given key signature.
     // @param init index of last note read to reach this configuration.
@@ -112,22 +114,20 @@ public:
     inline const PSState& state() const { return _state; }
 
     /// cost of the minimal path to this config.
-    inline const PSCost& cost() const { return _cost; }
+    const Cost& cost() const; //{ return _cost; }
     
-    /// cumulated number of accidents in the minimal path to this config.
-    /// @todo remove
-    size_t accidentals() const { return _cost.getAccid(); }
+    // cumulated number of accidents in the minimal path to this config.
+    // @todo remove
+    // size_t accidentals() const { return _cost.getAccid(); }
     
-    /// cumulated distance to tonic in the minimal path to this config.
-    /// @todo remove
-    size_t dist() const { return _cost.getDist(); }
+    // cumulated distance to tonic in the minimal path to this config.
+    // @todo remove
+    // size_t dist() const { return _cost.getDist(); }
 
-    /// cumulated number of non-conjoint moves in the minimal path to this config.
-    /// @todo remove
-    size_t disjoint() const { return _cost.getDia(); }
+    // cumulated number of non-conjoint moves in the minimal path to this config.
+    // @todo remove
+    // size_t disjoint() const { return _cost.getDia(); }
 
-    
-    
     
     /// allocate every config reached by one transition from this config,
     /// when reading one pitch or several simultaneous pitchs,
@@ -179,7 +179,7 @@ protected:
     size_t _id;
     
     /// cumulated cost in the minimal path to this config.
-    PSCost _cost;
+    std::shared_ptr<Cost> _cost;
     
     // cumulated number of accidents in the minimal path to this config.
     // unsigned int _accidents;
@@ -191,9 +191,6 @@ protected:
     // cumulated number of non-conjoint moves
     // in the minimal path to this config.
     // unsigned int _disj;
-    
-    
-
     
 private:
     

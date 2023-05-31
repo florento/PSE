@@ -56,47 +56,47 @@ struct PSClex
    
 };
 
-/// ordering for PS Config0 based on lexico combination of
-/// - cost (nb accidents, dist. to local tonality,
-/// number of disjoint moves, color), ordered lexicographically,
-/// withh cumul of number of accids and non-diatonic moves.
-/// - index in enumerator
-struct PSCcumul
-{
-    bool operator()(std::shared_ptr<const PSC0>& lhs,
-                    std::shared_ptr<const PSC0>& rhs);
-};
+// ordering for PS Config0 based on lexico combination of
+// - cost (nb accidents, dist. to local tonality,
+// number of disjoint moves, color), ordered lexicographically,
+// withh cumul of number of accids and non-diatonic moves.
+// - index in enumerator
+//struct PSCcumul
+//{
+//    bool operator()(std::shared_ptr<const PSC0>& lhs,
+//                    std::shared_ptr<const PSC0>& rhs);
+//};
 
-/// ordering for PS Config0 based on nb of accidents only.
-struct PSCacc
-{
-    bool operator()(std::shared_ptr<const PSC0>& lhs,
-                    std::shared_ptr<const PSC0>& rhs);
-};
+// ordering for PS Config0 based on nb of accidents only.
+//struct PSCacc
+//{
+//    bool operator()(std::shared_ptr<const PSC0>& lhs,
+//                    std::shared_ptr<const PSC0>& rhs);
+//};
 
-/// ordering for PS Config0 based on nb of accidents and
-/// number of non-diatonic moves only
-struct PSCad
-{
-    bool operator()(std::shared_ptr<const PSC0>& lhs,
-                    std::shared_ptr<const PSC0>& rhs);
-};
+// ordering for PS Config0 based on nb of accidents and
+// number of non-diatonic moves only
+//struct PSCad
+//{
+//    bool operator()(std::shared_ptr<const PSC0>& lhs,
+//                    std::shared_ptr<const PSC0>& rhs);
+//};
 
-/// ordering for PS Config0
-struct PSCaplusd
-{
-    bool operator()(std::shared_ptr<const PSC0>& lhs,
-                    std::shared_ptr<const PSC0>& rhs);
-};
+// ordering for PS Config0
+//struct PSCaplusd
+//{
+//    bool operator()(std::shared_ptr<const PSC0>& lhs,
+//                    std::shared_ptr<const PSC0>& rhs);
+//};
 
-/// ordering for base PSConfig0 based on dist.
-/// @todo TBR
-/// @todo mv to PSC0
-struct PSCdist
-{
-    bool operator()(std::shared_ptr<const PSC0>& lhs,
-                    std::shared_ptr<const PSC0>& rhs);
-};
+// ordering for base PSConfig0 based on dist.
+// @todo TBR
+// @todo mv to PSC0
+//struct PSCdist
+//{
+//    bool operator()(std::shared_ptr<const PSC0>& lhs,
+//                    std::shared_ptr<const PSC0>& rhs);
+//};
 
 
 

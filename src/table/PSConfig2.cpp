@@ -23,10 +23,11 @@ _prints(_chord->size(), false)
 {
     assert(e.size() > 1);
     _id = _chord->stop();          // first note after chord
+    // TBC no update of _cost?
 }
 
 
-PSC2::PSC2(const PSC2& c,
+PSC2::PSC2(const PSC2& c, const PSEnum& e,
            const enum NoteName& name, const enum Accid& accid,
            const Ton& ton):
 PSC2(c) // copy of current
@@ -36,12 +37,13 @@ PSC2(c) // copy of current
     // process the current pitch class (chroma)
     bool print = _state.update(name, accid);
     size_t nbocc = setNames(name, print);
-    updateCost(name, accid, print, nbocc, ton);
+    assert(_cost);
+    _cost->update(*this, e, name, accid, print, nbocc, ton);
     _current = nextChroma();
 }
 
 
-PSC2::PSC2(const PSC2& c,        
+PSC2::PSC2(const PSC2& c, const PSEnum& e,
            const enum NoteName& name, const enum Accid& accid,
            const Ton& ton, const Ton& lton):
 PSC2(c) // copy of current
@@ -51,7 +53,8 @@ PSC2(c) // copy of current
     // process the current pitch class (chroma)
     bool print = _state.update(name, accid);
     size_t nbocc = setNames(name, print);
-    updateCost(name, accid, print, nbocc, ton, lton);
+    assert(_cost);
+    _cost->update(*this, e, name, accid, print, nbocc, ton, lton);
     _current = nextChroma();
 }
 
@@ -259,75 +262,75 @@ size_t PSC2::setNames(const enum NoteName& name, bool print)
 }
 
 
-/// @todo mv to PSCost:
-/// update(const PSC1& c, const PSEnum& e, const Ton& gton)
-bool PSC2::updateCost(const enum NoteName& name, const enum Accid& accid,
-                      bool print,
-                      size_t nbocc, const Ton& ton)
-{
-    // whether the cost has to be changed
-    bool cc = false;
-    if (ton.lead(name)) // sensible
-        cc = print && (ton.accidDia(name) != accid);
-    else
-        cc = print;
+// @todo mv to PSCost:
+// update(const PSC1& c, const PSEnum& e, const Ton& gton)
+//bool PSC2::updateCost(const enum NoteName& name, const enum Accid& accid,
+//                      bool print,
+//                      size_t nbocc, const Ton& ton)
+//{
+//    // whether the cost has to be changed
+//    bool cc = false;
+//    if (ton.lead(name)) // sensible
+//        cc = print && (ton.accidDia(name) != accid);
+//    else
+//        cc = print;
+//
+//    if (cc)
+//    {
+//        switch (accid)
+//        {
+//            case Accid::DoubleSharp:
+//            case Accid::DoubleFlat:
+//                _cost.incrAccid(2*nbocc);
+//                break;
+//
+//            case Accid::Sharp:
+//            case Accid::Flat:
+//                _cost.incrAccid(nbocc);
+//                break;
+//
+//            case Accid::Natural:
+//                _cost.incrAccid(nbocc);
+//                break;
+//
+//            default:
+//            {
+//                ERROR("PSC: unexpected accidental"); // accid
+//                break;
+//            }
+//        }
+//    }
+//
+//    return cc;
+//}
 
-    if (cc)
-    {
-        switch (accid)
-        {
-            case Accid::DoubleSharp:
-            case Accid::DoubleFlat:
-                _cost.incrAccid(2*nbocc);
-                break;
-                
-            case Accid::Sharp:
-            case Accid::Flat:
-                _cost.incrAccid(nbocc);
-                break;
-                
-            case Accid::Natural:
-                _cost.incrAccid(nbocc);
-                break;
-                
-            default:
-            {
-                ERROR("PSC: unexpected accidental"); // accid
-                break;
-            }
-        }
-    }
 
-    return cc;
-}
-
-
-/// @todo mv to PSCost:
-/// update(const PSC1& c, const PSEnum& e, const Ton& gton, const Ton& lton)
-bool PSC2::updateCost(const enum NoteName& name, const enum Accid& accid,
-                      bool print,
-                      size_t nbocc, const Ton& ton, const Ton& lton)
-{
-    // update number of accid
-    bool res = updateCost(name, accid, print, nbocc, ton);;
-    
-    // complete the update
-
-    // distance to conjectured local ton.
-    _cost.incrDist(_state.dist(lton));
-
-    // no update of disjoint move _disj
-    
-    // color of accident and color of global ton
-    if (((ton.fifths() >= 0) && (flat(accid))) ||
-        ((ton.fifths() < 0) && (sharp(accid))))
-    {
-        _cost.incrColor(nbocc);
-        res = true;
-    }
-    
-    return res;
-}
+// @todo mv to PSCost:
+// update(const PSC1& c, const PSEnum& e, const Ton& gton, const Ton& lton)
+//bool PSC2::updateCost(const enum NoteName& name, const enum Accid& accid,
+//                      bool print,
+//                      size_t nbocc, const Ton& ton, const Ton& lton)
+//{
+//    // update number of accid
+//    bool res = updateCost(name, accid, print, nbocc, ton);;
+//
+//    // complete the update
+//
+//    // distance to conjectured local ton.
+//    _cost.incrDist(_state.dist(lton));
+//
+//    // no update of disjoint move _disj
+//
+//    // color of accident and color of global ton
+//    if (((ton.fifths() >= 0) && (flat(accid))) ||
+//        ((ton.fifths() < 0) && (sharp(accid))))
+//    {
+//        _cost.incrColor(nbocc);
+//        res = true;
+//    }
+//
+//    return res;
+//}
 
 } // end namespace pse
 

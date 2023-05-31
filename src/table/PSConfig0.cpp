@@ -20,10 +20,10 @@
 namespace pse {
 
 
-PSC0::PSC0(const Ton& ton, size_t id):
+PSC0::PSC0(const Ton& ton, size_t id, const Cost& seed):
 _state(ton, false),
 _id(id),
-_cost() // zero
+_cost(seed.shared_zero()) // zero
 {
     assert(ton.getMode() != ModeName::Undef);
 }
@@ -50,8 +50,10 @@ _cost() // zero
 PSC0::PSC0(const PSC0& rhs):
 _state(rhs._state),
 _id(rhs._id),
-_cost(rhs._cost) // copy
-{ }
+_cost(_cost->shared_clone())
+{
+    assert(_cost);
+}
 
 
 PSC0::~PSC0()
@@ -112,6 +114,13 @@ size_t PSC0::id() const
 {
     // ERROR("id(): should not be called for a PSC0");
     return _id;
+}
+
+
+const Cost& PSC0::cost() const
+{
+    assert(_cost);
+    return *(_cost);
 }
 
 

@@ -19,6 +19,11 @@ _content()
 }
 
 
+PSG::PSG(const PST& tab):
+PSG(tab, std::vector<bool>(tab.index().size(), true))
+{ }
+
+
 PSG::~PSG()
 { }
 
@@ -38,6 +43,15 @@ size_t PSG::ilocal(size_t i, size_t j) const
 }
 
 
+const std::vector<size_t>& PSG::column(size_t j) const
+{
+    assert(j < _content.size());
+    const std::vector<size_t>& col = _content.at(j);
+    assert(col.size() == _index.size());
+    return col;
+}
+
+
 void PSG::init(const PST& tab, std::vector<bool> mask)
 {
 
@@ -49,7 +63,7 @@ void PSG::init(const PST& tab, std::vector<bool> mask)
 
         // set of index of elements in vec with a best cost.
         // (there are several in case of tie).
-        std::set<size_t> cands;
+        std::set<size_t> cands; // empty
         extract_bests(vec, cands);
         
         // add empty column
@@ -95,7 +109,7 @@ void PSG::extract_bests(const PSV& vec, std::set<size_t>& ties)
     size_t ibest = TonIndex::UNDEF; // out of range. initialized to avoid warning.
 
     // cost for the current best local tonality.
-    PSCost cbest;            // WARNING: initialized to 0.
+    std::shared_ptr<Cost> cbest = nullptr;     // WARNING: initialized to 0.
 
     for (size_t j = 0; j < vec.size(); ++j)
     {
@@ -105,19 +119,19 @@ void PSG::extract_bests(const PSV& vec, std::set<size_t>& ties)
         if (psb.empty())
             continue; // break
         
-        PSCost cost = psb.cost();
+        const Cost& cost = psb.cost(); // shared_clone();
         
-        // new best cost
-        if ((j == 0) || (cost < cbest)) // cbest = 0 when j = 0
+        // new best cost     // cbest = 0 when j = 0
+        if ((j == 0) || ((cbest != nullptr) && (cost < *cbest)))
         {
             ibest = j;
-            cbest = cost;
+            cbest = cost.shared_clone();
             ties.clear();
             auto ret = ties.insert(j);
             assert(ret.second == true); // j was inserted
         }
         // tie break
-        else if (cost == cbest)
+        else if ((cbest != nullptr) && (cost == *cbest))
         {
             auto ret = ties.insert(j);
             assert(ret.second == true); // j was inserted
@@ -125,7 +139,7 @@ void PSG::extract_bests(const PSV& vec, std::set<size_t>& ties)
         // otherwisse keep the current best
         else
         {
-            assert(cost > cbest); // we did not forget a case
+            assert((cbest == nullptr) || (cost > *cbest)); // we did not forget a case
         }
     }
     //assert(! ties.empty());

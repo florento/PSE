@@ -77,7 +77,7 @@ public:
 
     /// nb of accidents in best path from first to last note.
     /// For debug info.
-    inline const PSCost& cost() const { return _cost; }
+    inline const Cost& cost() const; // { return _cost; }
     
     /// rename all notes read to build this PSP.
     void rename();
@@ -105,7 +105,7 @@ private:
     std::vector<bool> _prints;
 
     /// cumulated cost in the best path from n0 to n1.
-    PSCost _cost;
+    std::shared_ptr<Cost> _cost;
     
     /// best path was succesfull estimated
     bool _computed;

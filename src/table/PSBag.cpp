@@ -15,15 +15,20 @@
 namespace pse {
 
 
-PSB::PSB(const Algo& a, PSEnum& e, const Ton& gton, const Ton& lton):
+PSB::PSB(const Algo& a, const Cost& seed, PSEnum& e,
+         const Ton& gton, const Ton& lton):
 _enum(e),
 _bests(),   // empty
-_cost()    // zero
+_cost(seed.shared_zero())     // zero
 //_visited()  // empty
 {
     if (! e.empty())
-        init(gton, lton, a);
+        init(gton, lton, a, seed);
     // otherwise n0 == n1, no note, leave _best empty
+    else
+    {
+        
+    }
 }
 
 
@@ -50,7 +55,8 @@ PSB::~PSB()
 
 
 // search of best path
-void PSB::init(const Ton& ton, const Ton& lton, const Algo& a)
+void PSB::init(const Ton& ton, const Ton& lton,
+               const Algo& a, const Cost& seed)
 {
     // at least one note, the bag cannot be empty.
     assert(_enum.first() < _enum.stop());
@@ -78,7 +84,7 @@ void PSB::init(const Ton& ton, const Ton& lton, const Algo& a)
 //        q = PSCQueue(PSCad()); // empty
     
     // initial configuration
-    q.push(std::make_shared<const PSC0>(ton, _enum.first())); // n0
+    q.push(std::make_shared<const PSC0>(ton, _enum.first(), seed)); // n0
     
     while (! q.empty())
     {
@@ -96,26 +102,26 @@ void PSB::init(const Ton& ton, const Ton& lton, const Algo& a)
             if (_bests.empty())
             {
                 _bests.push_back(c);
-                _cost = c->cost(); // copy
+                _cost = c->cost().shared_clone(); // copy
             }
             else
             {
                 // c is a minimal complete path
-                if (c->cost() == _cost)
+                if (c->cost() == this->cost())
                 {
                     _bests.push_back(c);
                 }
                 // we have found all the minimal complete paths
                 else
                 {
-                    assert(c->cost() > _cost);
+                    assert(c->cost() > this->cost());
                     break;
                 }
             }
         }
         // prune: the cost of current config already overwhelmed
         // the cost of a best path found
-        else if ((! _bests.empty()) && (c->cost() > _cost))
+        else if ((! _bests.empty()) && (c->cost() > this->cost()))
         {
             continue;
         }
@@ -150,10 +156,20 @@ size_t PSB::size() const
 }
 
 
-const PSCost& PSB::cost() const
+const Cost& PSB::cost() const
 {
-    assert((! _bests.empty()) || _enum.empty());
-    return _cost;
+    assert(_cost);
+    return *(_cost);
+//    assert((! _bests.empty()) || _enum.empty());
+//    if (_bests.empty())
+//    {
+//        assert(_cost);
+//        return *(_cost);
+//    }
+//    else
+//    {
+//        return top().cost();
+//    }
 }
 
 
@@ -170,9 +186,9 @@ const PSC0& PSB::at(size_t i) const
 const PSC0& PSB::top() const
 {
     assert(! _bests.empty());
-    std::shared_ptr<const PSC0> psc = _bests.at(0);
-    assert(psc);
-    return *psc;
+    //std::shared_ptr<const PSC0> psc = _bests.at(0);
+    assert(_bests.at(0));
+    return *(_bests.at(0));
 }
 
 
@@ -195,12 +211,12 @@ PSCHeap::const_iterator PSB::cend() const
 }
 
 
-void PSB::addBest(std::shared_ptr<const PSC0>& c)
-{
-    assert(c);
-    assert(_bests.empty() || c->cost() <= _cost);
-    _bests.push_back(c);
-}
+//void PSB::addBest(std::shared_ptr<const PSC0>& c)
+//{
+//    assert(c);
+//    assert(_bests.empty() || c->cost() <= _cost);
+//    _bests.push_back(c);
+//}
 
 } // end namespace pse
 

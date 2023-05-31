@@ -12,6 +12,7 @@
 
 #include <iostream>
 #include <assert.h>
+#include <memory>
 
 #include "trace.hpp"
 #include "PSEnum.hpp"
@@ -31,6 +32,45 @@ class Cost
 {
 public:
 
+    /// create a new null cost value.
+    virtual std::shared_ptr<Cost> shared_zero() const = 0;
+
+    /// create a shared clone of this cost.
+    virtual std::shared_ptr<Cost> shared_clone() const = 0;
+    virtual std::unique_ptr<Cost> unique_clone() const = 0;
+
+    /// equality (mandatory).
+    /// @param rhs another cost to compare to.
+    virtual bool operator==(const Cost& rhs) const = 0;
+
+    /// negation of equality.
+    /// @param rhs another cost to compare to.
+    virtual bool operator!=(const Cost& rhs) const;
+    
+    /// a distance value, in percent of the bigger cost.
+    /// used for approximate equality.
+    virtual double dist(const Cost& rhs) const = 0;
+
+    /// strictly less (mandatory).
+    /// @param rhs another cost to compare to.
+    virtual bool operator<(const Cost& rhs) const = 0;
+
+    /// negation of >.
+    /// @param rhs another cost to compare to.
+    virtual bool operator<=(const Cost& rhs) const;
+
+    /// inverse (commutation) of <.
+    /// @param rhs another cost to compare to.
+    virtual bool operator>(const Cost& rhs) const;
+
+    /// negation of <.
+    /// @param rhs another cost to compare to.
+    virtual bool operator>=(const Cost& rhs) const;
+    
+    /// cumulated sum operator. update this cost by adding rhs.
+    /// @param rhs a cost to add.
+    virtual Cost& operator+=(const Cost& rhs) = 0;
+    
     /// update this cost for doing a transition into the given config,
     /// from its previous config, in a given hypothetic global tonality.
     /// @see PSC.previous()
@@ -72,7 +112,12 @@ public:
                         bool print, size_t nbocc,
                         const Ton& gton, const Ton& lton) = 0;
     
+    virtual void print(std::ostream& o) const = 0;
 };
+
+
+std::ostream& operator<<(std::ostream& o, const Cost& c);
+
 
 } // namespace pse
 

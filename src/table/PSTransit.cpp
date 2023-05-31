@@ -130,10 +130,10 @@ void Transition::succ2(std::shared_ptr<const PSC0>& c,
                 {
                     /// @todo merge into 1 constructor PSC2, with algo name
                     if (_algo == Algo::PSE0)
-                        cs.push(std::make_shared<PSC2>(rc2, name, accid,
+                        cs.push(std::make_shared<PSC2>(rc2, _enum, name, accid,
                                                        ton));
                     if (_algo == Algo::PSE1)
-                        cs.push(std::make_shared<PSC2>(rc2, name, accid,
+                        cs.push(std::make_shared<PSC2>(rc2, _enum, name, accid,
                                                        ton, lton));
                 }
             }
@@ -153,7 +153,7 @@ void Transition::succ2(std::shared_ptr<const PSC0>& c,
             enum Accid accid = scale.accid(deg);
             assert(defined(name));
             assert(defined(accid));
-            cs.push(std::make_shared<PSC2>(rc2, name, accid, ton));
+            cs.push(std::make_shared<PSC2>(rc2, _enum, name, accid, ton));
         }
     }
 }

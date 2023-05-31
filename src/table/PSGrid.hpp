@@ -18,7 +18,7 @@
 
 #include "trace.hpp"
 #include "TonIndex.hpp"
-#include "PSCost.hpp"
+#include "Cost.hpp"
 #include "PSBag.hpp"
 #include "PSVector.hpp"
 #include "PSTable.hpp"
@@ -37,6 +37,10 @@ public:
     /// be estimated. must be of the same length as the Ton index of tab.
     PSG(const PST& tab, std::vector<bool> mask);
     
+    /// constructor without mask.
+    /// @param tab pitch spelling table used to estimated the locals.
+    PSG(const PST& tab);
+    
     virtual ~PSG();
     
     /// vector of tonalities (row-index) associated to this table.
@@ -50,6 +54,9 @@ public:
     
     /// number of columns (PS Vectors) in this table, i.e. nb of measures spelled.
     inline size_t columnNb() const { return size(); }
+
+    /// one column of this table (corresponding to a measure).
+    const std::vector<size_t>& column(size_t i) const;
     
     /// index (in the TonIndex) of the estimated local tonality,
     /// for the given row number (assumed a global tonality)
@@ -68,7 +75,7 @@ private: // data
     /// header of rows: array of tonalities (1 per row).
     const TonIndex& _index;
     
-    /// columnns: one vector of bags of best paths (target configs) per measure.
+    /// columnns: one vector of index of local tons per measure.
     /// - the dimention of inner vectors (columns) is the size of TonIndex.
     ///   @see rowNb()
     /// - the dimention of outer vectors (rows) is the number of measures.

@@ -41,62 +41,62 @@ bool PSClex::operator()(std::shared_ptr<const PSC0>& lhs,
 //      return (lhs->accidentals() > rhs->accidentals());  // smallest cost
 };
 
-bool PSCcumul::operator()(std::shared_ptr<const PSC0>& lhs,
-                          std::shared_ptr<const PSC0>& rhs)
-{
-    assert (lhs);
-    assert (rhs);
-    if (lhs->cost().eq_cumul(rhs->cost()))
-        return (lhs->id() < rhs->id()); // largest index
-    else
-        return (lhs->cost().greater_cumul(rhs->cost()));
-        // smallest cost
-}
+//bool PSCcumul::operator()(std::shared_ptr<const PSC0>& lhs,
+//                          std::shared_ptr<const PSC0>& rhs)
+//{
+//    assert (lhs);
+//    assert (rhs);
+//    if (lhs->cost().eq_cumul(rhs->cost()))
+//        return (lhs->id() < rhs->id()); // largest index
+//    else
+//        return (lhs->cost().greater_cumul(rhs->cost()));
+//        // smallest cost
+//}
 
 
-bool PSCad::operator()(std::shared_ptr<const PSC0>& lhs,
-                       std::shared_ptr<const PSC0>& rhs)
-{
-    assert (lhs);
-    assert (rhs);
-    if (lhs->cost().getAccid() == rhs->cost().getAccid())
-        return (lhs->id() < rhs->id());  // largest index
-    else
-        return (lhs->cost().getAccid() > rhs->cost().getAccid());
-};
+//bool PSCad::operator()(std::shared_ptr<const PSC0>& lhs,
+//                       std::shared_ptr<const PSC0>& rhs)
+//{
+//    assert (lhs);
+//    assert (rhs);
+//    if (lhs->cost().getAccid() == rhs->cost().getAccid())
+//        return (lhs->id() < rhs->id());  // largest index
+//    else
+//        return (lhs->cost().getAccid() > rhs->cost().getAccid());
+//};
 
 
-bool PSCaplusd::operator()(std::shared_ptr<const PSC0>& lhs,
-                           std::shared_ptr<const PSC0>& rhs)
-{
-    assert (lhs);
-    assert (rhs);
-    if (lhs->cost().getAccid() + lhs->cost().getDia() ==
-        rhs->cost().getAccid() + rhs->cost().getDia())
-    {
-        if (lhs->cost().getDist() == rhs->cost().getDist())
-        {
-            if (lhs->cost().getColor() == rhs->cost().getColor())
-                return (lhs->id() < rhs->id()); // largest index
-            else
-                return (lhs->cost().getColor() > rhs->cost().getColor());
-       }
-        else
-            return (lhs->cost().getDist() > rhs->cost().getDist());
-    }
-    else
-        return (lhs->cost().getAccid() + lhs->cost().getDia() >
-                rhs->cost().getAccid() + rhs->cost().getDia());
-};
+//bool PSCaplusd::operator()(std::shared_ptr<const PSC0>& lhs,
+//                           std::shared_ptr<const PSC0>& rhs)
+//{
+//    assert (lhs);
+//    assert (rhs);
+//    if (lhs->cost().getAccid() + lhs->cost().getDia() ==
+//        rhs->cost().getAccid() + rhs->cost().getDia())
+//    {
+//        if (lhs->cost().getDist() == rhs->cost().getDist())
+//        {
+//            if (lhs->cost().getColor() == rhs->cost().getColor())
+//                return (lhs->id() < rhs->id()); // largest index
+//            else
+//                return (lhs->cost().getColor() > rhs->cost().getColor());
+//       }
+//        else
+//            return (lhs->cost().getDist() > rhs->cost().getDist());
+//    }
+//    else
+//        return (lhs->cost().getAccid() + lhs->cost().getDia() >
+//                rhs->cost().getAccid() + rhs->cost().getDia());
+//};
 
 
-bool PSCdist::operator()(std::shared_ptr<const PSC0>& lhs,
-                         std::shared_ptr<const PSC0>& rhs)
-{
-    assert (lhs);
-    assert (rhs);
-    return (lhs->cost().getDist() > rhs->cost().getDist());
-};
+//bool PSCdist::operator()(std::shared_ptr<const PSC0>& lhs,
+//                         std::shared_ptr<const PSC0>& rhs)
+//{
+//    assert (lhs);
+//    assert (rhs);
+//    return (lhs->cost().getDist() > rhs->cost().getDist());
+//};
 
 
 std::ostream& operator<<(std::ostream& o, const CostOrdering& co)

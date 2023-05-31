@@ -30,7 +30,8 @@ _print(false)
     _id = c->id()+1; // next note in enum
     assert(_id <= e.stop());
     assert(defined(accid));
-    _cost.update(*this, e, ton);
+    assert(_cost);
+    _cost->update(*this, e, ton);
 }
 
 
@@ -56,7 +57,8 @@ PSC1::PSC1(std::shared_ptr<const PSC0> c, const PSEnum& e,
 PSC1(c, e, name, accid, ton)
 {
     // complete the update
-    _cost.update(*this, e, ton, lton);
+    assert(_cost);
+    _cost->update(*this, e, ton, lton);
 }
 
 

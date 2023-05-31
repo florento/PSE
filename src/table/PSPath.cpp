@@ -20,7 +20,7 @@ _enum(e),
 _names(),   // initially empty
 _accids(),
 _prints(),
-_cost(psc.cost()),
+_cost(psc.cost().shared_clone()),
 _computed(false)
 {
     TRACE("PSP: computing best path for {}-{}", e.first(), e.stop());
@@ -92,17 +92,18 @@ bool PSP::printed(size_t i) const
     return _prints[i - _enum.first()];
 }
 
-
-//unsigned int PSP::cost() const
-//{
-//    return _cost;
-//}
+const Cost& PSP::cost() const
+{
+    assert(_cost);
+    return *_cost;
+}
 
 
 void PSP::record_path(const PSC0& c)
 {
     assert(c.id() == _enum.stop());
-    assert(_cost == c.cost());
+    assert(_cost);
+    assert(*_cost == c.cost());
     const PSC0* co = &c;
     assert(co);
     assert(co->initial() || co->fromNote() || co->fromChord());

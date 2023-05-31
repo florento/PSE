@@ -46,6 +46,10 @@
 		4342FD1229267895004E914F /* MidiNum.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4342FD1129267895004E914F /* MidiNum.cpp */; };
 		4342FD142926789C004E914F /* MidiNum.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 4342FD132926789C004E914F /* MidiNum.hpp */; };
 		4342FD1929268C78004E914F /* pypse.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 4342FD1729268C78004E914F /* pypse.hpp */; };
+		4346CB362A1FF62100756DE3 /* PSGlobal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4346CB342A1FF62100756DE3 /* PSGlobal.cpp */; };
+		4346CB372A1FF62100756DE3 /* PSGlobal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4346CB342A1FF62100756DE3 /* PSGlobal.cpp */; };
+		4346CB382A1FF62100756DE3 /* PSGlobal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4346CB342A1FF62100756DE3 /* PSGlobal.cpp */; };
+		4346CB392A1FF62100756DE3 /* PSGlobal.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 4346CB352A1FF62100756DE3 /* PSGlobal.hpp */; };
 		434B1DF8298ECCF1001CE41C /* PSConfig1.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 434B1DF6298ECCF0001CE41C /* PSConfig1.cpp */; };
 		434B1DF9298ED0A0001CE41C /* PSConfig1.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 434B1DF6298ECCF0001CE41C /* PSConfig1.cpp */; };
 		434B1DFC298ED394001CE41C /* PSConfig2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 434B1DFA298ED394001CE41C /* PSConfig2.cpp */; };
@@ -248,6 +252,8 @@
 		4342FD1729268C78004E914F /* pypse.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = pypse.hpp; path = src/targets/pypse.hpp; sourceTree = "<group>"; };
 		4342FD1A2926B925004E914F /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		434317272A1231F900D685A1 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		4346CB342A1FF62100756DE3 /* PSGlobal.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PSGlobal.cpp; sourceTree = "<group>"; };
+		4346CB352A1FF62100756DE3 /* PSGlobal.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = PSGlobal.hpp; sourceTree = "<group>"; };
 		434B1DF5298ECCF0001CE41C /* PSConfig1.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = PSConfig1.hpp; sourceTree = "<group>"; };
 		434B1DF6298ECCF0001CE41C /* PSConfig1.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PSConfig1.cpp; sourceTree = "<group>"; };
 		434B1DFA298ED394001CE41C /* PSConfig2.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PSConfig2.cpp; sourceTree = "<group>"; };
@@ -422,6 +428,8 @@
 				43ABA51F29242418002AC1D4 /* PSTable.cpp */,
 				43C4A6512A1E7EBB00925A99 /* PSGrid.hpp */,
 				43C4A6502A1E7EBB00925A99 /* PSGrid.cpp */,
+				4346CB352A1FF62100756DE3 /* PSGlobal.hpp */,
+				4346CB342A1FF62100756DE3 /* PSGlobal.cpp */,
 				43ABA51C29242418002AC1D4 /* PSPath.hpp */,
 				43ABA51629242417002AC1D4 /* PSPath.cpp */,
 			);
@@ -720,6 +728,7 @@
 				432657E5294E2FB100515080 /* Weber.hpp in Headers */,
 				43ABA52929242418002AC1D4 /* PSState.hpp in Headers */,
 				43DD954B2945E223006DC553 /* PSCost.hpp in Headers */,
+				4346CB392A1FF62100756DE3 /* PSGlobal.hpp in Headers */,
 				43ABA53029242418002AC1D4 /* PSConfig0.hpp in Headers */,
 				43ABA52B29242418002AC1D4 /* PSConfig.hpp in Headers */,
 				430960562A0CD2C60097487A /* AlgoName.hpp in Headers */,
@@ -876,6 +885,7 @@
 				435081EF29D6D75A00465943 /* Mode.cpp in Sources */,
 				435081EC29D6D74E00465943 /* KeyFifth.cpp in Sources */,
 				4309605F2A0D03C10097487A /* AlgoName.cpp in Sources */,
+				4346CB382A1FF62100756DE3 /* PSGlobal.cpp in Sources */,
 				435081FA29D6D78900465943 /* PSRawEnum.cpp in Sources */,
 				438A581929E049300073A32C /* PSConfig0.cpp in Sources */,
 				435081F629D6D77200465943 /* NoteName.cpp in Sources */,
@@ -902,6 +912,7 @@
 				43D31A0C2A13F28800234527 /* CostA.cpp in Sources */,
 				43F9BE6429CC423E00B0A7F8 /* ModeName.cpp in Sources */,
 				4342FD1229267895004E914F /* MidiNum.cpp in Sources */,
+				4346CB362A1FF62100756DE3 /* PSGlobal.cpp in Sources */,
 				430960532A0CD2C60097487A /* AlgoName.cpp in Sources */,
 				43ABA511292423E8002AC1D4 /* Enharmonic.cpp in Sources */,
 				43ABA50C292423E8002AC1D4 /* Fifths.cpp in Sources */,
@@ -950,6 +961,7 @@
 				43D31A0D2A13F28800234527 /* CostA.cpp in Sources */,
 				43F9BE6529CC423E00B0A7F8 /* ModeName.cpp in Sources */,
 				43FBEAC82930CEDD008FC486 /* Accidental.cpp in Sources */,
+				4346CB372A1FF62100756DE3 /* PSGlobal.cpp in Sources */,
 				430960602A0D03C10097487A /* AlgoName.cpp in Sources */,
 				43FBEAC92930CEDD008FC486 /* MidiNum.cpp in Sources */,
 				43FBEACA2930CEDD008FC486 /* Enharmonic.cpp in Sources */,

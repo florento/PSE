@@ -12,8 +12,10 @@
 
 #include <iostream>
 #include <assert.h>
+#include <memory>
 
 #include "trace.hpp"
+#include "Cost.hpp"
 #include "Costt.hpp"
 
 
@@ -23,7 +25,7 @@ class PSC1;
 
 class PSC2;
 
-class CostA : public Costt<CostA>
+class CostA : public PolymorphicComparable<Cost, CostA>
 {
 
 public:
@@ -37,21 +39,38 @@ public:
     /// distructor
     virtual ~CostA();
     
-    /// assignement operator.
-    /// @param rhs a cost to copy.
-    CostA& operator=(const CostA& rhs) override;
+    // assignement operator.
+    // @param rhs a cost to copy.
+    // CostA& operator=(const CostA& rhs) override;
     
     /// cost equality.
     /// @param rhs a cost to compare to.
-    bool operator==(const CostA& rhs) const override;
-
+    bool operator==(const CostA& rhs) const;
+    
+    /// a distance value, in percent of the bigger cost.
+    /// used for approximate equality.
+    double dist(const CostA& rhs) const;
+    
     /// cost inequality.
     /// @param rhs a cost to compare to.
-    bool operator<(const CostA& rhs) const override;
+    bool operator<(const CostA& rhs) const;
 
-    /// null cost value.
-    CostA zero() const override { return CostA(); }
+    /// cumulated sum operator. update this cost by adding rhs.
+    /// @param rhs a cost to add.
+    virtual CostA& operator+=(const CostA& rhs);
+       
+    // null cost value.
+    // CostA zero() const override { return CostA(); }
     
+    /// create a new null cost value.
+    virtual std::shared_ptr<Cost> shared_zero() const override;
+
+    /// create a shared clone of this cost.
+    virtual std::shared_ptr<Cost> shared_clone() const override;
+
+    /// create a smart clone of this cost.
+    virtual std::unique_ptr<Cost> unique_clone() const override;
+
     /// update this cost for doing a transition into the given config,
     /// from its previous config, in a given hypothetic global tonality.
     /// @see PSC.previous()
@@ -92,22 +111,14 @@ public:
                 const enum NoteName& name, const enum Accid& accid,
                 bool print, size_t nbocc,
                 const Ton& gton, const Ton& lton) override;
-    
 
     /// @param o output stream where to print this cost.
-    void print(std::ostream& o) const;
+    void print(std::ostream& o) const override;    
     
 protected: // data
     
     /// cumulated number of printed accidentals.
     size_t _accid; // unsigned int
-
-protected:
-
-    /// sum operator (non const)
-    /// update this cost adding rhs.
-    /// @param rhs a cost to add.
-    CostA& operator+=(const CostA& rhs) override;
     
 };
 

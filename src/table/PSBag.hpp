@@ -22,7 +22,7 @@
 //#include "AEVisitor.hpp"
 //#include "Pitch.hpp"
 #include "PSEnum.hpp"
-#include "PSCost.hpp"
+#include "Cost.hpp"
 #include "PSConfig0.hpp"
 #include "PSConfig1.hpp"
 #include "PSConfig2.hpp"
@@ -57,12 +57,15 @@ public:
     /// bag of best target configs configs for a conjectured global tonality
     /// (key sig), a conjectured local tonality (tie break) and a measure of notes.
     /// @param a name of pitch-spelling algorithm implemented.
+    /// @param seed cost value of specialized type used to create a null cost
+    /// of the same type.
     /// @param e an enumerator of notes for computing transitions between configs.
     /// @param ton conjectured global tonality (key sig),
     /// used to define the initial config.
     /// @param lton conjectured local tonality, to compute the cumulated
     /// distance value used for tie break.
-    PSB(const Algo& a, PSEnum& e, const Ton& ton, const Ton& lton);
+    PSB(const Algo& a, const Cost& seed,
+        PSEnum& e, const Ton& ton, const Ton& lton);
     
     ~PSB();
     
@@ -73,7 +76,7 @@ public:
     size_t size() const;
     
     /// cost of the best path in this bag.
-    const PSCost& cost() const;
+    const Cost& cost() const;
     
     /// access one PS config in this bag.
     /// @warning this bag must not be empty.
@@ -111,7 +114,7 @@ private: // data
     // std::vector<std::shared_ptr<const PSC0>> _inbests;
 
     /// cost of the best config in the bag.
-    PSCost _cost;
+    std::shared_ptr<Cost> _cost;
 
     // backup of visited non-terminal nodes (pointed as previous).
     // std::vector<std::shared_ptr<const PSC0>> _visited;
@@ -131,7 +134,9 @@ private:
     /// @param a name of pitch-spelling algorithm implemented.
     // @param fsucc flag, whether the successor is computed with ton only
     // or ton and lton.
-    void init(const Ton& ton, const Ton& lton, const Algo& a); // bool fsucc);
+    void init(const Ton& ton, const Ton& lton,
+              const Algo& a, const Cost& seed); // bool fsucc);
+
     // @param q priority queue for the computation of the best path.
     
     /// access one PS config in this bag.
@@ -140,7 +145,8 @@ private:
     /// @warning this bag must not be empty.
     const PSC0& at(size_t i) const;
     
-    void addBest(std::shared_ptr<const PSC0>& c);
+    // TBR unused
+    // void addBest(std::shared_ptr<const PSC0>& c);
     
 };
 

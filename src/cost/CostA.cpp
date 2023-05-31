@@ -22,26 +22,44 @@ _accid(rhs._accid)
 {}
 
 
-
 CostA::~CostA()
 {
     TRACE("delete Cost_accid");
 }
 
 
-CostA& CostA::operator=(const CostA& rhs)
-{
-    if (this != &rhs)
-    {
-        _accid = rhs._accid;
-    }
-    return *this;
-}
+//CostA& CostA::operator=(const CostA& rhs)
+//{
+//    if (this != &rhs)
+//    {
+//        _accid = rhs._accid;
+//    }
+//    return *this;
+//}
 
 
 bool CostA::operator==(const CostA& rhs) const
 {
     return (_accid == rhs._accid);
+}
+
+
+/// @todo STUB, complete
+double CostA::dist(const CostA& rhs) const
+{
+    double d = ((double) _accid) - ((double) rhs._accid);
+    if (d < 0)
+    {
+        assert(rhs._accid > 0);
+        return (d/rhs._accid)*100;
+    }
+    else if (d > 0)
+    {
+        assert(_accid > 0);
+        return (d/_accid)*100;
+    }
+    else
+        return 0;
 }
 
 
@@ -63,6 +81,22 @@ CostA& CostA::operator+=(const CostA& rhs)
 //    return c1.operator+(c2);
 //}
 
+
+std::shared_ptr<Cost> CostA::shared_zero() const
+{
+    return std::shared_ptr<Cost>(new CostA());
+}
+
+
+std::shared_ptr<Cost> CostA::shared_clone() const
+{
+    return std::shared_ptr<Cost>(new CostA(*this));
+}
+
+std::unique_ptr<Cost> CostA::unique_clone() const
+{
+    return std::unique_ptr<Cost>(new CostA(*this));
+}
 
 void CostA::update(const PSC1& c, const PSEnum& e, const Ton& gton)
 {

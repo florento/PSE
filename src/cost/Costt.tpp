@@ -13,6 +13,78 @@ namespace pse {
 //}
 
 
+
+template<typename Base, typename Derived>
+bool PolymorphicComparable<Base, Derived>::operator==(const Base& rhs) const
+{
+    // check if the dynamic types match
+    if (typeid(rhs) != typeid(Derived))
+        return false;
+
+    // cast to the concrete types; thanks to the check above this is safe
+    const Derived& a = static_cast<const Derived&>(*this);
+    const Derived& b = static_cast<const Derived&>(rhs);
+
+    // redirect to Derived::operator==(Derived)
+    return a == b;
+}
+
+
+template<typename Base, typename Derived>
+double PolymorphicComparable<Base, Derived>::dist(const Base& rhs) const
+{
+    // check if the dynamic types match
+    assert(typeid(rhs) != typeid(Derived));   //   return 0;
+
+    // cast to the concrete types; thanks to the check above this is safe
+    const Derived& a = static_cast<const Derived&>(*this);
+    const Derived& b = static_cast<const Derived&>(rhs);
+
+    // redirect to Derived::operator<(Derived)
+    return a.dist(b);
+}
+
+
+template<typename Base, typename Derived>
+bool PolymorphicComparable<Base, Derived>::operator<(const Base& rhs) const
+{
+    // check if the dynamic types match
+    if (typeid(rhs) != typeid(Derived))
+        return false;
+
+    // cast to the concrete types; thanks to the check above this is safe
+    const Derived& a = static_cast<const Derived&>(*this);
+    const Derived& b = static_cast<const Derived&>(rhs);
+
+    // redirect to Derived::operator<(Derived)
+    return a < b;
+}
+
+
+template<typename Base, typename Derived>
+Base& PolymorphicComparable<Base, Derived>::operator+=(const Base& rhs)
+{
+    // check if the dynamic types match
+    assert(typeid(rhs) != typeid(Derived));
+
+    // cast to the concrete types; thanks to the check above this is safe
+    Derived& a = static_cast<Derived&>(*this);
+    const Derived& b = static_cast<const Derived&>(rhs);
+
+    // redirect to Derived::operator+=(Derived)
+    return (a += b);
+}
+
+
+template<typename Base, typename Derived>
+void PolymorphicComparable<Base, Derived>::print(std::ostream& o) const
+{
+    const Derived& a = static_cast<const Derived&>(*this);
+    a.print(o);
+}
+
+
+
 template<class T>
 bool Costt<T>::operator!=(const T& rhs) const
 {
@@ -46,6 +118,13 @@ bool Costt<T>::operator>=(const T& rhs) const
 //{
 //    Costt<T> copy(*this);
 //    return copy.operator+=(rhs);
+//}
+
+
+//template<class T>
+//std::shared_ptr<Cost> Costt<T>::shared_zero() const
+//{
+//    return std::shared_ptr<Cost>(new T());
 //}
 
 
