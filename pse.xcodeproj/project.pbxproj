@@ -163,6 +163,10 @@
 		43D7BABA2A27CFBD00570C47 /* Speller2pass.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43D7BAB72A27CFBD00570C47 /* Speller2pass.cpp */; };
 		43D7BABB2A27CFBD00570C47 /* Speller2pass.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43D7BAB72A27CFBD00570C47 /* Speller2pass.cpp */; };
 		43D7BABC2A27CFBD00570C47 /* Speller2pass.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 43D7BAB82A27CFBD00570C47 /* Speller2pass.hpp */; };
+		43D7BABF2A27E31600570C47 /* PS14.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43D7BABD2A27E31600570C47 /* PS14.cpp */; };
+		43D7BAC02A27E31600570C47 /* PS14.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43D7BABD2A27E31600570C47 /* PS14.cpp */; };
+		43D7BAC12A27E31600570C47 /* PS14.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43D7BABD2A27E31600570C47 /* PS14.cpp */; };
+		43D7BAC22A27E31600570C47 /* PS14.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 43D7BABE2A27E31600570C47 /* PS14.hpp */; };
 		43DD95492945E223006DC553 /* PSCost.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43DD95472945E223006DC553 /* PSCost.cpp */; };
 		43DD954A2945E223006DC553 /* PSCost.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43DD95472945E223006DC553 /* PSCost.cpp */; };
 		43DD954B2945E223006DC553 /* PSCost.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 43DD95482945E223006DC553 /* PSCost.hpp */; };
@@ -340,6 +344,8 @@
 		43D7BAB22A27CFA500570C47 /* Speller1pass.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Speller1pass.hpp; sourceTree = "<group>"; };
 		43D7BAB72A27CFBD00570C47 /* Speller2pass.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Speller2pass.cpp; sourceTree = "<group>"; };
 		43D7BAB82A27CFBD00570C47 /* Speller2pass.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Speller2pass.hpp; sourceTree = "<group>"; };
+		43D7BABD2A27E31600570C47 /* PS14.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = PS14.cpp; path = src/PS14/PS14.cpp; sourceTree = "<group>"; };
+		43D7BABE2A27E31600570C47 /* PS14.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = PS14.hpp; path = src/PS14/PS14.hpp; sourceTree = "<group>"; };
 		43D8A9EF29AFA16B00B260DA /* PSOrder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PSOrder.cpp; sourceTree = "<group>"; };
 		43DD95472945E223006DC553 /* PSCost.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PSCost.cpp; sourceTree = "<group>"; };
 		43DD95482945E223006DC553 /* PSCost.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = PSCost.hpp; sourceTree = "<group>"; };
@@ -673,6 +679,8 @@
 			isa = PBXGroup;
 			children = (
 				43947D0029D972AF008EB20A /* README.md */,
+				43D7BABE2A27E31600570C47 /* PS14.hpp */,
+				43D7BABD2A27E31600570C47 /* PS14.cpp */,
 			);
 			name = PS14;
 			sourceTree = "<group>";
@@ -762,6 +770,7 @@
 				434B1E03298FD4FE001CE41C /* PSChord.hpp in Headers */,
 				4315863A2983EDD900918B1B /* PSRawEnum.hpp in Headers */,
 				431586382983E89B00918B1B /* PSNoteEnum.hpp in Headers */,
+				43D7BAC22A27E31600570C47 /* PS14.hpp in Headers */,
 				4342FD1929268C78004E914F /* pypse.hpp in Headers */,
 				43D31A152A1426A300234527 /* Cost.hpp in Headers */,
 			);
@@ -883,6 +892,7 @@
 				4350820829D7032B00465943 /* TestMidiNum.cpp in Sources */,
 				435081FE29D6D7F900465943 /* IntervalSimple.cpp in Sources */,
 				435081F729D6D78000465943 /* PSEnum.cpp in Sources */,
+				43D7BAC12A27E31600570C47 /* PS14.cpp in Sources */,
 				438A581A29E049330073A32C /* PSCost.cpp in Sources */,
 				4350820529D6FDA100465943 /* TestMode.cpp in Sources */,
 				438A581829E0492D0073A32C /* PSConfig.cpp in Sources */,
@@ -934,6 +944,7 @@
 				4342FD1229267895004E914F /* MidiNum.cpp in Sources */,
 				4346CB362A1FF62100756DE3 /* PSGlobal.cpp in Sources */,
 				430960532A0CD2C60097487A /* AlgoName.cpp in Sources */,
+				43D7BABF2A27E31600570C47 /* PS14.cpp in Sources */,
 				43ABA511292423E8002AC1D4 /* Enharmonic.cpp in Sources */,
 				43ABA50C292423E8002AC1D4 /* Fifths.cpp in Sources */,
 				43C2BA192999529E0084AB3B /* PWO.cpp in Sources */,
@@ -985,6 +996,7 @@
 				43FBEAC82930CEDD008FC486 /* Accidental.cpp in Sources */,
 				4346CB372A1FF62100756DE3 /* PSGlobal.cpp in Sources */,
 				430960602A0D03C10097487A /* AlgoName.cpp in Sources */,
+				43D7BAC02A27E31600570C47 /* PS14.cpp in Sources */,
 				43FBEAC92930CEDD008FC486 /* MidiNum.cpp in Sources */,
 				43FBEACA2930CEDD008FC486 /* Enharmonic.cpp in Sources */,
 				43C2BA1A2999529E0084AB3B /* PWO.cpp in Sources */,

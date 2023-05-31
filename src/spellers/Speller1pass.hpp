@@ -75,7 +75,7 @@ public:
     /// @warning spell() must have been called.
     const Ton& global() const override { return globalCand(0); }
     
-protected:
+protected: // data
     
     /// First Pitch Spelling table.
     PST* _table0;  // std::shared_ptr<PST>
@@ -92,6 +92,7 @@ protected:
     /// undefined tonality, for errors.
     Ton* _uton; // std::shared_ptr<Ton>
 
+protected:
     
     /// estimated local tonality for one candidate global tonality and one bar.
     /// @param i index of candidate global tonality.
@@ -106,6 +107,11 @@ protected:
     
     size_t iglobalCand(size_t i, const PSO* g) const; // std::shared_ptr<PSO>
     
+    /// compute the best pitch spelling for the input notes,
+    /// using the algorithm named in this class.
+    /// @return whether computation was succesfull.
+    bool spell(const Cost& seed0);
+
 };
 
 

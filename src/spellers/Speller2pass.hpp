@@ -52,13 +52,20 @@ public:
     size_t iglobalCand(size_t i) const override;
     
 
-protected:
+protected: // data
     
     /// Second Pitch Spelling table.
     PST* _table1; // std::shared_ptr<PST>
     
     /// Second estimation of global tonality (on table1).
     PSO* _global1; // std::shared_ptr<PSO>
+
+protected:
+    
+    /// compute the best pitch spelling for the input notes,
+    /// using the algorithm named in this class.
+    /// @return whether computation was succesfull.
+    bool spell(const Cost& seed0, const Cost& seed1);
 
 };
 
