@@ -16,6 +16,9 @@
 
 TEST(Mode, size)
 {
+    // pse::ModeName::Undef)
+    EXPECT_EQ(pse::Mode().size(), 0);
+
     // diatonic modes
     EXPECT_EQ(pse::Mode(pse::ModeName::Major).size(), 7);
     EXPECT_EQ(pse::Mode(pse::ModeName::Minor).size(), 7);

@@ -49,6 +49,9 @@ class Scale  // public Mode
 {
 public:
 
+    /// undefined scale.
+    Scale();
+    
     /// main constructor.
     /// @param mode mode of this scale
     /// @param pc pitch class of tonic, in 0..11
@@ -72,6 +75,9 @@ public:
     /// @param mode must be ModeName::Chromatic.
     Scale(const Ton& ton, const ModeName& mode);
 
+    /// this scale is undefined.
+    bool undef() const;
+    
     /// note name for given degree.
     /// @param d degree in this scale, in 0..12.
     /// @return the note name for the given degree, in A..G.

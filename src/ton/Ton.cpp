@@ -99,7 +99,7 @@ const std::array<std::array<enum Accid, 7>, 15> Ton::MIN_MEL =
 Ton::Ton():
 KeyFifth(0),
 _mode(ModeName::Undef),
-_chromatic(*this, ModeName::Chromatic)
+_chromatic()
 { }
 
 

@@ -11,6 +11,14 @@
 
 namespace pse {
 
+Scale::Scale():
+_mode(ModeName::Undef),
+_pcs(),
+_names(),
+_accids(),
+_ks(0)
+{ }
+
 
 Scale::Scale(const ModeName& mode, int pc, const enum NoteName& name):
 Scale(Mode(mode), pc, name)
@@ -63,6 +71,12 @@ Scale(ModeName::Chromatic, ton.getPitchClass(), ton.getName())
             (ton.getMode() == ModeName::Minor) ||
             (ton.getMode() == ModeName::MinorNat) ||
             (ton.getMode() == ModeName::MinorMel));
+}
+
+
+bool Scale::undef() const
+{
+    return (_mode == ModeName::Undef);
 }
 
 

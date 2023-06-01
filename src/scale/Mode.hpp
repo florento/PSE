@@ -25,19 +25,12 @@ class Mode
     
 public:
     
+    /// undefined mode.
+    Mode();
+    
     /// predefined mode of given name.
     Mode(const ModeName& name);
     
-    /// internal constructor.
-    /// @param name code of this mode.
-    /// @param ls list of numbers of 1/2 tones between one degree and the next.
-    /// must not be empty.
-    /// @param ln list of numbers of names between one degree and the next.
-    /// must have same size as ls.
-    Mode(const ModeName& name,
-         const std::vector<const int>& ls,
-         const std::vector<const int>& ln);
-
     /// copy constructor
     Mode(const Mode& rhs);
 
@@ -52,6 +45,9 @@ public:
 
     /// code of this mode.
     inline ModeName code() const { return name(); }
+
+    /// this mode is undefined.
+    bool undef() const;
     
     /// distance in 1/2 tones to the tonic.
     /// @param d degree in this mode. the first degree is 0 (not 1).
@@ -79,6 +75,16 @@ protected:
     std::vector<int> _cnames;
     
 private:
+    
+    /// internal constructor.
+    /// @param name code of this mode.
+    /// @param ls list of numbers of 1/2 tones between one degree and the next.
+    /// must not be empty.
+    /// @param ln list of numbers of names between one degree and the next.
+    /// must have same size as ls.
+    Mode(const ModeName& name,
+         const std::vector<const int>& ls,
+         const std::vector<const int>& ln);
     
     /// @param name code of a mode.
     /// @return list of numbers of 1/2 tones between one degree and the next.

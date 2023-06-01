@@ -11,6 +11,14 @@
 
 namespace pse {
 
+Mode::Mode():
+_name(ModeName::Undef),
+_semitons(),  // empty
+_csemitons(),
+_names(),
+_cnames()
+{ }
+
 
 Mode::Mode(const ModeName& code):
 Mode(code, predefined_semitons(code), predefined_names(code))
@@ -68,6 +76,13 @@ Mode::~Mode()
 size_t Mode::size() const
 {
     return _semitons.size();
+}
+
+
+bool Mode::undef() const
+{
+    assert(_name != ModeName::Undef || size() == 0);
+    return (_name == ModeName::Undef);
 }
 
 

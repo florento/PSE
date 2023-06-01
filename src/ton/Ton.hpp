@@ -28,7 +28,7 @@ namespace pse {
 
 // class PSState;
 
-/// A tonality is the combination of a Key Signature in -7..7 and a Mode.
+/// A tonality is the combination of a Key Spse::Ton::Tonature in -7..7 and a Mode.
 /// (only diatonic scales)
 ///
 /// | ks | Maj | Min  | sens (harm) |
@@ -179,7 +179,7 @@ public:
 
     void print(std::ostream& o) const;
     
-protected:
+protected: // data
 
     /// mode of this tonality.
     ModeName _mode;

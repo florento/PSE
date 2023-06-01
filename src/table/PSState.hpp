@@ -45,7 +45,7 @@ public:
     /// @param ton a tonality.
     /// @param joker flag: true for computing the set of jokers for a minor ton,
     /// false for computing the initial state of the given ton.
-    /// @todo the joker flag is obsolete.
+    /// @warning the joker flag is obsolete.
     PSState(const Ton& ton, bool joker = false);
 
     /// initial state for a given tonality.
@@ -94,7 +94,7 @@ public:
     /// @param n a pitch name, in 0..6 (0 is 'C', 6 is 'B').
     /// @param a a number of accidentals, for n, in -2..2.
     /// @return whether this state was effectively modified.
-    bool update(const enum NoteName&  n, const enum Accid& a);
+    bool update(const enum NoteName& n, const enum Accid& a);
     
     // distance from other state of accidentals
     // unsigned int dist(const PSState& rhs) const;
@@ -115,6 +115,7 @@ public:
     /// @param ajoker one joker state of accidentals, possibly with undef.
     ///        The joker state is given the priority over the first state in
     ///        distance computation.
+    /// @todo TBR, obsolete.
     unsigned int dist(const PSState& astate,
                       const PSState& ajoker) const;
 
@@ -126,6 +127,7 @@ public:
     /// @param ajoker2 one joker state of accidentals, possibly with undef.
     /// The joker state is given the priority over the resp. first state in
     /// distance computation.
+    /// @todo TBR, obsolete.
     static unsigned int dist(const PSState& astate1,
                              const PSState& ajoker1,
                              const PSState& astate2,
