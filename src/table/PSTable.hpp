@@ -95,6 +95,9 @@ public:
     /// the table content has been correctly initialized.
     bool status() const;
     
+    /// enumerator of input notes used to build this vector.
+    inline PSEnum& enumerator() const { return _enum; }
+    
     /// vector of tonalities associated to this table.
     /// it is the row-index of this table.
     inline const TonIndex& index() const { return _index; }

@@ -161,4 +161,66 @@ const Ton& Speller1Pass::localNote(size_t i) const
 }
 
 
+bool Speller1Pass::spell(const Cost& seed0, double diff0, bool rewrite_flag0)
+{
+    bool status = true;
+    
+    TRACE("pitch-spelling: building first pitch-spelling table");
+    if (_table0 != nullptr)
+    {
+        WARN("PSE: re-spelling, PS table overrided");
+        delete _table0;
+    }
+    _table0 = new PST(_algo, seed0, _index, _enum, _debug); // std::unique_ptr<PST>
+       
+    TRACE("pitch-spelling: {} bars", _table0->size());
+
+    TRACE("pitch-spelling: estimate first list of global tonality candidates");
+    if (_global0 != nullptr)
+    {
+        WARN("PSE: re-spelling, PS global set overrided");
+        delete _global0;
+    }
+    assert(diff0 >= 0);
+    _global0 = new PSO(*_table0, diff0, _debug); // std::unique_ptr<PSO>
+
+    // extract local tonality for each column of table
+    TRACE("pitch-spelling: start local tonalities estimation");
+    if (_locals0 != nullptr)
+    {
+        WARN("PSE: re-spelling, PS local grid overrided");
+        delete _locals0;
+    }
+    _locals0 = new PSG(*_table0, _global0->getMask()); // std::unique_ptr<PSG>
+
+    //    if (status == false)
+    //    {
+    //        ERROR("Pitch Spelling: failed to extract local tonalities, abort.");
+    //        return false;
+    //    }
+
+
+    TRACE("Pitch Spelling: estimated global tonality: {} ({})",
+          global(), global().fifths());
+
+//    if (status == false)
+//    {
+//        ERROR("Speller: failed to compute spelling table {}-{}",
+//              _enum.first(), _enum.stop());
+//    }
+
+    if (rewrite_flag0)
+    {
+        TRACE("pitch-spelling: rewrite passing notes");
+        _table0->enumerator().rewritePassing();
+    }
+
+    // will update the lists _names, _accids and _octave
+    TRACE("pitch-spelling: start renaming");
+    _table0->rename(iglobal());
+
+    return status;
+}
+
+
 } // namespace pse

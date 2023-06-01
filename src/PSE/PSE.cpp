@@ -68,7 +68,7 @@ bool PSE::spell()
 
     CostA seed0; // zero
     CostA seed1; // zero
-    return Speller2Pass::spell(seed0, seed1);
+    return Speller2Pass::spell(seed0, seed1, 0, false, 0, true);
 }
 
 
