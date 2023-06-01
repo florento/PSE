@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		4302F7D629E1A9810002AD05 /* RewritePassing.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 4302F7D229E1A9810002AD05 /* RewritePassing.hpp */; };
+		4308A7082A28DF0F007F7A55 /* TestState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4308A7072A28DF0F007F7A55 /* TestState.cpp */; };
+		4308A70A2A28E04F007F7A55 /* TestTon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4308A7092A28E04F007F7A55 /* TestTon.cpp */; };
 		430960532A0CD2C60097487A /* AlgoName.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 430960512A0CD2C60097487A /* AlgoName.cpp */; };
 		430960562A0CD2C60097487A /* AlgoName.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 430960522A0CD2C60097487A /* AlgoName.hpp */; };
 		4309605D2A0D034A0097487A /* Speller.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 432EF6AB292D405400C620CF /* Speller.cpp */; };
@@ -221,6 +223,8 @@
 /* Begin PBXFileReference section */
 		4302F7D129E1A9810002AD05 /* RewritePassing.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RewritePassing.cpp; sourceTree = "<group>"; };
 		4302F7D229E1A9810002AD05 /* RewritePassing.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = RewritePassing.hpp; sourceTree = "<group>"; };
+		4308A7072A28DF0F007F7A55 /* TestState.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TestState.cpp; sourceTree = "<group>"; };
+		4308A7092A28E04F007F7A55 /* TestTon.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TestTon.cpp; sourceTree = "<group>"; };
 		430960512A0CD2C60097487A /* AlgoName.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AlgoName.cpp; sourceTree = "<group>"; };
 		430960522A0CD2C60097487A /* AlgoName.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AlgoName.hpp; sourceTree = "<group>"; };
 		430960572A0CD7E80097487A /* PSTransit.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PSTransit.cpp; sourceTree = "<group>"; };
@@ -516,8 +520,10 @@
 				43316FFF29DD934E00BA534D /* TestEnharmonic.cpp */,
 				4350820429D6FDA100465943 /* TestMode.cpp */,
 				435081CE29D6C04600465943 /* TestScale.cpp */,
+				4308A7092A28E04F007F7A55 /* TestTon.cpp */,
 				4353AE3729DDAD3E00FAF8A3 /* TestPSEnum.cpp */,
 				4353AE3929DDB2CC00FAF8A3 /* TestPSRawEnum.cpp */,
+				4308A7072A28DF0F007F7A55 /* TestState.cpp */,
 			);
 			path = unit;
 			sourceTree = "<group>";
@@ -898,6 +904,7 @@
 				438A581829E0492D0073A32C /* PSConfig.cpp in Sources */,
 				4353AE3829DDAD3E00FAF8A3 /* TestPSEnum.cpp in Sources */,
 				435081F129D6D76100465943 /* Pitch.cpp in Sources */,
+				4308A70A2A28E04F007F7A55 /* TestTon.cpp in Sources */,
 				435081F029D6D75D00465943 /* ModeName.cpp in Sources */,
 				438A581E29E049430073A32C /* PSState.cpp in Sources */,
 				438A581729E0492A0073A32C /* PSConfig1.cpp in Sources */,
@@ -924,6 +931,7 @@
 				438EFD812A0D4C8600FF3733 /* PSOrder.cpp in Sources */,
 				435081F529D6D76F00465943 /* Accidental.cpp in Sources */,
 				438A581429E049190073A32C /* PSVector.cpp in Sources */,
+				4308A7082A28DF0F007F7A55 /* TestState.cpp in Sources */,
 				435081F829D6D78200465943 /* PSChord.cpp in Sources */,
 				4331700029DD934E00BA534D /* TestEnharmonic.cpp in Sources */,
 				438A581F29E0496D0073A32C /* PSPath.cpp in Sources */,

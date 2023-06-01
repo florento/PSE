@@ -136,6 +136,68 @@ void PST::init_rowcosts(const Cost& seed)
 }
 
 
+bool PST::init_psvs(const Cost& seed)
+{
+    TRACE("PST: computing spelling table {}-{}");
+    assert(_psvs.empty()); // do not recompute
+    
+    // first note of current bar
+    size_t i0 = _enum.first();
+    // current bar number
+    // NOT _enum.measure(i0) if first bar is empty
+    size_t b  = 0;
+    // first note after current bar
+    size_t i1;
+
+    // empty seq of notes
+    if (_enum.outside(i0))
+    {
+        WARN("PST init: empty sequence of notes");
+        return false;
+    }
+    
+    if (_index.empty())
+    {
+        ERROR("PST init: no tonality");
+        return false;
+    }
+    
+    // reset table
+    _psvs.clear();
+    
+    while (_enum.inside(i0))
+    {
+        assert(_enum.measure(i0) >= b);
+        // the current bar b is empty (i0 is after b)
+        if (_enum.measure(i0) > b)
+        {
+            TRACE("PST init: bar {} EMPTY", b);
+            // vector of empty bags
+            _psvs.push_back(std::make_unique<PSV>(_algo, seed, _index,
+                                                  _enum, i0, i0));
+            ++b;
+            continue;
+        }
+            
+        // the current bar b is not empty (i0 in b). add it.
+        i1 = bound_measure(b, i0); // first note after current measure b
+        TRACE("PST init: bar {} {}-{}", b, i0, i1);
+        assert(_enum.inside(i1 - 1));
+        assert(_enum.measure(i1 - 1) == b);
+        TRACE("PST: compute column of the best spelling table for measure {}\
+              (notes {}-{})", b, i0, i1-1);
+        // add a PS vector (column) for the measure b
+        _psvs.push_back(std::make_unique<PSV>(_algo, seed, _index,
+                                              _enum, i0, i1));
+        assert(_psvs.size() == b+1);
+        // then start next measure
+        i0 = i1; // index of first note of next bar
+        ++b;
+    }
+    return true;
+}
+
+
 bool PST::init_psvs(const PST& tab, const Cost& seed, const PSG& grid)
 {
     TRACE("PST: re-computing spelling table {}-{}");
