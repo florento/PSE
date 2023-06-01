@@ -44,7 +44,7 @@ PSE::~PSE()
 
 
 
-
+/// @todo add steps rewrite passing notes
 bool PSE::spell()
 {
     //DEBUGU("Speller respell: nb tonalities in table: {}", _table.nbTons());

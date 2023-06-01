@@ -18,6 +18,7 @@
 #include "Speller.hpp"
 #include "PSE.hpp"
 #include "PS13.hpp"
+#include "PS14.hpp"
 
 namespace py = pybind11;
 using namespace pybind11::literals;
@@ -145,4 +146,44 @@ PYBIND11_MODULE(pse, m)
         .def("printed", &pse::PS13::printed, "estimated print flag of note",
              py::arg("i"))
         .def("global_ton", &pse::PS13::global, "estimated global tonality (undef)");
+    
+    py::class_<pse::PS14>(m, "PS14")
+        .def(py::init<>(), "Spell Checker PS14")
+        .def("algo", &pse::PS14::algo, "name of spelling algorithm")
+        .def("debug", &pse::PS14::debug, "set debug mode", py::arg("on"))
+        .def("size", &pse::PS14::size, "number notes to spell")
+        .def("add", &pse::PS14::add, "add a new note to spell",
+             py::arg("midi"), py::arg("bar"), py::arg("simultaneous"))
+        .def("nb_tons", &pse::PS14::nbTons,
+             "number of tonalities considered for pitch spelling")
+        .def("reset_tons", &pse::PS14::resetTons,
+             "clear the array of tonalities for pitch spelling")
+    // disambiguate overloaded method
+        .def("add_ton",
+             static_cast<void (pse::PS14::*)(int, pse::ModeName)>(&pse::PS14::addTon),
+             "add a tonality for pitch spelling", py::arg("ks"), py::arg("mode"))
+        .def("set_global", &pse::PS14::setGlobal, "force global tonality")
+        .def("spell", &pse::PS14::spell, "spell notes")
+        .def("rewrite_passing", &pse::PS14::rewritePassing, "rewrite passing notes")
+        .def("global_ton", &pse::PS14::global, "get estimated global tonality")
+        .def("iglobal_ton", &pse::PS14::iglobal,
+             "get index of estimated global tonality")
+        .def("keysig", &pse::PS14::fifths, "get estimated global key signature")
+        .def("local_bar", &pse::PS14::local, "estimated local tonality for a bar")
+             // py::arg("ton"), py::arg("bar"))
+        .def("local_note", &pse::PS14::localNote, "estimated local tonality for a note")
+        .def("global_cands", &pse::PS14::globals,
+             "get number of candidates (ties) for the estimatation of the global tonality")
+        .def("global_cand_ton", &pse::PS14::globalCand,
+             "get candidate global tonality ")
+        .def("iglobal_cand_ton", &pse::PS14::iglobalCand,
+             "get index of candidate global tonality ")
+        .def("name",  &pse::PS14::name, "estimated name of note",
+             py::arg("i"))
+        .def("accidental", &pse::PS14::accidental,
+             "estimated accidental of note", py::arg("i"))
+        .def("octave", &pse::PS14::octave, "estimated octave of note",
+             py::arg("i"))
+        .def("printed", &pse::PS14::printed, "estimated print flag of note",
+             py::arg("i"));
 }
