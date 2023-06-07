@@ -239,8 +239,8 @@
 		4310526629CDD15000694D5A /* Scale.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Scale.hpp; sourceTree = "<group>"; };
 		43139F7B2A0D3D9D00A8E764 /* TestFifths.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TestFifths.cpp; sourceTree = "<group>"; };
 		431586172983E57F00918B1B /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		4315861D2983E84D00918B1B /* KeyFind.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = KeyFind.hpp; path = src/KrumhanslSchmuckler/KeyFind.hpp; sourceTree = "<group>"; };
-		4315861E2983E84D00918B1B /* KeyFind.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = KeyFind.cpp; path = src/KrumhanslSchmuckler/KeyFind.cpp; sourceTree = "<group>"; };
+		4315861D2983E84D00918B1B /* KeyFind.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = KeyFind.hpp; path = src/KSKF/KeyFind.hpp; sourceTree = "<group>"; };
+		4315861E2983E84D00918B1B /* KeyFind.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = KeyFind.cpp; path = src/KSKF/KeyFind.cpp; sourceTree = "<group>"; };
 		431586212983E86E00918B1B /* Spiral.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Spiral.hpp; path = src/Spiral/Spiral.hpp; sourceTree = "<group>"; };
 		431586222983E86E00918B1B /* InputSegmentSpiral.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = InputSegmentSpiral.hpp; path = src/Spiral/InputSegmentSpiral.hpp; sourceTree = "<group>"; };
 		431586232983E86E00918B1B /* InputSegmentSpiral.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = InputSegmentSpiral.cpp; path = src/Spiral/InputSegmentSpiral.cpp; sourceTree = "<group>"; };
@@ -294,7 +294,7 @@
 		4353AE3929DDB2CC00FAF8A3 /* TestPSRawEnum.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TestPSRawEnum.cpp; sourceTree = "<group>"; };
 		4354069F29A8D2F90075B3B7 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = chord/README.md; sourceTree = "<group>"; };
 		435406A029A8D3530075B3B7 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = src/Spiral/README.md; sourceTree = "<group>"; };
-		435406A129A8D4050075B3B7 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = src/KrumhanslSchmuckler/README.md; sourceTree = "<group>"; };
+		435406A129A8D4050075B3B7 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = src/KSKF/README.md; sourceTree = "<group>"; };
 		435406A229A8D4BB0075B3B7 /* TonIndex.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = TonIndex.cpp; path = src/ton/TonIndex.cpp; sourceTree = "<group>"; };
 		435406A329A8D4BB0075B3B7 /* TonIndex.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = TonIndex.hpp; path = src/ton/TonIndex.hpp; sourceTree = "<group>"; };
 		4363442C29D31D8700F5D628 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
@@ -492,14 +492,14 @@
 			name = Spiral;
 			sourceTree = "<group>";
 		};
-		4315861C2983E82300918B1B /* KrumhanslSchmuckler */ = {
+		4315861C2983E82300918B1B /* KSKF */ = {
 			isa = PBXGroup;
 			children = (
 				435406A129A8D4050075B3B7 /* README.md */,
 				4315861D2983E84D00918B1B /* KeyFind.hpp */,
 				4315861E2983E84D00918B1B /* KeyFind.cpp */,
 			);
-			name = KrumhanslSchmuckler;
+			name = KSKF;
 			sourceTree = "<group>";
 		};
 		432E7A5129D45F78000E2B72 /* test */ = {
@@ -541,13 +541,15 @@
 				432E7A4D29D427FD000E2B72 /* PSE.hpp */,
 				432E7A4C29D427FD000E2B72 /* PSE.cpp */,
 			);
-			name = PSE;
-			path = src/PSE;
+			path = PSE;
 			sourceTree = "<group>";
 		};
 		434317262A11579700D685A1 /* spellers */ = {
 			isa = PBXGroup;
 			children = (
+				4363442B29D31D3500F5D628 /* PS13 */,
+				43947CFF29D97299008EB20A /* PS14 */,
+				434317252A1156F900D685A1 /* PSE */,
 				430960522A0CD2C60097487A /* AlgoName.hpp */,
 				430960512A0CD2C60097487A /* AlgoName.cpp */,
 				432EF6AC292D405400C620CF /* Speller.hpp */,
@@ -600,8 +602,7 @@
 				432E7A5329D45FE2000E2B72 /* PS13.hpp */,
 				432E7A5229D45FE2000E2B72 /* PS13.cpp */,
 			);
-			name = PS13;
-			path = src/PS13;
+			path = PS13;
 			sourceTree = "<group>";
 		};
 		436C6C342924016E00152D8C = {
@@ -644,11 +645,8 @@
 				438EFD822A0E3EB200FF3733 /* cost */,
 				431586192983E6BF00918B1B /* table */,
 				434317262A11579700D685A1 /* spellers */,
-				434317252A1156F900D685A1 /* PSE */,
-				4363442B29D31D3500F5D628 /* PS13 */,
-				43947CFF29D97299008EB20A /* PS14 */,
 				4315861B2983E80400918B1B /* Spiral */,
-				4315861C2983E82300918B1B /* KrumhanslSchmuckler */,
+				4315861C2983E82300918B1B /* KSKF */,
 			);
 			name = sources;
 			sourceTree = "<group>";
@@ -695,6 +693,7 @@
 				43D7BABD2A27E31600570C47 /* PS14.cpp */,
 			);
 			name = PS14;
+			path = ../..;
 			sourceTree = "<group>";
 		};
 		43A2543929280A6600D559D2 /* pitch */ = {

@@ -725,6 +725,9 @@ def eval_part(part, stat,
         sp = pse.PS13()
         sp.set_Kpre(kpre)
         sp.set_Kpost(kpost)
+    if algo == pse.Algo_PS14:
+        sp = pse.PS14()
+        add_tons(nbtons, sp)
     else:
         sp = pse.PSE()
         add_tons(nbtons, sp)

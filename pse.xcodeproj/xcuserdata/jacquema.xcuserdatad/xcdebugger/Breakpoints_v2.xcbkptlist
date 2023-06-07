@@ -302,6 +302,21 @@
                   endingLineNumber = "321"
                   offsetFromSymbolStart = "218">
                </Location>
+               <Location
+                  uuid = "4E3D7837-6A89-4943-8157-1C5FAD7A812F - e8c6784efca81afc"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "pse::PSRawEnum::rename(unsigned long, pse::NoteName const&amp;, bool)"
+                  moduleName = "debugpse"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/jacquema/Code/PSE/src/import/PSRawEnum.cpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "321"
+                  endingLineNumber = "321"
+                  offsetFromSymbolStart = "218">
+               </Location>
             </Locations>
          </BreakpointContent>
       </BreakpointProxy>
@@ -586,6 +601,22 @@
                   offsetFromSymbolStart = "756">
                </Location>
             </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "6F586E17-701E-42B2-A969-431EA76A88C3"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "test/unit/TestState.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "25"
+            endingLineNumber = "25"
+            landmarkName = "TEST()"
+            landmarkType = "9">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

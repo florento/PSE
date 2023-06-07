@@ -89,37 +89,6 @@ void Speller::add(int note, int bar, bool simult)
 }
 
 
-enum NoteName Speller::name(size_t i) const
-{
-    return _enum.name(i);
-}
-
-
-enum Accid Speller::accidental(size_t i) const
-{
-    return _enum.accidental(i);
-}
-
-
-int Speller::octave(size_t i) const
-{
-    return _enum.octave(i);
-}
-
-
-bool Speller::printed(size_t i) const
-{
-    return _enum.printed(i);
-}
-
-
-bool Speller::rewritePassing()
-{
-    TRACE("Rewriting passing notes");
-    return _enum.rewritePassing();
-}
-
-
 size_t Speller::nbTons() const
 {
     return _index.size();  // nbTons();
@@ -156,6 +125,36 @@ void Speller::addTon(int ks, ModeName mode)
 }
 
 
+
+bool Speller::rewritePassing()
+{
+    TRACE("Rewriting passing notes");
+    return _enum.rewritePassing();
+}
+
+
+enum NoteName Speller::name(size_t i) const
+{
+    return _enum.name(i);
+}
+
+
+enum Accid Speller::accidental(size_t i) const
+{
+    return _enum.accidental(i);
+}
+
+
+int Speller::octave(size_t i) const
+{
+    return _enum.octave(i);
+}
+
+
+bool Speller::printed(size_t i) const
+{
+    return _enum.printed(i);
+}
 
 
 } // namespace pse

@@ -195,7 +195,7 @@ def eval_LGitem(i, algo=ps.pse.Algo_PSE, nbtons=26, kpre=33, kpost=23,
     (ls, lld) = ps.eval_score(score=s, stat=stat, 
                               sid=i, title=t, composer='', 
                               algo=algo,
-                              tons=nbtons,            # for PSE 
+                              nbtons=nbtons,            # for PSE 
                               kpre=kpre, kpost=kpost, # for PS13                                  
                               debug=dflag, mark=mflag)
     stat.show()   

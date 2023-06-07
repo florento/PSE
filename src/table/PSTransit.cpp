@@ -17,7 +17,7 @@ _enum(e)
 { }
 
 
-void Transition::succ(std::shared_ptr<const PSC0>& c,
+void Transition::succ(std::shared_ptr<const PSC0> c,
                       const Ton& ton, const Ton& lton,
                       PSCQueue& q) const
 {
@@ -29,7 +29,7 @@ void Transition::succ(std::shared_ptr<const PSC0>& c,
 }
 
 
-void Transition::succ1(std::shared_ptr<const PSC0>& c,
+void Transition::succ1(std::shared_ptr<const PSC0> c,
                        const Ton& ton, const Ton& lton,
                        PSCQueue& q) const
 {
@@ -83,7 +83,7 @@ void Transition::succ1(std::shared_ptr<const PSC0>& c,
 
 
 // static
-void Transition::succ2(std::shared_ptr<const PSC0>& c,
+void Transition::succ2(std::shared_ptr<const PSC0> c,
                        const Ton& ton, const Ton& lton,
                        PSCQueue& q) const
 {

@@ -50,7 +50,7 @@ _cost(seed.shared_zero()) // zero
 PSC0::PSC0(const PSC0& rhs):
 _state(rhs._state),
 _id(rhs._id),
-_cost(_cost->shared_clone())
+_cost(rhs._cost->shared_clone())
 {
     assert(_cost);
 }

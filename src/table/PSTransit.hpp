@@ -45,7 +45,7 @@ public:
     /// @param ton conjectured main (global) tonality (key signature).
     /// @param lton conjectured local tonality. ignored if algo is not PSE1.
     /// @param q queue receiving the target configs.
-    void succ(std::shared_ptr<const PSC0>& c,
+    void succ(std::shared_ptr<const PSC0> c,
               const Ton& ton, const Ton& lton, PSCQueue& q) const;
     
     /// allocate every config reached by one transition from the given config,
@@ -55,7 +55,7 @@ public:
     /// @param ton conjectured main (global) tonality (key signature).
     /// @param lton conjectured local tonality. ignored if algo is not PSE1.
     /// @param q queue receiving the target configs.
-    void succ1(std::shared_ptr<const PSC0>& c,
+    void succ1(std::shared_ptr<const PSC0> c,
                const Ton& ton, const Ton& lton, PSCQueue& q) const;
 
     /// allocate every config reached by one transition from the given config,
@@ -66,7 +66,7 @@ public:
     /// @param ton conjectured main (global) tonality (key signature).
     /// @param lton conjectured local tonality. ignored if algo is not PSE1.
     /// @param q queue receiving the target configs.
-    void succ2(std::shared_ptr<const PSC0>& c,
+    void succ2(std::shared_ptr<const PSC0> c,
                const Ton& ton, const Ton& lton, PSCQueue& q) const;
     
 private:
