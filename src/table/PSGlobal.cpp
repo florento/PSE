@@ -16,7 +16,7 @@ _index(tab.index()),
 _globals(), // empty
 _debug(dflag)
 {
-    assert(d > 0);
+    assert(d >= 0);
     init(tab, d);
 }
 
