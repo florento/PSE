@@ -67,8 +67,8 @@ protected:
     /// @param seed0 seed cost used to built the first PS table
     /// @param diff0 approximation coeff (percent) for the first estimatation of
     /// global ton(s).
-    /// @param rewrite_flag0 wether the passing note must be rewritten
-    /// after first pass.
+    // @param rewrite_flag0 whether the passing note must be rewritten
+    // after first pass.
     /// @param seed1 seed cost used to built the second PS table
     /// @param diff1 approximation coeff (percent) for the second estimatation of
     /// global ton(s).
@@ -77,7 +77,7 @@ protected:
     /// @see PSEnum::rewritePassing()
     /// @return whether computation was succesfull.
     bool spell(const Cost& seed0, const Cost& seed1,
-               double diff0=0, bool rewrite_flag0=false,
+               double diff0=0, // bool rewrite_flag0=false,
                double diff1=0, bool rewrite_flag1=false);
 
 };

@@ -74,6 +74,7 @@ public:
     /// estimated global tonality.
     /// @warning spell() must have been called.
     const Ton& global() const override;
+
     
 protected: // data
     
@@ -114,10 +115,12 @@ protected:
     /// using the algorithm named in this class.
     /// @param seed0 seed cost used to built the PS table
     /// @param diff0 approximation coeff (percent) to estimate the global ton(s).
-    /// @param rewrite_flag wether the passing note must be rewritten.
+    /// @param rename_flag whether the notes in enumerator must be renamed.
+    /// @param rewrite_flag whether the passing note must be rewritten.
     /// @see PSEnum::rewritePassing()
     /// @return whether computation was succesfull.
-    bool spell(const Cost& seed0, double diff0=0, bool rewrite_flag=false);
+    bool spell(const Cost& seed0, double diff0=0,
+               bool rename_flag=true, bool rewrite_flag=false);
 
 };
 

@@ -619,5 +619,101 @@
             landmarkType = "9">
          </BreakpointContent>
       </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "E18B2230-0DA1-4BC4-B702-8AAD9A07DAA3"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "src/spellers/Speller1pass.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "78"
+            endingLineNumber = "78"
+            landmarkName = "Speller1Pass::globalCand(i, g)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "E18B2230-0DA1-4BC4-B702-8AAD9A07DAA3 - a3229c664f7a714c"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "pse::Speller1Pass::globalCand(unsigned long, pse::PSO const*) const"
+                  moduleName = "debugpse"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/jacquema/Code/PSE/src/spellers/Speller1pass.cpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "78"
+                  endingLineNumber = "78"
+                  offsetFromSymbolStart = "332">
+               </Location>
+               <Location
+                  uuid = "E18B2230-0DA1-4BC4-B702-8AAD9A07DAA3 - a3229c664f7a714c"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "pse::Speller1Pass::globalCand(unsigned long, pse::PSO const*) const"
+                  moduleName = "debugpse"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/jacquema/Code/PSE/src/spellers/Speller1pass.cpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "78"
+                  endingLineNumber = "78"
+                  offsetFromSymbolStart = "339">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "EAD589BB-8A23-43A2-9DE2-ED475D2CC497"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "src/spellers/Speller1pass.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "96"
+            endingLineNumber = "96"
+            landmarkName = "Speller1Pass::iglobalCand(i, g)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "EAD589BB-8A23-43A2-9DE2-ED475D2CC497 - aff60d58ed069128"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "pse::Speller1Pass::iglobalCand(unsigned long, pse::PSO const*) const"
+                  moduleName = "debugpse"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/jacquema/Code/PSE/src/spellers/Speller1pass.cpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "96"
+                  endingLineNumber = "96"
+                  offsetFromSymbolStart = "332">
+               </Location>
+               <Location
+                  uuid = "EAD589BB-8A23-43A2-9DE2-ED475D2CC497 - aff60d58ed069128"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "pse::Speller1Pass::iglobalCand(unsigned long, pse::PSO const*) const"
+                  moduleName = "debugpse"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/jacquema/Code/PSE/src/spellers/Speller1pass.cpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "96"
+                  endingLineNumber = "96"
+                  offsetFromSymbolStart = "339">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
    </Breakpoints>
 </Bucket>

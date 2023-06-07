@@ -75,7 +75,8 @@ const Ton& Speller1Pass::globalCand(size_t i, const PSO* g) const // std::shared
     }
     else
     {
-        ERROR("Speller1Pass: iglobal {}: no such global ton candidate", i);
+        ERROR("Speller1Pass: global[{}]: no such global ton candidate ({} cands)",
+              i, globals(g));
         //std::shared_ptr<Ton> uton(new Ton()); // undefined tonality
         assert(_uton);
         return *_uton;
@@ -92,8 +93,8 @@ size_t Speller1Pass::iglobalCand(size_t i, const PSO* g) const // std::shared_pt
     }
     else
     {
-        ERROR("Speller1Pass: iglobal {}: no such global ton candidates (only {})",
-              i, globals());
+        ERROR("Speller1Pass: iglobal[{}]: no such global ton candidate ({} cands)",
+              i, globals(g));
         return TonIndex::UNDEF;
     }
 
@@ -174,7 +175,8 @@ const Ton& Speller1Pass::localNote(size_t i) const
 }
 
 
-bool Speller1Pass::spell(const Cost& seed0, double diff0, bool rewrite_flag0)
+bool Speller1Pass::spell(const Cost& seed0, double diff0,
+                         bool rename_flag, bool rewrite_flag0)
 {
     bool status = true;
     
@@ -213,8 +215,11 @@ bool Speller1Pass::spell(const Cost& seed0, double diff0, bool rewrite_flag0)
     //    }
 
 
-    TRACE("Pitch Spelling: estimated global tonality: {} ({})",
-          global(), global().fifths());
+    TRACE("Pitch Spelling: {} estimated global tonality candidates",
+          globals(_global0));
+
+    size_t ig = iglobalCand(0, _global0);
+
 
 //    if (status == false)
 //    {
@@ -222,15 +227,27 @@ bool Speller1Pass::spell(const Cost& seed0, double diff0, bool rewrite_flag0)
 //              _enum.first(), _enum.stop());
 //    }
 
-    if (rewrite_flag0)
+    // update the lists _names, _accids and _octave
+    if (rename_flag)
+    {
+        if (ig != TonIndex::UNDEF)
+        {
+            TRACE("Pitch Spelling: renaming with estimated global tonality: {}",
+                  ig);
+            _table0->rename(ig);
+        }
+        else
+        {
+            ERROR("Pitch Spelling: renaming fail: no estimated global tonality");
+        }
+    }
+    
+    assert(rewrite_flag0 == false || rename_flag == true);
+    if (rename_flag && rewrite_flag0)
     {
         TRACE("pitch-spelling: rewrite passing notes");
         _table0->enumerator().rewritePassing();
     }
-
-    // will update the lists _names, _accids and _octave
-    TRACE("pitch-spelling: start renaming");
-    _table0->rename(iglobal());
 
     return status;
 }
