@@ -79,7 +79,7 @@ public:
     // when there are no more notes to read in e.
     // PST(PSEnum& e, size_t n0);
 
-    /// rebuid a table with the same algo, index, and enumerator  as the given
+    /// rebuid a table with the same algo, index, and enumerator as the given
     /// table, and the new given seed and given grid of local tonalities.
     /// @param tab PS table whose algo, ton index, and enumerator will be copied.
     /// @param seed cost value of specialized type used to create a null cost

@@ -89,8 +89,17 @@ _debug(dflag)
           _enum.first(), _enum.stop(), _algo);
     assert(grid.rowNb() == _index.size());
     assert(grid.columnNb() == tab.columnNb());
-    
-
+    assert(_algo == Algo::PSE || _algo == Algo::PS14);
+    bool status = init_psvs(tab, seed, grid);
+    if (status == false)
+    {
+        ERROR("PST: fail to compute spelling table {}-{} for {}",
+              _enum.first(), _enum.stop(), _algo);
+    }
+    else
+    {
+        init_rowcosts(seed);
+    }
 }
 
 
