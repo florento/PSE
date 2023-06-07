@@ -157,15 +157,15 @@ void PSEnum::rename(size_t i, const enum NoteName& n, bool altprint)
     rename(i, n, a, o, altprint);
 }
 
-bool PSEnum::rewritePassing()
+size_t PSEnum::rewritePassing()
 {
-    bool ret = false;
+    size_t ret = 0;
     size_t efirst = first();
     size_t estop = open()?efirst+size():stop();
     for (size_t i = efirst; i < estop; ++i)
     {
         bool rew = rewritePassing(i);
-        ret = (ret || rew);
+        ret += rew?1:0;
     }
     return ret;
 }

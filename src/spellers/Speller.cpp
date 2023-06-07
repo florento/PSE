@@ -126,7 +126,7 @@ void Speller::addTon(int ks, ModeName mode)
 
 
 
-bool Speller::rewritePassing()
+size_t Speller::rewritePassing()
 {
     TRACE("Rewriting passing notes");
     return _enum.rewritePassing();

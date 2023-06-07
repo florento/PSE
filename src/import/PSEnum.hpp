@@ -192,8 +192,8 @@ public:
     ///   ex. `C` `A#` `A` $\to$ `C` `Bb` `A`
     /// - +2 +1  (ascending 2)
     ///   ex. `A` `Cb` `C` $\to$ `A` `B` `C`
-    /// @return whether at least one rewriting was done.
-    bool rewritePassing();
+    /// @return how many rewriting wer performed.
+    size_t rewritePassing();
     
 protected:
 

@@ -116,9 +116,9 @@ public:
     virtual bool spell() = 0;
     
     /// rewrite the passing notes in enumerator.
-    /// @return whether at least one rewriting was done.
+    /// @return how many notes have been rewritten.
     /// @see class RewritePassing
-    bool rewritePassing();
+    size_t rewritePassing();
     
     /// estimated name for the note of given index, in 0..6 (0 is 'C', 6 is 'B').
     /// @param i index of note in the enumerator of input notes.
