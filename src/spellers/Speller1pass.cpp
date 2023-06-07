@@ -70,7 +70,7 @@ const Ton& Speller1Pass::globalCand(size_t i, const PSO* g) const // std::shared
     // if (it != TonIndex::UNDEF)
     if ((g != nullptr) && (i <  g->size()))
     {
-        assert(_index.size() == g->size());
+        assert(_index.size() == g->index().size());  // same index
         return g->global(i);
     }
     else
@@ -85,14 +85,15 @@ const Ton& Speller1Pass::globalCand(size_t i, const PSO* g) const // std::shared
 
 size_t Speller1Pass::iglobalCand(size_t i, const PSO* g) const // std::shared_ptr<PSO>
 {
-    if (i < globals())
+    if ((g != nullptr) && (i <  g->size()))
     {
+        assert(_index.size() == g->index().size()); // same index
         return g->iglobal(i);
     }
     else
     {
-        WARN("Speller1Pass: iglobal {}: no such global ton candidates (only {})",
-             i, globals());
+        ERROR("Speller1Pass: iglobal {}: no such global ton candidates (only {})",
+              i, globals());
         return TonIndex::UNDEF;
     }
 
@@ -120,6 +121,18 @@ const Ton& Speller1Pass::globalCand(size_t i) const
 size_t Speller1Pass::iglobalCand(size_t i) const
 {
     return iglobalCand(i, _global0);
+}
+
+
+size_t Speller1Pass::iglobal() const
+{
+    return iglobalCand(0);
+}
+
+
+const Ton& Speller1Pass::global() const
+{
+    return globalCand(0);
 }
 
 

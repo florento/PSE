@@ -69,11 +69,11 @@ public:
     /// index of the estimated global tonality.
     /// @return the index of the estimated global tonality in the index of tons,
     /// in 0..index.size().
-    size_t iglobal() const { return iglobalCand(0); };
+    size_t iglobal() const override;
     
     /// estimated global tonality.
     /// @warning spell() must have been called.
-    const Ton& global() const override { return globalCand(0); }
+    const Ton& global() const override;
     
 protected: // data
     
@@ -101,10 +101,13 @@ protected:
    
     void setGlobal(size_t i, PSO* g); // std::shared_ptr<PSO>
     
+    /// number of global cands in g
     size_t globals(const PSO* g) const; // std::shared_ptr<PSO>
     
+    /// global cand number i in g
     const Ton& globalCand(size_t i, const PSO* g) const; // std::shared_ptr<PSO>
     
+    /// index of global cand number i in g
     size_t iglobalCand(size_t i, const PSO* g) const; // std::shared_ptr<PSO>
     
     /// compute the best pitch spelling for the input notes,

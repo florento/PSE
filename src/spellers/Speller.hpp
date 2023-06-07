@@ -141,6 +141,12 @@ public:
     /// @warning spell() must have been called.
      virtual const Ton& global() const = 0;
 
+    /// index of the estimated global tonality.
+    /// @return the index of the estimated global tonality in the index of tons,
+    /// in 0..index.size().
+    /// @warning spell() must have been called.
+    virtual size_t iglobal() const = 0;
+    
     // estimated local tonality at note of given index.
     // @param i index of note in the list of input notes.
     // @warning spell() must have been called.

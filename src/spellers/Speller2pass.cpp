@@ -82,16 +82,16 @@ bool Speller2Pass::spell(const Cost& seed0, const Cost& seed1,
     TRACE("Pitch Spelling: estimated global tonality: {} ({})",
           global(), global().fifths());
 
+    // will update the lists _names, _accids and _octave
+    TRACE("pitch-spelling: start renaming");
+    _table1->rename(iglobal());
+
     if (rewrite_flag1)
     {
         TRACE("pitch-spelling: rewrite passing notes");
         _table1->enumerator().rewritePassing();
     }
     
-    // will update the lists _names, _accids and _octave
-    TRACE("pitch-spelling: start renaming");
-    _table1->rename(iglobal());
-
     if (status == false)
     {
         ERROR("Speller: failed to compute spelling table {}-{}",
