@@ -43,6 +43,14 @@ size_t PSG::ilocal(size_t i, size_t j) const
 }
 
 
+const Ton& PSG::local(size_t i, size_t j) const
+{
+    size_t it = ilocal(i, j);
+    assert(it < _index.size());
+    return _index.ton(i);
+}
+
+
 const std::vector<size_t>& PSG::column(size_t j) const
 {
     assert(j < _content.size());
@@ -65,6 +73,7 @@ void PSG::init(const PST& tab, std::vector<bool> mask)
         // (there are several in case of tie).
         std::set<size_t> cands; // empty
         extract_bests(vec, cands);
+        // cands empty in case of empty measure
         
         // add empty column
         assert(_content.size() == j); // current nb of columns
@@ -83,6 +92,7 @@ void PSG::init(const PST& tab, std::vector<bool> mask)
             else if (_content.size() == 1)
             {
                 _content.back().push_back(estimateLocal(i, i, cands));
+
             }
             // otherwise, consider previous column
             else
@@ -95,6 +105,7 @@ void PSG::init(const PST& tab, std::vector<bool> mask)
             }
             assert(_content.back().back() == TonIndex::UNDEF ||
                    _content.back().back() < _index.size());
+            //INFO("BUG 102: {} (UNDEF={})", _content.back().back(), TonIndex::UNDEF);
         }
         assert(_content.back().size() == vec.size());
     }
@@ -117,7 +128,7 @@ void PSG::extract_bests(const PSV& vec, std::set<size_t>& ties)
 
         // occurs iff first() == last(), and in this case all the bags are empty.
         if (psb.empty())
-            continue; // break
+            break; // break
         
         const Cost& cost = psb.cost(); // shared_clone();
         
@@ -148,8 +159,9 @@ void PSG::extract_bests(const PSV& vec, std::set<size_t>& ties)
 
 size_t PSG::estimateLocal(size_t ig, size_t iprev, std::set<size_t>& cands)
 {
+    // no candidates in case of empty bar: keep the previous local
     if (cands.empty())
-        return TonIndex::FAILED; // TonIndex::UNDEF
+        return iprev;  // TonIndex::FAILED; // TonIndex::UNDEF
     
     assert(iprev != TonIndex::UNDEF);
     assert(iprev != TonIndex::FAILED);

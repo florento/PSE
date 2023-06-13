@@ -38,16 +38,35 @@ public:
     
     /// destructor
     virtual ~Speller1Pass();
-    
-    /// estimated local tonality for one bar.
-    /// @param j bar number.
+
+    /// index (in the TonIndex) of the estimated local tonality
+    /// for one assumed global tonality and one bar.
+    /// @param i index in the TonIndex of an assumed global tonality.
+    /// @param j measure number.
+    /// @return the index of the estimated local tonality,
+    /// assuming the global tonality i:
+    /// - TonIndex::UNDEF if it was not estimated yet.
+    /// - TonIndex::FAILED if its estimation failed.
+    /// - an integer value between 0 and index.size() otherwise.
     /// @warning spell() must have been called.
-    const Ton& local(size_t j) const;
-    
-    /// estimated local tonality at note of given index.
-    /// @param i index of note in the enumerator of input notes.
+    size_t ilocal(size_t i, size_t j) const;
+
+    /// estimated local tonality for one assumed global tonality and one bar.
+    /// @param i index in the TonIndex of an assumed global tonality.
+    /// @param j measure number.
+    /// @return the estimated local tonality assuming the global tonality i:
+    /// - TonIndex::UNDEF if it was not estimated yet.
+    /// - TonIndex::FAILED if its estimation failed.
+    /// - an integer value between 0 and index.size() otherwise.
     /// @warning spell() must have been called.
-    const Ton& localNote(size_t i) const;
+    const Ton& local(size_t i, size_t j) const;
+    
+    /// estimated local tonality at note of given index, for one given
+    /// assumed global tonality.
+    /// @param i index in the TonIndex of an assumed global tonality.
+    /// @param j index of note in the enumerator of input notes.
+    /// @warning spell() must have been called.
+    const Ton& localNote(size_t i, size_t j) const;
     
     /// force global tonality. it wont be estimated.
     /// @param i index of tonality set as global.
@@ -95,10 +114,10 @@ protected: // data
 
 protected:
     
-    /// estimated local tonality for one candidate global tonality and one bar.
-    /// @param i index of candidate global tonality.
-    /// @param j bar number.
-    const Ton& localCandBar(size_t i, size_t j) const;
+    // estimated local tonality for one candidate global tonality and one bar.
+    // @param i index of candidate global tonality.
+    // @param j bar number.
+    // const Ton& localCandBar(size_t i, size_t j) const;
    
     void setGlobal(size_t i, PSO* g); // std::shared_ptr<PSO>
     

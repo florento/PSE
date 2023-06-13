@@ -20,6 +20,7 @@ void WeberTable()
 }
 
 void LG101(pse::Speller& sp);
+void LG102(pse::Speller& sp);
 void LG128(pse::Speller& sp);
 void LG228(pse::Speller& sp);
 void LG275(pse::Speller& sp);
@@ -43,7 +44,7 @@ int main(int argc, const char* argv[])
     pse::PSE sp(26, true);
     //pse::PS13 sp;
 
-    LG101(sp);
+    LG102(sp);
     //LG349(sp);
     // Waldstein(sp);
     
@@ -143,7 +144,108 @@ void LG101(pse::Speller& sp)
     sp.add(76, 16, false);
     sp.add(76, 16, false);
     sp.add(76, 16, false);
-    sp.add(69, 17, false);
+    sp.add(69, 17, false);    
+}
+
+// content of LG 102
+void LG102(pse::Speller& sp)
+{
+    sp.add(61, 1, false);
+    sp.add(65, 1, false);
+    sp.add(61, 2, false);
+    sp.add(60, 2, false);
+    sp.add(58, 2, false);
+    sp.add(56, 2, false);
+    sp.add(58, 2, false);
+    sp.add(60, 2, false);
+    sp.add(61, 3, false);
+    sp.add(63, 3, false);
+    sp.add(65, 3, false);
+    sp.add(63, 3, false);
+    sp.add(61, 4, false);
+    sp.add(60, 4, false);
+    sp.add(58, 4, false);
+    sp.add(56, 4, false);
+    sp.add(58, 4, false);
+    sp.add(60, 4, false);
+    sp.add(61, 5, false);
+    sp.add(63, 5, false);
+    sp.add(65, 5, false);
+    sp.add(65, 5, false);
+    sp.add(63, 5, false);
+    sp.add(65, 6, false);
+    sp.add(65, 6, false);
+    sp.add(65, 6, false);
+    sp.add(61, 6, false);
+    sp.add(58, 6, false);
+    sp.add(70, 7, false);
+    sp.add(70, 7, false);
+    sp.add(70, 7, false);
+    sp.add(66, 7, false);
+    sp.add(63, 7, false);
+    sp.add(68, 8, false);
+    sp.add(68, 8, false);
+    sp.add(68, 8, false);
+    sp.add(65, 8, false);
+    sp.add(61, 8, false);
+    sp.add(56, 9, false);
+    sp.add(65, 9, false);
+    sp.add(63, 9, false);
+    sp.add(61, 9, false);
+    sp.add(61, 10, false);
+    sp.add(60, 10, false);
+    sp.add(61, 10, false);
+    sp.add(65, 10, false);
+    sp.add(66, 10, false);
+    sp.add(68, 11, false);
+    sp.add(77, 11, false);
+    sp.add(75, 11, false);
+    sp.add(73, 11, false);
+    sp.add(70, 11, false);
+    sp.add(66, 11, false);
+    sp.add(65, 12, false);
+    sp.add(68, 12, false);
+    sp.add(73, 12, false);
+    sp.add(73, 12, false);
+    sp.add(72, 12, false);
+    sp.add(73, 13, false);
+    sp.add(75, 13, false);
+    sp.add(77, 13, false);
+    sp.add(77, 13, false);
+    sp.add(75, 13, false);
+    sp.add(75, 14, false);
+    sp.add(73, 14, false);
+    sp.add(73, 14, false);
+    sp.add(72, 14, false);
+    sp.add(72, 15, false);
+    sp.add(73, 15, false);
+    sp.add(74, 15, false);
+    sp.add(75, 15, false);
+    sp.add(76, 16, false);
+    sp.add(77, 16, false);
+    sp.add(77, 16, false);
+    sp.add(74, 16, false);
+    sp.add(81, 17, false);
+    sp.add(82, 17, false);
+    sp.add(82, 17, false);
+    sp.add(78, 17, false);
+    sp.add(79, 18, false);
+    sp.add(80, 18, false);
+    sp.add(82, 18, false);
+    sp.add(79, 18, false);
+    sp.add(79, 19, false);
+    sp.add(80, 19, false);
+    sp.add(80, 19, false);
+    sp.add(80, 20, false);
+    sp.add(80, 20, false);
+    sp.add(85, 20, false);
+    sp.add(77, 21, false);
+    sp.add(75, 21, false);
+    sp.add(75, 21, false);
+    sp.add(73, 21, false);
+    sp.add(68, 22, false);
+    sp.add(68, 22, false);
+    sp.add(73, 22, false);
 }
 
 // content of LG 128

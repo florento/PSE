@@ -69,6 +69,18 @@ public:
     /// - TonIndex::FAILED if its estimation failed.
     /// - an integer value between 0 and index.size() otherwise.
     size_t ilocal(size_t i, size_t j) const;
+    
+    /// estimated local tonality,
+    /// for the given row number (assumed a global tonality)
+    /// and column number (number of measure).
+    /// @param i index in the TonIndex of an assumed global tonality.
+    /// @param j measure number (column number of the table used for
+    /// initialization).
+    /// @return the estimated local tonality assuming the global tonality i:
+    /// - TonIndex::UNDEF if it was not estimated yet.
+    /// - TonIndex::FAILED if its estimation failed.
+    /// - an integer value between 0 and index.size() otherwise.
+    const Ton& local(size_t i, size_t j) const;
         
 private: // data
     
