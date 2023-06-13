@@ -34,12 +34,21 @@ class PS13 : public Speller
 {
 public:
 
+    
     /// main constructor. initially empty list of notes to spell.
     /// @param dflag debug mode.
     /// @param kpre parameter of PS13
     /// @param kpost parameter of PS13
     /// @see http://www.titanmusic.com/papers/public/ps-ircam.pdf section 10
     PS13(size_t kpre = 33, size_t kpost = 23, bool dflag=true);
+
+    // constructor with default values kpre=33, kpost = 23
+    // PS13(bool dflag);
+
+    // default constructor,
+    // default values kpre=33, kpost = 23, debug = false
+    // PS13();
+
     
     /// destructor
     virtual ~PS13();
@@ -60,8 +69,12 @@ public:
     
     /// estimated global tonality.
     /// @warning it is always an undef Ton for PS13.
-    virtual const Ton& global() const override; //  { return Ton(); }
-    
+    const Ton& global() const override; //  { return Ton(); }
+
+    /// index of estimated global tonality.
+    /// @warning it is always an undef Ton for PS13.
+    size_t iglobal() const override;
+
     // estimated local tonality at note of given index.
     // @param i index of note in the list of input notes.
     // @warning spell() must have been called.
@@ -80,7 +93,7 @@ private: // data
     
     /// estimated global tonality.
     /// @warning undef for PS13.
-     const Ton _global;
+    const Ton _global;
     
     // one estimated local tonality for each note.
     // std::vector<Ton> _locals;

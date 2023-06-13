@@ -36,6 +36,7 @@
 		432657E3294E2FB100515080 /* Weber.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 432657E1294E2FB000515080 /* Weber.cpp */; };
 		432657E4294E2FB100515080 /* Weber.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 432657E1294E2FB000515080 /* Weber.cpp */; };
 		432657E5294E2FB100515080 /* Weber.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 432657E2294E2FB100515080 /* Weber.hpp */; };
+		432A0F8D2A311889007D5CA2 /* TestRewritePassing.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 432A0F8B2A311889007D5CA2 /* TestRewritePassing.cpp */; };
 		432E7A4E29D427FD000E2B72 /* PSE.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 432E7A4C29D427FD000E2B72 /* PSE.cpp */; };
 		432E7A4F29D427FD000E2B72 /* PSE.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 432E7A4C29D427FD000E2B72 /* PSE.cpp */; };
 		432E7A5429D45FE2000E2B72 /* PS13.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 432E7A5229D45FE2000E2B72 /* PS13.cpp */; };
@@ -255,6 +256,7 @@
 		431586302983E89B00918B1B /* PSNoteEnum.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = PSNoteEnum.hpp; path = src/import/PSNoteEnum.hpp; sourceTree = "<group>"; };
 		432657E1294E2FB000515080 /* Weber.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Weber.cpp; path = src/ton/Weber.cpp; sourceTree = "<group>"; };
 		432657E2294E2FB100515080 /* Weber.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Weber.hpp; path = src/ton/Weber.hpp; sourceTree = "<group>"; };
+		432A0F8B2A311889007D5CA2 /* TestRewritePassing.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TestRewritePassing.cpp; sourceTree = "<group>"; };
 		432E7A4C29D427FD000E2B72 /* PSE.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PSE.cpp; sourceTree = "<group>"; };
 		432E7A4D29D427FD000E2B72 /* PSE.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = PSE.hpp; sourceTree = "<group>"; };
 		432E7A5229D45FE2000E2B72 /* PS13.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PS13.cpp; sourceTree = "<group>"; };
@@ -529,6 +531,7 @@
 				4308A70D2A28F9B8007F7A55 /* TestTonIndex.cpp */,
 				4353AE3729DDAD3E00FAF8A3 /* TestPSEnum.cpp */,
 				4353AE3929DDB2CC00FAF8A3 /* TestPSRawEnum.cpp */,
+				432A0F8B2A311889007D5CA2 /* TestRewritePassing.cpp */,
 				4308A7072A28DF0F007F7A55 /* TestState.cpp */,
 			);
 			path = unit;
@@ -916,6 +919,7 @@
 				438A581729E0492A0073A32C /* PSConfig1.cpp in Sources */,
 				43C4A6542A1E7EBB00925A99 /* PSGrid.cpp in Sources */,
 				4309605D2A0D034A0097487A /* Speller.cpp in Sources */,
+				432A0F8D2A311889007D5CA2 /* TestRewritePassing.cpp in Sources */,
 				438A581329E049020073A32C /* PSTable.cpp in Sources */,
 				435081F329D6D76800465943 /* Enharmonic.cpp in Sources */,
 				435081FB29D6D7DF00465943 /* TonIndex.cpp in Sources */,

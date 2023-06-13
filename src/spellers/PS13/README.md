@@ -1,6 +1,7 @@
 # David Meredith's PS13 pitch-spelling algorithm
 
 ## first step
+
 for a pitch class $p$,  
 a note $n$ (in the sequence of notes to spell),  
 a note name $\ell$ (in A..G)
@@ -20,10 +21,12 @@ a note name $\ell$ (in A..G)
 1 b2 2 b3 3 4 #4 5 #6 6 b7 7 8
 
 ## second step
+
 correct the "passing notes" 
 passing note = middle note in non-diatonic move between 3 close notes.
 
 [Meredith] 6 kinds, characterized by the distance in 1/2 tons between the 3 notes:
+
 - **a.** -1 +1   (broderie 1)  
   ex. `C` `Cb` `C` $\to$ `C` `B` `C`
 - **b.** +1  -1  (broderie 2)  
@@ -38,6 +41,7 @@ passing note = middle note in non-diatonic move between 3 close notes.
   ex. `A` `A#` `C` $\to$ `A` `Bb` `C`
 
 could we add 2 more kinds?: chromatic
+
 - **g.** -1 -1  (descending chr.)  
   ex. `C` `Cb` `A#` $\to$ `C` `B` `A#`  
   ex. `B#` `Cb` `Bb` $\to$ `C` `B` `A#`  
@@ -51,6 +55,7 @@ could we add 2 more kinds?: chromatic
   ex. `A` `A#` `B`
 
 correction strategy: 
+
 - left to right? 
 - with overlapping?
 
