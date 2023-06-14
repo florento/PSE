@@ -83,7 +83,30 @@ public:
     /// @param bar bar number of the new input note.
     /// @param simult whether the new input note is simultaneous with the
     /// next note.
-    void add(int note, int bar, bool simult=false);
+    /// @param dur note duration, in fraction of bars.
+    void add(int note, int bar, bool simult=false,
+             const Rational& dur = Rational(0));
+
+    /// for pybind: add a new input note to the enumerator of notes to spell
+    /// with duration.
+    /// @param note MIDI key of the new input note.
+    /// @param bar bar number of the new input note.
+    /// @param simult whether the new input note is simultaneous with the
+    /// next note.
+    /// @param dur_num numerator of note duration, in fraction of bars.
+    /// @param dur_den denominator of note duration, in fraction of bars.
+    /// @warning for Phython binding
+    void add_pybindwd(int note, int bar, bool simult=false,
+                      long dur_num=0, long dur_den=1);
+
+    /// for pybind: add a new input note to the enumerator of notes to spell
+    /// without duration.
+    /// @param note MIDI key of the new input note.
+    /// @param bar bar number of the new input note.
+    /// @param simult whether the new input note is simultaneous with the
+    /// next note.
+    /// @warning for Phython binding
+    void add_pybindwod(int note, int bar, bool simult=false);
 
     /// number of tonalities considered for pitch spelling.
     /// It is the size of array of tonalities.

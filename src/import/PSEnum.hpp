@@ -16,6 +16,7 @@
 #include <memory>
 
 #include "trace.hpp"
+#include "Rational.hpp"
 #include "NoteName.hpp"
 #include "Accidental.hpp"
 #include "MidiNum.hpp"
@@ -139,6 +140,11 @@ public:
     /// @param i index of note in the list of input notes.
     virtual int octave(size_t i) const = 0;
 
+    /// duration, in number of bars, of the note of given index,
+    /// if it has been set, otherwise 0.
+    /// @param i index of note in the list of input notes.
+    virtual Rational duration(size_t i) const = 0;
+    
     /// print flag for the note of given index, if it has been set,
     /// otherwise true.
     /// This flags says wether the accidental of the note must be printed or not.

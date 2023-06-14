@@ -112,6 +112,8 @@
 		438EFD802A0D4C8500FF3733 /* PSOrder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43D8A9EF29AFA16B00B260DA /* PSOrder.cpp */; };
 		438EFD812A0D4C8600FF3733 /* PSOrder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43D8A9EF29AFA16B00B260DA /* PSOrder.cpp */; };
 		4397A5DE29A6CDB300C2CC9A /* PSOrder.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 4397A5DC29A6CDB300C2CC9A /* PSOrder.hpp */; };
+		43A24E442A3A0BD50041B004 /* Rational.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43A24E422A3A0BD50041B004 /* Rational.cpp */; };
+		43A24E452A3A0BD50041B004 /* Rational.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 43A24E432A3A0BD50041B004 /* Rational.hpp */; };
 		43A2544029280D8900D559D2 /* trace.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43A2543E29280D8900D559D2 /* trace.cpp */; };
 		43A2544129280D8900D559D2 /* trace.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 43A2543F29280D8900D559D2 /* trace.hpp */; };
 		43A2544529280E1600D559D2 /* config.h in Headers */ = {isa = PBXBuildFile; fileRef = 43A2544329280E1600D559D2 /* config.h */; };
@@ -311,6 +313,8 @@
 		438EFD842A0E41DD00FF3733 /* Costt.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Costt.hpp; sourceTree = "<group>"; };
 		43947D0029D972AF008EB20A /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = src/spellers/PS14/README.md; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.markdown; };
 		4397A5DC29A6CDB300C2CC9A /* PSOrder.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = PSOrder.hpp; sourceTree = "<group>"; };
+		43A24E422A3A0BD50041B004 /* Rational.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rational.cpp; path = src/general/Rational.cpp; sourceTree = "<group>"; };
+		43A24E432A3A0BD50041B004 /* Rational.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Rational.hpp; path = src/general/Rational.hpp; sourceTree = "<group>"; };
 		43A2543E29280D8900D559D2 /* trace.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = trace.cpp; path = src/general/trace.cpp; sourceTree = "<group>"; };
 		43A2543F29280D8900D559D2 /* trace.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = trace.hpp; path = src/general/trace.hpp; sourceTree = "<group>"; };
 		43A2544329280E1600D559D2 /* config.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = config.h; path = src/general/config.h; sourceTree = "<group>"; };
@@ -732,6 +736,8 @@
 				43A2544329280E1600D559D2 /* config.h */,
 				43A2543F29280D8900D559D2 /* trace.hpp */,
 				43A2543E29280D8900D559D2 /* trace.cpp */,
+				43A24E432A3A0BD50041B004 /* Rational.hpp */,
+				43A24E422A3A0BD50041B004 /* Rational.cpp */,
 			);
 			name = general;
 			sourceTree = "<group>";
@@ -775,6 +781,7 @@
 				432657E5294E2FB100515080 /* Weber.hpp in Headers */,
 				43ABA52929242418002AC1D4 /* PSState.hpp in Headers */,
 				43DD54282A38FA4E0036EF07 /* CostAD.hpp in Headers */,
+				43A24E452A3A0BD50041B004 /* Rational.hpp in Headers */,
 				43DD954B2945E223006DC553 /* PSCost.hpp in Headers */,
 				4346CB392A1FF62100756DE3 /* PSGlobal.hpp in Headers */,
 				43ABA53029242418002AC1D4 /* PSConfig0.hpp in Headers */,
@@ -974,6 +981,7 @@
 				4342FD1229267895004E914F /* MidiNum.cpp in Sources */,
 				4346CB362A1FF62100756DE3 /* PSGlobal.cpp in Sources */,
 				430960532A0CD2C60097487A /* AlgoName.cpp in Sources */,
+				43A24E442A3A0BD50041B004 /* Rational.cpp in Sources */,
 				43D7BABF2A27E31600570C47 /* PS14.cpp in Sources */,
 				43ABA511292423E8002AC1D4 /* Enharmonic.cpp in Sources */,
 				43ABA50C292423E8002AC1D4 /* Fifths.cpp in Sources */,

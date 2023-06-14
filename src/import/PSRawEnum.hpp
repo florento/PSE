@@ -107,7 +107,20 @@ public:
     /// @param bar bar number of the new input note.
     /// @param simult whether the new input note is simultaneous with the
     /// next note.
-    void add(int note, int bar, bool simult=false);
+    /// @param dur note duration, in fraction of bars.
+    void add(int note, int bar, bool simult=false,
+             const Rational& dur = Rational(0));
+    
+    /// add a new input note to the list of enumerated notes.
+    /// @param note MIDI key of the new input note.
+    /// @param bar bar number of the new input note.
+    /// @param simult whether the new input note is simultaneous with the
+    /// next note.
+    /// @param dur_num numerator of note duration, in fraction of bars.
+    /// @param dur_den denominator of note duration, in fraction of bars.
+    /// @warning for Phython binding
+    void addlong(int note, int bar, bool simult=false,
+                 long dur_num=0, long dur_den=1);
     
     // the given note index is within the interval of notes accessible
     // to this enumerator.
@@ -168,6 +181,11 @@ public:
     /// @param i index of note in the list of input notes.
     int octave(size_t i) const override;
 
+    /// duration, in number of bars, of the note of given index,
+    /// if it has been set, otherwise 0.
+    /// @param i index of note in the list of input notes.
+    virtual Rational duration(size_t i) const override;
+    
     /// estimated print flag for the note of given index in the best path.
     /// This flags says wether the accidental of the note must be printed or not.
     /// @param i index of note in the list of input notes.
@@ -190,10 +208,16 @@ private: // data (shared by all copies of this enumerator)
     std::shared_ptr<std::vector<int>> _notes;
 
     /// list of bar number to which belongs each input note.
+    /// entered with method add().
     std::shared_ptr<std::vector<int>> _barnum;
     
     /// list of simultaneity with next note, for each input note
+    /// entered with method add().
     std::shared_ptr<std::vector<bool>> _simult;
+    
+    /// list of durations of input notes.
+    /// entered with method add().
+    std::shared_ptr<std::vector<Rational>> _durations;
     
     /// list of the estimated best note name (in 0..6) for each input note.
     /// copy of the values of the PSPaths (best paths) in the columns of table,

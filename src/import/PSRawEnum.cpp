@@ -18,6 +18,7 @@ PSEnum(i0, i1), // empty
 _notes(new std::vector<int>), // empty initial vector
 _barnum(new std::vector<int>),
 _simult(new std::vector<bool>),
+_durations(new std::vector<Rational>),
 _names(new std::vector<enum NoteName>),
 _accids(new std::vector<enum Accid>),
 _octs(new std::vector<int>),
@@ -42,6 +43,7 @@ PSEnum(e), // copy
 _notes(e._notes),  // shallow copy of pointer
 _barnum(e._barnum),
 _simult(e._simult),
+_durations(e._durations),
 _names(e._names),
 _accids(e._accids),
 _octs(e._octs),
@@ -57,6 +59,7 @@ _prints(e._prints)
     assert(e._notes);
     assert(e._barnum);
     assert(e._simult);
+    assert(e._durations);
     assert(e._names);
     assert(e._accids);
     assert(e._octs);
@@ -75,6 +78,7 @@ PSEnum(e, i0),
 _notes(e._notes),  // shallow copy of pointer
 _barnum(e._barnum),
 _simult(e._simult),
+_durations(e._durations),
 _names(e._names),
 _accids(e._accids),
 _octs(e._octs),
@@ -83,6 +87,7 @@ _prints(e._prints)
     assert(e._notes);
     assert(e._barnum);
     assert(e._simult);
+    assert(e._durations);
     assert(e._names);
     assert(e._accids);
     assert(e._octs);
@@ -101,6 +106,7 @@ PSEnum(e, i0, i1),
 _notes(e._notes),  // shallow copy of pointer
 _barnum(e._barnum),
 _simult(e._simult),
+_durations(e._durations),
 _names(e._names),
 _accids(e._accids),
 _octs(e._octs),
@@ -109,6 +115,7 @@ _prints(e._prints)
     assert(e._notes);
     assert(e._barnum);
     assert(e._simult);
+    assert(e._durations);
     assert(e._names);
     assert(e._accids);
     assert(e._octs);
@@ -134,11 +141,13 @@ bool PSRawEnum::sanity_check() const
     if (_notes == nullptr)        return false;
     if (_barnum == nullptr)       return false;
     if (_simult == nullptr)       return false;
+    if (_durations == nullptr)    return false;
     if (_names == nullptr)        return false;
     if (_accids == nullptr)       return false;
     if (_octs == nullptr)         return false;
     if (_barnum->size() != _notes->size()) return false;
     if (_simult->size() != _notes->size()) return false;
+    if (_durations->size() != _notes->size()) return false;
     if (_names->size()  != _notes->size()) return false;
     if (_accids->size() != _notes->size()) return false;
     if (_octs->size()   != _notes->size()) return false;
@@ -157,7 +166,7 @@ size_t PSRawEnum::size() const
 }
 
 
-void PSRawEnum::add(int note, int bar, bool simult)
+void PSRawEnum::add(int note, int bar, bool simult, const Rational& dur)
 {
     assert(sanity_check());
 
@@ -177,6 +186,10 @@ void PSRawEnum::add(int note, int bar, bool simult)
     assert(_simult);
     _simult->push_back(simult);
 
+    // duration
+    assert(_durations);
+    _durations->push_back(dur);
+    
     // pad the output values (note names)
     assert(_names);
     _names->push_back(NoteName::Undef);
@@ -189,6 +202,11 @@ void PSRawEnum::add(int note, int bar, bool simult)
 
     if (! open() && (_notes->size() > _stop))
         _stop = _notes->size();
+}
+
+void PSRawEnum::addlong(int note, int bar, bool simult, long dur_num, long dur_den)
+{
+    add(note, bar, simult, Rational(dur_num, dur_den));
 }
 
 
@@ -213,6 +231,14 @@ bool PSRawEnum::simultaneous(size_t i) const
     assert(_simult);
     assert(i < _simult->size());
     return _simult->at(i);
+}
+
+
+Rational PSRawEnum::duration(size_t i) const
+{
+    assert(_durations);
+    assert(i < _durations->size());
+    return _durations->at(i);
 }
 
 

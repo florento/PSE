@@ -91,8 +91,11 @@ PYBIND11_MODULE(pse, m)
         .def("algo", &pse::PSE::algo, "name of spelling algorithm")
         .def("debug", &pse::PSE::debug, "set debug mode", py::arg("on"))
         .def("size", &pse::PSE::size, "number notes to spell")
-        .def("add", &pse::PSE::add, "add a new note to spell",
+        .def("add", &pse::PSE::add_pybindwod, "add a new note to spell",
              py::arg("midi"), py::arg("bar"), py::arg("simultaneous"))
+        .def("addlong", &pse::PSE::add_pybindwd, "add a new note to spell",
+             py::arg("midi"), py::arg("bar"), py::arg("simultaneous"),
+             py::arg("dur_num"), py::arg("dur_den"))
         .def("nb_tons", &pse::PSE::nbTons,
              "number of tonalities considered for pitch spelling")
         .def("reset_tons", &pse::PSE::resetTons,
@@ -134,8 +137,11 @@ PYBIND11_MODULE(pse, m)
         .def("size", &pse::PS13::size, "number notes to spell")
         .def("set_Kpre", &pse::PS13::setKpre, "set the Kpre parameter of PS13")
         .def("set_Kpost", &pse::PS13::setKpost, "set the Kpost parameter of PS13")
-        .def("add", &pse::PS13::add, "add a new note to spell",
+        .def("add", &pse::PS13::add_pybindwod, "add a new note to spell",
              py::arg("midi"), py::arg("bar"), py::arg("simultaneous"))
+        .def("addlong", &pse::PSE::add_pybindwd, "add a new note to spell",
+             py::arg("midi"), py::arg("bar"), py::arg("simultaneous"),
+             py::arg("dur_num"), py::arg("dur_den"))
         .def("spell", &pse::PS13::spell, "spell notes")
         .def("rewrite_passing", &pse::PS13::rewritePassing, "rewrite passing notes")
         .def("name",  &pse::PS13::name, "estimated name of note",
@@ -153,8 +159,11 @@ PYBIND11_MODULE(pse, m)
         .def("algo", &pse::PS14::algo, "name of spelling algorithm")
         .def("debug", &pse::PS14::debug, "set debug mode", py::arg("on"))
         .def("size", &pse::PS14::size, "number notes to spell")
-        .def("add", &pse::PS14::add, "add a new note to spell",
+        .def("add", &pse::PS14::add_pybindwod, "add a new note to spell",
              py::arg("midi"), py::arg("bar"), py::arg("simultaneous"))
+        .def("addlong", &pse::PSE::add_pybindwd, "add a new note to spell",
+             py::arg("midi"), py::arg("bar"), py::arg("simultaneous"),
+             py::arg("dur_num"), py::arg("dur_den"))
         .def("nb_tons", &pse::PS14::nbTons,
              "number of tonalities considered for pitch spelling")
         .def("reset_tons", &pse::PS14::resetTons,

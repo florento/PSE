@@ -46,7 +46,6 @@ public:
     // and operator< on cost.
     PSO(const PST& tab, double d = 0, bool dflag=false); // const TonIndex& i
 
-
     /// Empty store of candidate global tonalities.
     /// @param id array of possible global tonalities.
     /// @param dflag debug mode (for feeback)

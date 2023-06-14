@@ -56,6 +56,54 @@ void PSChord::init()
 }
 
 
+unsigned int PSChord::midipitch(size_t i) const
+{
+    return _enum.midipitch(i);    
+}
+
+
+long PSChord::measure(size_t i) const
+{
+    return _enum.measure(i);
+}
+
+
+bool PSChord::simultaneous(size_t i) const
+{
+    return _enum.simultaneous(i);
+}
+
+
+enum NoteName PSChord::name(size_t i) const
+{
+    return _enum.name(i);
+}
+
+
+enum Accid PSChord::accidental(size_t i) const
+{
+    return _enum.accidental(i);
+}
+
+
+int PSChord::octave(size_t i) const
+{
+    return _enum.octave(i);
+}
+
+
+Rational PSChord::duration(size_t i) const
+{
+    return _enum.duration(i);
+}
+
+
+bool PSChord::printed(size_t i) const
+{
+    return _enum.printed(i);
+}
+
+
 void PSChord::insert_occurrence(int c, size_t i)
 {
     std::vector<size_t>& vo = _occurences[c];

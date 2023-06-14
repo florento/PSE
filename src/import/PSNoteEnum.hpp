@@ -29,6 +29,7 @@ namespace scoremodel {
 /// Pitch Spelling structure defined from a sequence of notes,
 /// given by a part enumerator (see NoteEnum)
 /// and the index (wrt the enumerator) of first and last note in sequence.
+/// @todo obsolete
 struct PSNoteEnum : public pse::PSEnum
 {
 public:

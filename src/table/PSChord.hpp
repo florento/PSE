@@ -46,7 +46,7 @@ public:
     
     /// clone this enumerator into a enumerator of the same type.
     /// @warning should not be called for this enumerator.
-    virtual std::unique_ptr<PSEnum> clone() const;
+    virtual std::unique_ptr<PSEnum> clone() const override;
 
     /// clone this enumerator and update the bounds with new values.
     /// @param i0 new index of the first note accessible by this enumerator.
@@ -54,14 +54,14 @@ public:
     /// enumerator. it must be larger than or equal to i0.
     /// The enumerated sequence of notes is empty if i0 == i1.
     /// @warning should not be called for this enumerator.
-    virtual std::unique_ptr<PSEnum> clone(size_t i0, size_t i1) const;
+    virtual std::unique_ptr<PSEnum> clone(size_t i0, size_t i1) const override;
 
     /// clone this enumerator and update the bounds with new values.
     /// @param i0 new index of the first note accessible by this enumerator.
     /// The enumeration starts at i0 and stops when there are no more notes
     /// to read in e.
     /// @warning should not be called for this enumerator.
-    virtual std::unique_ptr<PSEnum> clone(size_t i0) const;
+    virtual std::unique_ptr<PSEnum> clone(size_t i0) const override;
     
     /// number of notes in this chord.
     /// @see PSEnum::length()
@@ -85,41 +85,46 @@ public:
     /// midi key number in 0..128 of the note of the given index.
     /// @param i index of a note, inside the interval [first(), last() [
     /// of this enumerator.
-    unsigned int midipitch(size_t i) const { return _enum.midipitch(i); }
+    unsigned int midipitch(size_t i) const override;
 
     /// number of measure the note of given index belongs to.
     /// midi key number in 0..128 of the note of the given index.
     /// @param i index of a noteinside the interval [first(), last() [
     /// of this enumerator.
-    long measure(size_t i) const { return _enum.measure(i); }
+    long measure(size_t i) const override;
 
     /// whether the note of given index is simultaneous with the next note.
     /// @param i index of a note inside the interval [first(), last() [
     /// of this enumerator.
     /// @warning always true for the notes in this enumerator,
     /// except the last one.
-    bool simultaneous(size_t i) const { return _enum.simultaneous(i); }
+    bool simultaneous(size_t i) const override;
     
     /// name for the note of given index, if it has been set,
     /// otherwise Undef.
     /// @param i index of note in the list of input notes.
-    enum NoteName name(size_t i) const { return _enum.name(i); }
+    enum NoteName name(size_t i) const override;
     
     /// accidental for the note of given index, if it has been set,
     /// otherwise Undef.
     /// @param i index of note in the list of input notes.
-    enum Accid accidental(size_t i) const { return _enum.accidental(i); }
+    enum Accid accidental(size_t i) const override;
     
     /// octave number for the note of given index, if it has been set,
     /// otherwise 10.
     /// @param i index of note in the list of input notes.
-    int octave(size_t i) const { return _enum.octave(i); }
+    int octave(size_t i) const override;
 
+    /// duration, in number of bars, of the note of given index,
+    /// if it has been set, otherwise 0.
+    /// @param i index of note in the list of input notes.
+    Rational duration(size_t i) const override;
+    
     /// print flag for the note of given index, if it has been set,
     /// otherwise true.
     /// This flags says wether the accidental of the note must be printed or not.
     /// @param i index of note in the list of input notes.
-    bool printed(size_t i) const { return _enum.printed(i); }
+    bool printed(size_t i) const;
     
     /// rename the note of given index.
     /// @param i note index inside the interval [first(), last() [
