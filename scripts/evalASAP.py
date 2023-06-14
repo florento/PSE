@@ -245,7 +245,7 @@ lBach = [#(846, 'Prelude', '../../../Datasets/ASAP/Bach/Prelude/bwv_846/xml_scor
          (856, 'Prelude', '../../../Datasets/ASAP/Bach/Prelude/bwv_856/xml_score.musicxml'),
          #(856, 'Fugue', '../../../Datasets/ASAP/Bach/Fugue/bwv_856/xml_score.musicxml'),
          #(857, 'Prelude', '../../../Datasets/ASAP/Bach/Prelude/bwv_857/xml_score.musicxml'),
-         #(857, 'Fugue', '../../../Datasets/ASAP/Bach/Fugue/bwv_857/xml_score.musicxml'),
+         (857, 'Fugue', '../../../Datasets/ASAP/Bach/Fugue/bwv_857/xml_score.musicxml'),
          #(858, 'Prelude', '../../../Datasets/ASAP/Bach/Prelude/bwv_858/xml_score.musicxml'),
          #(858, 'Fugue', '../../../Datasets/ASAP/Bach/Fugue/bwv_858/xml_score.musicxml'),
          #(860, 'Prelude', '../../../Datasets/ASAP/Bach/Prelude/bwv_860/xml_score.musicxml'),
@@ -298,7 +298,7 @@ lBach = [#(846, 'Prelude', '../../../Datasets/ASAP/Bach/Prelude/bwv_846/xml_scor
 
 # the following cause a complexity explosion. TBC.
 # (866, 'Prelude') lonnnng
-Bach_skip = [(856, 'Prelude'), (873, 'Prelude'), ]
+Bach_skip = [(856, 'Prelude'), (873, 'Prelude'), (857, 'Fugue')]
 
 def eval1_Bach(nb, mvt, file, stat, 
                algo=ps.pse.Algo_PSE, tons=25, kpre=33, kpost=23,
@@ -336,6 +336,28 @@ def eval_Bach(stat=ps.Stats(),
     stat.write_datasum(output_dir(composer='Bach')/'DWK_sum.csv')
     stat.show()
 
+
+
+
+
+
+def quick_eval(bwv=854, stat=ps.Stats(), 
+              algo=ps.pse.Algo_PSE, nbtons=25, kpre=33, kpost=23,
+              dflag=True, mflag=True):
+    lB=DWK_list()
+    lB1=[]
+    for e in lB:
+        lB1.append(e.nb)
+    i=lB1.index(bwv)
+    p=lB[i]
+    eval1_Bach(nb=p.nb, mvt=p.mvt, file=p.file, stat=stat,algo=algo, tons=nbtons, kpre=33, kpost=23, dflag=dflag, mflag=mflag)
+    if i<len(lB)-1:
+        print()
+        f=lB[i+1]
+        eval1_Bach(nb=f.nb, mvt=f.mvt, file=f.file, stat=stat,algo=algo, tons=nbtons, kpre=33, kpost=23, dflag=dflag, mflag=mflag)
+    
+    
+    
 
 #########################
 ##                     ##
