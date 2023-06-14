@@ -28,10 +28,6 @@ namespace py = pybind11;
 
 
 
-
-
-
-
 #endif /* pypse_hpp */
 
 /// @}

@@ -1,14 +1,14 @@
 //
-//  CostA.hpp
+//  CostAD.hpp
 //  pse
 //
-//  Created by Florent on 16/05/2023.
+//  Created by Florent Jacquemard on 13/06/2023.
 //
 /// @addtogroup pitch
 /// @{
 
-#ifndef CostA_hpp
-#define CostA_hpp
+#ifndef CostAD_hpp
+#define CostAD_hpp
 
 #include <iostream>
 #include <assert.h>
@@ -25,42 +25,41 @@ class PSC1;
 
 class PSC2;
 
-class CostA : public PolymorphicComparable<Cost, CostA>
+class CostAD : public PolymorphicComparable<Cost, CostAD>
 {
-    
 public:
     
     /// null cost.
-    CostA();
+    CostAD();
     
     /// copy constructor.
-    CostA(const CostA& rhs);
+    CostAD(const CostAD& rhs);
     
     /// distructor
-    virtual ~CostA();
+    virtual ~CostAD();
     
     // assignement operator.
     // @param rhs a cost to copy.
-    // CostA& operator=(const CostA& rhs) override;
+    // CostAD& operator=(const CostAD& rhs) override;
     
     /// cost equality.
     /// @param rhs a cost to compare to.
-    bool operator==(const CostA& rhs) const;
+    bool operator==(const CostAD& rhs) const;
     
     /// a distance value, in percent of the bigger cost.
     /// used for approximate equality.
-    double dist(const CostA& rhs) const;
+    double dist(const CostAD& rhs) const;
     
     /// cost inequality.
     /// @param rhs a cost to compare to.
-    bool operator<(const CostA& rhs) const;
+    bool operator<(const CostAD& rhs) const;
     
     /// cumulated sum operator. update this cost by adding rhs.
     /// @param rhs a cost to add.
-    virtual CostA& operator+=(const CostA& rhs);
+    virtual CostAD& operator+=(const CostAD& rhs);
     
     // null cost value.
-    // CostA zero() const override { return CostA(); }
+    // CostAD zero() const override { return CostAD(); }
     
     /// create a new null cost value.
     virtual std::shared_ptr<Cost> shared_zero() const override;
@@ -120,15 +119,24 @@ protected: // data
     /// cumulated number of printed accidentals.
     size_t _accid; // unsigned int
     
+    /// cumulated distance to a conjectured local tonality.
+    size_t _dist;
+    
+    /// degree of approximation.
+    /// percent under which 2 costs componnents are considered equal.
+    static double approx_degree;
+    
 };
 
-// CostA operator+(const CostA& c1, const CostA& c2);
 
-std::ostream& operator<<(std::ostream& o, const CostA& c);
+// CostAD operator+(const CostAD& c1, const CostAD& c2);
+
+std::ostream& operator<<(std::ostream& o, const CostAD& c);
 
 
 } // namespace pse
 
-#endif /* CostA_hpp */
+#endif /* CostAD_hpp */
 
 /// @}
+

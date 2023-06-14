@@ -1,34 +1,37 @@
 //
-//  CostA.cpp
+//  CostAD.cpp
 //  pse
 //
-//  Created by Florent on 16/05/2023.
+//  Created by Florent Jacquemard on 13/06/2023.
 //
 
-#include "CostA.hpp"
+#include "CostAD.hpp"
+
 #include "PSConfig1.hpp"
 #include "PSConfig2.hpp"
 
 namespace pse {
 
 
-CostA::CostA():
-_accid(0)
-{}
+CostAD::CostAD():
+_accid(0),
+_dist(0)
+{ }
 
 
-CostA::CostA(const CostA& rhs):
-_accid(rhs._accid)
-{}
+CostAD::CostAD(const CostAD& rhs):
+_accid(rhs._accid),
+_dist(rhs._dist)
+{ }
 
 
-CostA::~CostA()
+CostAD::~CostAD()
 {
-    TRACE("delete Cost_accid");
+    TRACE("delete Cost_AD");
 }
 
 
-//CostA& CostA::operator=(const CostA& rhs)
+//CostAD& CostAD::operator=(const CostAD& rhs)
 //{
 //    if (this != &rhs)
 //    {
@@ -38,54 +41,61 @@ CostA::~CostA()
 //}
 
 
-bool CostA::operator==(const CostA& rhs) const
+bool CostAD::operator==(const CostAD& rhs) const
 {
-    return (_accid == rhs._accid);
+    return (_accid == rhs._accid && _dist == rhs._dist);
 }
 
 
-double CostA::dist(const CostA& rhs) const
+double CostAD::dist(const CostAD& rhs) const
 {
-    return distCost((double) _accid, (double) rhs._accid);
+    if (_accid == rhs._accid)
+        return distCost((double) _dist, (double) rhs._dist);
+    else
+        return distCost((double) _accid, (double) rhs._accid);
 }
 
 
-bool CostA::operator<(const CostA& rhs) const
+bool CostAD::operator<(const CostAD& rhs) const
 {
-    return (_accid < rhs._accid);
+    if (_accid == rhs._accid)
+        return (_dist < rhs._dist);
+    else
+        return (_accid < rhs._accid);
 }
 
 
-CostA& CostA::operator+=(const CostA& rhs)
+CostAD& CostAD::operator+=(const CostAD& rhs)
 {
     _accid += rhs._accid;
+    _dist += rhs._dist;
     return *this;
 }
 
 
-//CostA operator+(const CostA& c1, const CostA& c2)
+//CostAD operator+(const CostAD& c1, const CostAD& c2)
 //{
 //    return c1.operator+(c2);
 //}
 
 
-std::shared_ptr<Cost> CostA::shared_zero() const
+std::shared_ptr<Cost> CostAD::shared_zero() const
 {
-    return std::shared_ptr<Cost>(new CostA());
+    return std::shared_ptr<Cost>(new CostAD());
 }
 
 
-std::shared_ptr<Cost> CostA::shared_clone() const
+std::shared_ptr<Cost> CostAD::shared_clone() const
 {
-    return std::shared_ptr<Cost>(new CostA(*this));
+    return std::shared_ptr<Cost>(new CostAD(*this));
 }
 
-std::unique_ptr<Cost> CostA::unique_clone() const
+std::unique_ptr<Cost> CostAD::unique_clone() const
 {
-    return std::unique_ptr<Cost>(new CostA(*this));
+    return std::unique_ptr<Cost>(new CostAD(*this));
 }
 
-void CostA::update(const PSC1& c, const PSEnum& e, const Ton& gton)
+void CostAD::update(const PSC1& c, const PSEnum& e, const Ton& gton)
 {
     // count the cost
     // bool cc = false;
@@ -123,12 +133,14 @@ void CostA::update(const PSC1& c, const PSEnum& e, const Ton& gton)
 }
 
 
-void CostA::update(const PSC1& c, const PSEnum& e,
+void CostAD::update(const PSC1& c, const PSEnum& e,
                     const Ton& gton, const Ton& lton)
-{ }
+{
+    _dist += c.state().dist(lton);
+}
 
 
-void CostA::update(const PSC2& c, const PSEnum& e,
+void CostAD::update(const PSC2& c, const PSEnum& e,
                     const enum NoteName& name, const enum Accid& accid,
                     bool print, size_t nbocc,
                     const Ton& gton)
@@ -165,7 +177,7 @@ void CostA::update(const PSC2& c, const PSEnum& e,
 }
 
 
-void CostA::update(const PSC2& c, const PSEnum& e,
+void CostAD::update(const PSC2& c, const PSEnum& e,
                     const enum NoteName& name, const enum Accid& accid,
                     bool print, size_t nbocc,
                     const Ton& gton, const Ton& lton)
@@ -174,16 +186,20 @@ void CostA::update(const PSC2& c, const PSEnum& e,
     //bool res = updateCost(name, accid, print, nbocc, ton);;
     
     // complete the update
+    
+    // distance to conjectured local ton.
+    _dist += c.state().dist(lton);
 }
 
 
-void CostA::print(std::ostream& o) const
+void CostAD::print(std::ostream& o) const
 {
     o << "accid=" << _accid;
+    o << " dist=" << _dist;
 }
 
 
-std::ostream& operator<<(std::ostream& o, const CostA& c)
+std::ostream& operator<<(std::ostream& o, const CostAD& c)
 {
     c.print(o);
     return o;

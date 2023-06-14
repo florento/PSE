@@ -137,7 +137,7 @@ const Ton& Speller1Pass::global() const
 }
 
 
-const Ton& Speller1Pass::localCandBar(size_t i, size_t j) const
+size_t Speller1Pass::ilocal(size_t i, size_t j) const
 {
     if (_locals0 == nullptr)
     {
@@ -147,31 +147,41 @@ const Ton& Speller1Pass::localCandBar(size_t i, size_t j) const
     {
         ERROR("Speller1Pass local: no bar {}", j);
     }
+    else if (i >= _locals0->rowNb())
+    {
+        ERROR("Speller1Pass local: no ton of index {}", i);
+    }
     else
     {
-        assert(i < _locals0->rowNb());
-        size_t it = _locals0->ilocal(i, j);
-        assert(it < _index.size());
-        return _index.ton(it);
+        return _locals0->ilocal(i, j);
     }
 
     // in case or error return undefined tonality
-    std::shared_ptr<Ton> uton(new Ton());
-    return *uton;
+    return TonIndex::UNDEF;
+}
+
+const Ton& Speller1Pass::local(size_t i, size_t j) const
+{
+    size_t it = ilocal(i, j);
+    if (it == TonIndex::UNDEF)
+    {
+        // in case or error return undefined tonality
+        std::shared_ptr<Ton> uton(new Ton());
+        return *uton;
+    }
+    else
+    {
+        assert(it < _index.size());
+        return _index.ton(it);
+    }
 }
 
 
-const Ton& Speller1Pass::local(size_t j) const
+const Ton& Speller1Pass::localNote(size_t i, size_t j) const
 {
-    return localCandBar(iglobal(), j);
-}
-
-
-const Ton& Speller1Pass::localNote(size_t i) const
-{
-    assert(_enum.inside(i));
-    size_t j = _enum.measure(i);
-    return local(j);
+    assert(_enum.inside(j));
+    size_t bar = _enum.measure(j);
+    return local(i, bar);
 }
 
 

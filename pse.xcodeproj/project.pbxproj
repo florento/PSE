@@ -172,6 +172,10 @@
 		43D7BAC02A27E31600570C47 /* PS14.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43D7BABD2A27E31600570C47 /* PS14.cpp */; };
 		43D7BAC12A27E31600570C47 /* PS14.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43D7BABD2A27E31600570C47 /* PS14.cpp */; };
 		43D7BAC22A27E31600570C47 /* PS14.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 43D7BABE2A27E31600570C47 /* PS14.hpp */; };
+		43DD54252A38FA4E0036EF07 /* CostAD.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43DD54232A38FA4E0036EF07 /* CostAD.cpp */; };
+		43DD54262A38FA4E0036EF07 /* CostAD.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43DD54232A38FA4E0036EF07 /* CostAD.cpp */; };
+		43DD54272A38FA4E0036EF07 /* CostAD.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43DD54232A38FA4E0036EF07 /* CostAD.cpp */; };
+		43DD54282A38FA4E0036EF07 /* CostAD.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 43DD54242A38FA4E0036EF07 /* CostAD.hpp */; };
 		43DD95492945E223006DC553 /* PSCost.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43DD95472945E223006DC553 /* PSCost.cpp */; };
 		43DD954A2945E223006DC553 /* PSCost.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43DD95472945E223006DC553 /* PSCost.cpp */; };
 		43DD954B2945E223006DC553 /* PSCost.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 43DD95482945E223006DC553 /* PSCost.hpp */; };
@@ -305,7 +309,7 @@
 		43791C8D29D8392200DE8796 /* TestAccidental.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TestAccidental.cpp; sourceTree = "<group>"; };
 		438EFD832A0E41DD00FF3733 /* Costt.tpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; path = Costt.tpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		438EFD842A0E41DD00FF3733 /* Costt.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Costt.hpp; sourceTree = "<group>"; };
-		43947D0029D972AF008EB20A /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = src/PS14/README.md; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.markdown; };
+		43947D0029D972AF008EB20A /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = src/spellers/PS14/README.md; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.markdown; };
 		4397A5DC29A6CDB300C2CC9A /* PSOrder.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = PSOrder.hpp; sourceTree = "<group>"; };
 		43A2543E29280D8900D559D2 /* trace.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = trace.cpp; path = src/general/trace.cpp; sourceTree = "<group>"; };
 		43A2543F29280D8900D559D2 /* trace.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = trace.hpp; path = src/general/trace.hpp; sourceTree = "<group>"; };
@@ -354,9 +358,11 @@
 		43D7BAB22A27CFA500570C47 /* Speller1pass.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Speller1pass.hpp; sourceTree = "<group>"; };
 		43D7BAB72A27CFBD00570C47 /* Speller2pass.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Speller2pass.cpp; sourceTree = "<group>"; };
 		43D7BAB82A27CFBD00570C47 /* Speller2pass.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Speller2pass.hpp; sourceTree = "<group>"; };
-		43D7BABD2A27E31600570C47 /* PS14.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = PS14.cpp; path = src/PS14/PS14.cpp; sourceTree = "<group>"; };
-		43D7BABE2A27E31600570C47 /* PS14.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = PS14.hpp; path = src/PS14/PS14.hpp; sourceTree = "<group>"; };
+		43D7BABD2A27E31600570C47 /* PS14.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = PS14.cpp; path = src/spellers/PS14/PS14.cpp; sourceTree = "<group>"; };
+		43D7BABE2A27E31600570C47 /* PS14.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = PS14.hpp; path = src/spellers/PS14/PS14.hpp; sourceTree = "<group>"; };
 		43D8A9EF29AFA16B00B260DA /* PSOrder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PSOrder.cpp; sourceTree = "<group>"; };
+		43DD54232A38FA4E0036EF07 /* CostAD.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CostAD.cpp; sourceTree = "<group>"; };
+		43DD54242A38FA4E0036EF07 /* CostAD.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CostAD.hpp; sourceTree = "<group>"; };
 		43DD95472945E223006DC553 /* PSCost.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PSCost.cpp; sourceTree = "<group>"; };
 		43DD95482945E223006DC553 /* PSCost.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = PSCost.hpp; sourceTree = "<group>"; };
 		43F566F229DEDFC70043546B /* pybind11_tests.cpython-311-darwin.so */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.bundle"; name = "pybind11_tests.cpython-311-darwin.so"; path = "extern/pybind11/build/tests/pybind11_tests.cpython-311-darwin.so"; sourceTree = "<group>"; };
@@ -683,6 +689,8 @@
 				438EFD832A0E41DD00FF3733 /* Costt.tpp */,
 				43D31A0B2A13F28800234527 /* CostA.hpp */,
 				43D31A0A2A13F28800234527 /* CostA.cpp */,
+				43DD54242A38FA4E0036EF07 /* CostAD.hpp */,
+				43DD54232A38FA4E0036EF07 /* CostAD.cpp */,
 			);
 			name = cost;
 			path = src/cost;
@@ -766,6 +774,7 @@
 				43ABA510292423E8002AC1D4 /* Ton.hpp in Headers */,
 				432657E5294E2FB100515080 /* Weber.hpp in Headers */,
 				43ABA52929242418002AC1D4 /* PSState.hpp in Headers */,
+				43DD54282A38FA4E0036EF07 /* CostAD.hpp in Headers */,
 				43DD954B2945E223006DC553 /* PSCost.hpp in Headers */,
 				4346CB392A1FF62100756DE3 /* PSGlobal.hpp in Headers */,
 				43ABA53029242418002AC1D4 /* PSConfig0.hpp in Headers */,
@@ -914,6 +923,7 @@
 				4353AE3829DDAD3E00FAF8A3 /* TestPSEnum.cpp in Sources */,
 				435081F129D6D76100465943 /* Pitch.cpp in Sources */,
 				4308A70A2A28E04F007F7A55 /* TestTon.cpp in Sources */,
+				43DD54272A38FA4E0036EF07 /* CostAD.cpp in Sources */,
 				435081F029D6D75D00465943 /* ModeName.cpp in Sources */,
 				438A581E29E049430073A32C /* PSState.cpp in Sources */,
 				438A581729E0492A0073A32C /* PSConfig1.cpp in Sources */,
@@ -957,6 +967,7 @@
 				438EFD7C2A0D451800FF3733 /* PSTransit.cpp in Sources */,
 				43A2544029280D8900D559D2 /* trace.cpp in Sources */,
 				43ABA4FE292423C5002AC1D4 /* NoteName.cpp in Sources */,
+				43DD54252A38FA4E0036EF07 /* CostAD.cpp in Sources */,
 				43ABA50F292423E8002AC1D4 /* Accidental.cpp in Sources */,
 				43D31A0C2A13F28800234527 /* CostA.cpp in Sources */,
 				43F9BE6429CC423E00B0A7F8 /* ModeName.cpp in Sources */,
@@ -1009,6 +1020,7 @@
 				438EFD7D2A0D451900FF3733 /* PSTransit.cpp in Sources */,
 				434B1DFD298ED394001CE41C /* PSConfig2.cpp in Sources */,
 				43FBEAC62930CEDD008FC486 /* trace.cpp in Sources */,
+				43DD54262A38FA4E0036EF07 /* CostAD.cpp in Sources */,
 				43FBEAC72930CEDD008FC486 /* NoteName.cpp in Sources */,
 				43D31A0D2A13F28800234527 /* CostA.cpp in Sources */,
 				43F9BE6529CC423E00B0A7F8 /* ModeName.cpp in Sources */,

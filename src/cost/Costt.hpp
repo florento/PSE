@@ -57,6 +57,7 @@ public:
 /// - less operator
 /// - cumul sum operator
 /// - functions of update for transition to PSConfig's
+/// @todo TBR (not used)
 template<class T>     // class Compare
 class Costt : public Cost
 {

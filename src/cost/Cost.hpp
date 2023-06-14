@@ -116,6 +116,14 @@ public:
 };
 
 
+/// convenience function.
+/// @param lhs first value. must be positive or null.
+/// @param rhs second value. must be positive or null.
+/// @return the difference between lhs amd rhs, in percent of the biggest one.
+double distCost(const double lhs, const double rhs);
+
+
+
 std::ostream& operator<<(std::ostream& o, const Cost& c);
 
 
