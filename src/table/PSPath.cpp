@@ -113,8 +113,12 @@ void PSP::record_path(const PSC0& c)
         {
             const PSC1* com = dynamic_cast<const PSC1*>(co);
             assert(com);
-            _names.insert(_names.begin(), com->name());  // push_front (copy)
-            _accids.insert(_accids.begin(), com->accidental());
+            //unsigned int m =
+            const enum NoteName& name = com->name();
+            const enum Accid& accid = com->accidental();
+            assert(accid == MidiNum::accid(com->midi()%12, name));
+            _names.insert(_names.begin(), name);  // push_front (copy)
+            _accids.insert(_accids.begin(), accid);
             _prints.insert(_prints.begin(), com->printed());
         }
         else
@@ -125,7 +129,11 @@ void PSP::record_path(const PSC0& c)
             // assert(com->size() > 1);
             std::vector<enum Accid> accids;
             for (size_t i = 0; i < com->size(); ++i)
+            {
+                assert(com->accidental(i) ==
+                       MidiNum::accid(com->midi(i)%12, com->name(i)));
                 accids.push_back(com->accidental(i));
+            }
 
             _names.insert(_names.begin(), com->cbeginName(), com->cendName());
             _accids.insert(_accids.begin(), accids.cbegin(), accids.cend());

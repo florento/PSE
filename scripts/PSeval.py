@@ -279,8 +279,8 @@ def m21_mode(m):
         return 'lydian'
     elif (m == pse.Mode.Mixolydian):
         return 'mixolydian'
-    elif (m == pse.Mode.Eolian):
-        return 'eolian'
+    elif (m == pse.Mode.Aeolian):
+        return 'aeolian'
     elif (m == pse.Mode.Locrian):
         return 'locrian'
     else: 

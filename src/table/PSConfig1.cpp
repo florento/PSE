@@ -26,10 +26,16 @@ _name(name),
 _print(false)
 {
     assert(c);
+    _midi = e.midipitch(c->id());
     _print = _state.update(name, accid);
     _id = c->id()+1; // next note in enum
     assert(_id <= e.stop());
     assert(defined(accid));
+    
+    // the given accidental corresponds to the chroma of input note and given name.
+    assert(accid == MidiNum::accid(_midi%12, name));
+
+    // update cost
     assert(_cost);
     _cost->update(*this, e, ton);
 }
@@ -56,7 +62,10 @@ PSC1::PSC1(std::shared_ptr<const PSC0> c, const PSEnum& e,
            const Ton& ton, const Ton& lton):
 PSC1(c, e, name, accid, ton)
 {
-    // complete the update
+    // the given accidental corresponds to the chroma of input note and given name.
+    assert(accid == MidiNum::accid(e.midipitch(c->id())%12, name));
+
+    // complete the update of cost
     assert(_cost);
     _cost->update(*this, e, ton, lton);
 }
@@ -116,16 +125,10 @@ bool PSC1::operator!=(const PSC1& rhs) const
 }
 
 
-//size_t PSC::id() const
-//{
-//    return _id;
-//}
-
-
-//unsigned int PSC1::midi() const
-//{
-//    return _midi;
-//}
+unsigned int PSC1::midi() const
+{
+    return _midi;
+}
 
 
 enum NoteName PSC1::name() const

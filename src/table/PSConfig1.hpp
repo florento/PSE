@@ -100,11 +100,10 @@ public:
     /// configs have different list of accidentals
     bool operator!=(const PSC1& rhs) const;
     
-    // midi pitch of the note read for the transition
-    // from this config's predecessor.
-    // @todo TBR
-    // unsigned int midi() const;
-
+    /// midi pitch of the note read for the transition
+    /// from this config's predecessor to this config.
+    unsigned int midi() const;
+    
     /// name of the note read for the transition from this config's predecessor.
     /// in 0..6 (0 is 'C', 6 is 'B').
     /// @see NoteName.hpp
@@ -117,7 +116,8 @@ public:
     /// @warning not formatted for a Pitch object.
     enum Accid accidental() const;
     
-    /// whether the accidental of the note (read for the transition from predecessor)
+    /// whether the accidental of the note
+    /// (read for the transition from predecessor)
     /// must be printed or not.
     bool printed() const;
     
@@ -132,9 +132,8 @@ public:
 
 private:
         
-    // MIDI pitch of the note read for the transition to this config.
-    // @todo TBR
-    // unsigned int _midi;
+    /// MIDI pitch of the note read for the transition to this config.
+    unsigned int _midi;
 
     /// a chosen pitch name, in 0..6 (0 is 'C', 6 is 'B'),
     /// for the note read for the transition to this config.

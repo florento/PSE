@@ -335,12 +335,20 @@ def eval_Bach(stat=ps.Stats(),
     df.to_csv(output_dir(composer='Bach')/'DWK.csv', header=True, index=False)
     stat.write_datasum(output_dir(composer='Bach')/'DWK_sum.csv')
     stat.show()
+    
+    
+def DWV_num(bwv, mvt):
+    """index in list DWK_list() of the Opus BWV, and mvt 'prelude' or 'fugue'"""
+    lB=DWK_list()
+    i = 0
+    for e in lB:
+        if e.nb == bwv and e.mvt == mvt:
+            return i
+        else:
+            i = i+1
+    return None # not found
 
-
-
-
-##utils
-def quick_eval(bwv=854, stat=ps.Stats(), 
+def quick_eval_Bach(bwv=854, stat=ps.Stats(), 
               algo=ps.pse.Algo_PSE, nbtons=25, kpre=33, kpost=23,
               dflag=True, mflag=True):
     lB=DWK_list()
@@ -349,12 +357,21 @@ def quick_eval(bwv=854, stat=ps.Stats(),
         lB1.append(e.nb)
     i=lB1.index(bwv)
     p=lB[i]
-    eval1_Bach(nb=p.nb, mvt=p.mvt, file=p.file, stat=stat,algo=algo, tons=nbtons, kpre=33, kpost=23, dflag=dflag, mflag=mflag)
+    eval1_Bach(nb=p.nb, mvt=p.mvt, file=p.file, stat=stat,algo=algo, 
+               tons=nbtons, kpre=33, kpost=23, dflag=dflag, mflag=mflag)
     if i<len(lB)-1:
         print()
         f=lB[i+1]
-        eval1_Bach(nb=f.nb, mvt=f.mvt, file=f.file, stat=stat,algo=algo, tons=nbtons, kpre=33, kpost=23, dflag=dflag, mflag=mflag)
+        eval1_Bach(nb=f.nb, mvt=f.mvt, file=f.file, stat=stat,algo=algo, 
+                   tons=nbtons, kpre=33, kpost=23, dflag=dflag, mflag=mflag)
     
+
+
+######################################
+##                                  ##
+##                                  ##
+######################################
+
     
 def debug(composer="Bach",i=0):
     

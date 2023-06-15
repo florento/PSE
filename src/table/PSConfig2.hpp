@@ -161,7 +161,7 @@ private: // data
     // std::vector<unsigned int> _midi;
 
     /// representation of the sequence of simultaneous notes
-    /// read to reach this config.
+    /// read to reach this config from previous config.
     std::shared_ptr<const PSChord> _chord;
     //const PSChord* _chord;
     //const PSChord& _chord;
@@ -173,10 +173,10 @@ private: // data
     /// for the notes read for the transition to this config.
     std::vector<enum NoteName> _names;
     
-    // a chosen number of accidents, in -2..2.
+    /// chosen number of accidents, in -2..2.
     // @todo TBR: it is _state[_name] by construction
-    // int _accid;
-    
+    std::vector<enum Accid> _accids;
+   
     /// whether the accident must be printed
     /// for the note read for the transition to this config.
     std::vector<bool> _prints;
@@ -202,7 +202,8 @@ private:
     
     /// all occurrences of the same note receive same name and accid.
     /// @return the number of names assigned
-    size_t setNames(const enum NoteName& name, bool print);
+    size_t setNames(const enum NoteName& name, const enum Accid& accid,
+                    bool print);
     
     // update the spelling cost for one pitch class in the current chord.
     // @param name chosen name for the received pitch, in 0..6 (0 is 'C', 6 is 'B').

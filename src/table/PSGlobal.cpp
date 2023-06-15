@@ -45,8 +45,6 @@ void PSO::init(const PST& tab, double d)
     // estimate the best tonality wrt costs (nb accidentals)
     for (size_t i = 1; i < _index.size(); ++i)
     {
-        assert(! _globals.empty());
-        assert(_globals[0] < _index.size());
         // all elements of cands have same cost
         const Cost& bestCost = tab.rowCost(ibest);
         const Cost& rc = tab.rowCost(i);
@@ -83,6 +81,7 @@ void PSO::init(const PST& tab, double d)
     
     // at least ibest
     assert(! _globals.empty());
+    assert(_globals[0] < _index.size());
 
     if (_debug)
         INFO("PST: {} candidates global: ", _globals.size());

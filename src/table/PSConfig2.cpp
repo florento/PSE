@@ -13,12 +13,14 @@
 namespace pse {
 
 
+// first step for processing chord
 //PSC2::PSC2(const PSC0& c, const PSChord& e):
 PSC2::PSC2(std::shared_ptr<const PSC0> c, PSEnum& e, size_t i0):
 PSC(c),
 _chord(std::make_shared<const PSChord>(e, i0)),
 _current(firstChroma()),             // jump to the first non-empty pitch class
 _names(_chord->size(), NoteName::Undef), // fix size
+_accids(_chord->size(), Accid::Undef),
 _prints(_chord->size(), false)
 {
     assert(e.size() > 1);
@@ -36,7 +38,11 @@ PSC2(c) // copy of current
     
     // process the current pitch class (chroma)
     bool print = _state.update(name, accid);
-    size_t nbocc = setNames(name, print);
+    size_t nbocc = setNames(name, accid, print);
+    // the given accidental corresponds to the chroma of input note and given name.
+    assert(accid == MidiNum::accid(c.current(), name));
+
+    // update cost
     assert(_cost);
     _cost->update(*this, e, name, accid, print, nbocc, ton);
     _current = nextChroma();
@@ -52,7 +58,12 @@ PSC2(c) // copy of current
     
     // process the current pitch class (chroma)
     bool print = _state.update(name, accid);
-    size_t nbocc = setNames(name, print);
+    size_t nbocc = setNames(name, accid, print);
+
+    // the given accidental corresponds to the chroma of input note and given name.
+    assert(accid == MidiNum::accid(c.current(), name));
+
+    // update cost
     assert(_cost);
     _cost->update(*this, e, name, accid, print, nbocc, ton, lton);
     _current = nextChroma();
@@ -65,6 +76,7 @@ PSC(rhs),
 _chord(rhs._chord),     // shared ptr copy
 _current(rhs._current),
 _names(rhs._names),     // vector copy
+_accids(rhs._accids),   // vector copy
 _prints(rhs._prints)    // vector copy
 { }
 
@@ -85,6 +97,7 @@ PSC2& PSC2::operator=(const PSC2& rhs)
         _chord        = rhs._chord;   // shared ptr copy (const chord)
         _current      = rhs._current;
         _names        = rhs._names;
+        _accids       = rhs._accids;
         _prints       = rhs._prints;
     }
     return *this;
@@ -99,7 +112,8 @@ bool PSC2::operator==(const PSC2& rhs) const
             (_chord->first() == rhs._chord->first()) &&
             (_chord->stop()  == rhs._chord->stop()) &&
             (_current == rhs._current) &&
-            (_names == rhs._names) &&
+            (_names  == rhs._names) &&
+            (_accids == rhs._accids) &&
             (_prints == rhs._prints));
 }
 
@@ -152,10 +166,11 @@ std::vector<enum NoteName>::const_iterator PSC2::cendName() const
 
 enum Accid PSC2::accidental(size_t i) const
 {
-    assert(i < _names.size());
-    const enum NoteName& n = name(i);
-    assert(n != NoteName::Undef);
-    return _state.accid(n);
+    assert(i < _accids.size());
+    return _accids[i];
+//    const enum NoteName& n = name(i);
+//    assert(n != NoteName::Undef);
+//    return _state.accid(n);
 }
 
 
@@ -238,11 +253,14 @@ bool PSC2::consistent(const enum NoteName& name, const enum Accid& accid) const
 }
 
 
-size_t PSC2::setNames(const enum NoteName& name, bool print)
+size_t PSC2::setNames(const enum NoteName& name, const enum Accid& accid,
+                      bool print)
 {
     assert(_chord);
     assert(0 <= _current);
     assert(_current < 12);
+    //assert(accid == MidiNum::accid(_current, name));
+    
     // occurrences of notes in current pitch class
     size_t nbocc = _chord->occurences(_current);
 
@@ -255,6 +273,8 @@ size_t PSC2::setNames(const enum NoteName& name, bool print)
         size_t j = jo - _chord->first();
         assert(j < _names.size());
         _names[j]  = name;
+        assert(j < _accids.size());
+        _accids[j]  = accid;
         assert(j < _prints.size());
         _prints[j] = print;
     }
