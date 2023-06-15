@@ -339,8 +339,7 @@ def eval_Bach(stat=ps.Stats(),
 
 
 
-
-
+##utils
 def quick_eval(bwv=854, stat=ps.Stats(), 
               algo=ps.pse.Algo_PSE, nbtons=25, kpre=33, kpost=23,
               dflag=True, mflag=True):
@@ -357,7 +356,33 @@ def quick_eval(bwv=854, stat=ps.Stats(),
         eval1_Bach(nb=f.nb, mvt=f.mvt, file=f.file, stat=stat,algo=algo, tons=nbtons, kpre=33, kpost=23, dflag=dflag, mflag=mflag)
     
     
+def debug(composer="Bach",i=0):
     
+    if composer=="Beethoven":
+        dataset=Beethoven_list()
+    
+    else:
+        dataset = DWK_list()
+    
+    file = dataset[i].file
+    #print(file)
+    score = m21.converter.parse(file)
+    lp = score.getElementsByClass(m21.stream.Part)
+    ln = ps.extract_part(lp[0]) # first and unique part
+    for (n, b, s) in ln:   
+        a = 'sp.add('
+        a += str(n.pitch.midi)
+        a += ', '
+        a += str(b)
+        a += ', '
+        a += 'true' if s else 'false'
+        a += ');'
+        print(a)
+##
+
+
+
+
 
 #########################
 ##                     ##
