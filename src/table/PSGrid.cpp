@@ -157,7 +157,7 @@ void PSG::extract_bests(const PSV& vec, std::set<size_t>& ties)
 }
 
 
-//to do later : reorganize the loop so that warnings only occur when a real tie break fail happens
+//to do later : reorganize the loops to improve efficiency!
 size_t PSG::estimateLocal(size_t ig, size_t iprev, std::set<size_t>& cands)
 {
     // no candidates in case of empty bar: keep the previous local
@@ -178,10 +178,10 @@ size_t PSG::estimateLocal(size_t ig, size_t iprev, std::set<size_t>& cands)
     PSCost cbest;  // WARNING: initialized to 0.
     
     // current best distance to previous local ton. for ig
-    unsigned int dbest = -1; // initialized to avoid warning
+    unsigned int dbest = 30; // initialized to avoid warning
 
     // current best distance to previous global ton. ig
-    unsigned int dgbest = -1; // initialized to avoid warning
+    unsigned int dgbest = 30; // initialized to avoid warning
 
     for (size_t j : cands)
     {
@@ -190,23 +190,28 @@ size_t PSG::estimateLocal(size_t ig, size_t iprev, std::set<size_t>& cands)
         //assert(! psb.empty());
         // occurs iff first() == last(), and in this case all the bags are empty.
         //PSCost cost = psb.cost();
-
+        
         const Ton& jton = _index.ton(j);
-
+        
         // tie break criteria 1:
         // best distance (of current tonality j) to the previous local tonality for ig
         //unsigned int dist = pton.distDiatonic(jton);
         unsigned int dist = pton.distWeber(jton);
-
+        
         if (dist < dbest)
         {
             ibest = j;
             dbest = dist;
-            continue;
+            //continue;
         }
-        // tie break criteria 2:
-        // best distance (of current tonality j) to the global tonality ig
-        else if (dist == dbest)
+    }
+    // tie break criteria 2:
+    // best distance (of current tonality j) to the global tonality ig
+    for (size_t j : cands)
+    {
+        const Ton& jton = _index.ton(j);
+        unsigned int dist = pton.distWeber(jton);
+        if (dist == dbest)
         {
             //unsigned int distg = gton.distDiatonic(jton);
             unsigned int distg = gton.distWeber(jton);
@@ -219,35 +224,42 @@ size_t PSG::estimateLocal(size_t ig, size_t iprev, std::set<size_t>& cands)
             // smallest key signature
             // ALT: best distance between the previous local tonality and
             // a config in bag for the current tonality j
-            else if (distg == dgbest)
+        }
+    }
+    for (size_t j : cands)
+    {
+        const Ton& jton = _index.ton(j);
+        unsigned int dist = pton.distWeber(jton);
+        unsigned int distg = gton.distWeber(jton);
+        if ((dist == dbest) && (distg == dgbest))
+        {
+            const Ton& bton = _index.ton(ibest);
+            if (std::abs(jton.fifths()) < std::abs(bton.fifths()))
             {
-                const Ton& bton = _index.ton(ibest);
-                if (std::abs(jton.fifths()) < std::abs(bton.fifths()))
-                {
-                    ibest = j;
-                }
-                else if (std::abs(jton.fifths()) == std::abs(bton.fifths()))
-                {
-                    WARN("PSGrid, estimation local, tie break fail {} vs {} dist prev({})={}, dist global({})={})",
-                         jton, _index.ton(ibest), pton, dist, gton, distg);
-                }
-                // otherwise keep the current best
-                else
-                {
-                    assert(std::abs(jton.fifths()) > std::abs(bton.fifths()));
-                }
+                ibest = j;
+            }
+            else if (std::abs(jton.fifths()) == std::abs(bton.fifths()))
+            {
+                WARN("PSGrid, estimation local, tie break fail {} vs {} dist prev({})={}, dist global({})={})",
+                     jton, _index.ton(ibest), pton, dist, gton, distg);
             }
             // otherwise keep the current best
             else
             {
-                assert(distg > dgbest); // we did not forget a case
+                assert(std::abs(jton.fifths()) > std::abs(bton.fifths()));
             }
         }
+        // otherwise keep the current best
+        //else
+        //{
+        //    assert(distg > dgbest); // we did not forget a case
+        //}
+        //}
         // otherwisse keep the current best
-        else
-        {
-            assert(dist > dbest); // we did not forget a case
-        }
+        //else
+        //{
+        //    assert(dist > dbest); // we did not forget a case
+        //}
     }
         
     assert(ibest != TonIndex::FAILED);
