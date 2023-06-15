@@ -157,6 +157,7 @@ void PSG::extract_bests(const PSV& vec, std::set<size_t>& ties)
 }
 
 
+//to do later : reorganize the loop so that warnings only occur when a real tie break fail happens
 size_t PSG::estimateLocal(size_t ig, size_t iprev, std::set<size_t>& cands)
 {
     // no candidates in case of empty bar: keep the previous local
@@ -194,7 +195,8 @@ size_t PSG::estimateLocal(size_t ig, size_t iprev, std::set<size_t>& cands)
 
         // tie break criteria 1:
         // best distance (of current tonality j) to the previous local tonality for ig
-        unsigned int dist = pton.distDiatonic(jton);
+        //unsigned int dist = pton.distDiatonic(jton);
+        unsigned int dist = pton.distWeber(jton);
 
         if (dist < dbest)
         {
@@ -206,7 +208,8 @@ size_t PSG::estimateLocal(size_t ig, size_t iprev, std::set<size_t>& cands)
         // best distance (of current tonality j) to the global tonality ig
         else if (dist == dbest)
         {
-            unsigned int distg = gton.distDiatonic(jton);
+            //unsigned int distg = gton.distDiatonic(jton);
+            unsigned int distg = gton.distWeber(jton);
             if (distg < dgbest)
             {
                 ibest = j;
