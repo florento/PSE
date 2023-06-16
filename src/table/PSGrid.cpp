@@ -245,18 +245,24 @@ size_t PSG::estimateLocal(size_t ig, size_t iprev, std::set<size_t>& cands)
     for (size_t j : cands)
     {
         const Ton& jton = _index.ton(j);
-        if ((std::abs(jton.fifths()) == besty) && (j != ibest))
+        unsigned int dist = pton.distWeber(jton);
+        if (dist==dbest)
+        {
+            unsigned int distg = gton.distWeber(jton);
+            if (distg == dgbest)
             {
-                unsigned int dist = pton.distWeber(jton);
-                unsigned int distg = gton.distWeber(jton);
-                WARN("PSGrid, estimation local, tie break fail {} vs {} dist prev({})={}, dist global({})={})",
-                     jton, _index.ton(ibest), pton, dist, gton, distg);
+                if ((std::abs(jton.fifths()) == besty) && (j != ibest))
+                {
+                    WARN("PSGrid, estimation local, tie break fail {} vs {} dist prev({})={}, dist global({})={})",
+                         jton, _index.ton(ibest), pton, dist, gton, distg);
+                }
             }
+        }
             // otherwise keep the current best
-        else
-            {
-                assert(std::abs(jton.fifths()) > std::abs(bton.fifths()));
-            }
+        //else
+        //    {
+                //assert(std::abs(jton.fifths()) > std::abs(bton.fifths()));
+        //    }
     }
         // otherwise keep the current best
         //else
