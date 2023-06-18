@@ -27,7 +27,7 @@ _cost(seed.shared_zero())     // zero
     // otherwise n0 == n1, no note, leave _best empty
     else
     {
-        
+        // msg
     }
 }
 

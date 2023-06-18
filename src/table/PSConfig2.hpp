@@ -53,11 +53,12 @@ public:
     //PSC2(const PSC0& c, const PSChord& e);
 
     /// target PS config for a transition from given (previous) config,
-    /// when reading a chord.
+    /// when reading a note in a chord.
     /// copy and update with given accident for given name and accidental,
     /// in given conjectured global tonality.
     /// only the cost (number of accidentals) is updated.
-    /// @param c previous config (origin), to be updated with the received pitch in a chord.
+    /// @param c previous config (origin), to be updated with the received pitch
+    /// in a chord.
     /// @param e note enumerator containing the notes of the read chord.
     /// @param name chosen name for the received pitch, in 0..6 (0 is 'C', 6 is 'B').
     /// @param accid chosen alteration for the received pitch, in -2..2.
@@ -67,7 +68,7 @@ public:
          const Ton& ton);
 
     /// alternative target PS config for a transition
-    /// from a given (previous) PS config, when reading a chord.
+    /// from a given (previous) PS config, when reading a note in a chord.
     /// copy and update with given accident for given name and accidental,
     /// in given conjectured global tonality and local tonality.
     /// the cost (number of accidentals) and distance (to local ton) are updated.
@@ -170,7 +171,7 @@ private: // data
     unsigned int _current;
     
     /// chosen pitch names, in 0..6 (0 is 'C', 6 is 'B'),
-    /// for the notes read for the transition to this config.
+    /// for the chord read for the transition to this config.
     std::vector<enum NoteName> _names;
     
     /// chosen number of accidents, in -2..2.

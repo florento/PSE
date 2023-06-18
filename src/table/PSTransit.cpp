@@ -85,10 +85,9 @@ void Transition::succ1(std::shared_ptr<const PSC0> c,
 }
 
 
-// static
+// old version off succ2
 void Transition::succ2(std::shared_ptr<const PSC0> c,
-                       const Ton& ton, const Ton& lton,
-                       PSCQueue& q) const
+                       const Ton& ton, const Ton& lton, PSCQueue& q) const
 {
     assert(c);
     //assert(c->size() > 1);
@@ -162,6 +161,15 @@ void Transition::succ2(std::shared_ptr<const PSC0> c,
         }
     }
 }
+
+
+// we loop on the chord, with a auxiliary queue
+void Transition::succ3(std::shared_ptr<const PSC0> c,
+                       const Ton& ton, const Ton& lton, PSCQueue& q) const
+{
+    // TBC
+}
+
 
 
 } // end namespace pse
