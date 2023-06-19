@@ -78,7 +78,7 @@ void PSG::init(const PST& tab, std::vector<bool> mask)
         // add empty column
         assert(_content.size() == j); // current nb of columns
         _content.emplace_back();
-        std::vector<size_t>& current = _content.back();
+        //std::vector<size_t>& current = _content.back();
 
         // compute every row in this new column
         for (size_t i = 0; i < vec.size(); ++i)
@@ -125,7 +125,7 @@ void PSG::extract_bests(const PSV& vec, std::set<size_t>& ties)
     for (size_t j = 0; j < vec.size(); ++j)
     {
         const PSB& psb = vec.bag(j);
-
+        
         // occurs iff first() == last(), and in this case all the bags are empty.
         if (psb.empty())
             break; // break
@@ -137,12 +137,22 @@ void PSG::extract_bests(const PSV& vec, std::set<size_t>& ties)
         {
             ibest = j;
             cbest = cost.shared_clone();
-            ties.clear();
-            auto ret = ties.insert(j);
-            assert(ret.second == true); // j was inserted
+            //ties.clear();
+            //auto ret = ties.insert(j);
+            //assert(ret.second == true); // j was inserted
         }
+    }
+    for (size_t j = 0; j < vec.size(); ++j)
+    {
+        const PSB& psb = vec.bag(j);
+        
+        // occurs iff first() == last(), and in this case all the bags are empty.
+        if (psb.empty())
+            break; // break
+        
+        const Cost& cost = psb.cost(); // shared_clone();
         // tie break
-        else if ((cbest != nullptr) && (cost == *cbest))
+        if ((cbest != nullptr) && (cost == *cbest))
         {
             auto ret = ties.insert(j);
             assert(ret.second == true); // j was inserted
@@ -230,13 +240,16 @@ size_t PSG::estimateLocal(size_t ig, size_t iprev, std::set<size_t>& cands)
     {
         const Ton& jton = _index.ton(j);
         unsigned int dist = pton.distWeber(jton);
-        unsigned int distg = gton.distWeber(jton);
-        if ((dist == dbest) && (distg == dgbest))
+        if (dist == dbest)
         {
-            const Ton& bton = _index.ton(ibest);
-            if (std::abs(jton.fifths()) < std::abs(bton.fifths()))
+            unsigned int distg = gton.distWeber(jton);
+            if (distg == dgbest)
             {
-                ibest = j;
+                const Ton& bton = _index.ton(ibest);
+                if (std::abs(jton.fifths()) < std::abs(bton.fifths()))
+                {
+                    ibest = j;
+                }
             }
         }
     }

@@ -35,7 +35,7 @@ _generic_score = 'xml_score.musicxml'
 _eval_root = '../../PSeval'
 
 # name of dir for evaluation output
-_output_dir = 'ASAP'
+_output_dir = 'augASAP'
 
 # or '..' if we assume that we are in dir script/ of the evaluation dir
 
