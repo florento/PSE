@@ -17,10 +17,9 @@ namespace pse {
 
 
 // copy and update
-// @todo TBR
 PSC1::PSC1(std::shared_ptr<const PSC0> c, const PSEnum& e,
            const enum NoteName& name, const enum Accid& accid,
-           const Ton& ton):
+           const Ton& ton, const Ton& lton):
 PSC(c),
 _name(name),
 _print(false)
@@ -37,6 +36,16 @@ _print(false)
     // update cost
     assert(_cost);
     _cost->update(*this, e, ton);
+        
+    // the given accidental corresponds to the chroma of input note and given name.
+    assert(accid == MidiNum::accid(e.midipitch(c->id())%12, name));
+
+    // complete the update of cost
+    if (lton.defined())
+    {
+        assert(_cost);
+        _cost->update(*this, e, ton, lton);
+    }
 }
 
 
@@ -56,18 +65,18 @@ _print(false)
 
 
 // @todo TBR
-PSC1::PSC1(std::shared_ptr<const PSC0> c, const PSEnum& e,
-           const enum NoteName& name, const enum Accid& accid,
-           const Ton& ton, const Ton& lton):
-PSC1(c, e, name, accid, ton)
-{
-    // the given accidental corresponds to the chroma of input note and given name.
-    assert(accid == MidiNum::accid(e.midipitch(c->id())%12, name));
-
-    // complete the update of cost
-    assert(_cost);
-    _cost->update(*this, e, ton, lton);
-}
+//PSC1::PSC1(std::shared_ptr<const PSC0> c, const PSEnum& e,
+//           const enum NoteName& name, const enum Accid& accid,
+//           const Ton& ton, const Ton& lton):
+//PSC1(c, e, name, accid, ton)
+//{
+//    // the given accidental corresponds to the chroma of input note and given name.
+//    assert(accid == MidiNum::accid(e.midipitch(c->id())%12, name));
+//
+//    // complete the update of cost
+//    assert(_cost);
+//    _cost->update(*this, e, ton, lton);
+//}
 
 
 //PSC1::PSC1(const PSC0& c, const PSEnum& e,

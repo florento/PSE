@@ -109,7 +109,6 @@
 		438A581729E0492A0073A32C /* PSConfig1.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 434B1DF6298ECCF0001CE41C /* PSConfig1.cpp */; };
 		438A581829E0492D0073A32C /* PSConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43ABA51729242417002AC1D4 /* PSConfig.cpp */; };
 		438A581929E049300073A32C /* PSConfig0.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43ABA52129242418002AC1D4 /* PSConfig0.cpp */; };
-		438A581A29E049330073A32C /* PSCost.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43DD95472945E223006DC553 /* PSCost.cpp */; };
 		438A581E29E049430073A32C /* PSState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43ABA51E29242418002AC1D4 /* PSState.cpp */; };
 		438A581F29E0496D0073A32C /* PSPath.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43ABA51629242417002AC1D4 /* PSPath.cpp */; };
 		438EFD7C2A0D451800FF3733 /* PSTransit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 430960572A0CD7E80097487A /* PSTransit.cpp */; };
@@ -185,8 +184,6 @@
 		43DD54262A38FA4E0036EF07 /* CostAD.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43DD54232A38FA4E0036EF07 /* CostAD.cpp */; };
 		43DD54272A38FA4E0036EF07 /* CostAD.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43DD54232A38FA4E0036EF07 /* CostAD.cpp */; };
 		43DD54282A38FA4E0036EF07 /* CostAD.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 43DD54242A38FA4E0036EF07 /* CostAD.hpp */; };
-		43DD95492945E223006DC553 /* PSCost.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43DD95472945E223006DC553 /* PSCost.cpp */; };
-		43DD954A2945E223006DC553 /* PSCost.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43DD95472945E223006DC553 /* PSCost.cpp */; };
 		43DD954B2945E223006DC553 /* PSCost.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 43DD95482945E223006DC553 /* PSCost.hpp */; };
 		43F9BE6429CC423E00B0A7F8 /* ModeName.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43F9BE6229CC423E00B0A7F8 /* ModeName.cpp */; };
 		43F9BE6529CC423E00B0A7F8 /* ModeName.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43F9BE6229CC423E00B0A7F8 /* ModeName.cpp */; };
@@ -942,7 +939,6 @@
 				435081FE29D6D7F900465943 /* IntervalSimple.cpp in Sources */,
 				435081F729D6D78000465943 /* PSEnum.cpp in Sources */,
 				43D7BAC12A27E31600570C47 /* PS14.cpp in Sources */,
-				438A581A29E049330073A32C /* PSCost.cpp in Sources */,
 				4350820529D6FDA100465943 /* TestMode.cpp in Sources */,
 				438A581829E0492D0073A32C /* PSConfig.cpp in Sources */,
 				4353AE3829DDAD3E00FAF8A3 /* TestPSEnum.cpp in Sources */,
@@ -1017,7 +1013,6 @@
 				432657E3294E2FB100515080 /* Weber.cpp in Sources */,
 				43ABA52E29242418002AC1D4 /* PSState.cpp in Sources */,
 				4310526729CDD15000694D5A /* Scale.cpp in Sources */,
-				43DD95492945E223006DC553 /* PSCost.cpp in Sources */,
 				43ABA53129242418002AC1D4 /* PSConfig0.cpp in Sources */,
 				432E7A5429D45FE2000E2B72 /* PS13.cpp in Sources */,
 				43C2BA1D299A5FEE0084AB3B /* IntervalSimple.cpp in Sources */,
@@ -1076,7 +1071,6 @@
 				432586A42A4050C80069D796 /* PSConfig1c.cpp in Sources */,
 				432E7A5529D45FE2000E2B72 /* PS13.cpp in Sources */,
 				43C2BA1E299A5FEE0084AB3B /* IntervalSimple.cpp in Sources */,
-				43DD954A2945E223006DC553 /* PSCost.cpp in Sources */,
 				43C2BA1729994F630084AB3B /* Pitch.cpp in Sources */,
 				4309605E2A0D034D0097487A /* Speller.cpp in Sources */,
 				43FBEACF2930CEDD008FC486 /* PSConfig0.cpp in Sources */,
