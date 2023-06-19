@@ -78,7 +78,7 @@ void PSG::init(const PST& tab, std::vector<bool> mask)
         // add empty column
         assert(_content.size() == j); // current nb of columns
         _content.emplace_back();
-        //std::vector<size_t>& current = _content.back();
+        std::vector<size_t>& current = _content.back();
 
         // compute every row in this new column
         for (size_t i = 0; i < vec.size(); ++i)
@@ -86,12 +86,12 @@ void PSG::init(const PST& tab, std::vector<bool> mask)
             // i is masked : do not estimate local for i
             if (mask[i] == false)
             {
-                _content.back().push_back(TonIndex::UNDEF);
+                current.push_back(TonIndex::UNDEF);
             }
             // in the first column (first measure)
             else if (_content.size() == 1)
             {
-                _content.back().push_back(estimateLocal(i, i, cands));
+                current.push_back(estimateLocal(i, i, cands));
 
             }
             // otherwise, consider previous column
@@ -101,17 +101,18 @@ void PSG::init(const PST& tab, std::vector<bool> mask)
                 assert(j-1 < _content.size());
                 assert(i < _content.at(j-1).size());
                 size_t iprev = _content.at(j-1).at(i);
-                _content.back().push_back(estimateLocal(i, iprev, cands));
+                current.push_back(estimateLocal(i, iprev, cands));
             }
-            assert(_content.back().back() == TonIndex::UNDEF ||
-                   _content.back().back() < _index.size());
+            assert(current.back() == TonIndex::UNDEF ||
+                   current.back() < _index.size());
             //INFO("BUG 102: {} (UNDEF={})", _content.back().back(), TonIndex::UNDEF);
         }
-        assert(_content.back().size() == vec.size());
+        assert(current.size() == vec.size());
     }
 }
 
-
+//this function determines the best local tonalities according to the bags of the studied measure
+//However it has an important flaw : no tonal context is taken into account to determine the local tones
 void PSG::extract_bests(const PSV& vec, std::set<size_t>& ties)
 {
     assert(ties.empty());
@@ -167,7 +168,7 @@ void PSG::extract_bests(const PSV& vec, std::set<size_t>& ties)
 }
 
 
-//to do later : reorganize the loops to improve efficiency!
+//this function chooses among the best possible local tonalities (obtained with extract_bests) the closest one to the previous local tone and to the global tone
 size_t PSG::estimateLocal(size_t ig, size_t iprev, std::set<size_t>& cands)
 {
     // no candidates in case of empty bar: keep the previous local
@@ -295,5 +296,101 @@ size_t PSG::estimateLocal(size_t ig, size_t iprev, std::set<size_t>& cands)
     return ibest;
 }
 
+
+//this alternative function determines the best local tonality by restraining its search only on tones close to the previous or global one and then choosing the one minimizing accidents
+size_t PSG::estimateLocalalt(const PSV& vec, std::set<size_t>& ties, size_t ig, size_t iprev, unsigned int d)
+{
+    // no candidates in case of empty bar: keep the previous local
+    //if (cands.empty())
+    //    return iprev;  // TonIndex::FAILED; // TonIndex::UNDEF
+    std::set<size_t> cands ;
+    
+    
+    assert(iprev != TonIndex::UNDEF);
+    assert(iprev != TonIndex::FAILED);
+    assert(iprev < _index.size());
+    
+    const Ton& pton = _index.ton(iprev);
+    const Ton& gton = _index.ton(ig);
+
+    // index of the current best local tonality.
+    size_t ibest = TonIndex::UNDEF; // out of range. initialized to avoid warning.
+    
+    // current best distance to previous local ton. for ig
+    //unsigned int dbest = 30; // initialized to avoid warning
+
+    // current best distance to previous global ton. ig
+    //unsigned int dgbest = 30; // initialized to avoid warning
+
+    for (size_t j=0; j < _index.size(); ++j)
+    {
+        
+        const Ton& jton = _index.ton(j);
+        unsigned int dist = pton.distWeber(jton);
+        unsigned int distg = gton.distWeber(jton);
+        //éventuellement remplacer Weber par la simple distance du cycle des quintes
+        if ((dist <= d) || (distg <= d))
+        {
+            cands.insert(j);
+            //continue;
+        }
+    }
+    
+    
+    std::shared_ptr<Cost> cbest = nullptr;
+    
+    for (size_t j : cands)
+    {
+        const PSB& psb = vec.bag(j);
+        
+        // occurs iff first() == last(), and in this case all the bags are empty.
+        if (psb.empty())
+            break; // break
+        
+        const Cost& cost = psb.cost(); // shared_clone();
+        
+        // new best cost     // cbest = 0 when j = 0
+        if ((j == 0) || ((cbest != nullptr) && (cost < *cbest)))
+        {
+            ibest = j;
+            cbest = cost.shared_clone();
+            //ties.clear();
+            //auto ret = ties.insert(j);
+            //assert(ret.second == true); // j was inserted
+        }
+    }
+    
+    for (size_t j : cands)
+    {
+        const PSB& psb = vec.bag(j);
+        
+        // occurs iff first() == last(), and in this case all the bags are empty.
+        if (psb.empty())
+            break; // break
+        
+        const Cost& cost = psb.cost(); // shared_clone();
+        // tie break
+        if ((cbest != nullptr) && (cost == *cbest) && (j != ibest))
+        {
+            auto ret = ties.insert(j);
+            assert(ret.second == true); // j was inserted
+            const Ton& jton=_index.ton(j);
+            unsigned int dist = pton.distWeber(jton);
+            unsigned int distg = gton.distWeber(jton);
+            WARN("PSGrid, estimation local, tie break fail {} vs {} dist prev({})={}, dist global({})={})",
+                 jton, _index.ton(ibest), pton, dist, gton, distg);
+        }
+        // otherwisse keep the current best
+        else
+        {
+            assert((cbest == nullptr) || (cost > *cbest)); // we did not forget a case
+        }
+    }
+    assert(ibest != TonIndex::FAILED);
+    assert(ibest == TonIndex::UNDEF || ibest < _index.size());
+    assert(ibest < _index.size() || cands.empty());
+    
+    return ibest;
+}
 
 } // end namespace pse
