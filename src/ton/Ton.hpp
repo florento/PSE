@@ -95,7 +95,10 @@ public:
 
     /// this tonality is undefined.
     bool undef() const;
-    
+
+    /// this tonality is defined.
+    inline bool defined() const { return !undef(); }
+
     /// accidental in the key signature of this ton for a given pitch name.
     /// @param n an encapsulated note name
     /// @return the number of accidents, in the key signature, for n, in -2..2.

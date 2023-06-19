@@ -16,6 +16,7 @@
 #include <memory>
 
 #include "trace.hpp"
+#include "Rational.hpp"
 #include "NoteName.hpp"
 #include "Accidental.hpp"
 #include "ModeName.hpp"

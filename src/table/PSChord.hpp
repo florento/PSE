@@ -18,6 +18,7 @@
 #include <vector>
 
 #include "trace.hpp"
+#include "Rational.hpp"
 #include "NoteName.hpp"
 #include "Accidental.hpp"
 #include "PSEnum.hpp"
@@ -124,7 +125,7 @@ public:
     /// otherwise true.
     /// This flags says wether the accidental of the note must be printed or not.
     /// @param i index of note in the list of input notes.
-    bool printed(size_t i) const;
+    bool printed(size_t i) const override;
     
     /// rename the note of given index.
     /// @param i note index inside the interval [first(), last() [
@@ -136,7 +137,7 @@ public:
     /// @warning should not be called for this enumerator.
     virtual void rename(size_t i,
                         const enum NoteName& name, const enum Accid& accid,
-                        int oct, bool altprint);
+                        int oct, bool altprint) override;
     
 private: // data
 

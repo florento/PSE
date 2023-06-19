@@ -23,6 +23,7 @@
 #include "PSConfig.hpp"
 #include "PSEnum.hpp"
 #include "PSChord.hpp"
+#include "PSConfig1c.hpp"
 
 
 
@@ -46,41 +47,10 @@ public:
 
     /// target PS config for a transition from given (previous) config,
     /// when reading a chord.
-    /// @param c previous config, to be updated with the received chord.
-    /// @param e note enumerator containing the notes of the read chord.
-    /// @param i0 index of the first note of chord in the given enumerator.
-    PSC2(std::shared_ptr<const PSC0> c, PSEnum& e, size_t i0);
-    //PSC2(const PSC0& c, const PSChord& e);
-
-    /// target PS config for a transition from given (previous) config,
-    /// when reading a note in a chord.
-    /// copy and update with given accident for given name and accidental,
-    /// in given conjectured global tonality.
-    /// only the cost (number of accidentals) is updated.
-    /// @param c previous config (origin), to be updated with the received pitch
-    /// in a chord.
-    /// @param e note enumerator containing the notes of the read chord.
-    /// @param name chosen name for the received pitch, in 0..6 (0 is 'C', 6 is 'B').
-    /// @param accid chosen alteration for the received pitch, in -2..2.
-    /// @param ton conjectured main (global) tonality (key signature).
-    PSC2(const PSC2& c,  const PSEnum& e,      // std::shared_ptr<const PSC2> c,
-         const enum NoteName& name, const enum Accid& accid,
-         const Ton& ton);
-
-    /// alternative target PS config for a transition
-    /// from a given (previous) PS config, when reading a note in a chord.
-    /// copy and update with given accident for given name and accidental,
-    /// in given conjectured global tonality and local tonality.
-    /// the cost (number of accidentals) and distance (to local ton) are updated.
-    /// @param c previous config, to be updated with the received pitch in a chord.
-    /// @param e note enumerator containing the notes of the read chord.
-    /// @param name chosen name for the received pitch, in 0..6 (0 is 'C', 6 is 'B').
-    /// @param acc chosen alteration for the received pitch, in -2..2.
-    /// @param ton conjectured main (global) tonality (key signature).
-    /// @param lton conjectured local tonality.
-    PSC2(const PSC2& c, const PSEnum& e,       // std::shared_ptr<const PSC2> c,
-         const enum NoteName& name, const enum Accid& acc,
-         const Ton& ton, const Ton& lton);
+    /// @param c0 previous config, to be updated with the received chord.
+    /// @param c1 last config reached after processing the chord.
+    /// @param chord note enumerator containing the notes of the read chord.
+    PSC2(std::shared_ptr<const PSC0> c0, const PSC1c* c1, PSChord& chord);
 
     /// copy constructor
     PSC2(const PSC2& c);
@@ -96,20 +66,10 @@ public:
     /// configs have different list of accidentals
     bool operator!=(const PSC2& rhs) const;
     
-    bool acceptable(const enum NoteName& name, const enum Accid& accid) const;
+    // bool acceptable(const enum NoteName& name, const enum Accid& accid) const;
     
-    /// number of simultaneous note read to reach this config.
+    /// number of simultaneous note in chord read to reach this config.
     size_t size() const;
-
-    /// the construction of this config is terminated.
-    bool complete() const;
-    
-    /// current pitch class number to process in the input chord,
-    /// in 0..12.
-    inline unsigned int current() const { return _current; };
-
-    /// the proposed update is compatible with this config.
-    bool consistent(const enum NoteName& name, const enum Accid& accid) const;
 
     /// midi pitch of the ith note read for the transition
     /// from this config's predecessor.
@@ -158,18 +118,16 @@ public:
     
 private: // data
         
-    // MIDI pitchs of the notes read for the transition to this config.
-    // std::vector<unsigned int> _midi;
+    // representation of the sequence of simultaneous notes
+    // read to reach this config from previous config.
+    // std::shared_ptr<const PSChord> _chord;
 
-    /// representation of the sequence of simultaneous notes
-    /// read to reach this config from previous config.
-    std::shared_ptr<const PSChord> _chord;
-    //const PSChord* _chord;
-    //const PSChord& _chord;
+    // index of the next pitch class number to process in the input chord.
+    // unsigned int _current;
     
-    /// index of the next pitch class number to process in the input chord.
-    unsigned int _current;
-    
+    /// MIDI pitchs of the notes read for the transition to this config.
+    std::vector<unsigned int> _midi;
+
     /// chosen pitch names, in 0..6 (0 is 'C', 6 is 'B'),
     /// for the chord read for the transition to this config.
     std::vector<enum NoteName> _names;
@@ -181,51 +139,6 @@ private: // data
     /// whether the accident must be printed
     /// for the note read for the transition to this config.
     std::vector<bool> _prints;
-
-    // update the cumulated number of accidents for this Config,
-    // with the number of printed alterations of this config.
-    // void updateAccidents();
-
-private:
-    
-    /// state of previous config in shortest path to this config.
-    const PSState& prevState() const;
-
-    /// first pitch class number to be processed in the input chord.
-    unsigned int firstChroma() const;
-
-    /// next pitch class number to be processed in the input chord.
-    unsigned int nextChroma() const;
-
-    // the proposed update is compatible with this config.
-    // bool valid(const NoteName& name, const Accid& accid,
-    //           const Ton& ton, const Ton& lton) const;
-    
-    /// all occurrences of the same note receive same name and accid.
-    /// @return the number of names assigned
-    size_t setNames(const enum NoteName& name, const enum Accid& accid,
-                    bool print);
-    
-    // update the spelling cost for one pitch class in the current chord.
-    // @param name chosen name for the received pitch, in 0..6 (0 is 'C', 6 is 'B').
-    // @param accid chosen alteration for the received pitch, in -2..2.
-    // @param print whether the acciental must be printed in score.
-    // @param nbocc nb of occurrence of the note (pitch class) in this chord.
-    // @param ton conjectured main (global) tonality (key signature).
-    // @return wheter the cost value of this config was increased
-    // bool updateCost(const enum NoteName& name, const enum Accid& accid,
-    //                 bool print, size_t nbocc, const Ton& ton);
-
-    // update the spelling cost for one pitch class in the current chord.
-    // @param name chosen name for the received pitch, in 0..6 (0 is 'C', 6 is 'B').
-    // @param accid chosen alteration for the received pitch, in -2..2.
-    // @param print whether the acciental must be printed in score.
-    // @param nbocc nb of occurrence of the note (pitch class) in this chord.
-    // @param ton conjectured main (global) tonality (key signature).
-    // @param lton conjectured local tonality.
-    // @return wheter the cost value of this config was increased
-    // bool updateCost(const enum NoteName& name, const enum Accid& accid,
-    //                 bool print, size_t nbocc, const Ton& ton, const Ton& lton);
 
 };
 

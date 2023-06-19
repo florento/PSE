@@ -50,7 +50,7 @@ public:
     /// only the cost (number of accidentals) is updated.
     /// @param c previous config (origin), to be updated with the received pitch.
     // @param mp midi pitch to be named, used to update the config.
-    /// @param e an enumerator of notes read for transition tp this configs.
+    /// @param e an enumerator of notes read for transition to this config.
     /// @param name chosen name for the received pitch, in 0..6 (0 is 'C', 6 is 'B').
     /// @param accid chosen alteration for the received pitch, in -2..2.
     /// @param ton conjectured main (global) tonality (key signature).
@@ -84,9 +84,10 @@ public:
 //         const NoteName& name, const Accid& acc,
 //         const Ton& ton, const Ton& lton);
 
-    /// copy constructor
+    /// copy constructor.
     PSC1(const PSC1& c);
     
+    /// destructor.
     virtual ~PSC1();
     
     /// assignement operator
@@ -128,7 +129,7 @@ public:
     /// Always false for this class.
     virtual bool fromChord() const;
 
-private:
+protected: // data
         
     /// MIDI pitch of the note read for the transition to this config.
     unsigned int _midi;
@@ -150,6 +151,12 @@ private:
     // with the number of printed alterations of this config.
     // void updateAccidents();
 
+protected:
+    
+    /// updgrade copy constructor.
+    /// for internal use by PSC1c.
+    PSC1(const PSC& c);
+    
 };
 
 

@@ -19,6 +19,7 @@
 #include <vector>
 
 #include "trace.hpp"
+#include "Rational.hpp"
 #include "NoteName.hpp"
 #include "Accidental.hpp"
 #include "MidiNum.hpp"

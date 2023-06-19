@@ -18,8 +18,10 @@
 #include "AlgoName.hpp"
 #include "PSEnum.hpp"
 #include "PSCost.hpp"
+#include "PSOrder.hpp"
 #include "PSConfig0.hpp" // PSC0, PSCQueue
 #include "PSConfig1.hpp"
+#include "PSConfig1c.hpp"
 #include "PSConfig2.hpp"
 
 
@@ -57,17 +59,17 @@ public:
     void succ1(std::shared_ptr<const PSC0> c,
                const Ton& ton, const Ton& lton, PSCQueue& q) const;
 
-    /// allocate every config reached by one transition from the given config,
-    /// when reading several simultaneous pitchs (chord), and push it to
-    /// the given queue.
-    /// @param c source configuration.
-    /// this config.
-    /// @param ton conjectured main (global) tonality (key signature).
-    /// @param lton conjectured local tonality. ignored if algo is not PSE1.
-    /// @param q queue receiving the target configs.
-    /// @todo former version, to be replaced
-    void succ2(std::shared_ptr<const PSC0> c,
-               const Ton& ton, const Ton& lton, PSCQueue& q) const;
+    // allocate every config reached by one transition from the given config,
+    // when reading several simultaneous pitchs (chord), and push it to
+    // the given queue.
+    // @param c source configuration.
+    // this config.
+    // @param ton conjectured main (global) tonality (key signature).
+    // @param lton conjectured local tonality. ignored if algo is not PSE1.
+    // @param q queue receiving the target configs.
+    // @todo former version, to be replaced
+    // void succ2_TBR(std::shared_ptr<const PSC0> c,
+    //           const Ton& ton, const Ton& lton, PSCQueue& q) const;
 
     /// allocate every config reached by one transition from the given config,
     /// when reading several simultaneous pitchs (chord), and push it to
@@ -76,8 +78,8 @@ public:
     /// @param ton conjectured main (global) tonality (key signature).
     /// @param lton conjectured local tonality. ignored if algo is not PSE1.
     /// @param q queue receiving the target configs.
-    /// @todo replacement of succ2
-    void succ3(std::shared_ptr<const PSC0> c,
+    /// @todo replacement of succ2_TBR
+    void succ2(std::shared_ptr<const PSC0> c,
                const Ton& ton, const Ton& lton, PSCQueue& q) const;
     
 private:

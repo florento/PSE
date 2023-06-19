@@ -194,7 +194,7 @@ enum Accid Ton::accidKey(int n) const
 
 enum Accid Ton::accidKey(const enum NoteName& name) const
 {
-    assert(defined(name));
+    assert(name != NoteName::Undef);
     return accidKey(toint(name));
 }
 
@@ -243,7 +243,7 @@ enum Accid Ton::accidDia(int n) const
 
 enum Accid Ton::accidDia(const enum NoteName& name) const
 {
-    assert(defined(name));
+    assert(name != NoteName::Undef);
     return accidDia(toint(name));
 }
 
@@ -273,7 +273,7 @@ enum Accid Ton::accidental(int d) const
 
 bool Ton::lead(const enum NoteName& name) const
 {
-    assert(defined(name));
+    assert(name != NoteName::Undef);
     int n = toint(name);
     assert(0 <= n);
     assert(n <= 6);
@@ -299,8 +299,8 @@ bool Ton::lead(const enum NoteName& name) const
 
 unsigned int Ton::dist(const enum NoteName& name, const enum Accid& accid) const
 {
-    assert(defined(name));
-    assert(defined(accid));
+    assert(name != NoteName::Undef);
+    assert(accid != Accid::Undef);
     // int n = name.toint();
     // assert(0 <= n);
     // assert(n <= 6);

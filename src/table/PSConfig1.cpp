@@ -29,9 +29,8 @@ _print(false)
     _midi = e.midipitch(c->id());
     _print = _state.update(name, accid);
     _id = c->id()+1; // next note in enum
-    assert(_id <= e.stop());
+    // assert(_id <= e.stop());
     assert(defined(accid));
-    
     // the given accidental corresponds to the chroma of input note and given name.
     assert(accid == MidiNum::accid(_midi%12, name));
 
@@ -84,8 +83,17 @@ PSC1(c, e, name, accid, ton)
 // copy
 PSC1::PSC1(const PSC1& c):
 PSC(c),
+_midi(c._midi),
 _name(c._name),
 _print(c._print)
+{ }
+
+
+PSC1::PSC1(const PSC& c):
+PSC(c),
+_midi(0),
+_name(NoteName::Undef),
+_print(false)
 { }
 
 

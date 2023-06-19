@@ -157,7 +157,7 @@ const enum Accid PSC0::accidental(const enum NoteName&  name) const
 //void PSC0::succ(PSEnum& e, const Ton& ton, PSCQueue& q) const
 //{
 //    if (e.simultaneous(_id))
-//        succ2(e, ton, q);    // chord
+//        succ2_TBR(e, ton, q);    // chord
 //    else
 //        succ1(e, ton, q);    // single note
 //}
@@ -181,7 +181,7 @@ const enum Accid PSC0::accidental(const enum NoteName&  name) const
 //}
 
 
-//void PSC0::succ2(PSEnum& e, const Ton& ton, PSCQueue& q) const
+//void PSC0::succ2_TBR(PSEnum& e, const Ton& ton, PSCQueue& q) const
 //{
 //    //PSChord c(e, _id);
 //    //assert(c.size() > 1);
@@ -220,7 +220,7 @@ const enum Accid PSC0::accidental(const enum NoteName&  name) const
 //void PSC0::succ(PSEnum& e, const Ton& ton, const Ton& lton, PSCQueue& q) const
 //{
 //    if (e.simultaneous(_id))
-//        succ2(e, ton, lton, q);    // chord
+//        succ2_TBR(e, ton, lton, q);    // chord
 //    else
 //        succ1(e, ton, lton, q);    // single note
 //}
@@ -245,7 +245,7 @@ const enum Accid PSC0::accidental(const enum NoteName&  name) const
 //}
 
 
-//void PSC0::succ2(PSEnum& e, const Ton& ton, const Ton& lton, PSCQueue& q) const
+//void PSC0::succ2_TBR(PSEnum& e, const Ton& ton, const Ton& lton, PSCQueue& q) const
 //{
 //    //PSChord c(e, _id);
 //    //assert(c.size() > 1);
