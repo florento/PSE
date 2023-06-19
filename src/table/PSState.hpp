@@ -60,7 +60,7 @@ public:
     PSState(const KeyFifth& k);
     
     /// copy constructor
-    PSState(const PSState& as);
+    PSState(const PSState& rhs);
 
     /// copy and update given name with given accident
     PSState(const PSState& as,
@@ -132,12 +132,14 @@ public:
                              const PSState& ajoker1,
                              const PSState& astate2,
                              const PSState& ajoker2);
-private:
+private: // data
 
     /// association to each pitch name (in 0..6)
     /// of an accidental (in -2..2).
     std::array<enum Accid, 7> _state; // _state[7]
-       
+
+private: // static data
+
     /// abbreviations for accidentals
     static const enum Accid _2F;
     static const enum Accid _1F;

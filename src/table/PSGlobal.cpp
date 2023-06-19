@@ -37,44 +37,51 @@ void PSO::init(const PST& tab, double d)
     // candidate list for best global
     // _globals is empty
     // invariant: all index in _globals have the same RowCost
-    _globals.push_back(0);
+    // _globals.push_back(0);
+
+    // index of row of best cost
+    size_t ibest = 0;
     
     // estimate the best tonality wrt costs (nb accidentals)
     for (size_t i = 1; i < _index.size(); ++i)
     {
-        assert(! _globals.empty());
-        assert(_globals[0] < _index.size());
         // all elements of cands have same cost
-        const Cost& bestCost = tab.rowCost(_globals[0]);
+        const Cost& bestCost = tab.rowCost(ibest);
         const Cost& rc = tab.rowCost(i);
+                
+        // new best ton
+        if (rc < bestCost)
+        {
+            ibest = i;
+        }
+    }
 
-        // tie
+    assert(ibest < _index.size());
+    const Cost& bestCost = tab.rowCost(ibest);
+    
+    // add to _globals (candidates) all tonality at distance to ibest
+    // smaller than d
+    for (size_t i = 0; i < _index.size(); ++i)
+    {
+        const Cost& rc = tab.rowCost(i);
+        
+        // real tie
         if (rc == bestCost)
         {
             _globals.push_back(i);
         }
         // approx tie
+        // we keep this case apart from real tie because of floating approx.
+        // (dist is double)
         else if ((d > 0) && (rc.dist(bestCost) <= d))
         {
             _globals.push_back(i);
         }
-        // new best ton
-        else if (rc < bestCost)
-        {
-            // rc far under bestCost
-            assert((d == 0) || (rc.dist(bestCost) > d));
-            _globals.clear();
-            // push front
-            _globals.insert(_globals.begin(), i);
-            //_globals.push_back(i);
-        }
-        // otherwise do nothing
-        else
-        {
-            assert(rc > bestCost);
-        }
     }
+    
+    // at least ibest
     assert(! _globals.empty());
+    assert(_globals[0] < _index.size());
 
     if (_debug)
         INFO("PST: {} candidates global: ", _globals.size());

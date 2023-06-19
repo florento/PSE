@@ -136,8 +136,10 @@ def eval_LG(psalgo=ps.pse.Algo_PSE, nbtons=26, kpre=33, kpost=23,
     # default output dir name
     if output_dir == '':
        output_dir = timestamp
-    output_path = Path(_eval_root)/'LG'/output_dir
+    output_path = Path(_eval_root)/'augLG'/output_dir
     if not os.path.isdir(output_path):
+        if not os.path.isdir(Path(_eval_root)/'augLG'):
+            os.mkdir(Path(_eval_root)/'augLG')
         os.mkdir(output_path)
     else:
         print('WARNING: dir', output_path, 'exists')

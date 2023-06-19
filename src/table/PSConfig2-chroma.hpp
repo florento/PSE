@@ -53,7 +53,7 @@ public:
     //PSC2(const PSC0& c, const PSChord& e);
 
     /// target PS config for a transition from given (previous) config,
-    /// when reading a note in a chord.
+    /// when reading a chord.
     /// copy and update with given accident for given name and accidental,
     /// in given conjectured global tonality.
     /// only the cost (number of accidentals) is updated.
@@ -68,7 +68,7 @@ public:
          const Ton& ton);
 
     /// alternative target PS config for a transition
-    /// from a given (previous) PS config, when reading a note in a chord.
+    /// from a given (previous) PS config, when reading a chord.
     /// copy and update with given accident for given name and accidental,
     /// in given conjectured global tonality and local tonality.
     /// the cost (number of accidentals) and distance (to local ton) are updated.

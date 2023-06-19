@@ -51,7 +51,9 @@ void Transition::succ1(std::shared_ptr<const PSC0> c,
             // case of 8 and (short list) 1, 3, 6, 10
             if (! defined(name) || !defined(accid))
                 continue;
+
             /// @todo merge into 1 constructor PSC1, with algo name
+            assert(accid == MidiNum::accid(m, name));
             if (_algo == Algo::PSE0) // lton is ignored
                 q.push(std::make_shared<PSC1>(c, _enum, name, accid, ton));
             else if (_algo == Algo::PSE1)
@@ -72,6 +74,7 @@ void Transition::succ1(std::shared_ptr<const PSC0> c,
         enum Accid accid = scale.accid(deg);
         assert(defined(name));
         assert(defined(accid));
+        assert(accid == MidiNum::accid(m, name));
         // lton is ignored
         q.push(std::make_shared<PSC1>(c, _enum, name, accid, ton));
     }
@@ -82,10 +85,9 @@ void Transition::succ1(std::shared_ptr<const PSC0> c,
 }
 
 
-// static
+// old version off succ2
 void Transition::succ2(std::shared_ptr<const PSC0> c,
-                       const Ton& ton, const Ton& lton,
-                       PSCQueue& q) const
+                       const Ton& ton, const Ton& lton, PSCQueue& q) const
 {
     assert(c);
     //assert(c->size() > 1);
@@ -129,6 +131,7 @@ void Transition::succ2(std::shared_ptr<const PSC0> c,
                     rc2.consistent(name, accid))
                 {
                     /// @todo merge into 1 constructor PSC2, with algo name
+                    assert(accid == MidiNum::accid(m, name));
                     if (_algo == Algo::PSE0)
                         cs.push(std::make_shared<PSC2>(rc2, _enum, name, accid,
                                                        ton));
@@ -153,10 +156,20 @@ void Transition::succ2(std::shared_ptr<const PSC0> c,
             enum Accid accid = scale.accid(deg);
             assert(defined(name));
             assert(defined(accid));
+            assert(accid == MidiNum::accid(m, name));
             cs.push(std::make_shared<PSC2>(rc2, _enum, name, accid, ton));
         }
     }
 }
+
+
+// we loop on the chord, with a auxiliary queue
+void Transition::succ3(std::shared_ptr<const PSC0> c,
+                       const Ton& ton, const Ton& lton, PSCQueue& q) const
+{
+    // TBC
+}
+
 
 
 } // end namespace pse

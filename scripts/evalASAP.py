@@ -245,7 +245,7 @@ lBach = [#(846, 'Prelude', '../../../Datasets/ASAP/Bach/Prelude/bwv_846/xml_scor
          (856, 'Prelude', '../../../Datasets/ASAP/Bach/Prelude/bwv_856/xml_score.musicxml'),
          #(856, 'Fugue', '../../../Datasets/ASAP/Bach/Fugue/bwv_856/xml_score.musicxml'),
          #(857, 'Prelude', '../../../Datasets/ASAP/Bach/Prelude/bwv_857/xml_score.musicxml'),
-         #(857, 'Fugue', '../../../Datasets/ASAP/Bach/Fugue/bwv_857/xml_score.musicxml'),
+         (857, 'Fugue', '../../../Datasets/ASAP/Bach/Fugue/bwv_857/xml_score.musicxml'),
          #(858, 'Prelude', '../../../Datasets/ASAP/Bach/Prelude/bwv_858/xml_score.musicxml'),
          #(858, 'Fugue', '../../../Datasets/ASAP/Bach/Fugue/bwv_858/xml_score.musicxml'),
          #(860, 'Prelude', '../../../Datasets/ASAP/Bach/Prelude/bwv_860/xml_score.musicxml'),
@@ -298,7 +298,7 @@ lBach = [#(846, 'Prelude', '../../../Datasets/ASAP/Bach/Prelude/bwv_846/xml_scor
 
 # the following cause a complexity explosion. TBC.
 # (866, 'Prelude') lonnnng
-Bach_skip = [(856, 'Prelude'), (873, 'Prelude'), ]
+Bach_skip = [(856, 'Prelude'), (873, 'Prelude'), (857, 'Fugue')]
 
 def eval1_Bach(nb, mvt, file, stat, 
                algo=ps.pse.Algo_PSE, tons=25, kpre=33, kpost=23,
@@ -335,6 +335,70 @@ def eval_Bach(stat=ps.Stats(),
     df.to_csv(output_dir(composer='Bach')/'DWK.csv', header=True, index=False)
     stat.write_datasum(output_dir(composer='Bach')/'DWK_sum.csv')
     stat.show()
+    
+    
+def DWV_num(bwv, mvt):
+    """index in list DWK_list() of the Opus BWV, and mvt 'prelude' or 'fugue'"""
+    lB=DWK_list()
+    i = 0
+    for e in lB:
+        if e.nb == bwv and e.mvt == mvt:
+            return i
+        else:
+            i = i+1
+    return None # not found
+
+def quick_eval_Bach(bwv=854, stat=ps.Stats(), 
+              algo=ps.pse.Algo_PSE, nbtons=25, kpre=33, kpost=23,
+              dflag=True, mflag=True):
+    lB=DWK_list()
+    lB1=[]
+    for e in lB:
+        lB1.append(e.nb)
+    i=lB1.index(bwv)
+    p=lB[i]
+    eval1_Bach(nb=p.nb, mvt=p.mvt, file=p.file, stat=stat,algo=algo, 
+               tons=nbtons, kpre=33, kpost=23, dflag=dflag, mflag=mflag)
+    if i<len(lB)-1:
+        print()
+        f=lB[i+1]
+        eval1_Bach(nb=f.nb, mvt=f.mvt, file=f.file, stat=stat,algo=algo, 
+                   tons=nbtons, kpre=33, kpost=23, dflag=dflag, mflag=mflag)
+    
+
+
+######################################
+##                                  ##
+##                                  ##
+######################################
+
+    
+def debug(composer="Bach",i=0):
+    
+    if composer=="Beethoven":
+        dataset=Beethoven_list()
+    
+    else:
+        dataset = DWK_list()
+    
+    file = dataset[i].file
+    #print(file)
+    score = m21.converter.parse(file)
+    lp = score.getElementsByClass(m21.stream.Part)
+    ln = ps.extract_part(lp[0]) # first and unique part
+    for (n, b, s) in ln:   
+        a = 'sp.add('
+        a += str(n.pitch.midi)
+        a += ', '
+        a += str(b)
+        a += ', '
+        a += 'true' if s else 'false'
+        a += ');'
+        print(a)
+##
+
+
+
 
 
 #########################

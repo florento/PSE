@@ -237,9 +237,12 @@ PSState::PSState(const KeyFifth& k)
 }
 
 
-PSState::PSState(const PSState& as):
-_state(as._state)
-{ }
+PSState::PSState(const PSState& rhs):
+_state(rhs._state) // array copy
+{
+//    for (size_t i = 0; i < 7; ++i)
+//        _state[i] = rhs._state[i];
+}
 
 
 PSState::PSState(const PSState& as,
