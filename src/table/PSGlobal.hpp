@@ -145,15 +145,15 @@ private:
     
     bool member(size_t ig) const;
     
-    /// macro: cost equality for the estimation of global.
-    /// use if Costt.operator== is eq_lex.
-    /// @warning static choice
-    bool eGlobals_eq_lex(const PSCost& lhs, const PSCost& rhs) const;
+    // macro: cost equality for the estimation of global.
+    // use if Costt.operator== is eq_lex.
+    // @warning static choice
+    // bool eGlobals_eq_lex(const PSCost& lhs, const PSCost& rhs) const;
 
-    /// macro: cost equality for the estimation of global.
-    /// use if Costt.operator== is eq_cumul.
-    /// @warning static choice
-    inline bool eGlobals_eq_cumul(const PSCost& lhs, const PSCost& rhs) const;
+    // macro: cost equality for the estimation of global.
+    // use if Costt.operator== is eq_cumul.
+    // @warning static choice
+    // inline bool eGlobals_eq_cumul(const PSCost& lhs, const PSCost& rhs) const;
     
 };
 

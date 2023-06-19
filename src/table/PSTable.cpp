@@ -779,7 +779,7 @@ void PST::dump_rowcost() const
 }
 
 
-void PST::dump_table(const std::vector<PSCost>& rc) const
+void PST::dump_table(const std::vector<Cost*>& rc) const
 {
     DEBUGU("PS Table:");
     assert(rc.size() == _index.size());
@@ -813,8 +813,8 @@ void PST::dump_table(const std::vector<PSCost>& rc) const
             }
         }
         std::string hrow; // header
-        
-        DEBUGU("PST row {} {}: {}", _index.ton(i), rc[i], srow);
+        assert(rc[i]);
+        DEBUGU("PST row {} {}: {}", _index.ton(i), *rc[i], srow);
     }
 }
 

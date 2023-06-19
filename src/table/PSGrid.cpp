@@ -175,7 +175,7 @@ size_t PSG::estimateLocal(size_t ig, size_t iprev, std::set<size_t>& cands)
     size_t ibest = TonIndex::UNDEF; // out of range. initialized to avoid warning.
 
     // cost for the current best local tonality.
-    PSCost cbest;  // WARNING: initialized to 0.
+    // PSCost cbest;  // WARNING: initialized to 0.
     
     // current best distance to previous local ton. for ig
     unsigned int dbest = 30; // initialized to avoid warning

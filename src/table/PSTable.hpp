@@ -349,7 +349,7 @@ private:
     void dump_rowcost() const;
    
     /// debug: print the cottent of the table.
-    void dump_table(const std::vector<PSCost>& rc) const;
+    void dump_table(const std::vector<Cost*>& rc) const;
     
 };
 
