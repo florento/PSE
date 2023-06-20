@@ -117,7 +117,7 @@ void Transition::succ2(std::shared_ptr<const PSC0> c,
         {
             // build c2
             // std::shared_ptr<const PSC2> c2(new PSC2(c, c1.get(), chord));
-            q.push(std::make_shared<const PSC2>(c, c1.get(), chord));
+            q.push(std::make_shared<const PSC2>(c, c1, chord));
             continue;
         }
         

@@ -15,7 +15,8 @@ namespace pse {
 
 // first step for processing chord
 //PSC2::PSC2(const PSC0& c, const PSChord& e):
-PSC2::PSC2(std::shared_ptr<const PSC0> c0, const PSC1c* c1, PSChord& chord):
+PSC2::PSC2(std::shared_ptr<const PSC0> c0,
+           std::shared_ptr<const PSC1c> c1, PSChord& chord):
 PSC(c0),
 _midis(chord.size(), 0),    // fix the size
 _names(chord.size(), NoteName::Undef),
@@ -24,28 +25,33 @@ _prints(chord.size(), false)
 {
     assert(c0);
     assert(chord.size() > 1);
+    assert(_midis.size() == chord.size());
+    assert(_names.size() == chord.size());
+    assert(_accids.size() == chord.size());
+    assert(_prints.size() == chord.size());
+
     _id = chord.stop();          // first note after chord
     assert(c1);
     *_cost += c1->cost();
     // _pred is c0
-    const PSC0* co = c1;
-    for (size_t i = chord.size()-1; i >= 0; --i)
-    {
-        const PSC1c* com = dynamic_cast<const PSC1c*>(co);
-        assert(com);
-        assert(i < _midis.size());
-        _midis[i] = com->midi();
-        assert(i < _names.size());
-        assert(defined(com->name()));
-        _names[i] = com->name();
-        assert(i < _accids.size());
-        assert(defined(com->accidental()));
-        _accids[i] = com->accidental();
-        assert(i < _prints.size());
-        _prints[i] = com->printed();
 
-        co = co->previous(); // NULL if co is initial
-        assert(co);
+    const PSC1c* pc1 = c1.get();;
+    for (long i = chord.size()-1; i >= 0; --i)
+    {
+        assert(pc1);
+        assert(i < _midis.size());
+        _midis[i] = pc1->midi();
+        assert(i < _names.size());
+        assert(defined(pc1->name()));
+        _names[i] = pc1->name();
+        assert(i < _accids.size());
+        assert(defined(pc1->accidental()));
+        _accids[i] = pc1->accidental();
+        assert(i < _prints.size());
+        _prints[i] = pc1->printed();
+
+        //co = c1->previous(); // NULL if co is initial
+        pc1 = dynamic_cast<const PSC1c*>(pc1->previous());
     }
 }
 

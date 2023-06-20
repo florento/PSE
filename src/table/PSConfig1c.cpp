@@ -61,6 +61,7 @@ PSC1c::PSC1c(std::shared_ptr<const PSC1c> c,
 PSC1c(*c) // copy and set manually the PSC1 and PSC1c attributes
 {
     assert(c);
+    _pred = c;
     assert(ton.defined());
     // set info on note read (in chord) and spelling)
     //assert(_midi == chord.midipitch(c->id()));

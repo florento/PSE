@@ -50,7 +50,8 @@ public:
     /// @param c0 previous config, to be updated with the received chord.
     /// @param c1 last config reached after processing the chord.
     /// @param chord note enumerator containing the notes of the read chord.
-    PSC2(std::shared_ptr<const PSC0> c0, const PSC1c* c1, PSChord& chord);
+    PSC2(std::shared_ptr<const PSC0> c0,
+         std::shared_ptr<const PSC1c> c1, PSChord& chord);
 
     /// copy constructor
     PSC2(const PSC2& c);
