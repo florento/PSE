@@ -17,7 +17,7 @@ namespace pse {
 //PSC2::PSC2(const PSC0& c, const PSChord& e):
 PSC2::PSC2(std::shared_ptr<const PSC0> c0, const PSC1c* c1, PSChord& chord):
 PSC(c0),
-_midi(chord.size(), 0),    // fix the size
+_midis(chord.size(), 0),    // fix the size
 _names(chord.size(), NoteName::Undef),
 _accids(chord.size(), Accid::Undef),
 _prints(chord.size(), false)
@@ -29,12 +29,12 @@ _prints(chord.size(), false)
     *_cost += c1->cost();
     // _pred is c0
     const PSC0* co = c1;
-    for (size_t i = chord.size(); i >= 0; --i)
+    for (size_t i = chord.size()-1; i >= 0; --i)
     {
         const PSC1c* com = dynamic_cast<const PSC1c*>(co);
         assert(com);
-        assert(i < _midi.size());
-        _midi[i] = com->midi();
+        assert(i < _midis.size());
+        _midis[i] = com->midi();
         assert(i < _names.size());
         assert(defined(com->name()));
         _names[i] = com->name();
@@ -53,7 +53,7 @@ _prints(chord.size(), false)
 // copy
 PSC2::PSC2(const PSC2& rhs):
 PSC(rhs),
-_midi(rhs._midi),     // vector copy
+_midis(rhs._midis),     // vector copy
 _names(rhs._names),   // vector copy
 _accids(rhs._accids), // vector copy
 _prints(rhs._prints)  // vector copy
@@ -71,7 +71,7 @@ PSC2& PSC2::operator=(const PSC2& rhs)
     if (this != &rhs)
     {
         PSC::operator=(rhs);
-        _midi   = rhs._midi;
+        _midis   = rhs._midis;
         _names  = rhs._names;
         _accids = rhs._accids;
         _prints = rhs._prints;
@@ -83,7 +83,7 @@ PSC2& PSC2::operator=(const PSC2& rhs)
 bool PSC2::operator==(const PSC2& rhs) const
 {
     return (PSC::operator==(rhs) &&
-            (_midi == rhs._midi) &&
+            (_midis == rhs._midis) &&
             (_names  == rhs._names) &&
             (_accids == rhs._accids) &&
             (_prints == rhs._prints));
@@ -98,14 +98,14 @@ bool PSC2::operator!=(const PSC2& rhs) const
 
 size_t PSC2::size() const
 {
-    return _midi.size();
+    return _midis.size();
 }
 
 
 unsigned int PSC2::midi(size_t i) const
 {
-    assert(i < _midi.size());
-    return _midi.at(i);
+    assert(i < _midis.size());
+    return _midis.at(i);
 }
 
 

@@ -63,7 +63,8 @@ PSC1c(*c) // copy and set manually the PSC1 and PSC1c attributes
     assert(c);
     assert(ton.defined());
     // set info on note read (in chord) and spelling)
-    assert(_midi == chord.midipitch(c->id()));
+    //assert(_midi == chord.midipitch(c->id()));
+    _midi = chord.midipitch(c->id());
     unsigned int m = _midi % 12;
     _name = _pcn[m];
     assert(defined(_name)); // assert(_name != NoteName::Undef);

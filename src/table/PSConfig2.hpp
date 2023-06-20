@@ -126,7 +126,7 @@ private: // data
     // unsigned int _current;
     
     /// MIDI pitchs of the notes read for the transition to this config.
-    std::vector<unsigned int> _midi;
+    std::vector<unsigned int> _midis;
 
     /// chosen pitch names, in 0..6 (0 is 'C', 6 is 'B'),
     /// for the chord read for the transition to this config.
