@@ -95,7 +95,7 @@ void CostA::update(const PSC1& c, const PSEnum& e, const Ton& gton)
     
     // update cost when accident for the name was updated
     // discount for lead degree
-    if (c.printed() && !(gton.lead(name) && gton.accidDia(name) == accid))
+    if (c.printed() && !(gton.accidDia(name) == accid)) //!(gton.lead()  &&  gton.accidDia(name) == accid)
     {
         switch (accid)
         {
@@ -106,9 +106,6 @@ void CostA::update(const PSC1& c, const PSEnum& e, const Ton& gton)
 
             case Accid::Sharp:
             case Accid::Flat:
-                _accid += 1;
-                break;
-
             case Accid::Natural:
                 _accid += 1;
                 break;
@@ -122,6 +119,66 @@ void CostA::update(const PSC1& c, const PSEnum& e, const Ton& gton)
     }
 }
 
+void CostA::update(const enum NoteName& name, const enum Accid& accid,
+                   bool print,
+                   const Ton& gton, const Ton& lton)
+{
+    // count the cost
+    // bool cc = false;
+    
+    // update cost when accident for the name was updated
+    // discount for lead degree
+    if (print && !(gton.accidDia(name) == accid)) //!(gton.lead()  &&  gton.accidDia(name) == accid)
+    {
+        switch (accid)
+        {
+            case Accid::DoubleSharp:
+            case Accid::DoubleFlat:
+                _accid += 2;
+                break;
+
+            case Accid::Sharp:
+            case Accid::Flat:
+            case Accid::Natural:
+                _accid += 1;
+                break;
+
+            default:
+            {
+                ERROR("PSC: unexpected accidental"); // accid
+                break;
+            }
+        }
+    }
+    if(lton.undef())
+    {
+        //_dist += c.state().dist(lton);
+        //if (print && !(lton.accidDia(name) == accid)) //si l'on veut juger purement d'un point de vue tonal afin de déduire la meilleure tonalité locale, il vaut mieux ne plus se poser la question du print :
+        if (!(lton.accidDia(name) == accid))
+         //!(gton.lead()  &&  gton.accidDia(name) == accid)
+        {
+            switch (accid)
+            {
+                case Accid::DoubleSharp:
+                case Accid::DoubleFlat:
+                    _accid += 2;
+                    break;
+
+                case Accid::Sharp:
+                case Accid::Flat:
+                case Accid::Natural:
+                    _accid += 1;
+                    break;
+
+                default:
+                {
+                    ERROR("PSC: unexpected accidental"); // accid
+                    break;
+                }
+            }
+        }
+    }
+}
 
 void CostA::update(const PSC1& c, const PSEnum& e,
                     const Ton& gton, const Ton& lton)
@@ -140,7 +197,7 @@ void CostA::update(const PSC2& c, const PSEnum& e,
     //    else
     //        cc = print;
     
-    if (print && !(gton.lead(name) && gton.accidDia(name) == accid))
+    if (print && !(gton.accidDia(name) == accid))
     {
         switch (accid)
         {

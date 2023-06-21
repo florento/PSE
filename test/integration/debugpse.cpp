@@ -45,7 +45,7 @@ int main(int argc, const char* argv[])
     // godfried.dump();
     // return 0;
 
-    pse::PSE sp(26, true); 
+    pse::PSE sp(26, true);
     //pse::PSE sp(26, true);
     //pse::PS13 sp;
 

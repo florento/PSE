@@ -78,6 +78,15 @@ public:
     virtual void update(const PSC1& c, const PSEnum& e,
                         const Ton& gton) = 0;
 
+    
+    
+    
+    //void update(const enum NoteName& name, const enum Accid& accid,
+    //                   bool print,
+    //            const Ton& gton, const Ton& lton = Ton()) = 0;
+    
+    
+    
     /// update this cost for doing a transition into the given config,
     /// from its previous config,
     /// in given hypothetic global and local tonalities.
