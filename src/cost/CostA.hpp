@@ -71,6 +71,10 @@ public:
     /// create a smart clone of this cost.
     virtual std::unique_ptr<Cost> unique_clone() const override;
     
+    void update(const enum NoteName& name, const enum Accid& accid,
+                       bool print,
+                const Ton& gton, const Ton& lton = Ton());
+    
     /// update this cost for doing a transition into the given config,
     /// from its previous config, in a given hypothetic global tonality.
     /// @see PSC.previous()
