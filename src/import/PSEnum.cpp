@@ -194,6 +194,15 @@ bool PSEnum::rewritePassing(size_t i)
     assert(n1 != NoteName::Undef);
     assert(n2 != NoteName::Undef);
 
+//    if (n0 == NoteName::Undef)
+//    {
+//        ERROR("rewritePassing: {} undef", n0);
+//        return false;
+//    }
+//
+//    if (n1 == NoteName::Undef || n2 == NoteName::Undef)
+//        return false;
+
     /// @todo TBC: overlapping cases?
     
     // broderie down

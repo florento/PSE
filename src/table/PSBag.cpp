@@ -61,7 +61,7 @@ void PSB::init(const Ton& ton, const Ton& lton,
     // at least one note, the bag cannot be empty.
     assert(_enum.first() < _enum.stop());
 
-    assert((a == Algo::PSE0) || (a == Algo::PSE1) || (a == Algo::PS14));
+    assert((a == Algo::PSE) || (a == Algo::PS14));
     Transition transition(a, _enum);
     
     // backup of configurations during construction

@@ -100,7 +100,7 @@ bool Speller2Pass::spell(const Cost& seed0, const Cost& seed1,
         
         if (rewrite_flag1)
         {
-            TRACE("pitch-spelling: rewrite passing notes");
+            INFO("pitch-spelling: rewrite passing notes");
             _table1->enumerator().rewritePassing();
         }
     }

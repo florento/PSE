@@ -130,8 +130,7 @@ void Transition::succ2(std::shared_ptr<const PSC0> c,
             cs.push(std::make_shared<PSC1c>(c1, chord, ton, lton));
         }
         // 3 enharmonics = potential successors in algo PSE
-        else if ((_algo == Algo::PSE) ||
-                 (_algo == Algo::PSE0) || (_algo == Algo::PSE1))
+        else if (_algo == Algo::PSE)
         {
             for (int j = 0; j < 3; ++j)
             {

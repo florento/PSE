@@ -28,11 +28,11 @@ enum class Algo
     /// algo PSE, both passes
     PSE,
     
-    /// algo PSE, step 0
-    PSE0,
+    // algo PSE, step 0
+    // PSE0,
 
-    /// algo PSE, step 1
-    PSE1,
+    // algo PSE, step 1
+    // PSE1,
 
     /// Meredith's PS13
     PS13,

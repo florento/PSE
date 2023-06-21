@@ -20,11 +20,11 @@ std::string tostring(const Algo& a)
         case Algo::PSE:
             return "PSE";
 
-        case Algo::PSE0:
-            return "PSE0";
+        // case Algo::PSE0:
+        //    return "PSE0";
 
-        case Algo::PSE1:
-            return "PSE1";
+        //case Algo::PSE1:
+        //    return "PSE1";
 
         case Algo::PS13:
             return "PS13";

@@ -255,7 +255,7 @@ bool Speller1Pass::spell(const Cost& seed0, double diff0,
     assert(rewrite_flag0 == false || rename_flag == true);
     if (rename_flag && rewrite_flag0)
     {
-        TRACE("pitch-spelling: rewrite passing notes");
+        INFO("pitch-spelling: rewrite passing notes");
         _table0->enumerator().rewritePassing();
     }
 
