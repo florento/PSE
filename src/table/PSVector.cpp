@@ -199,14 +199,14 @@ void PSV::init_psbs(const Cost& seed)
             // arg local ton is ignored
             _psbs[i] =
                 std::make_shared<const PSB>(Algo::PSE, seed, enumerator(),
-                                            toni, toni);
+                                            toni, Ton());
         }
         else if (_algo == Algo::PS14)
         {
             // arg local ton is ignored
             _psbs[i] =
                 std::make_shared<const PSB>(Algo::PS14, seed, enumerator(),
-                                            toni, toni);
+                                            toni,  Ton());
         }
         else
         {

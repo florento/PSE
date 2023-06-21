@@ -52,5 +52,69 @@
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "3158C667-2AE8-46C4-9517-2437FA8C21A9"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "src/table/PSConfig1c.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "59"
+            endingLineNumber = "59"
+            landmarkName = "PSC1c::PSC1c(c, chord, name, accid, force_print, gton, lton)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "8838F16C-7FDF-4626-B61F-78376FDF5CC7"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "src/table/PSConfig1.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "29"
+            endingLineNumber = "29"
+            landmarkName = "PSC1::PSC1(c, e, name, accid, cprint, gton, lton)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "8838F16C-7FDF-4626-B61F-78376FDF5CC7 - 78432fba0c2d7c31"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "pse::PSC1::PSC1(std::__1::shared_ptr&lt;pse::PSC0 const&gt;, pse::PSEnum const&amp;, pse::NoteName const&amp;, pse::Accid const&amp;, bool, pse::Ton const&amp;, pse::Ton const&amp;)"
+                  moduleName = "debugpse"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/jacquema/Code/PSE/src/table/PSConfig1.cpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "29"
+                  endingLineNumber = "29"
+                  offsetFromSymbolStart = "314">
+               </Location>
+               <Location
+                  uuid = "8838F16C-7FDF-4626-B61F-78376FDF5CC7 - 78432fba0c2d7c10"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "pse::PSC1::PSC1(std::__1::shared_ptr&lt;pse::PSC0 const&gt;, pse::PSEnum const&amp;, pse::NoteName const&amp;, pse::Accid const&amp;, bool, pse::Ton const&amp;, pse::Ton const&amp;)"
+                  moduleName = "debugpse"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/jacquema/Code/PSE/src/table/PSConfig1.cpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "30"
+                  endingLineNumber = "30"
+                  offsetFromSymbolStart = "151">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
    </Breakpoints>
 </Bucket>
