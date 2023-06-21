@@ -106,9 +106,6 @@ void CostA::update(const PSC1& c, const PSEnum& e, const Ton& gton)
 
             case Accid::Sharp:
             case Accid::Flat:
-                _accid += 1;
-                break;
-
             case Accid::Natural:
                 _accid += 1;
                 break;
@@ -140,7 +137,7 @@ void CostA::update(const PSC2& c, const PSEnum& e,
     //    else
     //        cc = print;
     
-    if (print && !(gton.lead(name) && gton.accidDia(name) == accid))
+    if (print && !(gton.accidDia(name) == accid))
     {
         switch (accid)
         {

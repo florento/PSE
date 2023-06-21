@@ -105,7 +105,7 @@ void CostAD::update(const PSC1& c, const PSEnum& e, const Ton& gton)
     
     // update cost when accident for the name was updated
     // discount for lead degree
-    if (c.printed() && !(gton.lead(name) && gton.accidDia(name) == accid))
+    if (c.printed() && !(gton.accidDia(name) == accid))
     {
         switch (accid)
         {
@@ -152,7 +152,7 @@ void CostAD::update(const PSC2& c, const PSEnum& e,
     //    else
     //        cc = print;
     
-    if (print && !(gton.lead(name) && gton.accidDia(name) == accid))
+    if (print && !(gton.accidDia(name) == accid))
     {
         switch (accid)
         {
