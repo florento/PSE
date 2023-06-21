@@ -95,6 +95,10 @@ void Transition::succ2(std::shared_ptr<const PSC0> c,
     const PSC0& c0 = *c;
     assert(_enum.simultaneous(c0.id())); // we are at the beginning of a chord
     PSChord chord(_enum, c0.id());
+    DEBUGU("CHORD of size {} at {}", chord.size(), chord.first());
+    system("read"); // Press any key to continue...
+    //std::string pipo;    std::cin >> pipo;
+
     // two pairs of parentheses to declare cs as a variable.
     // std::priority_queue<std::shared_ptr<const PSC1c>,
     //                     std::vector<std::shared_ptr<const PSC1c>>,
@@ -105,7 +109,6 @@ void Transition::succ2(std::shared_ptr<const PSC0> c,
     // initial config (beginning of chord
     cs.push(std::make_shared<const PSC1c>(c, chord));
 
-    
     while (! cs.empty())
     {
         std::shared_ptr<const PSC1c> c1 = cs.top();
@@ -115,6 +118,7 @@ void Transition::succ2(std::shared_ptr<const PSC0> c,
         // the chord has been fully processed
         if (c1->complete())
         {
+            DEBUGU("spelling of cost {}", c1->cost());
             // build c2
             // std::shared_ptr<const PSC2> c2(new PSC2(c, c1.get(), chord));
             q.push(std::make_shared<const PSC2>(c, c1, chord));

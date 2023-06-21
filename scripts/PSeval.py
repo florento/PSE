@@ -737,6 +737,7 @@ def eval_part(part, stat,
         sp.add(midi=n.pitch.midi, bar=b, simultaneous=s)
     # spell
     stat.start_timer()
+    print('start Spelling part')
     sp.spell()
     stat.stop_timer()
     # compute diff list between reference score and respell

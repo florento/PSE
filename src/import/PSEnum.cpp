@@ -219,34 +219,34 @@ bool PSEnum::rewritePassing(size_t i)
         return true;
     }
 
-    // descending 1
-    else if (d0 == -1 & d1 == -2 && n1 == n0 && n2 == n0-2)
+    // descending 1+
+    else if ((d0 == -1 || d0 == -2) && d1 == -2 && n1 == n0 && n2 == n0-2)
     {
         rename(i+1, n1-1);
         return true;
     }
 
-    // ascending 1
-    else if (d0 == 1 & d1 == 2 && n1 == n0 && n2 == n0+2)
+    // ascending 1+
+    else if ((d0 == 1 || d0 == 2) && d1 == 2 && n1 == n0 && n2 == n0+2)
     {
         rename(i+1, n1+1);
         return true;
     }
 
-    // descending 2
-    else if (d0 == -2 & d1 == -1 && n2 == n1 && n2 == n0-2)
+    // descending 2+
+    else if (d0 == -2 && (d1 == -1 || d1 == -2) && n2 == n1 && n2 == n0-2)
     {
         rename(i+1, n1+1);
         return true;
     }
 
-    // ascending 2
-    else if (d0 == 2 & d1 == 1 && n2 == n1 && n2 == n0+2)
+    // ascending 2+
+    else if (d0 == 2 && (d1 == 1 || d1 == 2) && n2 == n1 && n2 == n0+2)
     {
         rename(i+1, n1-1);
         return true;
     }
-
+        
     else
         return false;
 }
