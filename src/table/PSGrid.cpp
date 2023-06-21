@@ -297,13 +297,69 @@ size_t PSG::estimateLocal(size_t ig, size_t iprev, std::set<size_t>& cands)
 }
 
 
+//______________________________________________________________________________//
+/*
+
+
+void PSG::init(const PST& tab, std::vector<bool> mask)
+{
+
+    for (size_t j = 0; j < tab.columnNb(); ++j)
+    {
+        // column of best paths for measure j
+        const PSV& vec = tab.column(j);
+        assert(vec.size() == mask.size());
+
+        // set of index of elements in vec with a best cost.
+        // (there are several in case of tie).
+        //std::set<size_t> ties; // empty
+        // cands empty in case of empty measure
+        
+        // add empty column
+        assert(_content.size() == j); // current nb of columns
+        _content.emplace_back();
+        std::vector<size_t>& current = _content.back();
+
+        // compute every row in this new column
+        for (size_t i = 0; i < vec.size(); ++i)
+        {
+            // i is masked : do not estimate local for i
+            if (mask[i] == false)
+            {
+                current.push_back(TonIndex::UNDEF);
+            }
+            // in the first column (first measure)
+            else if (_content.size() == 1)
+            {
+                current.push_back(estimateLocalalt(vec, i, i, 4));
+            }
+            // otherwise, consider previous column
+            else
+            {
+                assert(j > 0);
+                assert(j-1 < _content.size());
+                assert(i < _content.at(j-1).size());
+                size_t iprev = _content.at(j-1).at(i);
+                current.push_back(estimateLocalalt(vec, i, iprev, 4));
+            }
+            assert(current.back() == TonIndex::UNDEF ||
+                   current.back() < _index.size());
+            //INFO("BUG 102: {} (UNDEF={})", _content.back().back(), TonIndex::UNDEF);
+        }
+        assert(current.size() == vec.size());
+    }
+}
+
+*/
+
 //this alternative function determines the best local tonality by restraining its search only on tones close to the previous or global one and then choosing the one minimizing accidents
-size_t PSG::estimateLocalalt(const PSV& vec, std::set<size_t>& ties, size_t ig, size_t iprev, unsigned int d)
+size_t PSG::estimateLocalalt(const PSV& vec, size_t ig, size_t iprev, unsigned int d)
 {
     // no candidates in case of empty bar: keep the previous local
     //if (cands.empty())
     //    return iprev;  // TonIndex::FAILED; // TonIndex::UNDEF
     std::set<size_t> cands ;
+    std::set<size_t> ties ;
     
     
     assert(iprev != TonIndex::UNDEF);
@@ -332,13 +388,14 @@ size_t PSG::estimateLocalalt(const PSV& vec, std::set<size_t>& ties, size_t ig, 
         if ((dist <= d) || (distg <= d))
         {
             cands.insert(j);
+            //ibest = j;
             //continue;
         }
     }
     
     
     std::shared_ptr<Cost> cbest = nullptr;
-    
+    int cpt = 0;
     for (size_t j : cands)
     {
         const PSB& psb = vec.bag(j);
@@ -350,10 +407,11 @@ size_t PSG::estimateLocalalt(const PSV& vec, std::set<size_t>& ties, size_t ig, 
         const Cost& cost = psb.cost(); // shared_clone();
         
         // new best cost     // cbest = 0 when j = 0
-        if ((j == 0) || ((cbest != nullptr) && (cost < *cbest)))
+        if ((cpt == 0) || ((cbest != nullptr) && (cost < *cbest)))
         {
             ibest = j;
             cbest = cost.shared_clone();
+            cpt++;
             //ties.clear();
             //auto ret = ties.insert(j);
             //assert(ret.second == true); // j was inserted
@@ -380,7 +438,7 @@ size_t PSG::estimateLocalalt(const PSV& vec, std::set<size_t>& ties, size_t ig, 
             WARN("PSGrid, estimation local, tie break fail {} vs {} dist prev({})={}, dist global({})={})",
                  jton, _index.ton(ibest), pton, dist, gton, distg);
         }
-        // otherwisse keep the current best
+        // otherwise keep the current best
         else
         {
             assert((cbest == nullptr) || (cost > *cbest)); // we did not forget a case

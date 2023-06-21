@@ -45,12 +45,12 @@ int main(int argc, const char* argv[])
     // godfried.dump();
     // return 0;
 
-    pse::PS14 sp(26, true); // DWV
-    //pse::PSE sp(26, true);
+    //pse::PS14 sp(26, true); // DWV
+    pse::PSE sp(26, true);
     //pse::PS13 sp;
 
-    //BWV_857fugue(sp);
-    LG461(sp);
+    BWV_857fugue(sp);
+    //LG461(sp);
     // Waldstein(sp);
     
     std::cout << sp.size() << " notes" << std::endl;
