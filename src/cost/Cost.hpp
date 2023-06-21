@@ -78,14 +78,20 @@ public:
     virtual void update(const PSC1& c, const PSEnum& e,
                         const Ton& gton) = 0;
 
-    
-    
-    
-    //void update(const enum NoteName& name, const enum Accid& accid,
-    //                   bool print,
-    //            const Ton& gton, const Ton& lton = Ton()) = 0;
-    
-    
+      
+    /// update this cost for doing a transition renaming one note (single
+    /// or in chord) with the given parameters and in a given hypothetic global
+    /// local tonalities.
+    /// @param name chosen name for the received pitch, in 0..6 (0 is 'C', 6 is 'B').
+    /// @param accid chosen alteration for the received pitch, in -2..2.
+    /// @param print whether the accidental must be printed in score.
+    /// @param gton conjectured main (global) tonality (key signature).
+    /// @param lton conjectured local tonality or undef tonlity if it is
+    /// not known.
+    virtual void update(const enum NoteName& name,
+                        const enum Accid& accid,
+                        bool print,
+                        const Ton& gton, const Ton& lton = Ton()) = 0;
     
     /// update this cost for doing a transition into the given config,
     /// from its previous config,

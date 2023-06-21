@@ -128,7 +128,8 @@ void CostA::update(const enum NoteName& name, const enum Accid& accid,
     
     // update cost when accident for the name was updated
     // discount for lead degree
-    if (print && !(gton.accidDia(name) == accid)) //!(gton.lead()  &&  gton.accidDia(name) == accid)
+    if (print && !(gton.accidDia(name) == accid))
+        //!(gton.lead()  &&  gton.accidDia(name) == accid)
     {
         switch (accid)
         {
@@ -150,7 +151,8 @@ void CostA::update(const enum NoteName& name, const enum Accid& accid,
             }
         }
     }
-    if(lton.undef())
+
+    if (lton.defined())
     {
         //_dist += c.state().dist(lton);
         //if (print && !(lton.accidDia(name) == accid)) //si l'on veut juger purement d'un point de vue tonal afin de déduire la meilleure tonalité locale, il vaut mieux ne plus se poser la question du print :

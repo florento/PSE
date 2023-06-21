@@ -95,6 +95,63 @@ std::unique_ptr<Cost> CostAD::unique_clone() const
     return std::unique_ptr<Cost>(new CostAD(*this));
 }
 
+
+void CostAD::update(const enum NoteName& name, const enum Accid& accid,
+                    bool print,
+                    const Ton& gton, const Ton& lton)
+{
+    if (print && !(gton.accidDia(name) == accid)) //!(gton.lead()  &&  gton.accidDia(name) == accid)
+    {
+        switch (accid)
+        {
+            case Accid::DoubleSharp:
+            case Accid::DoubleFlat:
+                _accid += 2;
+                break;
+
+            case Accid::Sharp:
+            case Accid::Flat:
+            case Accid::Natural:
+                _accid += 1;
+                break;
+
+            default:
+            {
+                ERROR("PSC: unexpected accidental"); // accid
+                break;
+            }
+        }
+    }
+    
+    if (lton.defined())
+    {
+        if (!(lton.accidDia(name) == accid))
+         //!(gton.lead()  &&  gton.accidDia(name) == accid)
+        {
+            switch (accid)
+            {
+                case Accid::DoubleSharp:
+                case Accid::DoubleFlat:
+                    _dist += 2;
+                    break;
+
+                case Accid::Sharp:
+                case Accid::Flat:
+                case Accid::Natural:
+                    _dist += 1;
+                    break;
+
+                default:
+                {
+                    ERROR("PSC: unexpected accidental"); // accid
+                    break;
+                }
+            }
+        }
+    }
+}
+
+
 void CostAD::update(const PSC1& c, const PSEnum& e, const Ton& gton)
 {
     // count the cost
