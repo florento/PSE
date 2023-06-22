@@ -109,47 +109,76 @@ void PSP::record_path(const PSC0& c)
     assert(co->initial() || co->fromNote() || co->fromChord());
     while (! co->initial())
     {
-        if (co->fromNote())
-        {
-            const PSC1* com = dynamic_cast<const PSC1*>(co);
-            assert(com);
-            //unsigned int m =
-            const enum NoteName& name = com->name();
-            const enum Accid& accid = com->accidental();
-            assert(accid == MidiNum::accid(com->midi()%12, name));
-            _names.insert(_names.begin(), name);  // push_front (copy)
-            _accids.insert(_accids.begin(), accid);
-            _prints.insert(_prints.begin(), com->printed());
-        }
-        else
-        {
-            assert(co->fromChord());
-            const PSC2* com = dynamic_cast<const PSC2*>(co);
-            assert(com);
-            // assert(com->size() > 1);
-            std::vector<enum Accid> accids;
-            for (size_t i = 0; i < com->size(); ++i)
-            {
-                assert(com->accidental(i) ==
-                       MidiNum::accid(com->midi(i)%12, com->name(i)));
-                accids.push_back(com->accidental(i));
-            }
-
-            _names.insert(_names.begin(), com->cbeginName(), com->cendName());
-            _accids.insert(_accids.begin(), accids.cbegin(), accids.cend());
-            _prints.insert(_prints.begin(), com->cbeginPrint(), com->cendPrint());
-        }
+        const PSC1* com = dynamic_cast<const PSC1*>(co);
+        assert(com);
+        const enum NoteName& name = com->name();
+        const enum Accid& accid = com->accidental();
+        assert(accid == MidiNum::accid(com->midi()%12, name));
+        _names.insert(_names.begin(), name);  // push_front (copy)
+        _accids.insert(_accids.begin(), accid);
+        _prints.insert(_prints.begin(), com->printed());
         
-        assert(co->previous());
         co = co->previous(); // NULL if co is initial
         assert(co);
         assert(co->initial() || co->fromNote() || co->fromChord());
     }
-    
     assert(_names.size()  == _enum.size()); // number of notes
     assert(_accids.size() == _enum.size());
     assert(_prints.size() == _enum.size());
 }
+
+
+//void PSP::record_path(const PSC0& c)
+//{
+//    assert(c.id() == _enum.stop());
+//    assert(_cost);
+//    assert(*_cost == c.cost());
+//    const PSC0* co = &c;
+//    assert(co);
+//    assert(co->initial() || co->fromNote() || co->fromChord());
+//    while (! co->initial())
+//    {
+//        if (co->fromNote())
+//        {
+//            const PSC1* com = dynamic_cast<const PSC1*>(co);
+//            assert(com);
+//            //unsigned int m =
+//            const enum NoteName& name = com->name();
+//            const enum Accid& accid = com->accidental();
+//            assert(accid == MidiNum::accid(com->midi()%12, name));
+//            _names.insert(_names.begin(), name);  // push_front (copy)
+//            _accids.insert(_accids.begin(), accid);
+//            _prints.insert(_prints.begin(), com->printed());
+//        }
+//        else
+//        {
+//            assert(co->fromChord());
+//            const PSC2* com = dynamic_cast<const PSC2*>(co);
+//            assert(com);
+//            // assert(com->size() > 1);
+//            std::vector<enum Accid> accids;
+//            for (size_t i = 0; i < com->size(); ++i)
+//            {
+//                assert(com->accidental(i) ==
+//                       MidiNum::accid(com->midi(i)%12, com->name(i)));
+//                accids.push_back(com->accidental(i));
+//            }
+//
+//            _names.insert(_names.begin(), com->cbeginName(), com->cendName());
+//            _accids.insert(_accids.begin(), accids.cbegin(), accids.cend());
+//            _prints.insert(_prints.begin(), com->cbeginPrint(), com->cendPrint());
+//        }
+//
+//        assert(co->previous());
+//        co = co->previous(); // NULL if co is initial
+//        assert(co);
+//        assert(co->initial() || co->fromNote() || co->fromChord());
+//    }
+//
+//    assert(_names.size()  == _enum.size()); // number of notes
+//    assert(_accids.size() == _enum.size());
+//    assert(_prints.size() == _enum.size());
+//}
 
 
 void PSP::rename()

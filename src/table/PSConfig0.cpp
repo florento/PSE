@@ -12,8 +12,9 @@
 #include <stack>
 
 #include "PSConfig0.hpp"
-#include "PSConfig1.hpp"
-#include "PSConfig2.hpp"
+//#include "PSConfig1.hpp"
+//#include "PSConfig1c.hpp"
+//#include "PSConfig2.hpp"
 #include "Enharmonic.hpp"
 
 
@@ -99,6 +100,12 @@ bool PSC0::fromNote() const
 
 
 bool PSC0::fromChord() const
+{
+    return false;
+}
+
+
+bool PSC0::inChord() const
 {
     return false;
 }

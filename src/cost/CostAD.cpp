@@ -8,6 +8,7 @@
 #include "CostAD.hpp"
 
 #include "PSConfig1.hpp"
+#include "PSConfig1c.hpp"
 #include "PSConfig2.hpp"
 
 namespace pse {

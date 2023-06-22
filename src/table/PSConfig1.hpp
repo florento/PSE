@@ -70,14 +70,13 @@ public:
     /// the cost (number of accidentals) and distance (to local ton) are updated.
     /// @param c previous config, to be updated with the received pitch.
     // @param p pitch to be named, used to update the config.
-    /// @param e an enumerator of notes read for transition tp this configs.
+    /// @param e an enumerator of notes read for transition to this configs.
     /// @param name chosen name for the received pitch, in 0..6 (0 is 'C', 6 is 'B').
     /// @param accid chosen alteration for the received pitch, in -2..2.
     /// @param count_print whether the note must be counted as printed
     /// (for the computation of cost).
     /// @param gton conjectured main (global) tonality (key signature).
-    /// @param lton conjectured local tonality,
-    /// or undef Ton if it is not knnown yet.
+    /// @param lton conjectured local tonality, undef if it is not known yet.
     PSC1(std::shared_ptr<const PSC0> c, const PSEnum& e,
          const enum NoteName& name, const enum Accid& accid,
          bool count_print,
@@ -132,6 +131,9 @@ public:
     /// several simultaneous notes (an interval or a "chord").
     /// Always false for this class.
     virtual bool fromChord() const;
+    
+    /// we are currently processing a chord.
+    virtual bool inChord() const;
 
 protected: // data
         

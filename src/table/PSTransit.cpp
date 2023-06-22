@@ -97,7 +97,6 @@ typedef std::priority_queue<std::shared_ptr<const PSC1c>,
                             std::vector<std::shared_ptr<const PSC1c>>,
                             PSC1cCompare> PSC1cQueue;
 
-
 // we loop on the chord, with a auxiliary queue
 void Transition::succ2(std::shared_ptr<const PSC0> c,
                        const Ton& gton, const Ton& lton, PSCQueue& q) const
@@ -108,7 +107,7 @@ void Transition::succ2(std::shared_ptr<const PSC0> c,
     PSChord chord(_enum, c0.id());
     DEBUGU("CHORD of size {} at {} (current cost:{})",
            chord.size(), chord.first(), c0.cost());
-    std::cin.get();  //system("read"); // Press any key to continue...
+    //std::cin.get();  //system("read"); // Press any key to continue...
 
     // two pairs of parentheses to declare cs as a variable.
     // std::priority_queue<std::shared_ptr<const PSC1c>,

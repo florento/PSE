@@ -58,8 +58,8 @@ public:
     /// @param ton a tonality, used to defined the accident state of this initial config.
     /// @param id index (in a note enumerator) of the note to read
     /// in order to reach the successor configs from this config.
-    /// @param seed cost value of specialized type used to create a null cost
-    /// of the same type.
+    /// @param seed cost value of specialized type
+    /// (to create a cost of the same type).
     PSC0(const Ton& ton, size_t id, const Cost& seed);
 
     // initial config for a given key signature.
@@ -94,6 +94,9 @@ public:
     /// this configuration was reached by reading
     /// several simultaneous notes (a "chord").
     virtual bool fromChord() const;
+    
+    /// we are currently processing a chord.
+    virtual bool inChord() const;
 
     /// previous config in shortest path to this config,
     /// or null if there are none.

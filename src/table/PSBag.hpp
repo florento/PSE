@@ -25,7 +25,8 @@
 #include "Cost.hpp"
 #include "PSConfig0.hpp"
 #include "PSConfig1.hpp"
-#include "PSConfig2.hpp"
+#include "PSConfig1c.hpp"
+//#include "PSConfig2.hpp"
 
 
 namespace pse {
@@ -57,15 +58,15 @@ public:
     /// bag of best target configs configs for a conjectured global tonality
     /// (key sig), a conjectured local tonality (tie break) and a measure of notes.
     /// @param a name of pitch-spelling algorithm implemented.
-    /// @param seed cost value of specialized type used to create a null cost
-    /// of the same type.
+    /// @param seed cost value of specialized type (to create a cost of
+    /// the same type).
     /// @param e an enumerator of notes for computing transitions between configs.
     /// @param ton conjectured global tonality (key sig),
     /// used to define the initial config.
     /// @param lton conjectured local tonality, to compute the cumulated
     /// distance value used for tie break.
     PSB(const Algo& a, const Cost& seed,
-        PSEnum& e, const Ton& ton, const Ton& lton);
+        PSEnum& e, const Ton& ton, const Ton& lton = Ton());
     
     ~PSB();
     
@@ -102,6 +103,9 @@ private: // data
     // tonality of the best path, determines the source config of the best paths.
     // const Ton& _ton;
 
+    /// name  of algorithm to consider for computing the transitions.
+    Algo _algo;
+    
     /// enumerator of notes for computing transitions between configs.
     PSEnum& _enum;
     
@@ -127,18 +131,33 @@ private:
     /// - shortest path determined only by the nb of accidents.
     /// - shortest path determined by the nb of accidents and distance
     ///   to a conjectured local tonality (tie break).
+    /// @param a name of pitch-spelling algorithm implemented.
+    /// @param seed cost value of specialized type (to create a cost of
+    /// the same type).
     /// @param ton conjectured global tonality (key sig),
     /// used to define the initial config.
     /// @param lton conjectured local tonality, to compute the cumulated
     /// dist value used for tie break.
-    /// @param a name of pitch-spelling algorithm implemented.
     // @param fsucc flag, whether the successor is computed with ton only
     // or ton and lton.
-    void init(const Ton& ton, const Ton& lton,
-              const Algo& a, const Cost& seed); // bool fsucc);
+    void init(const Cost& seed, const Ton& ton, const Ton& lton); // bool fsucc);
 
-    // @param q priority queue for the computation of the best path.
+    /// allocate every config reached by one transition from the given config,
+    /// when reading one pitch or several simultaneous pitchs,
+    /// and push it to the given queue.
+    /// @param c source configuration.
+    /// this config.
+    /// @param gton conjectured main (global) tonality (key signature).
+    /// @param lton conjectured local tonality. ignored if algo is not PSE1.
+    /// @param q priority queue receiving the target configs.
+    void succ(std::shared_ptr<const PSC0> c, PSCQueue& q,
+              const Ton& gton, const Ton& lton = Ton()) const;
     
+    void get_names(size_t id, const Ton& gton,
+                   std::stack<enum NoteName>& names,
+                   std::stack<enum Accid>& accids) const;
+                   // std::stack<bool>& prints) const;
+        
     /// access one PS config in this bag.
     /// @param i index of an element of this bag.
     /// must be strictly smaller than PSB.size().

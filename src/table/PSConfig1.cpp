@@ -181,6 +181,12 @@ bool PSC1::fromChord() const
 }
 
 
+bool PSC1::inChord() const
+{
+    return false;
+}
+
+
 } // end namespace pse
 
 /// @}

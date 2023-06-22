@@ -36,30 +36,43 @@ class PSC1c : public PSC1
 {
 public:
     
-    /// initial PSC1c for the processing of the given chord.
-    PSC1c(std::shared_ptr<const PSC0> c, PSChord& chord);
+    // initial PSC1c for the processing of the given chord.
+    // PSC1c(std::shared_ptr<const PSC0> c, PSChord& chord);
     // PSC1c(const PSC0& c, PSChord& chord);
 
+    /// configuration reached with the first note in the given chord.
+    /// @param c previous config, to be updated with the received pitch.
+    /// @param e an enumerator of notes read for transition to this configs.
+    /// @param name chosen name for the received pitch, in 0..6 (0 is 'C', 6 is 'B').
+    /// @param accid chosen alteration for the received pitch, in -2..2.
+    /// @param gton conjectured main (global) tonality (key signature).
+    /// @param lton conjectured local tonality, undef if it is not known yet.
+    PSC1c(std::shared_ptr<const PSC0> c,
+          const PSEnum& e,
+          const enum NoteName& name,
+          const enum Accid& accid,
+          const Ton& gton,
+          const Ton& lton = Ton());
+      
     /// next PSC1c for the processing of one note in the given chord.
     /// @param c previous config (origin), to be updated with the received pitch.
-    /// @param chord an enumerator of notes read for transition to this config.
+    // @param chord an enumerator of notes in chord currently processed.
     /// @param name chosen name for the received pitch,
     /// or undef if the current pitch class was already met.
     /// @param accid chosen alteration for the received pitch,
     /// or undef if the current pitch class was already met.
     /// @param force_print whether the note must be counted as printed
     /// (for the computation of cost).
-    /// @param ton conjectured main (global) tonality (key signature),
+    /// @param gton conjectured main (global) tonality (key signature),
     /// or undef if the current pitch class was already met.
     /// @param lton conjectured local tonality,
     /// or undef if it was not yet estimated
     /// or if the current pitch class was already met.
     PSC1c(std::shared_ptr<const PSC1c> c,
-          const PSChord& chord,
-          const enum NoteName& name, // = NoteName::Undef,
-          const enum Accid& accid, // = Accid::Undef,
+          const enum NoteName& name,
+          const enum Accid& accid,
           bool force_print,
-          const Ton& ton, // = Ton(),
+          const Ton& gton,
           const Ton& lton = Ton());
     
     // next PSC1c for the processing of the given chord,
@@ -102,7 +115,17 @@ public:
     /// the processing of the chord is terminated.
     bool complete() const;
     
+    /// we are currently processing a chord.
+    virtual bool inChord() const;
+    
+    /// the chord currently processed.
+    const PSChord& chord() const;
+    
 private:
+
+    /// chord currently processed.
+    std::shared_ptr<const PSChord> _chord;
+    
     /// map associating to every pitch class in 0..12
     /// a note name, if the pitch class was encountered while processing the chord
     /// or NoteName::Undef otherwise.
@@ -119,7 +142,11 @@ private:
     
     /// internal constructor.
     PSC1c(const PSC& c, PSChord& chord);
-     
+    
+    void post_init(const PSC0& c, const PSChord& chord);
+    
+    std::shared_ptr<const PSChord> init_chord(const PSC1c* c) const;
+    
 };
 
 
