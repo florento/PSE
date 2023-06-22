@@ -44,20 +44,20 @@ public:
     /// and push it to the given queue.
     /// @param c source configuration.
     /// this config.
-    /// @param ton conjectured main (global) tonality (key signature).
+    /// @param gton conjectured main (global) tonality (key signature).
     /// @param lton conjectured local tonality. ignored if algo is not PSE1.
     /// @param q queue receiving the target configs.
     void succ(std::shared_ptr<const PSC0> c,
-              const Ton& ton, const Ton& lton, PSCQueue& q) const;
+              const Ton& gton, const Ton& lton, PSCQueue& q) const;
     
     /// allocate every config reached by one transition from the given config,
     /// when reading one pitch and push it to the given queue.
     /// @param c source configuration.
-    /// @param ton conjectured main (global) tonality (key signature).
+    /// @param gton conjectured main (global) tonality (key signature).
     /// @param lton conjectured local tonality. ignored if algo is not PSE1.
     /// @param q queue receiving the target configs.
     void succ1(std::shared_ptr<const PSC0> c,
-               const Ton& ton, const Ton& lton, PSCQueue& q) const;
+               const Ton& gton, const Ton& lton, PSCQueue& q) const;
 
     // allocate every config reached by one transition from the given config,
     // when reading several simultaneous pitchs (chord), and push it to

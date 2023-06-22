@@ -41,6 +41,18 @@ bool PSClex::operator()(std::shared_ptr<const PSC0>& lhs,
 //      return (lhs->accidentals() > rhs->accidentals());  // smallest cost
 };
 
+
+bool PSClexc::operator()(std::shared_ptr<const PSC1c>& lhs,
+                         std::shared_ptr<const PSC1c>& rhs)
+{
+    assert (lhs);
+    assert (rhs);
+    if (lhs->cost() == rhs->cost())
+        return (lhs->id() < rhs->id());      // largest index
+    else
+        return (lhs->cost() > rhs->cost());  // smallest cost
+};
+
 //bool PSCcumul::operator()(std::shared_ptr<const PSC0>& lhs,
 //                          std::shared_ptr<const PSC0>& rhs)
 //{

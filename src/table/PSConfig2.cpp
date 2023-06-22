@@ -88,11 +88,11 @@ PSC2& PSC2::operator=(const PSC2& rhs)
 
 bool PSC2::operator==(const PSC2& rhs) const
 {
-    return (PSC::operator==(rhs) &&
-            (_midis == rhs._midis) &&
-            (_names  == rhs._names) &&
-            (_accids == rhs._accids) &&
-            (_prints == rhs._prints));
+    return (PSC::operator==(rhs)); // &&
+         // (_midis == rhs._midis) &&
+         // (_names  == rhs._names) &&
+         // (_accids == rhs._accids) &&
+         // (_prints == rhs._prints));
 }
 
 

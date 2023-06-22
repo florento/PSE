@@ -73,12 +73,15 @@ public:
     /// @param e an enumerator of notes read for transition tp this configs.
     /// @param name chosen name for the received pitch, in 0..6 (0 is 'C', 6 is 'B').
     /// @param accid chosen alteration for the received pitch, in -2..2.
-    /// @param ton conjectured main (global) tonality (key signature).
+    /// @param count_print whether the note must be counted as printed
+    /// (for the computation of cost).
+    /// @param gton conjectured main (global) tonality (key signature).
     /// @param lton conjectured local tonality,
     /// or undef Ton if it is not knnown yet.
     PSC1(std::shared_ptr<const PSC0> c, const PSEnum& e,
          const enum NoteName& name, const enum Accid& accid,
-         const Ton& ton, const Ton& lton);
+         bool count_print,
+         const Ton& gton, const Ton& lton = Ton());
 
 //    PSC1(const PSC0& c,
 //         const PSEnum& e,               //unsigned int mp,

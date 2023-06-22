@@ -40,13 +40,15 @@ public:
     PSC1c(std::shared_ptr<const PSC0> c, PSChord& chord);
     // PSC1c(const PSC0& c, PSChord& chord);
 
-    /// next PSC1c for the processing of the given chord.
+    /// next PSC1c for the processing of one note in the given chord.
     /// @param c previous config (origin), to be updated with the received pitch.
     /// @param chord an enumerator of notes read for transition to this config.
     /// @param name chosen name for the received pitch,
     /// or undef if the current pitch class was already met.
     /// @param accid chosen alteration for the received pitch,
     /// or undef if the current pitch class was already met.
+    /// @param force_print whether the note must be counted as printed
+    /// (for the computation of cost).
     /// @param ton conjectured main (global) tonality (key signature),
     /// or undef if the current pitch class was already met.
     /// @param lton conjectured local tonality,
@@ -56,20 +58,21 @@ public:
           const PSChord& chord,
           const enum NoteName& name, // = NoteName::Undef,
           const enum Accid& accid, // = Accid::Undef,
+          bool force_print,
           const Ton& ton, // = Ton(),
           const Ton& lton = Ton());
     
-    /// next PSC1c for the processing of the given chord,
-    /// when the current processed pitch class was already met in the chord.
-    /// @param c previous config (origin), to be updated with the received pitch.
-    /// @param chord an enumerator of notes read for transition to this config.
-    /// @param ton conjectured main (global) tonality (key signature).
-    /// @param lton conjectured local tonality,
-    /// or undef if it was not yet estimated.
-    PSC1c(std::shared_ptr<const PSC1c> c,
-          const PSChord& chord,
-          const Ton& ton,
-          const Ton& lton = Ton());
+    // next PSC1c for the processing of the given chord,
+    // when the current processed pitch class was already met in the chord.
+    // @param c previous config (origin), to be updated with the received pitch.
+    // @param chord an enumerator of notes read for transition to this config.
+    // @param ton conjectured main (global) tonality (key signature).
+    // @param lton conjectured local tonality,
+    // or undef if it was not yet estimated.
+    // PSC1c(std::shared_ptr<const PSC1c> c,
+    //       const PSChord& chord,
+    //       const Ton& ton,
+    //       const Ton& lton = Ton());
 
     /// copy constructor.
     PSC1c(const PSC1c& c);
@@ -90,7 +93,12 @@ public:
     /// @return if the pitch class pc was already met in chord,
     /// the associated name, or otherwise NoteName::Undef.
     enum NoteName dejavu(unsigned int pc) const;
-    
+
+    /// @param pc a pitch class in 0..11.
+    /// @return if the pitch class pc was already met in chord,
+    /// and the associated accidental must be printed.
+    bool dejaprint(unsigned int pc) const;
+
     /// the processing of the chord is terminated.
     bool complete() const;
     
@@ -99,6 +107,10 @@ private:
     /// a note name, if the pitch class was encountered while processing the chord
     /// or NoteName::Undef otherwise.
     std::array<enum NoteName, 12> _pcn;
+
+    /// map associating to every pitch class in 0..12
+    /// a print flag, if the pitch class was encountered while processing the chord.
+    std::array<bool, 12> _pcp;
 
     /// index of the note after the last note of the chord processed.
     bool _complete;

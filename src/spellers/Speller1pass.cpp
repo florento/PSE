@@ -14,7 +14,7 @@ Speller(algo, nbTons, dflag),
 _table0(nullptr),
 _global0(nullptr),
 _locals0(nullptr),
-_uton(new Ton())
+_uton(new Ton()) // undef
 { }
 
 
@@ -166,8 +166,9 @@ const Ton& Speller1Pass::local(size_t i, size_t j) const
     if (it == TonIndex::UNDEF)
     {
         // in case or error return undefined tonality
-        std::shared_ptr<Ton> uton(new Ton());
-        return *uton;
+        // std::shared_ptr<Ton> uton(new Ton());
+        return *_uton;
+        
     }
     else
     {
@@ -251,7 +252,7 @@ bool Speller1Pass::spell(const Cost& seed0, double diff0,
             ERROR("Pitch Spelling: renaming fail: no estimated global tonality");
         }
     }
-    
+ 
     assert(rewrite_flag0 == false || rename_flag == true);
     if (rename_flag && rewrite_flag0)
     {

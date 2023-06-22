@@ -110,7 +110,8 @@ private:
     /// given an assumed global tonality and previous local tonality.
     size_t estimateLocal(size_t ig, size_t iprev, std::set<size_t>& cands);
 
-    size_t estimateLocalalt(const PSV& vec, size_t ig, size_t iprev, unsigned int);
+    size_t estimateLocalalt(const PSV& vec, size_t ig, size_t iprev,
+                            unsigned int);
 };
 
 } // namespace pse

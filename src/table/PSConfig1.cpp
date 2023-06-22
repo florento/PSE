@@ -18,12 +18,17 @@ namespace pse {
 
 // copy and update
 PSC1::PSC1(std::shared_ptr<const PSC0> c, const PSEnum& e,
-           const enum NoteName& name, const enum Accid& accid,
-           const Ton& ton, const Ton& lton):
+           const enum NoteName& name, const enum Accid& accid, bool cprint,
+           const Ton& gton, const Ton& lton):
 PSC(c),
 _name(name),
 _print(false)
 {
+    if (gton.fifths() == 2)
+    {
+        // RE
+    }
+    
     assert(c);
     _midi = e.midipitch(c->id());
     _print = _state.update(name, accid);
@@ -34,18 +39,13 @@ _print(false)
     assert(accid == MidiNum::accid(_midi%12, name));
 
     // update cost
+    assert(gton.defined());
     assert(_cost);
-    _cost->update(*this, e, ton);
+    _cost->update(name, accid, (cprint?true:_print), gton, lton);
+    // _cost->update(*this, e, ton);
         
     // the given accidental corresponds to the chroma of input note and given name.
     assert(accid == MidiNum::accid(e.midipitch(c->id())%12, name));
-
-    // complete the update of cost
-    if (lton.defined())
-    {
-        assert(_cost);
-        _cost->update(*this, e, ton, lton);
-    }
 }
 
 
@@ -128,11 +128,10 @@ PSC1& PSC1::operator=(const PSC1& rhs)
 
 bool PSC1::operator==(const PSC1& rhs) const
 {
-    return (PSC::operator==(rhs) &&
+    return (PSC::operator==(rhs)); // &&
             //(_midi == rhs._midi) &&
-            (_name == rhs._name) &&
-            (_print == rhs._print));
-
+            //(_name == rhs._name) &&
+            //(_print == rhs._print));
 }
 
 

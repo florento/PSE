@@ -30,7 +30,7 @@ void Transition::succ(std::shared_ptr<const PSC0> c,
 
 
 void Transition::succ1(std::shared_ptr<const PSC0> c,
-                       const Ton& ton, const Ton& lton,
+                       const Ton& gton, const Ton& lton,
                        PSCQueue& q) const
 {
     assert(c);
@@ -55,7 +55,9 @@ void Transition::succ1(std::shared_ptr<const PSC0> c,
 
             /// @todo merge into 1 constructor PSC1, with algo name
             assert(accid == MidiNum::accid(m, name));
-            q.push(std::make_shared<PSC1>(c, _enum, name, accid, ton, lton));
+            // no force print
+            q.push(std::make_shared<PSC1>(c, _enum, name, accid, false,
+                                          gton, lton));
 //            if (_algo == Algo::PSE0) // lton is ignored
 //                q.push(std::make_shared<PSC1>(c, _enum, name, accid, ton));
 //            else if (_algo == Algo::PSE1)
@@ -66,7 +68,7 @@ void Transition::succ1(std::shared_ptr<const PSC0> c,
     // only 1 potential successor in algo PS14
     else if (_algo == Algo::PS14)
     {
-        const Scale& scale = ton.chromatic();
+        const Scale& scale = gton.chromatic();
         int p = scale.pitchClass(0); // pitch class of tonic of scale
         // degree of m in the chromatic harmonic scale of p
         size_t deg = (p <= m)?(m - p):(12-p+m);
@@ -77,8 +79,10 @@ void Transition::succ1(std::shared_ptr<const PSC0> c,
         assert(defined(name));
         assert(defined(accid));
         assert(accid == MidiNum::accid(m, name));
-        // lton is ignored
-        q.push(std::make_shared<PSC1>(c, _enum, name, accid, ton, lton));
+        // lton may be ignored
+        // no force print
+        q.push(std::make_shared<PSC1>(c, _enum, name, accid, false,
+                                      gton, lton));
     }
     else
     {
@@ -86,26 +90,35 @@ void Transition::succ1(std::shared_ptr<const PSC0> c,
     }
 }
 
+using PSC1cCompare = std::function<bool(std::shared_ptr<const PSC1c>&,
+                                        std::shared_ptr<const PSC1c>&)>;
+
+typedef std::priority_queue<std::shared_ptr<const PSC1c>,
+                            std::vector<std::shared_ptr<const PSC1c>>,
+                            PSC1cCompare> PSC1cQueue;
+
 
 // we loop on the chord, with a auxiliary queue
 void Transition::succ2(std::shared_ptr<const PSC0> c,
-                       const Ton& ton, const Ton& lton, PSCQueue& q) const
+                       const Ton& gton, const Ton& lton, PSCQueue& q) const
 {
     assert(c);    //assert(c->size() > 1);
     const PSC0& c0 = *c;
     assert(_enum.simultaneous(c0.id())); // we are at the beginning of a chord
     PSChord chord(_enum, c0.id());
-    DEBUGU("CHORD of size {} at {}", chord.size(), chord.first());
-    system("read"); // Press any key to continue...
-    //std::string pipo;    std::cin >> pipo;
+    DEBUGU("CHORD of size {} at {} (current cost:{})",
+           chord.size(), chord.first(), c0.cost());
+    std::cin.get();  //system("read"); // Press any key to continue...
 
     // two pairs of parentheses to declare cs as a variable.
     // std::priority_queue<std::shared_ptr<const PSC1c>,
     //                     std::vector<std::shared_ptr<const PSC1c>>,
     //                     PSCCompare> cs((PSClex()));
     // we store partial chord renaming in a stack (no need of an ordered queue)
-    std::stack<std::shared_ptr<const PSC1c>> cs;
-        
+    //std::stack<std::shared_ptr<const PSC1c>> cs;
+    PSC1cQueue cs = PSC1cQueue(PSClexc());
+    
+    // initial config (beginning of chord
     // initial config (beginning of chord
     cs.push(std::make_shared<const PSC1c>(c, chord));
 
@@ -118,7 +131,8 @@ void Transition::succ2(std::shared_ptr<const PSC0> c,
         // the chord has been fully processed
         if (c1->complete())
         {
-            DEBUGU("spelling of cost {}", c1->cost());
+            DEBUGU("spelling chord[{},{}] of cost: {}",
+                   chord.size(), chord.first(), c1->cost());
             // build c2
             // std::shared_ptr<const PSC2> c2(new PSC2(c, c1.get(), chord));
             q.push(std::make_shared<const PSC2>(c, c1, chord));
@@ -128,12 +142,18 @@ void Transition::succ2(std::shared_ptr<const PSC0> c,
         // otherwise continue processing of the chord
         unsigned int m = chord.midipitch(c1->id()) % 12; // chroma in 0..11
 
-        // the current pitch class has already been processed in chord
-        if (c1->dejavu(m) != NoteName::Undef)
+        // not undef if the current pitch class has already been processed in chord
+        const enum NoteName dejaname = c1->dejavu(m);
+        // in this case, we resuse the previous name chosen for the pitch class
+        if (dejaname != NoteName::Undef)
         {
-            cs.push(std::make_shared<PSC1c>(c1, chord, ton, lton));
+            cs.push(std::make_shared<PSC1c>(c1, chord,
+                                            dejaname,
+                                            MidiNum::accid(m, dejaname),
+                                            c1->dejaprint(m), // force print
+                                            gton, lton));
         }
-        // 3 enharmonics = potential successors in algo PSE
+        // 3 enharmonics = 3 potential successors in algo PSE
         else if (_algo == Algo::PSE)
         {
             for (int j = 0; j < 3; ++j)
@@ -144,8 +164,9 @@ void Transition::succ2(std::shared_ptr<const PSC0> c,
                 if (defined(name) && defined(accid))
                 {
                     assert(accid == MidiNum::accid(m, name));
-                    cs.push(std::make_shared<PSC1c>(c1, chord, name, accid,
-                                                    ton, lton));
+                    cs.push(std::make_shared<PSC1c>(c1, chord,
+                                                    name, accid, false, // do not force print
+                                                    gton, lton));
                 }
             }
         }
@@ -154,7 +175,7 @@ void Transition::succ2(std::shared_ptr<const PSC0> c,
         {
             // only 1 potential successor in algo PS14
             // lton is ignored
-            const Scale& scale = ton.chromatic();
+            const Scale& scale = gton.chromatic();
             int p = scale.pitchClass(0); // pitch class of tonic of scale
             // degree of m in the chromatic harmonic scale of p
             size_t deg = (p <= m)?(m - p):(12-p+m);
@@ -165,7 +186,9 @@ void Transition::succ2(std::shared_ptr<const PSC0> c,
             assert(defined(name));
             assert(defined(accid));
             assert(accid == MidiNum::accid(m, name));
-            cs.push(std::make_shared<PSC1c>(c1, chord, name, accid, ton, lton));
+            cs.push(std::make_shared<PSC1c>(c1, chord,
+                                            name, accid, false, // do not force print
+                                            gton, lton));
         }
     }
 }

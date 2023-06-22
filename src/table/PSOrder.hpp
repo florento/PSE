@@ -18,6 +18,9 @@
 #include "PSEnum.hpp"
 #include "PSCost.hpp"
 #include "PSConfig0.hpp"
+#include "PSConfig1.hpp"
+#include "PSConfig1c.hpp"
+#include "PSConfig2.hpp"
 
 
 namespace pse {
@@ -53,6 +56,13 @@ struct PSClex
 {
     bool operator()(std::shared_ptr<const PSC0>& lhs,
                     std::shared_ptr<const PSC0>& rhs);
+   
+};
+
+struct PSClexc
+{
+    bool operator()(std::shared_ptr<const PSC1c>& lhs,
+                    std::shared_ptr<const PSC1c>& rhs);
    
 };
 

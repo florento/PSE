@@ -198,15 +198,13 @@ void PSV::init_psbs(const Cost& seed)
         {
             // arg local ton is ignored
             _psbs[i] =
-                std::make_shared<const PSB>(Algo::PSE, seed, enumerator(),
-                                            toni, Ton());
+             std::make_shared<const PSB>(Algo::PSE, seed, enumerator(), toni);
         }
         else if (_algo == Algo::PS14)
         {
             // arg local ton is ignored
             _psbs[i] =
-                std::make_shared<const PSB>(Algo::PS14, seed, enumerator(),
-                                            toni,  Ton());
+             std::make_shared<const PSB>(Algo::PS14, seed, enumerator(), toni);
         }
         else
         {
@@ -231,10 +229,12 @@ void PSV::init_psbs(const Cost& seed, const std::vector<size_t>& locals)
               enumerator().first(), enumerator().stop(), ton(i));
         assert(_psbs[i] == nullptr);
         const Ton& toni = ton(i);
+        assert(toni.defined());
         assert(locals.at(i) != TonIndex::UNDEF);
         assert(locals.at(i) != TonIndex::FAILED);
         assert(locals.at(i) < _index.size());
         const Ton& ltoni = ton(locals.at(i));
+        assert(ltoni.defined());
         if (_algo == Algo::PSE)
         {
             // arg local ton is ignored
