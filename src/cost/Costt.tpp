@@ -12,8 +12,6 @@ namespace pse {
 //    return lhs.operator+(rhs);
 //}
 
-
-
 template<typename Base, typename Derived>
 bool PolymorphicComparable<Base, Derived>::operator==(const Base& rhs) const
 {
@@ -82,50 +80,6 @@ void PolymorphicComparable<Base, Derived>::print(std::ostream& o) const
     const Derived& a = static_cast<const Derived&>(*this);
     a.print(o);
 }
-
-
-
-template<class T>
-bool Costt<T>::operator!=(const T& rhs) const
-{
-    return !operator==(rhs);
-}
-
-
-template<class T>
-bool Costt<T>::operator<=(const T& rhs) const
-{
-    return !operator>(rhs);
-}
-
-
-template<class T>
-bool Costt<T>::operator>(const T& rhs) const
-{
-    return rhs.operator<(*this); // rhs.Compare(*this);
-}
-
-
-template<class T>
-bool Costt<T>::operator>=(const T& rhs) const
-{
-    return !operator<(rhs);
-}
-
-
-//template<class T>
-//T Costt<T>::operator+(const T& rhs) const
-//{
-//    Costt<T> copy(*this);
-//    return copy.operator+=(rhs);
-//}
-
-
-//template<class T>
-//std::shared_ptr<Cost> Costt<T>::shared_zero() const
-//{
-//    return std::shared_ptr<Cost>(new T());
-//}
 
 
 } // end namespace pse

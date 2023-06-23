@@ -1,5 +1,5 @@
 //
-//  CostADplus.hpp
+//  CostADlex.hpp
 //  pse
 //
 //  Created by Florent Jacquemard on 22/06/2023.
@@ -7,8 +7,9 @@
 /// @addtogroup pitch
 /// @{
 
-#ifndef CostADplus_hpp
-#define CostADplus_hpp
+
+#ifndef CostADlex_hpp
+#define CostADlex_hpp
 
 #include <stdio.h>
 #include <assert.h>
@@ -20,37 +21,38 @@
 #include "CostAD.hpp"
 
 
+
 namespace pse {
 
-class CostADplus : public CostAD, // update
-                   public PolymorphicComparable<Cost, CostADplus>
+class CostADlex : public CostAD, // update
+                  public PolymorphicComparable<Cost, CostADlex>
 {
 public:
     
     /// null cost.
-    CostADplus();
+    CostADlex();
     
     /// copy constructor.
-    CostADplus(const CostADplus& rhs);
+    CostADlex(const CostADlex& rhs);
     
     /// distructor
-    virtual ~CostADplus();
+    virtual ~CostADlex();
     
     /// cost equality.
     /// @param rhs a cost to compare to.
-    bool operator==(const CostADplus& rhs) const;
+    bool operator==(const CostADlex& rhs) const;
     
     /// a distance value, in percent of the bigger cost.
     /// used for approximate equality.
-    double dist(const CostADplus& rhs) const;
+    double dist(const CostADlex& rhs) const;
     
     /// cost inequality.
     /// @param rhs a cost to compare to.
-    bool operator<(const CostADplus& rhs) const;
-    
+    bool operator<(const CostADlex& rhs) const;
+        
     /// cumulated sum operator. update this cost by adding rhs.
     /// @param rhs a cost to add.
-    CostADplus& operator+=(const CostADplus& rhs);
+    CostADlex& operator+=(const CostADlex& rhs);
 
     /// create a new null cost value.
     virtual std::shared_ptr<Cost> shared_zero() const override;
@@ -70,29 +72,23 @@ public:
     /// @param gton conjectured main (global) tonality (key signature).
     /// @param lton conjectured local tonality or undef tonlity if it is
     /// not known.
-    void update(const enum NoteName& name,
-                const enum Accid& accid,
-                bool print,
-                const Ton& gton, const Ton& lton = Ton()) override;
+    virtual void update(const enum NoteName& name,
+                        const enum Accid& accid,
+                        bool print,
+                        const Ton& gton, const Ton& lton = Ton()) override;
     
     /// @param o output stream where to print this cost.
     void print(std::ostream& o) const override;
-    
-protected: // data
-    
-    /// sum of number of printed accidentals and
-    /// distance to a conjectured local tonality.
-    size_t _sum;
-    
+
 };
     
     
-std::ostream& operator<<(std::ostream& o, const CostADplus& c);
+std::ostream& operator<<(std::ostream& o, const CostADlex& c);
 
 
 } // namespace pse
 
-#endif /* CostADplus_hpp */
+#endif /* CostADlex_hpp */
 
 /// @}
 
