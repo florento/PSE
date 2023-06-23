@@ -7,7 +7,8 @@
 
 #include "PSE.hpp"
 #include "CostA.hpp"
-#include "CostAD.hpp"
+#include "CostADplus.hpp"
+#include "CostADlex.hpp"
 
 namespace pse {
 
@@ -68,7 +69,7 @@ bool PSE::spell()
     //    }
 
     CostA seed0; // zero
-    CostAD seed1; // zero
+    CostADplus seed1; // zero
     // diff0=0, diff1=0, rewrite_flag1=false
     return Speller2Pass::spell(seed0, seed1, 0, 0, false);
 }

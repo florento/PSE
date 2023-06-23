@@ -7,7 +7,8 @@
 
 #include "PS14.hpp"
 #include "CostA.hpp"
-#include "CostAD.hpp"
+#include "CostADplus.hpp"
+#include "CostADlex.hpp"
 
 
 namespace pse {
@@ -46,7 +47,7 @@ bool PS14::spell()
     
     /// @todo replace by other specialized costs
     CostA seed0;  // zero
-    CostAD seed1; // zero
+    CostADplus seed1; // zero
     // diff0=0, diff1=0, rewrite_flag1=false
     return Speller2Pass::spell(seed0, seed1, 0, 0, false);
 }
