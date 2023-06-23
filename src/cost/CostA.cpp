@@ -123,7 +123,10 @@ void CostA::update(const enum NoteName& name, const enum Accid& accid,
     if (lton.defined())
     {
         //_dist += c.state().dist(lton);
-        //if (print && !(lton.accidDia(name) == accid)) //si l'on veut juger purement d'un point de vue tonal afin de déduire la meilleure tonalité locale, il vaut mieux ne plus se poser la question du print :
+        //if (print && !(lton.accidDia(name) == accid))
+        // si l'on veut juger purement d'un point de vue tonal
+        // afin de déduire la meilleure tonalité locale,
+        // il vaut mieux ne plus se poser la question du print :
         // !(gton.lead()  &&  gton.accidDia(name) == accid)
         if (!(lton.accidDia(name) == accid))
         {

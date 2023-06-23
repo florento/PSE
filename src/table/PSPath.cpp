@@ -321,6 +321,44 @@ void PSP::rename()
 //}
 
 
+size_t PSP::size() const
+{
+    return _enum.size();
+}
+
+
+void PSP::print(std::ostream& o, size_t i) const
+{
+    assert(_enum.inside(i));
+    o << name(i);
+    if (printed(i))
+        o << alteration(i);
+    else
+    {
+        o << '(';
+        o << alteration(i);
+        o << ')';
+    }
+}
+
+
+void PSP::print(std::ostream& o) const
+{
+    for (size_t n = _enum.first(); n < _enum.stop(); ++n)
+    {
+        print(o, n);
+        o << ' ';
+    }
+}
+
+
+std::ostream& operator<<(std::ostream& o, const PSP& p)
+{
+    p.print(o);
+    return o;
+}
+
+
 } // end namespace pse
 
 /// @}

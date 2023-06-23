@@ -83,6 +83,8 @@ void CostAD::update(const enum NoteName& name, const enum Accid& accid,
                     bool print,
                     const Ton& gton, const Ton& lton)
 {
+    // update cost when accident for the name was updated
+    // discount for lead degree
     // !(gton.lead()  &&  gton.accidDia(name) == accid)
     if (print && !(gton.accidDia(name) == accid))
     {
@@ -109,8 +111,11 @@ void CostAD::update(const enum NoteName& name, const enum Accid& accid,
     
     if (lton.defined())
     {
+        // si l'on veut juger purement d'un point de vue tonal
+        // afin de déduire la meilleure tonalité locale,
+        // il vaut mieux ne plus se poser la question du print :
+        // !(gton.lead()  &&  gton.accidDia(name) == accid)
         if (!(lton.accidDia(name) == accid))
-         //!(gton.lead()  &&  gton.accidDia(name) == accid)
         {
             switch (accid)
             {

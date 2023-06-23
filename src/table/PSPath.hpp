@@ -63,6 +63,9 @@ public:
 
     ~PSP();
 
+
+    size_t size() const;
+    
     /// name for the pitch of the note of given index in the best path,
     /// in 0..6 (0 is 'C', 6 is 'B').
     /// @param i index of note in enumerator, must be between first and last.
@@ -82,6 +85,8 @@ public:
     
     /// rename all notes read to build this PSP.
     void rename();
+    
+    void print(std::ostream& o) const;
        
 private:
     
@@ -132,8 +137,14 @@ private:
     // void init2(PSCQueue& queue2);
     
     void record_path(const PSC0& c);
-
+    
+    /// @param i index of note in enumerator, must be between first and last.
+    void print(std::ostream& o, size_t i) const;
+    
 };
+
+
+std::ostream& operator<<(std::ostream& o, const PSP& p);
 
 
 } // namespace pse

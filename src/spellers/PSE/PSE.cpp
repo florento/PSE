@@ -68,8 +68,8 @@ bool PSE::spell()
     //        _frowcost.assign(nbtons(), false);
     //    }
 
-    CostA seed0; // zero
-    CostADplus seed1; // zero
+    CostADplus seed0; // zero
+    CostADlex  seed1; // zero
     // diff0=0, diff1=0, rewrite_flag1=false
     return Speller2Pass::spell(seed0, seed1, 0, 0, false);
 }

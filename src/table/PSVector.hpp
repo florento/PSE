@@ -56,9 +56,10 @@ public:
     /// of the same type.
     /// @param index array of tonalities. dimension of this vector.
     /// @param e an enumerator of notes for transitions of configs.
+    /// @param bar number of bar corresp.  to this vector (column number in table).
     /// @warning the enumerator cannot be changed once the object created.
     PSV(const Algo& a, const Cost& seed, const TonIndex& index,
-        const PSEnum& e);
+        const PSEnum& e, size_t bar);
     
     /// main constructor.
     /// @param a name of pitch-spelling algorithm implemented.
@@ -70,8 +71,9 @@ public:
     /// @param i1 index of the note after the last note to read in enumerator.
     /// must be superior of equal to i0.
     /// the sequence is empty iff if i0 == i1.
+    /// @param bar number of bar corresp.  to this vector (column number in table).
     PSV(const Algo& a, const Cost& seed, const TonIndex& index,
-        const PSEnum& e, size_t i0, size_t i1);
+        const PSEnum& e, size_t i0, size_t i1, size_t bar);
     
     /// main constructor.
     /// @param a name of pitch-spelling algorithm implemented.
@@ -82,8 +84,9 @@ public:
     /// @param i0 index of the first note to read in enumerator.
     /// The enumeration starts at i0 and stops
     /// when there are no more notes to read in e.
+    /// @param bar number of bar corresp.  to this vector (column number in table).
     PSV(const Algo& a, const Cost& seed, const TonIndex& index,
-        const PSEnum& e, size_t i0);
+        const PSEnum& e, size_t i0, size_t bar);
 
     /// rebuid a column with the same algo, index, and enumerator as the given
     /// column, and the new given seed and given column of local tonalities.
@@ -101,6 +104,9 @@ public:
 
     /// enumerator of input notes used to build this vector.
     PSEnum& enumerator() const;
+    
+    /// number of bar corresp.  to this vector (column number in table).
+    size_t bar() const;
     
     /// first id of the enumerator of input notes.
     inline size_t first() const { return enumerator().first(); }
@@ -188,6 +194,10 @@ private: // data
 
     /// enumerator of notes transmitted to embedded PSB's.
     const std::unique_ptr<PSEnum> _enum;
+    
+    /// number of bar corresponding to this vector.
+    /// info for debugging / tracing.
+    const size_t _bar;
 
     /// vector of bags of best paths (target configs), one bag for each ton.
     /// best paths computed with partial ordering.

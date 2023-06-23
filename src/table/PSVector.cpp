@@ -17,10 +17,11 @@ namespace pse {
 
 
 PSV::PSV(const Algo& a, const Cost& seed, const TonIndex& i,
-         const PSEnum& e):
+         const PSEnum& e, size_t bar):
 _index(i),
 _algo(a),
 _enum(e.clone()),
+_bar(bar),
 _psbs(i.size(), nullptr),
 //_psb_total(), // TBR
 //_locals(i.size(), TonIndex::UNDEF),
@@ -35,10 +36,11 @@ _tiebfail(0)
 
 
 PSV::PSV(const Algo& a, const Cost& seed, const TonIndex& i,
-         const PSEnum& e, size_t i0, size_t i1):
+         const PSEnum& e, size_t i0, size_t i1, size_t bar):
 _index(i),
 _algo(a),
 _enum(e.clone(i0, i1)),
+_bar(bar),
 _psbs(i.size(), nullptr),
 //_psb_total(), // TBR
 //_locals(i.size(), TonIndex::UNDEF),
@@ -54,10 +56,11 @@ _tiebfail(0)
 
 
 PSV::PSV(const Algo& a, const Cost& seed, const TonIndex& i,
-         const PSEnum& e, size_t i0):
+         const PSEnum& e, size_t i0, size_t bar):
 _index(i),
 _algo(a),
 _enum(e.clone(i0)),
+_bar(bar),
 _psbs(i.size(), nullptr),
 //_psb_total(), // TBR
 //_locals(i.size(), TonIndex::UNDEF),
@@ -76,6 +79,7 @@ PSV::PSV(const PSV& col, const Cost& seed, const std::vector<size_t>& locals):
 _index(col._index),
 _algo(col._algo),
 _enum(col._enum->clone()),
+_bar(col.bar()),
 _psbs(_index.size(), nullptr),
 _tiebfail(0)
 {
@@ -97,6 +101,12 @@ PSEnum& PSV::enumerator() const
 {
     assert(_enum);
     return *_enum;
+}
+
+
+size_t PSV::bar() const
+{
+    return _bar;
 }
 
 
@@ -704,19 +714,34 @@ bool PSV::rename(size_t i)
     // warning: ambiguity (tie break fail)
     else if (psb.size() > 1)
     {
-        std::stringstream sms;
-        sms << '[';
-        psb.cost().print(sms);
-        sms << ']' << ' ';
+        // std::stringstream sms;
+        // sms << '[';
+        // psb.cost().print(sms);
+        // sms << ']' << ' ';
+        // for (auto it = psb.cbegin(); it != psb.cend(); ++it)
+        // {
+        //    assert(*it); // std::shared_ptr<const PSC0>
+        //    (*it)->cost().print(sms);
+        //    sms << ' ';
+        // }
+        
+        
+        _tiebfail += 1;
+
+        WARN("PSV rename bar:{}({}-{}): tie break fail ({} bests) cost[{}]",
+             _bar, enumerator().first(), enumerator().stop(),
+             psb.size(), psb.cost());
+
+        size_t s = 0;
         for (auto it = psb.cbegin(); it != psb.cend(); ++it)
         {
             assert(*it); // std::shared_ptr<const PSC0>
-            (*it)->cost().print(sms);
-            sms << ' ';
+            assert(_enum);
+            const PSP p(**it, *_enum);
+            WARN("spelling {}: {}", s, p);
+            ++s;
         }
-        _tiebfail += 1;
-        WARN("PSV {}-{}: tie break fail ({} bests): {}",
-             enumerator().first(), enumerator().stop(), psb.size(), sms.str());
+            
         // DEBUGU("PSV {}-{}: tie break fail {}", sms.str());
     }
     

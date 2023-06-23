@@ -152,9 +152,11 @@ bool PST::init_psvs(const Cost& seed)
     
     // first note of current bar
     size_t i0 = _enum.first();
+    
     // current bar number
     // NOT _enum.measure(i0) if first bar is empty
     size_t b  = 0;
+    
     // first note after current bar
     size_t i1;
 
@@ -183,7 +185,7 @@ bool PST::init_psvs(const Cost& seed)
             TRACE("PST init: bar {} EMPTY", b);
             // vector of empty bags
             _psvs.push_back(std::make_unique<PSV>(_algo, seed, _index,
-                                                  _enum, i0, i0));
+                                                  _enum, i0, i0, b));
             ++b;
             continue;
         }
@@ -197,7 +199,7 @@ bool PST::init_psvs(const Cost& seed)
               (notes {}-{})", b, i0, i1-1);
         // add a PS vector (column) for the measure b
         _psvs.push_back(std::make_unique<PSV>(_algo, seed, _index,
-                                              _enum, i0, i1));
+                                              _enum, i0, i1, b));
         assert(_psvs.size() == b+1);
         // then start next measure
         i0 = i1; // index of first note of next bar
@@ -215,8 +217,9 @@ bool PST::init_psvs(const PST& tab, const Cost& seed, const PSG& grid)
     for (size_t j = 0; j < tab.size(); ++j)
     {
         const PSV& col = tab.column(j);
+        assert(col.bar() == j);
         _psvs.emplace_back(std::unique_ptr<PSV>(new
-                           PSV(_algo, seed, _index, col.enumerator())));
+                           PSV(_algo, seed, _index, col.enumerator(), j)));
     }
     
     return true;
