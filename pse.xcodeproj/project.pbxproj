@@ -110,7 +110,6 @@
 		43600D552A45C94E002704E0 /* CostAD.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43DD54232A38FA4E0036EF07 /* CostAD.cpp */; };
 		43600D562A45C94E002704E0 /* CostAD.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43DD54232A38FA4E0036EF07 /* CostAD.cpp */; };
 		43600D572A45C94F002704E0 /* CostAD.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43DD54232A38FA4E0036EF07 /* CostAD.cpp */; };
-		43600D5D2A45CA3A002704E0 /* Costtt.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 43600D592A45CA3A002704E0 /* Costtt.hpp */; };
 		43791C8E29D8392200DE8796 /* TestAccidental.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43791C8D29D8392200DE8796 /* TestAccidental.cpp */; };
 		43791C8F29D83EE400DE8796 /* TestScale.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 435081CE29D6C04600465943 /* TestScale.cpp */; };
 		438A581129E03FBB0073A32C /* PS13.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 432E7A5229D45FE2000E2B72 /* PS13.cpp */; };
@@ -175,7 +174,6 @@
 		43D31A122A1426A300234527 /* Cost.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43D31A102A1426A300234527 /* Cost.cpp */; };
 		43D31A132A1426A300234527 /* Cost.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43D31A102A1426A300234527 /* Cost.cpp */; };
 		43D31A142A1426A300234527 /* Cost.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43D31A102A1426A300234527 /* Cost.cpp */; };
-		43D31A152A1426A300234527 /* Cost.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 43D31A112A1426A300234527 /* Cost.hpp */; };
 		43D7BAB32A27CFA500570C47 /* Speller1pass.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43D7BAB12A27CFA500570C47 /* Speller1pass.cpp */; };
 		43D7BAB42A27CFA500570C47 /* Speller1pass.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43D7BAB12A27CFA500570C47 /* Speller1pass.cpp */; };
 		43D7BAB52A27CFA500570C47 /* Speller1pass.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43D7BAB12A27CFA500570C47 /* Speller1pass.cpp */; };
@@ -803,7 +801,6 @@
 				4342FD102926781E004E914F /* PWO.hpp in Headers */,
 				43C2BA1529994F630084AB3B /* Pitch.hpp in Headers */,
 				43D7BAB62A27CFA500570C47 /* Speller1pass.hpp in Headers */,
-				43600D5D2A45CA3A002704E0 /* Costtt.hpp in Headers */,
 				4310526929CDD15000694D5A /* Scale.hpp in Headers */,
 				43C4A6552A1E7EBB00925A99 /* PSGrid.hpp in Headers */,
 				432E7A5629D45FE2000E2B72 /* PS13.hpp in Headers */,
@@ -833,7 +830,6 @@
 				431586382983E89B00918B1B /* PSNoteEnum.hpp in Headers */,
 				43D7BAC22A27E31600570C47 /* PS14.hpp in Headers */,
 				4342FD1929268C78004E914F /* pypse.hpp in Headers */,
-				43D31A152A1426A300234527 /* Cost.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

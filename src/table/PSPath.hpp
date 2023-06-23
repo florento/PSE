@@ -115,7 +115,7 @@ private:
     /// @param ton an estimated global tonality (key signature).
     /// @param lton an estimated local tonality.
     /// @todo TBR obsolete
-    bool init(const Ton& ton, const Ton& lton);
+    bool init(const Ton& ton, const Ton& lton = Ton());
 
     // compute the bast path from the given bag of configs.
     // @param psb bag of best config, to compute one best path.
