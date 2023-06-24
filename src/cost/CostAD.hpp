@@ -146,6 +146,9 @@ protected: // data
 
     /// cumulated number of accidentals with color different from global ton
     size_t _color;
+
+    /// cumulated number of printed and non lead Cb B# E# Fb
+    size_t _cflat;
     
     // degree of approximation.
     // percent under which 2 costs componnents are considered equal.

@@ -17,14 +17,16 @@ namespace pse {
 CostAD::CostAD():
 _accid(0),
 _dist(0),
-_color(0)
+_color(0),
+_cflat(0)
 { }
 
 
 CostAD::CostAD(const CostAD& rhs):
 _accid(rhs._accid),
 _dist(rhs._dist),
-_color(rhs._color)
+_color(rhs._color),
+_cflat(rhs._cflat)
 { }
 
 
@@ -55,6 +57,7 @@ CostAD& CostAD::operator+=(const CostAD& rhs)
     _accid += rhs._accid;
     _dist += rhs._dist;
     _color += rhs._color;
+    _cflat += rhs._cflat;
     return *this;
 }
 
@@ -98,18 +101,26 @@ void CostAD::update(const enum NoteName& name,
             case Accid::DoubleFlat:
                 _accid += 2;
                 break;
-
+                
             case Accid::Sharp:
             case Accid::Flat:
             case Accid::Natural:
                 _accid += 1;
                 break;
-
+                
             default:
             {
                 ERROR("PSC: unexpected accidental"); // accid
                 break;
             }
+        }
+        
+        if (((name == NoteName::C) && (accid == Accid::Flat)) ||
+            ((name == NoteName::B) && (accid == Accid::Sharp)) ||
+            ((name == NoteName::F) && (accid == Accid::Flat)) ||
+            ((name == NoteName::E) && (accid == Accid::Sharp)))
+        {
+            ++_cflat;
         }
     }
     
@@ -252,6 +263,7 @@ void CostAD::print(std::ostream& o) const
     o << "accid=" << _accid;
     o << " dist=" << _dist;
     o << " color=" << _color;
+    o << " cflat=" << _cflat;
 }
 
 

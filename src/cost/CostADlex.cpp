@@ -30,7 +30,8 @@ bool CostADlex::operator==(const CostADlex& rhs) const
 {
     return (_accid == rhs._accid &&
             _dist == rhs._dist &&
-            _color == rhs._color);
+            _color == rhs._color &&
+            _cflat == rhs._cflat);
 }
 
 
@@ -40,7 +41,10 @@ double CostADlex::dist(const CostADlex& rhs) const
     {
         if (_dist == rhs._dist)
         {
-            return distCost((double) _color, (double) rhs._color);
+            if (_color == rhs._color)
+                return distCost((double) _cflat, (double) rhs._cflat);
+            else
+                return distCost((double) _color, (double) rhs._color);
         }
         else
         {
@@ -57,7 +61,12 @@ bool CostADlex::operator<(const CostADlex& rhs) const
     if (_accid == rhs._accid)
     {
         if (_dist == rhs._dist)
-            return (_color < rhs._color);
+        {
+            if (_color == rhs._color)
+                return (_cflat < rhs._cflat);
+            else
+                return (_color < rhs._color);
+        }
         else
             return (_dist < rhs._dist);
     }
