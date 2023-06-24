@@ -75,7 +75,8 @@ _tiebfail(0)
 }
 
 
-PSV::PSV(const PSV& col, const Cost& seed, const std::vector<size_t>& locals):
+PSV::PSV(const PSV& col, const Cost& seed,
+         const PSO& globals, const std::vector<size_t>& locals):
 _index(col._index),
 _algo(col._algo),
 _enum(col._enum->clone()),
@@ -84,7 +85,7 @@ _psbs(_index.size(), nullptr),
 _tiebfail(0)
 {
     assert(col.size() == locals.size());
-    init_psbs(seed, locals);
+    init_psbs(seed, globals, locals);
 }
 
 
@@ -229,19 +230,24 @@ void PSV::init_psbs(const Cost& seed)
 }
 
 // compute _psbs with given local tons
-void PSV::init_psbs(const Cost& seed, const std::vector<size_t>& locals)
+void PSV::init_psbs(const Cost& seed,
+                    const PSO& globals, const std::vector<size_t>& locals)
 {
     assert(locals.size() == _index.size());
-    for (size_t i = 0; i < _index.size(); ++i)
+    
+    for (auto it = globals.cbegin(); it != globals.cend(); ++it)
     {
+        size_t i = *it;
         // PS Bag is empty if first() = last()
         TRACE("PSV {}-{} ton {}",
               enumerator().first(), enumerator().stop(), ton(i));
+        assert(i < _psbs.size());
         assert(_psbs[i] == nullptr);
+        assert(i < _index.size());
         const Ton& toni = ton(i);
         assert(toni.defined());
-        assert(locals.at(i) != TonIndex::UNDEF);
         assert(locals.at(i) != TonIndex::FAILED);
+        assert(locals.at(i) != TonIndex::UNDEF);
         assert(locals.at(i) < _index.size());
         const Ton& ltoni = ton(locals.at(i));
         assert(ltoni.defined());

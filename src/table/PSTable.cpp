@@ -37,7 +37,7 @@ _debug(dflag)
         }
     }
     
-    init_rowcosts(seed);
+    compute_rowcosts(seed);
 
 // @todo TBR
 //    if (a == Algo::PSE || a == Algo::PSE0)
@@ -77,7 +77,8 @@ _debug(dflag)
 //}
 
 
-PST::PST(const PST& tab, const Cost& seed, const PSG& grid, bool dflag):
+PST::PST(const PST& tab, const Cost& seed,
+         const PSO& globals, const PSG& locals, bool dflag):
 _algo(tab._algo),
 _enum(tab._enum),
 _index(tab._index),
@@ -87,10 +88,10 @@ _debug(dflag)
 {
     TRACE("new PS Table {}-{} from grid, for {}",
           _enum.first(), _enum.stop(), _algo);
-    assert(grid.rowNb() == _index.size());
-    assert(grid.columnNb() == tab.columnNb());
+    assert(locals.rowNb() == _index.size());
+    assert(locals.columnNb() == tab.columnNb());
     assert(_algo == Algo::PSE || _algo == Algo::PS14);
-    bool status = init_psvs(tab, seed, grid);
+    bool status = init_psvs(tab, seed, globals, locals);
     if (status == false)
     {
         ERROR("PST: fail to compute spelling table {}-{} for {}",
@@ -98,7 +99,7 @@ _debug(dflag)
     }
     else
     {
-        init_rowcosts(seed);
+        compute_rowcosts(seed, globals);
     }
 }
 
@@ -125,19 +126,53 @@ void PST::init_rowcosts(const Cost& seed)
     // one different shared pointer for each row cost
     for (size_t i = 0; i < _index.size(); ++i)
         _rowcost.push_back(seed.shared_zero());
-    
+}
+
+
+void PST::compute_rowcosts(const Cost& seed)
+{
+    const PSO allglobals(_index, _debug, true); // full
+    compute_rowcosts(seed, allglobals);
+//    init_rowcosts(seed);
+//    for (size_t j = 0; j < _psvs.size(); ++j)
+//    {
+//        assert(_psvs[j]);
+//        PSV& psv = *(_psvs[j]);
+//        assert(psv.size() == _index.size());
+//        for (size_t i = 0; i < psv.size(); ++i)
+//        {
+//            const PSB& psb = psv.bag(i);
+//            assert(_rowcost.at(i));
+//            if (! psb.empty())
+//            {
+//                Cost& rc = *(_rowcost.at(i));
+//                rc += psb.cost();
+//            }
+//        }
+//    }
+}
+
+
+void PST::compute_rowcosts(const Cost& seed, const PSO& globals)
+{
+    init_rowcosts(seed);
     for (size_t j = 0; j < _psvs.size(); ++j)
     {
         assert(_psvs[j]);
         PSV& psv = *(_psvs[j]);
         assert(psv.size() == _index.size());
-        for (size_t i = 0; i < psv.size(); ++i)
+
+        // compute the rowcosts only for candidate global tonalities
+        for (auto it = globals.cbegin(); it != globals.cend(); ++it)
         {
-            const PSB& psb = psv.bag(i);
-            assert(_rowcost.at(i));
+            size_t ig = *it; // index of global tnolity in tonindex.
+            assert(ig < _index.size());
+            assert(ig < psv.size());
+            const PSB& psb = psv.bag(ig);
             if (! psb.empty())
             {
-                Cost& rc = *(_rowcost.at(i));
+                assert(_rowcost.at(ig));
+                Cost& rc = *(_rowcost.at(ig));
                 rc += psb.cost();
             }
         }
@@ -209,17 +244,21 @@ bool PST::init_psvs(const Cost& seed)
 }
 
 
-bool PST::init_psvs(const PST& tab, const Cost& seed, const PSG& grid)
+bool PST::init_psvs(const PST& tab, const Cost& seed,
+                    const PSO& globals, const PSG& grid)
 {
     TRACE("PST: re-computing spelling table {}-{}");
     assert(_psvs.empty()); // do not recompute
-    
+    assert(grid.size() == tab.size()); // nb of columns
+
     for (size_t j = 0; j < tab.size(); ++j)
     {
         const PSV& col = tab.column(j);
+        const std::vector<size_t>& locals = grid.column(j);
         assert(col.bar() == j);
         _psvs.emplace_back(std::unique_ptr<PSV>(new
-                           PSV(_algo, seed, _index, col.enumerator(), j)));
+                        PSV(col, seed, globals, locals)));
+         // PSV(_algo, seed, _index, col.enumerator(), j)));
     }
     
     return true;

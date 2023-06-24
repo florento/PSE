@@ -31,6 +31,7 @@
 #include "TonIndex.hpp"
 #include "PSEnum.hpp"
 #include "PSBag.hpp"
+#include "PSGlobal.hpp"
 #include "PSPath.hpp"
 
 
@@ -93,9 +94,12 @@ public:
     /// @param col PS vector whose algo, ton index, and enumerator will be copied.
     /// @param seed cost value of specialized type used to create a null cost
     /// of the same type.
+    /// @param globals candidate global tonalities. They must refer to the same
+    /// TonIndex as col and locals.
     /// @param locals column of local tonalities for tab. Its dimension must be
     /// the same as col.
-    PSV(const PSV& col, const Cost& seed, const std::vector<size_t>& locals);
+    PSV(const PSV& col, const Cost& seed,
+        const PSO& globals, const std::vector<size_t>& locals);
 
     ~PSV();
   
@@ -235,7 +239,12 @@ private:
     
     /// fill the vector _psbs with PS Bags constructed with the notes enumerated
     /// and the given local tons.
-    void init_psbs(const Cost& seed, const std::vector<size_t>& locals);
+    /// @param seed cost value of specialized type used to create a null cost
+    /// of the same type.
+    /// @param globals candidate global tonalities.
+    /// @param locals column of local tonalities for tab.
+    void init_psbs(const Cost& seed,
+                   const PSO& globals, const std::vector<size_t>& locals);
 
     // initialize the vector _locals of local tonalities
     // bool init_locals();

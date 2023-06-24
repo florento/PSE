@@ -80,7 +80,9 @@ bool Speller2Pass::spell(const Cost& seed0, const Cost& seed1,
         WARN("PSE: re-spelling, 2d PS global set overrided");
         delete _global1;
     }
-    _global1 = new PSO(*_table1, diff1, _debug); // std::unique_ptr<PSO>
+    assert(_global0);
+    // std::unique_ptr<PSO>
+    _global1 = new PSO(*_global0, *_table1, diff1, _debug);
 
     TRACE("Pitch Spelling: {} estimated global tonality candidates", globals());
     size_t ig = iglobalCand(0);

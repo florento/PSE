@@ -25,6 +25,8 @@
 #include "PSCost.hpp" // TBR
 #include "Cost.hpp"
 #include "PSVector.hpp"
+#include "PSGlobal.hpp" // globals
+#include "PSGrid.hpp"   // locals
 
 
 namespace pse {
@@ -84,10 +86,13 @@ public:
     /// @param tab PS table whose algo, ton index, and enumerator will be copied.
     /// @param seed cost value of specialized type used to create a null cost
     /// of the same type.
-    /// @param grid table of local tonalities for tab. Its dimensions must be
-    /// the same as tab.
+    /// @param globals candidate global tonalities.
+    /// Its dimensions must be the same as tab.
+    /// @param locals table of local tonalities for tab.
+    /// Its dimensions must be the same as tab.
     /// @param dflag debug mode (display table during construction).
-    PST(const PST& tab, const Cost& seed, const PSG& grid, bool dflag=false);
+    PST(const PST& tab, const Cost& seed,
+        const PSO& globals, const PSG& locals, bool dflag=false);
 
     /// destructor.
     virtual ~PST();
@@ -259,9 +264,6 @@ private: // data
     
 private:
 
-    /// initialise the vector of row costs as null vector.
-    void init_rowcosts(const Cost& seed);
-    
     /// compute the columns (PS Vectors) of this table,
     /// filling cells with cost values.
     /// @return wether the computation was successful.
@@ -273,11 +275,27 @@ private:
     /// this table (and former pitch spelling content).
     /// @param seed cost value of specialized type used to create a null cost
     /// of the same type.
-    /// @param grid optional table of local tonalities.
+    /// @param globals candidate global tonalities.
+    /// Its dimensions must be the same as the index of this table and
+    /// the columns of tab.
+    /// @param locals table of local tonalities for tab.
     /// Its dimensions must be the same as the index of this table and
     /// the columns of tab.
     /// @return wether the computation was successful.
-    bool init_psvs(const PST& tab, const Cost& seed, const PSG& grid);
+    bool init_psvs(const PST& tab, const Cost& seed,
+                   const PSO& globals, const PSG& locals);
+    
+    /// initialise the vector of row costs as null vector.
+    void init_rowcosts(const Cost& seed);
+    
+    /// fill the the vector of row costs.
+    void compute_rowcosts(const Cost& seed);
+
+    /// fill the the vector of row costs for given global tonalities.
+    /// @param globals candidate global tonalities.
+    /// Its dimensions must be the same as the index of this table and
+    /// the columns of tab.
+    void compute_rowcosts(const Cost& seed, const PSO& globals);
     
     // estimate local tonalities in every column,
     // for each potential global tonality.

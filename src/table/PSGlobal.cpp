@@ -6,45 +6,72 @@
 //
 
 #include "PSGlobal.hpp"
+#include "PSTable.hpp"
 
 
 namespace pse {
 
 
-PSO::PSO(const PST& tab, double d, bool dflag):
+PSO::PSO(const PSO& globals, const PST& tab, double d, bool dflag):
 _index(tab.index()),
 _globals(), // empty
 _debug(dflag)
 {
     assert(d >= 0);
-    init(tab, d);
+    assert(globals._index.size() == tab.index().size());
+    // assert(globals._index == tab.index());
+    init(globals, tab, d);
 }
 
 
-PSO::PSO(const TonIndex& id, double dflag):
+PSO::PSO(const PST& tab, double d, bool dflag):
+PSO(PSO(tab.index(), dflag, true), tab, d, dflag)
+{ assert(d >= 0); }
+
+
+PSO::PSO(const TonIndex& id, double dflag, double full):
 _index(id),
 _globals(), // empty
 _debug(dflag)
-{ }
+{
+    if (full)
+    {
+        for (size_t i = 0; i < _index.size(); ++i)
+            _globals.push_back(i);
+    }
+}
 
 
 PSO::~PSO()
 { }
 
 
-void PSO::init(const PST& tab, double d)
+void PSO::init(const PSO& globals, const PST& tab, double d)
 {
-    // candidate list for best global
-    // _globals is empty
+    // no former candidates for best global
+    if (globals.empty())
+    {
+        assert(_globals.empty());
+        return;
+    }
+    
     // invariant: all index in _globals have the same RowCost
     // _globals.push_back(0);
+    
 
     // index of row of best cost
-    size_t ibest = 0;
+    assert(globals.cbegin() != globals.cend());
+    size_t ibest = *(globals.cbegin());
     
     // estimate the best tonality wrt costs (nb accidentals)
-    for (size_t i = 1; i < _index.size(); ++i)
+    for (auto it = globals.cbegin(); it != globals.cend(); ++it)
+
     {
+        size_t i = *it;
+        assert(i != TonIndex::FAILED);
+        assert(i != TonIndex::UNDEF);
+        assert(i < _index.size());
+        //     for (size_t i = 1; ; ++i)
         // all elements of cands have same cost
         const Cost& bestCost = tab.rowCost(ibest);
         const Cost& rc = tab.rowCost(i);
@@ -61,8 +88,12 @@ void PSO::init(const PST& tab, double d)
     
     // add to _globals (candidates) all tonality at distance to ibest
     // smaller than d
-    for (size_t i = 0; i < _index.size(); ++i)
+    for (auto it = globals.cbegin(); it != globals.cend(); ++it)
     {
+        size_t i = *it;
+        assert(i != TonIndex::FAILED);
+        assert(i != TonIndex::UNDEF);
+        assert(i < _index.size());
         const Cost& rc = tab.rowCost(i);
         
         // real tie
@@ -94,6 +125,12 @@ size_t PSO::size() const
 }
 
 
+bool PSO::empty() const
+{
+    return _globals.empty();
+}
+
+
 size_t PSO::iglobal(size_t i) const
 {
     assert(i < _globals.size());
@@ -106,6 +143,18 @@ const Ton& PSO::global(size_t i) const
     size_t ig = iglobal(i);
     assert(ig < _index.size());
     return _index.ton(ig);
+}
+
+
+std::vector<size_t>::const_iterator PSO::cbegin() const
+{
+    return _globals.cbegin();
+}
+
+
+std::vector<size_t>::const_iterator PSO::cend() const
+{
+    return _globals.cend();
 }
 
 

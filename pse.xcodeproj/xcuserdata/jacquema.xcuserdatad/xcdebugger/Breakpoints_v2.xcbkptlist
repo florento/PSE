@@ -126,8 +126,8 @@
             filePath = "src/spellers/Speller2pass.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "102"
-            endingLineNumber = "102"
+            startingLineNumber = "104"
+            endingLineNumber = "104"
             landmarkName = "Speller2Pass::spell(seed0, seed1, diff0, diff1, rewrite_flag1)"
             landmarkType = "7">
          </BreakpointContent>
@@ -167,16 +167,64 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "37B91EC0-49E3-4CFE-8AE4-F8D2915BE1A5"
+            uuid = "166EBD4B-2D76-4B20-8300-F5FEEA9E7240"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "src/table/PSGlobal.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "118"
+            endingLineNumber = "118"
+            landmarkName = "PSO::init(globals, tab, d)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "5464D6A1-A1A8-4182-8448-7EC495ABF472"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "src/spellers/Speller2pass.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "84"
+            endingLineNumber = "84"
+            landmarkName = "Speller2Pass::spell(seed0, seed1, diff0, diff1, rewrite_flag1)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "C7BF420A-10AE-4FF7-9356-A5265C964E6F"
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "src/table/PSTable.cpp"
+            filePath = "src/spellers/Speller2pass.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "94"
-            endingLineNumber = "94"
-            landmarkName = "PST::PST(tab, seed, globals, locals, dflag)"
+            startingLineNumber = "75"
+            endingLineNumber = "75"
+            landmarkName = "Speller2Pass::spell(seed0, seed1, diff0, diff1, rewrite_flag1)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "D19BA229-2F89-4EFB-BCD7-580BA6B6228A"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "src/table/PSGlobal.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "20"
+            endingLineNumber = "20"
+            landmarkName = "PSO::PSO(globals, tab, d, dflag)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

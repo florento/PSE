@@ -25,6 +25,7 @@ _tons() // empty vector
             break;
         case 25:
             init25();
+            break;
 
         case 26:
             init13(ModeName::Major);

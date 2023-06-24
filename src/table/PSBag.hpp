@@ -87,10 +87,10 @@ public:
     // @warning this bag must not be empty.
     // void pop();
     
-    /// iterator to the pointing to the first element in this bag.
+    /// iterator pointing to the first element in this bag.
     PSCHeap::const_iterator cbegin() const;
     
-    /// iterator to the pointing to the past-the-end element in this bag.
+    /// iterator pointing to the past-the-end element in this bag.
     PSCHeap::const_iterator cend() const;
     
     /// rename all notes in input used to build this bag,
