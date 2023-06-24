@@ -338,7 +338,7 @@ def eval_Bach(stat=ps.Stats(),
     
     
 def DWV_num(bwv, mvt):
-    """index in list DWK_list() of the Opus BWV, and mvt 'prelude' or 'fugue'"""
+    """index in list DWK_list() of the Opus BWV, and mvt Prelude or Fugue"""
     lB=DWK_list()
     i = 0
     for e in lB:

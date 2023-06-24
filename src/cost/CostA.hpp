@@ -128,7 +128,7 @@ public:
     //             const Ton& gton, const Ton& lton) override;
     
     /// @param o output stream where to print this cost.
-    void print(std::ostream& o) const;
+    void print(std::ostream& o) const override;
     
 protected: // data
     

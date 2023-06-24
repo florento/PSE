@@ -16,13 +16,15 @@ namespace pse {
 
 CostAD::CostAD():
 _accid(0),
-_dist(0)
+_dist(0),
+_color(0)
 { }
 
 
 CostAD::CostAD(const CostAD& rhs):
 _accid(rhs._accid),
-_dist(rhs._dist)
+_dist(rhs._dist),
+_color(rhs._color)
 { }
 
 
@@ -52,6 +54,7 @@ CostAD& CostAD::operator+=(const CostAD& rhs)
 {
     _accid += rhs._accid;
     _dist += rhs._dist;
+    _color += rhs._color;
     return *this;
 }
 
@@ -79,14 +82,15 @@ CostAD& CostAD::operator+=(const CostAD& rhs)
 //}
 
 
-void CostAD::update(const enum NoteName& name, const enum Accid& accid,
+void CostAD::update(const enum NoteName& name,
+                    const enum Accid& accid,
                     bool print,
                     const Ton& gton, const Ton& lton)
 {
     // update cost when accident for the name was updated
     // discount for lead degree
     // !(gton.lead()  &&  gton.accidDia(name) == accid)
-    if (print && !(gton.accidDia(name) == accid))
+    if (print && (gton.accidDia(name) != accid))
     {
         switch (accid)
         {
@@ -109,34 +113,39 @@ void CostAD::update(const enum NoteName& name, const enum Accid& accid,
         }
     }
     
-    if (lton.defined())
+    // si l'on veut juger purement d'un point de vue tonal
+    // afin de déduire la meilleure tonalité locale,
+    // il vaut mieux ne plus se poser la question du print :
+    // !(gton.lead()  &&  gton.accidDia(name) == accid)
+    if (lton.defined() && (lton.accidDia(name) != accid))
     {
-        // si l'on veut juger purement d'un point de vue tonal
-        // afin de déduire la meilleure tonalité locale,
-        // il vaut mieux ne plus se poser la question du print :
-        // !(gton.lead()  &&  gton.accidDia(name) == accid)
-        if (!(lton.accidDia(name) == accid))
+        switch (accid)
         {
-            switch (accid)
+            case Accid::DoubleSharp:
+            case Accid::DoubleFlat:
+                _dist += 2;
+                break;
+
+            case Accid::Sharp:
+            case Accid::Flat:
+            case Accid::Natural:
+                _dist += 1;
+                break;
+
+            default:
             {
-                case Accid::DoubleSharp:
-                case Accid::DoubleFlat:
-                    _dist += 2;
-                    break;
-
-                case Accid::Sharp:
-                case Accid::Flat:
-                case Accid::Natural:
-                    _dist += 1;
-                    break;
-
-                default:
-                {
-                    ERROR("PSC: unexpected accidental"); // accid
-                    break;
-                }
+                ERROR("PSC: unexpected accidental"); // accid
+                break;
             }
         }
+    }
+    
+    // color of accident and color of global ton
+    int ks = gton.fifths();
+    // const enum Accid& a = c.accidental();
+    if (((ks >= 0) && (flat(accid))) || ((ks <  0) && (sharp(accid))))
+    {
+        _color += 1;
     }
 }
 
@@ -242,6 +251,7 @@ void CostAD::print(std::ostream& o) const
 {
     o << "accid=" << _accid;
     o << " dist=" << _dist;
+    o << " color=" << _color;
 }
 
 

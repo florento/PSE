@@ -34,7 +34,7 @@ bool CostADplus::operator==(const CostADplus& rhs) const
 {
     assert(_sum == _accid + _dist);
     assert(rhs._sum == rhs._accid + rhs._dist);
-    return (_sum == rhs._sum);
+    return (_sum == rhs._sum && _color == rhs._color);
 }
 
 
@@ -42,7 +42,10 @@ double CostADplus::dist(const CostADplus& rhs) const
 {
     assert(_sum == _accid + _dist);
     assert(rhs._sum == rhs._accid + rhs._dist);
-    return distCost((double) _sum, (double) rhs._sum);
+    if (_sum == rhs._sum)
+        return distCost((double) _color, (double) rhs._color);
+    else
+        return distCost((double) _sum, (double) rhs._sum);
 }
 
 
@@ -50,7 +53,10 @@ bool CostADplus::operator<(const CostADplus& rhs) const
 {
     assert(_sum == _accid + _dist);
     assert(rhs._sum == rhs._accid + rhs._dist);
-    return (_sum < rhs._sum);
+    if (_sum == rhs._sum)
+        return (_color < rhs._color);
+    else
+        return (_sum < rhs._sum);
 }
 
 
@@ -91,7 +97,7 @@ void CostADplus::update(const enum NoteName& name, const enum Accid& accid,
 void CostADplus::print(std::ostream& o) const
 {
     CostAD::print(o);
-    o << " sum=" << _sum;
+    o << " a+d=" << _sum;
 }
 
 

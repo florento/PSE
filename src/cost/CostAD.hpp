@@ -143,6 +143,9 @@ protected: // data
     
     /// cumulated distance to a conjectured local tonality.
     size_t _dist;
+
+    /// cumulated number of accidentals with color different from global ton
+    size_t _color;
     
     // degree of approximation.
     // percent under which 2 costs componnents are considered equal.

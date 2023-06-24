@@ -245,7 +245,7 @@ void CostA::update(const enum NoteName& name, const enum Accid& accid,
 
 void CostA::print(std::ostream& o) const
 {
-    o << "accid=" << _accid;
+    o << "a+d=" << _accid;
 }
 
 

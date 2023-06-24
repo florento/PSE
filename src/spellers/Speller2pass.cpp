@@ -69,7 +69,10 @@ bool Speller2Pass::spell(const Cost& seed0, const Cost& seed1,
         WARN("PSE: re-spelling, 2d PS table overrided");
         delete _table1;
     }
-    _table1 = new PST(*_table0, seed1, *_locals0, _debug); // std::unique_ptr<PST>
+    assert(_global0);
+    assert(_locals0);
+    // std::unique_ptr<PST>
+    _table1 = new PST(*_table0, seed1, *_global0, *_locals0, _debug);
 
     TRACE("pitch-spelling: estimate second list of global tonality candidates");
     if (_global1 != nullptr) // should not happen
