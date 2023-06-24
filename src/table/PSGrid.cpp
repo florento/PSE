@@ -6,6 +6,7 @@
 //
 
 #include "PSGrid.hpp"
+#include "PSTable.hpp"
 
 namespace pse {
 
@@ -158,7 +159,7 @@ void PSG::extract_bests(const PSV& vec, std::set<size_t>& ties)
             auto ret = ties.insert(j);
             assert(ret.second == true); // j was inserted
         }
-        // otherwisse keep the current best
+        // otherwise keep the current best
         else
         {
             assert((cbest == nullptr) || (cost > *cbest)); // we did not forget a case
@@ -188,11 +189,11 @@ size_t PSG::estimateLocal(size_t ig, size_t iprev, std::set<size_t>& cands)
     // cost for the current best local tonality.
     // PSCost cbest;  // WARNING: initialized to 0.
     
-    // current best distance to previous local ton. for ig
-    unsigned int dbest = 30; // initialized to avoid warning
-
     // current best distance to previous global ton. ig
     unsigned int dgbest = 30; // initialized to avoid warning
+
+    // current best distance to previous local ton. for ig
+    unsigned int dlbest = 30; // initialized to avoid warning
 
     for (size_t j : cands)
     {
@@ -209,20 +210,15 @@ size_t PSG::estimateLocal(size_t ig, size_t iprev, std::set<size_t>& cands)
         //unsigned int dist = pton.distDiatonic(jton);
         unsigned int dist = pton.distWeber(jton);
         
-        if (dist < dbest)
+        if (dist < dlbest)
         {
             ibest = j;
-            dbest = dist;
+            dlbest = dist;
             //continue;
         }
-    }
-    // tie break criteria 2:
-    // best distance (of current tonality j) to the global tonality ig
-    for (size_t j : cands)
-    {
-        const Ton& jton = _index.ton(j);
-        unsigned int dist = pton.distWeber(jton);
-        if (dist == dbest)
+        // tie break criteria 2:
+        // best distance (of current tonality j) to the global tonality ig
+        else if (dist == dlbest)
         {
             //unsigned int distg = gton.distDiatonic(jton);
             unsigned int distg = gton.distWeber(jton);
@@ -235,61 +231,23 @@ size_t PSG::estimateLocal(size_t ig, size_t iprev, std::set<size_t>& cands)
             // smallest key signature
             // ALT: best distance between the previous local tonality and
             // a config in bag for the current tonality j
-        }
-    }
-    for (size_t j : cands)
-    {
-        const Ton& jton = _index.ton(j);
-        unsigned int dist = pton.distWeber(jton);
-        if (dist == dbest)
-        {
-            unsigned int distg = gton.distWeber(jton);
-            if (distg == dgbest)
+            else if (distg == dgbest)
             {
                 const Ton& bton = _index.ton(ibest);
+                size_t besty = std::abs(bton.fifths());
                 if (std::abs(jton.fifths()) < std::abs(bton.fifths()))
                 {
                     ibest = j;
                 }
-            }
-        }
-    }
-    const Ton& bton = _index.ton(ibest);
-    size_t besty = std::abs(bton.fifths());
-    for (size_t j : cands)
-    {
-        const Ton& jton = _index.ton(j);
-        unsigned int dist = pton.distWeber(jton);
-        if (dist==dbest)
-        {
-            unsigned int distg = gton.distWeber(jton);
-            if (distg == dgbest)
-            {
-                if ((std::abs(jton.fifths()) == besty) && (j != ibest))
+                // tie break fail
+                else if ((std::abs(jton.fifths()) == besty) && (j != ibest))
                 {
                     WARN("PSGrid, estimation local, tie break fail {} vs {} dist prev({})={}, dist global({})={})",
                          jton, _index.ton(ibest), pton, dist, gton, distg);
                 }
             }
         }
-            // otherwise keep the current best
-        //else
-        //    {
-                //assert(std::abs(jton.fifths()) > std::abs(bton.fifths()));
-        //    }
     }
-        // otherwise keep the current best
-        //else
-        //{
-        //    assert(distg > dgbest); // we did not forget a case
-        //}
-        //}
-        // otherwisse keep the current best
-        //else
-        //{
-        //    assert(dist > dbest); // we did not forget a case
-        //}
-        
     assert(ibest != TonIndex::FAILED);
     assert(ibest == TonIndex::UNDEF || ibest < _index.size());
     assert(ibest < _index.size() || cands.empty());
@@ -435,7 +393,7 @@ size_t PSG::estimateLocalalt(const PSV& vec, size_t ig, size_t iprev, unsigned i
             const Ton& jton=_index.ton(j);
             unsigned int dist = pton.distWeber(jton);
             unsigned int distg = gton.distWeber(jton);
-            WARN("PSGrid, estimation local, tie break fail {} vs {} dist prev({})={}, dist global({})={})",
+            WARN("PSGrid, estimation local ALT, tie break fail {} vs {} dist prev({})={}, dist global({})={})",
                  jton, _index.ton(ibest), pton, dist, gton, distg);
         }
         // otherwise keep the current best

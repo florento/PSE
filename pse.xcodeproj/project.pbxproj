@@ -167,9 +167,6 @@
 		43C4A6532A1E7EBB00925A99 /* PSGrid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43C4A6502A1E7EBB00925A99 /* PSGrid.cpp */; };
 		43C4A6542A1E7EBB00925A99 /* PSGrid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43C4A6502A1E7EBB00925A99 /* PSGrid.cpp */; };
 		43C4A6552A1E7EBB00925A99 /* PSGrid.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 43C4A6512A1E7EBB00925A99 /* PSGrid.hpp */; };
-		43D31A0C2A13F28800234527 /* CostA.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43D31A0A2A13F28800234527 /* CostA.cpp */; };
-		43D31A0D2A13F28800234527 /* CostA.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43D31A0A2A13F28800234527 /* CostA.cpp */; };
-		43D31A0E2A13F28800234527 /* CostA.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43D31A0A2A13F28800234527 /* CostA.cpp */; };
 		43D31A122A1426A300234527 /* Cost.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43D31A102A1426A300234527 /* Cost.cpp */; };
 		43D31A132A1426A300234527 /* Cost.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43D31A102A1426A300234527 /* Cost.cpp */; };
 		43D31A142A1426A300234527 /* Cost.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43D31A102A1426A300234527 /* Cost.cpp */; };
@@ -970,7 +967,6 @@
 				430627C52A4586370046FD99 /* CostADlex.cpp in Sources */,
 				435081DF29D6C96800465943 /* unit_test.cpp in Sources */,
 				4350820129D6D85100465943 /* trace.cpp in Sources */,
-				43D31A0E2A13F28800234527 /* CostA.cpp in Sources */,
 				435081EF29D6D75A00465943 /* Mode.cpp in Sources */,
 				435081EC29D6D74E00465943 /* KeyFifth.cpp in Sources */,
 				4309605F2A0D03C10097487A /* AlgoName.cpp in Sources */,
@@ -1001,7 +997,6 @@
 				43A2544029280D8900D559D2 /* trace.cpp in Sources */,
 				43ABA4FE292423C5002AC1D4 /* NoteName.cpp in Sources */,
 				43ABA50F292423E8002AC1D4 /* Accidental.cpp in Sources */,
-				43D31A0C2A13F28800234527 /* CostA.cpp in Sources */,
 				43F9BE6429CC423E00B0A7F8 /* ModeName.cpp in Sources */,
 				4342FD1229267895004E914F /* MidiNum.cpp in Sources */,
 				4346CB362A1FF62100756DE3 /* PSGlobal.cpp in Sources */,
@@ -1055,7 +1050,6 @@
 			files = (
 				43FBEAC62930CEDD008FC486 /* trace.cpp in Sources */,
 				43FBEAC72930CEDD008FC486 /* NoteName.cpp in Sources */,
-				43D31A0D2A13F28800234527 /* CostA.cpp in Sources */,
 				43F9BE6529CC423E00B0A7F8 /* ModeName.cpp in Sources */,
 				432586A72A40EBB30069D796 /* Rational.cpp in Sources */,
 				43FBEAC82930CEDD008FC486 /* Accidental.cpp in Sources */,

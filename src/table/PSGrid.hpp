@@ -21,9 +21,11 @@
 #include "Cost.hpp"
 #include "PSBag.hpp"
 #include "PSVector.hpp"
-#include "PSTable.hpp"
+//#include "PSTable.hpp"
 
 namespace pse {
+
+class PST;
 
 /// Grid of estimated local tonalities, for each measure (X) and
 /// each possible global tonality (Y) in a TonIndex.
