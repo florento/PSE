@@ -80,6 +80,9 @@ public:
     /// there are no candidates for the estimatation of the global tonality.
     bool empty() const;
 
+    /// the given index of global tonality is one of the current candidates.
+    bool contains(size_t i) const;
+    
     /// vector of tonalities associated to the estimated global tonalities
     /// contained in this structure.
     /// it is the row-index of the table for the estimation

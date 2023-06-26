@@ -95,7 +95,7 @@ void PSO::init(const PSO& globals, const PST& tab, double d)
         assert(i != TonIndex::UNDEF);
         assert(i < _index.size());
         const Cost& rc = tab.rowCost(i);
-        
+
         // real tie
         if (rc == bestCost)
         {
@@ -112,10 +112,12 @@ void PSO::init(const PSO& globals, const PST& tab, double d)
     
     // at least ibest
     assert(! _globals.empty());
+    assert(contains(ibest));
     assert(_globals[0] < _index.size());
 
     if (_debug)
-        INFO("PST: {} candidates global: ", _globals.size());
+        DEBUGU("PST: {} candidates global: ", _globals.size());
+    
 }
 
 
@@ -130,6 +132,21 @@ bool PSO::empty() const
     return _globals.empty();
 }
 
+
+bool PSO::contains(size_t n) const
+{
+    for (auto it = _globals.cbegin(); it != _globals.cend(); ++it)
+    {
+        size_t i = *it;
+        assert(i != TonIndex::FAILED);
+        assert(i != TonIndex::UNDEF);
+        assert(i < _index.size());
+        if (i == n)
+            return true;
+    }
+    
+    return false;
+}
 
 size_t PSO::iglobal(size_t i) const
 {
