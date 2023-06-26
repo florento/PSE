@@ -275,7 +275,7 @@ bool Speller1Pass::rename(PST* table, size_t n)
         return false;
     }
 
-    return table->rename(n);
+    return table->rename(iglobal(n));
 }
 
 

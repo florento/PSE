@@ -58,6 +58,9 @@ int main(int argc, const char* argv[])
     std::cout << "spelling " << sp.size() << " notes" << std::endl;
     bool status = sp.spell();
 
+    std::cout << "renaming" << sp.size() << " notes" << std::endl;
+    status = status && sp.rename();
+    
     if (status)
     {
         std::cout << sp.size() << " spelled notes" << std::endl;

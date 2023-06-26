@@ -112,7 +112,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "68"
             endingLineNumber = "68"
-            landmarkName = "Speller2Pass::spell(seed0, seed1, diff0, diff1, rewrite_flag1)"
+            landmarkName = "Speller2Pass::spell(seed0, seed1, diff0, diff1, rename_flag1, rewrite_flag1)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -160,7 +160,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "86"
             endingLineNumber = "86"
-            landmarkName = "Speller2Pass::spell(seed0, seed1, diff0, diff1, rewrite_flag1)"
+            landmarkName = "Speller2Pass::spell(seed0, seed1, diff0, diff1, rename_flag1, rewrite_flag1)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -176,7 +176,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "77"
             endingLineNumber = "77"
-            landmarkName = "Speller2Pass::spell(seed0, seed1, diff0, diff1, rewrite_flag1)"
+            landmarkName = "Speller2Pass::spell(seed0, seed1, diff0, diff1, rename_flag1, rewrite_flag1)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
