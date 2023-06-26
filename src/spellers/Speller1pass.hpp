@@ -38,6 +38,13 @@ public:
     
     /// destructor
     virtual ~Speller1Pass();
+       
+    /// rename all notes read by this speller,
+    /// according to a given global tonality.
+    /// @param n number of candidate estimated global tonality.
+    /// must be in 0..globals().
+    /// @return whether renaming succeded for all measures.
+    virtual bool rename(size_t n=0) override;
 
     /// index (in the TonIndex) of the estimated local tonality
     /// for one assumed global tonality and one bar.
@@ -73,27 +80,34 @@ public:
     virtual void setGlobal(size_t i);
     
     /// number of candidates (ties) for the estimatation of the global tonality.
-    virtual size_t globals() const;
+    virtual size_t globals() const override;
     
-    /// candidate global tonality for this table.
-    /// @param i candidate number, must be in 0..globalCands().
-    virtual const Ton& globalCand(size_t i) const;
+    // candidate global tonality for this table.
+    // @param i candidate number, must be in 0..globalCands().
+    // virtual const Ton& globalCand(size_t i) const;
     
-    /// index of a candidate global tonality for this table, in 0..index.size().
-    /// @param i candidate number, must be in 0..globalCands().
-    /// @return the index of the global tonality candidate i,
-    /// in the index of tons, in 0..index.size().
-    virtual size_t iglobalCand(size_t i) const;
+    // index of a candidate global tonality for this table, in 0..index.size().
+    // @param i candidate number, must be in 0..globalCands().
+    // @return the index of the global tonality candidate i,
+    // in the index of tons, in 0..index.size().
+    //virtual size_t iglobalCand(size_t i) const;
     
-    /// index of the estimated global tonality.
-    /// @return the index of the estimated global tonality in the index of tons,
-    /// in 0..index.size().
-    size_t iglobal() const override;
-    
-    /// estimated global tonality.
+    /// index of the n-best estimated global tonality.
+    /// @param n number of candidate estimated global tonality,
+    /// must be in 0..globals().
+    /// @return the index of the n-best estimated global tonality
+    /// in the index of tons, in 0..index.size()
+    /// or TonIndex::UNDEF in case of error.
     /// @warning spell() must have been called.
-    const Ton& global() const override;
-
+    size_t iglobal(size_t n=0) const override;
+    
+    /// n-best estimated global tonality.
+    /// @param n number of candidate estimated global tonality,
+    /// must be in 0..globals().
+    /// @return the n-best estimated global tonality.
+    /// It is ton(iglobal(n)) or an undef ton in case of error.
+    /// @warning spell() must have been called.
+    const Ton& global(size_t n=0) const override;
     
 protected: // data
     
@@ -122,14 +136,14 @@ protected:
     void setGlobal(size_t i, PSO* g); // std::shared_ptr<PSO>
     
     /// number of global cands in g
-    size_t globals(const PSO* g) const; // std::shared_ptr<PSO>
+    size_t globalCands(const PSO* g) const; // std::shared_ptr<PSO>
     
     /// global cand number i in g
     const Ton& globalCand(size_t i, const PSO* g) const; // std::shared_ptr<PSO>
     
     /// index of global cand number i in g
     size_t iglobalCand(size_t i, const PSO* g) const; // std::shared_ptr<PSO>
-    
+
     /// compute the best pitch spelling for the input notes,
     /// using the algorithm named in this class.
     /// @param seed0 seed cost used to built the PS table
@@ -140,7 +154,14 @@ protected:
     /// @return whether computation was succesfull.
     bool spell(const Cost& seed0, double diff0=0,
                bool rename_flag=true, bool rewrite_flag=false);
-
+    
+    /// rename all notes read by this speller,
+    /// according to a given global tonality.
+    /// @param n number of candidate estimated global tonality.
+    /// must be in 0..globals().
+    /// @return whether renaming succeded for all measures.
+    bool rename(PST* table, size_t n=0);
+    
 };
 
 

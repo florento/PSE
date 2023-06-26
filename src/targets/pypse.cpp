@@ -115,11 +115,11 @@ PYBIND11_MODULE(pse, m)
              // py::arg("ton"), py::arg("bar"))
         .def("local_note", &pse::PSE::localNote,
              "estimated local tonality for a note")
-        .def("global_cands", &pse::PSE::globals,
+        .def("globals", &pse::PSE::globals,
              "get number of candidates (ties) for the estimatation of the global tonality")
-        .def("global_cand_ton", &pse::PSE::globalCand,
+        .def("global_ton", &pse::PSE::global,
              "get candidate global tonality ")
-        .def("iglobal_cand_ton", &pse::PSE::iglobalCand,
+        .def("iglobal_ton", &pse::PSE::iglobal,
              "get index of candidate global tonality ")
         .def("name",  &pse::PSE::name, "estimated name of note",
              py::arg("i"))
@@ -182,11 +182,11 @@ PYBIND11_MODULE(pse, m)
         .def("local_bar", &pse::PS14::local, "estimated local tonality for a bar")
              // py::arg("ton"), py::arg("bar"))
         .def("local_note", &pse::PS14::localNote, "estimated local tonality for a note")
-        .def("global_cands", &pse::PS14::globals,
+        .def("globals", &pse::PS14::globals,
              "get number of candidates (ties) for the estimatation of the global tonality")
-        .def("global_cand_ton", &pse::PS14::globalCand,
+        .def("global_ton", &pse::PS14::global,
              "get candidate global tonality ")
-        .def("iglobal_cand_ton", &pse::PS14::iglobalCand,
+        .def("iglobal_ton", &pse::PS14::iglobal,
              "get index of candidate global tonality ")
         .def("name",  &pse::PS14::name, "estimated name of note",
              py::arg("i"))

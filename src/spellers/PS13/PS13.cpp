@@ -117,6 +117,14 @@ bool PS13::spell()
 }
 
 
+// arg n ignored
+bool PS13::rename(size_t n)
+{
+    WARN("PS13: rename = spell for this speller");
+    return spell();
+}
+
+
 size_t PS13::count(int c, size_t n) const
 {
     return _enum.count(c, n, _Kpre, _Kpost);
@@ -147,12 +155,20 @@ size_t PS13::count(int c, size_t n) const
 }
 
 
-const Ton& PS13::global() const
+
+size_t PS13::globals() const
+{
+    return 0;
+}
+
+
+const Ton& PS13::global(size_t n) const
 {
     return _global; // Undef
 }
 
-size_t PS13::iglobal() const
+
+size_t PS13::iglobal(size_t n) const
 {
     return TonIndex::UNDEF;
 }

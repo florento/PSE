@@ -37,17 +37,17 @@ void Speller2Pass::setGlobal(size_t i)
 
 size_t Speller2Pass::globals() const
 {
-    return Speller1Pass::globals(_global1);
+    return Speller1Pass::globalCands(_global1);
 }
 
 
-const Ton& Speller2Pass::globalCand(size_t i) const
+const Ton& Speller2Pass::global(size_t i) const
 {
     return Speller1Pass::globalCand(i, _global1);
 }
 
 
-size_t Speller2Pass::iglobalCand(size_t i) const
+size_t Speller2Pass::iglobal(size_t i) const
 {
     return Speller1Pass::iglobalCand(i, _global1);
 }
@@ -85,7 +85,7 @@ bool Speller2Pass::spell(const Cost& seed0, const Cost& seed1,
     _global1 = new PSO(*_global0, *_table1, diff1, _debug);
 
     TRACE("Pitch Spelling: {} estimated global tonality candidates", globals());
-    size_t ig = iglobalCand(0);
+    size_t ig = iglobal(0);
     
     if (ig == TonIndex::UNDEF)
     {
@@ -101,7 +101,7 @@ bool Speller2Pass::spell(const Cost& seed0, const Cost& seed1,
         
         // will update the lists _names, _accids and _octave
         TRACE("pitch-spelling: start renaming");
-        _table1->rename(ig);
+        rename(ig);
         
         if (rewrite_flag1)
         {
@@ -111,6 +111,12 @@ bool Speller2Pass::spell(const Cost& seed0, const Cost& seed1,
     }
 
     return status;
+}
+
+
+bool Speller2Pass::rename(size_t n)
+{
+    return Speller1Pass::rename(_table1, n);
 }
 
 

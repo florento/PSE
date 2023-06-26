@@ -51,7 +51,7 @@ void Speller1Pass::setGlobal(size_t i, PSO* g) // std::shared_ptr<PSO>
 }
  
 
-size_t Speller1Pass::globals(const PSO* g) const // std::shared_ptr<PSO>
+size_t Speller1Pass::globalCands(const PSO* g) const // std::shared_ptr<PSO>
 {
     if (g == nullptr)
     {
@@ -76,7 +76,7 @@ const Ton& Speller1Pass::globalCand(size_t i, const PSO* g) const // std::shared
     else
     {
         ERROR("Speller1Pass: global[{}]: no such global ton candidate ({} cands)",
-              i, globals(g));
+              i, globalCands(g));
         //std::shared_ptr<Ton> uton(new Ton()); // undefined tonality
         assert(_uton);
         return *_uton;
@@ -94,7 +94,7 @@ size_t Speller1Pass::iglobalCand(size_t i, const PSO* g) const // std::shared_pt
     else
     {
         ERROR("Speller1Pass: iglobal[{}]: no such global ton candidate ({} cands)",
-              i, globals(g));
+              i, globalCands(g));
         return TonIndex::UNDEF;
     }
 
@@ -109,31 +109,30 @@ void Speller1Pass::setGlobal(size_t i)
 
 size_t Speller1Pass::globals() const
 {
-    return globals(_global0);
+    return globalCands(_global0);
+}
+
+//const Ton& Speller1Pass::globalCand(size_t i) const
+//{
+//    return globalCand(i, _global0);
+//}
+
+
+//size_t Speller1Pass::iglobalCand(size_t i) const
+//{
+//    return iglobalCand(i, _global0);
+//}
+
+
+size_t Speller1Pass::iglobal(size_t n) const
+{
+    return iglobalCand(n, _global0);
 }
 
 
-const Ton& Speller1Pass::globalCand(size_t i) const
+const Ton& Speller1Pass::global(size_t n) const
 {
-    return globalCand(i, _global0);
-}
-
-
-size_t Speller1Pass::iglobalCand(size_t i) const
-{
-    return iglobalCand(i, _global0);
-}
-
-
-size_t Speller1Pass::iglobal() const
-{
-    return iglobalCand(0);
-}
-
-
-const Ton& Speller1Pass::global() const
-{
-    return globalCand(0);
+    return globalCand(n, _global0);
 }
 
 
@@ -227,10 +226,7 @@ bool Speller1Pass::spell(const Cost& seed0, double diff0,
 
 
     TRACE("Pitch Spelling: {} estimated global tonality candidates",
-          globals(_global0));
-
-    size_t ig = iglobalCand(0, _global0);
-
+          globalCands(_global0));
 
 //    if (status == false)
 //    {
@@ -241,11 +237,13 @@ bool Speller1Pass::spell(const Cost& seed0, double diff0,
     // update the lists _names, _accids and _octave
     if (rename_flag)
     {
+        size_t ig = iglobalCand(0, _global0);
+
         if (ig != TonIndex::UNDEF)
         {
             TRACE("Pitch Spelling: renaming with estimated global tonality: {}",
                   ig);
-            _table0->rename(ig);
+            rename(ig);
         }
         else
         {
@@ -261,6 +259,29 @@ bool Speller1Pass::spell(const Cost& seed0, double diff0,
     }
 
     return status;
+}
+
+
+
+bool Speller1Pass::rename(PST* table, size_t n)
+{
+    assert(table);
+    assert(n != TonIndex::UNDEF);
+    if (n >= globals())
+    {
+        ERROR("Speller1Pass rename: {} wrong number of global ton candidate (max = {})",
+              n, globals()-1);
+        return false;
+    }
+
+    return table->rename(n);
+}
+
+
+
+bool Speller1Pass::rename(size_t n)
+{
+    return rename(_table0, n);
 }
 
 

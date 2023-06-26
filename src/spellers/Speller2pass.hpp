@@ -34,6 +34,13 @@ public:
     /// destructor
     virtual ~Speller2Pass();
     
+    /// rename all notes read by this speller,
+    /// according to a given global tonality.
+    /// @param n number of candidate estimated global tonality.
+    /// must be in 0..globals().
+    /// @return whether renaming succeded for all measures.
+    virtual bool rename(size_t n=0) override;
+    
     /// force global tonality. it wont be estimated.
     /// @param i index of tonality set as global.
     void setGlobal(size_t i) override;
@@ -41,17 +48,23 @@ public:
     /// number of candidates (ties) for the estimatation of the global tonality.
     size_t globals() const override;
     
-    /// candidate global tonality for this table.
-    /// @param i candidate number, must be in 0..globalCands().
-    const Ton& globalCand(size_t i) const override;
+    /// index of the n-best estimated global tonality.
+    /// @param n number of candidate estimated global tonality,
+    /// must be in 0..globals().
+    /// @return the index of the n-best estimated global tonality
+    /// in the index of tons, in 0..index.size()
+    /// or TonIndex::UNDEF in case of error.
+    /// @warning spell() must have been called.
+    size_t iglobal(size_t n=0) const override;
     
-    /// index of a candidate global tonality for this table, in 0..index.size().
-    /// @param i candidate number, must be in 0..globalCands().
-    /// @return the index of the global tonality candidate i,
-    /// in the index of tons, in 0..index.size().
-    size_t iglobalCand(size_t i) const override;
+    /// n-best estimated global tonality.
+    /// @param n number of candidate estimated global tonality,
+    /// must be in 0..globals().
+    /// @return the n-best estimated global tonality.
+    /// It is ton(iglobal(n)) or an undef ton in case of error.
+    /// @warning spell() must have been called.
+    const Ton& global(size_t n=0) const override;
     
-
 protected: // data
     
     /// Second Pitch Spelling table.

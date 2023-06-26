@@ -72,7 +72,7 @@ const std::array<std::array<enum Accid, 7>, 15> Ton::MIN_HARM =
     { _1S, _1S, _0N, _1S, _1S, _0N, _1S }, //  4  C# min harm
     { _1S, _1S, _0N, _2S, _1S, _1S, _0N }, //  5  G# min harm
     { _2S, _1S, _1S, _1S, _1S, _1S, _0N }, //  6  D# min harm
-    { _1S, _1S, _1S, _1S, _2S, _1S, _1S }, //  7   A# min harm
+    { _1S, _1S, _1S, _1S, _2S, _1S, _1S }, //  7  A# min harm
 }};
 
 // accidentals in minor melodic scales for each key signature.

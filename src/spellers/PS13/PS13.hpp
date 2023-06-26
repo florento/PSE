@@ -67,13 +67,23 @@ public:
     /// @return whether computation was succesfull.
     bool spell() override;
     
-    /// estimated global tonality.
+    /// rename all notes read by this speller,
+    /// according to a given global tonality.
+    /// @param n number of candidate estimated global tonality.
+    /// must be in 0..globals().
+    /// @return whether renaming succeded for all measures.
+    bool rename(size_t n=0) override;
+    
+    /// number of candidates estimated global tonality (ties).
+    size_t globals() const override;
+    
+    /// n-best estimated global tonality.
     /// @warning it is always an undef Ton for PS13.
-    const Ton& global() const override; //  { return Ton(); }
+    const Ton& global(size_t n) const override; //  { return Ton(); }
 
-    /// index of estimated global tonality.
+    /// index of the n-best estimated global tonality.
     /// @warning it is always an undef Ton for PS13.
-    size_t iglobal() const override;
+    size_t iglobal(size_t n) const override;
 
     // estimated local tonality at note of given index.
     // @param i index of note in the list of input notes.

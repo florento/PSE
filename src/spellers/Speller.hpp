@@ -138,6 +138,13 @@ public:
     /// using the algorithm named in this class.
     /// @return whether computation was succesfull.
     virtual bool spell() = 0;
+
+    /// rename all notes read by this speller,
+    /// according to a given global tonality.
+    /// @param n number of candidate estimated global tonality.
+    /// must be in 0..globals().
+    /// @return whether renaming succeded for all measures.
+    virtual bool rename(size_t n=0) = 0;
     
     /// rewrite the passing notes in enumerator.
     /// @return how many notes have been rewritten.
@@ -161,15 +168,25 @@ public:
     /// @param i index of note in the enumerator of input notes.
     bool printed(size_t i) const;
     
-    /// estimated global tonality.
+    /// number of candidates estimated global tonality (ties).
+    virtual size_t globals() const = 0;
+    
+    /// n-best estimated global tonality.
+    /// @param n number of candidate estimated global tonality,
+    /// must be in 0..globals().
+    /// @return the n-best estimated global tonality.
+    /// It is ton(iglobal(n)) or an undef ton in case of error.
     /// @warning spell() must have been called.
-     virtual const Ton& global() const = 0;
+    virtual const Ton& global(size_t n = 0) const = 0;
 
-    /// index of the estimated global tonality.
-    /// @return the index of the estimated global tonality in the index of tons,
-    /// in 0..index.size().
+    /// index of the n-best estimated global tonality.
+    /// @param n number of candidate estimated global tonality,
+    /// must be in 0..globals().
+    /// @return the index of the n-best estimated global tonality
+    /// in the index of tons, in 0..index.size()
+    /// or TonIndex::UNDEF in case of error.
     /// @warning spell() must have been called.
-    virtual size_t iglobal() const = 0;
+    virtual size_t iglobal(size_t n = 0) const = 0;
     
     // estimated local tonality at note of given index.
     // @param i index of note in the list of input notes.
