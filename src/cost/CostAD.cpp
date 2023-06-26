@@ -90,28 +90,43 @@ void CostAD::update(const enum NoteName& name,
                     bool print,
                     const Ton& gton, const Ton& lton)
 {
+    bool boo = true;
     // update cost when accident for the name was updated
     // discount for lead degree
     // !(gton.lead()  &&  gton.accidDia(name) == accid)
-    if (print && (gton.accidDia(name) != accid))
+    if (gton.accidDia(name) != accid)
     {
-        switch (accid)
+        if (gton.lead(name))
         {
-            case Accid::DoubleSharp:
-            case Accid::DoubleFlat:
-                _accid += 2;
-                break;
-                
-            case Accid::Sharp:
-            case Accid::Flat:
-            case Accid::Natural:
-                _accid += 1;
-                break;
-                
-            default:
+            if (gton.getMode()==ModeName::Minor)
             {
-                ERROR("PSC: unexpected accidental"); // accid
-                break;
+                if ((gton.accidDia(name)==Accid::Sharp && accid==Accid::Natural) || (gton.accidDia(name)==Accid::Natural && accid==Accid::Flat) || (gton.accidDia(name)==Accid::DoubleSharp && accid==Accid::Sharp))
+                {
+                    _accid += 1/2;//on pénalise un peu lorsque la sensible n'est pas augmentée, mais pas de 1 car il peut s'agir du mode mineur descendant
+                }
+            }
+        }
+        
+        if (print)
+        {
+            switch (accid)
+            {
+                case Accid::DoubleSharp:
+                case Accid::DoubleFlat:
+                    _accid += 2;
+                    break;
+                    
+                case Accid::Sharp:
+                case Accid::Flat:
+                case Accid::Natural:
+                    _accid += 1;
+                    break;
+                    
+                default:
+                {
+                    ERROR("PSC: unexpected accidental"); // accid
+                    break;
+                }
             }
         }
         
@@ -127,26 +142,40 @@ void CostAD::update(const enum NoteName& name,
     // si l'on veut juger purement d'un point de vue tonal
     // afin de déduire la meilleure tonalité locale,
     // il vaut mieux ne plus se poser la question du print :
-    // !(gton.lead()  &&  gton.accidDia(name) == accid)
+    // !(print  &&  lton.accidDia(name) == accid)
     if (lton.defined() && (lton.accidDia(name) != accid))
     {
-        switch (accid)
+        if (lton.lead(name))
         {
-            case Accid::DoubleSharp:
-            case Accid::DoubleFlat:
-                _dist += 2;
-                break;
-
-            case Accid::Sharp:
-            case Accid::Flat:
-            case Accid::Natural:
-                _dist += 1;
-                break;
-
-            default:
+            if (lton.getMode()==ModeName::Minor)
             {
-                ERROR("PSC: unexpected accidental"); // accid
-                break;
+                if ((lton.accidDia(name)==Accid::Sharp && accid==Accid::Natural) || (lton.accidDia(name)==Accid::Natural && accid==Accid::Flat) || (lton.accidDia(name)==Accid::DoubleSharp && accid==Accid::Sharp))
+                {
+                    _accid += 1/2;//on pénalise un peu lorsque la sensible n'est pas augmentée, mais pas de 1 car il peut s'agir du mode mineur descendant
+                    boo = false;//on a déjà traité la sensible de cette façon, pas la peine de la repénaliser par la suite
+                }
+            }
+        }
+        if (boo)
+        {
+            switch (accid)
+            {
+                case Accid::DoubleSharp:
+                case Accid::DoubleFlat:
+                    _dist += 2;
+                    break;
+
+                case Accid::Sharp:
+                case Accid::Flat:
+                case Accid::Natural:
+                    _dist += 1;
+                    break;
+
+                default:
+                {
+                    ERROR("PSC: unexpected accidental"); // accid
+                    break;
+                }
             }
         }
     }

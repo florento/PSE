@@ -321,7 +321,7 @@ def compare_key(k, ton):
     if ton.undef():
         return False
     elif isinstance(k, m21.key.Key):
-        return (k.sharps == ton.fifths() and k.mode == m21_mode(ton.mode()))
+        return (k.sharps == ton.fifths())# and k.mode == m21_mode(ton.mode()))
     elif isinstance(k, m21.key.KeySignature):
         return (k.sharps == ton.fifths())
     else:
@@ -440,16 +440,16 @@ def strk(k):
 
 
 def anote_global_part(part, sp):
-    k = m21_key(sp.global_ton())
+    k = m21_key(sp.global_ton(0))
     text = 'est. global: '+strk(k)
-    nc = sp.global_cands()
+    nc = sp.globals()
     if nc > 1:
         text += ' ' 
         text += '(' 
         text += str(nc) 
         text += ' candidates: '         
         for i in range(nc):
-            text += strk(m21_key(sp.global_cand_ton(i)))
+            text += strk(m21_key(sp.global_ton(i)))
             text += ' '
         text += ')'            
     e = m21.expressions.TextExpression(text)    
@@ -460,7 +460,7 @@ def anote_global_part(part, sp):
     ml[0].insert(0, e)
 
 def anote_local_part(part, sp):
-    i = sp.iglobal_ton()
+    i = sp.iglobal_ton(0)
     ml = part.getElementsByClass(m21.stream.Measure)    
     for j in range(len(ml)):
         k = m21_key(sp.local_bar(i, j))
@@ -740,6 +740,29 @@ def eval_part(part, stat,
     print('start Spelling part')
     sp.spell()
     stat.stop_timer()
+    
+    # extract tonality estimation results
+    if (algo == pse.Algo_PSE or algo == pse.Algo_PS14):
+        nbg=sp.globals()
+        #if nbg>0:
+        #    enharm=False
+        #    for i in range(nbg):
+        #        gt = sp.global_ton(i)
+        #        if compare_key(k0, gt):
+        #            goodgtindex = i
+        #        elif compare_key_pitches(k0,gt):
+        #            enharm=True
+        #    sp.rename(goodgtindex)
+        #else:
+        sp.rename(0)
+        gt = sp.global_ton(0)
+        if compare_key(k0, gt):
+            print('global ton: OK:', '(', m21_key(gt), '), has the same signature as',k0, end=' ')
+        else:
+            print('global ton: NO:', '(', m21_key(gt), 'was', k0, '),', end=' ')
+            if mark:
+                anote_global_part(part, sp) 
+
     # compute diff list between reference score and respell
     ld0 = diff(ln, sp) 
     print('diff:', len(ld0), end='\n', flush=True)
@@ -748,21 +771,13 @@ def eval_part(part, stat,
     # compute diff list between reference score and rewritten
     ld1 = diff(ln, sp)
     print('diff:', len(ld0), end='\n', flush=True)
-    # extract tonality estimation results
-    gt = sp.global_ton()
-    if (algo == pse.Algo_PSE or algo == pse.Algo_PS14):
-        if compare_key(k0, gt):
-            print('global ton: OK:', '(', m21_key(gt), '),', end=' ')
-        else:
-            print('global ton: NO:', '(', m21_key(gt), 'was', k0, '),', end=' ')
-            if mark:
-                anote_global_part(part, sp) 
+    
     # annotations
     if mark:
         anote_rediff(ln, ld0, ld1) # anote_diff(ln, ld0, 'red')
         if (algo == pse.Algo_PSE or algo == pse.Algo_PS14):
             anote_local_part(part, sp)            
-    return (k0, sp.global_ton(), len(ln), ld1)
+    return (k0, sp.global_ton(0), len(ln), ld1)
 
 def eval_score(score, stat, 
                sid, title, composer,  

@@ -37,6 +37,8 @@ _eval_root = '../../PSeval'
 # name of dir for evaluation output
 _output_dir = 'augASAP'
 
+timestamp = str(datetime.today().strftime('%Y%m%d-%H%M'))
+
 # or '..' if we assume that we are in dir script/ of the evaluation dir
 
 #################################
@@ -78,10 +80,11 @@ def multisort(xs, specs):
 # _eval_root/_output_dir/composer
 
 def output_dir(composer='Unknown'):
+    global timestamp
     global _eval_root
     global _output_dir
     assert(len(_output_dir) > 0)
-    outpath = Path(_eval_root)/_output_dir/composer	
+    outpath = Path(_eval_root)/_output_dir/composer	/timestamp
     if not os.path.isdir(outpath):
         os.mkdir(outpath)
     return outpath;
