@@ -91,7 +91,9 @@ protected:
     /// @return whether computation was succesfull.
     bool spell(const Cost& seed0, const Cost& seed1,
                double diff0=0, // bool rewrite_flag0=false,
-               double diff1=0, bool rewrite_flag1=false);
+               double diff1=0,
+               bool rename_flag1=false,
+               bool rewrite_flag1=false);
 
 };
 

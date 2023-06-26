@@ -76,7 +76,6 @@ bool PSE::spell()
 
 
 
-
 // TBR not used
 //std::array<const PSState, PSV::NBTONS> PSV::ASTATES =
 //{

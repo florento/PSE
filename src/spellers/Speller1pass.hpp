@@ -153,7 +153,7 @@ protected:
     /// @see PSEnum::rewritePassing()
     /// @return whether computation was succesfull.
     bool spell(const Cost& seed0, double diff0=0,
-               bool rename_flag=true, bool rewrite_flag=false);
+               bool rename_flag=false, bool rewrite_flag=false);
     
     /// rename all notes read by this speller,
     /// according to a given global tonality.

@@ -55,7 +55,9 @@ size_t Speller2Pass::iglobal(size_t i) const
 
 bool Speller2Pass::spell(const Cost& seed0, const Cost& seed1,
                          double diff0, //bool rewrite_flag0,
-                         double diff1, bool rewrite_flag1)
+                         double diff1,
+                         bool rename_flag1,
+                         bool rewrite_flag1)
 {
     bool status = true;
 
@@ -83,31 +85,36 @@ bool Speller2Pass::spell(const Cost& seed0, const Cost& seed1,
     assert(_global0);
     // std::unique_ptr<PSO>
     _global1 = new PSO(*_global0, *_table1, diff1, _debug);
-
-    TRACE("Pitch Spelling: {} estimated global tonality candidates", globals());
-    size_t ig = iglobal(0);
     
-    if (ig == TonIndex::UNDEF)
+    TRACE("Pitch Spelling: {} estimated global tonality candidates", globals());
+    
+    if (rename_flag1)
     {
-        ERROR("Speller: failure with spelling table {}-{}",
-              _enum.first(), _enum.stop());
-        status = false;
-    }
-    else
-    {
-        assert(ig < _index.size());
-        TRACE("Pitch Spelling: estimated global tonality: {} ({})",
-              ig, _index.ton(ig).fifths());
+        size_t ig = iglobal(0);
         
-        // will update the lists _names, _accids and _octave
-        TRACE("pitch-spelling: start renaming");
-        rename(ig);
-        
-        if (rewrite_flag1)
+        if (ig != TonIndex::UNDEF)
         {
-            INFO("pitch-spelling: rewrite passing notes");
-            _table1->enumerator().rewritePassing();
+            assert(ig < _index.size());
+            TRACE("Pitch Spelling: estimated global tonality: {} ({})",
+                  ig, _index.ton(ig).fifths());
+            
+            // will update the lists _names, _accids and _octave
+            TRACE("pitch-spelling: renaming");
+            rename(ig);
         }
+        else
+        {
+            ERROR("Speller: failure with spelling table {}-{}",
+                  _enum.first(), _enum.stop());
+            status = false;
+        }
+
+    }
+
+    if (rename_flag1 && rewrite_flag1)
+    {
+        INFO("pitch-spelling: rewrite passing notes");
+        _table1->enumerator().rewritePassing();
     }
 
     return status;

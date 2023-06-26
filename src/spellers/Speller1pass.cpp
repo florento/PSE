@@ -241,6 +241,7 @@ bool Speller1Pass::spell(const Cost& seed0, double diff0,
 
         if (ig != TonIndex::UNDEF)
         {
+            assert(ig < _index.size());
             TRACE("Pitch Spelling: renaming with estimated global tonality: {}",
                   ig);
             rename(ig);
