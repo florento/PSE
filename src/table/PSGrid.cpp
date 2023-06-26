@@ -204,27 +204,27 @@ size_t PSG::estimateLocal(size_t ig, size_t iprev, std::set<size_t>& cands)
         //PSCost cost = psb.cost();
         
         const Ton& jton = _index.ton(j);
-        
-        // tie break criteria 1:
-        // best distance (of current tonality j) to the previous local tonality for ig
         //unsigned int dist = pton.distDiatonic(jton);
         unsigned int dist = pton.distWeber(jton);
-        
+        //unsigned int distg = gton.distDiatonic(jton);
+        unsigned int distg = gton.distWeber(jton);
+
+        // tie break criteria 1:
+        // best distance (of current tonality j) to the previous local tonality for ig
         if (dist < dlbest)
         {
             ibest = j;
             dlbest = dist;
-            //continue;
+            dgbest = distg;
         }
         // tie break criteria 2:
         // best distance (of current tonality j) to the global tonality ig
         else if (dist == dlbest)
         {
-            //unsigned int distg = gton.distDiatonic(jton);
-            unsigned int distg = gton.distWeber(jton);
             if (distg < dgbest)
             {
                 ibest = j;
+                dlbest = dist;
                 dgbest = distg;
             }
             // tie break criteria 3:
@@ -238,6 +238,8 @@ size_t PSG::estimateLocal(size_t ig, size_t iprev, std::set<size_t>& cands)
                 if (std::abs(jton.fifths()) < std::abs(bton.fifths()))
                 {
                     ibest = j;
+                    dlbest = dist;
+                    dgbest = distg;
                 }
                 // tie break fail
                 else if ((std::abs(jton.fifths()) == besty) && (j != ibest))
