@@ -105,7 +105,8 @@ PYBIND11_MODULE(pse, m)
              static_cast<void (pse::PSE::*)(int, pse::ModeName)>(&pse::PSE::addTon),
              "add a tonality for pitch spelling", py::arg("ks"), py::arg("mode"))
         .def("set_global", &pse::PSE::setGlobal, "force global tonality")
-        .def("spell", &pse::PSE::spell, "spell notes")
+        .def("spell", &pse::PSE::spell, "compute spelling")
+        .def("rename", &pse::PSE::rename, "rename input notes")
         .def("rewrite_passing", &pse::PSE::rewritePassing, "rewrite passing notes")
         .def("global_ton", &pse::PSE::global, "get estimated global tonality")
         .def("iglobal_ton", &pse::PSE::iglobal,
@@ -173,7 +174,8 @@ PYBIND11_MODULE(pse, m)
              static_cast<void (pse::PS14::*)(int, pse::ModeName)>(&pse::PS14::addTon),
              "add a tonality for pitch spelling", py::arg("ks"), py::arg("mode"))
         .def("set_global", &pse::PS14::setGlobal, "force global tonality")
-        .def("spell", &pse::PS14::spell, "spell notes")
+        .def("spell", &pse::PS14::spell, "compute spelling")
+        .def("rename", &pse::PS14::rename, "rename input notes")
         .def("rewrite_passing", &pse::PS14::rewritePassing, "rewrite passing notes")
         .def("global_ton", &pse::PS14::global, "get estimated global tonality")
         .def("iglobal_ton", &pse::PS14::iglobal,
