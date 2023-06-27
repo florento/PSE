@@ -68,10 +68,12 @@ bool PSE::spell()
     //        _frowcost.assign(nbtons(), false);
     //    }
 
-    CostADplus seed0; // zero
-    CostADplus seed1; // zero
+    //CostADplus seed0; // zero
+    //CostADplus seed1; // zero
+    CostADlex seed0;
+    CostADlex seed1;
     // diff0=0, diff1=0, rewrite_flag1=false
-    return Speller2Pass::spell(seed0, seed1, 30, 30, false, false);
+    return Speller2Pass::spell(seed0, seed1, 50, 30, false, false);
 }
 
 
