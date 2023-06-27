@@ -28,8 +28,6 @@ import pse
 #spec.loader.exec_module(pse)
 
 print(pse.excuseme)
-
-
 ###############
 ##           ##
 ## M21 to PS ##
@@ -333,7 +331,7 @@ def compare_key_pitches(k0,ton):
         return False
     elif isinstance(k0, m21.key.Key):
         ton=m21_key(ton)
-        return (k0.tonic.ps==ton.tonic.ps and k0.mode==ton.mode()) or (k0.relative.tonic.ps==ton.tonic.ps and k0.relative.mode==ton.mode)
+        return (k0.tonic.ps==ton.tonic.ps and k0.mode==ton.mode) or (k0.relative.tonic.ps==ton.tonic.ps and k0.relative.mode==ton.mode)
     elif isinstance(k0, m21.key.KeySignature):
         ton=m21_key(ton)
         kM=k0.asKey(mode='major')
@@ -709,6 +707,10 @@ def sp_errors(df):
 ##                     ##
 #########################
 
+choix_enharmonie = 0
+
+triche = 0
+
 def spellable(part):
     """the given part can be pitch spelled"""
     c = key_changes(part)
@@ -726,6 +728,11 @@ def eval_part(part, stat,
               kpre=33, kpost=23, # for PS13 (window size)
               debug=False, mark=False):
     """evaluate spelling for one part in a score and mark errors in red"""
+    
+    global choix_enharmonie
+
+    global triche
+    
     if stat == None:
         stat=Stats()
     k0 = get_key(part)
@@ -763,20 +770,32 @@ def eval_part(part, stat,
         if nbg>1:
             print("real global tone :", k0)
             enharm=False
+            boo=False
+            present=False
             for i in range(nbg):
                 gt = sp.global_ton(i)
                 print("possible tone : " , m21_key(gt))
                 if compare_key(k0, gt):
                     goodgtindex = i
                     print("good index : " , i)
+                    present=True
                 elif compare_key_pitches(k0,gt):
                     enharm=True
+                else:
+                    boo=True
             if enharm :
                 print("the good global tone was present, together with its enharmonical rival...")
-                sp.rename(goodgtindex)
+                choix_enharmonie+=1
             else :
                 print("the good global tone was present, but not his enharmonical rival...")
+                if boo:
+                    triche+=1
+                    print("POTENTIAL CHEATER")
+                print("triche =",triche)
+            if present : 
                 sp.rename(goodgtindex)
+            else :
+                sp.rename(0)
         else:
             sp.rename(0)
             gt = sp.global_ton(0)
