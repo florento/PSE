@@ -327,6 +327,19 @@ def compare_key(k, ton):
     else:
         print('ERROR"', k, 'of unexpected type')
         return False
+    
+def compare_key_pitches(k0,ton):
+    if ton.undef():
+        return False
+    elif isinstance(k0, m21.key.Key):
+        return (k0.tonic==ton.getPitchClass() and k0.relative.mode==ton.getMode()) or (k0.relative.tonic==ton.getPitchClass() and k0.relative.mode==ton.getMode())
+    elif isinstance(k0, m21.key.KeySignature):
+        kM=k0.asKey(mode='major')
+        km=k0.asKey(mode='minor')
+        return (kM.tonic==ton.getPitchClass() and kM.mode==ton.getMode()) or (km.tonic==ton.getPitchClass() and km.mode==ton.getMode())
+    else:
+        print('ERROR"', k0, 'of unexpected type')
+        return False
 
 def diff(ln, sp):
     """compare a list of barred notes and the list of notes of a speller"""    
@@ -744,24 +757,33 @@ def eval_part(part, stat,
     # extract tonality estimation results
     if (algo == pse.Algo_PSE or algo == pse.Algo_PS14):
         nbg=sp.globals()
-        #if nbg>0:
-        #    enharm=False
-        #    for i in range(nbg):
-        #        gt = sp.global_ton(i)
-        #        if compare_key(k0, gt):
-        #            goodgtindex = i
-        #        elif compare_key_pitches(k0,gt):
-        #            enharm=True
-        #    sp.rename(goodgtindex)
-        #else:
-        sp.rename(0)
-        gt = sp.global_ton(0)
-        if compare_key(k0, gt):
-            print('global ton: OK:', '(', m21_key(gt), '), has the same signature as',k0, end=' ')
+        print(nbg)
+        if nbg>1:
+            print("real global tone :", k0)
+            enharm=False
+            for i in range(nbg):
+                gt = sp.global_ton(i)
+                print("possible tone : " , m21_key(gt))
+                if compare_key(k0, gt):
+                    goodgtindex = i
+                    print("good index : " , i)
+                elif compare_key_pitches(k0,gt):
+                    enharm=True
+            if enharm :
+                print("the good global tone was present, together with its enharmonical rival...")
+                sp.rename(goodgtindex)
+            else :
+                print("the good global tone was present, but not his enharmonical rival...")
+                sp.rename(goodgtindex)
         else:
-            print('global ton: NO:', '(', m21_key(gt), 'was', k0, '),', end=' ')
-            if mark:
-                anote_global_part(part, sp) 
+            sp.rename(0)
+            gt = sp.global_ton(0)
+            if compare_key(k0, gt):
+                print('global ton: OK:', '(', m21_key(gt), '), has the same signature as',k0, end=' ')
+            else:
+                print('global ton: NO:', '(', m21_key(gt), 'was', k0, '),', end=' ')
+                if mark:
+                    anote_global_part(part, sp) 
 
     # compute diff list between reference score and respell
     ld0 = diff(ln, sp) 
