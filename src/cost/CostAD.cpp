@@ -143,7 +143,7 @@ void CostAD::update(const enum NoteName& name,
     // afin de déduire la meilleure tonalité locale,
     // il vaut mieux ne plus se poser la question du print :
     // !(print  &&  lton.accidDia(name) == accid)
-    if (lton.defined() && (lton.accidDia(name) != accid))
+    if (lton.defined() && print && (lton.accidDia(name) != accid))
     {
         if (lton.lead(name))
         {
