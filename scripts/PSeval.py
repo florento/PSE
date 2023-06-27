@@ -332,11 +332,13 @@ def compare_key_pitches(k0,ton):
     if ton.undef():
         return False
     elif isinstance(k0, m21.key.Key):
-        return (k0.tonic==ton.getPitchClass() and k0.relative.mode==ton.getMode()) or (k0.relative.tonic==ton.getPitchClass() and k0.relative.mode==ton.getMode())
+        ton=m21_key(ton)
+        return (k0.tonic.ps==ton.tonic.ps and k0.mode==ton.mode()) or (k0.relative.tonic.ps==ton.tonic.ps and k0.relative.mode==ton.mode)
     elif isinstance(k0, m21.key.KeySignature):
+        ton=m21_key(ton)
         kM=k0.asKey(mode='major')
         km=k0.asKey(mode='minor')
-        return (kM.tonic==ton.getPitchClass() and kM.mode==ton.getMode()) or (km.tonic==ton.getPitchClass() and km.mode==ton.getMode())
+        return (kM.tonic.ps==ton.tonic.ps and kM.mode==ton.mode) or (km.tonic.ps==ton.tonic.ps and km.mode==ton.mode)
     else:
         print('ERROR"', k0, 'of unexpected type')
         return False
