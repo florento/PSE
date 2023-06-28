@@ -256,8 +256,8 @@ bool PSO::completeEnharmonics()
         }
         else if (! member(e))
         {
-            WARN("enharmonic ton {} currently not a global candidate, added.",
-                    _index.ton(e));
+            WARN("enharmonic ton {} currently not a global candidate, added",
+                 _index.ton(e));
             missing.push_back(e);
         }
     }

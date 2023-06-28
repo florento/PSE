@@ -32,7 +32,7 @@ _dataset_root = '../../../Datasets/ASAP'
 _generic_score = 'xml_score.musicxml'  
 
 # root of evaluation dir
-_eval_root = '../../PSeval'
+_eval_root = '../eval'
 
 # name of dir for evaluation output
 _output_dir = 'augASAP'

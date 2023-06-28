@@ -209,6 +209,9 @@ bool Speller1Pass::spell(const Cost& seed0, double diff0,
     assert(diff0 >= 0);
     _global0 = new PSO(*_table0, diff0, _debug); // std::unique_ptr<PSO>
 
+    // add possible enharmonics in list of global candidate
+    _global0->completeEnharmonics();
+    
     // extract local tonality for each column of table
     TRACE("pitch-spelling: start local tonalities estimation");
     if (_locals0 != nullptr)
