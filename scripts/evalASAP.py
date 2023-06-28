@@ -320,7 +320,7 @@ def eval1_Bach(nb, mvt, file, stat,
                    dflag=dflag, mflag=mflag)
     
 def eval_Bach(stat=ps.Stats(), 
-              algo=ps.pse.Algo_PSE, nbtons=25, kpre=33, kpost=23,
+              algo=ps.pse.Algo_PSE, nbtons=30, kpre=33, kpost=23,
               dflag=True, mflag=True): 
     print('eval ASAP/Bach with algo', algo)
     global Bach_skip
