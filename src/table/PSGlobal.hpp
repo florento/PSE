@@ -98,6 +98,23 @@ public:
     // @warning iglobal(0) = TonIndex::FAILED if the evaluation failed.
     size_t iglobal(size_t i = 0) const;
     
+    /// Enharmonic tonality of the candidate of the given index.
+    /// It is added to this list of candidates if necessary.
+    /// @param i a candidate number, must be in 0..globalNb().
+    /// @return the following index:
+    /// - i if the candidate i has no enharmonics,
+    /// - j != i if the candidate j is an enharmonic of the candidate i.
+    ///   If the enharmonics of i is present in this candidate list,
+    ///   then it is added.
+    /// - UNDEF if if the candidate i has an enharmonic that is not
+    ///   present in the index of tonalities considered.
+    size_t enharmonic(size_t i);
+    
+    /// Add all enharmonic tonalities of candidates in this list,
+    /// if they are not present.
+    /// @return whether the completion was successful.
+    bool completeEnharmonics();
+    
     /// iterator pointing to the first index of an estimated candidate
     /// global tonality.
     std::vector<size_t>::const_iterator cbegin() const;
@@ -171,7 +188,9 @@ private:
     void init(const PSO& globals, const PST& tab, double d);
     
     bool member(size_t ig) const;
-    
+
+    size_t find(size_t ig) const;
+
     // macro: cost equality for the estimation of global.
     // use if Costt.operator== is eq_lex.
     // @warning static choice

@@ -67,10 +67,10 @@ public:
     /// @return whether computation was succesfull.
     bool spell() override;
     
-    /// rename all notes read by this speller,
-    /// according to a given global tonality.
+    /// rename all notes read by this speller.
+    /// For PS13, it is just a call to spell().
     /// @param n number of candidate estimated global tonality.
-    /// must be in 0..globals().
+    /// It is ignored for PS13.
     /// @return whether renaming succeded for all measures.
     bool rename(size_t n=0) override;
     

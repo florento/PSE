@@ -68,6 +68,7 @@ public:
     /// - for  1, major, we get -5 (Db M), it could be  7 (C# M)
     /// - for  6, major, we get  6 (F# M), it could be -6 (Gb M)
     /// - for 11, major, we get  5 (B  M), it could be -7 (Cb M)
+    /// 
     /// - for 10, minor, we get -5 (Bb m), it could be  7 (A# m)
     /// - for  3, minor, we get  6 (D# m), it could be -6 (Eb m)
     /// - for  8, minor, we get  5 (G# m), it could be -7 (Ab m)

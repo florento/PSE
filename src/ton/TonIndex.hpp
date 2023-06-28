@@ -36,13 +36,13 @@ public:
     /// maximal number of tonalities considered for Pitch Spelling.
     static const size_t MAXTONS;
     
-    /// a tonality that was ont estimated yet.
+    /// a tonality that is not present in this array of tonalities.
     static const size_t UNDEF; // = MAXTONS+1;
 
     /// a tonality whose estimation failed.
     static const size_t FAILED; // = MAXTONS+2;
     
-    /// main constructor
+    /// main constructor.
     /// @param nb default list of tonalities.
     /// currently supported
     /// - 0  : empty list
@@ -53,23 +53,34 @@ public:
     ///        minor harm KS -6 to 6 : C, C#, D, Eb, D#, E, F, F#, G, G#, A, Bb, B
     TonIndex(size_t nb=0);
 
-    /// destructor
+    /// destructor.
     virtual ~TonIndex();
     
-    /// number of tons in this index.
+    /// number of tons in this array of tonalities.
     size_t size() const;
 
-    /// no tons in this index.
+    /// there are no tons in this array of tonalities.
     bool empty() const;
 
     /// Tonality corresponding to the given row index.
-    /// @param i an index in array of tonalities. must be smaller than NBTONS.
+    /// @param i an index in this array of tonalities. must be smaller than size().
     const Ton& ton(size_t i) const;
     
     /// find the index of a ton in current array of tons.
     /// @param ton a given tonality.
-    /// @return the index of ton or -1 if not found.
+    /// @return the index of ton or UNDEF if not found.
     size_t find(const Ton& ton) const;
+        
+    /// Enharmonic tonality corresponding to the given row index.
+    /// @param i an index in this array of tonalities.
+    /// must be smaller than size().
+    /// @return the following index:
+    /// - i if the tonality i in this array has no enharmonics,
+    /// - j != i if the tonality j in this array is an enharmonic of i.
+    /// - UNDEF if if the tonality i in this array has an enharmonic that is not
+    ///   present in this array.
+    /// - FAIL in case of error.
+    size_t enharmonic(size_t i) const;
 
     /// empty this index of tonalities.
     /// @see addTon
@@ -103,7 +114,14 @@ private: // data
     /// minor harmonic KS -6 to 6 : C, C#, D, Eb, D#, E, F, F#, G, G#, A, Bb, B
     void init25();
 
-
+    /// find the index of a ton defined by given key signature and mode
+    /// in the current array of tonalities.
+    /// @param ks number of flats if negative int,
+    /// or number of sharps if positive int. must be in -7..7.
+    /// @param mode a mode name.
+    /// @return the index of ton or UNDEF if not found.
+    size_t find(int ks, const ModeName& mode) const;
+    
     // default array of tonalities considered for Pitch Spelling.
     // static const std::vector<const Ton> TONS30;
     

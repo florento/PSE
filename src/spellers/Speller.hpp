@@ -206,6 +206,11 @@ protected: // data
     
     /// debug mode activated.
     bool _debug;
+    
+protected:
+    
+    
+    
 
 };
 

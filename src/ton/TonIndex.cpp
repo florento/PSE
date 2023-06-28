@@ -75,8 +75,63 @@ size_t TonIndex::find(const Ton& ton) const
             return i;
 
     ERROR("TonIndex find: {} not found", ton);
-    return -1;
+    return UNDEF;
 }
+
+
+size_t TonIndex::find(int ks, const ModeName& mode) const
+{
+    assert(-7 <= ks);
+    assert(ks <= 7);
+    for (size_t i = 0; i < _tons.size(); ++i)
+    {
+        const Ton& toni = _tons.at(i);
+        if (toni.fifths() == ks && toni.getMode() == mode)
+            return i;
+    }
+    // not found
+    return UNDEF;
+}
+
+
+size_t TonIndex::enharmonic(size_t i) const
+{
+    assert(i < _tons.size());
+    const Ton& toni = _tons.at(i);
+    int ks = toni.fifths();
+    assert(-7 <= ks);
+    assert(ks <= 7);
+    int eks = ks; // key signature of enharmonic
+    switch (ks)
+    {
+        case 7:
+            eks = -5;
+            break;
+        case 6:
+            eks = -6;
+            break;
+        case 5:
+            eks = -7;
+            break;
+        case -5:
+            eks = 7;
+            break;
+        case -6:
+            eks = 6;
+            break;
+        case -7:
+            eks = 5;
+            break;
+        default:
+            eks = ks;
+    }
+
+    return find(eks, toni.getMode());
+}
+
+
+
+
 
 
 void TonIndex::reset()

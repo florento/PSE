@@ -162,6 +162,8 @@ protected:
     /// @return whether renaming succeded for all measures.
     bool rename(PST* table, size_t n=0);
     
+    
+    
 };
 
 

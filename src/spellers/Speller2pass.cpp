@@ -73,6 +73,9 @@ bool Speller2Pass::spell(const Cost& seed0, const Cost& seed1,
     }
     assert(_global0);
     assert(_locals0);
+    
+    _global0->completeEnharmonics();
+    
     // std::unique_ptr<PST>
     _table1 = new PST(*_table0, seed1, *_global0, *_locals0, _debug);
 

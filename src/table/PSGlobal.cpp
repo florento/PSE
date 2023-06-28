@@ -193,6 +193,81 @@ bool PSO::member(size_t ig) const
 }
 
 
+size_t PSO::find(size_t ig) const
+{
+    if (ig < _index.size())
+    {
+        for (size_t i = 0; i < _globals.size(); ++i)
+        {
+            if (_globals.at(i) == ig)
+                return i;
+        }
+        return TonIndex::UNDEF;
+    }
+    else
+    {
+        return TonIndex::UNDEF;
+    }
+}
+
+
+size_t PSO::enharmonic(size_t i)
+{
+    assert(i < _globals.size());
+    size_t e = _index.enharmonic(_globals.at(i));
+    assert(e == TonIndex::UNDEF || e < _index.size());
+    if (e == TonIndex::UNDEF)
+    {
+        ERROR("enharmonic ton of {} not present in the array of tonalities",
+              global(i));
+        return TonIndex::UNDEF;
+    }
+    size_t eg = find(e); // index of enharmonic in candidate list or UNDEF if not found
+    
+    if (eg == TonIndex::UNDEF)
+    {
+        // enharmonic ton e not present in list of candidate, add it.
+        size_t ret = _globals.size();
+        _globals.push_back(e);
+        assert(_globals.at(ret) == e);
+        return ret;
+    }
+    else
+    {
+        assert(eg < _globals.size());
+        return eg;
+    }
+}
+
+
+bool PSO::completeEnharmonics()
+{
+    std::vector<size_t> missing; // missing enharmonics
+    bool status = true;
+    
+    for (size_t i = 0; i < _globals.size(); ++i)
+    {
+        size_t e = _index.enharmonic(_globals.at(i));
+        if (e == TonIndex::UNDEF)
+        {
+            ERROR("enharmonic ton of {} not present in the array of tonalities",
+                  global(i));
+            status = false;
+        }
+        else if (! member(e))
+        {
+            WARN("enharmonic ton {} currently not a global candidate, added.",
+                    _index.ton(e));
+            missing.push_back(e);
+        }
+    }
+    // add missing at end of _globals
+    _globals.insert(_globals.end(), missing.begin(), missing.end());
+
+    return status;
+}
+
+
 std::vector<bool> PSO::getMask() const
 {
     std::vector<bool> m(_index.size(), false);

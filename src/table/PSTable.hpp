@@ -207,6 +207,12 @@ public:
     /// @return whether renaming succeded for all measures.
     bool rename(size_t ig);
     
+    /// debug: print the array of row costs.
+    void dump_rowcost() const;
+    
+    /// debug: print the content of the table.
+    void dump_table() const;
+    
 private: // data
 
     /// name  of the pitch spelling algorithm implemented with this table.
@@ -362,12 +368,6 @@ private:
     /// hence if a whole row could no be estimated, all columns are empty
     /// hence the table is empty.
     // bool check_rowcost(const std::vector<PSCost>& rc) const;
-
-    /// debug: print the array of row costs.
-    void dump_rowcost() const;
-   
-    /// debug: print the cottent of the table.
-    void dump_table(const std::vector<Cost*>& rc) const;
     
 };
 
