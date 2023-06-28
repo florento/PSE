@@ -114,10 +114,6 @@ void PSO::init(const PSO& globals, const PST& tab, double d)
     assert(! _globals.empty());
     assert(contains(ibest));
     assert(_globals[0] < _index.size());
-
-    if (_debug)
-        DEBUGU("PST: {} candidates global: ", _globals.size());
-    
 }
 
 
@@ -250,14 +246,14 @@ bool PSO::completeEnharmonics()
         size_t e = _index.enharmonic(_globals.at(i));
         if (e == TonIndex::UNDEF)
         {
-            ERROR("enharmonic ton of {} not present in the array of tonalities",
-                  global(i));
+            DEBUGU("ERROR: enharmonic ton of {} not present in the array of tonalities",
+                   global(i));
             status = false;
         }
         else if (! member(e))
         {
-            WARN("enharmonic ton {} currently not a global candidate, added",
-                 _index.ton(e));
+            DEBUGU("enharmonic ton {} currently not a global candidate, added",
+                   _index.ton(e));
             missing.push_back(e);
         }
     }
@@ -287,7 +283,29 @@ void PSO::setGlobal(size_t ig)
 }
 
 
+void PSO::print(std::ostream& o) const
+{
+    for (size_t ig : _globals)
+    {
+        if (ig < _index.size())
+        {
+            const Ton& tonig = _index.ton(ig);
+            o << tonig;
+        }
+        else
+        {
+            o << "ERR";
+        }
+        o << ' ';
+    }
+}
 
+
+std::ostream& operator<<(std::ostream& o, const PSO& globals)
+{
+    globals.print(o);
+    return o;
+}
 
 
 } // namespace pse

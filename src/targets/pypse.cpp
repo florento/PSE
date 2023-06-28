@@ -118,10 +118,14 @@ PYBIND11_MODULE(pse, m)
              "estimated local tonality for a note")
         .def("globals", &pse::PSE::globals,
              "get number of candidates (ties) for the estimatation of the global tonality")
+        .def("globals0", &pse::PSE::globals0,
+             "get number of candidates (ties) for the estimatation of the global tonality  (after first pass)")
         .def("global_ton", &pse::PSE::global,
              "get candidate global tonality ")
         .def("iglobal_ton", &pse::PSE::iglobal,
              "get index of candidate global tonality ")
+        .def("iglobal_ton0", &pse::PSE::iglobal0,
+             "get index of candidate global tonality (after first pass)")
         .def("name",  &pse::PSE::name, "estimated name of note",
              py::arg("i"))
         .def("accidental", &pse::PSE::accidental,
@@ -186,10 +190,14 @@ PYBIND11_MODULE(pse, m)
         .def("local_note", &pse::PS14::localNote, "estimated local tonality for a note")
         .def("globals", &pse::PS14::globals,
              "get number of candidates (ties) for the estimatation of the global tonality")
+        .def("globals0", &pse::PS14::globals0,
+             "get number of candidates (ties) for the estimatation of the global tonality  (after first pass)")
         .def("global_ton", &pse::PS14::global,
              "get candidate global tonality ")
         .def("iglobal_ton", &pse::PS14::iglobal,
              "get index of candidate global tonality ")
+        .def("iglobal_ton0", &pse::PS14::iglobal0,
+             "get index of candidate global tonality (after first pass)")
         .def("name",  &pse::PS14::name, "estimated name of note",
              py::arg("i"))
         .def("accidental", &pse::PS14::accidental,

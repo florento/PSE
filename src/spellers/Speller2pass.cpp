@@ -53,6 +53,18 @@ size_t Speller2Pass::iglobal(size_t i) const
 }
 
 
+size_t Speller2Pass::globals0() const
+{
+    return Speller1Pass::globalCands(_global0);
+}
+
+
+size_t Speller2Pass::iglobal0(size_t i) const
+{
+    return Speller1Pass::iglobalCand(i, _global0);
+}
+
+
 bool Speller2Pass::spell(const Cost& seed0, const Cost& seed1,
                          double diff0, //bool rewrite_flag0,
                          double diff1,
@@ -88,6 +100,12 @@ bool Speller2Pass::spell(const Cost& seed0, const Cost& seed1,
     _global1 = new PSO(*_global0, *_table1, diff1, _debug);
     
     TRACE("Pitch Spelling: {} estimated global tonality candidates", globals());
+    if (_debug)
+    {
+        assert(_global1);
+        DEBUGU("{} candidates in second global list: {}",
+               _global1->size(), *_global1);
+    }
     
     if (rename_flag1)
     {
