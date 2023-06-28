@@ -24,11 +24,6 @@ PSC(c),
 _name(name),
 _print(false)
 {
-    if (gton.fifths() == 2)
-    {
-        // RE
-    }
-    
     assert(c);
     _midi = e.midipitch(c->id());
     _print = _state.update(name, accid);

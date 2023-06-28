@@ -204,6 +204,10 @@ private:
 };
 
 
+std::ostream& operator<<(std::ostream& o, const PSO& globals);
+
+
+
 } // namespace pse
 
 #endif /* PSGlobal_hpp */

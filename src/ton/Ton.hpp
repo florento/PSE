@@ -237,7 +237,6 @@ private:
     
 };
 
-
 std::ostream& operator<<(std::ostream& o, const Ton& ton);
 
 } // end namespace pse
