@@ -45,7 +45,7 @@ public:
     /// @param i index of tonality set as global.
     void setGlobal(size_t i) override;
     
-    /// number of candidates (ties) for the estimatation of the global tonality.
+    /// number of candidates (ties) for the estimation of the global tonality.
     size_t globals() const override;
     
     /// index of the n-best estimated global tonality.
@@ -64,6 +64,20 @@ public:
     /// It is ton(iglobal(n)) or an undef ton in case of error.
     /// @warning spell() must have been called.
     const Ton& global(size_t n=0) const override;
+    
+    /// number of candidates (ties) for the estimation of the global tonality,
+    /// after first pass.
+    size_t globals0() const;
+    
+    /// index of the n-best estimated global tonality,
+    /// after first pass.
+    /// @param n number of candidate estimated global tonality,
+    /// must be in 0..globals().
+    /// @return the index of the n-best estimated global tonality
+    /// in the index of tons, in 0..index.size()
+    /// or TonIndex::UNDEF in case of error.
+    /// @warning spell() must have been called.
+    size_t iglobal0(size_t n=0) const;
     
 protected: // data
     
