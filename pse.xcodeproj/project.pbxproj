@@ -170,6 +170,7 @@
 		43D31A122A1426A300234527 /* Cost.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43D31A102A1426A300234527 /* Cost.cpp */; };
 		43D31A132A1426A300234527 /* Cost.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43D31A102A1426A300234527 /* Cost.cpp */; };
 		43D31A142A1426A300234527 /* Cost.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43D31A102A1426A300234527 /* Cost.cpp */; };
+		43D5EC682A4C7D2100693E37 /* samples.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43D5EC662A4C7D2100693E37 /* samples.cpp */; };
 		43D7BAB32A27CFA500570C47 /* Speller1pass.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43D7BAB12A27CFA500570C47 /* Speller1pass.cpp */; };
 		43D7BAB42A27CFA500570C47 /* Speller1pass.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43D7BAB12A27CFA500570C47 /* Speller1pass.cpp */; };
 		43D7BAB52A27CFA500570C47 /* Speller1pass.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43D7BAB12A27CFA500570C47 /* Speller1pass.cpp */; };
@@ -370,6 +371,8 @@
 		43D31A0B2A13F28800234527 /* CostA.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CostA.hpp; sourceTree = "<group>"; };
 		43D31A102A1426A300234527 /* Cost.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Cost.cpp; sourceTree = "<group>"; };
 		43D31A112A1426A300234527 /* Cost.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Cost.hpp; sourceTree = "<group>"; };
+		43D5EC662A4C7D2100693E37 /* samples.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = samples.cpp; sourceTree = "<group>"; };
+		43D5EC672A4C7D2100693E37 /* samples.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = samples.hpp; sourceTree = "<group>"; };
 		43D7BAB12A27CFA500570C47 /* Speller1pass.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Speller1pass.cpp; sourceTree = "<group>"; };
 		43D7BAB22A27CFA500570C47 /* Speller1pass.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Speller1pass.hpp; sourceTree = "<group>"; };
 		43D7BAB72A27CFBD00570C47 /* Speller2pass.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Speller2pass.cpp; sourceTree = "<group>"; };
@@ -769,6 +772,8 @@
 			children = (
 				43A25446292B7D7E00D559D2 /* exemple.cpp */,
 				43FBEAB52930CB16008FC486 /* debugpse.cpp */,
+				43D5EC672A4C7D2100693E37 /* samples.hpp */,
+				43D5EC662A4C7D2100693E37 /* samples.cpp */,
 			);
 			path = integration;
 			sourceTree = "<group>";
@@ -1065,6 +1070,7 @@
 				438EFD802A0D4C8500FF3733 /* PSOrder.cpp in Sources */,
 				43316F2229AA73D7000160EA /* TonIndex.cpp in Sources */,
 				43D31A132A1426A300234527 /* Cost.cpp in Sources */,
+				43D5EC682A4C7D2100693E37 /* samples.cpp in Sources */,
 				432E7A4F29D427FD000E2B72 /* PSE.cpp in Sources */,
 				43FBEACC2930CEDD008FC486 /* KeyFifth.cpp in Sources */,
 				43FBEACD2930CEDD008FC486 /* Ton.cpp in Sources */,
