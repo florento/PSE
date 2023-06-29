@@ -765,7 +765,7 @@ def eval_part(part, stat,
     
     # extract tonality estimation results
     if (algo == pse.Algo_PSE or algo == pse.Algo_PS14):
-        nbg=sp.globals()
+        nbg=sp.globals0()
         print(nbg)
         if nbg>1:
             print("real global tone :", k0)
@@ -773,7 +773,7 @@ def eval_part(part, stat,
             boo=False
             present=False
             for i in range(nbg):
-                gt = sp.global_ton(i)
+                gt = sp.global_ton0(i)
                 print("possible tone : " , m21_key(gt))
                 if compare_key(k0, gt):
                     goodgtindex = i
@@ -793,9 +793,9 @@ def eval_part(part, stat,
                     print("POTENTIAL CHEATER")
                 print("triche =",triche)
             if present : 
-                sp.rename(goodgtindex)
+                sp.rename0(goodgtindex)
             else :
-                sp.rename(0)
+                sp.rename0(0)
         else:
             sp.rename(0)
             gt = sp.global_ton(0)

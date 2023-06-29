@@ -47,6 +47,11 @@ const Ton& Speller2Pass::global(size_t i) const
 }
 
 
+const Ton& Speller2Pass::global0(size_t i) const
+{
+    return Speller1Pass::globalCand(i, _global0);
+}
+
 size_t Speller2Pass::iglobal(size_t i) const
 {
     return Speller1Pass::iglobalCand(i, _global1);

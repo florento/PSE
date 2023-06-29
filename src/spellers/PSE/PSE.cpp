@@ -73,7 +73,7 @@ bool PSE::spell()
     CostADlex seed0;
     CostADlex seed1;
     // diff0=0, diff1=0, rewrite_flag1=false
-    return Speller2Pass::spell(seed0, seed1, 10, 0, false, false);
+    return Speller2Pass::spell(seed0, seed1, 0, 0, false, false);
 }
 
 
