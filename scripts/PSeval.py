@@ -769,6 +769,7 @@ def eval_part(part, stat,
         nbg=sp.globals0()
         ton_est=sp.global_ton(0)
         print(nbg)
+        c=0
         if nbg>1:
             print("real global tone :", k0)
             enharm=False
@@ -784,7 +785,9 @@ def eval_part(part, stat,
                 elif compare_key_pitches(k0,gt):
                     enharm=True
                 else:
-                    enharm=False
+                    c+=1
+            if c>0:
+                enharm=False
             #if enharm :
             #else :
             #    print("the good global tone was present, but not his enharmonical rival...")
