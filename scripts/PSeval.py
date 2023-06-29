@@ -770,7 +770,7 @@ def eval_part(part, stat,
         if nbg>1:
             print("real global tone :", k0)
             enharm=False
-            boo=False
+            #boo=False
             present=False
             for i in range(nbg):
                 gt = sp.global_ton0(i)
@@ -781,21 +781,21 @@ def eval_part(part, stat,
                     present=True
                 elif compare_key_pitches(k0,gt):
                     enharm=True
-                else:
-                    boo=True
+                #else:
+                #    boo=True
             if enharm :
                 print("the good global tone was present, together with its enharmonical rival...")
                 choix_enharmonie+=1
-            else :
-                print("the good global tone was present, but not his enharmonical rival...")
-                if boo:
-                    triche+=1
-                    print("POTENTIAL CHEATER")
-                print("triche =",triche)
-            if present : 
+            #else :
+            #    print("the good global tone was present, but not his enharmonical rival...")
+            #    if boo:
+            #        triche+=1
+            #        print("POTENTIAL CHEATER")
+            #    print("triche =",triche)
+            if present and enharm: 
                 sp.rename0(goodgtindex)
             else :
-                sp.rename0(0)
+                sp.rename(0)
         else:
             sp.rename(0)
             gt = sp.global_ton(0)
