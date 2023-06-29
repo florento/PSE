@@ -767,6 +767,7 @@ def eval_part(part, stat,
     # extract tonality estimation results
     if (algo == pse.Algo_PSE or algo == pse.Algo_PS14):
         nbg=sp.globals0()
+        ton_est=sp.global_ton(0)
         print(nbg)
         if nbg>1:
             print("real global tone :", k0)
@@ -784,8 +785,7 @@ def eval_part(part, stat,
                     enharm=True
                 else:
                     enharm=False
-            if enharm :
-                print("the good global tone was present, together with its enharmonical rival...")
+            #if enharm :
             #else :
             #    print("the good global tone was present, but not his enharmonical rival...")
             #    if boo:
@@ -794,6 +794,7 @@ def eval_part(part, stat,
             #    print("triche =",triche)
             if present and enharm: 
                 sp.rename0(goodgtindex)
+                ton_est=sp.global_ton0(goodgtindex)
             else :
                 sp.rename(0)
         else:
@@ -821,7 +822,7 @@ def eval_part(part, stat,
         anote_rediff(ln, ld0, ld1) # anote_diff(ln, ld0, 'red')
         if (algo == pse.Algo_PSE or algo == pse.Algo_PS14):
             anote_local_part(part, sp)            
-    return (k0, sp.global_ton(0), len(ln), ld1)
+    return (k0, ton_est, len(ln), ld1)
 
 def eval_score(score, stat, 
                sid, title, composer,  
