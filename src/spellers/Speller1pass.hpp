@@ -157,10 +157,11 @@ protected:
     
     /// rename all notes read by this speller,
     /// according to a given global tonality.
-    /// @param n number of candidate estimated global tonality.
-    /// must be in 0..globals().
+    /// @param table table for renaming.
+    /// @param globals list of global tonality candidates.
+    /// @param n number of candidate estimated global tonality, in g.
     /// @return whether renaming succeded for all measures.
-    bool rename(PST* table, size_t n=0);
+    bool rename(PST* table, const PSO* globals, size_t n=0);
     
     
     

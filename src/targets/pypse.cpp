@@ -107,6 +107,7 @@ PYBIND11_MODULE(pse, m)
         .def("set_global", &pse::PSE::setGlobal, "force global tonality")
         .def("spell", &pse::PSE::spell, "compute spelling")
         .def("rename", &pse::PSE::rename, "rename input notes")
+        .def("rename0", &pse::PSE::rename0, "rename input notes (wrt global candidate first pass)")
         .def("rewrite_passing", &pse::PSE::rewritePassing, "rewrite passing notes")
         .def("global_ton", &pse::PSE::global, "get estimated global tonality")
         .def("iglobal_ton", &pse::PSE::iglobal,
@@ -173,31 +174,30 @@ PYBIND11_MODULE(pse, m)
              "number of tonalities considered for pitch spelling")
         .def("reset_tons", &pse::PS14::resetTons,
              "clear the array of tonalities for pitch spelling")
-    // disambiguate overloaded method
+        // disambiguate overloaded method
         .def("add_ton",
              static_cast<void (pse::PS14::*)(int, pse::ModeName)>(&pse::PS14::addTon),
              "add a tonality for pitch spelling", py::arg("ks"), py::arg("mode"))
         .def("set_global", &pse::PS14::setGlobal, "force global tonality")
         .def("spell", &pse::PS14::spell, "compute spelling")
         .def("rename", &pse::PS14::rename, "rename input notes")
+        .def("rename0", &pse::PS14::rename0, "rename input notes (wrt global candidate first pass)")
         .def("rewrite_passing", &pse::PS14::rewritePassing, "rewrite passing notes")
-        .def("global_ton", &pse::PS14::global, "get estimated global tonality")
-        .def("iglobal_ton", &pse::PS14::iglobal,
-             "get index of estimated global tonality")
-        .def("keysig", &pse::PS14::fifths, "get estimated global key signature")
-        .def("local_bar", &pse::PS14::local, "estimated local tonality for a bar")
-             // py::arg("ton"), py::arg("bar"))
-        .def("local_note", &pse::PS14::localNote, "estimated local tonality for a note")
         .def("globals", &pse::PS14::globals,
              "get number of candidates (ties) for the estimatation of the global tonality")
         .def("globals0", &pse::PS14::globals0,
              "get number of candidates (ties) for the estimatation of the global tonality  (after first pass)")
-        .def("global_ton", &pse::PS14::global,
-             "get candidate global tonality ")
+        .def("global_ton", &pse::PS14::global, "get candidate global tonality ")
         .def("iglobal_ton", &pse::PS14::iglobal,
              "get index of candidate global tonality ")
         .def("iglobal_ton0", &pse::PS14::iglobal0,
              "get index of candidate global tonality (after first pass)")
+//        .def("iglobal_ton", &pse::PS14::iglobal,
+//             "get index of estimated global tonality")
+        .def("keysig", &pse::PS14::fifths, "get estimated global key signature")
+        .def("local_bar", &pse::PS14::local, "estimated local tonality for a bar")
+             // py::arg("ton"), py::arg("bar"))
+        .def("local_note", &pse::PS14::localNote, "estimated local tonality for a note")
         .def("name",  &pse::PS14::name, "estimated name of note",
              py::arg("i"))
         .def("accidental", &pse::PS14::accidental,

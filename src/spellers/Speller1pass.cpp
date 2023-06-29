@@ -274,25 +274,26 @@ bool Speller1Pass::spell(const Cost& seed0, double diff0,
 
 
 
-bool Speller1Pass::rename(PST* table, size_t n)
+bool Speller1Pass::rename(PST* table, const PSO* globals, size_t n)
 {
     assert(table);
+    assert(globals);
     assert(n != TonIndex::UNDEF);
-    if (n >= globals())
+    if (n >= globals->size())
     {
         ERROR("Speller1Pass rename: {} wrong number of global ton candidate (max = {})",
-              n, globals()-1);
+              n, globals->size()-1);
         return false;
     }
 
-    return table->rename(iglobal(n));
+    return table->rename(iglobalCand(n, globals));
 }
 
 
 
 bool Speller1Pass::rename(size_t n)
 {
-    return rename(_table0, n);
+    return rename(_table0, _global0, n);
 }
 
 
