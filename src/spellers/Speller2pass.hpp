@@ -39,7 +39,13 @@ public:
     /// @param n number of candidate estimated global tonality.
     /// must be in 0..globals().
     /// @return whether renaming succeded for all measures.
-    virtual bool rename(size_t n=0) override;
+    bool rename(size_t n=0) override;
+
+    /// rename all notes read by this speller, according to a given global tonality.
+    /// @param n number of candidate estimated global tonality, in the
+    /// first table of global candidates.
+    /// @return whether renaming succeded for all measures.
+    bool rename0(size_t n=0);
     
     /// force global tonality. it wont be estimated.
     /// @param i index of tonality set as global.

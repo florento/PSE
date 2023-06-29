@@ -142,8 +142,15 @@ bool Speller2Pass::spell(const Cost& seed0, const Cost& seed1,
 
 bool Speller2Pass::rename(size_t n)
 {
-    return Speller1Pass::rename(_table1, n);
+    return Speller1Pass::rename(_table1, _global1, n);
 }
+
+
+bool Speller2Pass::rename0(size_t n)
+{
+    return Speller1Pass::rename(_table1, _global0, n);
+}
+
 
 
 
