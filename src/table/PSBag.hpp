@@ -134,13 +134,13 @@ private:
     /// @param a name of pitch-spelling algorithm implemented.
     /// @param seed cost value of specialized type (to create a cost of
     /// the same type).
-    /// @param ton conjectured global tonality (key sig),
+    /// @param gton conjectured global tonality (key sig),
     /// used to define the initial config.
     /// @param lton conjectured local tonality, to compute the cumulated
     /// dist value used for tie break.
     // @param fsucc flag, whether the successor is computed with ton only
     // or ton and lton.
-    void init(const Cost& seed, const Ton& ton, const Ton& lton); // bool fsucc);
+    void init(const Cost& seed, const Ton& gton, const Ton& lton); // bool fsucc);
 
     /// allocate every config reached by one transition from the given config,
     /// when reading one pitch or several simultaneous pitchs,

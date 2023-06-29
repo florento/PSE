@@ -25,23 +25,44 @@ TEST(PSState, C_maj)
     EXPECT_EQ(s.accid(pse::NoteName::B), pse::Accid::Natural);
     pse::PSState s0(s);
     
-    s.update(pse::NoteName::F, pse::Accid::Sharp);
+    bool print = s.update(pse::NoteName::F, pse::Accid::Sharp);
+    EXPECT_EQ(s.accid(pse::NoteName::C), pse::Accid::Natural);
+    EXPECT_EQ(s.accid(pse::NoteName::D), pse::Accid::Natural);
+    EXPECT_EQ(s.accid(pse::NoteName::E), pse::Accid::Natural);
+    EXPECT_EQ(s.accid(pse::NoteName::F), pse::Accid::Sharp);
+    EXPECT_EQ(s.accid(pse::NoteName::G), pse::Accid::Natural);
+    EXPECT_EQ(s.accid(pse::NoteName::A), pse::Accid::Natural);
+    EXPECT_EQ(s.accid(pse::NoteName::B), pse::Accid::Natural);
     pse::PSState s1(s);
-    EXPECT_FALSE(s1 == s0);
-    EXPECT_EQ(s1.dist(s0), 1);
-    EXPECT_EQ(s0.dist(s1), 1);
+    EXPECT_FALSE(s == s0);
+    EXPECT_EQ(s.dist(s0), 1);
+    EXPECT_EQ(s0.dist(s), 1);
+    EXPECT_EQ(print, true);
 
-    s.update(pse::NoteName::F, pse::Accid::Natural);
+    print = s.update(pse::NoteName::F, pse::Accid::Sharp);
+    EXPECT_EQ(s.accid(pse::NoteName::C), pse::Accid::Natural);
+    EXPECT_EQ(s.accid(pse::NoteName::D), pse::Accid::Natural);
+    EXPECT_EQ(s.accid(pse::NoteName::E), pse::Accid::Natural);
+    EXPECT_EQ(s.accid(pse::NoteName::F), pse::Accid::Sharp);
+    EXPECT_EQ(s.accid(pse::NoteName::G), pse::Accid::Natural);
+    EXPECT_EQ(s.accid(pse::NoteName::A), pse::Accid::Natural);
+    EXPECT_EQ(s.accid(pse::NoteName::B), pse::Accid::Natural);
+    EXPECT_TRUE(s == s1);
+    EXPECT_EQ(print, false);
+    
+    print = s.update(pse::NoteName::F, pse::Accid::Natural);
     EXPECT_TRUE(s == s0);
     EXPECT_EQ(s.dist(s0), 0);
     EXPECT_EQ(s0.dist(s), 0);
+    EXPECT_EQ(print, true);
 }
 
 
 TEST(PSState, C_min)
 {
-    pse::PSState s(pse::Ton(-3, pse::ModeName::Minor));
+    const pse::Ton gton(-3, pse::ModeName::Minor);
     
+    pse::PSState s(gton);
     EXPECT_EQ(s.accid(pse::NoteName::C), pse::Accid::Natural);
     EXPECT_EQ(s.accid(pse::NoteName::D), pse::Accid::Natural);
     EXPECT_EQ(s.accid(pse::NoteName::E), pse::Accid::Flat);
@@ -51,8 +72,7 @@ TEST(PSState, C_min)
     EXPECT_EQ(s.accid(pse::NoteName::B), pse::Accid::Flat);
     pse::PSState s0(s);
     
-    s.update(pse::NoteName::B, pse::Accid::Natural);
-
+    bool print = s.update(pse::NoteName::B, pse::Accid::Natural);
     EXPECT_EQ(s.accid(pse::NoteName::C), pse::Accid::Natural);
     EXPECT_EQ(s.accid(pse::NoteName::D), pse::Accid::Natural);
     EXPECT_EQ(s.accid(pse::NoteName::E), pse::Accid::Flat);
@@ -60,7 +80,9 @@ TEST(PSState, C_min)
     EXPECT_EQ(s.accid(pse::NoteName::G), pse::Accid::Natural);
     EXPECT_EQ(s.accid(pse::NoteName::A), pse::Accid::Flat);
     EXPECT_EQ(s.accid(pse::NoteName::B), pse::Accid::Natural);
-
+    EXPECT_EQ(print, true);
+    
+    
     EXPECT_FALSE(s == s0);
     EXPECT_EQ(s.dist(s0), 1);
     EXPECT_EQ(s0.dist(s), 1);
