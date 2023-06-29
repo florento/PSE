@@ -353,6 +353,8 @@ def diff(ln, sp):
             compare_accid(n, sp.accidental(i), sp.printed(i)) and 
             n.octave == sp.octave(i)):
             i = i+1
+        elif n.tie != None and n.tie.type != 'start' :
+            i = i+1
         else:
             d = (i, sp.name(i), sp.accidental(i), sp.octave(i), sp.printed(i))
             i = i+1
@@ -729,7 +731,6 @@ def eval_part(part, stat,
               debug=False, mark=False):
     """evaluate spelling for one part in a score and mark errors in red"""
     
-    global choix_enharmonie
 
     global triche
     
@@ -781,11 +782,10 @@ def eval_part(part, stat,
                     present=True
                 elif compare_key_pitches(k0,gt):
                     enharm=True
-                #else:
-                #    boo=True
+                else:
+                    enharm=False
             if enharm :
                 print("the good global tone was present, together with its enharmonical rival...")
-                choix_enharmonie+=1
             #else :
             #    print("the good global tone was present, but not his enharmonical rival...")
             #    if boo:
@@ -798,13 +798,14 @@ def eval_part(part, stat,
                 sp.rename(0)
         else:
             sp.rename(0)
-            gt = sp.global_ton(0)
-            if compare_key(k0, gt):
-                print('global ton: OK:', '(', m21_key(gt), '), has the same signature as',k0, end=' ')
-            else:
-                print('global ton: NO:', '(', m21_key(gt), 'was', k0, '),', end=' ')
-                if mark:
-                    anote_global_part(part, sp) 
+            #gt = sp.global_ton(0)
+        gt = sp.global_ton(0)
+        if compare_key(k0, gt):
+            print('global ton: OK:', '(', m21_key(gt), '), has the same signature as',k0, end=' ')
+        else:
+            print('global ton: NO:', '(', m21_key(gt), 'was', k0, '),', end=' ')
+            if mark:
+                anote_global_part(part, sp) 
 
     # compute diff list between reference score and respell
     ld0 = diff(ln, sp) 
