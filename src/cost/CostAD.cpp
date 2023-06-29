@@ -91,11 +91,123 @@ void CostAD::update(const enum NoteName& name,
                     const Ton& gton, const Ton& lton)
 {
     bool boo = true;
+    
+    if ((gton.accidDia(name) != accid) &&
+        lton.lead(name) && (lton.getMode() == ModeName::Minor) &&
+        ((lton.accidDia(name)==Accid::Sharp && accid==Accid::Natural) ||
+            (lton.accidDia(name)==Accid::Natural && accid==Accid::Flat) ||
+            (lton.accidDia(name)==Accid::DoubleSharp && accid==Accid::Sharp)))
+    {
+        // on pénalise un peu lorsque la sensible n'est pas augmentée,
+        // mais pas de 1 car il peut s'agir du mode mineur descendant
+        // not used (_accid of type size_t is incremented of 0)
+        _accid += 1/2;
+    }
+    
+    // update cost when accident for the name was updated (printed)
+    // discount for lead degree in minor modes
+    // !(gton.lead()  &&  gton.accidDia(name) == accid)
+    if (print && ( (!gton.lead(name)) || gton.accidDia(name) != accid))
+    {
+        switch (accid)
+        {
+            case Accid::DoubleSharp:
+            case Accid::DoubleFlat:
+                _accid += 2;
+                break;
+                
+            case Accid::Sharp:
+            case Accid::Flat:
+            case Accid::Natural:
+                _accid += 1;
+                break;
+                    
+            default:
+            {
+                ERROR("PSC: unexpected accidental"); // accid
+                break;
+            }
+        }
+    }
+    
+    // si l'on veut juger purement d'un point de vue tonal
+    // afin de déduire la meilleure tonalité locale,
+    // il vaut mieux ne plus se poser la question du print :
+    // !(print  &&  lton.accidDia(name) == accid)
+
+    // was : if (lton.defined() && print && (lton.accidDia(name) != accid))
+    // no print : print flag is related to gton, not for lton
+    if (lton.defined() && (lton.accidDia(name) != accid))
+    {
+        if (lton.lead(name) &&
+            (lton.getMode() == ModeName::Minor) &&
+            ((lton.accidDia(name)==Accid::Sharp && accid==Accid::Natural) ||
+             (lton.accidDia(name)==Accid::Natural && accid==Accid::Flat) ||
+             (lton.accidDia(name)==Accid::DoubleSharp && accid==Accid::Sharp)))
+        {
+            _dist += 1/2; //on pénalise un peu lorsque la sensible n'est pas augmentée,
+                          // mais pas de 1 car il peut s'agir du mode mineur descendant
+            boo = false;  //on a déjà traité la sensible de cette façon,
+                          //pas la peine de la repénaliser par la suite
+        }
+        if (boo)
+        {
+            switch (accid)
+            {
+                case Accid::DoubleSharp:
+                case Accid::DoubleFlat:
+                    _dist += 2;
+                    break;
+
+                case Accid::Sharp:
+                case Accid::Flat:
+                case Accid::Natural:
+                    _dist += 1;
+                    break;
+
+                default:
+                {
+                    ERROR("PSC: unexpected accidental"); // accid
+                    break;
+                }
+            }
+        }
+    }
+    
+    if (print && (gton.accidDia(name) != accid) &&
+        (((name == NoteName::C) && (accid == Accid::Flat)) ||
+         ((name == NoteName::B) && (accid == Accid::Sharp)) ||
+         ((name == NoteName::F) && (accid == Accid::Flat)) ||
+         ((name == NoteName::E) && (accid == Accid::Sharp))))
+    {
+        ++_cflat;
+    }
+    
+    // color of accident and color of global ton
+    int ks = gton.fifths();
+    // const enum Accid& a = c.accidental();
+    if (((ks >= 0) && (flat(accid))) || ((ks <  0) && (sharp(accid))))
+    {
+        _color += 1;
+    }
+}
+
+
+// previous version of update
+void CostAD::update99(const enum NoteName& name,
+                      const enum Accid& accid,
+                      bool print,
+                      const Ton& gton, const Ton& lton)
+{
+    bool boo = true;
+    
     // update cost when accident for the name was updated
     // discount for lead degree
     // !(gton.lead()  &&  gton.accidDia(name) == accid)
     if (gton.accidDia(name) != accid)
     {
+        
+        // not used (_accid of type size_t is incremented of 0)
         if (gton.lead(name))
         {
             if (gton.getMode()==ModeName::Minor)
@@ -143,18 +255,21 @@ void CostAD::update(const enum NoteName& name,
     // afin de déduire la meilleure tonalité locale,
     // il vaut mieux ne plus se poser la question du print :
     // !(print  &&  lton.accidDia(name) == accid)
+
+    // was : if (lton.defined() && print && (lton.accidDia(name) != accid))
+    // no print : print flag is related to gton, not for lton
     if (lton.defined() && print && (lton.accidDia(name) != accid))
     {
-        if (lton.lead(name))
+        if (lton.lead(name) &&
+            (lton.getMode() == ModeName::Minor) &&
+            ((lton.accidDia(name)==Accid::Sharp && accid==Accid::Natural) ||
+             (lton.accidDia(name)==Accid::Natural && accid==Accid::Flat) ||
+             (lton.accidDia(name)==Accid::DoubleSharp && accid==Accid::Sharp)))
         {
-            if (lton.getMode()==ModeName::Minor)
-            {
-                if ((lton.accidDia(name)==Accid::Sharp && accid==Accid::Natural) || (lton.accidDia(name)==Accid::Natural && accid==Accid::Flat) || (lton.accidDia(name)==Accid::DoubleSharp && accid==Accid::Sharp))
-                {
-                    _accid += 1/2;//on pénalise un peu lorsque la sensible n'est pas augmentée, mais pas de 1 car il peut s'agir du mode mineur descendant
-                    boo = false;//on a déjà traité la sensible de cette façon, pas la peine de la repénaliser par la suite
-                }
-            }
+            _dist += 1/2; //on pénalise un peu lorsque la sensible n'est pas augmentée,
+                          // mais pas de 1 car il peut s'agir du mode mineur descendant
+            boo = false;  //on a déjà traité la sensible de cette façon,
+                          //pas la peine de la repénaliser par la suite
         }
         if (boo)
         {
@@ -188,6 +303,7 @@ void CostAD::update(const enum NoteName& name,
         _color += 1;
     }
 }
+
 
 
 //void CostAD::update(const PSC1& c, const PSEnum& e, const Ton& gton)

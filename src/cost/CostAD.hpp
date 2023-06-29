@@ -91,7 +91,13 @@ public:
                         const enum Accid& accid,
                         bool print,
                         const Ton& gton, const Ton& lton = Ton());
-    
+
+    // backup previous version (bug)
+    virtual void update99(const enum NoteName& name,
+                          const enum Accid& accid,
+                          bool print,
+                          const Ton& gton, const Ton& lton = Ton());
+
     // update this cost for doing a transition into the given config,
     // from its previous config, in a given hypothetic global tonality.
     // @see PSC.previous()

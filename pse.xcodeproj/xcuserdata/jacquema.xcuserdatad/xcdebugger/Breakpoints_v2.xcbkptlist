@@ -81,6 +81,21 @@
                   endingLineNumber = "750"
                   offsetFromSymbolStart = "1334">
                </Location>
+               <Location
+                  uuid = "9DDF3D99-570F-40DB-867B-ABF0E91115C5 - d9ff471b645059c9"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "pse::PSV::rename(unsigned long)"
+                  moduleName = "testpse"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/jacquema/Code/PSE/src/table/PSVector.cpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "750"
+                  endingLineNumber = "750"
+                  offsetFromSymbolStart = "1334">
+               </Location>
             </Locations>
          </BreakpointContent>
       </BreakpointProxy>
