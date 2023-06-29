@@ -133,6 +133,19 @@ public:
     //             bool print, size_t nbocc,
     //             const Ton& gton, const Ton& lton) override;
     
+    
+    /// accessor for debug.
+    inline size_t get_accid() const { return _accid; }
+
+    /// accessor for debug.
+    inline size_t get_dist() const { return _dist; }
+
+    /// accessor for debug.
+    inline size_t get_color() const { return _color; }
+
+    /// accessor for debug.
+    inline size_t get_cflat() const { return _cflat; }
+    
     /// @param o output stream where to print this cost.
     void print(std::ostream& o) const;
     

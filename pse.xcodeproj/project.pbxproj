@@ -112,6 +112,7 @@
 		43600D572A45C94F002704E0 /* CostAD.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43DD54232A38FA4E0036EF07 /* CostAD.cpp */; };
 		43791C8E29D8392200DE8796 /* TestAccidental.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43791C8D29D8392200DE8796 /* TestAccidental.cpp */; };
 		43791C8F29D83EE400DE8796 /* TestScale.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 435081CE29D6C04600465943 /* TestScale.cpp */; };
+		4380D1E92A4DB78700AC1164 /* TestCostADlex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4380D1E82A4DB78700AC1164 /* TestCostADlex.cpp */; };
 		438A581129E03FBB0073A32C /* PS13.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 432E7A5229D45FE2000E2B72 /* PS13.cpp */; };
 		438A581229E03FC10073A32C /* PSE.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 432E7A4C29D427FD000E2B72 /* PSE.cpp */; };
 		438A581329E049020073A32C /* PSTable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43ABA51F29242418002AC1D4 /* PSTable.cpp */; };
@@ -322,6 +323,7 @@
 		436C6C3D2924016F00152D8C /* pse.cpython-311-darwin.so */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = "pse.cpython-311-darwin.so"; sourceTree = BUILT_PRODUCTS_DIR; };
 		436C6C4D2924023100152D8C /* NoteName.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = NoteName.hpp; path = src/pitch/NoteName.hpp; sourceTree = "<group>"; };
 		43791C8D29D8392200DE8796 /* TestAccidental.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TestAccidental.cpp; sourceTree = "<group>"; };
+		4380D1E82A4DB78700AC1164 /* TestCostADlex.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TestCostADlex.cpp; sourceTree = "<group>"; };
 		438EFD832A0E41DD00FF3733 /* Costt.tpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; path = Costt.tpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		438EFD842A0E41DD00FF3733 /* Costt.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Costt.hpp; sourceTree = "<group>"; };
 		43947D0029D972AF008EB20A /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = src/spellers/PS14/README.md; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.markdown; };
@@ -562,6 +564,7 @@
 				4353AE3929DDB2CC00FAF8A3 /* TestPSRawEnum.cpp */,
 				432A0F8B2A311889007D5CA2 /* TestRewritePassing.cpp */,
 				4308A7072A28DF0F007F7A55 /* TestState.cpp */,
+				4380D1E82A4DB78700AC1164 /* TestCostADlex.cpp */,
 			);
 			path = unit;
 			sourceTree = "<group>";
@@ -962,6 +965,7 @@
 				438A581E29E049430073A32C /* PSState.cpp in Sources */,
 				438A581729E0492A0073A32C /* PSConfig1.cpp in Sources */,
 				43C4A6542A1E7EBB00925A99 /* PSGrid.cpp in Sources */,
+				4380D1E92A4DB78700AC1164 /* TestCostADlex.cpp in Sources */,
 				4309605D2A0D034A0097487A /* Speller.cpp in Sources */,
 				432A0F8D2A311889007D5CA2 /* TestRewritePassing.cpp in Sources */,
 				438A581329E049020073A32C /* PSTable.cpp in Sources */,

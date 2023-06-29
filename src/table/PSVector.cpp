@@ -741,10 +741,12 @@ bool PSV::rename(size_t i)
         size_t s = 0;
         for (auto it = psb.cbegin(); it != psb.cend(); ++it)
         {
-            assert(*it); // std::shared_ptr<const PSC0>
+            std::shared_ptr<const PSC0> c = *it;
+            assert(c);
             assert(_enum);
-            const PSP p(**it, *_enum);
-            WARN("spelling {}: {}", s, p);
+            const PSP p(*c, *_enum);
+            DEBUGU("bar {}, ton {}, spell {}: {} {}",
+                   _bar, _index.ton(i), s, p, c->cost());
             ++s;
         }
             
