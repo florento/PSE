@@ -452,11 +452,15 @@ def strk(k):
         return str(k)+' ('+str(k.sharps)+')'
     elif isinstance(k, m21.key.KeySignature):
         return '('+str(k.sharps)+')'
+    else:
+        return str(m21_key(k))
 
 
-def anote_global_part(part, sp):
-    k = m21_key(sp.global_ton(0))
-    text = 'est. global: '+strk(k)
+def anote_global_part(part, sp, ton_est):
+    k=ton_est
+    #k = m21_key(sp.global_ton(0))
+    if ton_est != None:
+        text = 'est. global: '+strk(k)
     nc = sp.globals()
     if nc > 1:
         text += ' ' 
@@ -474,8 +478,8 @@ def anote_global_part(part, sp):
     ml = part.getElementsByClass(m21.stream.Measure)    
     ml[0].insert(0, e)
 
-def anote_local_part(part, sp):
-    i = sp.iglobal_ton(0)
+def anote_local_part(part, sp, goodgtindex):
+    i = sp.iglobal_ton0(goodgtindex)
     ml = part.getElementsByClass(m21.stream.Measure)    
     for j in range(len(ml)):
         k = m21_key(sp.local_bar(i, j))
@@ -760,15 +764,16 @@ def eval_part(part, stat,
         sp.add(midi=n.pitch.midi, bar=b, simultaneous=s)
     # spell
     stat.start_timer()
-    print('start Spelling part')
+    #print('start Spelling part')
     sp.spell()
     stat.stop_timer()
-    
+    goodgtindex=0
     # extract tonality estimation results
     if (algo == pse.Algo_PSE or algo == pse.Algo_PS14):
         nbg=sp.globals0()
         ton_est=sp.global_ton(0)
-        print(nbg)
+        #print(ton_est)
+        #print(nbg)
         c=0
         if nbg>1:
             print("real global tone :", k0)
@@ -798,6 +803,7 @@ def eval_part(part, stat,
             if present and enharm: 
                 sp.rename0(goodgtindex)
                 ton_est=sp.global_ton0(goodgtindex)
+                #print(ton_est)
             else :
                 sp.rename(0)
         else:
@@ -809,7 +815,7 @@ def eval_part(part, stat,
         else:
             print('global ton: NO:', '(', m21_key(gt), 'was', k0, '),', end=' ')
             if mark:
-                anote_global_part(part, sp) 
+                anote_global_part(part, sp, ton_est) 
 
     # compute diff list between reference score and respell
     ld0 = diff(ln, sp) 
@@ -824,7 +830,7 @@ def eval_part(part, stat,
     if mark:
         anote_rediff(ln, ld0, ld1) # anote_diff(ln, ld0, 'red')
         if (algo == pse.Algo_PSE or algo == pse.Algo_PS14):
-            anote_local_part(part, sp)            
+            anote_local_part(part, sp, goodgtindex)         
     return (k0, ton_est, len(ln), ld1)
 
 def eval_score(score, stat, 
