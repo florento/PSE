@@ -107,7 +107,7 @@ void CostAD::update(const enum NoteName& name,
     // update cost when accident for the name was updated (printed)
     // discount for lead degree in minor modes
     // !(gton.lead()  &&  gton.accidDia(name) == accid)
-    if (print) //&& (gton.accidDia(name) != accid))
+    if ((print) && (gton.accidDia(name) != accid))
     {
         switch (accid)
         {
