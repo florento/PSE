@@ -73,7 +73,8 @@ void PSG::init(const PST& tab, std::vector<bool> mask)
         // set of index of elements in vec with a best cost.
         // (there are several in case of tie).
         std::set<size_t> cands; // empty
-        extract_bests(vec, cands);
+        extract_bests(vec, cands, 50);
+        //printf("%lu",cands.size());
         // cands empty in case of empty measure
         
         // add empty column
@@ -114,7 +115,7 @@ void PSG::init(const PST& tab, std::vector<bool> mask)
 
 //this function determines the best local tonalities according to the bags of the studied measure
 //However it has an important flaw : no tonal context is taken into account to determine the local tones
-void PSG::extract_bests(const PSV& vec, std::set<size_t>& ties)
+void PSG::extract_bests(const PSV& vec, std::set<size_t>& ties, double d)
 {
     assert(ties.empty());
     
@@ -154,8 +155,9 @@ void PSG::extract_bests(const PSV& vec, std::set<size_t>& ties)
         
         const Cost& cost = psb.cost(); // shared_clone();
         // tie break
-        if ((cbest != nullptr) && (cost == *cbest))
+        if ((cbest != nullptr) && (cost.dist(*cbest)<=d))
         {
+            //printf("%f \n",cost.dist(*cbest));
             auto ret = ties.insert(j);
             assert(ret.second == true); // j was inserted
         }
@@ -165,6 +167,7 @@ void PSG::extract_bests(const PSV& vec, std::set<size_t>& ties)
             assert((cbest == nullptr) || (cost > *cbest)); // we did not forget a case
         }
     }
+    //printf("nombre de tonalités candidates : %lu",ties.size());
     //assert(! ties.empty());
 }
 

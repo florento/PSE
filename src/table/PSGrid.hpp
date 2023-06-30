@@ -106,7 +106,7 @@ private:
 
     /// fill the given set with tonality index with minimal cost in vec
     /// (there can be several tie).
-    void extract_bests(const PSV& vec, std::set<size_t>& ties);
+    void extract_bests(const PSV& vec, std::set<size_t>& ties, double d=0);
     
     /// select in the given set of candidates an index for local tonality,
     /// given an assumed global tonality and previous local tonality.
