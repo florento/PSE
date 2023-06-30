@@ -10,7 +10,6 @@
 #include "Ton.hpp"
 #include "CostADlex.hpp"
 
-
 // ASAP Bach BWV 858 Prelude bar 26
 // An D(b) G(b) C(b) F(n) Ab D(b) G(b) An Dn Ab C(b)
 // accid=3 dist=2 color=0 cflat=0

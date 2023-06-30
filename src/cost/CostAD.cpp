@@ -94,9 +94,9 @@ void CostAD::update(const enum NoteName& name,
     
     if ((gton.accidDia(name) != accid) &&
         gton.lead(name) && (gton.getMode() == ModeName::Minor) &&
-        ((gton.accidDia(name)==Accid::Sharp && accid==Accid::Natural) ||
-            (gton.accidDia(name)==Accid::Natural && accid==Accid::Flat) ||
-            (gton.accidDia(name)==Accid::DoubleSharp && accid==Accid::Sharp)))
+        ((gton.accidDia(name) == Accid::Sharp && accid == Accid::Natural) ||
+         (gton.accidDia(name) == Accid::Natural && accid == Accid::Flat) ||
+         (gton.accidDia(name) == Accid::DoubleSharp && accid == Accid::Sharp)))
     {
         // on pénalise un peu lorsque la sensible n'est pas augmentée,
         // mais pas de 1 car il peut s'agir du mode mineur descendant
