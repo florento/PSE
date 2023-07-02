@@ -18,6 +18,7 @@
 #include <memory>
 
 #include "trace.hpp"
+#include "utils.hpp"
 //#include "Pitch.hpp"
 #include "KeyFifth.hpp"
 #include "ModeName.hpp"
@@ -44,13 +45,15 @@ public:
     
     /// main constructor.
     /// @param nb default list of tonalities.
-    /// currently supported
-    /// - 0  : empty list
+    /// currently supported:
+    /// - 0  : empty list.
     /// - 26 : major and harmonic minor, KS between -6 and 6.
     /// - 30 : major and harmonic minor, KS between -7 and 7.
     /// - 25 : tonalities of Bach's Wohltemperierte Clavier
     ///        major      KS -4 to 7 : C, C#, D, Eb, E, F, F#, G, Ab, A, Bb, B
     ///        minor harm KS -6 to 6 : C, C#, D, Eb, D#, E, F, F#, G, G#, A, Bb, B
+    /// the empty array of tonalities (case 0) is not closed.
+    /// All the others are closed.
     TonIndex(size_t nb=0);
 
     /// destructor.
@@ -62,16 +65,17 @@ public:
     /// there are no tons in this array of tonalities.
     bool empty() const;
 
-    /// Tonality corresponding to the given row index.
-    /// @param i an index in this array of tonalities. must be smaller than size().
+    /// Tonality corresponding to the given index.
+    /// @param i an index in this array of tonalities.
+    /// must be smaller than size().
     const Ton& ton(size_t i) const;
     
-    /// find the index of a ton in current array of tons.
+    /// find the index of a ton in current array of tonalities.
     /// @param ton a given tonality.
     /// @return the index of ton or UNDEF if not found.
     size_t find(const Ton& ton) const;
         
-    /// Enharmonic tonality corresponding to the given row index.
+    /// Enharmonic tonality corresponding to the given index.
     /// @param i an index in this array of tonalities.
     /// must be smaller than size().
     /// @return the following index:
@@ -83,23 +87,58 @@ public:
     size_t enharmonic(size_t i) const;
 
     /// empty this index of tonalities.
+    /// The array is unclosed.
     /// @see addTon
     void reset();
 
-    ///add a tonality to this index of row headers.
+    ///add a tonality to this array of tonalities.
+    /// @warning this array of tonalities must not be closed.
     void add(const Ton& ton);
     
-    ///add a tonality to this index of row headers.
+    ///add a tonality to this array of tonalities.
     /// @param ks number of flats if negative int,
     /// or number of sharps if positive int. must be in -7..7.
     /// @param mode mode of this tonality.
     /// @see Ton
     void add(int ks, const ModeName& mode = ModeName::Major);
+
+    /// close this array of tonalities and finish initlialization.
+    /// No ton can be added after closure.
+    void close();
+
+    /// close this array of tonalities.
+    /// no ton can be added after closure.
+    bool closed() const;
+    
+    /// ranks of first given ton wrt Weber distance to second given ton.
+    /// @param i index of ton in this array of tonalities.
+    /// @param j index of ton in this array of tonalities.
+    /// @return the rank of j in the vector of Weber distances to ton i of
+    /// all the tons of this array of tonalities.
+    /// @warning this array of tonalities must be closed.
+    size_t rankWeber(size_t i, size_t j) const;
     
 private: // data
     
     /// vector of tonalities
     std::vector<const Ton> _tons;
+
+    /// ranks of ton wrt Weber distance:
+    /// _rankWeber[i, j] is the rank of ton i in this index, wrt to
+    /// to the distance to ton j in this index.
+    std::vector<std::vector<size_t>> _rankWeber;
+    
+    bool _closed;
+
+private:
+    
+    /// find the index of a ton defined by given key signature and mode
+    /// in the current array of tonalities.
+    /// @param ks number of flats if negative int,
+    /// or number of sharps if positive int. must be in -7..7.
+    /// @param mode a mode name.
+    /// @return the index of ton or UNDEF if not found.
+    size_t find(int ks, const ModeName& mode) const;
 
     /// default array of 13 tonalities, ks between -6 and 6.
     /// @param mode must not be ModeName::Undef.
@@ -113,25 +152,24 @@ private: // data
     /// major          KS -4 to 7 : C, C#, D, Eb, E, F, F#, G, Ab, A, Bb, B
     /// minor harmonic KS -6 to 6 : C, C#, D, Eb, D#, E, F, F#, G, G#, A, Bb, B
     void init25();
-
-    /// find the index of a ton defined by given key signature and mode
-    /// in the current array of tonalities.
-    /// @param ks number of flats if negative int,
-    /// or number of sharps if positive int. must be in -7..7.
-    /// @param mode a mode name.
-    /// @return the index of ton or UNDEF if not found.
-    size_t find(int ks, const ModeName& mode) const;
+    
+    void initRankWeber();
+    
+    // static bool pcompare(const std::pair <size_t, unsigned int>& a,
+    //                      const std::pair <size_t, unsigned int>& b);
+    
+    // static std::vector<size_t>
+    // getRanks(std::vector<std::pair <size_t, unsigned int>>& v);
+    
+    // static std::vector<size_t> getRanks(const std::vector<unsigned int>& v);
     
     // default array of tonalities considered for Pitch Spelling.
     // static const std::vector<const Ton> TONS30;
     
     // smaller table of all tonalities considered for PS.
     // static const std::vector<const Ton> TONS26;
-    
-    /// @todo TONS25
-    
+        
 };
-
 
 } // namespace pse
 

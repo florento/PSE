@@ -5,6 +5,9 @@
 //  Created by Florent Jacquemard on 24/02/2023.
 //
 
+#include <utility>      // std::pair, std::make_pair
+#include <algorithm>    // std::sort
+
 #include "TonIndex.hpp"
 
 
@@ -17,24 +20,31 @@ const size_t TonIndex::UNDEF  = MAXTONS+1;
 const size_t TonIndex::FAILED = MAXTONS+2;
 
 TonIndex::TonIndex(size_t n):
-_tons() // empty vector
+_tons(), // empty vector
+_rankWeber(),
+_closed(false)
 {
     switch (n)
     {
         case 0:
+            // close() must be called after
             break;
+
         case 25:
             init25();
+            close();
             break;
 
         case 26:
             init13(ModeName::Major);
             init13(ModeName::Minor);
+            close();
             break;
 
         case 30:
             init15(ModeName::Major);
             init15(ModeName::Minor);
+            close();
             break;
 
         default:
@@ -130,14 +140,11 @@ size_t TonIndex::enharmonic(size_t i) const
 }
 
 
-
-
-
-
 void TonIndex::reset()
 {
     TRACE("TonIndex: empty the list of tonalities (row headers)");
     _tons.clear();
+    _closed = false;
 }
 
 
@@ -156,6 +163,19 @@ void TonIndex::add(int ks, const ModeName& mode)
         _tons.emplace_back(ks, mode);
     else
         ERROR("TonIndex: array of tons overfull");
+}
+
+
+void TonIndex::close()
+{
+    initRankWeber();
+    _closed = true;
+}
+
+
+bool TonIndex::closed() const
+{
+    return _closed;
 }
 
 
@@ -185,69 +205,105 @@ void TonIndex::init25()
 }
 
 
-//const std::vector<const Ton> TonIndex::TONS30 =
+void TonIndex::initRankWeber()
+{
+    assert(_rankWeber.empty());
+    
+    for (size_t i = 0; i < _tons.size(); ++i)
+    {
+        // _rankWeber.emplace_back(_tons.size(), 0);
+        const Ton& toni = ton(i);
+
+        // pair (j, dist(i, j))
+        //std::vector<std::pair <size_t, unsigned int>> pcol; // empty
+        std::vector<unsigned int> pcol; // empty
+        
+        for (size_t j = 0; j < _tons.size(); ++j)
+            pcol.push_back(toni.distWeber(ton(j)));
+            // pcol.push_back(std::make_pair(j, toni.distWeber(ton(j))));
+
+        // pcol is sorted by weber distance to i.
+        _rankWeber.emplace_back(); // empty column
+        util::ranks<unsigned int>(pcol,
+                 [](unsigned int a, unsigned int b) { return (a == b); },
+                 [](unsigned int a, unsigned int b) { return (a <  b); },
+                                  _rankWeber.back());
+        assert(_rankWeber.back().size() == pcol.size());
+    }
+}
+
+
+size_t TonIndex::rankWeber(size_t i, size_t j) const
+{
+
+    // if (_tons.empty())
+    // {
+    //     ERROR("rankWeber[{},{}]: this ton index is empty", i, j);
+    //     return 0;
+    //  }
+    assert(closed());
+    assert(! _tons.empty());
+    assert(! _rankWeber.empty());
+    assert(i < _tons.size());
+    assert(j < _tons.size());
+    assert(_rankWeber[i][j] < _tons.size());
+    return _rankWeber[i][j];
+}
+
+
+// static
+//bool TonIndex::pcompare(const std::pair <size_t, unsigned int>& a,
+//                        const std::pair <size_t, unsigned int>& b)
 //{
-//    Ton(-7, ModeName::Maj),
-//    Ton(-6, ModeName::Maj),
-//    Ton(-5, ModeName::Maj),
-//    Ton(-4, ModeName::Maj),
-//    Ton(-3, ModeName::Maj),
-//    Ton(-2, ModeName::Maj),
-//    Ton(-1, ModeName::Maj),
-//    Ton(0,  ModeName::Maj),
-//    Ton(1,  ModeName::Maj),
-//    Ton(2,  ModeName::Maj),
-//    Ton(3,  ModeName::Maj),
-//    Ton(4,  ModeName::Maj),
-//    Ton(5,  ModeName::Maj),
-//    Ton(6,  ModeName::Maj),
-//    Ton(7,  ModeName::Maj),
-//    Ton(-7, ModeName::Min),
-//    Ton(-6, ModeName::Min),
-//    Ton(-5, ModeName::Min),
-//    Ton(-4, ModeName::Min),
-//    Ton(-3, ModeName::Min),
-//    Ton(-2, ModeName::Min),
-//    Ton(-1, ModeName::Min),
-//    Ton(0,  ModeName::Min),
-//    Ton(1,  ModeName::Min),
-//    Ton(2,  ModeName::Min),
-//    Ton(3,  ModeName::Min),
-//    Ton(4,  ModeName::Min),
-//    Ton(5,  ModeName::Min),
-//    Ton(6,  ModeName::Min),
-//    Ton(7,  ModeName::Min)
-//};
-//
-//
-//const std::vector<const Ton> TonIndex::TONS26 =
+//    return (a.second < b.second);
+//}
+
+
+// static
+//std::vector<size_t>
+//TonIndex::getRanks(std::vector<std::pair <size_t, unsigned int>>& v)
 //{
-//    Ton(-6, ModeName::Maj),
-//    Ton(-5, ModeName::Maj),
-//    Ton(-4, ModeName::Maj),
-//    Ton(-3, ModeName::Maj),
-//    Ton(-2, ModeName::Maj),
-//    Ton(-1, ModeName::Maj),
-//    Ton(0,  ModeName::Maj),
-//    Ton(1,  ModeName::Maj),
-//    Ton(2,  ModeName::Maj),
-//    Ton(3,  ModeName::Maj),
-//    Ton(4,  ModeName::Maj),
-//    Ton(5,  ModeName::Maj),
-//    Ton(6,  ModeName::Maj),
-//    Ton(-6, ModeName::Min),
-//    Ton(-5, ModeName::Min),
-//    Ton(-4, ModeName::Min),
-//    Ton(-3, ModeName::Min),
-//    Ton(-2, ModeName::Min),
-//    Ton(-1, ModeName::Min),
-//    Ton(0,  ModeName::Min),
-//    Ton(1,  ModeName::Min),
-//    Ton(2,  ModeName::Min),
-//    Ton(3,  ModeName::Min),
-//    Ton(4,  ModeName::Min),
-//    Ton(5,  ModeName::Min),
-//    Ton(6,  ModeName::Min),
-//};
+//    std::vector<size_t> ranks(v.size(), 0); // null vector
+//    if (v.empty()) return ranks;
+//
+//    // sort v according to the distance value
+//    std::sort(v.begin(), v.end(), pcompare);
+//
+//    // v[0] has rank 0. we leave it to 0.
+//    assert(0 < v.size());
+//    size_t rank = 0;
+//    size_t ties = 1;
+//    unsigned int dprec = v[0].second; // dist value of previous
+//
+//    for (size_t i = 1; i < v.size(); ++i)
+//    {
+//        size_t current = v[i].first;
+//        unsigned int d = v[i].second;
+//        if (d == dprec)
+//        {
+//            ranks[current] = rank;
+//            ties++;
+//        }
+//        else
+//        {
+//            assert(d > dprec);
+//            rank += ties;
+//            ties = 1;
+//            dprec = d;
+//            ranks[current] = rank;
+//        }
+//    }
+//
+//    return ranks;
+//}
+
+
+//std::vector<size_t> TonIndex::getRanks(const std::vector<unsigned int>& v)
+//{
+//    return (util::ranks<unsigned int>(v,
+//                     [](unsigned int a, unsigned int b) { return (a < b); }));
+//
+//}
+
 
 } // end namespace pse
