@@ -479,28 +479,32 @@ size_t PSG::estimateLocal(const PSV& vec, size_t ig, size_t iprev)
              [](double a, double b) { return (a == b); },
              [](double a, double b) { return (a <  b); }, rank_mean);
     assert(rank_mean.size() == _index.size());
-    size_t ibest = 0;
-    bool found0 = false;
     bool found1 = false;
+
+    /// index of tons with best rank
+    std::set<size_t> ties; // empty
     for (size_t j = 0; j < rank_mean.size(); ++j)
     {
         if (rank_mean.at(j) == 0)
         {
-            ibest = j;
-            found0 = true;
+            ties.insert(j);
         }
         if (rank_mean.at(j) == 1)
         {
             found1 = true;
         }
     }
-    assert(found0);
-    if (found1)
+    assert(!ties.empty());
+    assert((ties.size() == 1) || (found1 == false));
+    if (ties.size() == 1)
     {
-        WARN("estimateLocal: ties");
+        return *(ties.begin());
     }
-
-    return (ibest);
+    else
+    {
+        WARN("estimateLocal: ties bar {}", vec.bar());
+        return estimateLocal(ig, iprev, ties);
+    }
 }
 
 } // end namespace pse

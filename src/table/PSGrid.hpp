@@ -117,6 +117,8 @@ private:
     
     /// select in the given set of candidates an index for local tonality,
     /// given an assumed global tonality and a previous local tonality.
+    /// The selection criteria is the distance to previous local,
+    /// then the distance to global.
     size_t estimateLocal(size_t ig, size_t iprev, std::set<size_t>& cands);
     
     /// this alternative function determines the best local tonality by
