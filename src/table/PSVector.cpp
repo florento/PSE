@@ -311,8 +311,10 @@ void PSV::ranks(std::vector<size_t>& rk) const
         const Cost* cost = &(psb.cost()); // shared_clone();
         copy.push_back(cost);
     }
-    
+    assert(copy.size() == copy.size());
+
     util::ranks<const Cost*>(copy, eq_pcost, smaller_pcost, rk);
+    assert(rk.size() == _psbs.size());
 }
 
 

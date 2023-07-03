@@ -46,8 +46,8 @@
             filePath = "src/table/PSVector.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "849"
-            endingLineNumber = "849"
+            startingLineNumber = "851"
+            endingLineNumber = "851"
             landmarkName = "PSV::rename(i)"
             landmarkType = "7">
             <Locations>
@@ -239,6 +239,70 @@
             endingLineNumber = "297"
             landmarkName = "unknown"
             landmarkType = "0">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "D2149E06-7865-4A64-B972-8B346F4CA415"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "src/table/PSGrid.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "451"
+            endingLineNumber = "451"
+            landmarkName = "PSG::estimateLocal(vec, ig, iprev)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "D2149E06-7865-4A64-B972-8B346F4CA415 - d0c3458ade9f46e1"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "pse::PSG::estimateLocal(pse::PSV const&amp;, unsigned long, unsigned long)"
+                  moduleName = "debugpse"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/jacquema/Code/PSE/src/table/PSGrid.cpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "447"
+                  endingLineNumber = "447"
+                  offsetFromSymbolStart = "664">
+               </Location>
+               <Location
+                  uuid = "D2149E06-7865-4A64-B972-8B346F4CA415 - d0c3458ade9f4765"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "pse::PSG::estimateLocal(pse::PSV const&amp;, unsigned long, unsigned long)"
+                  moduleName = "debugpse"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/jacquema/Code/PSE/src/table/PSGrid.cpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "451"
+                  endingLineNumber = "451"
+                  offsetFromSymbolStart = "736">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "E7E05A94-E6BA-4170-BFBE-84A0DD965654"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "src/table/PSVector.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "314"
+            endingLineNumber = "314"
+            landmarkName = "PSV::ranks(rk)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

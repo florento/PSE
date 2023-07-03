@@ -19,7 +19,7 @@ void ranks(std::vector<E>& v,
     assert(ranks.empty());
     if (v.empty()) return;
 
-    // list of ranks, initialy null vector.
+    // list of ranks, initialy a null vector.
     ranks.insert(ranks.begin(), v.size(), 0);
     
     // list pf pairs index / value
@@ -60,7 +60,7 @@ void ranks(std::vector<E>& v,
         }
     }
     
-    //return ranks;
+    assert(ranks.size() == v.size());
 }
 
 } // namespace util

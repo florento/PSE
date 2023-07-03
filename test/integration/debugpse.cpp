@@ -38,7 +38,8 @@ int main(int argc, const char* argv[])
     //pse::PS13 sp;
 
     //issue7(sp);
-    BWV_858prelude(sp);
+    //BWV_858prelude(sp);
+    BWV_857fugue(sp);
     //LG101(sp);
     //LG461(sp);
     // Waldstein(sp);

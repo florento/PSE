@@ -432,6 +432,10 @@ size_t PSG::estimateLocalalt(const PSV& vec, size_t ig, size_t iprev,
 
 size_t PSG::estimateLocal(const PSV& vec, size_t ig, size_t iprev)
 {
+    // case of empty bar: keep the previous local
+    if (vec.first() == vec.stop())
+        return iprev;
+    
     assert(vec.size() == _index.size());
     
     assert(ig != TonIndex::UNDEF);
@@ -441,10 +445,11 @@ size_t PSG::estimateLocal(const PSV& vec, size_t ig, size_t iprev)
     assert(iprev != TonIndex::UNDEF);
     assert(iprev != TonIndex::FAILED);
     assert(iprev < _index.size());
-    
+            
     /// ranks for costs of bags
     std::vector<size_t> rank_bags; // empty
     vec.ranks(rank_bags);
+    assert(rank_bags.size() == _index.size());
 
     /// ranks for distance to prev local.
     std::vector<size_t> rank_prev; // empty
