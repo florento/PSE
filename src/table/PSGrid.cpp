@@ -466,9 +466,9 @@ size_t PSG::estimateLocal(const PSV& vec, size_t ig, size_t iprev)
     std::vector<double> means; // empty
     for (size_t j = 0; j < _index.size(); ++j)
     {
-        means.push_back(((double) rank_bags.at(j) +
-                             (double) rank_prev.at(j) +
-                             (double) rank_glob.at(j)) / 3);
+        means.push_back(3*(double) rank_bags.at(j) +
+                             3*(double) rank_prev.at(j) +
+                             2*(double) rank_glob.at(j));
     }
     
     std::vector<size_t> rank_mean; // empty
@@ -505,7 +505,7 @@ size_t PSG::estimateLocal(const PSV& vec, size_t ig, size_t iprev)
     {
         WARN("estimateLocal: ties bar {}", vec.bar());
         return ibest;
-        //return estimateLocal(ig, iprev, ties);
+        //return estimateLocal(ig, iprev, ties);//renvoie de moins bons résultats quand décommentée, bizarre
     }
 }
 
