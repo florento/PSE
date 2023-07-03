@@ -103,9 +103,10 @@ void CostAD::update(const enum NoteName& name,
         // not used (_accid of type size_t is incremented of 0)
         _accid += 1/2;
     }
-    
     // update cost when accident for the name was updated (printed)
     // discount for lead degree in minor modes
+    // && (gton.accidDia(name) != accid))
+    // else if (print && ((!gton.lead(name)) || gton.accidDia(name) != accid))
     // !(gton.lead()  &&  gton.accidDia(name) == accid)
     if ((print) && (gton.accidDia(name) != accid))
     {
@@ -150,7 +151,7 @@ void CostAD::update(const enum NoteName& name,
             boo = false;  //on a déjà traité la sensible de cette façon,
                           //pas la peine de la repénaliser par la suite
         }
-        if (boo and print)
+        if (boo && print)
         {
             switch (accid)
             {

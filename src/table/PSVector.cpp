@@ -276,6 +276,105 @@ void PSV::init_psbs(const Cost& seed,
     }
 }
 
+// static
+bool PSV::eq_pcost(const Cost* a, const Cost* b)
+{
+    assert(a);
+    assert(b);
+    return (*a == *b);
+}
+
+// static
+bool PSV::smaller_pcost(const Cost* a, const Cost* b)
+{
+    assert(a);
+    assert(b);
+    return (*a < *b);
+}
+
+void PSV::ranks(std::vector<size_t>& rk) const
+{
+    assert(_psbs.size() == _index.size());
+    assert(_enum);
+    assert(rk.empty());
+    if (_index.empty()) return;
+    if (_enum->empty()) return;
+    
+    // vector of pointers to costs in this PSV
+    std::vector<const Cost*> copy;  // empty
+    for (size_t j = 0; j < _psbs.size(); ++j)
+    {
+        const PSB& psb = bag(j);
+        // occurs iff first() == stop() (enum empty)
+        // and in this case all the bags are empty.
+        assert(! psb.empty());
+        const Cost* cost = &(psb.cost()); // shared_clone();
+        copy.push_back(cost);
+    }
+    
+    util::ranks<const Cost*>(copy, eq_pcost, smaller_pcost, rk);
+}
+
+
+// old version, TBR
+std::vector<size_t> PSV::getRanks() const
+{
+    assert(_psbs.size() == _index.size());
+
+    std::vector<size_t> ranks(_index.size(), 0); // null vector
+    
+    if (_index.empty()) return ranks;
+    assert(_enum);
+    if (_enum->empty()) return ranks;
+    
+    // make a copy of this PSV
+    std::vector<std::pair <size_t, const Cost*>> copy; // empty
+    for (size_t j = 0; j < _psbs.size(); ++j)
+    {
+        const PSB& psb = bag(j);
+        // occurs iff first() == stop() (enum empty)
+        // and in this case all the bags are empty.
+        assert(! psb.empty());
+        const Cost* cost = &(psb.cost()); // shared_clone();
+        copy.push_back(std::make_pair(j, cost));
+    }
+
+    typedef std::pair<size_t, const Cost*> copyelt;
+    
+    // sort the copy according to the cost value
+    std::sort(copy.begin(), copy.end(),
+              [] (copyelt& a, copyelt& b)
+              { assert(a.second);  assert(a.second);
+                return *(a.second) < *(b.second); });
+                  
+    // v[0] has rank 0. we leave it to 0.
+    assert(0 < copy.size());
+    size_t rank = 0;
+    size_t ties = 1;
+    //assert(copy[0].second);
+    const Cost* dprec = copy[0].second; // cost value of previous
+
+    for (size_t i = 1; i < copy.size(); ++i)
+    {
+        assert(dprec);
+        assert(copy[i].second);
+        if (*(copy[i].second) == *(dprec))
+        {
+            ties++;
+        }
+        else
+        {
+            assert(*(copy[i].second) > *(dprec));
+            rank += ties;
+            ties = 1;
+            dprec = copy[i].second;
+        }
+        ranks[copy[i].first] = rank;
+    }
+    
+    return ranks;
+}
+
 
 //size_t PSV::ilocal(size_t ig) const
 //{

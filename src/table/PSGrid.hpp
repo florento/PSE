@@ -17,6 +17,7 @@
 #include <set>
 
 #include "trace.hpp"
+#include "utils.hpp"
 #include "TonIndex.hpp"
 #include "Cost.hpp"
 #include "PSBag.hpp"
@@ -56,7 +57,7 @@ public:
     
     /// number of columns (PS Vectors) in this table, i.e. nb of measures spelled.
     inline size_t columnNb() const { return size(); }
-
+    
     /// one column of this table (corresponding to a measure).
     const std::vector<size_t>& column(size_t i) const;
     
@@ -83,7 +84,7 @@ public:
     /// - TonIndex::FAILED if its estimation failed.
     /// - an integer value between 0 and index.size() otherwise.
     const Ton& local(size_t i, size_t j) const;
-        
+    
 private: // data
     
     /// header of rows: array of tonalities (1 per row).
@@ -99,21 +100,39 @@ private: // data
 private:
     
     /// fill this table of local tons.
-    void init(const PST& tab, std::vector<bool> mask);
+    /// @param flag whether the local estimation is done with rank means.
+    void init(const PST& tab, std::vector<bool> mask, bool flag=false);
 
     // add one column
     // void init(const PSV& vec, std::vector<bool> mask);
-
-    /// fill the given set with tonality index with minimal cost in vec
-    /// (there can be several tie).
+    
+    /// fill the given set with the indexes of tonalities
+    /// having a minimal cost in the bags of the given PSV
+    /// (there can be several ties).
+    /// @warning this function determines the best local tonalities
+    /// according to the bags of the studied measure;
+    /// However it has an important flaw : no tonal context is taken into account
+    /// to determine the local tones.
     void extract_bests(const PSV& vec, std::set<size_t>& ties, double d=0);
     
     /// select in the given set of candidates an index for local tonality,
-    /// given an assumed global tonality and previous local tonality.
+    /// given an assumed global tonality and a previous local tonality.
     size_t estimateLocal(size_t ig, size_t iprev, std::set<size_t>& cands);
-
+    
+    /// this alternative function determines the best local tonality by
+    /// restraining its search only on tones close to the previous or global one
+    /// and then choosing the one minimizing accidents.
     size_t estimateLocalalt(const PSV& vec, size_t ig, size_t iprev,
                             unsigned int);
+    
+    /// select in the given set of candidates an index for local tonality,
+    /// given an assumed global tonality and a previous local tonality.
+    /// version by computing the mean of ranks of tonalities
+    /// - by cost (for this bar)
+    /// - by distance to previous local iprev
+    /// - by distance to global ig
+    size_t estimateLocal(const PSV& vec, size_t ig, size_t iprev);
+
 };
 
 } // namespace pse

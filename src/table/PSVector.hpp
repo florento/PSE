@@ -20,6 +20,7 @@
 #include <memory>
 
 #include "trace.hpp"
+#include "utils.hpp"
 //#include "MTU.hpp"
 #include "AlgoName.hpp"
 //#include "Pitch.hpp"
@@ -38,8 +39,8 @@
 namespace pse {
 
 
-/// vector with one PSP (shortest path of of PSC)
-/// for each tonality considered for Pitch Spelling.
+/// vector with one bag (PSB) of shortest path computation (PSC)
+/// for each tonality considered for Pitch Spelling (TonIndex, array of tonalities).
 /// The list of tonalities for PS is encapsulated,
 /// @see PSV::NBTONS
 /// @see PSV::TONS
@@ -129,6 +130,11 @@ public:
     /// @param i index in array of tonalities. must be smaller than index.size().
     /// @return the bag of configs at position i in this vector.
     const PSB& bag(size_t i) const;
+    
+    /// get the list of ranks of each ton in the array of tonalities,
+    /// wrt the cost of corresponding bag in this vector.
+    /// @param ranks container to receive the list of ranks
+    void ranks(std::vector<size_t>& rk) const;
 
     // bag of target configs for best paths for the ton of given index.
     // @param step number of step, 0 or 1.
@@ -265,7 +271,13 @@ private:
     
     /// return value for best step 1 in case of error.
     const PSB& best1ERROR(size_t i) const;
-        
+    
+    static bool eq_pcost(const Cost*, const Cost*);
+    static bool smaller_pcost(const Cost*, const Cost*);
+    
+    // old version
+    std::vector<size_t> getRanks() const;
+
     // estimate a local tonality, for a given assumed global tonality,
     // and a given previous local tonality (for previous measure).
     // @param ig index in the TonIndex of an assumed global tonality.
