@@ -190,6 +190,8 @@ PYBIND11_MODULE(pse, m)
         .def("globals0", &pse::PS14::globals0,
              "get number of candidates (ties) for the estimatation of the global tonality  (after first pass)")
         .def("global_ton", &pse::PS14::global, "get candidate global tonality ")
+        .def("global_ton0", &pse::PS14::global0,
+             "get candidate global tonality (after first pass)")
         .def("iglobal_ton", &pse::PS14::iglobal,
              "get index of candidate global tonality ")
         .def("iglobal_ton0", &pse::PS14::iglobal0,
