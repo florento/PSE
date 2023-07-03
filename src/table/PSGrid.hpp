@@ -113,13 +113,13 @@ private:
     /// according to the bags of the studied measure;
     /// However it has an important flaw : no tonal context is taken into account
     /// to determine the local tones.
-    void extract_bests(const PSV& vec, std::set<size_t>& ties, double d=0);
+    void extract_bests(const PSV& vec, std::vector<size_t>& ties, double d=0);
     
     /// select in the given set of candidates an index for local tonality,
     /// given an assumed global tonality and a previous local tonality.
     /// The selection criteria is the distance to previous local,
     /// then the distance to global.
-    size_t estimateLocal(size_t ig, size_t iprev, std::set<size_t>& cands);
+    size_t estimateLocal(size_t ig, size_t iprev, std::vector<size_t>& cands);
     
     /// this alternative function determines the best local tonality by
     /// restraining its search only on tones close to the previous or global one

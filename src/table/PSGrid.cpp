@@ -72,7 +72,7 @@ void PSG::init(const PST& tab, std::vector<bool> mask, bool flag)
 
         // set of index of elements in vec with a best cost.
         // (there are several in case of tie).
-        std::set<size_t> cands; // empty
+        std::vector<size_t> cands; // empty
         
         if (flag == false)
             extract_bests(vec, cands, 50);  // printf("%lu",cands.size());
@@ -124,7 +124,7 @@ void PSG::init(const PST& tab, std::vector<bool> mask, bool flag)
 // according to the bags of the studied measure
 // However it has an important flaw : no tonal context is taken into account
 // to determine the local tones.
-void PSG::extract_bests(const PSV& vec, std::set<size_t>& ties, double d)
+void PSG::extract_bests(const PSV& vec, std::vector<size_t>& ties, double d)
 {
     assert(ties.empty());
     
@@ -167,9 +167,9 @@ void PSG::extract_bests(const PSV& vec, std::set<size_t>& ties, double d)
         // tie break
         if ((cbest != nullptr) && (cost.dist(*cbest) <= d))
         {
-            //printf("%f \n",cost.dist(*cbest));
-            auto ret = ties.insert(j);
-            assert(ret.second == true); // j was inserted
+            ties.push_back(j);
+            //auto ret = ties.insert(j);
+            //assert(ret.second == true); // j was inserted
         }
         // otherwise keep the current best
         else
@@ -185,7 +185,7 @@ void PSG::extract_bests(const PSV& vec, std::set<size_t>& ties, double d)
 // this function chooses among the best possible local tonalities
 // (obtained with extract_bests)
 // the closest one to the previous local tone and to the global tone.
-size_t PSG::estimateLocal(size_t ig, size_t iprev, std::set<size_t>& cands)
+size_t PSG::estimateLocal(size_t ig, size_t iprev, std::vector<size_t>& cands)
 {
     // no candidates in case of empty bar: keep the previous local
     if (cands.empty())
@@ -287,7 +287,7 @@ void PSG::init(const PST& tab, std::vector<bool> mask)
 
         // set of index of elements in vec with a best cost.
         // (there are several in case of tie).
-        //std::set<size_t> ties; // empty
+        //std::vector<size_t> ties; // empty
         // cands empty in case of empty measure
         
         // add empty column
@@ -463,31 +463,30 @@ size_t PSG::estimateLocal(const PSV& vec, size_t ig, size_t iprev)
     }
 
     /// list of means of the ranks in the 3 lists (unweighted)
-    std::vector<double> means; // empty
+    std::vector<size_t> means; // empty
     for (size_t j = 0; j < _index.size(); ++j)
     {
-        means.push_back(((double) rank_bags.at(j) +
-                             (double) rank_prev.at(j) +
-                             (double) rank_glob.at(j)) / 3);
+        // cast to double ?
+        means.push_back(rank_bags.at(j) + rank_prev.at(j) + rank_glob.at(j));
     }
     
     std::vector<size_t> rank_mean; // empty
 
     /// ranks of the means
     /// we could also simply sort the list of means
-    util::ranks<double>(means,
-             [](double a, double b) { return (a == b); },
-             [](double a, double b) { return (a <  b); }, rank_mean);
+    util::ranks<size_t>(means,
+             [](size_t a, size_t b) { return (a == b); },
+             [](size_t a, size_t b) { return (a <  b); }, rank_mean);
     assert(rank_mean.size() == _index.size());
     bool found1 = false;
 
     /// index of tons with best rank
-    std::set<size_t> ties; // empty
+    std::vector<size_t> ties; // empty
     for (size_t j = 0; j < rank_mean.size(); ++j)
     {
         if (rank_mean.at(j) == 0)
         {
-            ties.insert(j);
+            ties.push_back(j);
         }
         if (rank_mean.at(j) == 1)
         {
@@ -498,7 +497,7 @@ size_t PSG::estimateLocal(const PSV& vec, size_t ig, size_t iprev)
     assert((ties.size() == 1) || (found1 == false));
     if (ties.size() == 1)
     {
-        return *(ties.begin());
+        return ties.front();
     }
     else
     {
