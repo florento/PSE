@@ -138,6 +138,16 @@ void CostAD::update(const enum NoteName& name,
 
     // was : if (lton.defined() && print && (lton.accidDia(name) != accid))
     // no print : print flag is related to gton, not for lton
+    /*if (lton.defined() && (lton.accidDia(name) == accid))
+    {
+        if ((accid == Accid::DoubleSharp) || (accid == Accid::DoubleFlat))
+        {
+            if (_accid>1)
+            {
+                _accid -= 1;
+            }
+        }
+    }*/
     if (lton.defined() && (lton.accidDia(name) != accid))
     {
         if (lton.lead(name) &&
