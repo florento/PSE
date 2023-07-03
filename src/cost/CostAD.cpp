@@ -161,7 +161,7 @@ void CostAD::update(const enum NoteName& name,
             boo = false;  //on a déjà traité la sensible de cette façon,
                           //pas la peine de la repénaliser par la suite
         }
-        if (boo && print)
+        if (boo)
         {
             switch (accid)
             {
