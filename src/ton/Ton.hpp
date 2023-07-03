@@ -107,7 +107,7 @@ public:
     /// accidental in the scale of this ton for a given pitch name.
     /// @param n an encapsulated note name
     /// @return the number of accidents, in scale, for degree d, in -2..2.
-    enum Accid accidDia(const enum NoteName& n) const;
+    enum Accid accidDia(const enum NoteName& n, ModeName mode) const;
 
     /// note name in the scale of this ton for a given degree.
     /// @param d a degree in 0..6.
@@ -230,7 +230,7 @@ private:
     /// accidental in the scale of this ton for a given pitch name.
     /// @param n a note name, in 0..6 (0 is 'C', 6 is 'B').
     /// @return the accidental, in scale, for n, in -2..2.
-    enum Accid accidDia(int n) const;
+    enum Accid accidDia(int n, ModeName mode) const;
     
     /// number of the tonic of this ton in the array of fifths.
     int tonic() const;

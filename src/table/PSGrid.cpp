@@ -466,8 +466,9 @@ size_t PSG::estimateLocal(const PSV& vec, size_t ig, size_t iprev)
     std::vector<size_t> means; // empty
     for (size_t j = 0; j < _index.size(); ++j)
     {
-        // cast to double ?
-        means.push_back(rank_bags.at(j) + rank_prev.at(j) + rank_glob.at(j));
+        means.push_back(3*rank_bags.at(j) +
+                        3*rank_prev.at(j) +
+                        2*rank_glob.at(j));
     }
     
     std::vector<size_t> rank_mean; // empty
@@ -479,7 +480,7 @@ size_t PSG::estimateLocal(const PSV& vec, size_t ig, size_t iprev)
              [](size_t a, size_t b) { return (a <  b); }, rank_mean);
     assert(rank_mean.size() == _index.size());
     bool found1 = false;
-
+    size_t ibest = 0;
     /// index of tons with best rank
     std::vector<size_t> ties; // empty
     for (size_t j = 0; j < rank_mean.size(); ++j)
@@ -502,7 +503,8 @@ size_t PSG::estimateLocal(const PSV& vec, size_t ig, size_t iprev)
     else
     {
         WARN("estimateLocal: ties bar {}", vec.bar());
-        return estimateLocal(ig, iprev, ties);
+        return ibest;
+        //return estimateLocal(ig, iprev, ties);//renvoie de moins bons résultats quand décommentée, bizarre
     }
 }
 

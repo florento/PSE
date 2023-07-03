@@ -78,21 +78,21 @@ const std::array<std::array<enum Accid, 7>, 15> Ton::MIN_HARM =
 // accidentals in minor melodic scales for each key signature.
 const std::array<std::array<enum Accid, 7>, 15> Ton::MIN_MEL =
 {{
-    { __U, __U, __U, _0N, _0N, __U, __U }, // -7  Ab min mel
-    { _0N, _0N, __U, __U, __U, __U, __U }, // -6  Eb min mel
-    { __U, __U, __U, __U, _0N, _0N, __U }, // -5  Bb min mel
-    { __U, _0N, _0N, __U, __U, __U, __U }, // -4  F  min mel
-    { __U, __U, __U, __U, __U, _0N, _0N }, // -3  C  min mel
-    { __U, __U, _0N, _1S, __U, __U, __U }, // -2  G  min mel
-    { _1S, __U, __U, __U, __U, __U, _0N }, // -1  D  min mel
-    { __U, __U, __U, _1S, _1S, _0N, _0N }, //  0  A  min mel
-    { _1S, _1S, __U, __U, __U, __U, __U }, // 1  E  min mel
-    { __U, __U, __U, __U, _1S, _1S, __U }, //  2  B  min mel
-    { __U, _1S, _1S, __U, __U, __U, __U }, //  3  F# min mel
-    { __U, __U, __U, __U, __U, _1S, _1S }, //  4  C# min mel
-    { __U, __U, _1S, _2S, __U, __U, __U }, //  5  G# min mel
-    { _2S, __U, __U, __U, __U, __U, _1S }, //  6  D# min mel
-    { __U, __U, __U, _2S, _2S, __U, __U },  // 7  A# min mel
+    { _1F, _1F, _1F, _0N, _0N, _1F, _1F }, // -7  Ab min mel
+    { _0N, _0N, _1F, _0N, _1F, _1F, _1F }, // -6  Eb min mel
+    { _0N, _1F, _1F, _0N, _0N, _0N, _1F }, // -5  Bb min mel
+    { _0N, _0N, _0N, _0N, _0N, _1F, _1F }, // -4  F  min mel
+    { _0N, _0N, _1F, _0N, _0N, _0N, _0N }, // -3  C  min mel
+    { _0N, _0N, _0N, _1S, _0N, _0N, _1F }, // -2  G  min mel
+    { _1S, _0N, _0N, _0N, _0N, _0N, _0N }, // -1  D  min mel
+    { _0N, _0N, _0N, _1S, _1S, _0N, _0N }, //  0  A  min mel
+    { _1S, _1S, _0N, _1S, _0N, _0N, _0N }, // 1  E  min mel
+    { _1S, _0N, _0N, _1S, _1S, _1S, _0N }, //  2  B  min mel
+    { _1S, _1S, _1S, _1S, _1S, _0N, _0N }, //  3  F# min mel
+    { _1S, _1S, _0N, _1S, _1S, _1S, _1S }, //  4  C# min mel
+    { _1S, _1S, _1S, _2S, _1S, _1S, _0N }, //  5  G# min mel
+    { _2S, _1S, _1S, _1S, _1S, _1S, _1S }, //  6  D# min mel
+    { _1S, _1S, _1S, _2S, _2S, _1S, _1S },  // 7  A# min mel
 }};
 
 
@@ -199,14 +199,14 @@ enum Accid Ton::accidKey(const enum NoteName& name) const
 }
 
 
-enum Accid Ton::accidDia(int n) const
+enum Accid Ton::accidDia(int n, ModeName mode) const
 {
     assert(-7 <= _sig);
     assert(_sig <= 7);
     assert(0 <= n);
     assert(n <= 6);
 
-    switch (_mode)
+    switch (mode)
     {
         case ModeName::Undef:
             return Accid::Undef;
@@ -241,10 +241,10 @@ enum Accid Ton::accidDia(int n) const
 }
 
 
-enum Accid Ton::accidDia(const enum NoteName& name) const
+enum Accid Ton::accidDia(const enum NoteName& name, ModeName mode) const
 {
     assert(name != NoteName::Undef);
-    return accidDia(toint(name));
+    return accidDia(toint(name),mode);
 }
 
 
@@ -267,7 +267,7 @@ enum Accid Ton::accidental(int d) const
 //           _mode == ModeName::MinorNat ||
 //           _mode == ModeName::MinorMel);
     assert(d < 7); // diatonic scale
-    return accidDia(name(d));
+    return accidDia(name(d), _mode);
 }
 
 
@@ -330,8 +330,8 @@ unsigned int Ton::distHamming(const Ton& rhs) const
     for (int i = 0; i < 7; ++i) // pitch names
     {
         const enum NoteName n = NoteName(i);
-        const enum Accid& this_ai = accidDia(n);
-        const enum Accid& rhs_ai  = rhs.accidDia(n);
+        const enum Accid& this_ai = accidDia(n, _mode);
+        const enum Accid& rhs_ai  = rhs.accidDia(n, _mode);
         assert(this_ai != Accid::Undef);
         assert(rhs_ai != Accid::Undef);
         if (this_ai != rhs_ai)
@@ -348,8 +348,8 @@ unsigned int Ton::distDiatonic(const Ton& rhs) const
     for (int i = 0; i < 7; ++i) // pitch names
     {
         const enum NoteName n = NoteName(i);
-        const enum Accid& this_ai = accidDia(n);
-        const enum Accid& rhs_ai  = rhs.accidDia(n);
+        const enum Accid& this_ai = accidDia(n, _mode);
+        const enum Accid& rhs_ai  = rhs.accidDia(n, _mode);
         assert(this_ai != Accid::Undef);
         assert(rhs_ai != Accid::Undef);
         res += accidDist(this_ai, rhs_ai);
