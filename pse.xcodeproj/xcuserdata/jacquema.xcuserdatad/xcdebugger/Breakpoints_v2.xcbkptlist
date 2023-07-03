@@ -40,7 +40,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "9DDF3D99-570F-40DB-867B-ABF0E91115C5"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "src/table/PSVector.cpp"
@@ -109,6 +109,21 @@
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "808"
                   endingLineNumber = "808"
+                  offsetFromSymbolStart = "1334">
+               </Location>
+               <Location
+                  uuid = "9DDF3D99-570F-40DB-867B-ABF0E91115C5 - 8fd5c14b60bcc952"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "pse::PSV::rename(unsigned long)"
+                  moduleName = "debugpse"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/jacquema/Code/PSE/src/table/PSVector.cpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "849"
+                  endingLineNumber = "849"
                   offsetFromSymbolStart = "1334">
                </Location>
             </Locations>

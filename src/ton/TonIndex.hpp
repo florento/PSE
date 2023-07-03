@@ -106,8 +106,7 @@ public:
     /// No ton can be added after closure.
     void close();
 
-    /// close this array of tonalities.
-    /// no ton can be added after closure.
+    /// this array of tonalities is closed (no ton can be added).
     bool closed() const;
     
     /// ranks of first given ton wrt Weber distance to second given ton.

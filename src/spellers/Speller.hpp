@@ -134,6 +134,13 @@ public:
     /// add a tonality for pitch spelling.
     void addTon(const Ton& ton);
     
+    /// close the array of tonalities and finish its initlialization.
+    /// No ton can be added after closure.
+    void closeTons();
+    
+    /// the array of tonalities is closed.
+    bool closedTons() const;
+       
     /// compute the best pitch spelling for the input notes,
     /// using the algorithm named in this class.
     /// @return whether computation was succesfull.

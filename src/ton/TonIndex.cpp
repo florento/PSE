@@ -168,8 +168,8 @@ void TonIndex::add(int ks, const ModeName& mode)
 
 void TonIndex::close()
 {
-    initRankWeber();
     _closed = true;
+    initRankWeber();
 }
 
 

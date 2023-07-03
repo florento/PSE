@@ -140,6 +140,17 @@ void Speller::addTon(int ks, ModeName mode)
 }
 
 
+void Speller::closeTons()
+{
+    _index.close();
+}
+
+
+bool Speller::closedTons() const
+{
+    return _index.closed();
+}
+
 
 size_t Speller::rewritePassing()
 {

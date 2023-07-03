@@ -16,7 +16,7 @@ _index(tab.index()),
 _content()
 {
     assert(mask.size() == _index.size());
-    init(tab, mask, false);
+    init(tab, mask, true); // true for using the
 }
 
 
@@ -94,9 +94,9 @@ void PSG::init(const PST& tab, std::vector<bool> mask, bool flag)
             // in the first column (first measure)
             else if (_content.size() == 1)
             {
-                if (flag == true)
+                if (flag == true) // estimation locals by mean of ranks
                     current.push_back(estimateLocal(vec,i, i));
-                else
+                else              // estimation locals by extractbests then distances
                     current.push_back(estimateLocal(i, i, cands));
             }
             // otherwise, consider previous column
@@ -106,9 +106,9 @@ void PSG::init(const PST& tab, std::vector<bool> mask, bool flag)
                 assert(j-1 < _content.size());
                 assert(i < _content.at(j-1).size());
                 size_t iprev = _content.at(j-1).at(i);
-                if (flag == true)
+                if (flag == true) // estimation locals by mean of ranks
                     current.push_back(estimateLocal(vec, i, iprev));
-                else
+                else              // estimation locals by extractbests then distances
                     current.push_back(estimateLocal(i, iprev, cands));
             }
             assert(current.back() == TonIndex::UNDEF ||
@@ -457,6 +457,7 @@ size_t PSG::estimateLocal(const PSV& vec, size_t ig, size_t iprev)
         rank_glob.push_back(_index.rankWeber(ig, j));
     }
 
+    /// list of means of the ranks in the 3 lists (unweighted)
     std::vector<double> means; // empty
     for (size_t j = 0; j < _index.size(); ++j)
     {
@@ -467,6 +468,8 @@ size_t PSG::estimateLocal(const PSV& vec, size_t ig, size_t iprev)
     
     std::vector<size_t> rank_mean; // empty
 
+    /// ranks of the means
+    /// we could also simply sort the list of means
     util::ranks<double>(means,
              [](double a, double b) { return (a == b); },
              [](double a, double b) { return (a <  b); }, rank_mean);

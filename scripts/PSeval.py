@@ -177,15 +177,18 @@ def add_tons(tons, sp):
         for k in range(-4, 8):            # maj key signature in [-4 .. 7]
             sp.add_ton(k, pse.Mode.Major) # C, C#, D, Eb, E, F, F#, G, Ab, A, Bb, B 
         for k in range(-6, 7):            # min key signature in [-6 .. 6]
-            sp.add_ton(k, pse.Mode.Minor) # C, C#, D, Eb, D#, E, F, F#, G, G#, A, Bb, B   
+            sp.add_ton(k, pse.Mode.Minor) # C, C#, D, Eb, D#, E, F, F#, G, G#, A, Bb, B
+        sp.close_tons()    
     elif (tons == 26):
         for k in range(-6, 7):            # key signature in [-6 .. 6]
             sp.add_ton(k, pse.Mode.Major)
             sp.add_ton(k, pse.Mode.Minor)
+        sp.close_tons()    
     elif (tons == 30):
         for k in range(-7, 8):            # key signature in [-7 .. 7]
             sp.add_ton(k, pse.Mode.Major)
             sp.add_ton(k, pse.Mode.Minor)
+        sp.close_tons()    
 
         
 ###############
