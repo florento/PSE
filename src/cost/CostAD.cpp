@@ -91,24 +91,26 @@ void CostAD::update(const enum NoteName& name,
                     const Ton& gton, const Ton& lton)
 {
     bool boo = true;
-    
-    if ((gton.accidDia(name) != accid) &&
+    /*
+    if ((gton.accidDia(name,gton.getMode()) != accid) &&
         gton.lead(name) && (gton.getMode() == ModeName::Minor) &&
-        ((gton.accidDia(name) == Accid::Sharp && accid == Accid::Natural) ||
-         (gton.accidDia(name) == Accid::Natural && accid == Accid::Flat) ||
-         (gton.accidDia(name) == Accid::DoubleSharp && accid == Accid::Sharp)))
+        ((gton.accidDia(name,gton.getMode()) == Accid::Sharp && accid == Accid::Natural) ||
+         (gton.accidDia(name,gton.getMode()) == Accid::Natural && accid == Accid::Flat) ||
+         (gton.accidDia(name,gton.getMode()) == Accid::DoubleSharp && accid == Accid::Sharp)))
     {
         // on pénalise un peu lorsque la sensible n'est pas augmentée,
         // mais pas de 1 car il peut s'agir du mode mineur descendant
         // not used (_accid of type size_t is incremented of 0)
         _accid += 1/2;
     }
+    */
+    
     // update cost when accident for the name was updated (printed)
     // discount for lead degree in minor modes
     // && (gton.accidDia(name) != accid))
     // else if (print && ((!gton.lead(name)) || gton.accidDia(name) != accid))
     // !(gton.lead()  &&  gton.accidDia(name) == accid)
-    if ((print) && (gton.accidDia(name) != accid))
+    if ((print) && (gton.accidDia(name,gton.getMode()) != accid))
     {
         switch (accid)
         {
@@ -148,8 +150,9 @@ void CostAD::update(const enum NoteName& name,
             }
         }
     }*/
-    if (lton.defined() && (lton.accidDia(name) != accid))
+    if (lton.defined() && (lton.accidDia(name,lton.getMode()) != accid))
     {
+        /*
         if (lton.lead(name) &&
             (lton.getMode() == ModeName::Minor) &&
             ((lton.accidDia(name)==Accid::Sharp && accid==Accid::Natural) ||
@@ -160,6 +163,11 @@ void CostAD::update(const enum NoteName& name,
                           // mais pas de 1 car il peut s'agir du mode mineur descendant
             boo = false;  //on a déjà traité la sensible de cette façon,
                           //pas la peine de la repénaliser par la suite
+        }
+        */
+        if (lton.getMode() == ModeName::Minor)
+        {
+            if (lton.accidDia(name, ModeName::MinorNat)==accid || lton.accidDia(name, ModeName::MinorMel)==accid) boo=false;
         }
         if (boo)
         {
@@ -185,7 +193,7 @@ void CostAD::update(const enum NoteName& name,
         }
     }
     
-    if (print && (gton.accidDia(name) != accid) &&
+    if (print && (gton.accidDia(name,gton.getMode()) != accid) &&
         (((name == NoteName::C) && (accid == Accid::Flat)) ||
          ((name == NoteName::B) && (accid == Accid::Sharp)) ||
          ((name == NoteName::F) && (accid == Accid::Flat)) ||
@@ -215,7 +223,7 @@ void CostAD::update99(const enum NoteName& name,
     // update cost when accident for the name was updated
     // discount for lead degree
     // !(gton.lead()  &&  gton.accidDia(name) == accid)
-    if (gton.accidDia(name) != accid)
+    if (gton.accidDia(name,gton.getMode()) != accid)
     {
         
         // not used (_accid of type size_t is incremented of 0)
@@ -223,7 +231,7 @@ void CostAD::update99(const enum NoteName& name,
         {
             if (gton.getMode()==ModeName::Minor)
             {
-                if ((gton.accidDia(name)==Accid::Sharp && accid==Accid::Natural) || (gton.accidDia(name)==Accid::Natural && accid==Accid::Flat) || (gton.accidDia(name)==Accid::DoubleSharp && accid==Accid::Sharp))
+                if ((gton.accidDia(name,gton.getMode())==Accid::Sharp && accid==Accid::Natural) || (gton.accidDia(name,gton.getMode())==Accid::Natural && accid==Accid::Flat) || (gton.accidDia(name,gton.getMode())==Accid::DoubleSharp && accid==Accid::Sharp))
                 {
                     _accid += 1/2;//on pénalise un peu lorsque la sensible n'est pas augmentée, mais pas de 1 car il peut s'agir du mode mineur descendant
                 }
@@ -269,13 +277,13 @@ void CostAD::update99(const enum NoteName& name,
 
     // was : if (lton.defined() && print && (lton.accidDia(name) != accid))
     // no print : print flag is related to gton, not for lton
-    if (lton.defined() && print && (lton.accidDia(name) != accid))
+    if (lton.defined() && print && (lton.accidDia(name,lton.getMode()) != accid))
     {
         if (lton.lead(name) &&
             (lton.getMode() == ModeName::Minor) &&
-            ((lton.accidDia(name)==Accid::Sharp && accid==Accid::Natural) ||
-             (lton.accidDia(name)==Accid::Natural && accid==Accid::Flat) ||
-             (lton.accidDia(name)==Accid::DoubleSharp && accid==Accid::Sharp)))
+            ((lton.accidDia(name,lton.getMode())==Accid::Sharp && accid==Accid::Natural) ||
+             (lton.accidDia(name,lton.getMode())==Accid::Natural && accid==Accid::Flat) ||
+             (lton.accidDia(name,lton.getMode())==Accid::DoubleSharp && accid==Accid::Sharp)))
         {
             _dist += 1/2; //on pénalise un peu lorsque la sensible n'est pas augmentée,
                           // mais pas de 1 car il peut s'agir du mode mineur descendant

@@ -358,7 +358,7 @@ unsigned int PSState::dist(const Ton& ton) const
     for (int i = 0; i < 7; ++i) // pitch names
     {
         enum NoteName n = NoteName(i); // encapsulation
-        if (_state[i] != ton.accidDia(n)) // or ton.accidKey(i) ?
+        if (_state[i] != ton.accidDia(n,ton.getMode())) // or ton.accidKey(i) ?
         {
             res += 1;
         }
