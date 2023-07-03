@@ -230,7 +230,7 @@ enum Accid Ton::accidDia(int n) const
         case ModeName::Mixolydian:
         case ModeName::Aeolian:
         case ModeName::Locrian:
-            return KEYS[_sig + 7][n];
+            return KEYS[_sig + 7][n]; // todo
             
         default:
         {
