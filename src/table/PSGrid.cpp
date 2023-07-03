@@ -480,13 +480,14 @@ size_t PSG::estimateLocal(const PSV& vec, size_t ig, size_t iprev)
              [](double a, double b) { return (a <  b); }, rank_mean);
     assert(rank_mean.size() == _index.size());
     bool found1 = false;
-
+    size_t ibest = 0;
     /// index of tons with best rank
     std::set<size_t> ties; // empty
     for (size_t j = 0; j < rank_mean.size(); ++j)
     {
         if (rank_mean.at(j) == 0)
         {
+            ibest=j;
             ties.insert(j);
         }
         if (rank_mean.at(j) == 1)
@@ -503,7 +504,8 @@ size_t PSG::estimateLocal(const PSV& vec, size_t ig, size_t iprev)
     else
     {
         WARN("estimateLocal: ties bar {}", vec.bar());
-        return estimateLocal(ig, iprev, ties);
+        return ibest;
+        //return estimateLocal(ig, iprev, ties);
     }
 }
 
