@@ -199,7 +199,7 @@ void CostAD::update(const enum NoteName& name,
     // color of accident and color of global ton
     int ks = gton.fifths();
     // const enum Accid& a = c.accidental();
-    if (((ks >= 0) && (flat(accid))) || ((ks <  0) && (sharp(accid))))
+    if (((ks >= 0) && (flat(accid))) || ((ks <=  0) && (sharp(accid))))
     {
         _color += 1;
     }

@@ -130,7 +130,22 @@ def get_table(file, composer='Unknown'):
     df = pd.read_csv(fp)
     return df
 
+def eval_Brahms(stat=ps.Stats(), algo=ps.pse.Algo_PSE,
+                   nbtons=30,          # for PSE
+                   kpre=33, kpost=23, # for PS13
+                   dflag=True, mflag=True):
+    global _dataset_root
+    global _generic_score
+    if stat == None:
+        stat = ps.Stats()
+    filep = Path(_dataset_root)/'Brahms'/'Six_Pieces_op_118'/'2'/_generic_score
+    eval_asapscore(sid=2, file=filep, stat=stat,
+                   title='Six_Pieces_op_118: 2nd one', composer='Brahms',
+                   psalgo=algo, tons=nbtons, kpre=kpre, kpost=kpost,
+                   dflag=dflag, mflag=mflag)
 
+
+#eval_Brahms()
 #########################
 ##                     ##
 ##  Beethoven Sonatas  ##
@@ -158,7 +173,7 @@ def Beethoven_list():
 Beethoven_skip = []
 
 def eval_Beethoven(stat=ps.Stats(), algo=ps.pse.Algo_PSE,
-                   nbtons=0,          # for PSE
+                   nbtons=30,          # for PSE
                    kpre=33, kpost=23, # for PS13
                    dflag=True, mflag=True):
     """"evaluation of Beethoven Sonatas in ASAP"""
