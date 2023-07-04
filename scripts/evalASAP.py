@@ -146,6 +146,24 @@ def eval_Brahms(stat=ps.Stats(), algo=ps.pse.Algo_PSE,
 
 
 #eval_Brahms()
+
+def eval_Chopin(no=1,stat=ps.Stats(), algo=ps.pse.Algo_PSE,
+                   nbtons=30,          # for PSE
+                   kpre=33, kpost=23, # for PS13
+                   dflag=True, mflag=True):
+    global _dataset_root
+    global _generic_score
+    if stat == None:
+        stat = ps.Stats()
+    filep = Path(_dataset_root)/'Chopin'/'Etudes_op_25'/str(no)/_generic_score
+    eval_asapscore(sid=no, file=filep, stat=stat,
+                   title='', composer='Chopin',
+                   psalgo=algo, tons=nbtons, kpre=kpre, kpost=kpost,
+                   dflag=dflag, mflag=mflag)
+
+#no=int(input("numéro d'étude? "))
+#eval_Chopin(no=no)
+
 #########################
 ##                     ##
 ##  Beethoven Sonatas  ##
@@ -354,7 +372,7 @@ def eval_Bach(stat=ps.Stats(),
     stat.write_datasum(output_dir(composer='Bach')/'DWK_sum.csv')
     stat.show()
 
-eval_Bach()
+#eval_Bach(algo=ps.pse.Algo_PS13)
 
 
 def DWV_num(bwv, mvt):
