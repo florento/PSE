@@ -162,7 +162,7 @@ def eval_Chopin(no=1,stat=ps.Stats(), algo=ps.pse.Algo_PSE,
                    dflag=dflag, mflag=mflag)
 
 #no=int(input("numéro d'étude? "))
-#eval_Chopin(no=no)
+#eval_Chopin(no=no) #algo=ps.pse.Algo_PS14)
 
 #########################
 ##                     ##
@@ -372,7 +372,7 @@ def eval_Bach(stat=ps.Stats(),
     stat.write_datasum(output_dir(composer='Bach')/'DWK_sum.csv')
     stat.show()
 
-#eval_Bach(algo=ps.pse.Algo_PS13)
+eval_Bach(algo=ps.pse.Algo_PSE)
 
 
 def DWV_num(bwv, mvt):
