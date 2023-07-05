@@ -17,6 +17,7 @@ namespace pse {
 CostAD::CostAD():
 _accid(0),
 _dist(0),
+_chromharm(0),
 _color(0),
 _cflat(0)
 { }
@@ -25,6 +26,7 @@ _cflat(0)
 CostAD::CostAD(const CostAD& rhs):
 _accid(rhs._accid),
 _dist(rhs._dist),
+_chromharm(rhs._chromharm),
 _color(rhs._color),
 _cflat(rhs._cflat)
 { }
@@ -56,6 +58,7 @@ CostAD& CostAD::operator+=(const CostAD& rhs)
 {
     _accid += rhs._accid;
     _dist += rhs._dist;
+    _chromharm += rhs._chromharm;
     _color += rhs._color;
     _cflat += rhs._cflat;
     return *this;
@@ -185,6 +188,11 @@ void CostAD::update(const enum NoteName& name,
                 }
             }
         }
+    }
+    
+    if (print && !(lton.chromatic().contains(name,accid)))
+    {
+        _chromharm+=1;
     }
     
     if (print && (gton.accidDia(name,gton.getMode()) != accid) &&
@@ -420,6 +428,7 @@ void CostAD::print(std::ostream& o) const
 {
     o << "accid=" << _accid;
     o << " dist=" << _dist;
+    o << "chromarm=" << _chromharm;
     o << " color=" << _color;
     o << " cflat=" << _cflat;
 }
