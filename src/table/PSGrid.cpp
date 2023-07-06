@@ -488,6 +488,7 @@ size_t PSG::estimateLocal(const PSV& vec, size_t ig, size_t iprev)
         if (rank_mean.at(j) == 0)
         {
             ties.push_back(j);
+            ibest=j;
         }
         if (rank_mean.at(j) == 1)
         {

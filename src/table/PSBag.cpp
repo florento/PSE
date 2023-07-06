@@ -188,7 +188,8 @@ void PSB::succ(std::shared_ptr<const PSC0> c, PSCQueue& q,
                 q.push(std::make_shared<PSC1c>(c1,
                                                dejaname,
                                                MidiNum::accid(m, dejaname),
-                                               c1->dejaprint(m), // force print
+                                               false,
+                                               //c1->dejaprint(m), // force print
                                                gton, lton));
             }
             else

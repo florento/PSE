@@ -29,7 +29,7 @@ import PSeval as ps
 _dataset_root = '../../../Datasets/ASAP'
 
  # default score file name
-_generic_score = 'xml_score.musicxml'  
+_generic_score = 'xml_score.musicxml'
 
 # root of evaluation dir
 _eval_root = '../../PSeval'
@@ -96,15 +96,15 @@ def write_score(score, title='title', composer='Unknown'):
     score.write('musicxml', fp=output_dir(composer)/(title+'.musicxml'))
     # pdffile = dirname+'/'+outname+'.pdf'
     # os.system(_mscore + ' -o ' + pdffile + ' ' + xmlfile)
-    
+
 def eval_asapscore(sid, file, stat, title='title', composer='composer',
-                   psalgo=ps.pse.Algo_PSE, tons=26, kpre=33, kpost=23, 
+                   psalgo=ps.pse.Algo_PSE, tons=26, kpre=33, kpost=23,
                    dflag=False, mflag=False):
     s = m21.converter.parse(file)
-    (ls, lld) = ps.eval_score(score=s, stat=stat, 
+    (ls, lld) = ps.eval_score(score=s, stat=stat,
                               sid=sid, title=title, composer=composer,
-                              algo=psalgo,                              
-                              nbtons=tons,              # for PSE 
+                              algo=psalgo,
+                              nbtons=tons,              # for PSE
                               kpre=kpre, kpost=kpost, # for PS13
                               debug=dflag, mark=mflag)
     if mflag: # and not ps.empty_difflist(lld):
@@ -115,21 +115,54 @@ def str_hands(i):
         return 'rh'
     elif i == 1:
         return 'lh'
-    else:        
+    else:
         return 'ERR'
 
 def revise_table_asap(df):
     # replace part number (0 and 1) by 'rh' 'lh'
     df['part'].update(df['part'].apply(str_hands))
     #df.insert(4, 'hand', df['part'].apply(str_hands))
-    #df.pop('part')   
+    #df.pop('part')
 
-def get_table(file, composer='Unknown'):	
+def get_table(file, composer='Unknown'):
     fp = output_dir(composer)/file
     assert(os.path.isfile(fp))
     df = pd.read_csv(fp)
     return df
 
+def eval_Brahms(stat=ps.Stats(), algo=ps.pse.Algo_PSE,
+                   nbtons=30,          # for PSE
+                   kpre=33, kpost=23, # for PS13
+                   dflag=True, mflag=True):
+    global _dataset_root
+    global _generic_score
+    if stat == None:
+        stat = ps.Stats()
+    filep = Path(_dataset_root)/'Brahms'/'Six_Pieces_op_118'/'2'/_generic_score
+    eval_asapscore(sid=2, file=filep, stat=stat,
+                   title='Six_Pieces_op_118: 2nd one', composer='Brahms',
+                   psalgo=algo, tons=nbtons, kpre=kpre, kpost=kpost,
+                   dflag=dflag, mflag=mflag)
+
+
+#eval_Brahms()
+
+def eval_Chopin(no=1,stat=ps.Stats(), algo=ps.pse.Algo_PSE,
+                   nbtons=30,          # for PSE
+                   kpre=33, kpost=23, # for PS13
+                   dflag=True, mflag=True):
+    global _dataset_root
+    global _generic_score
+    if stat == None:
+        stat = ps.Stats()
+    filep = Path(_dataset_root)/'Chopin'/'Etudes_op_25'/str(no)/_generic_score
+    eval_asapscore(sid=no, file=filep, stat=stat,
+                   title='', composer='Chopin',
+                   psalgo=algo, tons=nbtons, kpre=kpre, kpost=kpost,
+                   dflag=dflag, mflag=mflag)
+
+#no=int(input("numéro d'étude? "))
+#eval_Chopin(no=no) #algo=ps.pse.Algo_PS14)
 
 #########################
 ##                     ##
@@ -152,14 +185,14 @@ def Beethoven_list():
         po = p / d / _generic_score
         assert(os.path.isfile(po))
         bl.append(Opus(int(dm.group(1)), int(dm.group(2)), str(po)))
-    bl = sorted(bl, key=attrgetter('nb', 'mvt')) 
+    bl = sorted(bl, key=attrgetter('nb', 'mvt'))
     return bl
 
 Beethoven_skip = []
 
-def eval_Beethoven(stat=ps.Stats(), algo=ps.pse.Algo_PSE, 
-                   nbtons=0,          # for PSE 
-                   kpre=33, kpost=23, # for PS13  
+def eval_Beethoven(stat=ps.Stats(), algo=ps.pse.Algo_PSE,
+                   nbtons=30,          # for PSE
+                   kpre=33, kpost=23, # for PS13
                    dflag=True, mflag=True):
     """"evaluation of Beethoven Sonatas in ASAP"""
     print('eval ASAP/Beethoven with algo', algo)
@@ -168,7 +201,7 @@ def eval_Beethoven(stat=ps.Stats(), algo=ps.pse.Algo_PSE,
         stat = ps.Stats()
     for o in Beethoven_list():
         if (o.nb, o.mvt) in Beethoven_skip:
-            print(o.nb, o.mvt, ': SKIP')           
+            print(o.nb, o.mvt, ': SKIP')
             continue
         else:
             print(o.nb, o.mvt, ':', o.file)
@@ -193,7 +226,7 @@ def Waldstein():
     #k0 = ps.get_key(lp[1])
     #ln0 = ps.extract_part(lp[0]) # right hand part
     ln1 = ps.extract_part(lp[1])  # left hand part
-    for (n, b, s) in ln1[600:]:   
+    for (n, b, s) in ln1[600:]:
         a = 'sp.add('
         a += str(n.pitch.midi)
         a += ', '
@@ -201,7 +234,7 @@ def Waldstein():
         a += ', '
         a += 'true' if s else 'false'
         a += ');'
-        print(a)        
+        print(a)
     #sp = ps.Speller()
     #sp.debug(True)
     #ps.add_tons(0, sp)
@@ -228,15 +261,15 @@ def DWK_sublist(p, sublist):
         po = p / d / _generic_score
         assert(os.path.isfile(po))
         bl.append(Opus(int(dm.group(1)), sublist, str(po)))
-    return bl	
+    return bl
 
 def DWK_list():
     """list Opus (BWV nb, 'prelude' or 'fugue', path) of Bach WK preludes and fugues in ASAP"""
     global _dataset_root
     p = Path(_dataset_root)/'Bach'
     bl = DWK_sublist(p, 'Prelude') + DWK_sublist(p, 'Fugue')
-    #bl = multisort(bl, (('mvt', True), ('nb', False))) 
-    bl = sorted(bl, key=attrgetter('nb')) 
+    #bl = multisort(bl, (('mvt', True), ('nb', False)))
+    bl = sorted(bl, key=attrgetter('nb'))
     return bl
 
 lBach = [#(846, 'Prelude', '../../../Datasets/ASAP/Bach/Prelude/bwv_846/xml_score.musicxml'),
@@ -303,7 +336,7 @@ lBach = [#(846, 'Prelude', '../../../Datasets/ASAP/Bach/Prelude/bwv_846/xml_scor
 # (866, 'Prelude') lonnnng
 Bach_skip = [(856, 'Prelude'), (873, 'Prelude'), (857, 'Fugue')]
 
-def eval1_Bach(nb, mvt, file, stat, 
+def eval1_Bach(nb, mvt, file, stat,
                algo=ps.pse.Algo_PSE, tons=25, kpre=33, kpost=23,
                dflag=True, mflag=True):
     global _dataset_root
@@ -313,15 +346,15 @@ def eval1_Bach(nb, mvt, file, stat,
         file = p/('bwv_'+str(nb))/_generic_score
         assert(os.path.isfile(file))
     print('BWV', nb, mvt, ':', file, end='\n', flush=True)
-    c = 0 if mvt == 'Prelude' else 1            
+    c = 0 if mvt == 'Prelude' else 1
     eval_asapscore(sid=nb*10+c, file=file, stat=stat,
                    title='BWV'+str(nb)+'_'+str(mvt), composer='Bach',
                    psalgo=algo, tons=tons, kpre=33, kpost=23,
                    dflag=dflag, mflag=mflag)
-    
-def eval_Bach(stat=ps.Stats(), 
+
+def eval_Bach(stat=ps.Stats(),
               algo=ps.pse.Algo_PSE, nbtons=30, kpre=33, kpost=23,
-              dflag=True, mflag=True): 
+              dflag=True, mflag=True):
     print('eval ASAP/Bach with algo', algo)
     global Bach_skip
     for o in DWK_list():
@@ -329,7 +362,7 @@ def eval_Bach(stat=ps.Stats(),
             continue
         else:
             print('\n', flush=True)
-            eval1_Bach(nb=o.nb, mvt=o.mvt, file=o.file, stat=stat, 
+            eval1_Bach(nb=o.nb, mvt=o.mvt, file=o.file, stat=stat,
                        algo=algo, tons=nbtons, kpre=33, kpost=23,
                        dflag=dflag, mflag=mflag)
     df = stat.get_dataframe()
@@ -338,8 +371,10 @@ def eval_Bach(stat=ps.Stats(),
     df.to_csv(output_dir(composer='Bach')/'DWK.csv', header=True, index=False)
     stat.write_datasum(output_dir(composer='Bach')/'DWK_sum.csv')
     stat.show()
-    
-    
+
+eval_Bach(algo=ps.pse.Algo_PSE)
+
+
 def DWV_num(bwv, mvt):
     """index in list DWK_list() of the Opus BWV, and mvt Prelude or Fugue"""
     lB=DWK_list()
@@ -351,7 +386,7 @@ def DWV_num(bwv, mvt):
             i = i+1
     return None # not found
 
-def quick_eval_Bach(bwv=854, stat=ps.Stats(), 
+def quick_eval_Bach(bwv=854, stat=ps.Stats(),
               algo=ps.pse.Algo_PSE, nbtons=25, kpre=33, kpost=23,
               dflag=True, mflag=True):
     lB=DWK_list()
@@ -360,14 +395,14 @@ def quick_eval_Bach(bwv=854, stat=ps.Stats(),
         lB1.append(e.nb)
     i=lB1.index(bwv)
     p=lB[i]
-    eval1_Bach(nb=p.nb, mvt=p.mvt, file=p.file, stat=stat,algo=algo, 
+    eval1_Bach(nb=p.nb, mvt=p.mvt, file=p.file, stat=stat,algo=algo,
                tons=nbtons, kpre=33, kpost=23, dflag=dflag, mflag=mflag)
     if i<len(lB)-1:
         print()
         f=lB[i+1]
-        eval1_Bach(nb=f.nb, mvt=f.mvt, file=f.file, stat=stat,algo=algo, 
+        eval1_Bach(nb=f.nb, mvt=f.mvt, file=f.file, stat=stat,algo=algo,
                    tons=nbtons, kpre=33, kpost=23, dflag=dflag, mflag=mflag)
-    
+
 
 
 ######################################
@@ -375,21 +410,21 @@ def quick_eval_Bach(bwv=854, stat=ps.Stats(),
 ##                                  ##
 ######################################
 
-    
+
 def debug(composer="Bach",i=0):
-    
+
     if composer=="Beethoven":
         dataset=Beethoven_list()
-    
+
     else:
         dataset = DWK_list()
-    
+
     file = dataset[i].file
     #print(file)
     score = m21.converter.parse(file)
     lp = score.getElementsByClass(m21.stream.Part)
     ln = ps.extract_part(lp[0]) # first and unique part
-    for (n, b, s) in ln:   
+    for (n, b, s) in ln:
         a = 'sp.add('
         a += str(n.pitch.midi)
         a += ', '
@@ -436,5 +471,3 @@ def debug(composer="Bach",i=0):
 #
 # for p in ln:
 #    print('sp.add(', p[0].pitch.midi, ',', p[1],')')
-    
-

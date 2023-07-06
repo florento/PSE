@@ -145,6 +145,8 @@ public:
 
     /// accessor for debug.
     inline size_t get_dist() const { return _dist; }
+    
+    inline size_t get_chromharm() const { return _chromharm; }
 
     /// accessor for debug.
     inline size_t get_color() const { return _color; }
@@ -162,7 +164,10 @@ protected: // data
     
     /// cumulated distance to a conjectured local tonality.
     size_t _dist;
-
+    
+    /// is the accid present in the chromaticharmonic scale?
+    size_t _chromharm;
+    
     /// cumulated number of accidentals with color different from global ton
     size_t _color;
 
