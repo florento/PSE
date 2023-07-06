@@ -148,7 +148,7 @@ PYBIND11_MODULE(pse, m)
         .def("set_Kpost", &pse::PS13::setKpost, "set the Kpost parameter of PS13")
         .def("add", &pse::PS13::add_pybindwod, "add a new note to spell",
              py::arg("midi"), py::arg("bar"), py::arg("simultaneous"))
-        .def("addlong", &pse::PSE::add_pybindwd, "add a new note to spell",
+        .def("addlong", &pse::PS13::add_pybindwd, "add a new note to spell",
              py::arg("midi"), py::arg("bar"), py::arg("simultaneous"),
              py::arg("dur_num"), py::arg("dur_den"))
         .def("spell", &pse::PS13::spell, "spell notes")

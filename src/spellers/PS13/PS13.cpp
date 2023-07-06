@@ -111,6 +111,7 @@ bool PS13::spell()
         assert(maxi < 7);
         assert(maxName != NoteName::Undef);
         _enum.rename(n, maxName);
+        DEBUGU("PS13: rename {} with {}", n, maxName);
     }
     
     return true;

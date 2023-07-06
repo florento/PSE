@@ -752,13 +752,16 @@ def eval_part(part, stat,
     print(len(ln), 'notes,', count_measures(part), 'bars,', end=' ')
     # create and initialize the speller (default is PSE)
     if algo == pse.Algo_PS13:
+        print('algo PS13', end='\n', flush=True)
         sp = pse.PS13()
         sp.set_Kpre(kpre)
         sp.set_Kpost(kpost)
-    if algo == pse.Algo_PS14:
+    elif algo == pse.Algo_PS14:
+        print('algo PS14', end='\n', flush=True)
         sp = pse.PS14()
         add_tons(nbtons, sp)
     else:
+        print('algo PSE', end='\n', flush=True)
         sp = pse.PSE()
         add_tons(nbtons, sp)
     sp.debug(debug)           
@@ -767,10 +770,11 @@ def eval_part(part, stat,
         sp.add(midi=n.pitch.midi, bar=b, simultaneous=s)
     # spell
     stat.start_timer()
-    #print('start Spelling part')
+    print('spell', end='\n', flush=True)
     sp.spell()
     stat.stop_timer()
     goodgtindex=0
+    print('spell finished', end='\n', flush=True)
     # extract tonality estimation results
     if (algo == pse.Algo_PSE or algo == pse.Algo_PS14):
         nbg=sp.globals0()
@@ -820,10 +824,12 @@ def eval_part(part, stat,
             if mark:
                 anote_global_part(part, sp, ton_est) 
 
+    print('BEFORE diff', end='\n', flush=True)
     # compute diff list between reference score and respell
     ld0 = diff(ln, sp) 
     print('diff:', len(ld0), end='\n', flush=True)
     # rewrite the passing notes
+    print('rewrite passing notes', end='\n', flush=True)
     sp.rewrite_passing()
     # compute diff list between reference score and rewritten
     ld1 = diff(ln, sp)
