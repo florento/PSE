@@ -30,6 +30,7 @@ void LG470(pse::Speller& sp);
 void BWV_857prelude(pse::Speller& sp);
 void BWV_857fugue(pse::Speller& sp);
 void BWV_858prelude(pse::Speller& sp);
+void BWV_864fugue(pse::Speller& sp);
 void BWV_875prelude(pse::Speller& sp);
 
 void Waldstein(pse::Speller& sp);

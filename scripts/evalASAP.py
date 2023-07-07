@@ -372,7 +372,7 @@ def eval_Bach(stat=ps.Stats(),
     stat.write_datasum(output_dir(composer='Bach')/'DWK_sum.csv')
     stat.show()
 
-eval_Bach(algo=ps.pse.Algo_PSE)
+#eval_Bach(algo=ps.pse.Algo_PSE)
 
 
 def DWV_num(bwv, mvt):

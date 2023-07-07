@@ -197,8 +197,10 @@ bool Speller1Pass::spell(const Cost& seed0, double diff0,
         delete _table0;
     }
     _table0 = new PST(_algo, seed0, _index, _enum, _debug); // std::unique_ptr<PST>
-       
     TRACE("pitch-spelling: {} bars", _table0->size());
+    
+    //DEBUGU("PSE: table dump");
+    //_table0->dump_rowcost();
 
     TRACE("pitch-spelling: estimate first list of global tonality candidates");
     if (_global0 != nullptr)

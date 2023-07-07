@@ -94,6 +94,9 @@ bool Speller2Pass::spell(const Cost& seed0, const Cost& seed1,
     // std::unique_ptr<PST>
     _table1 = new PST(*_table0, seed1, *_global0, *_locals0, _debug);
 
+    // DEBUGU("PSE: table dump");
+    //_table1->dump_rowcost();
+    
     TRACE("pitch-spelling: estimate second list of global tonality candidates");
     if (_global1 != nullptr) // should not happen
     {

@@ -184,8 +184,8 @@ public:
     /// correct the passing notes using 6 rewrite rules proposed by
     /// D. Meredith in the PS13 Pitch-Spelling algorithm, step 2.
     /// rules apply to trigrams of notes.
-    /// the lhs of every rule is defined by the distance in 1/2 tons between
-    /// the 3 notes:
+    /// the lhs of every rule is defined by the distance in 1/2 tons
+    /// between the 3 notes:
     /// - -1 +1  (broderie down)
     ///   ex. `C` `Cb` `C` $\to$ `C` `B` `C`
     /// - +1 -1  (broderie up)
