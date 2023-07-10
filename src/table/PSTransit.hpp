@@ -31,6 +31,7 @@ namespace pse {
 /// computation of configurations (PSC0) reached from other configurations
 /// by transition, when when reading one pitch or several simultaneous pitchs,
 /// according to the different pitch spelling algorithms implemented.
+/// @todo TBR OBSOLETE
 class Transition
 {
 public:

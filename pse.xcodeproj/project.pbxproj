@@ -328,6 +328,8 @@
 		436C6C4D2924023100152D8C /* NoteName.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = NoteName.hpp; path = src/pitch/NoteName.hpp; sourceTree = "<group>"; };
 		43791C8D29D8392200DE8796 /* TestAccidental.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TestAccidental.cpp; sourceTree = "<group>"; };
 		4380D1E82A4DB78700AC1164 /* TestCostADlex.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TestCostADlex.cpp; sourceTree = "<group>"; };
+		438587EB2A5C0631006FB312 /* PSChord.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = PSChord.cpp; path = chord/PSChord.cpp; sourceTree = "<group>"; };
+		438587EC2A5C0631006FB312 /* PSChord.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = PSChord.hpp; path = chord/PSChord.hpp; sourceTree = "<group>"; };
 		438EFD832A0E41DD00FF3733 /* Costt.tpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; path = Costt.tpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		438EFD842A0E41DD00FF3733 /* Costt.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Costt.hpp; sourceTree = "<group>"; };
 		43947D0029D972AF008EB20A /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = src/spellers/PS14/README.md; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.markdown; };
@@ -624,6 +626,8 @@
 			isa = PBXGroup;
 			children = (
 				4354069F29A8D2F90075B3B7 /* README.md */,
+				438587EC2A5C0631006FB312 /* PSChord.hpp */,
+				438587EB2A5C0631006FB312 /* PSChord.cpp */,
 			);
 			name = chord;
 			path = src;
@@ -656,6 +660,7 @@
 				433F8B6F2A0BE47B00085ABC /* TODO.md */,
 				4342FD1A2926B925004E914F /* CMakeLists.txt */,
 				43A2544A292CC61100D559D2 /* Makefile */,
+				436C6C9729240D8300152D8C /* extern */,
 				432E7A5129D45F78000E2B72 /* test */,
 				436C6C4B292401BC00152D8C /* sources */,
 				436C6C3E2924016F00152D8C /* Products */,
@@ -677,7 +682,6 @@
 			isa = PBXGroup;
 			children = (
 				43A25449292CC61100D559D2 /* README.md */,
-				436C6C9729240D8300152D8C /* extern */,
 				436C6C8E2924032000152D8C /* pybind */,
 				43A25448292BD4FE00D559D2 /* general */,
 				43A2543929280A6600D559D2 /* pitch */,

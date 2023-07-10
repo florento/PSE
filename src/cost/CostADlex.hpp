@@ -60,8 +60,8 @@ public:
     /// create a shared clone of this cost.
     virtual std::shared_ptr<Cost> shared_clone() const override;
     
-    /// create a smart clone of this cost.
-    virtual std::unique_ptr<Cost> unique_clone() const override;
+    // create a smart clone of this cost.
+    // virtual std::unique_ptr<Cost> unique_clone() const override;
     
     /// update this cost for doing a transition renaming one note (single
     /// or in chord) with the given parameters and in a given hypothetic global

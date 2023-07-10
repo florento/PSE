@@ -99,10 +99,11 @@ std::shared_ptr<Cost> CostADplus::shared_clone() const
     return std::shared_ptr<Cost>(new CostADplus(*this));
 }
 
-std::unique_ptr<Cost> CostADplus::unique_clone() const
-{
-    return std::unique_ptr<Cost>(new CostADplus(*this));
-}
+
+//std::unique_ptr<Cost> CostADplus::unique_clone() const
+//{
+//    return std::unique_ptr<Cost>(new CostADplus(*this));
+//}
 
 
 void CostADplus::update(const enum NoteName& name, const enum Accid& accid,

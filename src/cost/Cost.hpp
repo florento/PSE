@@ -38,8 +38,8 @@ public:
     /// create a shared clone of this cost.
     virtual std::shared_ptr<Cost> shared_clone() const = 0;
     
-    /// create a unique clone of this cost.
-    virtual std::unique_ptr<Cost> unique_clone() const = 0;
+    // create a unique clone of this cost.
+    // virtual std::unique_ptr<Cost> unique_clone() const = 0;
     
     /// equality (mandatory).
     /// @param rhs another cost to compare to.

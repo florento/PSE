@@ -93,10 +93,11 @@ std::shared_ptr<Cost> CostADlex::shared_clone() const
     return std::shared_ptr<Cost>(new CostADlex(*this));
 }
 
-std::unique_ptr<Cost> CostADlex::unique_clone() const
-{
-    return std::unique_ptr<Cost>(new CostADlex(*this));
-}
+
+//std::unique_ptr<Cost> CostADlex::unique_clone() const
+//{
+//    return std::unique_ptr<Cost>(new CostADlex(*this));
+//}
 
 
 void CostADlex::update(const enum NoteName& name, const enum Accid& accid,
