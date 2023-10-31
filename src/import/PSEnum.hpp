@@ -102,56 +102,57 @@ public:
     /// no note is accessible by this PS Enumerator.
     bool empty() const;
 
-    /// the given note index is within the interval of notes accessible
+    /// the note at the given index is within the interval of notes accessible
     /// to this enumerator.
     /// @param i index of note.
     virtual bool inside(size_t i) const;
 
-    /// the given note index is not within the interval of notes accessible
+    /// the note at the given index is not within the interval of notes accessible
     /// to this eumerator.
     /// @param i index of note.
     bool outside(size_t i) const;
 
-    /// midi key number in 0..128 of the note of the given index.
+    /// midi key number in 0..128 of the note at the given index.
     /// @param i index of a note. must be inside the interval of this enumerator.
     virtual unsigned int midipitch(size_t i) const = 0;
 
-    /// number of measure the note of given index belongs to.
-    /// midi key number in 0..128 of the note of the given index.
+    /// number of the measure containing the note at the given index.
     /// @param i index of a note. must be inside the interval of this enumerator.
     virtual long measure(size_t i) const = 0;
 
-    /// whether the note of given index is simultaneous with the next note.
+    /// whether the note at the given index is simultaneous with the next note.
     /// @param i index of a note. must be inside the interval of this enumerator.
     virtual bool simultaneous(size_t i) const = 0;
 
-    /// name for the note of given index, if it has been set,
+    // midi key number in 0..128 of the note of the given index.
+
+    /// name for the note at the given index, if it has been set,
     /// otherwise Undef.
     /// @param i index of note in the list of input notes.
     virtual enum NoteName name(size_t i) const = 0;
     
-    /// accidental for the note of given index, if it has been set,
+    /// accidental for the note at the given index, if it has been set,
     /// otherwise Undef.
     /// @param i index of note in the list of input notes.
     virtual enum Accid accidental(size_t i) const = 0;
     
-    /// octave number for the note of given index, if it has been set,
+    /// octave number for the note at the given index, if it has been set,
     /// otherwise 10.
     /// @param i index of note in the list of input notes.
     virtual int octave(size_t i) const = 0;
 
-    /// duration, in number of bars, of the note of given index,
+    /// duration, in number of bars, of the note at the given index,
     /// if it has been set, otherwise 0.
     /// @param i index of note in the list of input notes.
     virtual Rational duration(size_t i) const = 0;
     
-    /// print flag for the note of given index, if it has been set,
+    /// print flag for the note at the given index, if it has been set,
     /// otherwise true.
     /// This flags says wether the accidental of the note must be printed or not.
     /// @param i index of note in the list of input notes.
     virtual bool printed(size_t i) const = 0;
     
-    /// rename the note of given index
+    /// rename the note at the given index
     /// @param i index of a note in this enumerator.
     /// @param name note name in 'A'..'G'.
     /// @param accid accidental in [-2, 2] where 1 is a half tone
@@ -162,7 +163,7 @@ public:
                         const enum NoteName& name, const enum Accid& accid,
                         int oct, bool altprint) = 0;
     
-    /// rename the note of given index, given a name.
+    /// rename the note at the given index, given a name.
     /// The accidental and octave number are deduced from the other parameters
     /// (MIDI key and the name).
     /// @param i index of a note in this enumerator.

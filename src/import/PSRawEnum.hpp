@@ -47,7 +47,7 @@ public:
     /// undefined octave number.
     static int OCTAVE_UNDEF;
 
-    /// Pitch Spelling enumerator with initialy empty list of notes.
+    /// Pitch Spelling enumerator with list of notes, initialy empty.
     /// @param i0 index of the first note accessible by this enumerator.
     /// @param i1 index of the note after the last note accessible by this
     /// enumerator. optional (can be ommited for open PS Enum).
