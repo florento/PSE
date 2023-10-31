@@ -1,8 +1,10 @@
 # PSE
-Pitch Spelling Algorithms
-based on optimization of Engraving-based info.
+Algorithms for joint pitch spelling and global and local key estimation, based on optimisation of engraving info.
+
+
 
 to compile:
+
 ```shell
 mkdir build
 cd build
