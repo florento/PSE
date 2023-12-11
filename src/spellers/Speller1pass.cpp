@@ -159,6 +159,7 @@ size_t Speller1Pass::ilocal(size_t i, size_t j) const
     return TonIndex::UNDEF;
 }
 
+
 const Ton& Speller1Pass::local(size_t i, size_t j) const
 {
     size_t it = ilocal(i, j);

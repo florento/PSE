@@ -158,7 +158,8 @@ void CostAD::update(const enum NoteName& name,
     {
         if (lton.getMode() == ModeName::Minor)
         {
-            if (lton.accidDia(name, ModeName::MinorNat)==accid || lton.accidDia(name, ModeName::MinorMel)==accid)
+            if (lton.accidDia(name, ModeName::MinorNat)==accid || 
+                lton.accidDia(name, ModeName::MinorMel)==accid)
             {
                 //_dist += 1;
                 boo=false;

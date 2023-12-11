@@ -86,7 +86,7 @@ const std::array<std::array<enum Accid, 7>, 15> Ton::MIN_MEL =
     { _0N, _0N, _0N, _1S, _0N, _0N, _1F }, // -2  G  min mel
     { _1S, _0N, _0N, _0N, _0N, _0N, _0N }, // -1  D  min mel
     { _0N, _0N, _0N, _1S, _1S, _0N, _0N }, //  0  A  min mel
-    { _1S, _1S, _0N, _1S, _0N, _0N, _0N }, // 1  E  min mel
+    { _1S, _1S, _0N, _1S, _0N, _0N, _0N }, //  1  E  min mel
     { _1S, _0N, _0N, _1S, _1S, _1S, _0N }, //  2  B  min mel
     { _1S, _1S, _1S, _1S, _1S, _0N, _0N }, //  3  F# min mel
     { _1S, _1S, _0N, _1S, _1S, _1S, _1S }, //  4  C# min mel

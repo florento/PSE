@@ -400,9 +400,9 @@ unsigned int PSState::dist(const Ton& ton) const
 // static
 // not used ?
 unsigned int PSState::dist(const PSState& astate1,
-                              const PSState& ajoker1,
-                              const PSState& astate2,
-                              const PSState& ajoker2)
+                           const PSState& ajoker1,
+                           const PSState& astate2,
+                           const PSState& ajoker2)
 {
     unsigned int res = 0;
     

@@ -19,6 +19,7 @@
 		430627C52A4586370046FD99 /* CostADlex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 430627BC2A44D34D0046FD99 /* CostADlex.cpp */; };
 		430627C62A4586380046FD99 /* CostADlex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 430627BC2A44D34D0046FD99 /* CostADlex.cpp */; };
 		430627C72A4586380046FD99 /* CostADlex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 430627BC2A44D34D0046FD99 /* CostADlex.cpp */; };
+		4306C0EC2B27156700CD3FAE /* pypse.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4342FD1629268C78004E914F /* pypse.cpp */; };
 		4308A7082A28DF0F007F7A55 /* TestState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4308A7072A28DF0F007F7A55 /* TestState.cpp */; };
 		4308A70A2A28E04F007F7A55 /* TestTon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4308A7092A28E04F007F7A55 /* TestTon.cpp */; };
 		4308A70C2A28EC9B007F7A55 /* TestKeyFifth.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4308A70B2A28EC9B007F7A55 /* TestKeyFifth.cpp */; };
@@ -157,7 +158,6 @@
 		43ABA52F29242418002AC1D4 /* PSTable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43ABA51F29242418002AC1D4 /* PSTable.cpp */; };
 		43ABA53029242418002AC1D4 /* PSConfig0.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 43ABA52029242418002AC1D4 /* PSConfig0.hpp */; };
 		43ABA53129242418002AC1D4 /* PSConfig0.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43ABA52129242418002AC1D4 /* PSConfig0.cpp */; };
-		43B4939B2948D9F9006435B1 /* pypse.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4342FD1629268C78004E914F /* pypse.cpp */; };
 		43C2BA10299946150084AB3B /* Interval.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43C2BA0E299946150084AB3B /* Interval.cpp */; };
 		43C2BA11299946150084AB3B /* Interval.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43C2BA0E299946150084AB3B /* Interval.cpp */; };
 		43C2BA12299946150084AB3B /* Interval.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 43C2BA0F299946150084AB3B /* Interval.hpp */; };
@@ -1067,8 +1067,8 @@
 				431586352983E89B00918B1B /* PSRawEnum.cpp in Sources */,
 				43F9BE6E29CC7DB000B0A7F8 /* ModeFactory.cpp in Sources */,
 				432EF6AD292D405400C620CF /* Speller.cpp in Sources */,
-				43B4939B2948D9F9006435B1 /* pypse.cpp in Sources */,
 				43D7BAB32A27CFA500570C47 /* Speller1pass.cpp in Sources */,
+				4306C0EC2B27156700CD3FAE /* pypse.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

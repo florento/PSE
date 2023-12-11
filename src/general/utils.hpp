@@ -13,6 +13,8 @@
 #define utils_hpp
 
 #include <iostream>
+#include <assert.h>
+
 
 namespace pse {
 

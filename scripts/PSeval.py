@@ -9,10 +9,12 @@ Created on Wed Nov 23 13:18:18 2022
 #import sys
 import os
 import time
+from pathlib import Path, PosixPath
 from dataclasses import dataclass
 import numpy as np
 import pandas as pd
 import music21 as m21
+import subprocess # run command line
 import pse
 
 # import module with full path
@@ -28,6 +30,7 @@ import pse
 #spec.loader.exec_module(pse)
 
 print(pse.excuseme)
+
 ###############
 ##           ##
 ## M21 to PS ##
@@ -710,11 +713,11 @@ def sp_errors(df):
 # df2 = df.append(df[['notes','err']].sum(),ignore_index=True).fillna('')
 
 
-#########################
-##                     ##
-##    evaluation       ##
-##                     ##
-#########################
+###################################
+##                               ##
+##    evaluation, reporting      ##
+##                               ##
+###################################
 
 choix_enharmonie = 0
 
@@ -883,6 +886,40 @@ def empty_difflist(lld):
         else:
             return False
     return True
+
+
+# path to MuseScore command line
+_musescore = '/Applications/MuseScore 4.app/Contents/MacOS/mscore'
+
+def is_musicxml(p, filename):
+    ''' the given filename in directory of path p is a musicxml'''
+    pf = pf = Path(p, filename)
+    return os.path.isfile(pf) and pf.suffix in ['.xml', '.mxml', '.musicxml']    
+
+def mk_pdf(p, filename):
+    ''' make a pdf from the given musicxml filename, in directory of path p'''
+    if not is_musicxml(p, filename):
+        print('ERROR mk_pdf: ', filename, 'not a musicxml file')
+        return
+    xml = Path(p, filename)
+    stem = os.path.splitext(filename)[0]
+    pdf = Path(p, stem+'.pdf')
+    subprocess.run([_musescore, str(xml), "-o", str(pdf)]) 
+
+def mk_pdfs(p):
+    ''' make a pdf from every musicxml file found under directory of path p'''
+    if not os.path.isdir(p):
+        print('ERROR mk_pdfs: ', p, 'not a dir')
+        return
+    else:
+        print('making pdfs in:', p)        
+    for f in os.listdir(p):
+        if is_musicxml(p, f):
+            print('making pdf of', f)            
+            mk_pdf(p, f)
+        elif os.path.isdir(Path(p, f)):
+            mk_pdfs(Path(p, f))
+        # else ignore
     
     # struct storing detailed evaluation errors for one score
     #class Errors:

@@ -109,7 +109,7 @@ public:
     /// @return the key signature in -7..7
     KeyFifth keySignature() const;
 
-protected:
+protected: //data
 
     /// mode of scale
     ModeName _mode;
@@ -127,6 +127,8 @@ protected:
     KeyFifth _ks;
 
     // void init_ks();
+
+protected:
     
     /// mode is major diatonic
     static bool major(const Mode& mode);
