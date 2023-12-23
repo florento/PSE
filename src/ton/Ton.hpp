@@ -221,6 +221,12 @@ private:
     /// for every key signature in -7..7.
     static const std::array<std::array<enum Accid, 7>, 15> MIN_MEL;
     
+    static const std::array<std::array<enum Accid, 7>, 15> DOR;
+    static const std::array<std::array<enum Accid, 7>, 15> PHRYG;
+    static const std::array<std::array<enum Accid, 7>, 15> LYD;
+    static const std::array<std::array<enum Accid, 7>, 15> MIXO;
+    static const std::array<std::array<enum Accid, 7>, 15> LOC;
+    
     /// accidental in the key signature of this ton for a given pitch name.
     /// @param n a note name, in 0..6 (0 is 'C', 6 is 'B').
     /// @return the accidental, in the key signature, for n, in -2..2.

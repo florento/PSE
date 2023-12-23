@@ -95,6 +95,104 @@ const std::array<std::array<enum Accid, 7>, 15> Ton::MIN_MEL =
     { _1S, _1S, _1S, _2S, _2S, _1S, _1S },  // 7  A# min mel
 }};
 
+const std::array<std::array<enum Accid, 7>, 15> Ton::DOR =
+{{
+    { _1F, _1F, _1F, _0N, _1F, _1F, _1F }, // -7  Ab dor
+    { _0N, _1F, _1F, _0N, _1F, _1F, _1F }, // -6  Eb dor
+    { _0N, _1F, _1F, _0N, _0N, _1F, _1F }, // -5  Bb dor
+    { _0N, _0N, _1F, _0N, _0N, _1F, _1F }, // -4  F  dor
+    { _0N, _0N, _1F, _0N, _0N, _0N, _1F }, // -3  C  dor
+    { _0N, _0N, _0N, _0N, _0N, _0N, _1F }, // -2  G  dor
+    { _0N, _0N, _0N, _0N, _0N, _0N, _0N }, // -1  D  dor
+    { _0N, _0N, _0N, _1S, _0N, _0N, _0N }, //  0  A  dor
+    { _1S, _0N, _0N, _1S, _0N, _0N, _0N }, //  1  E  dor
+    { _1S, _0N, _0N, _1S, _1S, _0N, _0N }, //  2  B  dor
+    { _1S, _1S, _0N, _1S, _1S, _0N, _0N }, //  3  F# dor
+    { _1S, _1S, _0N, _1S, _1S, _1S, _0N }, //  4  C# dor
+    { _1S, _1S, _1S, _1S, _1S, _1S, _0N }, //  5  G# dor
+    { _1S, _1S, _1S, _1S, _1S, _1S, _1S }, //  6  D# dor
+    { _1S, _1S, _1S, _2S, _1S, _1S, _1S },  // 7  A# dor
+}};
+
+
+const std::array<std::array<enum Accid, 7>, 15> Ton::PHRYG =
+{{
+    { _1F, _1F, _1F, _1F, _1F, _1F, _2F }, // -7  Ab phryg
+    { _1F, _1F, _1F, _1F, _1F, _1F, _1F }, // -6  Eb phryg
+    { _1F, _1F, _1F, _0N, _1F, _1F, _1F }, // -5  Bb phryg
+    { _0N, _1F, _1F, _0N, _1F, _1F, _1F }, // -4  F  phryg
+    { _0N, _1F, _1F, _0N, _0N, _1F, _1F }, // -3  C  phryg
+    { _0N, _0N, _1F, _0N, _0N, _1F, _1F }, // -2  G  phryg
+    { _0N, _0N, _1F, _0N, _0N, _0N, _1F }, // -1  D  phryg
+    { _0N, _0N, _0N, _0N, _0N, _0N, _1F }, //  0  A  phryg
+    { _0N, _0N, _0N, _0N, _0N, _0N, _0N }, //  1  E  phryg
+    { _0N, _0N, _0N, _1S, _0N, _0N, _0N }, //  2  B  phryg
+    { _1S, _0N, _0N, _1S, _0N, _0N, _0N }, //  3  F# phryg
+    { _1S, _0N, _0N, _1S, _1S, _0N, _0N }, //  4  C# phryg
+    { _1S, _1S, _0N, _1S, _1S, _0N, _0N }, //  5  G# phryg
+    { _1S, _1S, _0N, _1S, _1S, _1S, _0N }, //  6  D# phryg
+    { _1S, _1S, _1S, _1S, _1S, _1S, _0N },  // 7  A# phryg
+}};
+
+
+const std::array<std::array<enum Accid, 7>, 15> Ton::LYD =
+{{
+    { _1F, _1F, _1F, _0N, _1F, _1F, _1F }, // -7  Cb lyd
+    { _0N, _1F, _1F, _0N, _1F, _1F, _1F }, // -6  Gb lyd
+    { _0N, _1F, _1F, _0N, _0N, _1F, _1F }, // -5  Db lyd
+    { _0N, _0N, _1F, _0N, _0N, _1F, _1F }, // -4  Ab lyd
+    { _0N, _0N, _1F, _0N, _0N, _0N, _1F }, // -3  Eb lyd
+    { _0N, _0N, _0N, _0N, _0N, _0N, _1F }, // -2  Bb lyd
+    { _0N, _0N, _0N, _0N, _0N, _0N, _0N }, // -1  F  lyd
+    { _0N, _0N, _0N, _1S, _0N, _0N, _0N }, //  0  C  lyd
+    { _1S, _0N, _0N, _1S, _0N, _0N, _0N }, //  1  G  lyd
+    { _1S, _0N, _0N, _1S, _1S, _0N, _0N }, //  2  D  lyd
+    { _1S, _1S, _0N, _1S, _1S, _0N, _0N }, //  3  A  lyd
+    { _1S, _1S, _0N, _1S, _1S, _1S, _0N }, //  4  E  lyd
+    { _1S, _1S, _1S, _1S, _1S, _1S, _0N }, //  5  B  lyd
+    { _1S, _1S, _1S, _1S, _1S, _1S, _1S }, //  6  F# lyd
+    { _1S, _1S, _1S, _2S, _1S, _1S, _1S }  //  7  C# lyd
+}};
+
+
+const std::array<std::array<enum Accid, 7>, 15> Ton::MIXO =
+{{
+    { _1F, _1F, _1F, _1F, _1F, _1F, _2F }, // -7  Cb mix
+    { _1F, _1F, _1F, _1F, _1F, _1F, _1F }, // -6  Gb mix
+    { _1F, _1F, _1F, _0N, _1F, _1F, _1F }, // -5  Db mix
+    { _0N, _1F, _1F, _0N, _1F, _1F, _1F }, // -4  Ab mix
+    { _0N, _1F, _1F, _0N, _0N, _1F, _1F }, // -3  Eb mix
+    { _0N, _0N, _1F, _0N, _0N, _1F, _1F }, // -2  Bb mix
+    { _0N, _0N, _1F, _0N, _0N, _0N, _1F }, // -1  F  mix
+    { _0N, _0N, _0N, _0N, _0N, _0N, _1F }, //  0  C  mix
+    { _0N, _0N, _0N, _0N, _0N, _0N, _0N }, //  1  G  mix
+    { _0N, _0N, _0N, _1S, _0N, _0N, _0N }, //  2  D  mix
+    { _1S, _0N, _0N, _1S, _0N, _0N, _0N }, //  3  A  mix
+    { _1S, _0N, _0N, _1S, _1S, _0N, _0N }, //  4  E  mix
+    { _1S, _1S, _0N, _1S, _1S, _0N, _0N }, //  5  B  mix
+    { _1S, _1S, _0N, _1S, _1S, _1S, _0N }, //  6  F# mix
+    { _1S, _1S, _1S, _1S, _1S, _1S, _0N }  //  7  C# mix
+}};
+
+
+const std::array<std::array<enum Accid, 7>, 15> Ton::LOC =
+{{
+    { _1F, _1F, _2F, _1F, _1F, _1F, _2F }, // -7  Ab loc
+    { _1F, _1F, _1F, _1F, _1F, _1F, _2F }, // -6  Eb loc
+    { _1F, _1F, _1F, _1F, _1F, _1F, _1F }, // -5  Bb loc
+    { _1F, _1F, _1F, _0N, _1F, _1F, _1F }, // -4  F  loc
+    { _0N, _1F, _1F, _0N, _1F, _1F, _1F }, // -3  C  loc
+    { _0N, _1F, _1F, _0N, _0N, _1F, _1F }, // -2  G  loc
+    { _0N, _0N, _1F, _0N, _0N, _1F, _1F }, // -1  D  loc
+    { _0N, _0N, _1F, _0N, _0N, _0N, _1F }, //  0  A  loc
+    { _0N, _0N, _0N, _0N, _0N, _0N, _1F }, //  1  E  loc
+    { _0N, _0N, _0N, _0N, _0N, _0N, _0N }, //  2  B  loc
+    { _0N, _0N, _0N, _1S, _0N, _0N, _0N }, //  3  F# loc
+    { _1S, _0N, _0N, _1S, _0N, _0N, _0N }, //  4  C# loc
+    { _1S, _0N, _0N, _1S, _1S, _0N, _0N }, //  5  G# loc
+    { _1S, _1S, _0N, _1S, _1S, _0N, _0N }, //  6  D# loc
+    { _1S, _1S, _0N, _1S, _1S, _1S, _0N },  // 7  A# loc
+}};
 
 Ton::Ton():
 KeyFifth(0),
@@ -223,14 +321,19 @@ enum Accid Ton::accidDia(int n, ModeName mode) const
         case ModeName::MinorMel:
             return MIN_MEL[_sig + 7][n];
             
-        case ModeName::Ionian:
+        //case ModeName::Ionian:
         case ModeName::Dorian:
+            return DOR[_sig + 7][n];
         case ModeName::Phrygian:
+            return PHRYG[_sig + 7][n];
         case ModeName::Lydian:
+            return LYD[_sig + 7][n];
         case ModeName::Mixolydian:
+            return MIXO[_sig + 7][n];
         case ModeName::Aeolian:
+            return KEYS[_sig + 7][n];
         case ModeName::Locrian:
-            return KEYS[_sig + 7][n]; // todo
+            return LOC[_sig + 7][n];
             
         default:
         {
