@@ -164,6 +164,140 @@ def eval_Chopin(no=1,stat=ps.Stats(), algo=ps.pse.Algo_PSE,
 #no=int(input("numéro d'étude? "))
 #eval_Chopin(no=no) #algo=ps.pse.Algo_PS14)
 
+def eval_Chopin1(no=1,stat=ps.Stats(), algo=ps.pse.Algo_PSE,
+                   nbtons=30,          # for PSE
+                   kpre=33, kpost=23, # for PS13
+                   dflag=True, mflag=False):
+    global _dataset_root
+    global _generic_score
+    if stat == None:
+        stat = ps.Stats()
+    filep = Path(_dataset_root)/'Chopin'/'Etudes_op_25'/str(no)/_generic_score
+    eval_asapscore(sid=no, file=filep, stat=stat,
+                   title='', composer='Chopin',
+                   psalgo=algo, tons=nbtons, kpre=kpre, kpost=kpost,
+                   dflag=dflag, mflag=mflag)
+
+#no=int(input("numéro d'étude? "))
+#eval_Chopin1(no=no) #algo=ps.pse.Algo_PS14)
+
+def eval_Chopin(stat=ps.Stats(), algo=ps.pse.Algo_PSE,
+                   nbtons=30,          # for PSE
+                   kpre=33, kpost=23, # for PS13
+                   dflag=True, mflag=False):
+    global _generic_score
+    print('eval ASAP/Chopin with algo', algo)
+    frederic = 'Chopin'
+    p2 = Path(_dataset_root)/'Chopin'/'Etudes_op_25'
+    p1 = Path(_dataset_root)/'Chopin'/'Etudes_op_10'
+    Rachma_skip=[]
+    Rachma_list=[[1,10,p1/str(1)/_generic_score],[2,10,p1/str(2)/_generic_score],[3,10,p1/str(3)/_generic_score],[4,10,p1/str(4)/_generic_score],[5,10,p1/str(5)/_generic_score],[7,10,p1/str(7)/_generic_score],[8,10,p1/str(8)/_generic_score],[10,10,p1/str(10)/_generic_score],[12,10,p1/str(12)/_generic_score],[1,25,p2/str(1)/_generic_score],[2,25,p2/str(2)/_generic_score],[4,25,p2/str(4)/_generic_score],[5,25,p2/str(5)/_generic_score],[8,25,p2/str(8)/_generic_score],[10,25,p2/str(10)/_generic_score],[11,25,p2/str(11)/_generic_score],[12,25,p2/str(12)/_generic_score]]
+    if stat == None:
+        stat = ps.Stats()
+    for o in Rachma_list:
+        if (o[0], o[1]) in Rachma_skip:
+            print(o[0], o[1], ': SKIP')
+            continue
+        else:
+            print(o[0], o[1], ':', o[2])
+            eval_asapscore(sid=o[0], file=o[2], stat=stat,
+                           title='Preludes_op_'+str(o[1])+str(o[0]), composer=frederic,
+                           psalgo=algo, tons=nbtons, kpre=kpre, kpost=kpost,
+                           dflag=dflag, mflag=False)
+    df = stat.get_dataframe()
+    revise_table_asap(df)
+    df.to_csv(output_dir(composer=frederic)/(frederic+'_etudes.csv'), header=True, index=False)
+    stat.write_datasum(output_dir(composer=frederic)/(frederic+'_etudes_sum.csv'))
+    stat.show()
+
+#eval_Chopin(algo=ps.pse.Algo_PS14)
+
+def Mozart_list():
+    """list of Opus (sonata nb, mvt, file) of Beethoven Sonatas in ASAP"""
+    global _dataset_root
+    global _generic_score
+    dir_re = re.compile("(\d+)-(\d)_?\d?$")
+    bl = []
+    p = Path(_dataset_root)/'Mozart'/'Piano_Sonatas'
+    assert(os.path.isdir(p))
+    for d in os.listdir(p):
+        dm = dir_re.match(d)
+        if dm == None:
+            continue
+        po = p / d / _generic_score
+        assert(os.path.isfile(po))
+        bl.append(Opus((dm.group(1)), int(dm.group(2)), str(po)))
+    p = Path(_dataset_root)/'Mozart'/'Fantasie_475'
+    assert(os.path.isdir(p))
+    po = p / _generic_score
+    assert(os.path.isfile(po))
+    bl.append(Opus((dm.group(1)), int(dm.group(2)), str(po)))
+
+    bl = sorted(bl, key=attrgetter('nb', 'mvt'))
+    return bl
+
+def eval_Mozart(stat=ps.Stats(), algo=ps.pse.Algo_PSE,
+                   nbtons=30,          # for PSE
+                   kpre=33, kpost=23, # for PS13
+                   dflag=True, mflag=False):
+    global _dataset_root
+    global _generic_score
+    Mozart_skip=[]
+    wolfgang="Mozart"
+    if stat == None:
+        stat = ps.Stats()
+    for o in Mozart_list():
+        if (o.nb, o.mvt) in Mozart_skip:
+            print(o.nb, o.mvt, ': SKIP')
+            continue
+        else:
+            print(o.nb, o.mvt, ':', o.file)
+            eval_asapscore(sid=o.nb, file=o.file, stat=stat,
+                           title='Sonata_'+str(o.nb)+'_'+str(o.mvt), composer=wolfgang,
+                           psalgo=algo, tons=nbtons, kpre=kpre, kpost=kpost,
+                           dflag=dflag, mflag=mflag)
+    # write table and summary to files and display stats
+    df = stat.get_dataframe()
+    revise_table_asap(df)
+    df.to_csv(output_dir(composer=wolfgang)/(wolfgang+'_sonata.csv'), header=True, index=False)
+    stat.write_datasum(output_dir(composer=wolfgang)/(wolfgang+'_sonata_sum.csv'))
+    stat.show()
+
+#eval_Mozart()
+
+
+def eval_Rachmaninov(stat=ps.Stats(), algo=ps.pse.Algo_PSE,
+                   nbtons=30,          # for PSE
+                   kpre=33, kpost=23, # for PS13
+                   dflag=True, mflag=False):
+    global _generic_score
+    print('eval ASAP/Rachmaninoff with algo', algo)
+    sergei = 'Rachmaninoff'
+    p1 = Path(_dataset_root)/'Rachmaninoff'/'Preludes_op_23'
+    p2 = Path(_dataset_root)/'Rachmaninoff'/'Preludes_op_32'
+    Rachma_skip=[]
+    Rachma_list=[[4,23,p1/str(4)/_generic_score],[6,23,p1/str(6)/_generic_score],[5,32,p2/str(5)/_generic_score],[10,32,p2/str(10)/_generic_score]]
+    if stat == None:
+        stat = ps.Stats()
+    for o in Rachma_list:
+        if (o[0], o[1]) in Rachma_skip:
+            print(o[0], o[1], ': SKIP')
+            continue
+        else:
+            print(o[0], o[1], ':', o[2])
+            eval_asapscore(sid=o[0], file=o[2], stat=stat,
+                           title='Preludes_op_'+str(o[1])+str(o[0]), composer=sergei,
+                           psalgo=algo, tons=nbtons, kpre=kpre, kpost=kpost,
+                           dflag=dflag, mflag=False)
+    df = stat.get_dataframe()
+    revise_table_asap(df)
+    df.to_csv(output_dir(composer=sergei)/(sergei+'_preludes.csv'), header=True, index=False)
+    stat.write_datasum(output_dir(composer=sergei)/(sergei+'_preludes_sum.csv'))
+    stat.show()
+#eval_Rachmaninov(algo=ps.pse.Algo_PS14)
+
+##eval_Rachmaninov(algo=ps.pse.Algo_PS13)
+
 #########################
 ##                     ##
 ##  Beethoven Sonatas  ##
