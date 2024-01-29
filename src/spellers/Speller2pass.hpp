@@ -76,6 +76,7 @@ public:
     size_t globals0() const;
     
     const Ton& global0(size_t n=0) const;
+    
     /// index of the n-best estimated global tonality,
     /// after first pass.
     /// @param n number of candidate estimated global tonality,

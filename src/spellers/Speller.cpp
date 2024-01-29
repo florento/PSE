@@ -122,21 +122,21 @@ void Speller::resetTons()
 }
 
 
-void Speller::addTon(const Ton& ton)
+void Speller::addTon(const Ton& ton, bool global)
 {
     TRACE("Speller: add tonality {}", ton);
     _index.add(ton);
 }
 
 
-void Speller::addTon(int ks, ModeName mode)
+void Speller::addTon(int ks, ModeName mode, bool global)
 {
     if (ks < -7 || 7 < ks)
     {
         ERROR("Speller addTon: wrong key signature value {}", ks);
     }
     TRACE("Speller: add tonality {} {}", ks, mode);
-    _index.add(ks, mode);
+    _index.add(ks, mode, global);
 }
 
 

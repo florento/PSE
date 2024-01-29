@@ -63,7 +63,8 @@ size_t Speller1Pass::globalCands(const PSO* g) const // std::shared_ptr<PSO>
     }
 }
 
- 
+
+/// @todo def in PSO
 const Ton& Speller1Pass::globalCand(size_t i, const PSO* g) const // std::shared_ptr<PSO>
 {
     // size_t it = iglobalCand(i);
@@ -84,6 +85,7 @@ const Ton& Speller1Pass::globalCand(size_t i, const PSO* g) const // std::shared
 }
  
 
+/// @todo def in PSO
 size_t Speller1Pass::iglobalCand(size_t i, const PSO* g) const // std::shared_ptr<PSO>
 {
     if ((g != nullptr) && (i <  g->size()))

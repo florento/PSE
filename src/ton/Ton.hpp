@@ -28,8 +28,8 @@ namespace pse {
 
 // class PSState;
 
-/// A tonality is the combination of a Key Spse::Ton::Tonature in -7..7 and a Mode.
-/// (only diatonic scales)
+/// A tonality is the combination of a Key Signature in -7..7 and a Mode.
+/// (only diatonic scales).
 ///
 /// | ks | Maj | Min  | sens (harm) |
 /// |:--:|:---:|:----:|:-----------:|

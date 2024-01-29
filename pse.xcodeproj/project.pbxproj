@@ -324,7 +324,7 @@
 		43600D582A45CA3A002704E0 /* Costtt.tpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; path = Costtt.tpp; sourceTree = "<group>"; };
 		43600D592A45CA3A002704E0 /* Costtt.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Costtt.hpp; sourceTree = "<group>"; };
 		4363442C29D31D8700F5D628 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		436C6C3D2924016F00152D8C /* pse.cpython-311-darwin.so */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = "pse.cpython-311-darwin.so"; sourceTree = BUILT_PRODUCTS_DIR; };
+		436C6C3D2924016F00152D8C /* pse.cpython-312-darwin.so */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = "pse.cpython-312-darwin.so"; sourceTree = BUILT_PRODUCTS_DIR; };
 		436C6C4D2924023100152D8C /* NoteName.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = NoteName.hpp; path = src/pitch/NoteName.hpp; sourceTree = "<group>"; };
 		43791C8D29D8392200DE8796 /* TestAccidental.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TestAccidental.cpp; sourceTree = "<group>"; };
 		4380D1E82A4DB78700AC1164 /* TestCostADlex.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TestCostADlex.cpp; sourceTree = "<group>"; };
@@ -671,7 +671,7 @@
 		436C6C3E2924016F00152D8C /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				436C6C3D2924016F00152D8C /* pse.cpython-311-darwin.so */,
+				436C6C3D2924016F00152D8C /* pse.cpython-312-darwin.so */,
 				43FBEABD2930CD21008FC486 /* debugpse */,
 				435081D329D6C09A00465943 /* testpse */,
 			);
@@ -887,7 +887,7 @@
 			);
 			name = pse;
 			productName = pse;
-			productReference = 436C6C3D2924016F00152D8C /* pse.cpython-311-darwin.so */;
+			productReference = 436C6C3D2924016F00152D8C /* pse.cpython-312-darwin.so */;
 			productType = "com.apple.product-type.library.dynamic";
 		};
 		43FBEABC2930CD21008FC486 /* debugpse */ = {
@@ -1317,7 +1317,7 @@
 				DEAD_CODE_STRIPPING = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
-				EXECUTABLE_EXTENSION = "cpython-311-darwin.so";
+				EXECUTABLE_EXTENSION = "cpython-312-darwin.so";
 				EXECUTABLE_PREFIX = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1346,7 +1346,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SYSTEM_HEADER_SEARCH_PATHS = (
-					"$(LOCAL_LIBRARY_DIR)/Frameworks/Python.framework/Versions/3.10/Headers",
+					"$(LOCAL_LIBRARY_DIR)/Frameworks/Python.framework/Versions/3.12/Headers",
 					extern/spdlog/include,
 					/Users/augustinbouquillard/anaconda3/bin/python,
 				);
@@ -1365,7 +1365,7 @@
 				DEAD_CODE_STRIPPING = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
-				EXECUTABLE_EXTENSION = "cpython-311-darwin.so";
+				EXECUTABLE_EXTENSION = "cpython-312-darwin.so";
 				EXECUTABLE_PREFIX = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1394,7 +1394,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SYSTEM_HEADER_SEARCH_PATHS = (
-					"$(LOCAL_LIBRARY_DIR)/Frameworks/Python.framework/Versions/3.10/Headers",
+					"$(LOCAL_LIBRARY_DIR)/Frameworks/Python.framework/Versions/3.12/Headers",
 					extern/spdlog/include,
 					/Users/augustinbouquillard/anaconda3/bin/python,
 				);

@@ -30,6 +30,7 @@ class PST;
 
 /// Grid of estimated local tonalities, for each measure (X) and
 /// each possible global tonality (Y) in a TonIndex.
+/// @todo grid with a different TonIndex as the PST table
 class PSG
 {
 public:

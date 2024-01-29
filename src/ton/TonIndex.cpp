@@ -20,7 +20,7 @@ const size_t TonIndex::UNDEF  = MAXTONS+1;
 const size_t TonIndex::FAILED = MAXTONS+2;
 
 TonIndex::TonIndex(size_t n):
-_tons(), // empty vector
+_tons(), // vector initially empty
 _rankWeber(),
 _closed(false)
 {
@@ -74,14 +74,22 @@ bool TonIndex::empty() const
 const Ton& TonIndex::ton(size_t i) const
 {
     assert(i < _tons.size());
-    return _tons.at(i);
+    return _tons.at(i).first;
+}
+
+
+bool TonIndex::global(size_t i) const
+{
+    assert(i < _tons.size());
+    return _tons.at(i).second;
+
 }
 
 
 size_t TonIndex::find(const Ton& ton) const
 {
     for (size_t i = 0; i < _tons.size(); ++i)
-        if (_tons.at(i) == ton)
+        if (_tons.at(i).first == ton)
             return i;
 
     ERROR("TonIndex find: {} not found", ton);
@@ -95,7 +103,7 @@ size_t TonIndex::find(int ks, const ModeName& mode) const
     assert(ks <= 7);
     for (size_t i = 0; i < _tons.size(); ++i)
     {
-        const Ton& toni = _tons.at(i);
+        const Ton& toni = _tons.at(i).first;
         if (toni.fifths() == ks && toni.getMode() == mode)
             return i;
     }
@@ -107,7 +115,7 @@ size_t TonIndex::find(int ks, const ModeName& mode) const
 size_t TonIndex::enharmonic(size_t i) const
 {
     assert(i < _tons.size());
-    const Ton& toni = _tons.at(i);
+    const Ton& toni = _tons.at(i).first;
     int ks = toni.fifths();
     assert(-7 <= ks);
     assert(ks <= 7);
@@ -148,19 +156,22 @@ void TonIndex::reset()
 }
 
 
-void TonIndex::add(const Ton& ton)
+void TonIndex::add(const Ton& ton, bool global)
 {
     if (_tons.size() < MAXTONS)
-        _tons.push_back(ton); // copy
+        _tons.push_back(std::make_pair(ton, global)); // copy
     else
         ERROR("TonIndex: array of tons overfull");
 }
 
 
-void TonIndex::add(int ks, const ModeName& mode)
+void TonIndex::add(int ks, const ModeName& mode, bool global)
 {
     if (_tons.size() < MAXTONS)
-        _tons.emplace_back(ks, mode);
+    {
+        //_tons.emplace_back(ks, mode);
+        _tons.push_back(std::make_pair(Ton(ks, mode), global)); // copy
+    }
     else
         ERROR("TonIndex: array of tons overfull");
 }
@@ -182,26 +193,69 @@ bool TonIndex::closed() const
 void TonIndex::init13(const ModeName& mode)
 {
     assert(mode != ModeName::Undef);
+    bool f_global = global(mode);
     for (int ks = -6; ks <= 6; ++ks)
-        _tons.emplace_back(ks, mode);
+        add(ks, mode, f_global);
 }
 
 
 void TonIndex::init15(const ModeName& mode)
 {
     assert(mode != ModeName::Undef);
-    _tons.emplace_back(-7, mode);
+    bool f_global = global(mode);
+    add(-7, mode, f_global);
     init13(mode);
-    _tons.emplace_back(7, mode);
+    add(7, mode, f_global);
 }
 
 
 void TonIndex::init25()
 {
     for (int ks = -4; ks <= 7; ++ks)
-        _tons.emplace_back(ks, ModeName::Major);
+        add(ks, ModeName::Major, true);
     for (int ks = -6; ks <= 6; ++ks)
-        _tons.emplace_back(ks, ModeName::Minor);
+        add(ks, ModeName::Minor, true);
+}
+
+
+// static
+bool TonIndex::global(const ModeName& m)
+{
+    switch (m)
+    {
+        case ModeName::Major:
+        case ModeName::Minor:
+            return true;
+
+        case ModeName::MinorNat:
+        case ModeName::MinorMel:
+            return false;
+
+        case ModeName::Ionian:
+        case ModeName::Dorian:
+        case ModeName::Phrygian:
+        case ModeName::Lydian:
+        case ModeName::Mixolydian:
+        case ModeName::Aeolian:
+        case ModeName::Locrian:
+        case ModeName::Major5:
+        case ModeName::Minor5:
+        case ModeName::MajorBlues:
+        case ModeName::MinorBlues:
+        case ModeName::Augmented:
+        case ModeName::Diminished:
+        case ModeName::Chromatic:
+            return false;
+
+        case ModeName::Undef:
+            return false;
+
+        default:
+        {
+            ERROR("unknown mode name");
+            return false;
+        }
+    }
 }
 
 

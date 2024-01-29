@@ -128,11 +128,18 @@ public:
     /// @param ks number of flats if negative int,
     /// or number of sharps if positive int. must be in -7..7.
     /// @param mode mode of the tonality added.
+    /// @param global whether ton can be considered as a global tonality.
     /// @see Ton
-    void addTon(int ks, ModeName mode = ModeName::Major);
+    void addTon(int ks, ModeName mode = ModeName::Major, bool global=true);
 
+    /// for Python binder, same as addTon (overloaded).
+    inline void addTon3(int ks, ModeName mode, bool global)
+    { addTon(ks, mode, global); }
+    
     /// add a tonality for pitch spelling.
-    void addTon(const Ton& ton);
+    /// @param ton the tonality to add to this speller.
+    /// @param global whether ton can be considered as a global tonality.
+    void addTon(const Ton& ton, bool global=true);
     
     /// close the array of tonalities and finish its initlialization.
     /// No ton can be added after closure.

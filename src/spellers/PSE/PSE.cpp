@@ -45,7 +45,6 @@ PSE::~PSE()
 //}
 
 
-
 /// @todo add steps rewrite passing notes
 bool PSE::spell()
 {

@@ -65,11 +65,16 @@ public:
     /// there are no tons in this array of tonalities.
     bool empty() const;
 
-    /// Tonality corresponding to the given index.
+    /// Tonality at the given index in this array of tonalities.
     /// @param i an index in this array of tonalities.
     /// must be smaller than size().
     const Ton& ton(size_t i) const;
-    
+
+    /// The tonality at the given index can be considered as global.
+    /// @param i an index in this array of tonalities.
+    /// must be smaller than size().
+    bool global(size_t i) const;
+
     /// find the index of a ton in current array of tonalities.
     /// @param ton a given tonality.
     /// @return the index of ton or UNDEF if not found.
@@ -92,15 +97,18 @@ public:
     void reset();
 
     ///add a tonality to this array of tonalities.
+    /// @param ton the tonality to add to this index.
+    /// @param global whether ton can be considered as a global tonality.
     /// @warning this array of tonalities must not be closed.
-    void add(const Ton& ton);
+    void add(const Ton& ton, bool global=true);
     
-    ///add a tonality to this array of tonalities.
+    /// add a tonality to this array of tonalities.
     /// @param ks number of flats if negative int,
     /// or number of sharps if positive int. must be in -7..7.
-    /// @param mode mode of this tonality.
+    /// @param mode mode of the tonality to add.
+    /// @param global whether the tonality can be considered as global.
     /// @see Ton
-    void add(int ks, const ModeName& mode = ModeName::Major);
+    void add(int ks, const ModeName& mode = ModeName::Major, bool global=true);
 
     /// close this array of tonalities and finish initlialization.
     /// No ton can be added after closure.
@@ -119,9 +127,11 @@ public:
     
 private: // data
     
-    /// vector of tonalities
-    std::vector<const Ton> _tons;
-
+    /// vector of tonalities.
+    /// every tonality is associated a flag saying whether
+    /// it can be considered as global.
+    std::vector<std::pair<const Ton, bool>> _tons;
+    
     /// ranks of ton wrt Weber distance:
     /// _rankWeber[i, j] is the rank of ton i in this index, wrt to
     /// to the distance to ton j in this index.
@@ -153,6 +163,11 @@ private:
     void init25();
     
     void initRankWeber();
+    
+    /// a ton in the given mode can be considered global.
+    /// for automatically constructed arrays.
+    static bool global(const ModeName& mode);
+    
     
     // static bool pcompare(const std::pair <size_t, unsigned int>& a,
     //                      const std::pair <size_t, unsigned int>& b);

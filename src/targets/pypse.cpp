@@ -102,8 +102,11 @@ PYBIND11_MODULE(pse, m)
              "clear the array of tonalities for pitch spelling")
     // disambiguate overloaded method
         .def("add_ton",
-             static_cast<void (pse::PSE::*)(int, pse::ModeName)>(&pse::PSE::addTon),
-             "add a tonality for pitch spelling", py::arg("ks"), py::arg("mode"))
+             static_cast<void (pse::PSE::*)(int, pse::ModeName, bool)>(&pse::PSE::addTon3),
+             "add a tonality for pitch spelling",
+         py::arg("ks"),
+         py::arg("mode"),
+         py::arg("f_global"))
         .def("close_tons", &pse::PSE::closeTons, "close the array of tonalities")
         .def("set_global", &pse::PSE::setGlobal, "force global tonality")
         .def("spell", &pse::PSE::spell, "compute spelling")
@@ -179,8 +182,11 @@ PYBIND11_MODULE(pse, m)
              "clear the array of tonalities for pitch spelling")
         // disambiguate overloaded method
         .def("add_ton",
-             static_cast<void (pse::PS14::*)(int, pse::ModeName)>(&pse::PS14::addTon),
-             "add a tonality for pitch spelling", py::arg("ks"), py::arg("mode"))
+             static_cast<void (pse::PS14::*)(int, pse::ModeName, bool)>(&pse::PSE::addTon3),
+             "add a tonality for pitch spelling", 
+             py::arg("ks"),
+             py::arg("mode"), 
+             py::arg("f_global"))
         .def("close_tons", &pse::PS14::closeTons, "close the array of tonalities")
         .def("set_global", &pse::PS14::setGlobal, "force global tonality")
         .def("spell", &pse::PS14::spell, "compute spelling")

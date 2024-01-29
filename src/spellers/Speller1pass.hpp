@@ -24,7 +24,7 @@
 namespace pse {
 
 
-/// speller in 1 passes, with 1 table.
+/// speller in 1 pass, with 1 table.
 class Speller1Pass : public Speller
 {
 public:
@@ -117,13 +117,14 @@ protected: // data
     /// First estimation of global tonality (on table0).
     PSO* _global0; // std::shared_ptr<PSO>
     
-    /// Grid of loval tonalities (estimated on table0).
+    /// Grid of local tonalities (estimated on table0).
     PSG* _locals0; // std::shared_ptr<PSG>
     
     // forced global ton
     // std::unique_ptr<size_t> _global;
     
     /// undefined tonality, for errors.
+    /// @todo static
     Ton* _uton; // std::shared_ptr<Ton>
 
 protected:

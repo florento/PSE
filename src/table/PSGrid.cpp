@@ -95,7 +95,7 @@ void PSG::init(const PST& tab, std::vector<bool> mask, bool flag)
             else if (_content.size() == 1)
             {
                 if (flag == true) // estimation locals by mean of ranks
-                    current.push_back(estimateLocal(vec,i, i));
+                    current.push_back(estimateLocal(vec, i, i));
                 else              // estimation locals by extractbests then distances
                     current.push_back(estimateLocal(i, i, cands));
             }

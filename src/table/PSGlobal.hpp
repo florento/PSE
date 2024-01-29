@@ -30,7 +30,7 @@ namespace pse {
 
 class PST;
 
-/// Structure for the estimation from a table
+/// Structure for the estimation, from a table,
 /// of a glabal tonality, or several candidates for glabal tonality.
 class PSO
 {
@@ -187,8 +187,12 @@ private:
     
     void init(const PSO& globals, const PST& tab, double d);
     
-    bool member(size_t ig) const;
+    // @todo rm same as contains
+    // bool member(size_t ig) const;
 
+    /// @param ig index of a tonality in the ton index of this global array.
+    /// @return the index of ig in this array of globals, or TonIndex::UNDEF
+    /// if not found.
     size_t find(size_t ig) const;
 
     // macro: cost equality for the estimation of global.
