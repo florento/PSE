@@ -36,17 +36,43 @@ _closed(false)
             break;
 
         case 26:
-            init13(ModeName::Major);
-            init13(ModeName::Minor);
+            init13(ModeName::Major, true); // global flag
+            init13(ModeName::Minor, true);
             close();
             break;
 
         case 30:
-            init15(ModeName::Major);
-            init15(ModeName::Minor);
+            init15(ModeName::Major, true);
+            init15(ModeName::Minor, true);
             close();
             break;
 
+        case 104:
+            // init13(ModeName::Major);
+            init13(ModeName::Minor, true);
+            init13(ModeName::Ionian, true);
+            init13(ModeName::Dorian, false);
+            init13(ModeName::Phrygian, false);
+            init13(ModeName::Lydian, false);
+            init13(ModeName::Mixolydian, false);
+            init13(ModeName::Aeolian, false);
+            init13(ModeName::Locrian, false);
+            close();
+            break;
+            
+        case 120:
+            // init13(ModeName::Major);
+            init15(ModeName::Minor, true);
+            init15(ModeName::Ionian, true);
+            init15(ModeName::Dorian, false);
+            init15(ModeName::Phrygian, false);
+            init15(ModeName::Lydian, false);
+            init15(ModeName::Mixolydian, false);
+            init15(ModeName::Aeolian, false);
+            init15(ModeName::Locrian, false);
+            close();
+            break;
+            
         default:
             ERROR("TonIndex: unsupported list of default tons: {}", n);
             break;
@@ -190,21 +216,21 @@ bool TonIndex::closed() const
 }
 
 
-void TonIndex::init13(const ModeName& mode)
+void TonIndex::init13(const ModeName& mode, bool f_global)
 {
     assert(mode != ModeName::Undef);
-    bool f_global = global(mode);
+    // bool f_global = global(mode);
     for (int ks = -6; ks <= 6; ++ks)
         add(ks, mode, f_global);
 }
 
 
-void TonIndex::init15(const ModeName& mode)
+void TonIndex::init15(const ModeName& mode, bool f_global)
 {
     assert(mode != ModeName::Undef);
-    bool f_global = global(mode);
+    // bool f_global = global(mode);
     add(-7, mode, f_global);
-    init13(mode);
+    init13(mode, f_global);
     add(7, mode, f_global);
 }
 
@@ -224,6 +250,7 @@ bool TonIndex::global(const ModeName& m)
     switch (m)
     {
         case ModeName::Major:
+        case ModeName::Ionian:
         case ModeName::Minor:
             return true;
 
@@ -231,7 +258,6 @@ bool TonIndex::global(const ModeName& m)
         case ModeName::MinorMel:
             return false;
 
-        case ModeName::Ionian:
         case ModeName::Dorian:
         case ModeName::Phrygian:
         case ModeName::Lydian:

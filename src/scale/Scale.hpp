@@ -130,12 +130,15 @@ protected: //data
 
 protected:
     
-    /// mode is major diatonic
+    /// mode is major diatonic.
     static bool major(const Mode& mode);
 
     /// mode is minor diatonic
-    /// (harmonic minor or melodic minor or natural minor)
+    /// (harmonic minor or melodic minor or natural minor).
     static bool minor(const Mode& mode);
+
+    /// mode is diatonic.
+    static bool diatonic(const Mode& mode);
 
 };
 

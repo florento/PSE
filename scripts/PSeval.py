@@ -45,7 +45,7 @@ print(pse.excuseme)
 # Key object is the more expressive (tonic, mode...)
 # KeySignature object is just the number of sharps (> 0) or flats, < 0)
 def key_changes(part):
-    """check whether a music21 part contains one key signature change"""
+    """return the number of key signature change in the given music21 part"""
     fpart = part.flatten()
     kl = fpart.getElementsByClass([m21.key.Key, m21.key.KeySignature])
     return (len(kl) - 1)
@@ -208,7 +208,31 @@ def add_tons(tons, sp):
             sp.add_ton(k, pse.Mode.Major, True)
             sp.add_ton(k, pse.Mode.Minor, True)
         sp.close_tons()    
-
+    elif (tons == 104):
+        for k in range(-6, 7):            
+            sp.add_ton(k, pse.Mode.Ionian,     True)
+            sp.add_ton(k, pse.Mode.Dorian,     False)
+            sp.add_ton(k, pse.Mode.Phrygian,   False)
+            sp.add_ton(k, pse.Mode.Lydian,     False)
+            sp.add_ton(k, pse.Mode.Mixolydian, False)
+            sp.add_ton(k, pse.Mode.Aeolian,    False)
+            sp.add_ton(k, pse.Mode.Locrian,    False)
+            sp.add_ton(k, pse.Mode.Minor,      True)
+        sp.close_tons()    
+    elif (tons == 120):
+        for k in range(-7, 8):            
+            sp.add_ton(k, pse.Mode.Ionian,     True)
+            sp.add_ton(k, pse.Mode.Dorian,     False)
+            sp.add_ton(k, pse.Mode.Phrygian,   False)
+            sp.add_ton(k, pse.Mode.Lydian,     False)
+            sp.add_ton(k, pse.Mode.Mixolydian, False)
+            sp.add_ton(k, pse.Mode.Aeolian,    False)
+            sp.add_ton(k, pse.Mode.Locrian,    False)
+            sp.add_ton(k, pse.Mode.Minor,      True)
+        sp.close_tons()    
+        
+    else:
+        print('ERROR: unsuported number of tons', tons)
         
 ###############
 ##           ##
@@ -533,7 +557,7 @@ def print_score(score, outfile):
 
 #########################
 ##                     ##
-##   error counting    ##
+##      reporting      ##
 ##                     ##
 #########################
                             
@@ -757,7 +781,6 @@ def eval_part(part, stat,
               debug=False, mark=False):
     """evaluate spelling for one part in a score and mark errors in red"""
     
-
     global triche
     
     if stat == None:

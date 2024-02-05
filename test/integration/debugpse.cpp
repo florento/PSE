@@ -33,17 +33,18 @@ int main(int argc, const char* argv[])
     // godfried.dump();
     // return 0;
 
-    pse::PSE sp(26, true);
+    pse::PSE sp(104, true);
     //pse::PS13 sp;
 
     //issue7(sp);
     //BWV_858prelude(sp);
     //BWV_857fugue(sp);
-    BWV_864fugue(sp);
+    //BWV_864fugue(sp);
     //LG101(sp);
     //LG461(sp);
     // Waldstein(sp);
-    
+    Airegin(sp);
+
     std::cout << "spelling " << sp.size() << " notes" << std::endl;
     bool status = sp.spell();
 

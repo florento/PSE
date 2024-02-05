@@ -34,7 +34,7 @@ _dataset_root = '../../../Datasets/Lamarque-Goudard/'
 #_output_dir = 'LG/230226'   
 
 # MuseScore commandline executable
-_mscore = '/Applications/MuseScore\ 4.app/Contents/MacOS/mscore'
+_mscore = '/Applications/MuseScore 4.app/Contents/MacOS/mscore'
 
 
 #################################

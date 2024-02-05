@@ -8228,3 +8228,8 @@ void Waldstein(pse::Speller& sp)
     sp.add(48, 303, false);
 }
 
+
+void Airegin(pse::Speller& sp)
+{
+    
+}

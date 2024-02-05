@@ -35,7 +35,7 @@ void BWV_875prelude(pse::Speller& sp);
 
 void Waldstein(pse::Speller& sp);
 
-
+void Airegin(pse::Speller& sp);
 
 
 #endif /* samples_hpp */

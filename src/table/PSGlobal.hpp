@@ -131,6 +131,7 @@ public:
     void setGlobal(size_t ig);
 
     /// mask corresponding to the global tonality candidates in this structure.
+    /// @todo STUB: all true.
     std::vector<bool> getMask() const;
     
     // empty the set of candidate global tonality.

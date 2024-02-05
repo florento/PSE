@@ -30,7 +30,7 @@ _mode(mode.name()),
 _pcs(),
 _names(),
 _accids(),
-_ks((major(mode)||minor(mode))?pc:0, major(mode))
+_ks(diatonic(mode)?pc:0) //  major(mode)  flag major is OBSOLETE
 {
     assert(0 <= pc);
     assert(pc <= 11);
@@ -54,11 +54,12 @@ _ks((major(mode)||minor(mode))?pc:0, major(mode))
 Scale::Scale(const Ton& ton):
 Scale(ton.getMode(), ton.getPitchClass(), ton.getName())
 {
+    assert(diatonic(ton.getMode()));
     // @todo also for other modes?
-    assert ((ton.getMode() == ModeName::Major) ||
-            (ton.getMode() == ModeName::Minor) ||
-            (ton.getMode() == ModeName::MinorNat) ||
-            (ton.getMode() == ModeName::MinorMel));
+    // assert((ton.getMode() == ModeName::Major) ||
+    //        (ton.getMode() == ModeName::Minor) ||
+    //        (ton.getMode() == ModeName::MinorNat) ||
+    //        (ton.getMode() == ModeName::MinorMel));
 }
 
 
@@ -67,10 +68,12 @@ Scale(ModeName::Chromatic, ton.getPitchClass(), ton.getName())
 {
     assert(mode == ModeName::Chromatic);
     // @todo also for other modes?
-    assert ((ton.getMode() == ModeName::Major) ||
-            (ton.getMode() == ModeName::Minor) ||
-            (ton.getMode() == ModeName::MinorNat) ||
-            (ton.getMode() == ModeName::MinorMel));
+    assert(diatonic(ton.getMode()));
+    // @todo also for other modes?
+    // assert ((ton.getMode() == ModeName::Major) ||
+    //         (ton.getMode() == ModeName::Minor) ||
+    //         (ton.getMode() == ModeName::MinorNat) ||
+    //         (ton.getMode() == ModeName::MinorMel));
 }
 
 
@@ -95,6 +98,19 @@ bool Scale::minor(const Mode& mode)
             (mode.name() == ModeName::MinorMel));
 }
 
+// static private
+bool Scale::diatonic(const Mode& mode)
+{
+    return (major(mode) ||
+            minor(mode) ||
+            (mode.name() == ModeName::Ionian) ||
+            (mode.name() == ModeName::Dorian) ||
+            (mode.name() == ModeName::Phrygian) ||
+            (mode.name() == ModeName::Lydian) ||
+            (mode.name() == ModeName::Mixolydian) ||
+            (mode.name() == ModeName::Aeolian) ||
+            (mode.name() == ModeName::Locrian));
+}
 
 enum NoteName Scale::name(size_t d) const
 {

@@ -96,7 +96,7 @@ void PSG::init(const PST& tab, std::vector<bool> mask, bool flag)
             {
                 if (flag == true) // estimation locals by mean of ranks
                     current.push_back(estimateLocal(vec, i, i));
-                else              // estimation locals by extractbests then distances
+                else // estimation locals by extractbests then distances
                     current.push_back(estimateLocal(i, i, cands));
             }
             // otherwise, consider previous column
@@ -108,7 +108,7 @@ void PSG::init(const PST& tab, std::vector<bool> mask, bool flag)
                 size_t iprev = _content.at(j-1).at(i);
                 if (flag == true) // estimation locals by mean of ranks
                     current.push_back(estimateLocal(vec, i, iprev));
-                else              // estimation locals by extractbests then distances
+                else // estimation locals by extractbests then distances
                     current.push_back(estimateLocal(i, iprev, cands));
             }
             assert(current.back() == TonIndex::UNDEF ||
@@ -129,7 +129,8 @@ void PSG::extract_bests(const PSV& vec, std::vector<size_t>& ties, double d)
     assert(ties.empty());
     
     // index of the current best local tonality.
-    size_t ibest = TonIndex::UNDEF; // out of range. initialized to avoid warning.
+    // out of range. initialized to avoid warning.
+    size_t ibest = TonIndex::UNDEF;
 
     // cost for the current best local tonality.
     std::shared_ptr<Cost> cbest = nullptr;     // WARNING: initialized to 0.
@@ -174,7 +175,8 @@ void PSG::extract_bests(const PSV& vec, std::vector<size_t>& ties, double d)
         // otherwise keep the current best
         else
         {
-            assert((cbest == nullptr) || (cost > *cbest)); // we did not forget a case
+            // we did not forget a case
+            assert((cbest == nullptr) || (cost > *cbest));
         }
     }
     //printf("nombre de tonalités candidates : %lu",ties.size());
@@ -215,7 +217,8 @@ size_t PSG::estimateLocal(size_t ig, size_t iprev, std::vector<size_t>& cands)
         //assert(_psbs[j]);
         //const PSB& psb = *(_psbs[j]);
         //assert(! psb.empty());
-        // occurs iff first() == last(), and in this case all the bags are empty.
+        // occurs iff first() == last(), 
+        // and in this case all the bags are empty.
         //PSCost cost = psb.cost();
         
         const Ton& jton = _index.ton(j);
@@ -225,7 +228,8 @@ size_t PSG::estimateLocal(size_t ig, size_t iprev, std::vector<size_t>& cands)
         unsigned int distg = gton.distWeber(jton);
 
         // tie break criteria 1:
-        // best distance (of current tonality j) to the previous local tonality for ig
+        // best distance (of current tonality j) 
+        // to the previous local tonality for ig
         if (dist < dlbest)
         {
             ibest = j;

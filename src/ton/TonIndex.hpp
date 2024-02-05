@@ -52,6 +52,8 @@ public:
     /// - 25 : tonalities of Bach's Wohltemperierte Clavier
     ///        major      KS -4 to 7 : C, C#, D, Eb, E, F, F#, G, Ab, A, Bb, B
     ///        minor harm KS -6 to 6 : C, C#, D, Eb, D#, E, F, F#, G, G#, A, Bb, B
+    /// - 104: major, minor, all jazz modes, KS in -6..6
+    /// - 120: major, minor, all jazz modes, KS in -7..7
     /// the empty array of tonalities (case 0) is not closed.
     /// All the others are closed.
     TonIndex(size_t nb=0);
@@ -151,11 +153,13 @@ private:
 
     /// default array of 13 tonalities, ks between -6 and 6.
     /// @param mode must not be ModeName::Undef.
-    void init13(const ModeName& mode);
+    /// @param global whether ton can be considered as a global tonality.
+    void init13(const ModeName& mode, bool global);
 
     /// default array of 15 tonalities, ks between -7 and 7.
     /// @param mode must not be ModeName::Undef.
-    void init15(const ModeName& mode);
+    /// @param global whether ton can be considered as a global tonality.
+    void init15(const ModeName& mode, bool global);
     
     /// array of tonalities of Bach's Wohltemperierte Clavier.
     /// major          KS -4 to 7 : C, C#, D, Eb, E, F, F#, G, Ab, A, Bb, B

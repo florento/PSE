@@ -142,7 +142,8 @@ protected:
     /// global cand number i in g
     const Ton& globalCand(size_t i, const PSO* g) const; // std::shared_ptr<PSO>
     
-    /// index of global cand number i in g
+    /// index of global cand number i in g.
+    /// call of g.iglobal with some pre-verifications.
     size_t iglobalCand(size_t i, const PSO* g) const; // std::shared_ptr<PSO>
 
     /// compute the best pitch spelling for the input notes,
@@ -164,10 +165,7 @@ protected:
     /// @return whether renaming succeded for all measures.
     bool rename(PST* table, const PSO* globals, size_t n=0);
     
-    
-    
 };
-
 
 
 } // namespace pse

@@ -8,7 +8,6 @@
 #include "Mode.hpp"
 
 
-
 namespace pse {
 
 Mode::Mode():
