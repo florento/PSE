@@ -83,7 +83,7 @@ public:
     /// @see WEBER_DIST
     static int static_dist(const Ton& ton1, const Ton& ton2);
     
-private:
+private: // data
 
     /// number of tonalities considered.
     static const size_t NB_TONS = 30;
@@ -94,6 +94,14 @@ private:
     /// matrix of distances between tonalities.
     /// triangular.
     std::array<std::array<int, NB_TONS>, NB_TONS> DIST;
+    
+    /// precomputed matrix of Weber distance between tonalities.
+    /// obtained by the functions of the class
+    /// @see init()
+    /// @see dump()
+    static const std::array<std::array<int, NB_TONS>, NB_TONS> WEBER_DIST;
+    
+private:
     
     /// compute the matrix of distances.
     void init();
@@ -128,12 +136,6 @@ private:
     ///        - 3 for down
     /// @return the index of the neighbour tonality of NB_TONS if there is none.
     static size_t neighbour(size_t i, size_t j);
-
-    /// precomputed matrix of Weber distance between tonalities.
-    /// obtained by the functions of the class
-    /// @see init()
-    /// @see dump()
-    static const std::array<std::array<int, NB_TONS>, NB_TONS> WEBER_DIST;
 
 };
 

@@ -112,6 +112,14 @@ bool Scale::diatonic(const Mode& mode)
             (mode.name() == ModeName::Locrian));
 }
 
+
+size_t Scale::size() const
+{
+    assert(_names.size() == _accids.size());
+    return _names.size();
+}
+
+
 enum NoteName Scale::name(size_t d) const
 {
     assert(d < _names.size());

@@ -33,7 +33,7 @@ int main(int argc, const char* argv[])
     // godfried.dump();
     // return 0;
 
-    pse::PSE sp(104, true);
+    pse::PSE sp(30, true);
     //pse::PS13 sp;
 
     //issue7(sp);
@@ -48,8 +48,14 @@ int main(int argc, const char* argv[])
     std::cout << "spelling " << sp.size() << " notes" << std::endl;
     bool status = sp.spell();
 
+    if (!status)
+    {
+        ERROR("spell failure");
+        return 1;
+    }
+
     std::cout << "renaming " << sp.size() << " notes" << std::endl;
-    //status = status && sp.rename();
+    status = status && sp.rename();
     
     if (status)
     {
@@ -63,9 +69,10 @@ int main(int argc, const char* argv[])
             std::cout << std::endl;
         }
     }
-    else
+    else 
     {
-        ERROR("spell failure");
+        ERROR("renaming failure");
+        return 2;
     }
 
     std::cout << "rewriting" << sp.size() << " notes" << std::endl;

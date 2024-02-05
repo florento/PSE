@@ -25,7 +25,7 @@ namespace pse {
 
 class Ton;
 
-/// Major and harmonic minor scapes for each pitch class
+/// Major and harmonic minor scales for each pitch class
 /// with enharmonics
 ///
 /// | pc | maj          | min          |
@@ -45,6 +45,12 @@ class Ton;
 
 
 /// a scale is defined by a mode, a pitch class and the name of tonic.
+/// It has a certain number of degrees (its size()),
+/// and for each degree,
+/// - one note name,
+/// - one accidental,
+/// - one pitch class (which depends on the name and accid).
+///
 class Scale  // public Mode
 {
 public:
@@ -74,6 +80,9 @@ public:
     /// (defined by key signature and mode). Its mode must be diatonic.
     /// @param mode must be ModeName::Chromatic.
     Scale(const Ton& ton, const ModeName& mode);
+
+    /// number of degrees of this scale.
+    size_t size() const;
 
     /// this scale is undefined.
     bool undef() const;

@@ -85,11 +85,62 @@ def FRB_corpus(corpus):
 ###########################################
 
 # list of opus names with issues 
-skip = []
+skip = ['Autumn in New York']
 
+def eval_FRB(corpus='leads', algo=ps.pse.Algo_PSE, 
+             tons=104, kpre=33, kpost=23, 
+             output_dir='', filename='',             
+             debug=True, mark=True):
+    global _eval_root
+    assert(corpus == 'leads' or corpus == 'piano')
+    timestamp = datetime.today().strftime('%Y%m%d-%H%M')
+    # default output dir name
+    if output_dir == '':
+       output_dir = timestamp
+    output_path = Path(_eval_root)/'evalFRB'/output_dir
+    if not os.path.isdir(output_path):
+        if not os.path.isdir(Path(_eval_root)/'evalFRB'):
+            os.mkdir(Path(_eval_root)/'evalFRB')
+        os.mkdir(output_path)
+    else:
+        print('WARNING: dir', output_path, 'exists')
+    stat = ps.Stats()   
+    dataset = FRB_corpus(corpus)
+    names = sorted(list(dataset)) # list of index in dataset   
+    print('\n', 'starting evaluation of FRB dataset -', len(names), 'entries\n')
+    for name in names:
+        if (name in skip):
+            print('\n', name, 'SKIP\n')
+            continue
+        if (dataset.get(name) == None):
+            print(name, "not found in dataset", corpus)
+            continue
+        file = dataset[name]
+        print('\n', name, '\n')
+        s = m21.converter.parse(file.as_posix())
+        (ls, lld) = ps.eval_score(score=s, stat=stat, 
+                                  sid=0, title=name, composer='', 
+                                  algo=algo,
+                                  nbtons=tons,           # for PSE 
+                                  kpre=kpre, kpost=kpost,  # for PS13                                  
+                                  debug=debug, mark=mark)
+        if mark and not ps.empty_difflist(lld):
+            write_score(s, output_path, name)
+    # display and save evaluation table
+    # default table file name
+    if filename == '':
+       filename =  'FRWeval'+'_'+corpus+str(tons)+'_'+timestamp
+    stat.show()    
+    df = stat.get_dataframe() # create pands dataframe
+    df.pop('part') # del column part number (always 0)
+    df.to_csv(output_path/(filename+'.csv') , header=True, index=False)
+    stat.write_datasum(output_path/(filename+'_sum.csv'))    
+    
+    
 def eval_FRBitem(name, corpus='leads', algo=ps.pse.Algo_PSE, 
-                 nbtons=104, kpre=33, kpost=23, dflag=True, mflag=True):
+                 tons=104, kpre=33, kpost=23, dflag=True, mflag=True):
     assert(len(name) > 0)
+    assert(corpus == 'leads' or corpus == 'piano')
     dataset = FRB_corpus(corpus)
     if (dataset.get(name) == None):
         print(name, "not found in dataset", corpus)
@@ -103,7 +154,7 @@ def eval_FRBitem(name, corpus='leads', algo=ps.pse.Algo_PSE,
     (ls, lld) = ps.eval_score(score=score, stat=stat, 
                               sid=0, title=name, composer='', 
                               algo=algo,
-                              nbtons=nbtons,          # for PSE 
+                              nbtons=tons,          # for PSE 
                               kpre=kpre, kpost=kpost, # for PS13                                  
                               debug=dflag, mark=mflag)
     stat.show()   
@@ -125,5 +176,30 @@ def write_score(score, output_path, outname):
     # os.system(_mscore + ' -o ' + pdffile + ' ' + xmlfile)
 
 
+def debug(name, corpus='leads'):    
+    assert(len(name) > 0)
+    dataset = FRB_corpus(corpus)
+    if (dataset.get(name) == None):
+        print(name, "not found in dataset", corpus)
+        return
+    file = dataset[name]
+    score = m21.converter.parse(file)
+    lp = score.getElementsByClass(m21.stream.Part)
+    ln = ps.extract_part(lp[0]) # first and unique part
+    for (n, b, s) in ln:   
+        a = 'sp.add('
+        a += str(n.pitch.midi)
+        a += ', '
+        a += str(b)
+        a += ', '
+        a += 'true' if s else 'false'
+        a += ');'
+        print(a)        
+    #sp = ps.Speller()
+    #sp.debug(True)
+    #ps.add_tons(0, sp)
+    #sp.add_notes(ln1[:61], sp)
+    #sp.spell()
+    
 
 

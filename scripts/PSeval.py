@@ -178,15 +178,16 @@ def add_ton(ks, mode, f_global, sp):
         print("unsupported key signature", ks)
         return
     sp.add_ton(ks, mode, f_global)
-        
+
+
 def add_tons(tons, sp):
     """add predefined group of tonalities to a speller"""
-    print('add_tons', tons)
+    print('add_tons', tons, flush=True)
     # default tons of module (30)
-    if (tons == 0): 
+    if tons == 0: 
         return                            
     # Bach DWK
-    elif (tons == 25):    
+    elif tons == 25:    
         # maj key signature in [-4 .. 7]       
         # C, C#, D, Eb, E, F, F#, G, Ab, A, Bb, B          
         for k in range(-4, 8):            
@@ -197,18 +198,19 @@ def add_tons(tons, sp):
             sp.add_ton(k, pse.Mode.Minor, True) 
         sp.close_tons()    
     # key signature in [-6 .. 6]
-    elif (tons == 26):
+    elif tons == 26:
         for k in range(-6, 7):            
             sp.add_ton(k, pse.Mode.Major, True)
             sp.add_ton(k, pse.Mode.Minor, True)
         sp.close_tons()    
     # key signature in [-7 .. 7]
-    elif (tons == 30):
-        for k in range(-7, 8):            
+    elif tons == 30:
+        for k in range(-7, 8):     
             sp.add_ton(k, pse.Mode.Major, True)
             sp.add_ton(k, pse.Mode.Minor, True)
         sp.close_tons()    
-    elif (tons == 104):
+    # key signature in [-6 .. 6], jazz antic modes
+    elif tons == 104:
         for k in range(-6, 7):            
             sp.add_ton(k, pse.Mode.Ionian,     True)
             sp.add_ton(k, pse.Mode.Dorian,     False)
@@ -219,7 +221,8 @@ def add_tons(tons, sp):
             sp.add_ton(k, pse.Mode.Locrian,    False)
             sp.add_ton(k, pse.Mode.Minor,      True)
         sp.close_tons()    
-    elif (tons == 120):
+    # key signature in [-7 .. 7], jazz antic modes
+    elif tons == 120:
         for k in range(-7, 8):            
             sp.add_ton(k, pse.Mode.Ionian,     True)
             sp.add_ton(k, pse.Mode.Dorian,     False)
@@ -230,9 +233,10 @@ def add_tons(tons, sp):
             sp.add_ton(k, pse.Mode.Locrian,    False)
             sp.add_ton(k, pse.Mode.Minor,      True)
         sp.close_tons()    
-        
     else:
-        print('ERROR: unsuported number of tons', tons)
+        print('ERROR: unsupported number of tons', tons, flush=True)
+        sp.close_tons()    
+        
         
 ###############
 ##           ##
