@@ -15,8 +15,7 @@ from pathlib import Path, PosixPath
 from datetime import datetime
 import re
 from operator import itemgetter, attrgetter
-
-import pandas as pd
+import pandas
 import music21 as m21
 import PSeval as ps
 
@@ -77,7 +76,46 @@ def FRB_corpus(corpus):
     dataset = dict(sorted(dataset.items()))
     return dataset
 
+def accids(ks, notes):
+    c = 0
+    for note in notes:
+        if note.pitch.accidental != ks.accidentalByStep(note.name):
+            c += 1            
+    return c
+    
+def FRB_table(corpus='leads'):
+    assert(corpus == 'leads' or corpus == 'piano')
+    table = []
+    dataset = FRB_corpus(corpus)
+    names = sorted(list(dataset)) # list of index in dataset   
+    for name in names:
+        if (dataset.get(name) == None):
+            print(name, "not found in dataset", corpus)
+            continue        
+        file = dataset[name]
+        score = m21.converter.parse(file.as_posix())
+        assert(len(score.parts) > 0)
+        part = score.parts[0]
+        fpart = part.flatten()
+        keys = fpart.getElementsByClass([m21.key.Key, m21.key.KeySignature])
+        notes = fpart.getElementsByClass(m21.note.Note)
+        row = []
+        row.append(name)
+        row.append(keys[0].sharps if len(keys) > 0 else None)            
+        row.append(len(part.getElementsByClass(m21.stream.Measure)))
+        row.append(len(notes))
+        row.append(accids(keys[0], notes) if len(keys) > 0 else None)
+        row.append(len(score.parts))
+        row.append(len(keys))
+        table.append(row)
+    df = pandas.DataFrame(table)
+    df.columns = ['name', 'KS','# bars', '# notes', '# accids', '# parts', '# keys']
+    df['KS'] = df['KS'].map('{:n}'.format)
+    return df
 
+# df.fillna('NaN').to_csv(file, header=True, index=False)
+        
+        
 ###########################################
 ##                                       ##
 ## automatic evaluation of whole dataset ##
