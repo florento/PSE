@@ -25,13 +25,17 @@ class PSC1;
 
 class PSC2;
 
+
+/// measure of cost  defined by the cumulated number of printed accidentals.
 class CostA : public PolymorphicComparable<Cost, CostA>
 {
     
 public:
     
     /// null cost.
-    CostA();
+    /// @param discount apply or not a discount (during update) for accidentals in the assumed  scale
+    /// (lead degrees).
+    CostA(bool discount=true);
     
     /// copy constructor.
     CostA(const CostA& rhs);
@@ -134,6 +138,9 @@ protected: // data
     
     /// cumulated number of printed accidentals.
     size_t _accid; // unsigned int
+    
+    /// apply or not a discount (during update) for accidentals in the assumed  scale (lead degrees)
+    bool _discount;
     
 };
 

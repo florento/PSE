@@ -26,13 +26,15 @@ class PSC1;
 class PSC2;
 
 
-/// abstract cost class with two measures:
-/// - cumulated number of printed accidentals.
-/// - cumulated distance to a conjectured local tonality.
-///
-/// used for the definitions of
-/// class CostADplus : public PolymorphicComparable<CostAD, CostADplus>
-/// class CostADlex : public PolymorphicComparable<CostAD, CostADlex>
+/// abstract cost class with the following cumulated measures:
+/// - number of printed accidentals.
+/// - distance to a conjectured local tonality.
+/// - number of accidentals not present in the chromaticharmonic scale.
+/// - number of accidentals with color different from the assumed  global tonality.
+/// - number of printed and non lead Cb B# E# Fb.
+/// This class is used for the definitions of:
+/// - class CostADplus : public PolymorphicComparable<CostAD, CostADplus>
+/// - class CostADlex : public PolymorphicComparable<CostAD, CostADlex>
 class CostAD // public PolymorphicComparable<Cost, CostAD>
 {
 public:

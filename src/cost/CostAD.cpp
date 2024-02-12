@@ -110,7 +110,7 @@ void CostAD::update(const enum NoteName& name,
     //    }
     //}
     
-    if ((print) && (gton.accidDia(name,gton.getMode()) != accid)) //&& (boo))
+    if ((print) && (gton.accidDia(name, gton.getMode()) != accid)) //&& (boo))
     {
         switch (accid)
         {

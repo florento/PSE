@@ -13,8 +13,9 @@
 namespace pse {
 
 
-CostA::CostA():
-_accid(0)
+CostA::CostA(bool discount):
+_accid(0),
+_discount(discount)
 {}
 
 
@@ -80,6 +81,7 @@ std::shared_ptr<Cost> CostA::shared_clone() const
 {
     return std::shared_ptr<Cost>(new CostA(*this));
 }
+
 
 std::unique_ptr<Cost> CostA::unique_clone() const
 {
