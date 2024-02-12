@@ -133,7 +133,7 @@ public:
     
     /// get the list of ranks of each ton in the array of tonalities,
     /// wrt the cost of corresponding bag in this vector.
-    /// @param ranks container to receive the list of ranks
+    /// @param rk container to receive the list of ranks
     void ranks(std::vector<size_t>& rk) const;
 
     // bag of target configs for best paths for the ton of given index.

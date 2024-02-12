@@ -125,7 +125,7 @@ private:
     /// this alternative function determines the best local tonality by
     /// restraining its search only on tones close to the previous or global one
     /// and then choosing the one minimizing accidents.
-    size_t estimateLocalalt(const PSV& vec, size_t ig, size_t iprev,
+    size_t estimateLocalLexico(const PSV& vec, size_t ig, size_t iprev,
                             unsigned int);
     
     /// select in the given set of candidates an index for local tonality,

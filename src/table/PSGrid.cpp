@@ -335,7 +335,7 @@ void PSG::init(const PST& tab, std::vector<bool> mask)
 // this alternative function determines the best local tonality by restraining
 // its search only on tones close to the previous or global one
 // and then choosing the one minimizing accidents
-size_t PSG::estimateLocalalt(const PSV& vec, size_t ig, size_t iprev,
+size_t PSG::estimateLocalLexico(const PSV& vec, size_t ig, size_t iprev,
                              unsigned int d)
 {
     // no candidates in case of empty bar: keep the previous local

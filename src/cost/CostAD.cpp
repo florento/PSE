@@ -154,7 +154,7 @@ void CostAD::update(const enum NoteName& name,
     // no print : print flag is related to gton, not for lton
     
     //boo=true
-    if (lton.defined() && (lton.accidDia(name,lton.getMode()) != accid))
+    if (lton.defined() && (lton.accidDia(name, lton.getMode()) != accid))
     {
         if (lton.getMode() == ModeName::Minor)
         {

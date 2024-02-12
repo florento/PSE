@@ -113,7 +113,7 @@ private:
     /// `a < b` where `a` and `b` are positive or `UNDEF_DIST` (+infinity).
     static bool inf(int a, int b);
     
-    /// extract from heap the index with min value in dist ans return it.
+    /// extract from heap the index with min value in dist and return it.
     /// @param heap bitvector of index present.
     /// @param dist vector of distance values (positive or UNDEF_DIST = +infinity).
     /// @return index with min value in dist and present in heap or

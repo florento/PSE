@@ -158,6 +158,9 @@
 		43ABA52F29242418002AC1D4 /* PSTable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43ABA51F29242418002AC1D4 /* PSTable.cpp */; };
 		43ABA53029242418002AC1D4 /* PSConfig0.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 43ABA52029242418002AC1D4 /* PSConfig0.hpp */; };
 		43ABA53129242418002AC1D4 /* PSConfig0.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43ABA52129242418002AC1D4 /* PSConfig0.cpp */; };
+		43BE98CD2B7A1891000732B4 /* CostA.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43D31A0A2A13F28800234527 /* CostA.cpp */; };
+		43BE98CE2B7A1891000732B4 /* CostA.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43D31A0A2A13F28800234527 /* CostA.cpp */; };
+		43BE98CF2B7A1892000732B4 /* CostA.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43D31A0A2A13F28800234527 /* CostA.cpp */; };
 		43C2BA10299946150084AB3B /* Interval.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43C2BA0E299946150084AB3B /* Interval.cpp */; };
 		43C2BA11299946150084AB3B /* Interval.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43C2BA0E299946150084AB3B /* Interval.cpp */; };
 		43C2BA12299946150084AB3B /* Interval.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 43C2BA0F299946150084AB3B /* Interval.hpp */; };
@@ -1013,6 +1016,7 @@
 				4331700029DD934E00BA534D /* TestEnharmonic.cpp in Sources */,
 				438A581F29E0496D0073A32C /* PSPath.cpp in Sources */,
 				438A581529E0491D0073A32C /* PSBag.cpp in Sources */,
+				43BE98CF2B7A1892000732B4 /* CostA.cpp in Sources */,
 				432586A52A4050C80069D796 /* PSConfig1c.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1061,6 +1065,7 @@
 				430627C42A4586320046FD99 /* CostADplus.cpp in Sources */,
 				43D7BAB92A27CFBD00570C47 /* Speller2pass.cpp in Sources */,
 				43ABA52F29242418002AC1D4 /* PSTable.cpp in Sources */,
+				43BE98CD2B7A1891000732B4 /* CostA.cpp in Sources */,
 				43C4A6522A1E7EBB00925A99 /* PSGrid.cpp in Sources */,
 				43ABA52629242418002AC1D4 /* PSPath.cpp in Sources */,
 				431586332983E89B00918B1B /* PSEnum.cpp in Sources */,
@@ -1106,6 +1111,7 @@
 				432586A42A4050C80069D796 /* PSConfig1c.cpp in Sources */,
 				432E7A5529D45FE2000E2B72 /* PS13.cpp in Sources */,
 				43C2BA1E299A5FEE0084AB3B /* IntervalSimple.cpp in Sources */,
+				43BE98CE2B7A1891000732B4 /* CostA.cpp in Sources */,
 				43C2BA1729994F630084AB3B /* Pitch.cpp in Sources */,
 				4309605E2A0D034D0097487A /* Speller.cpp in Sources */,
 				430627C62A4586380046FD99 /* CostADlex.cpp in Sources */,

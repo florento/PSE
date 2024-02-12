@@ -89,39 +89,36 @@ std::unique_ptr<Cost> CostA::unique_clone() const
 }
 
 
+bool CostA::updateAccid(const enum Accid& accid)
+{
+    switch (accid)
+    {
+        case Accid::DoubleSharp:
+        case Accid::DoubleFlat:
+            _accid += 2;
+            return true;
+
+        case Accid::Sharp:
+        case Accid::Flat:
+        case Accid::Natural:
+            _accid += 1;
+            return true;
+
+        default:
+        {
+            ERROR("Cost updateAccid: unexpected accidental {}", accid);
+            return false;
+        }
+    }
+}
+
+
+// update cost when accident for the name was updated
 void CostA::update(const enum NoteName& name, const enum Accid& accid,
                    bool print,
                    const Ton& gton, const Ton& lton)
 {
-    // count the cost
-    // bool cc = false;
-    
-    // update cost when accident for the name was updated
-    // discount for lead degree
-    // !(gton.lead()  &&  gton.accidDia(name) == accid)
-    if (print && !(gton.accidDia(name) == accid))
-    {
-        switch (accid)
-        {
-            case Accid::DoubleSharp:
-            case Accid::DoubleFlat:
-                _accid += 2;
-                break;
-
-            case Accid::Sharp:
-            case Accid::Flat:
-            case Accid::Natural:
-                _accid += 1;
-                break;
-
-            default:
-            {
-                ERROR("PSC: unexpected accidental"); // accid
-                break;
-            }
-        }
-    }
-
+    // second pass
     if (lton.defined())
     {
         //_dist += c.state().dist(lton);
@@ -130,27 +127,19 @@ void CostA::update(const enum NoteName& name, const enum Accid& accid,
         // afin de déduire la meilleure tonalité locale,
         // il vaut mieux ne plus se poser la question du print :
         // !(gton.lead()  &&  gton.accidDia(name) == accid)
-        if (!(lton.accidDia(name) == accid))
+        if (!(lton.accidDia(name, lton.getMode()) == accid))
         {
-            switch (accid)
-            {
-                case Accid::DoubleSharp:
-                case Accid::DoubleFlat:
-                    _accid += 2;
-                    break;
-
-                case Accid::Sharp:
-                case Accid::Flat:
-                case Accid::Natural:
-                    _accid += 1;
-                    break;
-
-                default:
-                {
-                    ERROR("PSC: unexpected accidental"); // accid
-                    break;
-                }
-            }
+            updateAccid(accid);
+        }
+    }
+    // first pass
+    // optional discount for lead degree
+    else if (print)
+    {
+                          // !(gton.lead()  &&  gton.accidDia(name) == accid)
+        if ((! _discount)  || (gton.accidDia(name, gton.getMode()) != accid))
+        {
+            updateAccid(accid);
         }
     }
 }

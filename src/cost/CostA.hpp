@@ -33,8 +33,8 @@ class CostA : public PolymorphicComparable<Cost, CostA>
 public:
     
     /// null cost.
-    /// @param discount apply or not a discount (during update) for accidentals in the assumed  scale
-    /// (lead degrees).
+    /// @param discount apply or not a discount (during update) for accidentals
+    /// in the assumed  scale (lead degrees).
     CostA(bool discount=true);
     
     /// copy constructor.
@@ -73,7 +73,7 @@ public:
     virtual std::shared_ptr<Cost> shared_clone() const override;
     
     /// create a smart clone of this cost.
-    virtual std::unique_ptr<Cost> unique_clone() const override;
+    virtual std::unique_ptr<Cost> unique_clone() const;
     
     /// update this cost for doing a transition renaming one note (single
     /// or in chord) with the given parameters and in a given hypothetic global
@@ -141,6 +141,11 @@ protected: // data
     
     /// apply or not a discount (during update) for accidentals in the assumed  scale (lead degrees)
     bool _discount;
+        
+protected: // convenience function
+
+    /// @return wether update went correctly.
+    bool updateAccid(const enum Accid& accid);
     
 };
 

@@ -69,7 +69,7 @@ bool Weber::inf(int a, int b)
 
 // static
 size_t Weber::extractMin(std::array<bool, NB_TONS>& heap,
-                  const std::array<int, NB_TONS>& dist)
+                         const std::array<int, NB_TONS>& dist)
 {
     size_t m = NB_TONS; // undef
     for (size_t i = 0; i < NB_TONS; ++i)

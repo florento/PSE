@@ -140,7 +140,6 @@ public:
 double distCost(const double lhs, const double rhs);
 
 
-
 std::ostream& operator<<(std::ostream& o, const Cost& c);
 
 

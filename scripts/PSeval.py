@@ -207,7 +207,7 @@ def add_tons(tons, sp):
     elif tons == 30:
         for k in range(-7, 8):     
             sp.add_ton(k, pse.Mode.Major, True)
-            sp.add_ton(k, pse.Mode.Minor, True)
+            sp.add_ton(k, pse.Mode.Minor, False)
         sp.close_tons()    
     # key signature in [-6 .. 6], jazz antic modes
     elif tons == 104:

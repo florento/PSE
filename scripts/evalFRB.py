@@ -202,6 +202,12 @@ def eval_FRBitem(name, corpus='leads', algo=ps.pse.Algo_PSE,
         write_score(score, Path(os.getcwd()), name)
         
 def write_score(score, output_path, outname):
+    if not os.path.isdir(output_path):
+        os.mkdir(output_path)
+    xmlfile = output_path/(outname+'.musicxml')
+    score.write('musicxml', fp=xmlfile)
+
+def write_score2(score, output_path, outname):
     assert(len(outname) > 0)
     if not os.path.isdir(output_path):
         os.mkdir(output_path)
