@@ -150,6 +150,7 @@ protected:
     /// using the algorithm named in this class.
     /// @param seed0 seed cost used to built the PS table
     /// @param diff0 approximation coeff (percent) to estimate the global ton(s).
+    /// 100 for keeping all ton of index as candidates.
     /// @param rename_flag whether the notes in enumerator must be renamed.
     /// @param rewrite_flag whether the passing note must be rewritten.
     /// @see PSEnum::rewritePassing()

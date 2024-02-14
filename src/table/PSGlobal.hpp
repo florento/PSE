@@ -48,7 +48,7 @@ public:
     /// @param tab for the extraction of global tonality.
     /// The index of tonalities stored refer to the ton index of this table.
     /// @param d tolerance distance (in percent) for considering two
-    /// cost approx. equal in the global ton search.
+    /// cost approximatively equal in the global ton search.
     /// @param dflag debug mode (for feeback)
     // @warning call eGlobals_eq and eGlobals_less variants to operator==
     // and operator< on cost.

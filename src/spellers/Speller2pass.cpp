@@ -106,6 +106,9 @@ bool Speller2Pass::spell(const Cost& seed0, const Cost& seed1,
     assert(_global0);
     // std::unique_ptr<PSO>
     _global1 = new PSO(*_global0, *_table1, diff1, _debug);
+    // add possible enharmonics in list of global candidate
+    // _global1->completeEnharmonics();
+    
     
     TRACE("Pitch Spelling: {} estimated global tonality candidates", globals());
     if (_debug)

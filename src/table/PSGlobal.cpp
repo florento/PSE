@@ -17,11 +17,29 @@ _index(tab.index()),
 _globals(), // empty
 _debug(dflag)
 {
-    assert(d >= 0);
+    assert(0 >= d);
+    assert(d <= 100);
     // same index for globals and tab
     assert(globals._index.size() == tab.index().size());
     // assert(globals._index == tab.index());
-    init(globals, tab, d);
+    
+    if (d == 100) // we copy all globals to this globals
+    {
+        for (auto it = globals.cbegin(); it != globals.cend(); ++it)
+        {
+            size_t i = *it;
+            assert(i != TonIndex::FAILED);
+            assert(i != TonIndex::UNDEF);
+            assert(i < _index.size());
+            assert(_index.global(i)); // i can be global (if globals was well formed)
+            _globals.push_back(i);
+        }
+    }
+    else
+    {
+        assert(d < 100);
+        init(globals, tab, d);
+    }
 }
 
 
@@ -66,8 +84,7 @@ void PSO::init(const PSO& globals, const PST& tab, double d)
     assert(globals.cbegin() != globals.cend());
     size_t ibest = *(globals.cbegin());
     
-    // estimate the best tonality wrt costs (nb accidentals)
-    // in the list of candidates globals
+    // estimate the best tonality in tab wrt costs (nb accidentals)
     for (auto it = globals.cbegin(); it != globals.cend(); ++it)
 
     {
@@ -92,7 +109,7 @@ void PSO::init(const PSO& globals, const PST& tab, double d)
     const Cost& bestCost = tab.rowCost(ibest);
     
     // add to _globals (candidates) all tonality of globals
-    // at distance to ibest smaller than d
+    // at distance to ibest smaller than best cost
     for (auto it = globals.cbegin(); it != globals.cend(); ++it)
     {
         size_t i = *it;

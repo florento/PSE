@@ -101,7 +101,7 @@ protected:
     /// using the algorithm named in this class.
     /// @param seed0 seed cost used to built the first PS table
     /// @param diff0 approximation coeff (percent) for the first estimatation of
-    /// global ton(s).
+    /// global ton(s). 100 for keeping all ton of index as candidates.
     // @param rewrite_flag0 whether the passing note must be rewritten
     // after first pass.
     /// @param seed1 seed cost used to built the second PS table
