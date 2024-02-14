@@ -87,8 +87,85 @@ CostAD& CostAD::operator+=(const CostAD& rhs)
 //    return std::unique_ptr<Cost>(new CostAD(*this));
 //}
 
-
 void CostAD::update(const enum NoteName& name,
+                    const enum Accid& accid,
+                    bool print,
+                    const Ton& gton, const Ton& lton)
+{
+    if (print)
+    {
+        switch (accid)
+        {
+            case Accid::DoubleSharp:
+            case Accid::DoubleFlat:
+                _accid += 2;
+                //_accid += 3;
+                break;
+                
+            case Accid::Sharp:
+            case Accid::Flat:
+            case Accid::Natural:
+                _accid += 1;
+                //_accid += 2;
+                break;
+                    
+            default:
+            {
+                ERROR("PSC: unexpected accidental"); // accid
+                break;
+            }
+        }
+    }
+    
+    if (lton.defined() && (lton.accidDia(name, lton.getMode()) != accid))
+    {
+        switch (accid)
+        {
+            case Accid::DoubleSharp:
+            case Accid::DoubleFlat:
+                _dist += 2;
+                //_dist += 3;
+                break;
+
+            case Accid::Sharp:
+            case Accid::Flat:
+            case Accid::Natural:
+                _dist += 1;
+                //_dist += 2;
+                break;
+
+            default:
+            {
+                ERROR("PSC: unexpected accidental"); // accid
+                break;
+            }
+        }
+    }
+    
+    if (print && !(lton.chromatic().contains(name,accid)))
+    {
+        _chromharm+=1;
+    }
+    
+    if (print && (gton.accidDia(name,gton.getMode()) != accid) &&
+        (((name == NoteName::C) && (accid == Accid::Flat)) ||
+         ((name == NoteName::B) && (accid == Accid::Sharp)) ||
+         ((name == NoteName::F) && (accid == Accid::Flat)) ||
+         ((name == NoteName::E) && (accid == Accid::Sharp))))
+    {
+        ++_cflat;
+    }
+    
+    // color of accident and color of global ton
+    int ks = gton.fifths();
+    // const enum Accid& a = c.accidental();
+    if (((ks >= 0) && (flat(accid))) || ((ks <=  0) && (sharp(accid))))
+    {
+        _color += 1;
+    }
+}
+
+void CostAD::update_tonale(const enum NoteName& name,
                     const enum Accid& accid,
                     bool print,
                     const Ton& gton, const Ton& lton)
