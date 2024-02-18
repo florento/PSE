@@ -71,8 +71,8 @@ bool PSE::spell()
     CostADplus seed1; // zero
     //CostADlex seed0;
     //CostADlex seed1;
-    // diff0=0, diff1=0, rewrite_flag1=false
-    return Speller2Pass::spell(seed0, seed1, 0, 0, false, false);
+    // diff0=0, diff1=0, rename_flag1=false, rewrite_flag1=false
+    return Speller2Pass::spell(seed0, seed1, 100, 0, false, false);
 }
 
 
