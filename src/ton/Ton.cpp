@@ -354,10 +354,10 @@ enum Accid Ton::accidDia(const enum NoteName& name, ModeName mode) const
 enum NoteName Ton::name(int d) const
 {
     // diatonic scale
-    assert(_mode == ModeName::Major ||
-           _mode == ModeName::Minor ||
-           _mode == ModeName::MinorNat ||
-           _mode == ModeName::MinorMel);
+//    assert(_mode == ModeName::Major ||
+//           _mode == ModeName::Minor ||
+//           _mode == ModeName::MinorNat ||
+//           _mode == ModeName::MinorMel);
     assert(d < 7);
     return getName() + d;
 }

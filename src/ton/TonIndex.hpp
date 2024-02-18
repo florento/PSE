@@ -165,6 +165,7 @@ private:
     /// major          KS -4 to 7 : C, C#, D, Eb, E, F, F#, G, Ab, A, Bb, B
     /// minor harmonic KS -6 to 6 : C, C#, D, Eb, D#, E, F, F#, G, G#, A, Bb, B
     void init25();
+    void initmodal();
     
     void initRankWeber();
     

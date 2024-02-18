@@ -243,6 +243,28 @@ void TonIndex::init25()
         add(ks, ModeName::Minor, true);
 }
 
+void TonIndex::initmodal()
+{
+    for (int ks = -7; ks <= 7; ++ks)
+        add(ks, ModeName::Major, true);
+    for (int ks = -7; ks <= 7; ++ks)
+        add(ks, ModeName::Minor, true);
+    for (int ks = -7; ks <= 7; ++ks)
+        add(ks, ModeName::MinorMel, true);
+    for (int ks = -7; ks <= 7; ++ks)
+        add(ks, ModeName::Dorian, true);
+    for (int ks = -7; ks <= 7; ++ks)
+        add(ks, ModeName::Phrygian, true);
+    for (int ks = -7; ks <= 7; ++ks)
+        add(ks, ModeName::Lydian, true);
+    for (int ks = -7; ks <= 7; ++ks)
+        add(ks, ModeName::Mixolydian, true);
+    for (int ks = -7; ks <= 7; ++ks)
+        add(ks, ModeName::Aeolian, true);
+    for (int ks = -7; ks <= 7; ++ks)
+        add(ks, ModeName::Locrian, true);
+}
+
 
 // static
 bool TonIndex::global(const ModeName& m)
