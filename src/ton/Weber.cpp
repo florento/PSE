@@ -468,6 +468,12 @@ size_t Weber::neighbour(size_t i, size_t n)
                 // front : Major tone with the same key signature
             case 4:
                 return ((k+1 < FIRST_MIXO)?(k+1-FIRST_LYD):NB_TONS);
+            case 5:
+                return NB_TONS;
+            case 6:
+                return NB_TONS;
+            case 7:
+                return NB_TONS;
             default:
                 ERROR("Weber neighbour: unexpected neighbour number {}", n);
                 return NB_TONS;
@@ -495,6 +501,10 @@ size_t Weber::neighbour(size_t i, size_t n)
                 // back : major tone with the same key signature
             case 5:
                 return ((k-1 >= FIRST_MIXO)?(k-1-FIRST_MIXO):NB_TONS);
+            case 6:
+                return NB_TONS;
+            case 7:
+                return NB_TONS;
             default:
                 ERROR("Weber neighbour: unexpected neighbour number {}", n);
                 return NB_TONS;
@@ -556,6 +566,12 @@ size_t Weber::neighbour(size_t i, size_t n)
                 // back : phrygian mode with the same key sig
             case 4:
                 return ((k-1 >= FIRST_LOC)?((k-1)+FIRST_PHRY-FIRST_LOC):NB_TONS);
+            case 5:
+                return NB_TONS;
+            case 6:
+                return NB_TONS;
+            case 7:
+                return NB_TONS;
             default:
                 ERROR("Weber neighbour: unexpected neighbour number {}", n);
                 return NB_TONS;
