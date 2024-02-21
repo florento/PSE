@@ -135,7 +135,8 @@ private:
     ///        - 2 for right
     ///        - 3 for down
     /// @return the index of the neighbour tonality of NB_TONS if there is none.
-    static size_t neighbour(size_t i, size_t j);
+    static size_t neighbour_tonal(size_t i, size_t j);
+    static size_t neighbour_modal(size_t i, size_t j);
 
 };
 
