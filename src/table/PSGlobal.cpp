@@ -17,7 +17,7 @@ _index(tab.index()),
 _globals(), // empty
 _debug(dflag)
 {
-    assert(0 >= d);
+    assert(0 <= d);
     assert(d <= 100);
     // same index for globals and tab
     assert(globals._index.size() == tab.index().size());

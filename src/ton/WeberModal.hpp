@@ -1,5 +1,5 @@
 //
-//  Weber.hpp
+//  WeberModal.hpp
 //  pse
 //
 //  Created by Florent Jacquemard on 17/12/2022.
@@ -7,8 +7,8 @@
 /// @addtogroup pse
 /// @{
 
-#ifndef Weber_hpp
-#define Weber_hpp
+#ifndef WeberModal_hpp
+#define WeberModal_hpp
 
 
 #include <iostream>
@@ -47,7 +47,7 @@ namespace pse {
 ///  Fb  db Db bb Bb g  G  e  E  c#
 ///
 ///  Bbb gb Gb eb Eb c  C  a  A  f#
-class Weber
+class WeberModal
 {
 public:
 
@@ -55,10 +55,10 @@ public:
     static const int UNDEF_DIST;
 
     /// main constructor
-    Weber();
+    WeberModal();
 
     /// destructor
-    ~Weber();
+    ~WeberModal();
 
     /// Weber distance between two tonalities.
     /// @param ton1 tonality. must be major or harmonic minor,
@@ -135,6 +135,7 @@ private:
     ///        - 2 for right
     ///        - 3 for down
     /// @return the index of the neighbour tonality of NB_TONS if there is none.
+    static size_t neighbour_tonal(size_t i, size_t j);
     static size_t neighbour(size_t i, size_t j);
 
 };
@@ -142,7 +143,7 @@ private:
 
 } // end namespace pse
     
-#endif /* Weber_hpp */
+#endif /* WeberModal_hpp */
 
 /// @} // end group pse
 

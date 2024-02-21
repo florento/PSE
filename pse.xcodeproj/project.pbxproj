@@ -111,6 +111,10 @@
 		43600D552A45C94E002704E0 /* CostAD.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43DD54232A38FA4E0036EF07 /* CostAD.cpp */; };
 		43600D562A45C94E002704E0 /* CostAD.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43DD54232A38FA4E0036EF07 /* CostAD.cpp */; };
 		43600D572A45C94F002704E0 /* CostAD.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43DD54232A38FA4E0036EF07 /* CostAD.cpp */; };
+		437098312B85E971007E5E31 /* WeberModal.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 4370982F2B85E971007E5E31 /* WeberModal.hpp */; };
+		437098322B85E971007E5E31 /* WeberModal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 437098302B85E971007E5E31 /* WeberModal.cpp */; };
+		437098332B85E971007E5E31 /* WeberModal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 437098302B85E971007E5E31 /* WeberModal.cpp */; };
+		437098342B85E971007E5E31 /* WeberModal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 437098302B85E971007E5E31 /* WeberModal.cpp */; };
 		43791C8E29D8392200DE8796 /* TestAccidental.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43791C8D29D8392200DE8796 /* TestAccidental.cpp */; };
 		43791C8F29D83EE400DE8796 /* TestScale.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 435081CE29D6C04600465943 /* TestScale.cpp */; };
 		438A581129E03FBB0073A32C /* PS13.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 432E7A5229D45FE2000E2B72 /* PS13.cpp */; };
@@ -329,6 +333,8 @@
 		4363442C29D31D8700F5D628 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		436C6C3D2924016F00152D8C /* pse.cpython-312-darwin.so */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = "pse.cpython-312-darwin.so"; sourceTree = BUILT_PRODUCTS_DIR; };
 		436C6C4D2924023100152D8C /* NoteName.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = NoteName.hpp; path = src/pitch/NoteName.hpp; sourceTree = "<group>"; };
+		4370982F2B85E971007E5E31 /* WeberModal.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = WeberModal.hpp; path = src/ton/WeberModal.hpp; sourceTree = "<group>"; };
+		437098302B85E971007E5E31 /* WeberModal.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = WeberModal.cpp; path = src/ton/WeberModal.cpp; sourceTree = "<group>"; };
 		43791C8D29D8392200DE8796 /* TestAccidental.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TestAccidental.cpp; sourceTree = "<group>"; };
 		4380D1E82A4DB78700AC1164 /* TestCostADlex.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TestCostADlex.cpp; sourceTree = "<group>"; };
 		438587EB2A5C0631006FB312 /* PSChord.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = PSChord.cpp; path = chord/PSChord.cpp; sourceTree = "<group>"; };
@@ -466,6 +472,8 @@
 				435406A229A8D4BB0075B3B7 /* TonIndex.cpp */,
 				432657E2294E2FB100515080 /* Weber.hpp */,
 				432657E1294E2FB000515080 /* Weber.cpp */,
+				4370982F2B85E971007E5E31 /* WeberModal.hpp */,
+				437098302B85E971007E5E31 /* WeberModal.cpp */,
 			);
 			name = ton;
 			sourceTree = "<group>";
@@ -812,6 +820,7 @@
 				431586392983ED5B00918B1B /* NoteName.hpp in Headers */,
 				43F9BE6B29CC696C00B0A7F8 /* Mode.hpp in Headers */,
 				430627BB2A44D33A0046FD99 /* CostADplus.hpp in Headers */,
+				437098312B85E971007E5E31 /* WeberModal.hpp in Headers */,
 				43ABA50B292423E8002AC1D4 /* Accidental.hpp in Headers */,
 				43F9BE6629CC423E00B0A7F8 /* ModeName.hpp in Headers */,
 				4342FD142926789C004E914F /* MidiNum.hpp in Headers */,
@@ -988,6 +997,7 @@
 				43C4A6542A1E7EBB00925A99 /* PSGrid.cpp in Sources */,
 				4309605D2A0D034A0097487A /* Speller.cpp in Sources */,
 				432A0F8D2A311889007D5CA2 /* TestRewritePassing.cpp in Sources */,
+				437098342B85E971007E5E31 /* WeberModal.cpp in Sources */,
 				438A581329E049020073A32C /* PSTable.cpp in Sources */,
 				435081F329D6D76800465943 /* Enharmonic.cpp in Sources */,
 				435081FB29D6D7DF00465943 /* TonIndex.cpp in Sources */,
@@ -1036,6 +1046,7 @@
 				43D7BABF2A27E31600570C47 /* PS14.cpp in Sources */,
 				43ABA511292423E8002AC1D4 /* Enharmonic.cpp in Sources */,
 				43ABA50C292423E8002AC1D4 /* Fifths.cpp in Sources */,
+				437098322B85E971007E5E31 /* WeberModal.cpp in Sources */,
 				43C2BA192999529E0084AB3B /* PWO.cpp in Sources */,
 				430CDFF12924E6D800A84650 /* KeyFifth.cpp in Sources */,
 				43F9BE6929CC696C00B0A7F8 /* Mode.cpp in Sources */,
@@ -1108,6 +1119,7 @@
 				432657E4294E2FB100515080 /* Weber.cpp in Sources */,
 				43600D562A45C94E002704E0 /* CostAD.cpp in Sources */,
 				43FBEACE2930CEDD008FC486 /* PSState.cpp in Sources */,
+				437098332B85E971007E5E31 /* WeberModal.cpp in Sources */,
 				432586A42A4050C80069D796 /* PSConfig1c.cpp in Sources */,
 				432E7A5529D45FE2000E2B72 /* PS13.cpp in Sources */,
 				43C2BA1E299A5FEE0084AB3B /* IntervalSimple.cpp in Sources */,

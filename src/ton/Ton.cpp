@@ -539,6 +539,7 @@ const Scale& Ton::chromatic() const
     return _chromatic;
 }
 
+
 int Ton::tonic() const
 {
     int i = 99;
@@ -560,6 +561,7 @@ int Ton::tonic() const
         case ModeName::Ionian:
             i = fifths();
             break;
+
 
         case ModeName::Dorian:
             i = fifths(); // + 2;

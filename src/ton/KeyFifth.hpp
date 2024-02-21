@@ -54,7 +54,7 @@ public:
     /// distance in the array of fifths from a signature with no accidentals.
     KeyFifth(int ton);
     
-    /// key signature constructor for a given pitch class in 0..11.
+    /// key signature constructor for a given pitch class in 0..11 and a mode.
     /// @param c a pitch class, in 0..11
     /// @param major true for major key, false for minor key.
     /// @see key(int, bool)
@@ -72,7 +72,7 @@ public:
     /// - for 10, minor, we get -5 (Bb m), it could be  7 (A# m)
     /// - for  3, minor, we get  6 (D# m), it could be -6 (Eb m)
     /// - for  8, minor, we get  5 (G# m), it could be -7 (Ab m)
-    /// @warning obsolete
+    /// @todo RM obsolete (not used)
     KeyFifth(int c, bool major);
 
     /// copy constructor
@@ -84,7 +84,8 @@ public:
     bool operator==(const KeyFifth& rhs) const;
     bool operator!=(const KeyFifth& rhs) const;
 
-    /// @return distance in the array of fifths from a signature with no accidentals.
+    /// @return distance in the array of fifths from a signature 
+    /// with no accidentals.
     inline int fifths() const { return _sig; };
     
     /// number of sharp symbols to denote this key signature.

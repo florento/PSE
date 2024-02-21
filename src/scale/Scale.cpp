@@ -20,8 +20,8 @@ _ks(0)
 { }
 
 
-Scale::Scale(const ModeName& mode, int pc, const enum NoteName& name):
-Scale(Mode(mode), pc, name)
+Scale::Scale(const ModeName& modename, int pc, const enum NoteName& name):
+Scale(Mode(modename), pc, name)
 { }
 
 
