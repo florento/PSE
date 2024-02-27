@@ -60,10 +60,10 @@ _closed(false)
             close();
             break;
             
-        case 120:
-            // init13(ModeName::Major);
-            init15(ModeName::Minor, true);
-            init15(ModeName::Ionian, true);
+        case 135:
+            init15(ModeName::Major, true); // Ionian
+            init15(ModeName::Minor, false);
+            init15(ModeName::MinorMel, false);
             init15(ModeName::Dorian, false);
             init15(ModeName::Phrygian, false);
             init15(ModeName::Lydian, false);
