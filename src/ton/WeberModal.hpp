@@ -1,15 +1,14 @@
 //
-//  Weber.hpp
+//  WeberModal.hpp
 //  pse
 //
-//  Created by Florent Jacquemard on 17/12/2022.
+//  Created by Florent Jacquemard on 27/02/2024.
 //
 /// @addtogroup pse
 /// @{
 
-#ifndef Weber_hpp
-#define Weber_hpp
-
+#ifndef WeberModal_hpp
+#define WeberModal_hpp
 
 #include <iostream>
 #include <assert.h>
@@ -27,27 +26,7 @@
 
 namespace pse {
 
-/// computation of a table of distance between tonalities, following
-/// Jacob Gottfried Weber
-/// Versuch eine geordneten Theorie des Tonsetzkunst
-/// (1817-1821)
-///
-/// the table of relationships between keys:
-///
-///  Eb  c  C  a  A  f# F# d# D# b#
-///
-///  Ab  f  F  d  D  b  B  g# G# e#
-///
-///  Db  bb Bb g  G  e  E  c# C# a#
-///
-///  Gb  eb Eb c  C  a  A  f# F# d#
-///
-///  Cb  ab Ab f  F  d  D  b  B  g#
-///
-///  Fb  db Db bb Bb g  G  e  E  c#
-///
-///  Bbb gb Gb eb Eb c  C  a  A  f#
-class Weber
+class WeberModal
 {
 public:
 
@@ -55,10 +34,10 @@ public:
     static const int UNDEF_DIST;
 
     /// main constructor
-    Weber();
+    WeberModal();
 
     /// destructor
-    ~Weber();
+    ~WeberModal();
 
     /// Weber distance between two tonalities.
     /// @param ton1 tonality. must be major or harmonic minor,
@@ -71,24 +50,10 @@ public:
     /// print the matrix of distances.
     void dump() const;
     
-    /// Weber distance between two tonalities,
-    /// extracted from the static distance matrix WEBER_DIST
-    /// precomputed with the functions of this class.
-    /// @param ton1 tonality. must be major or harmonic minor,
-    ///        key signature in -7..7.
-    /// @param ton2 tonality. must be major or harmonic minor,
-    ///        key signature in -7..7.
-    /// @return positive int or UNDEF_DIST.
-    /// @see WEBER_DIST
-    static int static_dist(const Ton& ton1, const Ton& ton2);
-    
-    /// `a < b` where `a` and `b` are positive or `UNDEF_DIST` (+infinity).
-    static bool inf(int a, int b);
-    
 private: // data
 
     /// number of tonalities considered.
-    static const size_t NB_TONS = 30;
+    static const size_t NB_TONS = 135;
 
     // array of tonalities considered.
     // const std::array<const Ton, NB_TONS> TON;
@@ -97,20 +62,13 @@ private: // data
     /// triangular.
     std::array<std::array<int, NB_TONS>, NB_TONS> DIST;
     
-    /// precomputed matrix of Weber distance between tonalities.
-    /// obtained by the functions of the class
-    /// @see init()
-    /// @see dump()
-    static const std::array<std::array<int, NB_TONS>, NB_TONS> WEBER_DIST;
-    
 private:
     
     /// compute the matrix of distances.
     void init();
     
-    // size_t first: index of ton j
-    // int second: length smallest path so far from i to j (can be UNDEF_DIST)
-    // typedef std::pair<size_t, int> pairi;
+    /// `a < b` where `a` and `b` are positive or `UNDEF_DIST` (+infinity).
+    static bool inf(int a, int b);
     
     /// extract from heap the index with min value in dist and return it.
     /// @param heap bitvector of index present.
@@ -134,13 +92,12 @@ private:
     ///        - 2 for right
     ///        - 3 for down
     /// @return the index of the neighbour tonality of NB_TONS if there is none.
-    static size_t neighbour_tonal(size_t i, size_t j);
+    static size_t neighbour_modal(size_t i, size_t j);
 
 };
 
-
 } // end namespace pse
-    
-#endif /* Weber_hpp */
+
+#endif /* WeberModal_hpp */
 
 /// @} // end group pse

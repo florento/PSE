@@ -126,7 +126,7 @@ def FRB_table(corpus='leads'):
 skip = ['Autumn in New York']
 
 def eval_FRB(corpus='leads', algo=ps.pse.Algo_PSE, 
-             tons=104, kpre=33, kpost=23, 
+             tons=135, kpre=33, kpost=23, 
              output_dir='', filename='',             
              debug=True, mark=True):
     global _eval_root

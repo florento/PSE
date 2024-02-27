@@ -33,7 +33,7 @@ int main(int argc, const char* argv[])
     // godfried.dump();
     // return 0;
 
-    pse::PSE sp(30, true);
+    pse::PSE sp(135, true);
     //pse::PS13 sp;
 
     //issue7(sp);
