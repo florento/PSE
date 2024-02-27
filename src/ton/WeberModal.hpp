@@ -82,7 +82,7 @@ private:
 
     /// index of the given tonality in the array of tonalities considered,
     /// or NB_TONS if it does not belong to the array.
-    static size_t index(const Ton& ton);
+    static size_t index_modal(const Ton& ton);
     
     /// jth neighbour of the tonality of index i.
     /// @param i index of tonality. must be smaller than NB_TONS.

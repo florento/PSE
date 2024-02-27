@@ -207,22 +207,48 @@ void WeberModal::dump() const
 
 
 // static
-size_t WeberModal::index(const Ton& ton)
+size_t WeberModal::index_modal(const Ton& ton)
 {
     if (ton.getMode() == ModeName::Major)
     {
         return ton.fifths() + 7;
     }
-    else if (ton.getMode() == ModeName::Minor    ||
-             ton.getMode() == ModeName::MinorNat ||
-             ton.getMode() == ModeName::MinorMel)
+    else if (ton.getMode() == ModeName::Minor)
     {
         return ton.fifths() + 22;
     }
+    else if (ton.getMode() == ModeName::MinorMel)
+    {
+        return ton.fifths() + 37;
+    }
+    else if (ton.getMode() == ModeName::Dorian)
+    {
+        return ton.fifths() + 52;
+    }
+    else if (ton.getMode() == ModeName::Phrygian)
+    {
+        return ton.fifths() + 67;
+    }
+    else if (ton.getMode() == ModeName::Lydian)
+    {
+        return ton.fifths() + 82;
+    }
+    else if (ton.getMode() == ModeName::Mixolydian)
+    {
+        return ton.fifths() + 97;
+    }
+    else if (ton.getMode() == ModeName::Aeolian)
+    {
+        return ton.fifths() + 112;
+    }
+    else if (ton.getMode() == ModeName::Locrian)
+    {
+        return ton.fifths() + 127;
+    }
     else
     {
-        ERROR("Weber index undefined for {}", ton);
-        return NB_TONS;
+    ERROR("Weber index undefined for {}", ton);
+    return NB_TONS;
     }
 }
 
