@@ -222,16 +222,17 @@ def add_tons(tons, sp):
             sp.add_ton(k, pse.Mode.Minor,      True)
         sp.close_tons()    
     # key signature in [-7 .. 7], jazz antic modes
-    elif tons == 120:
+    elif tons == 135:
         for k in range(-7, 8):            
             sp.add_ton(k, pse.Mode.Ionian,     True)
+            sp.add_ton(k, pse.Mode.Minor,      False)
+            sp.add_ton(k, pse.Mode.MinMel,     False)
             sp.add_ton(k, pse.Mode.Dorian,     False)
             sp.add_ton(k, pse.Mode.Phrygian,   False)
             sp.add_ton(k, pse.Mode.Lydian,     False)
             sp.add_ton(k, pse.Mode.Mixolydian, False)
             sp.add_ton(k, pse.Mode.Aeolian,    False)
             sp.add_ton(k, pse.Mode.Locrian,    False)
-            sp.add_ton(k, pse.Mode.Minor,      True)
         sp.close_tons()    
     else:
         print('ERROR: unsupported number of tons', tons, flush=True)
