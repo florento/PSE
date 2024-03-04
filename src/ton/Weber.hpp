@@ -23,6 +23,7 @@
 //#include "Fifthspse::Weber
 //#include "KeyFifth.hpp"
 #include "Ton.hpp"
+#include "Weber_static.hpp"
 
 
 namespace pse {
@@ -51,9 +52,6 @@ class Weber
 {
 public:
 
-    /// undefined distance value.
-    static const int UNDEF_DIST;
-
     /// main constructor
     Weber();
 
@@ -70,41 +68,24 @@ public:
 
     /// print the matrix of distances.
     void dump() const;
-    
-    /// Weber distance between two tonalities,
-    /// extracted from the static distance matrix WEBER_DIST
-    /// precomputed with the functions of this class.
-    /// @param ton1 tonality. must be major or harmonic minor,
-    ///        key signature in -7..7.
-    /// @param ton2 tonality. must be major or harmonic minor,
-    ///        key signature in -7..7.
-    /// @return positive int or UNDEF_DIST.
-    /// @see WEBER_DIST
-    static int static_dist(const Ton& ton1, const Ton& ton2);
-    
-    /// `a < b` where `a` and `b` are positive or `UNDEF_DIST` (+infinity).
-    static bool inf(int a, int b);
-    
+          
 private: // data
-
-    /// number of tonalities considered.
-    static const size_t NB_TONS = 30;
-
+  
+    /// internal alias
+    static const size_t WS_NBTONS = Weber_static::NB_TONS;
+    
+    /// internal alias
+    static const int WS_UNDEFDIST; //  = Weber_static::UNDEF_DIST;
+        
     // array of tonalities considered.
     // const std::array<const Ton, NB_TONS> TON;
 
     /// matrix of distances between tonalities.
     /// triangular.
-    std::array<std::array<int, NB_TONS>, NB_TONS> DIST;
-    
-    /// precomputed matrix of Weber distance between tonalities.
-    /// obtained by the functions of the class
-    /// @see init()
-    /// @see dump()
-    static const std::array<std::array<int, NB_TONS>, NB_TONS> WEBER_DIST;
+    std::array<std::array<int, WS_NBTONS>, WS_NBTONS> DIST;
     
 private:
-    
+
     /// compute the matrix of distances.
     void init();
     
@@ -117,15 +98,11 @@ private:
     /// @param dist vector of distance values (positive or UNDEF_DIST = +infinity).
     /// @return index with min value in dist and present in heap or
     /// NB_TONS if there are none.
-    static size_t extractMin(std::array<bool, NB_TONS>& heap,
-                       const std::array<int,  NB_TONS>& dist);
+    static size_t extractMin(std::array<bool, WS_NBTONS>& heap,
+                       const std::array<int,  WS_NBTONS>& dist);
 
-    static bool isEmpty(const std::array<bool, NB_TONS>& heap);
+    static bool isEmpty(const std::array<bool, WS_NBTONS>& heap);
 
-    /// index of the given tonality in the array of tonalities considered,
-    /// or NB_TONS if it does not belong to the array.
-    static size_t index(const Ton& ton);
-    
     /// jth neighbour of the tonality of index i.
     /// @param i index of tonality. must be smaller than NB_TONS.
     /// @param j neighbour number.

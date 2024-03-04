@@ -22,7 +22,8 @@
 //#include "Fifthspse::Weber
 //#include "KeyFifth.hpp"
 #include "Ton.hpp"
-
+#include "Weber_static.hpp"
+#include "WeberModal_static.hpp"
 
 namespace pse {
 
@@ -30,8 +31,8 @@ class WeberModal
 {
 public:
 
-    /// undefined distance value.
-    static const int UNDEF_DIST;
+    // undefined distance value.
+    // static const int UNDEF_DIST;
 
     /// main constructor
     WeberModal();
@@ -52,15 +53,22 @@ public:
     
 private: // data
 
-    /// number of tonalities considered.
-    static const size_t NB_TONS = 135;
+    // number of tonalities considered.
+    // static const size_t NB_TONS = 135;
+    
+    /// internal alias
+    static const size_t WMS_NBTONS = WeberModal_static::NB_TONS;
+    
+    /// internal alias
+    static const int WS_UNDEFDIST; //  = Weber_static::UNDEF_DIST;
+
 
     // array of tonalities considered.
-    // const std::array<const Ton, NB_TONS> TON;
+    // const std::array<const Ton, WMS_NBTONS> TON;
 
     /// matrix of distances between tonalities.
     /// triangular.
-    std::array<std::array<int, NB_TONS>, NB_TONS> DIST;
+    std::array<std::array<int, WMS_NBTONS>, WMS_NBTONS> DIST;
     
 private:
     
@@ -75,10 +83,10 @@ private:
     /// @param dist vector of distance values (positive or UNDEF_DIST = +infinity).
     /// @return index with min value in dist and present in heap or
     /// NB_TONS if there are none.
-    static size_t extractMin(std::array<bool, NB_TONS>& heap,
-                       const std::array<int,  NB_TONS>& dist);
+    static size_t extractMin(std::array<bool, WMS_NBTONS>& heap,
+                       const std::array<int,  WMS_NBTONS>& dist);
 
-    static bool isEmpty(const std::array<bool, NB_TONS>& heap);
+    static bool isEmpty(const std::array<bool, WMS_NBTONS>& heap);
 
     /// index of the given tonality in the array of tonalities considered,
     /// or NB_TONS if it does not belong to the array.

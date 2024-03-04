@@ -11,15 +11,16 @@
 #include "PS13.hpp"
 #include "PS14.hpp"
 #include "Weber.hpp"
+#include "WeberModal.hpp"
 #include "samples.hpp"
 
 
 /// dump the matric of Weber distance between tonalities
-void WeberTable()
-{
-    pse::Weber godfried = pse::Weber();
-    godfried.dump();
-}
+//void WeberTable()
+//{
+//    pse::Weber godfried;
+//    godfried.dump();
+//}
 
 
 int main(int argc, const char* argv[])
@@ -29,19 +30,19 @@ int main(int argc, const char* argv[])
     spdlog_setVerbosity(5);
     spdlog_setPattern();
 
-    // pse::Weber godfried = pse::Weber();
-    // godfried.dump();
-    // return 0;
+    pse::WeberModal godfried;
+    godfried.dump();
+    return 0;
 
     pse::PSE sp(135, true);
     //pse::PS13 sp;
 
-    //issue7(sp);
-    //BWV_858prelude(sp);
-    //BWV_857fugue(sp);
-    //BWV_864fugue(sp);
-    //LG101(sp);
-    //LG461(sp);
+    // issue7(sp);
+    // BWV_858prelude(sp);
+    // BWV_857fugue(sp);
+    // BWV_864fugue(sp);
+    // LG101(sp);
+    // LG461(sp);
     // Waldstein(sp);
     Airegin(sp);
 

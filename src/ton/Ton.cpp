@@ -14,7 +14,7 @@
 //#include "Pitch.hpp"
 #include "Fifths.hpp"
 //#include "PSState.hpp"
-#include "Weber.hpp" // Weber distance
+#include "Weber_static.hpp" // Weber distance
 //#include "Scale.hpp" // dependency
 
 
@@ -463,8 +463,8 @@ unsigned int Ton::distDiatonic(const Ton& rhs) const
 
 unsigned int Ton::distWeber(const Ton& rhs) const
 {
-    int res = Weber::static_dist(*this, rhs);
-    assert(res != Weber::UNDEF_DIST);
+    int res = Weber_static::dist(*this, rhs);
+    assert(res != Weber_static::UNDEF_DIST);
     return res;
 }
 
