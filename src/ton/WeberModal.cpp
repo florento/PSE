@@ -97,7 +97,7 @@ void WeberModal::init()
             assert(distik != WS_UNDEFDIST);
             
             // explore the neighbour tonalities of k
-            for (size_t l = 0; l < 4; ++l)
+            for (size_t l = 0; l < 8; ++l)
             {
                 size_t nl = neighbour_modal(k, l);
                 assert(nl <= WMS_NBTONS);
