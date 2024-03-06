@@ -32,10 +32,10 @@ import PSeval as ps
 
 # path to ASAP dataset
 #_dataset_root = '/Users/xavriley/Dropbox/PhD/Datasets/FiloBass ISMIR Publication/musicxml/'
-_dataset_root = '../../../Datasets/FiloBass-XML'
+_dataset_root = '../../../Datasets/FiloBass-xml'
 
  # default score file name
-_score_suffix = '.xml'
+_score_suffix = '.musicxml'
 
 # root of evaluation dir
 _eval_root = '../../PSeval'
@@ -250,6 +250,11 @@ def debug(name):
     #sp.add_notes(ln1[:61], sp)
     #sp.spell()
     
+<<<<<<< HEAD
+#if __name__=="__main__":
+#    eval_FiloBass(tons=135)
+=======
 if __name__=="__main__":
     eval_FiloBass(tons=135)
+>>>>>>> d87a69a42280d7d7314d46364595cb9f480bca44
 

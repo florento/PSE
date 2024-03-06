@@ -26,7 +26,7 @@ import PSeval as ps
 ##                    ##
 ########################
 
-# path to ASAP dataset
+# path to FRB dataset
 _dataset_root = '../../../Datasets/FakeRealBook'
 
  # default score file name
