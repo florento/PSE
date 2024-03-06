@@ -276,62 +276,6 @@ size_t PSG::estimateLocal(size_t ig, size_t iprev, std::vector<size_t>& cands)
 }
 
 
-//______________________________________________________________________________//
-/*
-
-
-void PSG::init(const PST& tab, std::vector<bool> mask)
-{
-
-    for (size_t j = 0; j < tab.columnNb(); ++j)
-    {
-        // column of best paths for measure j
-        const PSV& vec = tab.column(j);
-        assert(vec.size() == mask.size());
-
-        // set of index of elements in vec with a best cost.
-        // (there are several in case of tie).
-        //std::vector<size_t> ties; // empty
-        // cands empty in case of empty measure
-        
-        // add empty column
-        assert(_content.size() == j); // current nb of columns
-        _content.emplace_back();
-        std::vector<size_t>& current = _content.back();
-
-        // compute every row in this new column
-        for (size_t i = 0; i < vec.size(); ++i)
-        {
-            // i is masked : do not estimate local for i
-            if (mask[i] == false)
-            {
-                current.push_back(TonIndex::UNDEF);
-            }
-            // in the first column (first measure)
-            else if (_content.size() == 1)
-            {
-                current.push_back(estimateLocalalt(vec, i, i, 4));
-            }
-            // otherwise, consider previous column
-            else
-            {
-                assert(j > 0);
-                assert(j-1 < _content.size());
-                assert(i < _content.at(j-1).size());
-                size_t iprev = _content.at(j-1).at(i);
-                current.push_back(estimateLocalalt(vec, i, iprev, 4));
-            }
-            assert(current.back() == TonIndex::UNDEF ||
-                   current.back() < _index.size());
-            //INFO("BUG 102: {} (UNDEF={})", _content.back().back(), TonIndex::UNDEF);
-        }
-        assert(current.size() == vec.size());
-    }
-}
-
-*/
-
-
 // this alternative function determines the best local tonality by restraining
 // its search only on tones close to the previous or global one
 // and then choosing the one minimizing accidents
@@ -515,3 +459,64 @@ size_t PSG::estimateLocal(const PSV& vec, size_t ig, size_t iprev)
 }
 
 } // end namespace pse
+
+
+
+
+
+
+
+//______________________________________________________________________________//
+/*
+
+
+void PSG::init(const PST& tab, std::vector<bool> mask)
+{
+
+    for (size_t j = 0; j < tab.columnNb(); ++j)
+    {
+        // column of best paths for measure j
+        const PSV& vec = tab.column(j);
+        assert(vec.size() == mask.size());
+
+        // set of index of elements in vec with a best cost.
+        // (there are several in case of tie).
+        //std::vector<size_t> ties; // empty
+        // cands empty in case of empty measure
+        
+        // add empty column
+        assert(_content.size() == j); // current nb of columns
+        _content.emplace_back();
+        std::vector<size_t>& current = _content.back();
+
+        // compute every row in this new column
+        for (size_t i = 0; i < vec.size(); ++i)
+        {
+            // i is masked : do not estimate local for i
+            if (mask[i] == false)
+            {
+                current.push_back(TonIndex::UNDEF);
+            }
+            // in the first column (first measure)
+            else if (_content.size() == 1)
+            {
+                current.push_back(estimateLocalalt(vec, i, i, 4));
+            }
+            // otherwise, consider previous column
+            else
+            {
+                assert(j > 0);
+                assert(j-1 < _content.size());
+                assert(i < _content.at(j-1).size());
+                size_t iprev = _content.at(j-1).at(i);
+                current.push_back(estimateLocalalt(vec, i, iprev, 4));
+            }
+            assert(current.back() == TonIndex::UNDEF ||
+                   current.back() < _index.size());
+            //INFO("BUG 102: {} (UNDEF={})", _content.back().back(), TonIndex::UNDEF);
+        }
+        assert(current.size() == vec.size());
+    }
+}
+
+*/

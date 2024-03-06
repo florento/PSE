@@ -22,12 +22,14 @@ const size_t TonIndex::FAILED = MAXTONS+2;
 TonIndex::TonIndex(size_t n):
 _tons(), // vector initially empty
 _rankWeber(),
-_closed(false)
+_closed(false),
+_WeberTonal(true)
 {
     switch (n)
     {
         case 0:
-            // close() must be called after
+            _WeberTonal = false;
+            // close() must be called afterwards
             break;
 
         case 25:
@@ -48,6 +50,7 @@ _closed(false)
             break;
 
         case 104:
+            _WeberTonal = false;
             // init13(ModeName::Major);
             init13(ModeName::Minor, true);
             init13(ModeName::Ionian, true);
@@ -61,6 +64,7 @@ _closed(false)
             break;
             
         case 135:
+            _WeberTonal = false;
             init15(ModeName::Major, true); // Ionian
             init15(ModeName::Minor, false);
             init15(ModeName::MinorMel, false);
@@ -184,22 +188,22 @@ void TonIndex::reset()
 
 void TonIndex::add(const Ton& ton, bool global)
 {
+    if (_closed)
+    {
+        ERROR("TonIndex add: array of tons is closed");
+        return;
+    }
+    
     if (_tons.size() < MAXTONS)
         _tons.push_back(std::make_pair(ton, global)); // copy
     else
-        ERROR("TonIndex: array of tons overfull");
+        ERROR("TonIndex add: array of tons overfull");
 }
 
 
 void TonIndex::add(int ks, const ModeName& mode, bool global)
 {
-    if (_tons.size() < MAXTONS)
-    {
-        //_tons.emplace_back(ks, mode);
-        _tons.push_back(std::make_pair(Ton(ks, mode), global)); // copy
-    }
-    else
-        ERROR("TonIndex: array of tons overfull");
+    add(Ton(ks, mode), global);
 }
 
 
@@ -310,6 +314,7 @@ bool TonIndex::global(const ModeName& m)
 void TonIndex::initRankWeber()
 {
     assert(_rankWeber.empty());
+    assert(_closed);
     
     for (size_t i = 0; i < _tons.size(); ++i)
     {
@@ -321,9 +326,14 @@ void TonIndex::initRankWeber()
         std::vector<unsigned int> pcol; // empty
         
         for (size_t j = 0; j < _tons.size(); ++j)
-            pcol.push_back(toni.distWeber(ton(j)));
+        {
+            if (_WeberTonal)
+                pcol.push_back(toni.distWeber(ton(j)));
+            else
+                pcol.push_back(toni.distWeberModal(ton(j)));
             // pcol.push_back(std::make_pair(j, toni.distWeber(ton(j))));
-
+        }
+            
         // pcol is sorted by weber distance to i.
         _rankWeber.emplace_back(); // empty column
         util::ranks<unsigned int>(pcol,

@@ -157,6 +157,11 @@ public:
     /// based on the table of J.G. Weber.
     /// @see Weber.hpp
     unsigned int distWeber(const Ton& rhs) const;
+    
+    /// distance between this tonality and another tonality
+    /// based on the extension of the table of J.G. Weber.
+    /// @see WeberModal.hpp
+    unsigned int distWeberModal(const Ton& rhs) const;
 
     // distance, in the array of fifths, between the note (given by name)
     // and the tonic of the given tonality.

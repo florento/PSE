@@ -9,7 +9,15 @@
 
 namespace pse {
 
-
+// static
+int WeberModal_static::dist(const Ton& ton1, const Ton& ton2)
+{
+    size_t i1 = index(ton1);
+    assert(i1 < NB_TONS);
+    size_t i2 = index(ton2);
+    assert(i2 < NB_TONS);
+    return WEBER_DIST[i1][i2];
+}
 
 // static
 size_t WeberModal_static::index(const Ton& ton)

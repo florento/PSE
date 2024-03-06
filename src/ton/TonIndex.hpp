@@ -46,7 +46,7 @@ public:
     /// main constructor.
     /// @param nb default list of tonalities.
     /// currently supported:
-    /// - 0  : empty list.
+    /// - 0  : empty list. tons can be added with add()
     /// - 26 : major and harmonic minor, KS between -6 and 6.
     /// - 30 : major and harmonic minor, KS between -7 and 7.
     /// - 25 : tonalities of Bach's Wohltemperierte Clavier
@@ -54,6 +54,7 @@ public:
     ///        minor harm KS -6 to 6 : C, C#, D, Eb, D#, E, F, F#, G, G#, A, Bb, B
     /// - 104: major, minor, all jazz modes, KS in -6..6
     /// - 120: major, minor, all jazz modes, KS in -7..7
+    /// - 135: modal: TBC
     /// the empty array of tonalities (case 0) is not closed.
     /// All the others are closed.
     TonIndex(size_t nb=0);
@@ -139,8 +140,13 @@ private: // data
     /// to the distance to ton j in this index.
     std::vector<std::vector<size_t>> _rankWeber;
     
+    /// this ton index has been closed:
     bool _closed;
 
+    /// true if we use the tonal (original) Weber distance,
+    /// false if we use the modal Weber distance.
+    bool _WeberTonal;
+    
 private:
     
     /// find the index of a ton defined by given key signature and mode
@@ -167,6 +173,7 @@ private:
     void init25();
     void initmodal();
     
+    /// initialize the table _rankWeber
     void initRankWeber();
     
     /// a ton in the given mode can be considered global.
