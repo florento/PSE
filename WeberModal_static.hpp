@@ -52,13 +52,13 @@ public:
         
     
 private:
+        
+    /// precomputed matrix of Weber distance between tonalities.
+    /// obtained by the functions of the class
+    /// @see init()
+    /// @see dump()
+    static const std::array<std::array<int, NB_TONS>, NB_TONS> WEBER_DIST;
     
-/// precomputed matrix of Weber distance between tonalities.
-/// obtained by the functions of the class
-/// @see init()
-/// @see dump()
-// static const std::array<std::array<int, NB_TONS>, NB_TONS> WM_DIST;
-
 };
 
 } // end namespace pse
