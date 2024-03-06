@@ -11,7 +11,7 @@ Evaluation of the score of the Fake Real Book dataset
 import sys
 import logging
 
-sys.path.append('/Users/xavriley/Projects/pse/lib')
+#sys.path.append('/Users/xavriley/Projects/pse/lib')
 import pse
 
 import os
@@ -133,7 +133,7 @@ skip = ['All-the-Things-You-Are',
         'Apple-Jump',]
 
 def eval_FiloBass(algo=ps.pse.Algo_PSE, 
-             tons=104, kpre=33, kpost=23, 
+             tons=135, kpre=33, kpost=23, 
              output_dir='', filename='',             
              debug=True, mark=True):
     global _eval_root
@@ -182,7 +182,7 @@ def eval_FiloBass(algo=ps.pse.Algo_PSE,
     
     
 def eval_FiloBassitem(name, algo=ps.pse.Algo_PSE, 
-                 tons=104, kpre=33, kpost=23, dflag=True, mflag=True):
+                 tons=135, kpre=33, kpost=23, dflag=True, mflag=True):
     assert(len(name) > 0)
     dataset = FiloBassCorpus()
     if (dataset.get(name) == None):
@@ -251,5 +251,5 @@ def debug(name):
     #sp.spell()
     
 if __name__=="__main__":
-    eval_FiloBass(tons=30)
+    eval_FiloBass(tons=135)
 
