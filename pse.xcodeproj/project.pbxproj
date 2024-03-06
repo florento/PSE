@@ -1386,7 +1386,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SYSTEM_HEADER_SEARCH_PATHS = (
-					"$(LOCAL_LIBRARY_DIR)/Frameworks/Python.framework/Versions/3.12/Headers",
+					"$(LOCAL_LIBRARY_DIR)/Frameworks/Python.framework/Versions/Current/Headers",
 					extern/spdlog/include,
 					/Users/augustinbouquillard/anaconda3/bin/python,
 				);
@@ -1434,7 +1434,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SYSTEM_HEADER_SEARCH_PATHS = (
-					"$(LOCAL_LIBRARY_DIR)/Frameworks/Python.framework/Versions/3.12/Headers",
+					"$(LOCAL_LIBRARY_DIR)/Frameworks/Python.framework/Versions/Current/Headers",
 					extern/spdlog/include,
 					/Users/augustinbouquillard/anaconda3/bin/python,
 				);

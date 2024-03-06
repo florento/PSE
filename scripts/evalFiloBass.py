@@ -11,7 +11,7 @@ Evaluation of the score of the Fake Real Book dataset
 import sys
 import logging
 
-sys.path.append('/Users/xavriley/Projects/pse/lib')
+#sys.path.append('/Users/xavriley/Projects/pse/lib')
 import pse
 
 import os
@@ -250,6 +250,11 @@ def debug(name):
     #sp.add_notes(ln1[:61], sp)
     #sp.spell()
     
+<<<<<<< HEAD
 #if __name__=="__main__":
 #    eval_FiloBass(tons=135)
+=======
+if __name__=="__main__":
+    eval_FiloBass(tons=135)
+>>>>>>> d87a69a42280d7d7314d46364595cb9f480bca44
 
