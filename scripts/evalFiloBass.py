@@ -32,10 +32,10 @@ import PSeval as ps
 
 # path to ASAP dataset
 #_dataset_root = '/Users/xavriley/Dropbox/PhD/Datasets/FiloBass ISMIR Publication/musicxml/'
-_dataset_root = '../../../Datasets/FiloBass-XML'
+_dataset_root = '../../../Datasets/FiloBass-xml'
 
  # default score file name
-_score_suffix = '.xml'
+_score_suffix = '.musicxml'
 
 # root of evaluation dir
 _eval_root = '../../PSeval'
@@ -133,7 +133,7 @@ skip = ['All-the-Things-You-Are',
         'Apple-Jump',]
 
 def eval_FiloBass(algo=ps.pse.Algo_PSE, 
-             tons=104, kpre=33, kpost=23, 
+             tons=135, kpre=33, kpost=23, 
              output_dir='', filename='',             
              debug=True, mark=True):
     global _eval_root
@@ -182,7 +182,7 @@ def eval_FiloBass(algo=ps.pse.Algo_PSE,
     
     
 def eval_FiloBassitem(name, algo=ps.pse.Algo_PSE, 
-                 tons=104, kpre=33, kpost=23, dflag=True, mflag=True):
+                 tons=135, kpre=33, kpost=23, dflag=True, mflag=True):
     assert(len(name) > 0)
     dataset = FiloBassCorpus()
     if (dataset.get(name) == None):
@@ -250,6 +250,6 @@ def debug(name):
     #sp.add_notes(ln1[:61], sp)
     #sp.spell()
     
-if __name__=="__main__":
-    eval_FiloBass(tons=30)
+#if __name__=="__main__":
+#    eval_FiloBass(tons=135)
 
