@@ -10,7 +10,9 @@
 namespace pse {
 
 
-// static
+// static const size_t Weber_static::NB_TONS = 30;
+
+// static 
 const int Weber_static::UNDEF_DIST = -1;
 
 
@@ -66,8 +68,7 @@ bool Weber_static::inf(int a, int b)
 
 
 // static
-const std::array<std::array<int, Weber_static::NB_TONS>, Weber_static::NB_TONS>
-Weber_static::WEBER_DIST =
+const std::vector<std::vector<int>> Weber_static::WEBER_DIST =
 {{
 //     0   1   2   3   4   5   6   7   8   9  10  11  12  13  14  15  16  17  18  19  20  21  22  23  24  25  26  27  28  29
 //    -7  -6  -5  -4  -3  -2  -1   0   1   2   3   4   5   6   7  -7  -6  -5  -4  -3  -2  -1   0   1   2   3   4   5   6   7

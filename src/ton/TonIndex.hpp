@@ -73,7 +73,7 @@ public:
     /// must be smaller than size().
     const Ton& ton(size_t i) const;
 
-    /// The tonality at the given index can be considered as global.
+    /// Whether the tonality at the given index can be considered as global.
     /// @param i an index in this array of tonalities.
     /// must be smaller than size().
     bool global(size_t i) const;
@@ -113,9 +113,19 @@ public:
     /// @see Ton
     void add(int ks, const ModeName& mode = ModeName::Major, bool global=true);
 
+    /// switch to tonal mode for the conmputation of Weber distance.
+    /// @warning this array must not be closed.
+    void setTonal();
+
+    /// switch to modal mode for the computation of Weber distance.
+    /// @warning this array must not be closed.
+    void setModal();
+    
     /// close this array of tonalities and finish initlialization.
     /// No ton can be added after closure.
-    void close();
+    /// @param tonal_flag tonal or modal mode for the computation of
+    /// Weber distance (default tonal).
+    void close(bool tonal_flag = true);
 
     /// this array of tonalities is closed (no ton can be added).
     bool closed() const;
@@ -145,6 +155,7 @@ private: // data
 
     /// true if we use the tonal (original) Weber distance,
     /// false if we use the modal Weber distance.
+    /// @todo TBR not used
     bool _WeberTonal;
     
 private:
@@ -173,8 +184,10 @@ private:
     void init25();
     void initmodal();
     
-    /// initialize the table _rankWeber
-    void initRankWeber();
+    /// initialize the table _rankWeber.
+    /// @param tonal_flag tonal or modal mode
+    /// for the computation of Weber distance.
+    void initRankWeber(bool tonal_flag);
     
     /// a ton in the given mode can be considered global.
     /// for automatically constructed arrays.

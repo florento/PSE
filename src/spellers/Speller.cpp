@@ -139,10 +139,21 @@ void Speller::addTon(int ks, ModeName mode, bool global)
     _index.add(ks, mode, global);
 }
 
-
-void Speller::closeTons()
+void Speller::setTonal()
 {
-    _index.close();
+    _index.setTonal();
+}
+
+
+void Speller::setModal()
+{
+    _index.setModal();
+}
+
+
+void Speller::closeTons(bool tonal_flag)
+{
+    _index.close(tonal_flag);
 }
 
 

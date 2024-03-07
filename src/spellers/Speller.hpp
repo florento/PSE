@@ -141,9 +141,19 @@ public:
     /// @param global whether ton can be considered as a global tonality.
     void addTon(const Ton& ton, bool global=true);
     
+    /// switch the array of tonalities  to tonal mode
+    /// for the conmputation of Weber distance.
+    /// @warning the array of tonalities array must not be closed.
+    void setTonal();
+
+    /// switch the array of tonalities to tonal mode
+    /// for the conmputation of Weber distance.
+    /// @warning the array of tonalities array must not be closed.
+    void setModal();
+
     /// close the array of tonalities and finish its initlialization.
     /// No ton can be added after closure.
-    void closeTons();
+    void closeTons(bool tonal_flag);
     
     /// the array of tonalities is closed.
     bool closedTons() const;

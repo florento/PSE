@@ -196,19 +196,19 @@ def add_tons(tons, sp):
         # C, C#, D, Eb, D#, E, F, F#, G, G#, A, Bb, B
         for k in range(-6, 7):           
             sp.add_ton(k, pse.Mode.Minor, True) 
-        sp.close_tons()    
+        sp.close_tons(True)    
     # key signature in [-6 .. 6]
     elif tons == 26:
         for k in range(-6, 7):            
             sp.add_ton(k, pse.Mode.Major, True)
             sp.add_ton(k, pse.Mode.Minor, True)
-        sp.close_tons()    
+        sp.close_tons(True)    
     # key signature in [-7 .. 7]
     elif tons == 30:
         for k in range(-7, 8):     
             sp.add_ton(k, pse.Mode.Major, True)
             sp.add_ton(k, pse.Mode.Minor, False)
-        sp.close_tons()    
+        sp.close_tons(True)    
     # key signature in [-6 .. 6], jazz antic modes
     elif tons == 104:
         for k in range(-6, 7):            
@@ -220,24 +220,24 @@ def add_tons(tons, sp):
             sp.add_ton(k, pse.Mode.Aeolian,    False)
             sp.add_ton(k, pse.Mode.Locrian,    False)
             sp.add_ton(k, pse.Mode.Minor,      True)
-        sp.close_tons()    
+        sp.close_tons(False)    
     # key signature in [-7 .. 7], jazz antic modes
     elif tons == 135:
-        for k in range(-7, 8):            
-            sp.add_ton(k, pse.Mode.Ionian,     True)
+        for k in range(-7, 8):      
+            sp.add_ton(k, pse.Mode.Major,      True)
             sp.add_ton(k, pse.Mode.Minor,      False)
-            sp.add_ton(k, pse.Mode.MinMel,     False)
+            sp.add_ton(k, pse.Mode.MinorMel,   False)
             sp.add_ton(k, pse.Mode.Dorian,     False)
             sp.add_ton(k, pse.Mode.Phrygian,   False)
             sp.add_ton(k, pse.Mode.Lydian,     False)
             sp.add_ton(k, pse.Mode.Mixolydian, False)
             sp.add_ton(k, pse.Mode.Aeolian,    False)
             sp.add_ton(k, pse.Mode.Locrian,    False)
-        sp.close_tons()    
+        sp.close_tons(False)    
     else:
         print('ERROR: unsupported number of tons', tons, flush=True)
         sp.close_tons()    
-        
+    
         
 ###############
 ##           ##
@@ -808,16 +808,17 @@ def eval_part(part, stat,
         sp = pse.PS14()
         add_tons(nbtons, sp)
     else:
-        print('algo PSE', end='\n', flush=True)
+        print('algo PSE', nbtons, 'tons', end='\n', flush=True)
         sp = pse.PSE()
         add_tons(nbtons, sp)
     sp.debug(debug)           
     # feed speller with input notes
+    print('adding', len(ln),'notes', end='\n', flush=True)
     for (n, b, s) in ln:   # note, bar number, simultaneous flag
         sp.add(midi=n.pitch.midi, bar=b, simultaneous=s)
     # spell
     stat.start_timer()
-    print('spell', end='\n', flush=True)
+    print('spelling...', end='\n', flush=True)
     sp.spell()
     stat.stop_timer()
     goodgtindex=0

@@ -68,7 +68,7 @@ PYBIND11_MODULE(pse, m)
         .value("Major", pse::ModeName::Major, "Major")
         .value("Minor", pse::ModeName::Minor, "Minor Harmonic")
         .value("MinorNat", pse::ModeName::MinorNat, "Minor Natural")
-        .value("MinMel", pse::ModeName::Major, "Minor Melodic")
+        .value("MinorMel", pse::ModeName::MinorMel, "Minor Melodic")
         .value("Ionian", pse::ModeName::Ionian, "Ionian")
         .value("Dorian", pse::ModeName::Dorian, "Dorian")
         .value("Phrygian", pse::ModeName::Phrygian, "Phrygian")
@@ -107,6 +107,10 @@ PYBIND11_MODULE(pse, m)
          py::arg("ks"),
          py::arg("mode"),
          py::arg("f_global"))
+        .def("set_tonal", &pse::PSE::setTonal,
+             "switch the array of tonalities to tonal mode for Weber dist.")
+        .def("set_modal", &pse::PSE::setModal,
+             "switch the array of tonalities to modal mode for Weber dist.")
         .def("close_tons", &pse::PSE::closeTons, "close the array of tonalities")
         .def("set_global", &pse::PSE::setGlobal, "force global tonality")
         .def("spell", &pse::PSE::spell, "compute spelling")
@@ -187,6 +191,10 @@ PYBIND11_MODULE(pse, m)
              py::arg("ks"),
              py::arg("mode"), 
              py::arg("f_global"))
+        .def("set_tonal", &pse::PS14::setTonal,
+             "switch the array of tonalities to tonal mode for Weber dist.")
+        .def("set_modal", &pse::PS14::setModal,
+             "switch the array of tonalities to modal mode for Weber dist.")
         .def("close_tons", &pse::PS14::closeTons, "close the array of tonalities")
         .def("set_global", &pse::PS14::setGlobal, "force global tonality")
         .def("spell", &pse::PS14::spell, "compute spelling")
