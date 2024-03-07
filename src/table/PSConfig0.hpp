@@ -61,7 +61,9 @@ public:
     /// in order to reach the successor configs from this config.
     /// @param seed cost value of specialized type
     /// (to create a cost of the same type).
-    PSC0(const Ton& ton, size_t id, const Cost& seed);
+    /// @param tonal mode: modal or tonal
+    /// @see State constructor
+    PSC0(const Ton& ton, size_t id, const Cost& seed, bool tonal = true);
 
     // initial config for a given key signature.
     // @param init index of last note read to reach this configuration.

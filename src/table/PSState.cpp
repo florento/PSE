@@ -14,7 +14,7 @@
 namespace pse {
 
 
-PSState::PSState(const Ton& ton, bool joker)
+PSState::PSState(const Ton& ton, bool tonal)
 // _state()  // empty
 {
     // check mode ?
@@ -23,10 +23,10 @@ PSState::PSState(const Ton& ton, bool joker)
     // for each note name (0 is 'C', 6 is 'B').
     for (int n = 0; n < 7; ++n)
     {
-        if (joker)
-            _state.at(n) = ton.accidDia(n);
-        else
+        if (tonal)
             _state.at(n) = ton.accidKey(n);
+        else
+            _state.at(n) = ton.accidDia(n);
     }
 }
   
@@ -178,7 +178,7 @@ unsigned int PSState::dist(const Ton& ton) const
     for (int i = 0; i < 7; ++i) // pitch names
     {
         enum NoteName n = NoteName(i); // encapsulation
-        if (_state[i] != ton.accidDia(n,ton.getMode())) // or ton.accidKey(i) ?
+        if (_state[i] != ton.accidDia(n)) // or ton.accidKey(i) ?
         {
             res += 1;
         }

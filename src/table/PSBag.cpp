@@ -16,7 +16,7 @@ namespace pse {
 
 
 PSB::PSB(const Algo& a, const Cost& seed, PSEnum& e,
-         const Ton& gton, const Ton& lton):
+         const Ton& gton, const Ton& lton, bool tonal):
 _algo(a),
 _enum(e),
 _bests(),   // empty
@@ -24,7 +24,7 @@ _cost(seed.shared_zero())     // zero
 //_visited()  // empty
 {
     if (! e.empty())
-        init(seed, gton, lton);
+        init(seed, gton, lton, tonal);
     // otherwise n0 == n1, no note, leave _best empty
     else
     {
@@ -56,7 +56,7 @@ PSB::~PSB()
 
 
 // algo best path search
-void PSB::init(const Cost& seed, const Ton& ton, const Ton& lton)
+void PSB::init(const Cost& seed, const Ton& ton, const Ton& lton, bool tonal)
 {
     // at least one note, the bag cannot be empty.
     assert(_enum.first() < _enum.stop());
@@ -84,7 +84,7 @@ void PSB::init(const Cost& seed, const Ton& ton, const Ton& lton)
 //        q = PSCQueue(PSCad()); // empty
     
     // initial configuration
-    q.push(std::make_shared<const PSC0>(ton, _enum.first(), seed)); // n0
+    q.push(std::make_shared<const PSC0>(ton, _enum.first(), seed, tonal)); // n0
     
     while (! q.empty())
     {

@@ -44,11 +44,13 @@ public:
     /// initial state for a given tonality.
     /// @param ton a tonality.
     /// @param joker flag: 
-    /// - if false: compute the initial state only according to the KS of ton.
+    /// - if true: tonal mode:
+    ///   compute the initial state only according to the KS of ton,
     ///   i.e. initial state is the one of the major mode (whatever the actual mode)
-    /// - if true: compute the initial state only according to the actual mode
+    /// - if false: modal mode:
+    ///   compute the initial state only according to the actual mode,
     ///   i.e. discount alterations of the mode that do not belong to the KS.
-    PSState(const Ton& ton, bool joker = false);
+    PSState(const Ton& ton, bool tonal = true);
 
     /// initial state for a given tonality.
     /// @param ks a key signature given in number of flats (negative int)

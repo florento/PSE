@@ -316,7 +316,7 @@ def m21_mode(m):
         return 'minor'
     elif (m == pse.Mode.MinorNat):
         return 'minor'   # not found
-    elif (m == pse.Mode.MinMel):
+    elif (m == pse.Mode.MinorMel):
         return 'minor'   # not found
     elif (m == pse.Mode.Ionian):
         return 'ionian'

@@ -136,8 +136,8 @@ void CostA::update(const enum NoteName& name, const enum Accid& accid,
     // optional discount for lead degree
     else if (print)
     {
-                          // !(gton.lead()  &&  gton.accidDia(name) == accid)
-        if ((! _discount)  || (gton.accidDia(name, gton.getMode()) != accid))
+          // !(gton.lead()  &&  gton.accidDia(name) == accid)
+        if ((! _discount)  || (gton.accidDia(name) != accid))
         {
             updateAccid(accid);
         }

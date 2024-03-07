@@ -65,8 +65,10 @@ public:
     /// used to define the initial config.
     /// @param lton conjectured local tonality, to compute the cumulated
     /// distance value used for tie break.
+    /// @param tonal mode: modal or tonal
+    /// @see State constructor
     PSB(const Algo& a, const Cost& seed,
-        PSEnum& e, const Ton& ton, const Ton& lton = Ton());
+        PSEnum& e, const Ton& ton, const Ton& lton = Ton(), bool tonal = true);
     
     ~PSB();
     
@@ -138,9 +140,12 @@ private:
     /// used to define the initial config.
     /// @param lton conjectured local tonality, to compute the cumulated
     /// dist value used for tie break.
+    /// @param tonal mode: modal or tonal
+    /// @see State constructor
     // @param fsucc flag, whether the successor is computed with ton only
     // or ton and lton.
-    void init(const Cost& seed, const Ton& gton, const Ton& lton); // bool fsucc);
+    void init(const Cost& seed, const Ton& gton, const Ton& lton, bool tonal);
+           // bool fsucc);
 
     /// allocate every config reached by one transition from the given config,
     /// when reading one pitch or several simultaneous pitchs,

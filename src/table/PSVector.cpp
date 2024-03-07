@@ -205,17 +205,12 @@ void PSV::init_psbs(const Cost& seed)
               enumerator().first(), enumerator().stop(), ton(i));
         assert(_psbs[i] == nullptr);
         const Ton& toni = ton(i);
-        if (_algo == Algo::PSE)
+        if (_algo == Algo::PSE || _algo == Algo::PS14)
         {
             // arg local ton is ignored
-            _psbs[i] =
-             std::make_shared<const PSB>(Algo::PSE, seed, enumerator(), toni);
-        }
-        else if (_algo == Algo::PS14)
-        {
-            // arg local ton is ignored
-            _psbs[i] =
-             std::make_shared<const PSB>(Algo::PS14, seed, enumerator(), toni);
+            // tonal mode
+            _psbs[i] = std::shared_ptr<const PSB>(new
+                                  PSB(_algo, seed, enumerator(), toni, true));
         }
         else
         {
@@ -251,19 +246,12 @@ void PSV::init_psbs(const Cost& seed,
         assert(locals.at(i) < _index.size());
         const Ton& ltoni = ton(locals.at(i));
         assert(ltoni.defined());
-        if (_algo == Algo::PSE)
+        if (_algo == Algo::PSE || _algo == Algo::PS14)
         {
             // arg local ton is ignored
-            _psbs[i] =
-                std::make_shared<const PSB>(Algo::PSE, seed, enumerator(),
-                                            toni, ltoni);
-        }
-        else if (_algo == Algo::PS14)
-        {
-            // arg local ton is ignored
-            _psbs[i] =
-                std::make_shared<const PSB>(Algo::PS14, seed, enumerator(),
-                                            toni, ltoni);
+            // modal mode
+            _psbs[i] = std::shared_ptr<const PSB>(new
+                        PSB(_algo, seed, enumerator(), toni, ltoni, false));
         }
         else
         {

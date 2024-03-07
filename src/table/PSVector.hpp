@@ -60,6 +60,7 @@ public:
     /// @param e an enumerator of notes for transitions of configs.
     /// @param bar number of bar corresp.  to this vector (column number in table).
     /// @warning the enumerator cannot be changed once the object created.
+    /// @todo not used
     PSV(const Algo& a, const Cost& seed, const TonIndex& index,
         const PSEnum& e, size_t bar);
     
@@ -87,6 +88,7 @@ public:
     /// The enumeration starts at i0 and stops
     /// when there are no more notes to read in e.
     /// @param bar number of bar corresp.  to this vector (column number in table).
+    /// @todo not used
     PSV(const Algo& a, const Cost& seed, const TonIndex& index,
         const PSEnum& e, size_t i0, size_t bar);
 

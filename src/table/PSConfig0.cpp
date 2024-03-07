@@ -21,8 +21,8 @@
 namespace pse {
 
 
-PSC0::PSC0(const Ton& ton, size_t id, const Cost& seed):
-_state(ton, false),
+PSC0::PSC0(const Ton& ton, size_t id, const Cost& seed, bool tonal):
+_state(ton, tonal),
 _id(id),
 _cost(seed.shared_zero()) // zero
 {

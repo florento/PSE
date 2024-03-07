@@ -219,8 +219,8 @@ bool PST::init_psvs(const Cost& seed)
         {
             TRACE("PST init: bar {} EMPTY", b);
             // vector of empty bags
-            _psvs.push_back(std::make_unique<PSV>(_algo, seed, _index,
-                                                  _enum, i0, i0, b));
+            _psvs.push_back(std::unique_ptr<PSV>(new
+                             PSV(_algo, seed, _index, _enum, i0, i0, b)));
             ++b;
             continue;
         }
@@ -233,8 +233,8 @@ bool PST::init_psvs(const Cost& seed)
         TRACE("PST: compute column of the best spelling table for measure {}\
               (notes {}-{})", b, i0, i1-1);
         // add a PS vector (column) for the measure b
-        _psvs.push_back(std::make_unique<PSV>(_algo, seed, _index,
-                                              _enum, i0, i1, b));
+        _psvs.push_back(std::unique_ptr<PSV>(new
+                                 PSV(_algo, seed, _index, _enum, i0, i1, b)));
         assert(_psvs.size() == b+1);
         // then start next measure
         i0 = i1; // index of first note of next bar
@@ -257,7 +257,7 @@ bool PST::init_psvs(const PST& tab, const Cost& seed,
         const std::vector<size_t>& locals = grid.column(j);
         assert(col.bar() == j);
         _psvs.emplace_back(std::unique_ptr<PSV>(new
-                        PSV(col, seed, globals, locals)));
+                                        PSV(col, seed, globals, locals)));
          // PSV(_algo, seed, _index, col.enumerator(), j)));
     }
     
