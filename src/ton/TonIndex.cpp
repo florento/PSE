@@ -34,19 +34,19 @@ _WeberTonal(true)
 
         case 25:
             init25();
-            close();
+            close(true); // tonal Weber
             break;
 
         case 26:
             init13(ModeName::Major, true); // global flag
             init13(ModeName::Minor, true);
-            close();
+            close(true); // tonal Weber
             break;
 
         case 30:
             init15(ModeName::Major, true);
             init15(ModeName::Minor, true);
-            close();
+            close(true); // tonal Weber
             break;
 
         case 104:
@@ -60,7 +60,7 @@ _WeberTonal(true)
             init13(ModeName::Mixolydian, false);
             init13(ModeName::Aeolian, false);
             init13(ModeName::Locrian, false);
-            close();
+            close(false); // modal Weber
             break;
             
         case 135:
@@ -74,7 +74,7 @@ _WeberTonal(true)
             init15(ModeName::Mixolydian, false);
             init15(ModeName::Aeolian, false);
             init15(ModeName::Locrian, false);
-            close();
+            close(false); // modal Weber
             break;
             
         default:
@@ -183,6 +183,20 @@ void TonIndex::reset()
     TRACE("TonIndex: empty the list of tonalities (row headers)");
     _tons.clear();
     _closed = false;
+    _WeberTonal = true;
+}
+
+void TonIndex::setTonal()
+{
+    assert(!_closed);
+    _WeberTonal = true;
+}
+
+
+void TonIndex::setModal()
+{
+    assert(!_closed);
+    _WeberTonal = false;
 }
 
 
@@ -207,10 +221,11 @@ void TonIndex::add(int ks, const ModeName& mode, bool global)
 }
 
 
-void TonIndex::close()
+void TonIndex::close(bool tonal_flag)
 {
     _closed = true;
-    initRankWeber();
+    // tonal flag : ugly
+    initRankWeber((_tons.size() > 30)?false:tonal_flag);
 }
 
 
@@ -311,7 +326,7 @@ bool TonIndex::global(const ModeName& m)
 }
 
 
-void TonIndex::initRankWeber()
+void TonIndex::initRankWeber(bool tonal_flag)
 {
     assert(_rankWeber.empty());
     assert(_closed);
@@ -327,7 +342,7 @@ void TonIndex::initRankWeber()
         
         for (size_t j = 0; j < _tons.size(); ++j)
         {
-            if (_WeberTonal)
+            if (tonal_flag)
                 pcol.push_back(toni.distWeber(ton(j)));
             else
                 pcol.push_back(toni.distWeberModal(ton(j)));

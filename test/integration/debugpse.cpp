@@ -30,9 +30,9 @@ int main(int argc, const char* argv[])
     spdlog_setVerbosity(5);
     spdlog_setPattern();
 
-    pse::WeberModal godfried;
-    godfried.dump();
-    return 0;
+    // pse::WeberModal godfried;
+    // godfried.dump();
+    // return 0;
 
     pse::PSE sp(135, true);
     //pse::PS13 sp;

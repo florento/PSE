@@ -199,7 +199,6 @@
 		43D9DB542B964A0F005F0A13 /* WeberModal_static.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43D9DB502B964A0F005F0A13 /* WeberModal_static.cpp */; };
 		43D9DB552B964A0F005F0A13 /* WeberModal_static.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 43D9DB512B964A0F005F0A13 /* WeberModal_static.hpp */; };
 		43DD954B2945E223006DC553 /* PSCost.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 43DD95482945E223006DC553 /* PSCost.hpp */; };
-		43EFF3632B8E526C000CA4B2 /* WeberModal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43EFF3612B8E526C000CA4B2 /* WeberModal.cpp */; };
 		43EFF3642B8E526C000CA4B2 /* WeberModal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43EFF3612B8E526C000CA4B2 /* WeberModal.cpp */; };
 		43EFF3652B8E526C000CA4B2 /* WeberModal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43EFF3612B8E526C000CA4B2 /* WeberModal.cpp */; };
 		43EFF3662B8E526C000CA4B2 /* WeberModal.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 43EFF3622B8E526C000CA4B2 /* WeberModal.hpp */; };
@@ -1066,7 +1065,6 @@
 				43D7BABF2A27E31600570C47 /* PS14.cpp in Sources */,
 				43ABA511292423E8002AC1D4 /* Enharmonic.cpp in Sources */,
 				43ABA50C292423E8002AC1D4 /* Fifths.cpp in Sources */,
-				43EFF3632B8E526C000CA4B2 /* WeberModal.cpp in Sources */,
 				43C2BA192999529E0084AB3B /* PWO.cpp in Sources */,
 				430CDFF12924E6D800A84650 /* KeyFifth.cpp in Sources */,
 				43D9DB522B964A0F005F0A13 /* WeberModal_static.cpp in Sources */,

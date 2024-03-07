@@ -15,6 +15,10 @@ namespace pse {
 const int Weber::WS_UNDEFDIST = Weber_static::UNDEF_DIST;
 
 
+// static
+// const size_t Weber::WS_NBTONS = Weber_static::NB_TONS;
+
+
 Weber::Weber():
 DIST()
 {

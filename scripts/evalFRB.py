@@ -176,7 +176,7 @@ def eval_FRB(corpus='leads', algo=ps.pse.Algo_PSE,
     
     
 def eval_FRBitem(name, corpus='leads', algo=ps.pse.Algo_PSE, 
-                 tons=104, kpre=33, kpost=23, dflag=True, mflag=True):
+                 tons=135, kpre=33, kpost=23, dflag=True, mflag=True):
     assert(len(name) > 0)
     assert(corpus == 'leads' or corpus == 'piano')
     dataset = FRB_corpus(corpus)
