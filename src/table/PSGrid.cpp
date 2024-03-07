@@ -377,7 +377,7 @@ size_t PSG::estimateLocalLexico(const PSV& vec, size_t ig, size_t iprev,
     return ibest;
 }
 
-
+//real function using ranks, used when the init flag is true
 size_t PSG::estimateLocal(const PSV& vec, size_t ig, size_t iprev)
 {
     // case of empty bar: keep the previous local
@@ -454,7 +454,6 @@ size_t PSG::estimateLocal(const PSV& vec, size_t ig, size_t iprev)
         WARN("estimateLocal: ties bar {}", vec.bar());
         return ibest;
         //return estimateLocal(ig, iprev, ties);
-        //renvoie de moins bons résultats quand décommentée, bizarre
     }
 }
 
