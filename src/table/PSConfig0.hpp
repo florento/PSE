@@ -51,6 +51,7 @@ typedef std::priority_queue<std::shared_ptr<const PSC0>,
 /// for pitch spelling.
 class PSC0
 {
+    
 public:
 
     /// initial configuration for a given tonality.
@@ -163,7 +164,7 @@ public:
     // origin of the best path this configuration belongs to.
     // virtual const PSC0* origin() const;
         
-protected:
+protected: // data
 
     /// description of accidents for each note name.
     PSState _state;

@@ -325,14 +325,19 @@ enum Accid Ton::accidDia(int n, ModeName mode) const
         //case ModeName::Ionian:
         case ModeName::Dorian:
             return DOR[_sig + 7][n];
+            
         case ModeName::Phrygian:
             return PHRYG[_sig + 7][n];
+            
         case ModeName::Lydian:
             return LYD[_sig + 7][n];
+            
         case ModeName::Mixolydian:
             return MIXO[_sig + 7][n];
+            
         case ModeName::Aeolian:
             return KEYS[_sig + 7][n];
+            
         case ModeName::Locrian:
             return LOC[_sig + 7][n];
             
@@ -348,7 +353,25 @@ enum Accid Ton::accidDia(int n, ModeName mode) const
 enum Accid Ton::accidDia(const enum NoteName& name, ModeName mode) const
 {
     assert(name != NoteName::Undef);
-    return accidDia(toint(name),mode);
+    return accidDia(toint(name), mode);
+}
+
+
+enum Accid Ton::accidDia(const enum NoteName& name) const
+{
+    assert(name != NoteName::Undef);
+    return accidDia(toint(name), _mode);
+}
+
+
+enum Accid Ton::accidDia(int n) const
+{
+    assert(-7 <= _sig);
+    assert(_sig <= 7);
+    assert(0 <= n);
+    assert(n <= 6);
+ 
+    return accidDia(n, _mode);
 }
 
 

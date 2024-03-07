@@ -41,11 +41,13 @@ class PSState
 {
 public:
     
-    /// initial state for a given tonality, or jokers for minor tons.
+    /// initial state for a given tonality.
     /// @param ton a tonality.
-    /// @param joker flag: true for computing the set of jokers for a minor ton,
-    /// false for computing the initial state of the given ton.
-    /// @warning the joker flag is obsolete.
+    /// @param joker flag: 
+    /// - if false: compute the initial state only according to the KS of ton.
+    ///   i.e. initial state is the one of the major mode (whatever the actual mode)
+    /// - if true: compute the initial state only according to the actual mode
+    ///   i.e. discount alterations of the mode that do not belong to the KS.
     PSState(const Ton& ton, bool joker = false);
 
     /// initial state for a given tonality.
@@ -132,12 +134,15 @@ public:
                              const PSState& ajoker1,
                              const PSState& astate2,
                              const PSState& ajoker2);
+
 private: // data
 
     /// association to each pitch name (in 0..6)
     /// of an accidental (in -2..2).
     std::array<enum Accid, 7> _state; // _state[7]
 
+    
+    
 private: // static data
 
     /// abbreviations for accidentals
@@ -150,6 +155,7 @@ private: // static data
     
     /// key signatures, formatted for _state, in major and minor harm modes,
     /// for every key signature in -7..7.
+    /// @todo rm OBSOLETE. we use the tables of Ton.
     static const std::array<std::array<enum Accid, 7>, 15> KEYS;
     // static const int TON[15][7];
 
@@ -162,6 +168,7 @@ private: // static data
     /// formatted for _state, for every minor harmonic mode
     /// with key signature in -7..7.
     /// accidental in -2..2 or 9 = no accidental.
+    /// @todo rm OBSOLETE. we use the tables of Ton.
     static const std::array<std::array<enum Accid, 7>, 15> MIN_HARM;
 
     /// accidentals in minor natural mode
@@ -169,6 +176,7 @@ private: // static data
     /// formatted for _state, for every minor harmonic mode
     /// with key signature in -7..7.
     /// accidental in -2..2 or 9 = no accidental.
+    /// @todo rm OBSOLETE. we use the tables of Ton.
     static const std::array<std::array<enum Accid, 7>, 15> MIN_NAT;
 
     /// accidentals in minor melodic mode
@@ -176,6 +184,7 @@ private: // static data
     /// formatted for _state, for every minor harmonic mode
     /// with key signature in -7..7.
     /// accidental in -2..2 or 9 = no accidental.
+    /// @todo rm OBSOLETE. we use the tables of Ton.
     static const std::array<std::array<enum Accid, 7>, 15> MIN_MEL;
 
     /// accidental in this state for a given pitch name.

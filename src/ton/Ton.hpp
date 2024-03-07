@@ -104,11 +104,29 @@ public:
     /// @return the number of accidents, in the key signature, for n, in -2..2.
     enum Accid accidKey(const enum NoteName& n) const;
 
+    /// accidental in the key signature of this ton for a given pitch name.
+    /// @param n a note name, in 0..6 (0 is 'C', 6 is 'B').
+    /// @return the accidental, in the key signature, for n, in -2..2.
+    /// @todo TBR
+    enum Accid accidKey(int n) const;
+    
     /// accidental in the scale of this ton for a given pitch name.
     /// @param n an encapsulated note name
     /// @return the number of accidents, in scale, for degree d, in -2..2.
-    enum Accid accidDia(const enum NoteName& n, ModeName mode) const;
+    enum Accid accidDia(const enum NoteName& n) const;
 
+    /// accidental in the scale of this ton for a given pitch name.
+    /// @param n a note name, in 0..6 (0 is 'C', 6 is 'B').
+    /// @return the accidental, in scale, for n, in -2..2.
+    enum Accid accidDia(int n) const;
+
+    /// accidental in the scale of this ton for a given pitch name.
+    /// @param n an encapsulated note name
+    /// @param mode a mode can be different from the one of this ton
+    /// @todo mode what for ?
+    /// @return the number of accidents, in scale, for degree d, in -2..2.
+    enum Accid accidDia(const enum NoteName& n, ModeName mode) const;
+        
     /// note name in the scale of this ton for a given degree.
     /// @param d a degree in 0..6.
     /// @return the note name in scale, for degree d, in 'C'..'B'.
@@ -232,20 +250,14 @@ private:
     static const std::array<std::array<enum Accid, 7>, 15> MIXO;
     static const std::array<std::array<enum Accid, 7>, 15> LOC;
     
-    /// accidental in the key signature of this ton for a given pitch name.
-    /// @param n a note name, in 0..6 (0 is 'C', 6 is 'B').
-    /// @return the accidental, in the key signature, for n, in -2..2.
-    /// @todo TBR
-    enum Accid accidKey(int n) const;
+    /// number of the tonic of this ton in the array of fifths.
+    int tonic() const;
     
     /// accidental in the scale of this ton for a given pitch name.
     /// @param n a note name, in 0..6 (0 is 'C', 6 is 'B').
     /// @return the accidental, in scale, for n, in -2..2.
     enum Accid accidDia(int n, ModeName mode) const;
-    
-    /// number of the tonic of this ton in the array of fifths.
-    int tonic() const;
-    
+        
 };
 
 std::ostream& operator<<(std::ostream& o, const Ton& ton);
