@@ -14,6 +14,7 @@
 #include <iostream>
 #include <assert.h>
 #include <memory>
+#include <time.h>
 
 #include "trace.hpp"
 #include "PSTable.hpp"
@@ -123,6 +124,12 @@ protected: // data
     // forced global ton
     // std::unique_ptr<size_t> _global;
     
+    /// Time to build the first Pitch Spelling table.
+    double _time_table0;
+
+    /// Time to build the grid of local tonalities
+    double _time_locals0;
+
     /// undefined tonality, for errors.
     /// @todo static
     Ton* _uton; // std::shared_ptr<Ton>

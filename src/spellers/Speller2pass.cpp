@@ -90,10 +90,17 @@ bool Speller2Pass::spell(const Cost& seed0, const Cost& seed1,
     }
     assert(_global0);
     assert(_locals0);
-       
+    
+    clock_t time_start = clock();
     // std::unique_ptr<PST>
     _table1 = new PST(*_table0, seed1, *_global0, *_locals0, _debug);
-
+    _time_table1 = duration(time_start);
+    if (_debug)
+    {
+        DEBUGU("time to build the second pitch-spelling table: {}ms",
+               (int)_time_table1);
+    }
+    
     // DEBUGU("PSE: table dump");
     //_table1->dump_rowcost();
     

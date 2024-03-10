@@ -16,6 +16,7 @@
 #include <assert.h>
 
 
+
 namespace pse {
 
 namespace util {
@@ -31,6 +32,7 @@ template<typename E> void ranks(const std::vector<E>& v,
                                 std::function<bool (E, E)> equal,
                                 std::function<bool (E, E)> smaller,
                                 std::vector<size_t>& rank);
+
 
 //template<typename E>
 //std::vector<size_t>

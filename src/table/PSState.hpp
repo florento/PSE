@@ -43,7 +43,7 @@ public:
     
     /// initial state for a given tonality.
     /// @param ton a tonality.
-    /// @param joker flag: 
+    /// @param tonal flag:
     /// - if true: tonal mode:
     ///   compute the initial state only according to the KS of ton,
     ///   i.e. initial state is the one of the major mode (whatever the actual mode)

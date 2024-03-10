@@ -89,19 +89,18 @@ public:
     /// @param gton conjectured main (global) tonality (key signature).
     /// @param lton conjectured local tonality or undef tonlity if it is
     /// not known.
-    
-    
+        
     virtual void update(const enum NoteName& name,
                         const enum Accid& accid,
                         bool print,
                         const Ton& gton, const Ton& lton = Ton());
     
     
-    // version of the Tenor article
+    // version of the TENOR article
     virtual void update_tonale(const enum NoteName& name,
-                        const enum Accid& accid,
-                        bool print,
-                        const Ton& gton, const Ton& lton = Ton());
+                               const enum Accid& accid,
+                               bool print,
+                               const Ton& gton, const Ton& lton = Ton());
 
     // backup previous version (bug)
     virtual void update99(const enum NoteName& name,

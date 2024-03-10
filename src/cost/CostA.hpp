@@ -26,7 +26,7 @@ class PSC1;
 class PSC2;
 
 
-/// measure of cost  defined by the cumulated number of printed accidentals.
+/// measure of cost defined by the cumulated number of printed accidentals.
 class CostA : public PolymorphicComparable<Cost, CostA>
 {
     

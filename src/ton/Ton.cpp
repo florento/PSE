@@ -8,7 +8,7 @@
 
 #include <cmath>        // std::abs
 #include <algorithm>    // std::max
-
+  
 #include "Ton.hpp"
 #include "Accidental.hpp"
 //#include "Pitch.hpp"
@@ -641,7 +641,7 @@ void Ton::print(std::ostream& o) const
         o << Fifths::name(i);
         if (Fifths::accid(i) != Accid::Natural)
             o << Fifths::accid(i);
-        o << tostring(_mode);
+        o << ' ' << tostring(_mode);
         o << ' ';
         o << '(';
         KeyFifth::print(o);

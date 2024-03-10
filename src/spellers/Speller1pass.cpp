@@ -14,6 +14,8 @@ Speller(algo, nbTons, dflag),
 _table0(nullptr),
 _global0(nullptr),
 _locals0(nullptr),
+_time_table0(0),
+_time_locals0(0),
 _uton(new Ton()) // undef
 { }
 
@@ -198,8 +200,16 @@ bool Speller1Pass::spell(const Cost& seed0, double diff0,
         WARN("PSE: re-spelling, PS table overrided");
         delete _table0;
     }
+    
+    clock_t time_start = clock();
     _table0 = new PST(_algo, seed0, _index, _enum, _debug); // std::unique_ptr<PST>
+    _time_table0 = duration(time_start);
     TRACE("pitch-spelling: {} bars", _table0->size());
+    if (_debug)
+    {
+        DEBUGU("time to build first pitch-spelling table: {}ms", 
+               (int)_time_table0);
+    }
     
     //DEBUGU("PSE: table dump");
     //_table0->dump_rowcost();
@@ -219,25 +229,30 @@ bool Speller1Pass::spell(const Cost& seed0, double diff0,
     if (_debug)
     {
         assert(_global0);
-        DEBUGU("{} candidates in first global list: {}",
-               _global0->size(), *_global0);
+        DEBUGU("{} candidates in first global list", _global0->size()); //  *_global0 // content
     }
     
     // extract local tonality for each column of table
-    TRACE("pitch-spelling: start local tonalities estimation");
+    TRACE("pitch-spelling: start estimate grid of local tonalities ");
     if (_locals0 != nullptr)
     {
         WARN("PSE: re-spelling, PS local grid overrided");
         delete _locals0;
     }
+    
+    time_start = clock();
     _locals0 = new PSG(*_table0, _global0->getMask()); // std::unique_ptr<PSG>
+    _time_locals0 = duration(time_start);
+    if (_debug)
+    {
+        DEBUGU("time to build grid of local tonalities: {}ms", (int)_time_locals0);
+    }
 
     //    if (status == false)
     //    {
     //        ERROR("Pitch Spelling: failed to extract local tonalities, abort.");
     //        return false;
     //    }
-
 
     TRACE("Pitch Spelling: {} estimated global tonality candidates",
           globalCands(_global0));

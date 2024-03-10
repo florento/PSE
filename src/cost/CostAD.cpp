@@ -165,10 +165,11 @@ void CostAD::update(const enum NoteName& name,
     }
 }
 
+// version version (TENOR paper)
 void CostAD::update_tonale(const enum NoteName& name,
-                    const enum Accid& accid,
-                    bool print,
-                    const Ton& gton, const Ton& lton)
+                           const enum Accid& accid,
+                           bool print,
+                           const Ton& gton, const Ton& lton)
 {
     bool boo = true;
     

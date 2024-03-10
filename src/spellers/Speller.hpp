@@ -14,6 +14,7 @@
 #include <iostream>
 #include <assert.h>
 #include <memory>
+#include <time.h>
 
 #include "trace.hpp"
 #include "Rational.hpp"
@@ -233,9 +234,9 @@ protected: // data
     
 protected:
     
+    /// time lapsed, in milli seconds, since the given start date.
+    static double duration(clock_t start);
     
-    
-
 };
 
 } // namespace pse

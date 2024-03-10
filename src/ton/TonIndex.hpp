@@ -130,7 +130,7 @@ public:
     /// this array of tonalities is closed (no ton can be added).
     bool closed() const;
     
-    /// ranks of first given ton wrt Weber distance to second given ton.
+    /// ranks of second given ton wrt Weber distance to first given ton.
     /// @param i index of ton in this array of tonalities.
     /// @param j index of ton in this array of tonalities.
     /// @return the rank of j in the vector of Weber distances to ton i of

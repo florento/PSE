@@ -62,7 +62,7 @@ public:
     /// @param seed cost value of specialized type
     /// (to create a cost of the same type).
     /// @param tonal mode: modal or tonal
-    /// @see State constructor
+    /// @see State constructor for tonal/modal mode
     PSC0(const Ton& ton, size_t id, const Cost& seed, bool tonal = true);
 
     // initial config for a given key signature.

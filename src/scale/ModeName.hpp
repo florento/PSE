@@ -27,13 +27,13 @@ enum class ModeName
     /// Unknown
     Undef,
     
-    /// Major
+    /// Major = Ionian
     Major,
     
     /// Harmonic Minor
     Minor,
     
-    /// natural Minor (melodic descending)
+    /// natural Minor (melodic descending) = Aeolian
     MinorNat,
     
     /// Melodic Minor (melodic ascending)

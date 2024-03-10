@@ -66,7 +66,7 @@ public:
     /// @param lton conjectured local tonality, to compute the cumulated
     /// distance value used for tie break.
     /// @param tonal mode: modal or tonal
-    /// @see State constructor
+    /// @see State constructor for tonal/modal mode
     PSB(const Algo& a, const Cost& seed,
         PSEnum& e, const Ton& ton, const Ton& lton = Ton(), bool tonal = true);
     

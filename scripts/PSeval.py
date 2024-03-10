@@ -837,10 +837,10 @@ def eval_part(part, stat,
             present=False
             for i in range(nbg):
                 gt = sp.global_ton0(i)
-                print("possible tone : " , m21_key(gt))
+                # print("possible tone : " , m21_key(gt))
                 if compare_key(k0, gt):
                     goodgtindex = i
-                    print("good index : " , i)
+                    # print("good index : " , i)
                     present=True
                 elif compare_key_pitches(k0,gt):
                     enharm=True

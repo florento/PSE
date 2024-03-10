@@ -194,4 +194,11 @@ bool Speller::printed(size_t i) const
 }
 
 
+// static
+double Speller::duration(clock_t start)
+{
+    return ((double)(clock() - start)/CLOCKS_PER_SEC * 1000);
+}
+
+
 } // namespace pse

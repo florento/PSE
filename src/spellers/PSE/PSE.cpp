@@ -6,7 +6,7 @@
 //
 
 #include "PSE.hpp"
-//#include "CostA.hpp"
+#include "CostA.hpp"
 #include "CostADplus.hpp"
 #include "CostADlex.hpp"
 
@@ -67,7 +67,7 @@ bool PSE::spell()
     //        _frowcost.assign(nbtons(), false);
     //    }
 
-    CostADplus seed0; // zero
+    CostA      seed0; // zero
     CostADplus seed1; // zero
     //CostADlex seed0;
     //CostADlex seed1;

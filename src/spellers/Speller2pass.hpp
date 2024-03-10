@@ -94,6 +94,9 @@ protected: // data
     
     /// Second estimation of global tonality (on table1).
     PSO* _global1; // std::shared_ptr<PSO>
+    
+    /// Time to build the second Pitch Spelling table.
+    double _time_table1;
 
 protected:
     
