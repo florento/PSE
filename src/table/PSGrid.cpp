@@ -621,6 +621,87 @@ size_t PSG::estimateLocalLexico(const PSV& vec, size_t ig, size_t iprev,
     return ibest;
 }
 
+
+//real function using ranks, used when the init flag is true
+size_t PSG::estimateLocal(const PSV& vec, size_t ig, size_t iprev)
+{
+    // case of empty bar: keep the previous local
+    if (vec.first() == vec.stop())
+        return iprev;
+    
+    assert(vec.size() == _index.size());
+    
+    assert(ig != TonIndex::UNDEF);
+    assert(ig != TonIndex::FAILED);
+    assert(ig < _index.size());
+
+    assert(iprev != TonIndex::UNDEF);
+    assert(iprev != TonIndex::FAILED);
+    assert(iprev < _index.size());
+            
+    /// ranks for costs of bags
+    std::vector<size_t> rank_bags; // empty
+    vec.ranks(rank_bags);
+    assert(rank_bags.size() == _index.size());
+
+    /// ranks for distance to prev local.
+    std::vector<size_t> rank_prev; // empty
+    /// ranks for distance to global.
+    std::vector<size_t> rank_glob; // empty
+
+    for (size_t j = 0; j < _index.size(); ++j)
+    {
+        rank_prev.push_back(_index.rankWeber(iprev, j));
+        rank_glob.push_back(_index.rankWeber(ig, j));
+    }
+
+    /// list of means of the ranks in the 3 lists (unweighted)
+    std::vector<size_t> means; // empty
+    for (size_t j = 0; j < _index.size(); ++j)
+    {
+        means.push_back(3*rank_bags.at(j) +
+                        3*rank_prev.at(j) +
+                        2*rank_glob.at(j));
+    }
+    
+    std::vector<size_t> rank_mean; // empty
+
+    /// ranks of the means
+    /// we could also simply sort the list of means
+    util::ranks<size_t>(means,
+             [](size_t a, size_t b) { return (a == b); },
+             [](size_t a, size_t b) { return (a <  b); }, rank_mean);
+    assert(rank_mean.size() == _index.size());
+    bool found1 = false;
+    size_t ibest = 0;
+    /// index of tons with best rank
+    std::vector<size_t> ties; // empty
+    for (size_t j = 0; j < rank_mean.size(); ++j)
+    {
+        if (rank_mean.at(j) == 0)
+        {
+            ties.push_back(j);
+            ibest=j;
+        }
+        if (rank_mean.at(j) == 1)
+        {
+            found1 = true;
+        }
+    }
+    assert(!ties.empty());
+    assert((ties.size() == 1) || (found1 == false));
+    if (ties.size() == 1)
+    {
+        return ties.front();
+    }
+    else
+    {
+        WARN("estimateLocal: ties bar {}", vec.bar());
+        return ibest;
+        //return estimateLocal(ig, iprev, ties);
+    }
+}
+
 } // end namespace pse
 
 

@@ -67,7 +67,11 @@ bool PSE::spell()
     //        _frowcost.assign(nbtons(), false);
     //    }
 
+<<<<<<< HEAD
     CostA      seed0; // zero
+=======
+    CostA seed0; // zero
+>>>>>>> 1877a3c7563350582b4233d76bf94ff371df8c6e
     CostADplus seed1; // zero
     //CostADlex seed0;
     //CostADlex seed1;
