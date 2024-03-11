@@ -42,7 +42,7 @@ public:
     /// @param dflag debug mode (for feeback)
     /// @param full flag, whether the constructed set of condidates is
     /// full (all tonalities of id) or empty.
-    PSO(const TonIndex& id, double dflag = false, double full = false);
+    PSO(const TonIndex& id, double dflag = false, double full=false);
 
     /// Estimate and store the global tonality candidates for the given table.
     /// @param tab for the extraction of global tonality.
@@ -52,7 +52,7 @@ public:
     /// @param dflag debug mode (for feeback)
     // @warning call eGlobals_eq and eGlobals_less variants to operator==
     // and operator< on cost.
-    PSO(const PST& tab, double d = 0, bool dflag=false); // const TonIndex& i
+    PSO(const PST& tab, double d=0, bool dflag=false); // const TonIndex& i
     
     /// Refine a given store of global tonality candidates, given a new table.
     /// @param globals former list of global tonality conditates.

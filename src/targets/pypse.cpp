@@ -85,12 +85,62 @@ PYBIND11_MODULE(pse, m)
         .def("accidental", &pse::Ton::getAccidental, "get accidental of ton")
         .def("fifths", &pse::Ton::fifths, "get key signature")
         .def("undef", &pse::Ton::undef, "ton is undef");
-    
+  
+    py::class_<pse::Speller>(m, "Speller")
+        .def(py::init<>(), "Modular Spell Checker")
+        .def("debug", &pse::Speller::debug, "set debug mode", py::arg("on"))
+        .def("size", &pse::Speller::size, "number of notes to spell")
+        .def("add", &pse::Speller::add_pybindwod, "add a new note to spell",
+             py::arg("midi"), py::arg("bar"), py::arg("simultaneous"))
+        .def("addlong", &pse::Speller::add_pybindwd, "add a new note to spell",
+             py::arg("midi"), py::arg("bar"), py::arg("simultaneous"),
+             py::arg("dur_num"), py::arg("dur_den"))
+        .def("nb_tons", &pse::Speller::nbTons,
+             "number of tonalities considered for pitch spelling")
+        .def("reset_tons", &pse::Speller::resetTons,
+             "clear the array of tonalities for pitch spelling")
+    // disambiguate overloaded method
+        .def("add_ton",
+             static_cast<void (pse::Speller::*)(int, pse::ModeName, bool)>(&pse::Speller::addTon3),
+             "add a tonality for pitch spelling",
+         py::arg("ks"),
+         py::arg("mode"),
+         py::arg("f_global"))
+        .def("Weber_tonal", &pse::Speller::WeberTonal,
+             "switch the array of tonalities to tonal mode for Weber dist.")
+        .def("Weber_modal", &pse::Speller::WeberModal,
+             "switch the array of tonalities to modal mode for Weber dist.")
+        .def("close_tons", &pse::Speller::closeTons, "close the array of tonalities")
+        .def("eval_table", &pse::Speller::evalTable, "construct the spelling table")
+        .def("reval_table", &pse::Speller::revalTable, "reconstruct the spelling table")
+        .def("eval_grid", &pse::Speller::evalGrid, "construct the grid of local tons")
+        .def("eval_global", &pse::Speller::evalGlobal,
+             "compute the subarray of tons selected as candidate global tonality,")
+        .def("rename", &pse::Speller::rename, "rename input notes")
+        .def("rewrite_passing", &pse::Speller::rewritePassing, "rewrite passing notes")
+        .def("name",  &pse::Speller::name, "estimated name of note",
+             py::arg("i"))
+        .def("accidental", &pse::Speller::accidental,
+             "estimated accidental of note", py::arg("i"))
+        .def("octave", &pse::Speller::octave, "estimated octave of note",
+             py::arg("i"))
+        .def("printed", &pse::Speller::printed, "estimated print flag of note",
+             py::arg("i"))
+        .def("globals", &pse::Speller::globals,
+             "get number of candidates (ties) for the estimatation of the global tonality")
+        .def("global_ton", &pse::Speller::global, "get candidate global tonality")
+        .def("iglobal_ton", &pse::Speller::iglobal, "get index of candidate global tonality ")
+        .def("iglobal_ton", &pse::Speller::iglobal,
+             "get index of estimated global tonality")
+        .def("local_bar", &pse::Speller::local, "estimated local tonality for a bar")
+             // py::arg("ton"), py::arg("bar"))
+        .def("local_note", &pse::Speller::localNote, "estimated local tonality for a note");
+   
     py::class_<pse::PSE>(m, "PSE")
         .def(py::init<>(), "Spell Checker PSE")
         .def("algo", &pse::PSE::algo, "name of spelling algorithm")
         .def("debug", &pse::PSE::debug, "set debug mode", py::arg("on"))
-        .def("size", &pse::PSE::size, "number notes to spell")
+        .def("size", &pse::PSE::size, "number of notes to spell")
         .def("add", &pse::PSE::add_pybindwod, "add a new note to spell",
              py::arg("midi"), py::arg("bar"), py::arg("simultaneous"))
         .def("addlong", &pse::PSE::add_pybindwd, "add a new note to spell",
@@ -107,9 +157,9 @@ PYBIND11_MODULE(pse, m)
          py::arg("ks"),
          py::arg("mode"),
          py::arg("f_global"))
-        .def("set_tonal", &pse::PSE::setTonal,
+        .def("set_tonal", &pse::PSE::WeberTonal,
              "switch the array of tonalities to tonal mode for Weber dist.")
-        .def("set_modal", &pse::PSE::setModal,
+        .def("set_modal", &pse::PSE::WeberModal,
              "switch the array of tonalities to modal mode for Weber dist.")
         .def("close_tons", &pse::PSE::closeTons, "close the array of tonalities")
         .def("set_global", &pse::PSE::setGlobal, "force global tonality")
@@ -191,9 +241,9 @@ PYBIND11_MODULE(pse, m)
              py::arg("ks"),
              py::arg("mode"), 
              py::arg("f_global"))
-        .def("set_tonal", &pse::PS14::setTonal,
+        .def("set_tonal", &pse::PS14::WeberTonal,
              "switch the array of tonalities to tonal mode for Weber dist.")
-        .def("set_modal", &pse::PS14::setModal,
+        .def("set_modal", &pse::PS14::WeberModal,
              "switch the array of tonalities to modal mode for Weber dist.")
         .def("close_tons", &pse::PS14::closeTons, "close the array of tonalities")
         .def("set_global", &pse::PS14::setGlobal, "force global tonality")

@@ -92,8 +92,7 @@ bool Speller2Pass::spell(const Cost& seed0, const Cost& seed1,
     assert(_locals0);
     
     clock_t time_start = clock();
-    // std::unique_ptr<PST>
-    _table1 = new PST(*_table0, seed1, *_global0, *_locals0, _debug);
+    _table1 = new PST(*_table0, seed1, *_global0, *_locals0, true, _debug); // tonal mode
     _time_table1 = duration(time_start);
     if (_debug)
     {

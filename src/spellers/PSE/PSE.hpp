@@ -56,7 +56,7 @@ public:
     // Estimation of tonalities
         
     /// @return distance in the array of fifths between
-    /// from estimated global tonality and
+    /// the estimated global tonality and
     /// a signature with no accidentals.
     inline int fifths() const { return global().fifths(); }
           

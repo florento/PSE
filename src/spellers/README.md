@@ -9,7 +9,7 @@ Their methods can be called in Python, through the binding, to specify the notes
 ## speller data
 
 - **array of tonalities**
-- **cost** sample (zero) for construction of tables
+- **cost** sample (zero) for the construction of tables 
 - **mode**: tonal / local
   flag for the construction of initial state for construction of tables
 - flag **chromatic** 
@@ -31,6 +31,18 @@ see `Speller.hpp` (documented)
 
 - `debug(flag)`
   set or unset debug mode (log messages for debugging)
+
+
+
+#### notes
+
+- `add`  + `add_pybindwd` `add_pybindwod`  (with or wo duration)
+  add a new input note to the enumerator of notes to spell.
+
+- `size`
+  number of input notes added to the enumerator of notes to spell.
+
+
 
 #### array of tonalities
 
@@ -66,10 +78,13 @@ see `Speller.hpp` (documented)
 
 #### prepare spelling
 
-- `setCost` 
-  selection from constants  `A` | `ADplus` |  `ADlex`
+- `sampleCost` 
+  selection from constants  `A` | `Adiscount` | `ADplus` |  `ADlex`
+  `costA` is with or without discount for lead degrees
 - `setMode`  flag or constant `TONAL` |  `GLOBAL`
 - `setChromatic` flag
+
+**Remark**:  redundancy or conflicts between `A`/`Adiscount` and `TONAL`/`GLOBAL` ?
 
 
 
@@ -77,20 +92,23 @@ see `Speller.hpp` (documented)
 
 - `evalTable1` : compute `table1`
   using the 3 parameters set in "prepare spelling"
-- `evalGlobal1`  options: full, diff%  using
-  - `table1`
-
+  
+- `evalGlobal`  options: full, diff%  using
+  
+  - `table1`  if `table2` doest not exist
+  - `table2`  if it exists
+  
 - `evalGrid`    using 
+  
   - `table1`
-  - `global1` (select rows to evaluate)
+  - `global` (select rows to evaluate)
+  
 - `evalTable2`  using 
   - the 3 parameters set in "prepare spelling"
   - `table1`
   - `grid`
-  - `global1` (select rows to evaluate)
-- `evalGlobal2`  options: full, diff%  using
-  - `table2`
-
+  - `global` (select rows to evaluate)
+  
 - `rename(iton)`
 
   rename all notes def to the speller,

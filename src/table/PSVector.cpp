@@ -17,26 +17,7 @@ namespace pse {
 
 
 PSV::PSV(const Algo& a, const Cost& seed, const TonIndex& i,
-         const PSEnum& e, size_t bar):
-_index(i),
-_algo(a),
-_enum(e.clone()),
-_bar(bar),
-_psbs(i.size(), nullptr),
-//_psb_total(), // TBR
-//_locals(i.size(), TonIndex::UNDEF),
-//_local_cands(), // emptyset
-_tiebfail(0)
-{
-    //_psbs.assign(_index.size(), nullptr);
-    //_psb_total.assign(_index.size(), nullptr);
-    //_local.assign(_index.size(), TonIndex::UNDEF);
-    init_psbs(seed);
-}
-
-
-PSV::PSV(const Algo& a, const Cost& seed, const TonIndex& i,
-         const PSEnum& e, size_t i0, size_t i1, size_t bar):
+         const PSEnum& e, size_t i0, size_t i1, size_t bar, bool tonal):
 _index(i),
 _algo(a),
 _enum(e.clone(i0, i1)),
@@ -51,10 +32,25 @@ _tiebfail(0)
     //_psbs.assign(_index.size(), nullptr);
     //_psb_total.assign(_index.size(), nullptr);
     //_local.assign(_index.size(), TonIndex::UNDEF);
-    init_psbs(seed);
+    init_psbs(seed, tonal);
 }
 
 
+PSV::PSV(const PSV& col, const Cost& seed,
+         const PSO& globals, const std::vector<size_t>& locals, bool tonal):
+_index(col._index),
+_algo(col._algo),
+_enum(col._enum->clone()),
+_bar(col.bar()),
+_psbs(_index.size(), nullptr),
+_tiebfail(0)
+{
+    assert(col.size() == locals.size());
+    init_psbs(seed, globals, locals, tonal);
+}
+
+
+// TBR
 PSV::PSV(const Algo& a, const Cost& seed, const TonIndex& i,
          const PSEnum& e, size_t i0, size_t bar):
 _index(i),
@@ -75,17 +71,23 @@ _tiebfail(0)
 }
 
 
-PSV::PSV(const PSV& col, const Cost& seed,
-         const PSO& globals, const std::vector<size_t>& locals):
-_index(col._index),
-_algo(col._algo),
-_enum(col._enum->clone()),
-_bar(col.bar()),
-_psbs(_index.size(), nullptr),
+// TBR
+PSV::PSV(const Algo& a, const Cost& seed, const TonIndex& i,
+         const PSEnum& e, size_t bar):
+_index(i),
+_algo(a),
+_enum(e.clone()),
+_bar(bar),
+_psbs(i.size(), nullptr),
+//_psb_total(), // TBR
+//_locals(i.size(), TonIndex::UNDEF),
+//_local_cands(), // emptyset
 _tiebfail(0)
 {
-    assert(col.size() == locals.size());
-    init_psbs(seed, globals, locals);
+    //_psbs.assign(_index.size(), nullptr);
+    //_psb_total.assign(_index.size(), nullptr);
+    //_local.assign(_index.size(), TonIndex::UNDEF);
+    init_psbs(seed);
 }
 
 
@@ -196,7 +198,7 @@ const PSB& PSV::bag(size_t i) const
 
 
 // compute _psbs
-void PSV::init_psbs(const Cost& seed)
+void PSV::init_psbs(const Cost& seed, bool tonal)
 {
     for (size_t i = 0; i < _index.size(); ++i)
     {
@@ -208,9 +210,8 @@ void PSV::init_psbs(const Cost& seed)
         if (_algo == Algo::PSE || _algo == Algo::PS14)
         {
             // arg local ton is ignored
-            // tonal mode
             _psbs[i] = std::shared_ptr<const PSB>(new
-                                  PSB(_algo, seed, enumerator(), toni, true));
+                       PSB(_algo, seed, enumerator(), toni, tonal));
         }
         else
         {
@@ -224,16 +225,17 @@ void PSV::init_psbs(const Cost& seed)
     }
 }
 
+
 // compute _psbs with given local tons
 void PSV::init_psbs(const Cost& seed,
-                    const PSO& globals, const std::vector<size_t>& locals)
+                    const PSO& globals, const std::vector<size_t>& locals,
+                    bool tonal)
 {
     assert(locals.size() == _index.size());
     
     for (auto it = globals.cbegin(); it != globals.cend(); ++it)
     {
-        size_t i = *it;
-        // PS Bag is empty if first() = last()
+        size_t i = *it; // index of global ton
         TRACE("PSV {}-{} ton {}",
               enumerator().first(), enumerator().stop(), ton(i));
         assert(i < _psbs.size());
@@ -246,12 +248,12 @@ void PSV::init_psbs(const Cost& seed,
         assert(locals.at(i) < _index.size());
         const Ton& ltoni = ton(locals.at(i));
         assert(ltoni.defined());
+        // PS Bag is empty if first() = last()
         if (_algo == Algo::PSE || _algo == Algo::PS14)
         {
             // arg local ton is ignored
-            // modal mode
             _psbs[i] = std::shared_ptr<const PSB>(new
-                        PSB(_algo, seed, enumerator(), toni, ltoni, false));
+                       PSB(_algo, seed, enumerator(), toni, ltoni, tonal));
         }
         else
         {

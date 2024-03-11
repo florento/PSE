@@ -48,6 +48,7 @@ class PSG;
 
 
 /// A PS Table is a list of PS Vectors, one for each measure.
+/// @todo suppr. algo (useless)
 class PST
 {
     
@@ -59,12 +60,13 @@ public:
     /// of the same type.
     /// @param e an enumerator of notes for transitions of configs.
     /// @param i array of tonalities = header of rows of this table.
+    /// @param tonal mode: tonal or modal, for the construction of initial state.
+    ///        default = modal.
     /// @param dflag debug mode (display table during construction).
     /// @warning the enumerator cannot be changed once the object created.
-    PST(const Algo& a, const Cost& seed,
-        const TonIndex& i,
-        PSEnum& e,
-        bool dflag=false);
+    ///
+    PST(const Algo& a, const Cost& seed, const TonIndex& i, PSEnum& e,
+        bool tonal=false, bool dflag=false);
 
     // main constructor.
     // @param e an enumerator of notes for transitions of configs.
@@ -80,6 +82,24 @@ public:
     // The enumeration starts at n0 and stops
     // when there are no more notes to read in e.
     // PST(PSEnum& e, size_t n0);
+    
+    
+    /// rebuid a table with the same index, and enumerator as the given
+    /// table, and the new given seed and given grid of local tonalities.
+    /// @param a name of pitch-spelling algorithm implemented with this table.
+    /// @param tab PS table whose algo, ton index, and enumerator will be copied.
+    /// @param seed cost value of specialized type used to create a null cost
+    /// of the same type.
+    /// @param globals candidate global tonalities.
+    /// Its dimensions must be the same as tab.
+    /// @param locals table of local tonalities for tab.
+    /// Its dimensions must be the same as tab.
+    /// @param tonal mode: tonal or modal, for the construction of initial state.
+    ///        default = tonal.
+    /// @param dflag debug mode (display table during construction).
+    PST(const Algo& a, const PST& tab, const Cost& seed,
+        const PSO& globals, const PSG& locals,
+        bool tonal=true, bool dflag=false);
 
     /// rebuid a table with the same algo, index, and enumerator as the given
     /// table, and the new given seed and given grid of local tonalities.
@@ -90,9 +110,12 @@ public:
     /// Its dimensions must be the same as tab.
     /// @param locals table of local tonalities for tab.
     /// Its dimensions must be the same as tab.
+    /// @param tonal mode: tonal or modal, for the construction of initial state.
+    ///        default = tonal.
     /// @param dflag debug mode (display table during construction).
     PST(const PST& tab, const Cost& seed,
-        const PSO& globals, const PSG& locals, bool dflag=false);
+        const PSO& globals, const PSG& locals, 
+        bool tonal=true, bool dflag=false);
 
     /// destructor.
     virtual ~PST();
@@ -272,8 +295,11 @@ private:
 
     /// compute the columns (PS Vectors) of this table,
     /// filling cells with cost values.
+    /// @param seed cost value of specialized type used to create a null cost
+    /// of the same type.
+    /// @param tonal mode: tonal or modal, for the construction of initial state.
     /// @return wether the computation was successful.
-    bool init_psvs(const Cost& seed);
+    bool init_psvs(const Cost& seed, bool tonal=false);
 
     /// compute the columns (PS Vectors) of this table,
     /// filling cells with cost values.
@@ -287,9 +313,10 @@ private:
     /// @param locals table of local tonalities for tab.
     /// Its dimensions must be the same as the index of this table and
     /// the columns of tab.
+    /// @param tonal mode: tonal or modal, for the construction of initial state.
     /// @return wether the computation was successful.
     bool init_psvs(const PST& tab, const Cost& seed,
-                   const PSO& globals, const PSG& locals);
+                   const PSO& globals, const PSG& locals, bool tonal=true);
     
     /// initialise the vector of row costs as null vector.
     void init_rowcosts(const Cost& seed);

@@ -623,7 +623,7 @@ size_t PSG::estimateLocalLexico(const PSV& vec, size_t ig, size_t iprev,
 
 
 //real function using ranks, used when the init flag is true
-size_t PSG::estimateLocal(const PSV& vec, size_t ig, size_t iprev)
+size_t PSG::estimateLocalRank(const PSV& vec, size_t ig, size_t iprev)
 {
     // case of empty bar: keep the previous local
     if (vec.first() == vec.stop())

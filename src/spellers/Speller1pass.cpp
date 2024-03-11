@@ -15,8 +15,7 @@ _table0(nullptr),
 _global0(nullptr),
 _locals0(nullptr),
 _time_table0(0),
-_time_locals0(0),
-_uton(new Ton()) // undef
+_time_locals0(0)
 { }
 
 
@@ -28,8 +27,6 @@ Speller1Pass::~Speller1Pass()
         delete _global0;
     if (_locals0)
         delete _locals0;
-    assert(_uton);
-    delete _uton;
 }
 
 
@@ -158,34 +155,8 @@ size_t Speller1Pass::ilocal(size_t i, size_t j) const
         return _locals0->ilocal(i, j);
     }
 
-    // in case or error return undefined tonality
+    // in case or error return undefined tonality index
     return TonIndex::UNDEF;
-}
-
-
-const Ton& Speller1Pass::local(size_t i, size_t j) const
-{
-    size_t it = ilocal(i, j);
-    if (it == TonIndex::UNDEF)
-    {
-        // in case or error return undefined tonality
-        // std::shared_ptr<Ton> uton(new Ton());
-        return *_uton;
-        
-    }
-    else
-    {
-        assert(it < _index.size());
-        return _index.ton(it);
-    }
-}
-
-
-const Ton& Speller1Pass::localNote(size_t i, size_t j) const
-{
-    assert(_enum.inside(j));
-    size_t bar = _enum.measure(j);
-    return local(i, bar);
 }
 
 
@@ -202,7 +173,7 @@ bool Speller1Pass::spell(const Cost& seed0, double diff0,
     }
     
     clock_t time_start = clock();
-    _table0 = new PST(_algo, seed0, _index, _enum, _debug); // std::unique_ptr<PST>
+    _table0 = new PST(_algo, seed0, _index, _enum, false, _debug); // modal mode
     _time_table0 = duration(time_start);
     TRACE("pitch-spelling: {} bars", _table0->size());
     if (_debug)
@@ -262,6 +233,7 @@ bool Speller1Pass::spell(const Cost& seed0, double diff0,
 //        ERROR("Speller: failed to compute spelling table {}-{}",
 //              _enum.first(), _enum.stop());
 //    }
+
 
     // update the lists _names, _accids and _octave
     if (rename_flag)

@@ -154,15 +154,22 @@ private:
     /// @param iprev index of estimated local tonality for previous measure.
     size_t breakTie2(std::vector<size_t>& cands, const PSV& vec,
                      size_t ig, size_t iprev);
+        
+    /// select a local tonality for a measure.
+    /// @param vec vector of best spelling, one for each possible local tonality.
+    /// @param ig index of assumed global tonality.
+    /// @param iprev index of estimated local tonality for previous measure.
+    /// @todo TBR not used, replaced by extractRank + breakTie2
+    size_t estimateLocalRank(const PSV& vec, size_t ig, size_t iprev);
     
     /// select a local tonality for a measure,
-    /// by iihe search to tons close to the previous or the global one
+    /// by the search to tons close to the previous or the global one
     /// and then choosing the one minimizing accidents.
     /// @param vec vector of best spelling, one for each possible local tonality.
     /// @param ig index of assumed global tonality.
     /// @param iprev index of estimated local tonality for previous measure.
     /// @param d ton distance value, for selection.
-    /// @todo not used? = init(false) ?
+    /// @todo TBR not used, replaced by extractBests + breakTie1
     size_t estimateLocalLexico(const PSV& vec, size_t ig, size_t iprev,
                                unsigned int d);
     

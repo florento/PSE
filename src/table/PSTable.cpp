@@ -17,7 +17,7 @@ namespace pse {
 
 
 PST::PST(const Algo& a, const Cost& seed, const TonIndex& i,
-         PSEnum& e, bool dflag):
+         PSEnum& e, bool tonal, bool dflag):
 _algo(a),
 _enum(e),
 _index(i),
@@ -29,7 +29,7 @@ _debug(dflag)
        
     if (a == Algo::PSE || a == Algo::PS14)
     {
-        bool status = init_psvs(seed);
+        bool status = init_psvs(seed, tonal);
         if (status == false)
         {
             ERROR("PST: fail to compute spelling table {}-{} for {}",
@@ -77,9 +77,9 @@ _debug(dflag)
 //}
 
 
-PST::PST(const PST& tab, const Cost& seed,
-         const PSO& globals, const PSG& locals, bool dflag):
-_algo(tab._algo),
+PST::PST(const Algo& a, const PST& tab, const Cost& seed,
+         const PSO& globals, const PSG& locals, bool tonal, bool dflag):
+_algo(a),
 _enum(tab._enum),
 _index(tab._index),
 _psvs(),     // initially empty
@@ -91,7 +91,7 @@ _debug(dflag)
     assert(locals.rowNb() == _index.size());
     assert(locals.columnNb() == tab.columnNb());
     assert(_algo == Algo::PSE || _algo == Algo::PS14);
-    bool status = init_psvs(tab, seed, globals, locals);
+    bool status = init_psvs(tab, seed, globals, locals, tonal);
     if (status == false)
     {
         ERROR("PST: fail to compute spelling table {}-{} for {}",
@@ -102,6 +102,11 @@ _debug(dflag)
         compute_rowcosts(seed, globals);
     }
 }
+
+PST::PST(const PST& tab, const Cost& seed,
+         const PSO& globals, const PSG& locals, bool tonal, bool dflag):
+PST(tab._algo, tab, seed, globals, locals, tonal, dflag)
+{ }
 
 
 PST::~PST()
@@ -180,7 +185,7 @@ void PST::compute_rowcosts(const Cost& seed, const PSO& globals)
 }
 
 
-bool PST::init_psvs(const Cost& seed)
+bool PST::init_psvs(const Cost& seed, bool tonal)
 {
     TRACE("PST: computing spelling table {}-{}");
     assert(_psvs.empty()); // do not recompute
@@ -220,7 +225,7 @@ bool PST::init_psvs(const Cost& seed)
             TRACE("PST init: bar {} EMPTY", b);
             // vector of empty bags
             _psvs.push_back(std::unique_ptr<PSV>(new
-                             PSV(_algo, seed, _index, _enum, i0, i0, b)));
+                           PSV(_algo, seed, _index, _enum, i0, i0, b, tonal)));
             ++b;
             continue;
         }
@@ -234,7 +239,7 @@ bool PST::init_psvs(const Cost& seed)
               (notes {}-{})", b, i0, i1-1);
         // add a PS vector (column) for the measure b
         _psvs.push_back(std::unique_ptr<PSV>(new
-                                 PSV(_algo, seed, _index, _enum, i0, i1, b)));
+                           PSV(_algo, seed, _index, _enum, i0, i1, b, tonal)));
         assert(_psvs.size() == b+1);
         // then start next measure
         i0 = i1; // index of first note of next bar
@@ -245,7 +250,7 @@ bool PST::init_psvs(const Cost& seed)
 
 
 bool PST::init_psvs(const PST& tab, const Cost& seed,
-                    const PSO& globals, const PSG& grid)
+                    const PSO& globals, const PSG& grid, bool tonal)
 {
     TRACE("PST: re-computing spelling table {}-{}");
     assert(_psvs.empty()); // do not recompute
@@ -257,7 +262,7 @@ bool PST::init_psvs(const PST& tab, const Cost& seed,
         const std::vector<size_t>& locals = grid.column(j);
         assert(col.bar() == j);
         _psvs.emplace_back(std::unique_ptr<PSV>(new
-                                        PSV(col, seed, globals, locals)));
+                                    PSV(col, seed, globals, locals, tonal)));
          // PSV(_algo, seed, _index, col.enumerator(), j)));
     }
     

@@ -65,7 +65,7 @@ _debug(dflag)
 
 PSO::~PSO()
 { }
-
+ 
 
 void PSO::init(const PSO& globals, const PST& tab, double d)
 {
@@ -79,14 +79,12 @@ void PSO::init(const PSO& globals, const PST& tab, double d)
     // invariant: all index in _globals have the same RowCost
     // _globals.push_back(0);
     
-
     // index of row of best cost
     assert(globals.cbegin() != globals.cend());
     size_t ibest = *(globals.cbegin());
     
     // estimate the best tonality in tab wrt costs (nb accidentals)
     for (auto it = globals.cbegin(); it != globals.cend(); ++it)
-
     {
         size_t i = *it;
         assert(i != TonIndex::FAILED);

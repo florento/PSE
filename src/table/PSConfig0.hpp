@@ -61,7 +61,7 @@ public:
     /// in order to reach the successor configs from this config.
     /// @param seed cost value of specialized type
     /// (to create a cost of the same type).
-    /// @param tonal mode: modal or tonal
+    /// @param tonal mode: tonal or modal, for the construction of initial state.
     /// @see State constructor for tonal/modal mode
     PSC0(const Ton& ton, size_t id, const Cost& seed, bool tonal = true);
 

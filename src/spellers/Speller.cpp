@@ -8,6 +8,7 @@
 #include "Speller.hpp"
 
 
+
 namespace pse {
 
 
@@ -15,7 +16,18 @@ Speller::Speller(const Algo& algo, size_t nbt, bool dflag):
 _algo(algo),
 _enum(0, 0),
 _index(nbt),
-_debug(dflag)
+//_seed(nullptr),
+//_initial_state(0), // default
+//_chromatic(false),
+_seedAdiscount(true),
+_seedAnodiscount(false),
+_seedADplus(),
+_seedADlex(),
+_table(nullptr),
+_grid(nullptr),
+_global(nullptr),
+_debug(dflag),
+_uton(new Ton()) // undef
 {
     spdlog_setVerbosity(4);
     debug(dflag);
@@ -23,19 +35,27 @@ _debug(dflag)
 }
 
 
-Speller::Speller(const Speller& rhs):
-_algo(rhs._algo),
-_enum(rhs._enum),  /// @todo AV copy
-_index(rhs._index), /// @todo AV copy
-_debug(rhs._debug)
-{
-    TRACE("Speller copy");
-}
+//Speller::Speller(const Speller& rhs):
+//_algo(rhs._algo),
+//_enum(rhs._enum),  /// @todo AV copy
+//_index(rhs._index), /// @todo AV copy
+//_debug(rhs._debug)
+//{
+//    TRACE("Speller copy");
+//}
 
 
 Speller::~Speller()
 {
     TRACE("delete Speller of type {}", _algo);
+    
+    if (_grid)
+        delete _grid;
+    if (_table)
+        delete _table;
+ 
+    assert(_uton);
+    delete _uton;
 }
 
 
@@ -75,6 +95,11 @@ void Speller::debug(bool flag)
 }
 
 
+//
+// notes
+//
+
+
 size_t Speller::size() const
 {
     //TRACE("Speller::size");
@@ -102,6 +127,11 @@ void Speller::add_pybindwod(int note, int bar, bool simult)
     TRACE("Speller: add {} {}", note, bar);
     _enum.add(note, bar, simult);
 }
+
+
+//
+// array of tonalities
+//
 
 
 size_t Speller::nbTons() const
@@ -139,13 +169,13 @@ void Speller::addTon(int ks, ModeName mode, bool global)
     _index.add(ks, mode, global);
 }
 
-void Speller::setTonal()
+void Speller::WeberTonal()
 {
     _index.setTonal();
 }
 
 
-void Speller::setModal()
+void Speller::WeberModal()
 {
     _index.setModal();
 }
@@ -163,12 +193,221 @@ bool Speller::closedTons() const
 }
 
 
+//
+// prepare spelling
+//
+
+Cost& Speller::sampleCost(int c)
+{
+    switch (c)
+    {
+        case 0:
+            return _seedAdiscount;
+            break;
+            
+        case 1:
+            return _seedAnodiscount;
+            break;
+            
+        case 2:
+            return _seedADplus;
+            break;
+            
+        case 3:
+            return _seedADlex;
+            break;
+            
+        default:
+            ERROR("Speller sampleCost unexpected code {}", c);
+            return _seedAdiscount;
+    }
+}
+
+
+//void Speller::setTonal()
+//{
+//    _initial_state = 1;
+//}
+
+
+//void Speller::setModal()
+//{
+//    _initial_state = 2;
+//}
+
+
+//void Speller::setChromatic(bool flag)
+//{
+//    _chromatic = flag;
+//}
+
+
+//
+// spelling
+//
+
+
+bool Speller::evalTable(int ctype, bool tonal, bool chromatic)
+{
+    if (_table)
+    {
+        delete _table;
+        _table = nullptr;
+    }
+    
+//    if (_seed == nullptr)
+//    {
+//        WARN("Speller evalTable: no type of cost specified, using default");
+//        _seed = new CostA(true); // with discount
+//    }
+    
+    const Algo algo(chromatic?Algo::PS14:Algo::PSE);
+    _table = new PST(algo, sampleCost(ctype), _index, _enum, tonal, _debug);
+
+    return true;
+}
+
+
+bool Speller::revalTable(int ctype, bool tonal, bool chromatic)
+{
+    if (_table == nullptr)
+    {
+        ERROR("Speller revalTable: call evalTable first");
+        return false;
+    }
+
+    if (_grid == nullptr)
+    {
+        ERROR("Speller revalTable: call evalGrid first");
+        return false;
+    }
+
+//  if (_seed == nullptr)
+//  {
+//      WARN("Speller revalTable: no type of cost specified, using default");
+//      _seed = new CostA(true); // with discount
+//  }
+    
+    assert(_table);
+    PST* table_pre = _table;
+    const Algo algo(chromatic?Algo::PS14:Algo::PSE);
+    
+    
+    if (_global)
+    {
+        _table = new PST(algo, *table_pre, sampleCost(ctype), *_global, *_grid,
+                         tonal, _debug);
+    }
+    else
+    {
+        PSO full(_index, _debug, true);
+        _table = new PST(algo, *table_pre, sampleCost(ctype), full, *_grid,
+                         tonal, _debug);
+    }
+
+    assert(table_pre);
+    delete table_pre;
+    return true;
+}
+
+
+bool Speller::evalGrid()
+{
+    if (_grid)
+    {
+        delete _grid;
+        _grid = nullptr;
+    }
+    if (_table == nullptr)
+    {
+        ERROR("Speller evalGrid: eval table first");
+        return false;
+    }
+    
+    std::vector<bool> mask(_index.size(), true); // all true by default
+
+    if (_global)
+    {
+        mask = _global->getMask(); // copy
+    }
+
+    _grid = new PSG(*_table, mask);
+    return true;
+}
+
+
+bool Speller::evalGlobal(double d, bool refine)
+{
+    assert(0 <= d);
+    assert(d <= 100);
+    
+    if (_table == nullptr)
+    {
+        ERROR("Speller evalGlobal: eval table first");
+        return false;
+    }
+    
+    if (refine)
+    {
+        if (_global)
+        {
+            PSO* global_pre = _global;
+            _global = new PSO(*global_pre, *_table, d, _debug);
+            assert(global_pre);
+            delete global_pre;
+            return true;
+        }
+        else
+        {
+            ERROR("Speller evalGlobal by refinement: no previous global");
+            return false;
+        }
+    }
+    else
+    {
+        if (_global)
+        {
+            delete _global;
+            _global = nullptr;
+        }
+        _global = new PSO(*_table, d, _debug);
+        return true;
+    }
+}
+
+
+bool Speller::rename(size_t i)
+{
+    assert(i != TonIndex::UNDEF);
+    assert(i < _index.size());
+
+    if (_table == nullptr)
+    {
+        ERROR("Speller rename: eval table first");
+        return false;
+    }
+    
+    return _table->rename(i);
+}
+
+
 size_t Speller::rewritePassing()
 {
     TRACE("Rewriting passing notes");
     return _enum.rewritePassing();
 }
 
+
+bool Speller::spell()
+{
+    ERROR("Speller spell should not be called");
+    return false;
+}
+
+
+//
+// results feedback
+//
 
 enum NoteName Speller::name(size_t i) const
 {
@@ -191,6 +430,99 @@ int Speller::octave(size_t i) const
 bool Speller::printed(size_t i) const
 {
     return _enum.printed(i);
+}
+
+
+size_t Speller::globals() const
+{
+    if (_global == nullptr)
+    {
+        WARN("Speller globals: evalGlobal not called");
+        return 0;
+    }
+    else
+    {
+        return _global->size();
+    }
+}
+
+
+const Ton& Speller::global(size_t n) const
+{
+    if (_global == nullptr)
+    {
+        ERROR("Speller global: evalGlobal not called");
+        assert(_uton);
+        return *_uton;
+    }
+    else
+    {
+        return _global->global(n);
+    }
+}
+
+
+size_t Speller::iglobal(size_t n) const
+{
+    if (_global == nullptr)
+    {
+        ERROR("Speller global: evalGlobal not called");
+        return TonIndex::UNDEF;
+    }
+    else
+    {
+        return _global->iglobal(n);
+    }
+}
+
+
+size_t Speller::ilocal(size_t i, size_t j) const
+{
+    if (_grid == nullptr)
+    {
+        ERROR("Speller ilocal: eval grid first");
+        return TonIndex::UNDEF;
+    }
+    else if (j >= _grid->columnNb())
+    {
+        ERROR("Speller ilocal: no bar {}", j);
+    }
+    else if (i >= _grid->rowNb())
+    {
+        ERROR("Speller ilocal: no ton of index {}", i);
+    }
+    else
+    {
+        return _grid->ilocal(i, j);
+    }
+    
+    // in case or error return undefined tonality index
+    return TonIndex::UNDEF;
+}
+
+
+const Ton& Speller::local(size_t i, size_t j) const
+{
+    size_t it = ilocal(i, j);
+    if (it == TonIndex::UNDEF)
+    {
+        // in case or error return undefined tonality
+        assert(_uton);
+        return *_uton;
+    }
+    else
+    {
+        assert(it < _index.size());
+        return _index.ton(it);
+    }
+}
+
+
+const Ton& Speller::localNote(size_t i, size_t j) const
+{
+    assert(_enum.inside(j));
+    size_t bar = _enum.measure(j);
+    return local(i, bar);
 }
 
 
