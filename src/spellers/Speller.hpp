@@ -74,7 +74,7 @@ public:
     /// @return Algo::Undef by default.
     const Algo& algo() const { return _algo; }
     
-    /// set debug mode (log messages up to debug)
+    /// set debug mode (log messages for debugging)
     void debug(bool flag);
 
     /// number of input notes in the enumerator of notes to spell.
