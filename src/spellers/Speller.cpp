@@ -476,12 +476,17 @@ size_t Speller::iglobal(size_t n) const
 }
 
 
+bool Speller::locals() const
+{
+    return (_grid != nullptr);
+}
+
+
 size_t Speller::ilocal(size_t i, size_t j) const
 {
     if (_grid == nullptr)
     {
         ERROR("Speller ilocal: eval grid first");
-        return TonIndex::UNDEF;
     }
     else if (j >= _grid->columnNb())
     {

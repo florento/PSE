@@ -99,14 +99,12 @@ void CostAD::update(const enum NoteName& name,
             case Accid::DoubleSharp:
             case Accid::DoubleFlat:
                 _accid += 2;
-                //_accid += 3;
                 break;
                 
             case Accid::Sharp:
             case Accid::Flat:
             case Accid::Natural:
                 _accid += 1;
-                //_accid += 2;
                 break;
                     
             default:
@@ -124,14 +122,12 @@ void CostAD::update(const enum NoteName& name,
             case Accid::DoubleSharp:
             case Accid::DoubleFlat:
                 _dist += 2;
-                //_dist += 3;
                 break;
 
             case Accid::Sharp:
             case Accid::Flat:
             case Accid::Natural:
                 _dist += 1;
-                //_dist += 2;
                 break;
 
             default:
@@ -165,7 +161,7 @@ void CostAD::update(const enum NoteName& name,
     }
 }
 
-// version version (TENOR paper)
+// version (TENOR paper)
 void CostAD::update_tonale(const enum NoteName& name,
                            const enum Accid& accid,
                            bool print,

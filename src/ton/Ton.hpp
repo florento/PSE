@@ -28,8 +28,9 @@ namespace pse {
 
 // class PSState;
 
-/// A tonality is the combination of a Key Signature in -7..7 and a Mode.
-/// (only diatonic scales).
+/// A tonality is the combination of a Key Signature in -7..7 and a diatonic Mode.
+/// It defines a diatonic scale:
+/// 7 notes of distinct names and with or without accident.
 ///
 /// | ks | Maj | Min  | sens (harm) |
 /// |:--:|:---:|:----:|:-----------:|
@@ -110,35 +111,36 @@ public:
     /// @todo TBR
     enum Accid accidKey(int n) const;
     
-    /// accidental in the scale of this ton for a given pitch name.
+    /// accidental in the diatonic scale of this ton for a given pitch name.
     /// @param n an encapsulated note name
     /// @return the number of accidents, in scale, for degree d, in -2..2.
     enum Accid accidDia(const enum NoteName& n) const;
 
-    /// accidental in the scale of this ton for a given pitch name.
+    /// accidental in the diatonic scale of this ton for a given pitch name.
     /// @param n a note name, in 0..6 (0 is 'C', 6 is 'B').
     /// @return the accidental, in scale, for n, in -2..2.
     enum Accid accidDia(int n) const;
 
-    /// accidental in the scale of this ton for a given pitch name.
+    /// accidental in the diatonic scale of this ton for a given pitch name.
     /// @param n an encapsulated note name
     /// @param mode a mode can be different from the one of this ton
     /// @todo mode what for ?
     /// @return the number of accidents, in scale, for degree d, in -2..2.
     enum Accid accidDia(const enum NoteName& n, ModeName mode) const;
         
-    /// note name in the scale of this ton for a given degree.
+    /// note name in the diatonic scale of this ton for a given degree.
     /// @param d a degree in 0..6.
     /// @return the note name in scale, for degree d, in 'C'..'B'.
     /// @warning only for distonic scales: the mode must be
     /// Major or Minor or MinorNat or MinorMel.
     enum NoteName name(int d) const;
 
-    /// accidental in the scale of this ton for a given degree.
+    /// accidental in the diatonic scale of this ton for a given degree.
     /// @param d a degree in 0..6.
     /// @return the number of accidents, in scale, for n, in -2..2.
     /// @warning only for distonic scales: the mode must be
     /// Major or Minor or MinorNat or MinorMel.
+    /// @todo TBR not used?
     enum Accid accidental(int d) const;
   
     /// a note is a lead in this Ton if
@@ -227,7 +229,7 @@ private:
     /// list of accidents in key signatures,
     /// for every pitch name in 0..6 (0 is 'C', 6 is 'B'),
     /// for every key signature in -7..7.
-    static const std::array<std::array<enum Accid, 7>, 15> KEYS;
+    static const std::array<std::array<enum Accid, 7>, 15> MAJOR;
 
     /// lead node in minor harmonic tons
     /// one pitch name in 0..6 (0 is 'C', 6 is 'B'),
@@ -244,11 +246,11 @@ private:
     /// for every key signature in -7..7.
     static const std::array<std::array<enum Accid, 7>, 15> MIN_MEL;
     
-    static const std::array<std::array<enum Accid, 7>, 15> DOR;
-    static const std::array<std::array<enum Accid, 7>, 15> PHRYG;
-    static const std::array<std::array<enum Accid, 7>, 15> LYD;
-    static const std::array<std::array<enum Accid, 7>, 15> MIXO;
-    static const std::array<std::array<enum Accid, 7>, 15> LOC;
+    static const std::array<std::array<enum Accid, 7>, 15> DORIAN;
+    static const std::array<std::array<enum Accid, 7>, 15> PHRYGIAN;
+    static const std::array<std::array<enum Accid, 7>, 15> LYDIAN;
+    static const std::array<std::array<enum Accid, 7>, 15> MIXOLYDIAN;
+    static const std::array<std::array<enum Accid, 7>, 15> LOCRIAN;
     
     /// number of the tonic of this ton in the array of fifths.
     int tonic() const;

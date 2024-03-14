@@ -132,6 +132,7 @@ PYBIND11_MODULE(pse, m)
         .def("iglobal_ton", &pse::Speller::iglobal, "get index of candidate global tonality ")
         .def("iglobal_ton", &pse::Speller::iglobal,
              "get index of estimated global tonality")
+        .def("locals", &pse::PSE::locals, "the local tonality grid has been estimated")
         .def("local_bar", &pse::Speller::local, "estimated local tonality for a bar")
              // py::arg("ton"), py::arg("bar"))
         .def("local_note", &pse::Speller::localNote, "estimated local tonality for a note");
@@ -171,6 +172,7 @@ PYBIND11_MODULE(pse, m)
         .def("iglobal_ton", &pse::PSE::iglobal,
              "get index of estimated global tonality")
         .def("keysig", &pse::PSE::fifths, "get estimated global key signature")
+        .def("locals", &pse::PSE::locals, "the local tonality grid has been estimated")
         .def("local_bar", &pse::PSE::local, "estimated local tonality for a bar")
              // py::arg("ton"), py::arg("bar"))
         .def("local_note", &pse::PSE::localNote,
@@ -178,7 +180,7 @@ PYBIND11_MODULE(pse, m)
         .def("globals", &pse::PSE::globals,
              "get number of candidates (ties) for the estimatation of the global tonality")
         .def("globals0", &pse::PSE::globals0,
-             "get number of candidates (ties) for the estimatation of the global tonality  (after first pass)")
+             "get number of candidates (ties) for the estimatation of the global tonality (after first pass)")
         .def("global_ton", &pse::PSE::global,
              "get candidate global tonality ")
         .def("global_ton0", &pse::PSE::global0,
@@ -218,6 +220,8 @@ PYBIND11_MODULE(pse, m)
              py::arg("i"))
         .def("printed", &pse::PS13::printed, "estimated print flag of note",
              py::arg("i"))
+        .def("locals", &pse::PS13::locals, "the local tonality grid has been estimated")
+        .def("globals", &pse::PS13::globals, "the glocal tonality candidates have been estimated")
         .def("global_ton", &pse::PS13::global, "estimated global tonality (undef)");
     
     py::class_<pse::PS14>(m, "PS14")
@@ -265,6 +269,7 @@ PYBIND11_MODULE(pse, m)
 //        .def("iglobal_ton", &pse::PS14::iglobal,
 //             "get index of estimated global tonality")
         .def("keysig", &pse::PS14::fifths, "get estimated global key signature")
+        .def("locals", &pse::PS14::locals, "the local tonality grid has been estimated")
         .def("local_bar", &pse::PS14::local, "estimated local tonality for a bar")
              // py::arg("ton"), py::arg("bar"))
         .def("local_note", &pse::PS14::localNote, "estimated local tonality for a note")

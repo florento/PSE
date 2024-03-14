@@ -311,6 +311,9 @@
 		434317272A1231F900D685A1 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		4346CB342A1FF62100756DE3 /* PSGlobal.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PSGlobal.cpp; sourceTree = "<group>"; };
 		4346CB352A1FF62100756DE3 /* PSGlobal.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = PSGlobal.hpp; sourceTree = "<group>"; };
+		4348774A2BA2EFE000EC1BAC /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		4348774B2BA2EFE600EC1BAC /* TODO.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = TODO.md; sourceTree = "<group>"; };
+		4348774C2BA2F2B500EC1BAC /* TODO.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = TODO.md; path = src/ton/TODO.md; sourceTree = "<group>"; };
 		434B1DF5298ECCF0001CE41C /* PSConfig1.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = PSConfig1.hpp; sourceTree = "<group>"; };
 		434B1DF6298ECCF0001CE41C /* PSConfig1.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PSConfig1.cpp; sourceTree = "<group>"; };
 		434B1DFA298ED394001CE41C /* PSConfig2.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PSConfig2.cpp; sourceTree = "<group>"; };
@@ -472,6 +475,7 @@
 		431586182983E65A00918B1B /* ton */ = {
 			isa = PBXGroup;
 			children = (
+				4348774C2BA2F2B500EC1BAC /* TODO.md */,
 				43ABA500292423E8002AC1D4 /* Fifths.hpp */,
 				43ABA502292423E8002AC1D4 /* Fifths.cpp */,
 				430CDFF02924E6D700A84650 /* KeyFifth.hpp */,
@@ -745,6 +749,8 @@
 		438EFD822A0E3EB200FF3733 /* cost */ = {
 			isa = PBXGroup;
 			children = (
+				4348774A2BA2EFE000EC1BAC /* README.md */,
+				4348774B2BA2EFE600EC1BAC /* TODO.md */,
 				43DD95482945E223006DC553 /* PSCost.hpp */,
 				43DD95472945E223006DC553 /* PSCost.cpp */,
 				43D31A112A1426A300234527 /* Cost.hpp */,

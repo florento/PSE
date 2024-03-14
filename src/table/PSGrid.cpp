@@ -472,7 +472,7 @@ size_t PSG::breakTie2(std::vector<size_t>& cands, const PSV& vec,
         {
             cands_church.push_back(j);
         }
-        // min mel if minor is not present (with same KS
+        // min mel if minor is not present (with same KS)
         else if ((jton.getMode() == ModeName::MinorMel) &&
                  (findbyKS(jton.fifths(), cands_majmin) == TonIndex::UNDEF))
         {

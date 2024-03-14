@@ -101,8 +101,8 @@ protected: // data
     /// First estimation of global tonality (on table0).
     PSO* _global0; // std::shared_ptr<PSO>
     
-    /// Grid of local tonalities (estimated on table0).
-    PSG* _locals0; // std::shared_ptr<PSG>
+    // Grid of local tonalities (estimated on table0).
+    // PSG* _grid; // std::shared_ptr<PSG>
     
     // forced global ton
     // std::unique_ptr<size_t> _global;
@@ -111,7 +111,7 @@ protected: // data
     double _time_table0;
 
     /// Time to build the grid of local tonalities
-    double _time_locals0;
+    double _time_grid;
 
 protected:
     

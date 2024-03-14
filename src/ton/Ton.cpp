@@ -31,7 +31,7 @@ const enum Accid Ton::__U = Accid::Undef;
 
 // accidentals in key signatures
 // and major or minor natural scales, for each key signature.
-const std::array<std::array<enum Accid, 7>, 15> Ton::KEYS =
+const std::array<std::array<enum Accid, 7>, 15> Ton::MAJOR =
 {{
     { _1F, _1F, _1F, _1F, _1F, _1F, _1F }, // -7  Cb maj / Ab min nat
     { _1F, _1F, _1F, _0N, _1F, _1F, _1F }, // -6  Gb maj / Eb min nat
@@ -96,7 +96,7 @@ const std::array<std::array<enum Accid, 7>, 15> Ton::MIN_MEL =
     { _1S, _1S, _1S, _2S, _2S, _1S, _1S },  // 7  A# min mel
 }};
 
-const std::array<std::array<enum Accid, 7>, 15> Ton::DOR =
+const std::array<std::array<enum Accid, 7>, 15> Ton::DORIAN =
 {{
     { _1F, _1F, _1F, _0N, _1F, _1F, _1F }, // -7  Ab dor
     { _0N, _1F, _1F, _0N, _1F, _1F, _1F }, // -6  Eb dor
@@ -116,7 +116,7 @@ const std::array<std::array<enum Accid, 7>, 15> Ton::DOR =
 }};
 
 
-const std::array<std::array<enum Accid, 7>, 15> Ton::PHRYG =
+const std::array<std::array<enum Accid, 7>, 15> Ton::PHRYGIAN =
 {{
     { _1F, _1F, _1F, _1F, _1F, _1F, _2F }, // -7  Ab phryg
     { _1F, _1F, _1F, _1F, _1F, _1F, _1F }, // -6  Eb phryg
@@ -136,7 +136,7 @@ const std::array<std::array<enum Accid, 7>, 15> Ton::PHRYG =
 }};
 
 
-const std::array<std::array<enum Accid, 7>, 15> Ton::LYD =
+const std::array<std::array<enum Accid, 7>, 15> Ton::LYDIAN =
 {{
     { _1F, _1F, _1F, _0N, _1F, _1F, _1F }, // -7  Cb lyd
     { _0N, _1F, _1F, _0N, _1F, _1F, _1F }, // -6  Gb lyd
@@ -156,7 +156,7 @@ const std::array<std::array<enum Accid, 7>, 15> Ton::LYD =
 }};
 
 
-const std::array<std::array<enum Accid, 7>, 15> Ton::MIXO =
+const std::array<std::array<enum Accid, 7>, 15> Ton::MIXOLYDIAN =
 {{
     { _1F, _1F, _1F, _1F, _1F, _1F, _2F }, // -7  Cb mix
     { _1F, _1F, _1F, _1F, _1F, _1F, _1F }, // -6  Gb mix
@@ -176,7 +176,7 @@ const std::array<std::array<enum Accid, 7>, 15> Ton::MIXO =
 }};
 
 
-const std::array<std::array<enum Accid, 7>, 15> Ton::LOC =
+const std::array<std::array<enum Accid, 7>, 15> Ton::LOCRIAN =
 {{
     { _1F, _1F, _2F, _1F, _1F, _1F, _2F }, // -7  Ab loc
     { _1F, _1F, _1F, _1F, _1F, _1F, _2F }, // -6  Eb loc
@@ -287,7 +287,7 @@ enum Accid Ton::accidKey(int n) const
     assert(_sig <= 7);
     assert(0 <= n);
     assert(n <= 6);
-    return KEYS[_sig + 7][n];
+    return MAJOR[_sig + 7][n];
 }
 
 
@@ -311,35 +311,35 @@ enum Accid Ton::accidDia(int n, ModeName mode) const
             return Accid::Undef;
             
         case ModeName::Major:
-            return KEYS[_sig + 7][n];
+            return MAJOR[_sig + 7][n];
             
         case ModeName::Minor:  // harmonic
             return MIN_HARM[_sig + 7][n];
             
         case ModeName::MinorNat:
-            return KEYS[_sig + 7][n];
+            return MAJOR[_sig + 7][n];
             
         case ModeName::MinorMel:
             return MIN_MEL[_sig + 7][n];
             
         //case ModeName::Ionian:
         case ModeName::Dorian:
-            return DOR[_sig + 7][n];
+            return DORIAN[_sig + 7][n];
             
         case ModeName::Phrygian:
-            return PHRYG[_sig + 7][n];
+            return PHRYGIAN[_sig + 7][n];
             
         case ModeName::Lydian:
-            return LYD[_sig + 7][n];
+            return LYDIAN[_sig + 7][n];
             
         case ModeName::Mixolydian:
-            return MIXO[_sig + 7][n];
+            return MIXOLYDIAN[_sig + 7][n];
             
         case ModeName::Aeolian:
-            return KEYS[_sig + 7][n];
+            return MAJOR[_sig + 7][n];
             
         case ModeName::Locrian:
-            return LOC[_sig + 7][n];
+            return LOCRIAN[_sig + 7][n];
             
         default:
         {
@@ -411,13 +411,13 @@ bool Ton::lead(const enum NoteName& name) const
     if (_mode == ModeName::Minor)
     {
         // DEBUGU("{} ({}) is lead of {}", name, n, *this);
-        return (KEYS[_sig + 7][n] != MIN_HARM[_sig + 7][n]);
+        return (MAJOR[_sig + 7][n] != MIN_HARM[_sig + 7][n]);
     }
     // melodic minor
     else if (_mode == ModeName::MinorMel)
     {
         // DEBUGU("{} ({}) is lead of {}", name, n, *this);
-        return (KEYS[_sig + 7][n] != MIN_MEL[_sig + 7][n]);
+        return (MAJOR[_sig + 7][n] != MIN_MEL[_sig + 7][n]);
     }
     else
         return false;

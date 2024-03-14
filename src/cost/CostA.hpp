@@ -35,7 +35,7 @@ public:
     /// null cost.
     /// @param discount apply or not a discount (during update) for accidentals
     /// in the assumed  scale (lead degrees).
-    CostA(bool discount=true);
+    CostA(bool discount=false);
     
     /// copy constructor.
     CostA(const CostA& rhs);

@@ -370,14 +370,14 @@ def compare_key(k, ton):
     if ton.undef():
         return False
     elif isinstance(k, m21.key.Key):
-        return (k.sharps == ton.fifths())# and k.mode == m21_mode(ton.mode()))
+        return (k.sharps == ton.fifths()) # and k.mode == m21_mode(ton.mode()))
     elif isinstance(k, m21.key.KeySignature):
         return (k.sharps == ton.fifths())
     else:
         print('ERROR"', k, 'of unexpected type')
         return False
     
-def compare_key_pitches(k0,ton):
+def compare_key_pitches(k0, ton):
     if ton.undef():
         return False
     elif isinstance(k0, m21.key.Key):
@@ -529,8 +529,8 @@ def anote_global_part(part, sp, ton_est):
     ml = part.getElementsByClass(m21.stream.Measure)    
     ml[0].insert(0, e)
 
-def anote_local_part(part, sp, goodgtindex):
-    i = sp.iglobal_ton0(goodgtindex)
+def anote_local_part(part, sp, i):
+    # i = sp.iglobal_ton0(goodgtindex)
     ml = part.getElementsByClass(m21.stream.Measure)    
     for j in range(len(ml)):
         k = m21_key(sp.local_bar(i, j))
@@ -562,7 +562,7 @@ def print_score(score, outfile):
 
 #########################
 ##                     ##
-##      reporting      ##
+##      feedback       ##
 ##                     ##
 #########################
                             
@@ -760,13 +760,9 @@ def sp_errors(df):
 
 ###################################
 ##                               ##
-##    evaluation, reporting      ##
+##      evaluation scenarii      ##
 ##                               ##
 ###################################
-
-choix_enharmonie = 0
-
-triche = 0
 
 def spellable(part):
     """the given part can be pitch spelled"""
@@ -778,15 +774,73 @@ def spellable(part):
     #    print('chords', end =' ')
     #    return False        
     return True
-              
-def eval_part(part, stat, 
-              algo=pse.Algo_PSE,
-              nbtons=0,        # for PSE (default)
-              kpre=33, kpost=23, # for PS13 (window size)
-              debug=False, mark=False):
-    """evaluate spelling for one part in a score and mark errors in red"""
-    
-    global triche
+
+def spell(code, ln, k0, stat, debug):
+    if (code == "PS13"):
+        return spell_PS13(ln, debug)
+    else:
+        print("Unknown algo code")
+        
+def spell_PS13(ln, stat, debug):
+    print('algo PS13', end='\n', flush=True)
+    kpre=33
+    kpost=23
+    sp = pse.PS13()
+    sp.set_Kpre(kpre)
+    sp.set_Kpost(kpost)
+    sp.debug(debug)           
+    # feed speller with input notes
+    for (n, b, s) in ln:   # note, bar number, simultaneous flag
+        sp.add(midi=n.pitch.midi, bar=b, simultaneous=s)
+    print('spelling...', end='\n', flush=True)
+    stat.start_timer()
+    sp.spell()
+    stat.stop_timer()
+    return sp
+
+
+
+###################################
+##                               ##
+##   evaluation and feedback     ##
+##                               ##
+###################################
+
+def get_global(sp, k0):
+    """extract estimated global tonality from speller"""
+    goodgtindex=0
+    nbg = sp.globals() 
+    # no evaluation of global ton (ex. PS13)
+    if nbg == 0: 
+        return (sp.global_ton(0), 0) # gt is undef 
+    # unambigous evaluation of global ton
+    elif nbg == 1: 
+        assert(not sp.global_ton(0).undef())
+        return (sp.global_ton(0), sp.iglobal_ton(0))
+    # ambigous evaluation of global ton
+    elif nbg > 1: 
+        print("real global tone :", k0)
+        c = 0
+        enharm = False
+        present = False
+        for i in range(nbg):
+            gt = sp.global_ton(i)
+            if compare_key(k0, gt):
+                goodgtindex = i
+                present = True
+            elif compare_key_pitches(k0, gt):
+                enharm = True
+            else:
+                c += 1
+        if c > 0:
+            enharm=False
+        if present and enharm: 
+            return (sp.global_ton(goodgtindex), sp.iglobal_ton(goodgtindex))
+        else:
+            return (sp.global_ton(0), sp.iglobal_ton(0))
+
+def eval_part(part, stat, code, debug=False, mark=False):
+    """evaluate spelling for one part in a score and mark errors"""
     
     if stat == None:
         stat=Stats()
@@ -797,6 +851,56 @@ def eval_part(part, stat,
         print('ERROR',  count_notes(part), len(ln))
         return
     print(len(ln), 'notes,', count_measures(part), 'bars,', end=' ')
+    # create and activate speller
+    print('spelling...', end='\n', flush=True)
+    sp = spell(code, ln, k0, stat, debug)
+    print('spell finished', end='\n', flush=True)
+    # extract estimated global ton from speller
+    (gt, i) = get_global(sp, k0)
+    sp.rename(i)
+    if not gt.undef:
+        if compare_key(k0, gt):
+            print('global ton: OK:', '(', m21_key(gt), 
+                  '), has the same signature as', k0, end=' ')
+        else:
+            print('global ton: NO:', '(', m21_key(gt), 'was', k0, '),', end=' ')
+            if mark:
+                anote_global_part(part, sp, gt) 
+    # compute diff list between reference score and respell
+    ld0 = diff(ln, sp) 
+    print('diff:', len(ld0), end='\n', flush=True)
+    # rewrite the passing notes
+    print('rewrite passing notes', end='\n', flush=True)
+    sp.rewrite_passing()
+    # compute diff list between reference score and rewritten
+    ld1 = diff(ln, sp)
+    print('diff after rewriting:', len(ld1), end='\n', flush=True)
+    
+    # annotations
+    if mark:
+        anote_rediff(ln, ld0, ld1) # anote_diff(ln, ld0, 'red')
+        if (sp.locals()):
+            anote_local_part(part, sp, i)         
+    return (k0, gt, len(ln), ld1)
+   
+# parameter algo (old style)
+def eval_part_algo(part, stat, 
+                   algo=pse.Algo_PSE,
+                   nbtons=0,          # for PSE (default)
+                   kpre=33, kpost=23, # for PS13 (window size)
+                   debug=False, mark=False):
+    """evaluate spelling for one part in a score and mark errors"""
+    
+    if stat == None:
+        stat=Stats()
+    k0 = get_key(part)
+    ln = extract_part(part)  # input note list
+    #assert(count_notes(part) == len(ln))
+    if (count_notes(part) != len(ln)):
+        print('ERROR',  count_notes(part), len(ln))
+        return
+    print(len(ln), 'notes,', count_measures(part), 'bars,', end=' ')
+    
     # create and initialize the speller (default is PSE)
     if algo == pse.Algo_PS13:
         print('algo PS13', end='\n', flush=True)
@@ -821,19 +925,18 @@ def eval_part(part, stat,
     print('spelling...', end='\n', flush=True)
     sp.spell()
     stat.stop_timer()
-    goodgtindex=0
     print('spell finished', end='\n', flush=True)
     # extract tonality estimation results
+    goodgtindex=0
     if (algo == pse.Algo_PSE or algo == pse.Algo_PS14):
-        nbg=sp.globals0()
-        ton_est=sp.global_ton(0)
+        nbg = sp.globals0()
+        ton_est = sp.global_ton(0)
         #print(ton_est)
         #print(nbg)
-        c=0
-        if nbg>1:
+        c = 0
+        if nbg > 1:
             print("real global tone :", k0)
             enharm=False
-            #boo=False
             present=False
             for i in range(nbg):
                 gt = sp.global_ton0(i)
@@ -842,24 +945,17 @@ def eval_part(part, stat,
                     goodgtindex = i
                     # print("good index : " , i)
                     present=True
-                elif compare_key_pitches(k0,gt):
+                elif compare_key_pitches(k0, gt):
                     enharm=True
                 else:
                     c+=1
-            if c>0:
+            if c > 0:
                 enharm=False
-            #if enharm :
-            #else :
-            #    print("the good global tone was present, but not his enharmonical rival...")
-            #    if boo:
-            #        triche+=1
-            #        print("POTENTIAL CHEATER")
-            #    print("triche =",triche)
             if present and enharm: 
                 sp.rename0(goodgtindex)
-                ton_est=sp.global_ton0(goodgtindex)
+                ton_est = sp.global_ton0(goodgtindex)
                 #print(ton_est)
-            else :
+            else:
                 sp.rename(0)
         else:
             sp.rename(0)
@@ -872,7 +968,7 @@ def eval_part(part, stat,
             if mark:
                 anote_global_part(part, sp, ton_est) 
 
-    print('BEFORE diff', end='\n', flush=True)
+    # print('BEFORE diff', end='\n', flush=True)
     # compute diff list between reference score and respell
     ld0 = diff(ln, sp) 
     print('diff:', len(ld0), end='\n', flush=True)
@@ -881,13 +977,13 @@ def eval_part(part, stat,
     sp.rewrite_passing()
     # compute diff list between reference score and rewritten
     ld1 = diff(ln, sp)
-    print('diff:', len(ld0), end='\n', flush=True)
+    print('diff after rewriting:', len(ld1), end='\n', flush=True)
     
     # annotations
     if mark:
         anote_rediff(ln, ld0, ld1) # anote_diff(ln, ld0, 'red')
         if (algo == pse.Algo_PSE or algo == pse.Algo_PS14):
-            anote_local_part(part, sp, goodgtindex)         
+            anote_local_part(part, sp, sp.global_ton0(goodgtindex))         
     return (k0, ton_est, len(ln), ld1)
 
 def eval_score(score, stat, 
@@ -914,9 +1010,9 @@ def eval_score(score, stat,
         if (nbparts > 1):
             print('part', i+1, '/', len(lp), end=' ', flush=True)
         if (spellable(part)):
-            (k_gt, ton_est, nn, ld) = eval_part(part, stat, 
-                                                algo, nbtons, kpre, kpost, 
-                                                debug, mark)
+            (k_gt, ton_est, nn, ld) = eval_part_algo(part, stat, 
+                                                     algo, nbtons, kpre, kpost, 
+                                                     debug, mark)
             stat.record_part(i, k_gt, ton_est, nn, len(ld))
             ls.append(ton_est)
             lld.append(ld)
@@ -931,7 +1027,6 @@ def empty_difflist(lld):
         else:
             return False
     return True
-
 
 # path to MuseScore command line
 _musescore = '/Applications/MuseScore 4.app/Contents/MacOS/mscore'

@@ -229,8 +229,8 @@ public:
     /// @param d tolerance distance (in percent) for considering two
     /// cost approximatively equal in the global ton search.
     /// @param refine whether we restart from the current global subarray
-    /// and refine, or from scratch. if true, one global sbuarray must have been
-    /// computed.
+    /// and refine, or from scratch. 
+    /// if true, one global sbuarray must have been computed.
     /// @return whether computation was succesfull.
     /// @warning a table must have been evaluated.
     bool evalGlobal(double d, bool refine=false);
@@ -294,7 +294,11 @@ public:
     /// or TonIndex::UNDEF in case of error.
     /// @warning spell() must have been called.
     virtual size_t iglobal(size_t n = 0) const;
-    
+        
+    /// the grid of local tonalities has been computaed.
+    /// i.e. evalGrid() has been called.
+    virtual bool locals() const;
+
     /// index (in the TonIndex) of the estimated local tonality
     /// for one assumed global tonality and one bar.
     /// @param i index in the TonIndex of an assumed global tonality.
@@ -306,7 +310,7 @@ public:
     /// - an integer value between 0 and index.size() otherwise.
     /// @warning spell() must have been called.
     virtual size_t ilocal(size_t i, size_t j) const;
-
+    
     /// estimated local tonality for one assumed global tonality and one bar.
     /// @param i index in the TonIndex of an assumed global tonality.
     /// @param j measure number.
@@ -314,14 +318,14 @@ public:
     /// - TonIndex::UNDEF if it was not estimated yet.
     /// - TonIndex::FAILED if its estimation failed.
     /// - an integer value between 0 and index.size() otherwise.
-    /// @warning spell() must have been called.
+    /// @warning evalGrid() must have been called.
     virtual const Ton& local(size_t i, size_t j) const;
     
     /// estimated local tonality at note of given index, for one given
     /// assumed global tonality.
     /// @param i index in the TonIndex of an assumed global tonality.
     /// @param j index of note in the enumerator of input notes.
-    /// @warning spell() must have been called.
+    /// @warning evalGrid() must have been called.
     virtual const Ton& localNote(size_t i, size_t j) const;
 
 protected: // data

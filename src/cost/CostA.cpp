@@ -119,6 +119,7 @@ void CostA::update(const enum NoteName& name, const enum Accid& accid,
                    const Ton& gton, const Ton& lton)
 {
     // second pass
+    // @todo revise this case
     if (lton.defined())
     {
         //_dist += c.state().dist(lton);
@@ -127,13 +128,13 @@ void CostA::update(const enum NoteName& name, const enum Accid& accid,
         // afin de déduire la meilleure tonalité locale,
         // il vaut mieux ne plus se poser la question du print :
         // !(gton.lead()  &&  gton.accidDia(name) == accid)
-        if (!(lton.accidDia(name, lton.getMode()) == accid))
+        if (lton.accidDia(name) != accid)
         {
             updateAccid(accid);
         }
     }
     // first pass
-    // optional discount for lead degree
+    // @todo suppr. optional discount for lead degree
     else if (print)
     {
           // !(gton.lead()  &&  gton.accidDia(name) == accid)

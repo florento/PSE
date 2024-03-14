@@ -64,7 +64,7 @@ Scale(ton.getMode(), ton.getPitchClass(), ton.getName())
 
 
 Scale::Scale(const Ton& ton, const ModeName& mode):
-Scale(ModeName::Chromatic, ton.getPitchClass(), ton.getName())
+Scale(mode, ton.getPitchClass(), ton.getName())
 {
     assert(mode == ModeName::Chromatic);
     // @todo also for other modes?

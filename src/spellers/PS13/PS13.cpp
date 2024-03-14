@@ -156,7 +156,6 @@ size_t PS13::count(int c, size_t n) const
 }
 
 
-
 size_t PS13::globals() const
 {
     return 0;
