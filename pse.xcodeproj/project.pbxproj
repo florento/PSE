@@ -314,6 +314,8 @@
 		4348774A2BA2EFE000EC1BAC /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		4348774B2BA2EFE600EC1BAC /* TODO.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = TODO.md; sourceTree = "<group>"; };
 		4348774C2BA2F2B500EC1BAC /* TODO.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = TODO.md; path = src/ton/TODO.md; sourceTree = "<group>"; };
+		434877522BA89D2E00EC1BAC /* TODO.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = TODO.md; sourceTree = "<group>"; };
+		434877532BA89D6700EC1BAC /* TODO.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = TODO.md; sourceTree = "<group>"; };
 		434B1DF5298ECCF0001CE41C /* PSConfig1.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = PSConfig1.hpp; sourceTree = "<group>"; };
 		434B1DF6298ECCF0001CE41C /* PSConfig1.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PSConfig1.cpp; sourceTree = "<group>"; };
 		434B1DFA298ED394001CE41C /* PSConfig2.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PSConfig2.cpp; sourceTree = "<group>"; };
@@ -459,6 +461,7 @@
 		4310526429CDAE2400694D5A /* scale */ = {
 			isa = PBXGroup;
 			children = (
+				434877532BA89D6700EC1BAC /* TODO.md */,
 				43F9BE6329CC423E00B0A7F8 /* ModeName.hpp */,
 				43F9BE6229CC423E00B0A7F8 /* ModeName.cpp */,
 				43F9BE6829CC696C00B0A7F8 /* Mode.hpp */,
@@ -500,6 +503,7 @@
 			isa = PBXGroup;
 			children = (
 				433F8B6E2A0BE3D000085ABC /* README.md */,
+				434877522BA89D2E00EC1BAC /* TODO.md */,
 				43ABA51929242417002AC1D4 /* PSState.hpp */,
 				43ABA51E29242418002AC1D4 /* PSState.cpp */,
 				4397A5DC29A6CDB300C2CC9A /* PSOrder.hpp */,

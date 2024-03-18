@@ -311,18 +311,19 @@ enum Accid Ton::accidDia(int n, ModeName mode) const
             return Accid::Undef;
             
         case ModeName::Major:
+        case ModeName::Ionian:
             return MAJOR[_sig + 7][n];
             
         case ModeName::Minor:  // harmonic
             return MIN_HARM[_sig + 7][n];
             
         case ModeName::MinorNat:
+        case ModeName::Aeolian:
             return MAJOR[_sig + 7][n];
             
         case ModeName::MinorMel:
             return MIN_MEL[_sig + 7][n];
             
-        //case ModeName::Ionian:
         case ModeName::Dorian:
             return DORIAN[_sig + 7][n];
             
@@ -334,10 +335,7 @@ enum Accid Ton::accidDia(int n, ModeName mode) const
             
         case ModeName::Mixolydian:
             return MIXOLYDIAN[_sig + 7][n];
-            
-        case ModeName::Aeolian:
-            return MAJOR[_sig + 7][n];
-            
+                        
         case ModeName::Locrian:
             return LOCRIAN[_sig + 7][n];
             
