@@ -54,6 +54,10 @@
 		432586A82A40EBB30069D796 /* Rational.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43A24E422A3A0BD50041B004 /* Rational.cpp */; };
 		432657E4294E2FB100515080 /* Weber.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 432657E1294E2FB000515080 /* Weber.cpp */; };
 		432657E5294E2FB100515080 /* Weber.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 432657E2294E2FB100515080 /* Weber.hpp */; };
+		432865422BA983CA00761737 /* AccidPair.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 432865402BA983CA00761737 /* AccidPair.cpp */; };
+		432865432BA983CA00761737 /* AccidPair.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 432865402BA983CA00761737 /* AccidPair.cpp */; };
+		432865442BA983CA00761737 /* AccidPair.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 432865402BA983CA00761737 /* AccidPair.cpp */; };
+		432865452BA983CA00761737 /* AccidPair.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 432865412BA983CA00761737 /* AccidPair.hpp */; };
 		432A0F8D2A311889007D5CA2 /* TestRewritePassing.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 432A0F8B2A311889007D5CA2 /* TestRewritePassing.cpp */; };
 		432E7A4E29D427FD000E2B72 /* PSE.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 432E7A4C29D427FD000E2B72 /* PSE.cpp */; };
 		432E7A4F29D427FD000E2B72 /* PSE.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 432E7A4C29D427FD000E2B72 /* PSE.cpp */; };
@@ -291,6 +295,8 @@
 		432586A22A4050C80069D796 /* PSConfig1c.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = PSConfig1c.hpp; sourceTree = "<group>"; };
 		432657E1294E2FB000515080 /* Weber.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Weber.cpp; path = src/ton/Weber.cpp; sourceTree = "<group>"; };
 		432657E2294E2FB100515080 /* Weber.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Weber.hpp; path = src/ton/Weber.hpp; sourceTree = "<group>"; };
+		432865402BA983CA00761737 /* AccidPair.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AccidPair.cpp; sourceTree = "<group>"; };
+		432865412BA983CA00761737 /* AccidPair.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AccidPair.hpp; sourceTree = "<group>"; };
 		432A0F8B2A311889007D5CA2 /* TestRewritePassing.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TestRewritePassing.cpp; sourceTree = "<group>"; };
 		432E7A4C29D427FD000E2B72 /* PSE.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PSE.cpp; sourceTree = "<group>"; };
 		432E7A4D29D427FD000E2B72 /* PSE.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = PSE.hpp; sourceTree = "<group>"; };
@@ -794,6 +800,8 @@
 				43ABA4FD292423C5002AC1D4 /* NoteName.cpp */,
 				43ABA501292423E8002AC1D4 /* Accidental.hpp */,
 				43ABA505292423E8002AC1D4 /* Accidental.cpp */,
+				432865412BA983CA00761737 /* AccidPair.hpp */,
+				432865402BA983CA00761737 /* AccidPair.cpp */,
 				4342FD132926789C004E914F /* MidiNum.hpp */,
 				4342FD1129267895004E914F /* MidiNum.cpp */,
 				43ABA503292423E8002AC1D4 /* Enharmonic.hpp */,
@@ -880,6 +888,7 @@
 				43D7BABC2A27CFBD00570C47 /* Speller2pass.hpp in Headers */,
 				434B1DFE298ED394001CE41C /* PSConfig2.hpp in Headers */,
 				43ABA52C29242418002AC1D4 /* PSPath.hpp in Headers */,
+				432865452BA983CA00761737 /* AccidPair.hpp in Headers */,
 				431586362983E89B00918B1B /* PSEnum.hpp in Headers */,
 				4302F7D629E1A9810002AD05 /* RewritePassing.hpp in Headers */,
 				431586342983E89B00918B1B /* PSM21Enum.hpp in Headers */,
@@ -1018,6 +1027,7 @@
 				4353AE3829DDAD3E00FAF8A3 /* TestPSEnum.cpp in Sources */,
 				435081F129D6D76100465943 /* Pitch.cpp in Sources */,
 				4308A70A2A28E04F007F7A55 /* TestTon.cpp in Sources */,
+				432865442BA983CA00761737 /* AccidPair.cpp in Sources */,
 				435081F029D6D75D00465943 /* ModeName.cpp in Sources */,
 				438A581E29E049430073A32C /* PSState.cpp in Sources */,
 				438A581729E0492A0073A32C /* PSConfig1.cpp in Sources */,
@@ -1067,6 +1077,7 @@
 				43D9DB4C2B964412005F0A13 /* Weber_static.cpp in Sources */,
 				43ABA4FE292423C5002AC1D4 /* NoteName.cpp in Sources */,
 				43ABA50F292423E8002AC1D4 /* Accidental.cpp in Sources */,
+				432865422BA983CA00761737 /* AccidPair.cpp in Sources */,
 				43F9BE6429CC423E00B0A7F8 /* ModeName.cpp in Sources */,
 				4342FD1229267895004E914F /* MidiNum.cpp in Sources */,
 				4346CB362A1FF62100756DE3 /* PSGlobal.cpp in Sources */,
@@ -1154,6 +1165,7 @@
 				43C2BA1E299A5FEE0084AB3B /* IntervalSimple.cpp in Sources */,
 				43BE98CE2B7A1891000732B4 /* CostA.cpp in Sources */,
 				43C2BA1729994F630084AB3B /* Pitch.cpp in Sources */,
+				432865432BA983CA00761737 /* AccidPair.cpp in Sources */,
 				43D9DB532B964A0F005F0A13 /* WeberModal_static.cpp in Sources */,
 				4309605E2A0D034D0097487A /* Speller.cpp in Sources */,
 				430627C62A4586380046FD99 /* CostADlex.cpp in Sources */,

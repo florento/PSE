@@ -22,32 +22,42 @@
 namespace pse {
 
 // static abbreviations for accidentals
-const enum Accid Ton::_2F = Accid::DoubleFlat;
-const enum Accid Ton::_1F = Accid::Flat;
-const enum Accid Ton::_0N = Accid::Natural;
-const enum Accid Ton::_1S = Accid::Sharp;
-const enum Accid Ton::_2S = Accid::DoubleSharp;
-const enum Accid Ton::__U = Accid::Undef;
+const enum Accid Ton::_F = Accid::DoubleFlat;
+const enum Accid Ton::_f = Accid::Flat;
+const enum Accid Ton::_n = Accid::Natural;
+const enum Accid Ton::_s = Accid::Sharp;
+const enum Accid Ton::_S = Accid::DoubleSharp;
+const enum Accid Ton::_U = Accid::Undef;
+
+static const AccidPair _Ff = AccidPair(Accid::DoubleFlat, Accid::Flat);
+static const AccidPair _f_ = AccidPair(Accid::Flat);
+static const AccidPair _fn = AccidPair(Accid::Flat, Accid::Natural);
+static const AccidPair _n_ = AccidPair(Accid::Natural);
+static const AccidPair _ns = AccidPair(Accid::Natural, Accid::Sharp);
+static const AccidPair _s_ = AccidPair(Accid::Sharp);
+static const AccidPair _sS = AccidPair(Accid::Sharp, Accid::DoubleSharp);
+static const AccidPair _UU = AccidPair();
+
 
 // accidentals in key signatures
 // and major or minor natural scales, for each key signature.
 const std::array<std::array<enum Accid, 7>, 15> Ton::MAJOR =
 {{
-    { _1F, _1F, _1F, _1F, _1F, _1F, _1F }, // -7  Cb maj / Ab min nat
-    { _1F, _1F, _1F, _0N, _1F, _1F, _1F }, // -6  Gb maj / Eb min nat
-    { _0N, _1F, _1F, _0N, _1F, _1F, _1F }, // -5  Db maj / Bb min nat
-    { _0N, _1F, _1F, _0N, _0N, _1F, _1F }, // -4  Ab maj / F  min nat
-    { _0N, _0N, _1F, _0N, _0N, _1F, _1F }, // -3  Eb maj / C  min nat
-    { _0N, _0N, _1F, _0N, _0N, _0N, _1F }, // -2  Bb maj / G  min nat
-    { _0N, _0N, _0N, _0N, _0N, _0N, _1F }, // -1  F  maj / D  min nat
-    { _0N, _0N, _0N, _0N, _0N, _0N, _0N }, //  0  C  maj / A  min nat
-    { _0N, _0N, _0N, _1S, _0N, _0N, _0N }, //  1  G  maj / E  min nat
-    { _1S, _0N, _0N, _1S, _0N, _0N, _0N }, //  2  D  maj / B  min nat
-    { _1S, _0N, _0N, _1S, _1S, _0N, _0N }, //  3  A  maj / F# min nat
-    { _1S, _1S, _0N, _1S, _1S, _0N, _0N }, //  4  E  maj / C# min nat
-    { _1S, _1S, _0N, _1S, _1S, _1S, _0N }, //  5  B  maj / G# min nat
-    { _1S, _1S, _1S, _1S, _1S, _1S, _0N }, //  6  F# maj / D# min nat
-    { _1S, _1S, _1S, _1S, _1S, _1S, _1S }  //  7  C# maj / A# min nat
+    { _f, _f, _f, _f, _f, _f, _f }, // -7  Cb maj / Ab min nat
+    { _f, _f, _f, _n, _f, _f, _f }, // -6  Gb maj / Eb min nat
+    { _n, _f, _f, _n, _f, _f, _f }, // -5  Db maj / Bb min nat
+    { _n, _f, _f, _n, _n, _f, _f }, // -4  Ab maj / F  min nat
+    { _n, _n, _f, _n, _n, _f, _f }, // -3  Eb maj / C  min nat
+    { _n, _n, _f, _n, _n, _n, _f }, // -2  Bb maj / G  min nat
+    { _n, _n, _n, _n, _n, _n, _f }, // -1  F  maj / D  min nat
+    { _n, _n, _n, _n, _n, _n, _n }, //  0  C  maj / A  min nat
+    { _n, _n, _n, _s, _n, _n, _n }, //  1  G  maj / E  min nat
+    { _s, _n, _n, _s, _n, _n, _n }, //  2  D  maj / B  min nat
+    { _s, _n, _n, _s, _s, _n, _n }, //  3  A  maj / F# min nat
+    { _s, _s, _n, _s, _s, _n, _n }, //  4  E  maj / C# min nat
+    { _s, _s, _n, _s, _s, _s, _n }, //  5  B  maj / G# min nat
+    { _s, _s, _s, _s, _s, _s, _n }, //  6  F# maj / D# min nat
+    { _s, _s, _s, _s, _s, _s, _s }  //  7  C# maj / A# min nat
 }};
 
 // lead node in minor harmonic tons, in 0..6
@@ -59,141 +69,162 @@ const std::array<int, 15> Ton::LEAD_HARM =
 // accidentals in minor harmonic scales for each key signature.
 const std::array<std::array<enum Accid, 7>, 15> Ton::MIN_HARM =
 {{
-    { _1F, _1F, _1F, _1F, _0N, _1F, _1F }, // -7  Ab min harm
-    { _1F, _0N, _1F, _0N, _1F, _1F, _1F }, // -6  Eb min harm
-    { _0N, _1F, _1F, _0N, _1F, _0N, _1F }, // -5  Bb min harm
-    { _0N, _1F, _0N, _0N, _0N, _1F, _1F }, // -4  F  min harm
-    { _0N, _0N, _1F, _0N, _0N, _1F, _0N }, // -3  C  min harm
-    { _0N, _0N, _1F, _1S, _0N, _0N, _1F }, // -2  G  min harm
-    { _1S, _0N, _0N, _0N, _0N, _0N, _1F }, // -1  D  min harm
-    { _0N, _0N, _0N, _0N, _1S, _0N, _0N }, //  0  A  min harm
-    { _0N, _1S, _0N, _1S, _0N, _0N, _0N }, //  1  E  min harm
-    { _1S, _0N, _0N, _1S, _0N, _1S, _0N }, //  2  B  min harm
-    { _1S, _0N, _1S, _1S, _1S, _0N, _0N }, //  3  F# min harm
-    { _1S, _1S, _0N, _1S, _1S, _0N, _1S }, //  4  C# min harm
-    { _1S, _1S, _0N, _2S, _1S, _1S, _0N }, //  5  G# min harm
-    { _2S, _1S, _1S, _1S, _1S, _1S, _0N }, //  6  D# min harm
-    { _1S, _1S, _1S, _1S, _2S, _1S, _1S }, //  7  A# min harm
+    { _f, _f, _f, _f, _n, _f, _f }, // -7  Ab min harm
+    { _f, _n, _f, _n, _f, _f, _f }, // -6  Eb min harm
+    { _n, _f, _f, _n, _f, _n, _f }, // -5  Bb min harm
+    { _n, _f, _n, _n, _n, _f, _f }, // -4  F  min harm
+    { _n, _n, _f, _n, _n, _f, _n }, // -3  C  min harm
+    { _n, _n, _f, _s, _n, _n, _f }, // -2  G  min harm
+    { _s, _n, _n, _n, _n, _n, _f }, // -1  D  min harm
+    { _n, _n, _n, _n, _s, _n, _n }, //  0  A  min harm
+    { _n, _s, _n, _s, _n, _n, _n }, //  1  E  min harm
+    { _s, _n, _n, _s, _n, _s, _n }, //  2  B  min harm
+    { _s, _n, _s, _s, _s, _n, _n }, //  3  F# min harm
+    { _s, _s, _n, _s, _s, _n, _s }, //  4  C# min harm
+    { _s, _s, _n, _S, _s, _s, _n }, //  5  G# min harm
+    { _S, _s, _s, _s, _s, _s, _n }, //  6  D# min harm
+    { _s, _s, _s, _s, _S, _s, _s }, //  7  A# min harm
 }};
 
 // accidentals in minor melodic scales for each key signature.
 const std::array<std::array<enum Accid, 7>, 15> Ton::MIN_MEL =
 {{
-    { _1F, _1F, _1F, _0N, _0N, _1F, _1F }, // -7  Ab min mel
-    { _0N, _0N, _1F, _0N, _1F, _1F, _1F }, // -6  Eb min mel
-    { _0N, _1F, _1F, _0N, _0N, _0N, _1F }, // -5  Bb min mel
-    { _0N, _0N, _0N, _0N, _0N, _1F, _1F }, // -4  F  min mel
-    { _0N, _0N, _1F, _0N, _0N, _0N, _0N }, // -3  C  min mel
-    { _0N, _0N, _0N, _1S, _0N, _0N, _1F }, // -2  G  min mel
-    { _1S, _0N, _0N, _0N, _0N, _0N, _0N }, // -1  D  min mel
-    { _0N, _0N, _0N, _1S, _1S, _0N, _0N }, //  0  A  min mel
-    { _1S, _1S, _0N, _1S, _0N, _0N, _0N }, //  1  E  min mel
-    { _1S, _0N, _0N, _1S, _1S, _1S, _0N }, //  2  B  min mel
-    { _1S, _1S, _1S, _1S, _1S, _0N, _0N }, //  3  F# min mel
-    { _1S, _1S, _0N, _1S, _1S, _1S, _1S }, //  4  C# min mel
-    { _1S, _1S, _1S, _2S, _1S, _1S, _0N }, //  5  G# min mel
-    { _2S, _1S, _1S, _1S, _1S, _1S, _1S }, //  6  D# min mel
-    { _1S, _1S, _1S, _2S, _2S, _1S, _1S },  // 7  A# min mel
+    { _f, _f, _f, _n, _n, _f, _f }, // -7  Ab min mel
+    { _n, _n, _f, _n, _f, _f, _f }, // -6  Eb min mel
+    { _n, _f, _f, _n, _n, _n, _f }, // -5  Bb min mel
+    { _n, _n, _n, _n, _n, _f, _f }, // -4  F  min mel
+    { _n, _n, _f, _n, _n, _n, _n }, // -3  C  min mel
+    { _n, _n, _n, _s, _n, _n, _f }, // -2  G  min mel
+    { _s, _n, _n, _n, _n, _n, _n }, // -1  D  min mel
+    { _n, _n, _n, _s, _s, _n, _n }, //  0  A  min mel
+    { _s, _s, _n, _s, _n, _n, _n }, //  1  E  min mel
+    { _s, _n, _n, _s, _s, _s, _n }, //  2  B  min mel
+    { _s, _s, _s, _s, _s, _n, _n }, //  3  F# min mel
+    { _s, _s, _n, _s, _s, _s, _s }, //  4  C# min mel
+    { _s, _s, _s, _S, _s, _s, _n }, //  5  G# min mel
+    { _S, _s, _s, _s, _s, _s, _s }, //  6  D# min mel
+    { _s, _s, _s, _S, _S, _s, _s },  // 7  A# min mel
 }};
 
 const std::array<std::array<enum Accid, 7>, 15> Ton::DORIAN =
 {{
-    { _1F, _1F, _1F, _0N, _1F, _1F, _1F }, // -7  Ab dor
-    { _0N, _1F, _1F, _0N, _1F, _1F, _1F }, // -6  Eb dor
-    { _0N, _1F, _1F, _0N, _0N, _1F, _1F }, // -5  Bb dor
-    { _0N, _0N, _1F, _0N, _0N, _1F, _1F }, // -4  F  dor
-    { _0N, _0N, _1F, _0N, _0N, _0N, _1F }, // -3  C  dor
-    { _0N, _0N, _0N, _0N, _0N, _0N, _1F }, // -2  G  dor
-    { _0N, _0N, _0N, _0N, _0N, _0N, _0N }, // -1  D  dor
-    { _0N, _0N, _0N, _1S, _0N, _0N, _0N }, //  0  A  dor
-    { _1S, _0N, _0N, _1S, _0N, _0N, _0N }, //  1  E  dor
-    { _1S, _0N, _0N, _1S, _1S, _0N, _0N }, //  2  B  dor
-    { _1S, _1S, _0N, _1S, _1S, _0N, _0N }, //  3  F# dor
-    { _1S, _1S, _0N, _1S, _1S, _1S, _0N }, //  4  C# dor
-    { _1S, _1S, _1S, _1S, _1S, _1S, _0N }, //  5  G# dor
-    { _1S, _1S, _1S, _1S, _1S, _1S, _1S }, //  6  D# dor
-    { _1S, _1S, _1S, _2S, _1S, _1S, _1S },  // 7  A# dor
+    { _f, _f, _f, _n, _f, _f, _f }, // -7  Ab dor
+    { _n, _f, _f, _n, _f, _f, _f }, // -6  Eb dor
+    { _n, _f, _f, _n, _n, _f, _f }, // -5  Bb dor
+    { _n, _n, _f, _n, _n, _f, _f }, // -4  F  dor
+    { _n, _n, _f, _n, _n, _n, _f }, // -3  C  dor
+    { _n, _n, _n, _n, _n, _n, _f }, // -2  G  dor
+    { _n, _n, _n, _n, _n, _n, _n }, // -1  D  dor
+    { _n, _n, _n, _s, _n, _n, _n }, //  0  A  dor
+    { _s, _n, _n, _s, _n, _n, _n }, //  1  E  dor
+    { _s, _n, _n, _s, _s, _n, _n }, //  2  B  dor
+    { _s, _s, _n, _s, _s, _n, _n }, //  3  F# dor
+    { _s, _s, _n, _s, _s, _s, _n }, //  4  C# dor
+    { _s, _s, _s, _s, _s, _s, _n }, //  5  G# dor
+    { _s, _s, _s, _s, _s, _s, _s }, //  6  D# dor
+    { _s, _s, _s, _S, _s, _s, _s },  // 7  A# dor
 }};
 
 
 const std::array<std::array<enum Accid, 7>, 15> Ton::PHRYGIAN =
 {{
-    { _1F, _1F, _1F, _1F, _1F, _1F, _2F }, // -7  Ab phryg
-    { _1F, _1F, _1F, _1F, _1F, _1F, _1F }, // -6  Eb phryg
-    { _1F, _1F, _1F, _0N, _1F, _1F, _1F }, // -5  Bb phryg
-    { _0N, _1F, _1F, _0N, _1F, _1F, _1F }, // -4  F  phryg
-    { _0N, _1F, _1F, _0N, _0N, _1F, _1F }, // -3  C  phryg
-    { _0N, _0N, _1F, _0N, _0N, _1F, _1F }, // -2  G  phryg
-    { _0N, _0N, _1F, _0N, _0N, _0N, _1F }, // -1  D  phryg
-    { _0N, _0N, _0N, _0N, _0N, _0N, _1F }, //  0  A  phryg
-    { _0N, _0N, _0N, _0N, _0N, _0N, _0N }, //  1  E  phryg
-    { _0N, _0N, _0N, _1S, _0N, _0N, _0N }, //  2  B  phryg
-    { _1S, _0N, _0N, _1S, _0N, _0N, _0N }, //  3  F# phryg
-    { _1S, _0N, _0N, _1S, _1S, _0N, _0N }, //  4  C# phryg
-    { _1S, _1S, _0N, _1S, _1S, _0N, _0N }, //  5  G# phryg
-    { _1S, _1S, _0N, _1S, _1S, _1S, _0N }, //  6  D# phryg
-    { _1S, _1S, _1S, _1S, _1S, _1S, _0N },  // 7  A# phryg
+    { _f, _f, _f, _f, _f, _f, _F }, // -7  Ab phryg
+    { _f, _f, _f, _f, _f, _f, _f }, // -6  Eb phryg
+    { _f, _f, _f, _n, _f, _f, _f }, // -5  Bb phryg
+    { _n, _f, _f, _n, _f, _f, _f }, // -4  F  phryg
+    { _n, _f, _f, _n, _n, _f, _f }, // -3  C  phryg
+    { _n, _n, _f, _n, _n, _f, _f }, // -2  G  phryg
+    { _n, _n, _f, _n, _n, _n, _f }, // -1  D  phryg
+    { _n, _n, _n, _n, _n, _n, _f }, //  0  A  phryg
+    { _n, _n, _n, _n, _n, _n, _n }, //  1  E  phryg
+    { _n, _n, _n, _s, _n, _n, _n }, //  2  B  phryg
+    { _s, _n, _n, _s, _n, _n, _n }, //  3  F# phryg
+    { _s, _n, _n, _s, _s, _n, _n }, //  4  C# phryg
+    { _s, _s, _n, _s, _s, _n, _n }, //  5  G# phryg
+    { _s, _s, _n, _s, _s, _s, _n }, //  6  D# phryg
+    { _s, _s, _s, _s, _s, _s, _n },  // 7  A# phryg
 }};
 
 
 const std::array<std::array<enum Accid, 7>, 15> Ton::LYDIAN =
 {{
-    { _1F, _1F, _1F, _0N, _1F, _1F, _1F }, // -7  Cb lyd
-    { _0N, _1F, _1F, _0N, _1F, _1F, _1F }, // -6  Gb lyd
-    { _0N, _1F, _1F, _0N, _0N, _1F, _1F }, // -5  Db lyd
-    { _0N, _0N, _1F, _0N, _0N, _1F, _1F }, // -4  Ab lyd
-    { _0N, _0N, _1F, _0N, _0N, _0N, _1F }, // -3  Eb lyd
-    { _0N, _0N, _0N, _0N, _0N, _0N, _1F }, // -2  Bb lyd
-    { _0N, _0N, _0N, _0N, _0N, _0N, _0N }, // -1  F  lyd
-    { _0N, _0N, _0N, _1S, _0N, _0N, _0N }, //  0  C  lyd
-    { _1S, _0N, _0N, _1S, _0N, _0N, _0N }, //  1  G  lyd
-    { _1S, _0N, _0N, _1S, _1S, _0N, _0N }, //  2  D  lyd
-    { _1S, _1S, _0N, _1S, _1S, _0N, _0N }, //  3  A  lyd
-    { _1S, _1S, _0N, _1S, _1S, _1S, _0N }, //  4  E  lyd
-    { _1S, _1S, _1S, _1S, _1S, _1S, _0N }, //  5  B  lyd
-    { _1S, _1S, _1S, _1S, _1S, _1S, _1S }, //  6  F# lyd
-    { _1S, _1S, _1S, _2S, _1S, _1S, _1S }  //  7  C# lyd
+    { _f, _f, _f, _n, _f, _f, _f }, // -7  Cb lyd
+    { _n, _f, _f, _n, _f, _f, _f }, // -6  Gb lyd
+    { _n, _f, _f, _n, _n, _f, _f }, // -5  Db lyd
+    { _n, _n, _f, _n, _n, _f, _f }, // -4  Ab lyd
+    { _n, _n, _f, _n, _n, _n, _f }, // -3  Eb lyd
+    { _n, _n, _n, _n, _n, _n, _f }, // -2  Bb lyd
+    { _n, _n, _n, _n, _n, _n, _n }, // -1  F  lyd
+    { _n, _n, _n, _s, _n, _n, _n }, //  0  C  lyd
+    { _s, _n, _n, _s, _n, _n, _n }, //  1  G  lyd
+    { _s, _n, _n, _s, _s, _n, _n }, //  2  D  lyd
+    { _s, _s, _n, _s, _s, _n, _n }, //  3  A  lyd
+    { _s, _s, _n, _s, _s, _s, _n }, //  4  E  lyd
+    { _s, _s, _s, _s, _s, _s, _n }, //  5  B  lyd
+    { _s, _s, _s, _s, _s, _s, _s }, //  6  F# lyd
+    { _s, _s, _s, _S, _s, _s, _s }  //  7  C# lyd
 }};
 
 
 const std::array<std::array<enum Accid, 7>, 15> Ton::MIXOLYDIAN =
 {{
-    { _1F, _1F, _1F, _1F, _1F, _1F, _2F }, // -7  Cb mix
-    { _1F, _1F, _1F, _1F, _1F, _1F, _1F }, // -6  Gb mix
-    { _1F, _1F, _1F, _0N, _1F, _1F, _1F }, // -5  Db mix
-    { _0N, _1F, _1F, _0N, _1F, _1F, _1F }, // -4  Ab mix
-    { _0N, _1F, _1F, _0N, _0N, _1F, _1F }, // -3  Eb mix
-    { _0N, _0N, _1F, _0N, _0N, _1F, _1F }, // -2  Bb mix
-    { _0N, _0N, _1F, _0N, _0N, _0N, _1F }, // -1  F  mix
-    { _0N, _0N, _0N, _0N, _0N, _0N, _1F }, //  0  C  mix
-    { _0N, _0N, _0N, _0N, _0N, _0N, _0N }, //  1  G  mix
-    { _0N, _0N, _0N, _1S, _0N, _0N, _0N }, //  2  D  mix
-    { _1S, _0N, _0N, _1S, _0N, _0N, _0N }, //  3  A  mix
-    { _1S, _0N, _0N, _1S, _1S, _0N, _0N }, //  4  E  mix
-    { _1S, _1S, _0N, _1S, _1S, _0N, _0N }, //  5  B  mix
-    { _1S, _1S, _0N, _1S, _1S, _1S, _0N }, //  6  F# mix
-    { _1S, _1S, _1S, _1S, _1S, _1S, _0N }  //  7  C# mix
+    { _f, _f, _f, _f, _f, _f, _F }, // -7  Cb mix
+    { _f, _f, _f, _f, _f, _f, _f }, // -6  Gb mix
+    { _f, _f, _f, _n, _f, _f, _f }, // -5  Db mix
+    { _n, _f, _f, _n, _f, _f, _f }, // -4  Ab mix
+    { _n, _f, _f, _n, _n, _f, _f }, // -3  Eb mix
+    { _n, _n, _f, _n, _n, _f, _f }, // -2  Bb mix
+    { _n, _n, _f, _n, _n, _n, _f }, // -1  F  mix
+    { _n, _n, _n, _n, _n, _n, _f }, //  0  C  mix
+    { _n, _n, _n, _n, _n, _n, _n }, //  1  G  mix
+    { _n, _n, _n, _s, _n, _n, _n }, //  2  D  mix
+    { _s, _n, _n, _s, _n, _n, _n }, //  3  A  mix
+    { _s, _n, _n, _s, _s, _n, _n }, //  4  E  mix
+    { _s, _s, _n, _s, _s, _n, _n }, //  5  B  mix
+    { _s, _s, _n, _s, _s, _s, _n }, //  6  F# mix
+    { _s, _s, _s, _s, _s, _s, _n }  //  7  C# mix
 }};
 
 
 const std::array<std::array<enum Accid, 7>, 15> Ton::LOCRIAN =
 {{
-    { _1F, _1F, _2F, _1F, _1F, _1F, _2F }, // -7  Ab loc
-    { _1F, _1F, _1F, _1F, _1F, _1F, _2F }, // -6  Eb loc
-    { _1F, _1F, _1F, _1F, _1F, _1F, _1F }, // -5  Bb loc
-    { _1F, _1F, _1F, _0N, _1F, _1F, _1F }, // -4  F  loc
-    { _0N, _1F, _1F, _0N, _1F, _1F, _1F }, // -3  C  loc
-    { _0N, _1F, _1F, _0N, _0N, _1F, _1F }, // -2  G  loc
-    { _0N, _0N, _1F, _0N, _0N, _1F, _1F }, // -1  D  loc
-    { _0N, _0N, _1F, _0N, _0N, _0N, _1F }, //  0  A  loc
-    { _0N, _0N, _0N, _0N, _0N, _0N, _1F }, //  1  E  loc
-    { _0N, _0N, _0N, _0N, _0N, _0N, _0N }, //  2  B  loc
-    { _0N, _0N, _0N, _1S, _0N, _0N, _0N }, //  3  F# loc
-    { _1S, _0N, _0N, _1S, _0N, _0N, _0N }, //  4  C# loc
-    { _1S, _0N, _0N, _1S, _1S, _0N, _0N }, //  5  G# loc
-    { _1S, _1S, _0N, _1S, _1S, _0N, _0N }, //  6  D# loc
-    { _1S, _1S, _0N, _1S, _1S, _1S, _0N },  // 7  A# loc
+    { _f, _f, _F, _f, _f, _f, _F }, // -7  Ab loc
+    { _f, _f, _f, _f, _f, _f, _F }, // -6  Eb loc
+    { _f, _f, _f, _f, _f, _f, _f }, // -5  Bb loc
+    { _f, _f, _f, _n, _f, _f, _f }, // -4  F  loc
+    { _n, _f, _f, _n, _f, _f, _f }, // -3  C  loc
+    { _n, _f, _f, _n, _n, _f, _f }, // -2  G  loc
+    { _n, _n, _f, _n, _n, _f, _f }, // -1  D  loc
+    { _n, _n, _f, _n, _n, _n, _f }, //  0  A  loc
+    { _n, _n, _n, _n, _n, _n, _f }, //  1  E  loc
+    { _n, _n, _n, _n, _n, _n, _n }, //  2  B  loc
+    { _n, _n, _n, _s, _n, _n, _n }, //  3  F# loc
+    { _s, _n, _n, _s, _n, _n, _n }, //  4  C# loc
+    { _s, _n, _n, _s, _s, _n, _n }, //  5  G# loc
+    { _s, _s, _n, _s, _s, _n, _n }, //  6  D# loc
+    { _s, _s, _n, _s, _s, _s, _n },  // 7  A# loc
 }};
+
+
+const std::array<std::array<AccidPair, 7>, 15> MAJ_BLUES =
+{{
+    { _f_, _f_, _Ff, _UU, _f_, _f_, _UU }, // -7  Cb maj blues
+    { _UU, _f_, _f_, _UU, _f_, _f_, _Ff }, // -6  Gb maj blues
+    { _UU, _f_, _f_, _fn, _UU, _f_, _f_ }, // -5  Db maj blues
+    { _fn, _UU, _f_, _n_, _UU, _f_, _f_ }, // -4  Ab maj blues
+    { _n_, _UU, _f_, _n_, _fn, _UU, _f_ }, // -3  Eb maj blues
+    { _n_, _fn, _UU, _n_, _n_, _UU, _f_ }, // -2  Bb maj blues
+    { _n_, _n_, _UU, _n_, _n_, _fn, _UU }, // -1  F  maj blues
+    { _n_, _n_, _fn, _UU, _n_, _n_, _UU }, //  0  C  maj blues
+    { _UU, _n_, _n_, _UU, _n_, _n_, _fn }, //  1  G  maj blues
+    { _UU, _n_, _n_, _ns, _UU, _n_, _n_ }, //  2  D  maj blues
+    { _ns, _UU, _n_, _s_, _UU, _n_, _n_ }, //  3  A  maj blues
+    { _s_, _UU, _n_, _s_, _ns, _UU, _n_ }, //  4  E  maj blues
+    { _s_, _ns, _UU, _s_, _s_, _UU, _n_ }, //  5  B  maj blues
+    { _s_, _s_, _UU, _s_, _s_, _ns, _UU }, //  6  F# maj blues
+    { _s_, _s_, _ns, _UU, _s_, _s_, _UU }  //  7  C# maj blues
+}};
+
 
 Ton::Ton():
 KeyFifth(0),

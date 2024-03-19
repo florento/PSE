@@ -144,7 +144,6 @@ private: // data
     std::array<enum Accid, 7> _state; // _state[7]
 
     
-    
 private: // static data
 
     /// abbreviations for accidentals

@@ -18,6 +18,7 @@
 #include "trace.hpp"
 #include "NoteName.hpp"
 #include "Accidental.hpp"
+#include "AccidPair.hpp"
 #include "ModeName.hpp"
 #include "Fifths.hpp"
 #include "KeyFifth.hpp"
@@ -218,14 +219,48 @@ protected: // data
 
 private:
     
-    /// abbreviations for accidentals
-    static const enum Accid _2F;
-    static const enum Accid _1F;
-    static const enum Accid _0N;
-    static const enum Accid _1S;
-    static const enum Accid _2S;
-    static const enum Accid __U;
+    /// abbreviation for accidentals: double flat
+    static const enum Accid _F;
     
+    /// abbreviation for accidentals: flat
+    static const enum Accid _f;
+    
+    /// abbreviation for accidentals: neutral
+    static const enum Accid _n;
+    
+    /// abbreviation for accidentals: sharp
+    static const enum Accid _s;
+    
+    /// abbreviation for accidentals: double sharp
+    static const enum Accid _S;
+    
+    /// abbreviation for accidentals: undef;
+    static const enum Accid _U;
+
+    /// abbreviation for pair of accidentals: double flat or flat
+    static const AccidPair _Ff;
+
+    /// abbreviation for pair of accidentals: single flat
+    static const AccidPair _f_;
+
+    /// abbreviation for pair of accidentals: flat or neutral
+    static const AccidPair _fn;
+
+    /// abbreviation for pair of accidentals: single neutral
+    static const AccidPair _n_;
+
+    /// abbreviation for pair of accidentals: neutral or sharp
+    static const AccidPair _ns;
+
+    /// abbreviation for pair of accidentals: single sharp
+    static const AccidPair _s_;
+
+    /// abbreviation for pair of accidentals: sharp or double sharp
+    static const AccidPair _sS;
+
+    /// abbreviation for pair of accidentals: undef
+    static const AccidPair _UU;
+
     /// list of accidents in key signatures,
     /// for every pitch name in 0..6 (0 is 'C', 6 is 'B'),
     /// for every key signature in -7..7.
@@ -246,11 +281,40 @@ private:
     /// for every key signature in -7..7.
     static const std::array<std::array<enum Accid, 7>, 15> MIN_MEL;
     
+    /// list of accidents in dorian mode,
+    /// for every pitch name in 0..6 (0 is 'C', 6 is 'B'),
+    /// for every key signature in -7..7.
     static const std::array<std::array<enum Accid, 7>, 15> DORIAN;
+
+    /// list of accidents in phrygian mode,
+    /// for every pitch name in 0..6 (0 is 'C', 6 is 'B'),
+    /// for every key signature in -7..7.
     static const std::array<std::array<enum Accid, 7>, 15> PHRYGIAN;
+
+    /// list of accidents in lydian mode,
+    /// for every pitch name in 0..6 (0 is 'C', 6 is 'B'),
+    /// for every key signature in -7..7.
     static const std::array<std::array<enum Accid, 7>, 15> LYDIAN;
+
+    /// list of accidents in mixolydian mode,
+    /// for every pitch name in 0..6 (0 is 'C', 6 is 'B'),
+    /// for every key signature in -7..7.
     static const std::array<std::array<enum Accid, 7>, 15> MIXOLYDIAN;
+
+    /// list of accidents in locrian mode,
+    /// for every pitch name in 0..6 (0 is 'C', 6 is 'B'),
+    /// for every key signature in -7..7.
     static const std::array<std::array<enum Accid, 7>, 15> LOCRIAN;
+    
+    /// list of accidents (pairs) in major blues scale,
+    /// for every pitch name in 0..6 (0 is 'C', 6 is 'B'),
+    /// for every key signature in -7..7.
+    static const std::array<std::array<AccidPair, 7>, 15> MAJ_BLUES;
+    
+    /// list of accidents (pairs) in minor blues scale,
+    /// for every pitch name in 0..6 (0 is 'C', 6 is 'B'),
+    /// for every key signature in -7..7.
+    static const std::array<std::array<AccidPair, 7>, 15> MIN_BLUES;
     
     /// number of the tonic of this ton in the array of fifths.
     int tonic() const;

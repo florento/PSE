@@ -12,7 +12,6 @@
 #define Accidental_hpp
 
 #include <iostream>
-//#include <ostream>
 #include <assert.h>
 #include <string>
 
