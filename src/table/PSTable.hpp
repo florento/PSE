@@ -64,7 +64,6 @@ public:
     ///        default = modal.
     /// @param dflag debug mode (display table during construction).
     /// @warning the enumerator cannot be changed once the object created.
-    ///
     PST(const Algo& a, const Cost& seed, const TonIndex& i, PSEnum& e,
         bool tonal=false, bool dflag=false);
 

@@ -103,6 +103,7 @@ _debug(dflag)
     }
 }
 
+
 PST::PST(const PST& tab, const Cost& seed,
          const PSO& globals, const PSG& locals, bool tonal, bool dflag):
 PST(tab._algo, tab, seed, globals, locals, tonal, dflag)
