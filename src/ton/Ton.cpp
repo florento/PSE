@@ -281,6 +281,17 @@ int Ton::getPitchClass() const
 }
 
 
+int Ton::getRealKs() const
+{
+    if (_mode == ModeName::Dorian) return _sig + 1 ;
+    if (_mode == ModeName::Phrygian) return _sig - 1 ;
+    if (_mode == ModeName::Lydian) return _sig + 1 ;
+    if (_mode == ModeName::Mixolydian) return _sig - 1 ;
+    if (_mode == ModeName::Locrian) return _sig - 2 ;
+    else return _sig ;
+}
+
+
 enum Accid Ton::accidKey(int n) const
 {
     assert(-7 <= _sig);

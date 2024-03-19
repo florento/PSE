@@ -93,6 +93,9 @@ public:
 
     /// pitch class of this tonality.
     int getPitchClass() const;
+    
+    /// key signature truly reflecting the notes constituting the considered scale
+    int getRealKs() const;
 
     /// this tonality is undefined.
     bool undef() const;
