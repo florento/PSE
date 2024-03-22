@@ -11,7 +11,9 @@ see also `ps13.md` for Meredith's ref
 
 
 
-
+> Javier Arau
+> Augmented Scale Theory
+> http://www.javierarau.com/augmented-scale-theory
 
 
 

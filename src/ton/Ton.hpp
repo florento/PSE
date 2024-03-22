@@ -309,15 +309,37 @@ private:
     /// for every key signature in -7..7.
     static const std::array<std::array<enum Accid, 7>, 15> LOCRIAN;
     
-    /// list of accidents (pairs) in major blues scale,
+    /// list of accidents (pairs) in the major blues scale,
     /// for every pitch name in 0..6 (0 is 'C', 6 is 'B'),
     /// for every key signature in -7..7.
     static const std::array<std::array<AccidPair, 7>, 15> MAJ_BLUES;
     
-    /// list of accidents (pairs) in minor blues scale,
+    /// list of accidents (pairs) in the minor blues scale,
     /// for every pitch name in 0..6 (0 is 'C', 6 is 'B'),
     /// for every key signature in -7..7.
     static const std::array<std::array<AccidPair, 7>, 15> MIN_BLUES;
+
+    /// list of accidents (pairs) in whole tone scale,
+    /// for every pitch name in 0..6 (0 is 'C', 6 is 'B'),
+    /// for every key signature in -7..7.
+    static const std::array<std::array<AccidPair, 7>, 2> WHOLE_TONE;
+
+    /// list of accidents (pairs) in the augmented scale,
+    /// for every pitch name in 0..6 (0 is 'C', 6 is 'B'),
+    /// for every key signature in -7..7.
+    static const std::array<std::array<AccidPair, 7>, 12> AUGMENTED;
+    
+    /// list of accidents (pairs) in the whole/half diminished scale,
+    /// for every pitch name in 0..6 (0 is 'C', 6 is 'B'),
+    /// for every key signature in -7..7.
+    static const std::array<std::array<AccidPair, 7>, 3> DIMINISHED_WH;
+
+    /// list of accidents (pairs) in the half/whole diminished scale
+    /// (dominant diminished scale),
+    /// for every pitch name in 0..6 (0 is 'C', 6 is 'B'),
+    /// for every key signature in -7..7.
+    static const std::array<std::array<AccidPair, 7>, 3> DIMINISHED_HW;
+
     
     /// number of the tonic of this ton in the array of fifths.
     int tonic() const;

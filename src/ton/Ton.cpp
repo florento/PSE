@@ -188,8 +188,8 @@ const std::array<std::array<enum Accid, 7>, 15> Ton::MIXOLYDIAN =
 
 const std::array<std::array<enum Accid, 7>, 15> Ton::LOCRIAN =
 {{
-    { _f, _f, _F, _f, _f, _f, _F }, // -7  Ab loc
-    { _f, _f, _f, _f, _f, _f, _F }, // -6  Eb loc
+    { _f, _f, _F, _f, _f, _f, _F }, // -7  Ab loc -> G#
+    { _f, _f, _f, _f, _f, _f, _F }, // -6  Eb loc -> D#
     { _f, _f, _f, _f, _f, _f, _f }, // -5  Bb loc
     { _f, _f, _f, _n, _f, _f, _f }, // -4  F  loc
     { _n, _f, _f, _n, _f, _f, _f }, // -3  C  loc
@@ -202,14 +202,14 @@ const std::array<std::array<enum Accid, 7>, 15> Ton::LOCRIAN =
     { _s, _n, _n, _s, _n, _n, _n }, //  4  C# loc
     { _s, _n, _n, _s, _s, _n, _n }, //  5  G# loc
     { _s, _s, _n, _s, _s, _n, _n }, //  6  D# loc
-    { _s, _s, _n, _s, _s, _s, _n },  // 7  A# loc
+    { _s, _s, _n, _s, _s, _s, _n }  // 7  A# loc -> Bb
 }};
 
 
-const std::array<std::array<AccidPair, 7>, 15> MAJ_BLUES =
+const std::array<std::array<AccidPair, 7>, 15> Ton::MAJ_BLUES =
 {{
-    { _f_, _f_, _Ff, _UU, _f_, _f_, _UU }, // -7  Cb maj blues
-    { _UU, _f_, _f_, _UU, _f_, _f_, _Ff }, // -6  Gb maj blues
+    { _f_, _f_, _Ff, _UU, _f_, _f_, _UU }, // -7  Cb maj blues -> B
+    { _UU, _f_, _f_, _UU, _f_, _f_, _Ff }, // -6  Gb maj blues -> Gb
     { _UU, _f_, _f_, _fn, _UU, _f_, _f_ }, // -5  Db maj blues
     { _fn, _UU, _f_, _n_, _UU, _f_, _f_ }, // -4  Ab maj blues
     { _n_, _UU, _f_, _n_, _fn, _UU, _f_ }, // -3  Eb maj blues
@@ -222,7 +222,71 @@ const std::array<std::array<AccidPair, 7>, 15> MAJ_BLUES =
     { _s_, _UU, _n_, _s_, _ns, _UU, _n_ }, //  4  E  maj blues
     { _s_, _ns, _UU, _s_, _s_, _UU, _n_ }, //  5  B  maj blues
     { _s_, _s_, _UU, _s_, _s_, _ns, _UU }, //  6  F# maj blues
-    { _s_, _s_, _ns, _UU, _s_, _s_, _UU }  //  7  C# maj blues
+    { _s_, _s_, _ns, _UU, _s_, _s_, _UU }  //  7  C# maj blues -> Db
+}};
+
+
+const std::array<std::array<AccidPair, 7>, 15> Ton::MIN_BLUES =
+{{
+    { _f_, _f_, _Ff, _UU, _f_, _f_, _UU }, // -7  Ab min blues -> G#
+    { _UU, _f_, _f_, _UU, _f_, _f_, _Ff }, // -6  Eb min blues -> D#
+    { _UU, _f_, _f_, _fn, _UU, _f_, _f_ }, // -5  Bb min blues
+    { _fn, _UU, _f_, _n_, _UU, _f_, _f_ }, // -4  F  min blues
+    { _n_, _UU, _f_, _n_, _fn, _UU, _f_ }, // -3  C  min blues
+    { _n_, _fn, _UU, _n_, _n_, _UU, _f_ }, // -2  G  min blues
+    { _n_, _n_, _UU, _n_, _n_, _fn, _UU }, // -1  D  min blues
+    { _n_, _n_, _fn, _UU, _n_, _n_, _UU }, //  0  A  min blues
+    { _UU, _n_, _n_, _UU, _n_, _n_, _fn }, //  1  E  min blues
+    { _UU, _n_, _n_, _ns, _UU, _n_, _n_ }, //  2  B  min blues
+    { _ns, _UU, _n_, _s_, _UU, _n_, _n_ }, //  3  F# min blues
+    { _s_, _UU, _n_, _s_, _ns, _UU, _n_ }, //  4  C# min blues
+    { _s_, _ns, _UU, _s_, _s_, _UU, _n_ }, //  5  G# min blues
+    { _s_, _s_, _UU, _s_, _s_, _ns, _s_ }, //  6  D# min blues
+    { _s_, _s_, _ns, _UU, _s_, _s_, _UU }  //  7  A# min blues -> Bb
+}};
+
+
+const std::array<std::array<AccidPair, 7>, 12> Ton::AUGMENTED =
+{{
+//  { _f_, _f_, _Ff, _UU, _f_, _f_, _UU }, // -7  Cb aug -> B
+//  { _UU, _f_, _f_, _UU, _f_, _f_, _Ff }, // -6  Gb aug -> Gb
+    { _n_, _f_, _UU, _fn, _UU, _fn, _UU }, // -5  Db aug
+    { _fn, _UU, _fn, _UU, _n_, _f_, _UU }, // -4  Ab aug
+    { _UU, _n_, _f_, _UU, _fn, _UU, _fn }, // -3  Eb aug
+    { _UU, _fn, _UU, _ns, _UU, _n_, _f_ }, // -2  Bb aug
+    { _ns, _UU, _n_, _n_, _UU, _fn, _UU }, // -1  F  aug
+    { _n_, _UU, _fn, _UU, _ns, _UU, _n_ }, //  0  C  aug
+    { _UU, _ns, _UU, _s_, _n_, _UU, _fn }, //  1  G  aug
+    { _s_, _n_, _UU, _ns, _UU, _ns, _UU }, //  2  D  aug
+    { _ns, _UU, _ns, _UU, _s_, _n_, _UU }, //  3  A  aug
+    { _UU, _s_, _n_, _UU, _ns, _UU, _ns }, //  4  E  aug
+    { _UU, _ns, _UU, _sS, _UU, _s_, _n_ }, //  5  B  aug
+    { _sS, _UU, _s_, _s_, _UU, _ns, _UU }  //  6  F# aug
+//  { _s_, _s_, _ns, _UU, _s_, _s_, _UU }  //  7  C# aug -> Db
+}};
+
+
+const std::array<std::array<AccidPair, 7>, 3> Ton::DIMINISHED_WH =
+{{
+    { _s_, _n_, _n_, _n_, _n_, _f_, _fn }, // F dim wh = Ab, D,  B
+    { _n_, _n_, _f_, _ns, _s_, _n_, _n_ }, // C dim wh = Eb, A,  F#
+    { _ns, _s_, _n_, _s_, _n_, _n_, _f_ }  // G dim wh = Db, Bb, E
+}};
+ 
+
+const std::array<std::array<AccidPair, 7>, 3> Ton::DIMINISHED_HW =
+{{
+    { _n_, _n_, _f_, _n_, _f_, _fn, _n_ }, // F dim hw = Ab, D, B
+    { _n_, _f_, _fn, _s_, _n_, _n_, _f_ }, // C dim hw = Eb, A, F#
+    { _s_, _n_, _n_, _n_, _n_, _f_, _fn }  // G dim hw = Bb, E, C#
+//  { _f_, _fn, _n_, _n_, _n_, _f_, _f_ }, // G dim hw = Bb, E, Db
+}};
+
+
+const std::array<std::array<AccidPair, 7>, 2> Ton::WHOLE_TONE =
+{{
+    { _n_, _n_, _n_, _f_, _f_, _f_, _UU }, // C whole tone
+    { _UU, _f_, _f_, _n_, _n_, _n_, _n_ }  // B whole tone
 }};
 
 
