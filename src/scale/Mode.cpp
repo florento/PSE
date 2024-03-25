@@ -181,6 +181,16 @@ std::vector<const int> Mode::predefined_semitons(const ModeName& name)
         /// @todo is it the correct spelling? not diatonic see https://muted.io/diminished-scale
         case ModeName::Diminished:
             return std::vector<const int>{2, 1, 2, 1, 2, 1, 2, 1};
+            
+        // Diminished Scale half-whole
+        /// @todo is it the correct spelling? not diatonic see https://muted.io/diminished-scale
+        case ModeName::DiminishedHW:
+            return std::vector<const int>{1, 2, 1, 2, 1, 2, 1, 2};
+        
+        // Whole-ton Scale
+        /// @todo is it the correct spelling? not diatonic see https://muted.io/diminished-scale
+        case ModeName::Whole:
+            return std::vector<const int>{1, 1, 1, 1, 1, 1, 1};
 
         case ModeName::Undef:
         {

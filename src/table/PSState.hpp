@@ -18,6 +18,7 @@
 #include "trace.hpp"
 #include "NoteName.hpp"
 #include "Accidental.hpp"
+#include "Accids.hpp"
 //#include "Pitch.hpp"
 #include "KeyFifth.hpp"
 #include "ModeName.hpp"
@@ -55,18 +56,18 @@ public:
     /// initial state for a given tonality.
     /// @param ks a key signature given in number of flats (negative int)
     /// or number of sharps (positive int). must be in -7..7.
-    /// @warning obsolete. use PSState(const Ton&).
+    /// @warning TBR obsolete. use PSState(const Ton&).
     PSState(int ks);
 
     /// initial state for a given key signature.
     /// @param k a key signature.
-    /// @warning obsolete. use PSState(const Ton&).
+    /// @warning TBR obsolete. use PSState(const Ton&).
     PSState(const KeyFifth& k);
     
     /// copy constructor
     PSState(const PSState& rhs);
 
-    /// copy and update given name with given accident
+    /// copy and update a given name with a given accidental.
     PSState(const PSState& as,
             const enum NoteName& name, const enum Accid& accid);
 
@@ -89,7 +90,7 @@ public:
     /// @return the number of accidents, in state, for n, in -2..2.
     const enum Accid accid(const enum NoteName& n) const;
     
-    /// the given note (given by name and alt) belongs to this state.
+    /// the given note (given by name and accidental) belongs to this state.
     /// @param name a note name in 0..6 (0 is 'C', 6 is 'B').
     /// @param accid accidental in -2..2 (-2 = double flats, 2 = double sharps).
     bool member(const enum NoteName& name, const enum Accid& accid) const;
@@ -143,8 +144,18 @@ private: // data
     /// of an accidental (in -2..2).
     std::array<enum Accid, 7> _state; // _state[7]
 
+
+private:
     
-private: // static data
+    /// accidental in this state for a given pitch name
+    /// can be undef or two options.
+    /// @param n a pitch name, in 0..6 (0 is 'C', 6 is 'B').
+    /// @return the number of accidents, in state, for n, in -2..2.
+    enum Accid accid(int n) const;
+    // accids_t accid(int n) const;
+
+    
+private: // static tables OBSOLETE
 
     /// abbreviations for accidentals
     static const enum Accid _2F;
@@ -188,10 +199,6 @@ private: // static data
     /// @todo rm OBSOLETE. we use the tables of Ton.
     static const std::array<std::array<enum Accid, 7>, 15> MIN_MEL;
 
-    /// accidental in this state for a given pitch name.
-    /// @param n a pitch name, in 0..6 (0 is 'C', 6 is 'B').
-    /// @return the number of accidents, in state, for n, in -2..2.
-    enum Accid accid(int n) const;
 
 };
 

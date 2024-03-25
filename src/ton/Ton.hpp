@@ -18,7 +18,7 @@
 #include "trace.hpp"
 #include "NoteName.hpp"
 #include "Accidental.hpp"
-#include "AccidPair.hpp"
+#include "Accids.hpp"
 #include "ModeName.hpp"
 #include "Fifths.hpp"
 #include "KeyFifth.hpp"
@@ -64,7 +64,26 @@ public:
     /// main constructor.
     /// @param ks number of flats if negative int,
     /// or number of sharps if positive int. must be in -7..7.
-    /// @param mode mode of this tonality.
+    /// @param mode mode of this tonality. supported values:
+    /// - Major, KS in -7..7.
+    /// - Minor (harmonic minor), KS in -7..7.
+    /// - MinorNat, KS in -7..7.
+    /// - MinorMel, KS in -7..7.
+    /// - Ionian = Major, KS in -7..7.
+    /// - Dorian, KS in -7..7.
+    /// - Phrygian, KS in -7..7.
+    /// - Lydian, KS in -7..7.
+    /// - Mixolydian, KS in -7..7.
+    /// - Aeolian = MinorNat, KS in -7..7.
+    /// - Locrian, KS in -7..7.
+    /// - MajorBlues, KS in -5..6, -7=5, -6=6, 7=-5
+    /// - MinorBlues, KS in -5..6, -7=5, -6=6, 7=-5
+    /// - Augmented, KS in -5..6, -7=5, -6=6, 7=-5
+    /// - Diminished, KS in -1..1, -7=5,
+    ///   -6=6, -5=1, -4=-1, -3=0, -2=1, 2=-1, 3=0, 4=1, 5=-1, 6=0, 7=-5
+    /// - DiminishedHW, KS in -1..1.
+    ///   -7=5 -6=6, -5=1, -4=-1, -3=0, -2=1, 2=-1, 3=0, 4=1, 5=-1, 6=0, 7=-5
+    /// - Whole, KS in 0..1.
     Ton(int ks, ModeName mode = ModeName::Major);
 
     /// upgrade of key signature.
@@ -96,7 +115,7 @@ public:
     int getPitchClass() const;
     
     /// key signature truly reflecting the notes constituting the considered scale
-    int getRealKs() const;
+    int getRealKS() const;
 
     /// this tonality is undefined.
     bool undef() const;
@@ -114,22 +133,44 @@ public:
     /// @return the accidental, in the key signature, for n, in -2..2.
     /// @todo TBR
     enum Accid accidKey(int n) const;
-    
-    /// accidental in the diatonic scale of this ton for a given pitch name.
+
+    /// accidental in the scale of this ton for a given pitch name.
     /// @param n an encapsulated note name
-    /// @return the number of accidents, in scale, for degree d, in -2..2.
+    /// @return the accidental(s), in scale, for note name n,
+    /// can be a single accidental value, a pair of accidents or UNDEF.
+    accids_t accidScale(const enum NoteName& n) const;
+
+    /// accidental in the scale of this ton for a given pitch name.
+    /// @param n a note name, in 0..6 (0 is 'C', 6 is 'B').
+    /// @return the accidental(s), in scale, for note n,
+    /// can be a single accidental value, a pair of accidents or UNDEF.
+    accids_t accidScale(int n) const;
+
+    /// accidental in the scale of this ton for a given pitch name.
+    /// @param n an encapsulated note name
+    /// @param mode a mode can be different from the one of this ton.
+    /// @return the accidental(s), in scale, for note name n,
+    /// can be a single accidental value, a pair of accidents or UNDEF.
+    accids_t accidScale(const enum NoteName& n, ModeName mode) const;
+
+    /// accidental in the diatonic scale of this ton for a given pitch name.
+    /// @param n an encapsulated note name.
+    /// @return the accidental, in scale, for note name n.
+    /// @todo replace by accidScale
     enum Accid accidDia(const enum NoteName& n) const;
 
     /// accidental in the diatonic scale of this ton for a given pitch name.
     /// @param n a note name, in 0..6 (0 is 'C', 6 is 'B').
-    /// @return the accidental, in scale, for n, in -2..2.
+    /// @return the accidental, in scale, for note n.
+    /// @todo replace by accidScale
     enum Accid accidDia(int n) const;
 
     /// accidental in the diatonic scale of this ton for a given pitch name.
-    /// @param n an encapsulated note name
-    /// @param mode a mode can be different from the one of this ton
+    /// @param n an encapsulated note name.
+    /// @param mode a mode can be different from the one of this ton.
+    /// @return the accidental, in scale, for note n.
     /// @todo mode what for ?
-    /// @return the number of accidents, in scale, for degree d, in -2..2.
+    /// @todo replace by accidScale
     enum Accid accidDia(const enum NoteName& n, ModeName mode) const;
         
     /// note name in the diatonic scale of this ton for a given degree.
@@ -144,7 +185,7 @@ public:
     /// @return the number of accidents, in scale, for n, in -2..2.
     /// @warning only for distonic scales: the mode must be
     /// Major or Minor or MinorNat or MinorMel.
-    /// @todo TBR not used?
+    /// @todo TBR OBSOLETE (not used?)
     enum Accid accidental(int d) const;
   
     /// a note is a lead in this Ton if
@@ -220,7 +261,36 @@ protected: // data
     // std::shared_ptr<Scale> _chromatic;
     const Scale _chromatic;
 
-private:
+    
+private: // convenience functions
+
+    /// @param ks number of flats if negative int,
+    /// or number of sharps if positive int. must be in -7..7.
+    /// @param mode mode of this tonality.
+    /// @return representative of ks for the given mode.
+    int init_KSofMode(int ks, ModeName mode);
+    
+    /// number of the tonic of this ton in the array of fifths.
+    int tonic() const;
+    
+    /// accidental in the scale of this ton for a given pitch name.
+    /// @param n a note name, in 0..6 (0 is 'C', 6 is 'B').
+    /// @param mode a mode can be different from the one of this ton.
+    /// @return the accidental, in scale, for n, in -2..2.
+    enum Accid accidDia(int n, ModeName mode) const;
+        
+    /// accidental in the scale of this ton for a given pitch name.
+    /// @param n a note name, in 0..6 (0 is 'C', 6 is 'B').
+    /// @param mode a mode can be different from the one of this ton.
+    /// @return the accidental(s), in scale, for note n,
+    /// can be a single accidental value, a pair of accidents or UNDEF.
+    accids_t accidScale(int n, ModeName mode) const;
+    
+    /// @param a an encoding of accids. must be single.
+    /// @return the unique accid value encoded in the encoding a.
+    static enum Accid accidSingle(const accids_t a);
+    
+private: // tables
     
     /// abbreviation for accidentals: double flat
     static const enum Accid _F;
@@ -241,28 +311,28 @@ private:
     static const enum Accid _U;
 
     /// abbreviation for pair of accidentals: double flat or flat
-    static const AccidPair _Ff;
+    static const accids_t _Ff;
 
     /// abbreviation for pair of accidentals: single flat
-    static const AccidPair _f_;
+    static const accids_t _f_;
 
     /// abbreviation for pair of accidentals: flat or neutral
-    static const AccidPair _fn;
+    static const accids_t _fn;
 
     /// abbreviation for pair of accidentals: single neutral
-    static const AccidPair _n_;
+    static const accids_t _n_;
 
     /// abbreviation for pair of accidentals: neutral or sharp
-    static const AccidPair _ns;
+    static const accids_t _ns;
 
     /// abbreviation for pair of accidentals: single sharp
-    static const AccidPair _s_;
+    static const accids_t _s_;
 
     /// abbreviation for pair of accidentals: sharp or double sharp
-    static const AccidPair _sS;
+    static const accids_t _sS;
 
     /// abbreviation for pair of accidentals: undef
-    static const AccidPair _UU;
+    static const accids_t _UU;
 
     /// list of accidents in key signatures,
     /// for every pitch name in 0..6 (0 is 'C', 6 is 'B'),
@@ -312,42 +382,34 @@ private:
     /// list of accidents (pairs) in the major blues scale,
     /// for every pitch name in 0..6 (0 is 'C', 6 is 'B'),
     /// for every key signature in -7..7.
-    static const std::array<std::array<AccidPair, 7>, 15> MAJ_BLUES;
+    static const std::array<std::array<accids_t, 7>, 15> MAJ_BLUES;
     
     /// list of accidents (pairs) in the minor blues scale,
     /// for every pitch name in 0..6 (0 is 'C', 6 is 'B'),
     /// for every key signature in -7..7.
-    static const std::array<std::array<AccidPair, 7>, 15> MIN_BLUES;
+    static const std::array<std::array<accids_t, 7>, 15> MIN_BLUES;
 
     /// list of accidents (pairs) in whole tone scale,
     /// for every pitch name in 0..6 (0 is 'C', 6 is 'B'),
-    /// for every key signature in -7..7.
-    static const std::array<std::array<AccidPair, 7>, 2> WHOLE_TONE;
+    /// for every 2 key signatures 0, 1
+    static const std::array<std::array<accids_t, 7>, 2> WHOLE_TONE;
 
-    /// list of accidents (pairs) in the augmented scale,
+    /// list of accidents (pairs) in the augmented scale
+    /// (made of two augmented chords),
     /// for every pitch name in 0..6 (0 is 'C', 6 is 'B'),
-    /// for every key signature in -7..7.
-    static const std::array<std::array<AccidPair, 7>, 12> AUGMENTED;
+    /// for every 12 key signatures in -5..6
+    static const std::array<std::array<accids_t, 7>, 12> AUGMENTED;
     
     /// list of accidents (pairs) in the whole/half diminished scale,
     /// for every pitch name in 0..6 (0 is 'C', 6 is 'B'),
-    /// for every key signature in -7..7.
-    static const std::array<std::array<AccidPair, 7>, 3> DIMINISHED_WH;
+    /// for every 3 key signatures in -1..1
+    static const std::array<std::array<accids_t, 7>, 3> DIMINISHED_WH;
 
     /// list of accidents (pairs) in the half/whole diminished scale
     /// (dominant diminished scale),
     /// for every pitch name in 0..6 (0 is 'C', 6 is 'B'),
-    /// for every key signature in -7..7.
-    static const std::array<std::array<AccidPair, 7>, 3> DIMINISHED_HW;
-
-    
-    /// number of the tonic of this ton in the array of fifths.
-    int tonic() const;
-    
-    /// accidental in the scale of this ton for a given pitch name.
-    /// @param n a note name, in 0..6 (0 is 'C', 6 is 'B').
-    /// @return the accidental, in scale, for n, in -2..2.
-    enum Accid accidDia(int n, ModeName mode) const;
+    /// for 3 key signatures in -1..1
+    static const std::array<std::array<accids_t, 7>, 3> DIMINISHED_HW;
         
 };
 

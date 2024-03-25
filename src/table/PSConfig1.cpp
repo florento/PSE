@@ -151,7 +151,10 @@ enum NoteName PSC1::name() const
 
 enum Accid PSC1::accidental() const
 {
+    /// @todo replace:
+    /// enum Accid accid = MidiNum::accid(MidiNum::pitchClass(_midi), _name);
     enum Accid accid(_state.accid(_name)); // copy
+
     //assert(-2 <= toint(accid));
     //assert(toint(accid) <= 2);
     return accid; // cast to float format for Pitch ?

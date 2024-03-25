@@ -6,9 +6,11 @@
 //  Copyright © 2022 Florent Jacquemard. All rights reserved.
 //
 
-#include "Accidental.hpp"
+
 #include <cmath>        // std::abs
 #include <algorithm>    // std::max
+
+#include "Accidental.hpp"
 
 namespace pse {
 

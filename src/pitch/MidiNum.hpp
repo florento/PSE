@@ -170,7 +170,7 @@ public:
     static enum Accid accid(int c, const enum NoteName& n);
     
     /// octave number for a given MIDI key and note name.
-    /// @param m midi number
+    /// @param m midi number.
     /// @param n note name in 'A'..'G'.
     /// @return octave number, in -2..9, for the note of given midi key and name.
     static int midi_to_octave(unsigned int m, const enum NoteName& n);
@@ -189,18 +189,24 @@ public:
                               const enum Accid& a,
                               bool debug = true);
 
-    /// pitch class, in 0..11, of the given note name with given accidental.
+    /// pitch class, in 0..11, of the given midi number.
+    /// @param m midi number
+    /// @return m modulo 12 or 12 in case of error.
+    static unsigned int pitchClass(unsigned int m);
+    
+    /// pitch class, in 0..11, of the given note name (with natural accid).
+    /// pitch class, in 0..11, of the given note name (with natural accid).
     /// @param n a note name in A..G. must not be Undef.
-
-    /// @return the pitch class corresponding to the note name, or 12 in case of
-    /// error. The classes of C, D, E, F, G, A, B are resp.  0, 2, 4, 5, 7, 9, 11.
+    /// @return the pitch class corresponding to the note name (natural),
+    /// or 12 in case of error.
+    /// The classes of C, D, E, F, G, A, B are resp.  0, 2, 4, 5, 7, 9, 11.
     static unsigned int pitchClass(const enum NoteName& n);
     
-    /// pitch class, in 0..11, of the given note name.
+    /// pitch class, in 0..11, of the given note name with given accidental.
     /// @param n a note name in A..G. must not be Undef.
     /// @param a accidental in [-2, 2], where 1 is a half tone.
-    /// @return the pitch class corresponding to the note name, or 12 in case of
-    /// error.
+    /// @return the pitch class corresponding to the note name and accid,
+    /// or 12 in case of error.
     static unsigned int pitchClass(const enum NoteName& n, const enum Accid& a);
     
     /// midi value corresponding to the given note name.
@@ -240,8 +246,8 @@ private:
     /// table of accidentals for pitch class and name.
     static const enum Accid ACCID[12][7];
     
-    /// table of pitch class for each note name in 0 (C) .. 7 (B)
-    static const int PC[7];
+    // table of pitch class for each note name in 0 (C) .. 7 (B)
+    // static const int PC[7];
     
 }; // end MidiNum
     

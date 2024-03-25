@@ -80,6 +80,12 @@ enum class ModeName
     /// Diminished Scale = symmetric diminished scale = two diminished 7th chords
     Diminished,
     
+    /// Diminished Scale Half-Whole
+    DiminishedHW,
+    
+    /// Whole-ton Scale
+    Whole,
+    
     /// Harmonic Chromatic. all notes are repeated except tonic and dominant.
     /// @see https://www.dolmetsch.com/musictheory11.htm
     Chromatic

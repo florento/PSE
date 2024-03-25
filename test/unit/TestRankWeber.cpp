@@ -15,7 +15,7 @@ TEST(TestRankWeber, ton1)
 {
     pse::TonIndex index;
     index.add(0, pse::ModeName::Major); // C maj
-
+    index.close();
     ASSERT_EQ(index.rankWeber(0, 0), 0);
 }
 
@@ -26,6 +26,7 @@ TEST(TestRankWeber, ton3)
     index.add(0, pse::ModeName::Major); // C maj
     index.add(1, pse::ModeName::Major); // G maj
     index.add(2, pse::ModeName::Major); // D maj
+    index.close();
 
     ASSERT_EQ(index.rankWeber(0, 0), 0);
     ASSERT_EQ(index.rankWeber(0, 1), 1);

@@ -69,6 +69,12 @@ std::string tostring(const ModeName& m)
         case ModeName::Diminished:
             return "diminished";
 
+        case ModeName::DiminishedHW:
+            return "diminished_hw";
+
+        case ModeName::Whole:
+            return "whole-ton";
+
         case ModeName::Chromatic:
             return "harmonic chromatic";
 

@@ -131,10 +131,10 @@ const Cost& PSC0::cost() const
 }
 
 
-const enum Accid PSC0::accidental(const enum NoteName&  name) const
-{
-    return _state.accid(name);
-}
+//const enum Accid PSC0::accidental(const enum NoteName&  name) const
+//{
+//    return _state.accid(name);
+//}
 
 
 //std::vector<std::shared_ptr<PSC0>>

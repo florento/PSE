@@ -129,6 +129,12 @@ std::shared_ptr<Mode> ModeFactory::make(ModeName name)
                                std::vector<const int>{2, 1, 2, 1, 2, 1, 2, 1},
                                std::vector<const int>{1, 1, 1, 1, 1, 0, 1, 1});
 
+        // Diminished Scale half-whole
+        case ModeName::DiminishedHW:
+            return std::make_shared<Mode>(name,
+                               std::vector<const int>{1, 2, 1, 2, 1, 2, 1, 2},
+                               std::vector<const int>{1, 1, 0, 1, 1, 1, 0, 1});
+            
         case ModeName::Undef:
         {
             ERROR("ModeFactory: mode name should not be Undef");

@@ -161,6 +161,16 @@ enum Accid MidiNum::accid(int c, const enum NoteName& n)
 //    }
 //}
 
+
+
+unsigned int MidiNum::pitchClass(unsigned int m)
+{
+    assert(0 <= m);
+    assert(m <= 128);
+    return (m % 12);
+}
+
+
 unsigned int MidiNum::pitchClass(const enum NoteName& n, const enum Accid& a)
 {
     assert(n != NoteName::Undef);

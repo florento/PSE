@@ -106,9 +106,10 @@ public:
     /// every config has at most one predecessor.
     virtual const PSC0* previous() const;
 
-    /// accidental for the given note name recorded in this config.
-    /// @param name note nate coded in 0..6 (0 is 'C', 6 is 'B').
-    const enum Accid accidental(const enum NoteName& name) const;
+    // accidental for the given note name recorded in this config.
+    // @param name note nate coded in 0..6 (0 is 'C', 6 is 'B').
+    // @todo rm unused
+    // const enum Accid accidental(const enum NoteName& name) const;
 
     // enumerator this transition was built from
     // PSEnum& psenum() const;
