@@ -50,10 +50,10 @@ class KeyFifth
 public:
 
     /// main constructor
-    /// @param ton number of flats if negative int,
+    /// @param signature number of flats if negative int,
     /// or number of sharps if positive int. must be in -7..7.
     /// distance in the array of fifths from a signature with no accidentals.
-    KeyFifth(int ton);
+    KeyFifth(int signature);
     
     /// key signature constructor for a given pitch class in 0..11 and a mode.
     /// @param c a pitch class, in 0..11

@@ -263,17 +263,16 @@ void PSB::get_names(size_t id, const Ton& gton,
     // only 1 potential successor in algo PS14
     else if (_algo == Algo::PS14)
     {
-        const Scale& scale = gton.chromatic();
-        int p = scale.pitchClass(0); // pitch class of tonic of scale
+        // const Scale& scale = gton.chromatic();
+        // int p = scale.pitchClass(0); // pitch class of tonic of scale
         // degree of m in the chromatic harmonic scale of p
-        size_t deg = (p <= m)?(m - p):(12-p+m);
-        assert(0 <= deg); // debug
-        assert(deg < 12);
-        enum NoteName name = scale.name(deg);
-        enum Accid accid = scale.accid(deg);
-
-        /// @todo enum NoteName name = gton.chromaName(m);
-        /// @todo enum Accid accid = MidiNum::accid(m, name);
+        // size_t deg = (p <= m)?(m - p):(12-p+m);
+        // assert(0 <= deg); // debug
+        // assert(deg < 12);
+        // enum NoteName name = scale.name(deg);
+        // enum Accid accid = scale.accid(deg);
+        enum NoteName name = gton.chromaname(m);
+        enum Accid accid = MidiNum::accid(m, name);
         assert(defined(name));
         assert(defined(accid));
         assert(accid == MidiNum::accid(m, name));

@@ -22,6 +22,10 @@ see also `ps13.md` for Meredith's ref
 > JOMAR Press, 2007
 > https://www.jomarpress.com/nagel/articles/ChromaticModal.html
 
+see also: https://www.dolmetsch.com/musictheory11.htm
+
+
+
 
 
 
@@ -33,6 +37,8 @@ REF: classical textbook on music theory:
 - ?  
 
 other open refs:  
+
+- https://fr.wikipedia.org/wiki/Liste_de_gammes_et_modes_(jazz)
 
 - `muted.io`
 - https://open.umn.edu/opentextbooks/textbooks/1101 ...

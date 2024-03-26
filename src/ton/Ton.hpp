@@ -123,11 +123,6 @@ public:
     
     /// key signature truly reflecting the notes constituting the considered scale
     int getRealKS() const;
-
-    /// note name corresponding to the given pitch class in the
-    /// chromatic harmonic scale associated to this ton.
-    /// @todo test in TestTon
-    const enum NoteName chromaName(int pc);
     
     /// accidental in the key signature of this ton for a given pitch name.
     /// @param n an encapsulated note name
@@ -247,7 +242,7 @@ public:
     // static int dist(int name, int alt, int sig);
     
     /// chromatic harmonic scale associated with this ton.
-    /// the chromatic harmonic modal scale embeds the epsllings of all the
+    /// the chromatic harmonic modal scale embeds the spellings of all the
     /// traditional seven-tone modes that contain a perfect fifth
     /// above the tonic note, including:
     /// - Harmonic Minor
@@ -259,7 +254,13 @@ public:
     /// - Mixolydian mode,
     /// - Aeolian mode.
     /// @see https://www.jomarpress.com/nagel/articles/ChromaticModal.html
-    const Scale& chromatic() const;
+    // const Scale& chromatic() const;
+    const Ton& chromaton() const;
+    
+    /// note name corresponding to the given pitch class in the
+    /// chromatic harmonic scale associated to this ton.
+    /// @todo test in TestTon
+    const enum NoteName chromaname(int pc) const;
 
     void print(std::ostream& o) const;
     
@@ -268,10 +269,9 @@ protected: // data
     /// mode of this tonality.
     ModeName _mode;
     
-    /// memoization of the chromatic harmonic scale associated with this ton.
+    // memoization of the chromatic harmonic scale associated with this ton.
     // std::shared_ptr<Scale> _chromatic;
-    const Scale _chromatic;
-
+    // const Scale _chromatic;
     
 private: // convenience functions
 
@@ -426,12 +426,15 @@ private: // tables
     /// list of accidents (pairs) in the chromatic harmonic scale,
     /// for every pitch name in 0..6 (0 is 'C', 6 is 'B'),
     /// for every key signature in -7..10.
-    static const std::array<std::array<accids_t, 7>, 18> CHROMA;
+    static const std::array<std::array<accids_t, 7>, 18> CHROMATIC;
     
-    /// list of dist, in names, from tonic, according to the number of
+    /// static list of dist, in names, from tonic, according to the number of
     /// semitons (from tonic).
     static const std::array<int, 12> CHROMA_NAMES;
-        
+
+    /// static list of chromatic harmonic scales for each KS in -7..10
+    static const std::array<Ton, 18> CHROMA_TONS;
+
 };
 
 std::ostream& operator<<(std::ostream& o, const Ton& ton);

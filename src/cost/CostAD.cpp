@@ -137,10 +137,11 @@ void CostAD::update(const enum NoteName& name,
             }
         }
     }
-    
-    if (print && !(lton.chromatic().contains(name,accid)))
+
+    //    if (print && !(lton.chromatic().contains(name,accid)))
+    if (print && !Accids::contained(accid, lton.chromaton().accidScale(name)))
     {
-        _chromharm+=1;
+        _chromharm += 1;
     }
     
     if (print && (!Accids::contained(accid, gton.accidScale(name))) &&
@@ -265,15 +266,16 @@ void CostAD::update_tonale(const enum NoteName& name,
         }
     }
     
-    if (print && !(lton.chromatic().contains(name,accid)))
+    // if (print && !(lton.chromatic().contains(name,accid)))
+    if (print && !Accids::contained(accid, lton.chromaton().accidScale(name)))
     {
-        _chromharm+=1;
+        _chromharm += 1;
     }
     
     if (print && (!Accids::contained(accid, gton.accidScale(name))) &&
-            (((name == NoteName::C) && (accid == Accid::Flat)) ||
+            (((name == NoteName::C) && (accid == Accid::Flat))  ||
              ((name == NoteName::B) && (accid == Accid::Sharp)) ||
-             ((name == NoteName::F) && (accid == Accid::Flat)) ||
+             ((name == NoteName::F) && (accid == Accid::Flat))  ||
              ((name == NoteName::E) && (accid == Accid::Sharp))))
     {
         ++_cflat;
