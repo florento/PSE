@@ -18,6 +18,7 @@
 #include "PSEnum.hpp"
 #include "NoteName.hpp"
 #include "Accidental.hpp"
+#include "Accids.hpp"
 #include "Ton.hpp"
 
 namespace pse {

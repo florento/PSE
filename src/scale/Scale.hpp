@@ -70,7 +70,7 @@ public:
     /// @param name name of tonic, in A..G
     Scale(const Mode& mode, int pc, const enum NoteName& name);
 
-    /// constructor of diatonic scale associated to a given ton.
+    /// constructor of a scale associated to a given ton.
     /// @param ton a tonality, i.e. a diatonic scale
     /// (defined by key signature and mode). Its mode must be diatonic.
     Scale(const Ton& ton);

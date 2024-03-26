@@ -24,36 +24,40 @@ PSState::PSState(const Ton& ton, bool tonal)
     for (int n = 0; n < 7; ++n)
     {
         if (tonal)
-            _state.at(n) = ton.accidKey(n);
+        {
+            _state.at(n) = Accids::encode(ton.accidKey(n)); // singleton
+        }
         else
-            _state.at(n) = ton.accidDia(n);
+        {
+            _state.at(n) = ton.accidScale(n);
+        }
     }
 }
   
 
-/// @todo TBR obsolete. not used.
-PSState::PSState(int ks):
-_state(KEYS[ks+7])
-{
-    assert(-7 <= ks);
-    assert(ks <= 7);
-}
+// @todo TBR obsolete. not used.
+// PSState::PSState(int ks):
+// _state(KEYS[ks+7])
+// {
+//     assert(-7 <= ks);
+//     assert(ks <= 7);
+// }
 
 
-/// @todo TBR obsolete. not used.
-PSState::PSState(const KeyFifth& k)
-{
-    if (k.flats() > 0)
-    {
-        assert(k.flats()  <= 7);
-        _state = KEYS[7 - k.flats()];
-    }
-    else
-    {
-        assert(k.sharps() <= 7);
-        _state = KEYS[k.sharps() + 7];
-    }
-}
+// @todo TBR obsolete. not used.
+// PSState::PSState(const KeyFifth& k)
+// {
+//     if (k.flats() > 0)
+//     {
+//         assert(k.flats()  <= 7);
+//         _state = KEYS[7 - k.flats()];
+//     }
+//     else
+//     {
+//         assert(k.sharps() <= 7);
+//         _state = KEYS[k.sharps() + 7];
+//     }
+// }
 
 
 PSState::PSState(const PSState& rhs):
@@ -72,7 +76,7 @@ _state(as._state)
     int n = toint(name);
     assert(0 <= n);
     assert(n <= 6);
-    _state[n] = accid;
+    _state[n] = Accids::encode(accid);
 }
 
 
@@ -115,7 +119,7 @@ bool PSState::equal(const PSState& rhs) const
 }
 
 
-enum Accid PSState::accid(int n) const
+const accids_t PSState::accids(int n) const
 {
     assert(0 <= n);
     assert(n <= 6);
@@ -123,9 +127,20 @@ enum Accid PSState::accid(int n) const
 }
 
 
+const accids_t PSState::accids(const enum NoteName& name) const
+{
+    return accids(toint(name));
+}
+
+
 const enum Accid PSState::accid(const enum NoteName& name) const
 {
-    return accid(toint(name));
+    int n = toint(name);
+    assert(0 <= n);
+    assert(n <= 6);
+    accids_t a = _state[n];
+    assert(Accids::single(a));
+    return Accids::first(a);
 }
 
 
@@ -134,7 +149,7 @@ bool PSState::member(const enum NoteName& name, const enum Accid& accid) const
     int n = toint(name);
     assert(0 <= n);
     assert(n <= 6);
-    return (_state[n] == accid);
+    return Accids::contained(accid, _state[n]);
 }
 
 
@@ -144,13 +159,14 @@ bool PSState::update(const enum NoteName& name, const enum Accid& accid)
     assert(0 <= n);
     assert(n <= 6);
     // accidental of n is unchanged
-    if (_state[n] == accid)
+    if (Accids::single(_state[n]) && Accids::contained(accid, _state[n]))
     {
         return false;
     }
-    else // real update
+    // real update
+    else
     {
-        _state[n] = accid;
+        _state[n] = Accids::encode(accid); // singleton
         return true;
     }
 }
@@ -178,7 +194,8 @@ unsigned int PSState::dist(const Ton& ton) const
     for (int i = 0; i < 7; ++i) // pitch names
     {
         enum NoteName n = NoteName(i); // encapsulation
-        if (_state[i] != ton.accidDia(n)) // or ton.accidKey(i) ?
+        /// @todo revise (if used)
+        if (_state[i] != ton.accidScale(n))
         {
             res += 1;
         }
@@ -219,29 +236,29 @@ unsigned int PSState::dist(const Ton& ton) const
 
 // static
 // not used ?
-unsigned int PSState::dist(const PSState& astate1,
-                           const PSState& ajoker1,
-                           const PSState& astate2,
-                           const PSState& ajoker2)
-{
-    unsigned int res = 0;
-    
-    for (int i = 0; i < 7; ++i) // pitch names
-    {
-        const enum NoteName n = NoteName(i); // encapsulation
-        const enum Accid& jo1 = ajoker1.accid(n);
-        const enum Accid& jo2 = ajoker2.accid(n);
-        // assert(astate1.accid(i) != Accid::undef);
-        // assert(astate2.accid(i) != Accid::undef);
-
-        const enum Accid& a1 = (defined(jo1))?jo1:astate1.accid(n);
-        const enum Accid& a2 = (defined(jo2))?jo2:astate2.accid(n);
-        assert(a1 != Accid::Undef);
-        assert(a2 != Accid::Undef);
-        res += accidDist(a1, a2);
-    }
-    return res;
-}
+//unsigned int PSState::dist(const PSState& astate1,
+//                           const PSState& ajoker1,
+//                           const PSState& astate2,
+//                           const PSState& ajoker2)
+//{
+//    unsigned int res = 0;
+//    
+//    for (int i = 0; i < 7; ++i) // pitch names
+//    {
+//        const enum NoteName n = NoteName(i); // encapsulation
+//        const enum Accid& jo1 = ajoker1.accid(n);
+//        const enum Accid& jo2 = ajoker2.accid(n);
+//        // assert(astate1.accid(i) != Accid::undef);
+//        // assert(astate2.accid(i) != Accid::undef);
+//
+//        const enum Accid& a1 = (defined(jo1))?jo1:astate1.accid(n);
+//        const enum Accid& a2 = (defined(jo2))?jo2:astate2.accid(n);
+//        assert(a1 != Accid::Undef);
+//        assert(a2 != Accid::Undef);
+//        res += accidDist(a1, a2);
+//    }
+//    return res;
+//}
 
 
 //

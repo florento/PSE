@@ -73,8 +73,25 @@ bool Accids::two(accids_t p)
 // static
 bool Accids::contained(enum Accid a, accids_t p)
 {
-    accids_t c = toint(a);
-    return (fst(p) == c || snd(p) == c);
+    if (zero(p))
+    {
+        return false;
+    }
+    else if (single(p))
+    {
+        accids_t c = Accids::toint(a);
+        return (fst(p) == c);
+    }
+    else if (two(p))
+    {
+        accids_t c = Accids::toint(a);
+        return (fst(p) == c || snd(p) == c);
+    }
+    else // should not happen
+    {
+        ERROR("Accids contained: unextected case");
+        return false;
+    }
 }
 
 

@@ -17,7 +17,10 @@ see also `ps13.md` for Meredith's ref
 
 
 
-
+> J. Nagel
+> The chromatic modal scale: Proper spelling for tonal voice-leading
+> JOMAR Press, 2007
+> https://www.jomarpress.com/nagel/articles/ChromaticModal.html
 
 
 
@@ -33,3 +36,13 @@ other open refs:
 
 - `muted.io`
 - https://open.umn.edu/opentextbooks/textbooks/1101 ...
+
+
+
+>  Uzay Bora, Baris Tekin Tezel, Alper Vahaplar
+> An algorithm for spelling the pitches of any musical scale
+> Information Sciences, vol. 472, 2019
+> https://doi.org/10.1016/j.ins.2018.09.015
+
+
+

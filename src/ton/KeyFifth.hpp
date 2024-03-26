@@ -43,6 +43,7 @@ namespace pse {
 /// |  B    |  G#   |    5    |
 /// |  F#   |  D#   |    6    |
 /// |  C#   |  A#   |    7    |
+/// @todo rename KeySig
 class KeyFifth
 {
 

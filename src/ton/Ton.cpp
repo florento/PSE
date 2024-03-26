@@ -192,19 +192,19 @@ bool Ton::undef() const
 
 const enum NoteName Ton::getName() const
 {
-    return Fifths::name(tonic());
+    return Fifths::name(tonicFifth());
 }
 
 
 const enum Accid Ton::getAccidental() const
 {
-    return Fifths::accid(tonic());
+    return Fifths::accid(tonicFifth());
 }
 
 
 int Ton::getPitchClass() const
 {
-    return Fifths::pc(tonic());
+    return Fifths::pc(tonicFifth());
 }
 
 
@@ -218,6 +218,25 @@ int Ton::getRealKS() const
     if (_mode == ModeName::Mixolydian) return _sig - 1 ;
     if (_mode == ModeName::Locrian) return _sig - 2 ;
     else return _sig ;
+}
+
+
+// m is a pitch class
+const enum NoteName Ton::chromaName(int m)
+{
+    assert(0 <= m);
+    assert(m < 12);
+
+    // name of the tonic of scale
+    enum NoteName tonic = getName();
+    // pitch class of the tonic of scale
+    int p = getPitchClass();
+    // degree of m in the chromatic harmonic scale of p
+    size_t deg = (p <= m)?(m - p):(12-p+m);
+    assert(0 <= deg); // debug
+    assert(deg < 12);
+
+    return tonic+CHROMA_NAMES[deg];
 }
 
 
@@ -310,7 +329,7 @@ accids_t Ton::accidScale(int n, ModeName mode) const
 
         default:
         {
-            ERROR("unknown Ton mode");
+            ERROR("Ton accidScale: unknown Ton mode");
             return Accids::encode(); // undef
         }
     }
@@ -390,7 +409,7 @@ enum Accid Ton::accidDia(int n, ModeName mode) const
             
         default:
         {
-            ERROR("unknown Ton mode");
+            ERROR("Ton accidDia: unknown Ton mode");
             return Accid::Undef;
         }
     }
@@ -469,8 +488,6 @@ bool Ton::lead(const enum NoteName& name) const
     else
         return false;
 }
-
-
 
 
 unsigned int Ton::dist(const enum NoteName& name, const enum Accid& accid) const
@@ -618,21 +635,20 @@ const Scale& Ton::chromatic() const
 }
 
 
-int Ton::tonic() const
+int Ton::tonicFifth() const
 {
     int i = 99;
     switch (_mode)
     {
-        case ModeName::Undef:
-            break;
-
         case ModeName::Major:
+        case ModeName::MajorBlues:
             i = fifths();
             break;
 
         case ModeName::Minor:
         case ModeName::MinorNat:
         case ModeName::MinorMel:
+        case ModeName::MinorBlues:
             i = fifths()+3;
             break;
             
@@ -665,9 +681,31 @@ int Ton::tonic() const
             i = fifths();
             break;
 
+     // case ModeName::Augmented:
+     //     i = fifths();
+     //     break;
+     //
+     // case ModeName::Diminished:
+     //     i = fifths();
+     //     break;
+     //
+     // case ModeName::DiminishedHW:
+     //     i = fifths();
+     //     break;
+     //
+     // case ModeName::Whole:
+     //     i = fifths();
+     //     break;
+
+        case ModeName::Undef:
+        {
+            ERROR("Ton tonicFifth: undef mode");
+            break;
+        }
+
         default:
         {
-            ERROR("unknown Ton mode");
+            ERROR("Ton tonicFifth: unexpected mode {}", _mode);
             break;
         }
     }
@@ -681,7 +719,7 @@ int Ton::tonic() const
 
 void Ton::print(std::ostream& o) const
 {
-    int i = tonic();
+    int i = tonicFifth();
     
     if ((-15 <= i) && (i <= 19))
     {
@@ -978,6 +1016,32 @@ const std::array<std::array<accids_t, 7>, 2> Ton::WHOLE_TONE =
 }};
 
 
+/// @todo uncomplete
+const std::array<std::array<accids_t, 7>, 18> Ton::CHROMA =
+{{
+    { _f_, _f_, _Ff, _UU, _f_, _f_, _UU }, // -7  Cb chromatic
+    { _UU, _f_, _f_, _UU, _f_, _f_, _Ff }, // -6  Gb chromatic
+    { _UU, _f_, _f_, _fn, _UU, _f_, _f_ }, // -5  Db chromatic
+    { _fn, _UU, _f_, _n_, _UU, _f_, _f_ }, // -4  Ab chromatic
+    { _n_, _UU, _f_, _n_, _fn, _UU, _f_ }, // -3  Eb chromatic
+    { _n_, _fn, _UU, _n_, _n_, _UU, _f_ }, // -2  Bb chromatic
+    { _n_, _n_, _UU, _n_, _n_, _fn, _UU }, // -1  F  chromatic
+    { _n_, _fn, _fn, _ns, _n_, _fn, _fn }, //  0  C  chromatic
+    { _ns, _n_, _fn, _ns, _n_, _fn, _fn }, //  1  G  chromatic
+    { _n_, _fn, _ns, _ns, _n_, _fn, _ns }, //  2  D  chromatic
+    { _ns, _UU, _n_, _s_, _UU, _n_, _n_ }, //  3  A  chromatic
+    { _s_, _UU, _n_, _s_, _ns, _UU, _n_ }, //  4  E  chromatic
+    { _s_, _ns, _UU, _s_, _s_, _UU, _n_ }, //  5  B  chromatic
+    { _s_, _s_, _UU, _s_, _s_, _ns, _UU }, //  6  F# chromatic
+    { _s_, _s_, _ns, _UU, _s_, _s_, _UU },  // 7  C# chromatic
+    { _s_, _s_, _ns, _UU, _s_, _s_, _UU },  // 8  G# chromatic
+    { _s_, _s_, _ns, _UU, _s_, _s_, _UU },  // 9  D# chromatic
+    { _s_, _s_, _ns, _UU, _s_, _s_, _UU },  // 10 A# chromatic
+}};
+
+
+const std::array<int, 12> Ton::CHROMA_NAMES =
+{{ 0, 1, 1, 2, 2, 3, 3, 4, 5, 5, 6, 6 }};
 
 
 } // end namespace pse

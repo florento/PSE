@@ -239,7 +239,7 @@ void PSB::get_names(size_t id, const Ton& gton,
 {
     unsigned int pm = _enum.midipitch(id);
     assert(0 <= pm);
-    assert(pm <= 127);
+    assert(pm <= 128);
     // chroma in 0..11
     int m = pm % 12;
 
@@ -271,6 +271,9 @@ void PSB::get_names(size_t id, const Ton& gton,
         assert(deg < 12);
         enum NoteName name = scale.name(deg);
         enum Accid accid = scale.accid(deg);
+
+        /// @todo enum NoteName name = gton.chromaName(m);
+        /// @todo enum Accid accid = MidiNum::accid(m, name);
         assert(defined(name));
         assert(defined(accid));
         assert(accid == MidiNum::accid(m, name));

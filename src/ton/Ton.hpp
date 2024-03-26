@@ -51,6 +51,7 @@ namespace pse {
 /// |  6 | F#  | D#   | C##         |
 /// |  7 | C#  | A#   | G##         |
 /// |----|-----|------|-------------|
+/// @todo suppr. _chromatic (use chromaName)
 class Ton : public KeyFifth
 {
 
@@ -105,6 +106,12 @@ public:
     
     inline ModeName getMode() const { return _mode; }
 
+    /// this tonality is undefined.
+    bool undef() const;
+
+    /// this tonality is defined.
+    inline bool defined() const { return !undef(); }
+
     /// note name of this tonality.
     const enum NoteName getName() const;
 
@@ -117,21 +124,21 @@ public:
     /// key signature truly reflecting the notes constituting the considered scale
     int getRealKS() const;
 
-    /// this tonality is undefined.
-    bool undef() const;
-
-    /// this tonality is defined.
-    inline bool defined() const { return !undef(); }
-
+    /// note name corresponding to the given pitch class in the
+    /// chromatic harmonic scale associated to this ton.
+    /// @todo test in TestTon
+    const enum NoteName chromaName(int pc);
+    
     /// accidental in the key signature of this ton for a given pitch name.
     /// @param n an encapsulated note name
     /// @return the number of accidents, in the key signature, for n, in -2..2.
+    /// @todo mv KeySig::accid
     enum Accid accidKey(const enum NoteName& n) const;
 
     /// accidental in the key signature of this ton for a given pitch name.
     /// @param n a note name, in 0..6 (0 is 'C', 6 is 'B').
     /// @return the accidental, in the key signature, for n, in -2..2.
-    /// @todo TBR
+    /// @todo mv KeySig::accid
     enum Accid accidKey(int n) const;
 
     /// accidental in the scale of this ton for a given pitch name.
@@ -176,8 +183,9 @@ public:
     /// note name in the diatonic scale of this ton for a given degree.
     /// @param d a degree in 0..6.
     /// @return the note name in scale, for degree d, in 'C'..'B'.
-    /// @warning only for distonic scales: the mode must be
+    /// @warning only for diatonic scales: the mode must be
     /// Major or Minor or MinorNat or MinorMel.
+    /// @todo TBR unused?
     enum NoteName name(int d) const;
 
     /// accidental in the diatonic scale of this ton for a given degree.
@@ -195,6 +203,9 @@ public:
     /// It is equivalent to accidKey(n) != accidDia(n)
     /// @param n a pitch name, in 0..6 (0 is 'C', 6 is 'B').
     /// @return wether the note n is a lead in this Ton.
+    /// @warning only for diatonic scales: the mode must be
+    /// Major or Minor or MinorNat or MinorMel.
+    /// @todo TBR unused?
     bool lead(const enum NoteName& n) const;
 
     /// distance, in the array of fifths, between the note
@@ -271,12 +282,13 @@ private: // convenience functions
     int init_KSofMode(int ks, ModeName mode);
     
     /// number of the tonic of this ton in the array of fifths.
-    int tonic() const;
+    int tonicFifth() const;
     
     /// accidental in the scale of this ton for a given pitch name.
     /// @param n a note name, in 0..6 (0 is 'C', 6 is 'B').
     /// @param mode a mode can be different from the one of this ton.
     /// @return the accidental, in scale, for n, in -2..2.
+    /// @todo TBR
     enum Accid accidDia(int n, ModeName mode) const;
         
     /// accidental in the scale of this ton for a given pitch name.
@@ -410,6 +422,15 @@ private: // tables
     /// for every pitch name in 0..6 (0 is 'C', 6 is 'B'),
     /// for 3 key signatures in -1..1
     static const std::array<std::array<accids_t, 7>, 3> DIMINISHED_HW;
+    
+    /// list of accidents (pairs) in the chromatic harmonic scale,
+    /// for every pitch name in 0..6 (0 is 'C', 6 is 'B'),
+    /// for every key signature in -7..10.
+    static const std::array<std::array<accids_t, 7>, 18> CHROMA;
+    
+    /// list of dist, in names, from tonic, according to the number of
+    /// semitons (from tonic).
+    static const std::array<int, 12> CHROMA_NAMES;
         
 };
 

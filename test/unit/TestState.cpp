@@ -130,3 +130,31 @@ TEST(PSState, As_min)
     EXPECT_EQ(s.dist(s0), 1);
     EXPECT_EQ(s0.dist(s), 1);
 }
+
+TEST(PSState, C_Blues_maj)
+{
+    pse::PSState s(pse::Ton(0, pse::ModeName::MajorBlues));
+    
+    
+    EXPECT_TRUE(pse::Accids::single(s.accids(pse::NoteName::C)));
+    EXPECT_TRUE(pse::Accids::contained(pse::Accid::Natural, 
+                                       s.accids(pse::NoteName::C)));
+    EXPECT_TRUE(pse::Accids::single(s.accids(pse::NoteName::D)));
+    EXPECT_TRUE(pse::Accids::contained(pse::Accid::Natural, 
+                                       s.accids(pse::NoteName::D)));
+    EXPECT_TRUE(pse::Accids::two(s.accids(pse::NoteName::E))); // 2 choices
+    EXPECT_TRUE(pse::Accids::contained(pse::Accid::Flat,
+                                       s.accids(pse::NoteName::E)));
+    EXPECT_TRUE(pse::Accids::contained(pse::Accid::Natural, 
+                                       s.accids(pse::NoteName::E)));
+    EXPECT_TRUE(pse::Accids::zero(s.accids(pse::NoteName::F))); // undef
+    EXPECT_TRUE(pse::Accids::single(s.accids(pse::NoteName::G)));
+    EXPECT_TRUE(pse::Accids::contained(pse::Accid::Natural, 
+                                       s.accids(pse::NoteName::G)));
+    EXPECT_TRUE(pse::Accids::single(s.accids(pse::NoteName::A)));
+    EXPECT_TRUE(pse::Accids::contained(pse::Accid::Natural, 
+                                       s.accids(pse::NoteName::A)));
+    EXPECT_TRUE(pse::Accids::zero(s.accids(pse::NoteName::B))); // undef
+
+}
+

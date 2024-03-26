@@ -21,10 +21,10 @@
 namespace pse {
 
 
-/// array of fifths, with double sharps and flats.
+/// static array of fifths, with double sharps and flats.
 /// every note is presented with 2 values :
-/// - name in 0..6 for C, D, E, F, G, A, B (see table Pitch::name_to_int)
-/// - alteration in -2..2
+/// - name : NoteName in 0..6 for C, D, E, F, G, A, B (see table Pitch::name_to_int)
+/// - alteration : Accid in -3..3
 ///
 /// Fbb Cbb Gbb Dbb Abb Ebb Bbb Fb Cb Gb Db Ab Eb Bb
 /// F C G D A E B F# C# G# D# A# E# B# F## C## G## D## A## E## B##

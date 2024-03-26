@@ -115,7 +115,7 @@ void CostAD::update(const enum NoteName& name,
         }
     }
     
-    if (lton.defined() && (lton.accidDia(name) != accid))
+    if (lton.defined() && (!Accids::contained(accid, lton.accidScale(name))))
     {
         switch (accid)
         {
@@ -143,7 +143,7 @@ void CostAD::update(const enum NoteName& name,
         _chromharm+=1;
     }
     
-    if (print && (gton.accidDia(name) != accid) &&
+    if (print && (!Accids::contained(accid, gton.accidScale(name))) &&
             (((name == NoteName::C) && (accid == Accid::Flat)) ||
              ((name == NoteName::B) && (accid == Accid::Sharp)) ||
              ((name == NoteName::F) && (accid == Accid::Flat)) ||
@@ -184,7 +184,7 @@ void CostAD::update_tonale(const enum NoteName& name,
     //    }
     //}
     
-    if ((print) && (gton.accidDia(name) != accid)) //&& (boo))
+    if ((print) && (!Accids::contained(accid, gton.accidScale(name)))) //&& (boo))
     {
         switch (accid)
         {
@@ -228,7 +228,7 @@ void CostAD::update_tonale(const enum NoteName& name,
     // no print : print flag is related to gton, not for lton
     
     //boo=true
-    if (lton.defined() && (lton.accidDia(name) != accid))
+    if (lton.defined() && (!Accids::contained(accid, lton.accidScale(name))))
     {
         if (lton.getMode() == ModeName::Minor)
         {
@@ -270,7 +270,7 @@ void CostAD::update_tonale(const enum NoteName& name,
         _chromharm+=1;
     }
     
-    if (print && (gton.accidDia(name) != accid) &&
+    if (print && (!Accids::contained(accid, gton.accidScale(name))) &&
             (((name == NoteName::C) && (accid == Accid::Flat)) ||
              ((name == NoteName::B) && (accid == Accid::Sharp)) ||
              ((name == NoteName::F) && (accid == Accid::Flat)) ||
@@ -300,7 +300,7 @@ void CostAD::update99(const enum NoteName& name,
     // update cost when accident for the name was updated
     // discount for lead degree
     // !(gton.lead()  &&  gton.accidDia(name) == accid)
-    if (gton.accidDia(name) != accid)
+    if (!Accids::contained(accid, gton.accidScale(name)))
     {
         
         // not used (_accid of type size_t is incremented of 0)
@@ -354,7 +354,7 @@ void CostAD::update99(const enum NoteName& name,
 
     // was : if (lton.defined() && print && (lton.accidDia(name) != accid))
     // no print : print flag is related to gton, not for lton
-    if (lton.defined() && print && (lton.accidDia(name) != accid))
+    if (lton.defined() && print && (!Accids::contained(accid, lton.accidScale(name))))
     {
         if (lton.lead(name) &&
             (lton.getMode() == ModeName::Minor) &&
@@ -455,7 +455,7 @@ void CostAD::update99(const enum NoteName& name,
 //    // whether the cost has to be changed
 //    //    bool cc = false;
 //    //    if (gton.lead(name)) // sensible
-//    //        cc = print && (gton.accidDia(name) != accid);
+//    //        cc = print && (!Accids::contained(accid, gton.accidScale(name)));
 //    //    else
 //    //        cc = print;
 //

@@ -128,7 +128,8 @@ void CostA::update(const enum NoteName& name, const enum Accid& accid,
         // afin de déduire la meilleure tonalité locale,
         // il vaut mieux ne plus se poser la question du print :
         // !(gton.lead()  &&  gton.accidDia(name) == accid)
-        if (lton.accidDia(name) != accid)
+        // (lton.accidDia(name) != accid)
+        if (!Accids::contained(accid, lton.accidScale(name)))
         {
             updateAccid(accid);
         }
@@ -137,8 +138,9 @@ void CostA::update(const enum NoteName& name, const enum Accid& accid,
     // @todo suppr. optional discount for lead degree
     else if (print)
     {
-          // !(gton.lead()  &&  gton.accidDia(name) == accid)
-        if ((! _discount)  || (gton.accidDia(name) != accid))
+        // !(gton.lead()  &&  gton.accidDia(name) == accid)
+        // ((! _discount)  || (gton.accidDia(name) != accid))
+        if ((! _discount)  || !Accids::contained(accid, gton.accidScale(name)))
         {
             updateAccid(accid);
         }
