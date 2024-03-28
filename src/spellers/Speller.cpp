@@ -261,7 +261,7 @@ bool Speller::evalTable(int ctype, bool tonal, bool chromatic)
 //        _seed = new CostA(true); // with discount
 //    }
     
-    const Algo algo(chromatic?Algo::PS14:Algo::PSE);
+    const Algo algo(chromatic?Algo::PSD:Algo::PSE);
     _table = new PST(algo, sampleCost(ctype), _index, _enum, tonal, _debug);
 
     return true;
@@ -290,7 +290,7 @@ bool Speller::revalTable(int ctype, bool tonal, bool chromatic)
     
     assert(_table);
     PST* table_pre = _table;
-    const Algo algo(chromatic?Algo::PS14:Algo::PSE);
+    const Algo algo(chromatic?Algo::PSD:Algo::PSE);
     
     
     if (_global)

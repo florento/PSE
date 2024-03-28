@@ -29,7 +29,7 @@ std::string tostring(const Algo& a)
         case Algo::PS13:
             return "PS13";
 
-        case Algo::PS14:
+        case Algo::PSD:
             return "PS14";
 
         case Algo::RewritePassing:

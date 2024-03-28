@@ -186,6 +186,12 @@ def add_tons(tons, sp):
     # default tons of module (30)
     if tons == 0: 
         return                            
+    # major, minor, KS in [-5 .. 6]
+    elif tons == 24:    
+        for k in range(-5, 7):            
+            sp.add_ton(k, pse.Mode.Major, True) # can be global
+            sp.add_ton(k, pse.Mode.Minor, True) 
+        sp.close_tons(True)   
     # Bach DWK
     elif tons == 25:    
         # maj key signature in [-4 .. 7]       
@@ -197,19 +203,19 @@ def add_tons(tons, sp):
         for k in range(-6, 7):           
             sp.add_ton(k, pse.Mode.Minor, True) 
         sp.close_tons(True)    
-    # key signature in [-6 .. 6]
+    # major, minor, KS in [-6 .. 6]
     elif tons == 26:
         for k in range(-6, 7):            
             sp.add_ton(k, pse.Mode.Major, True)
             sp.add_ton(k, pse.Mode.Minor, True)
         sp.close_tons(True)    
-    # key signature in [-7 .. 7]
+    # major, minor, KS in [-7 .. 7]
     elif tons == 30:
         for k in range(-7, 8):     
             sp.add_ton(k, pse.Mode.Major, True)
             sp.add_ton(k, pse.Mode.Minor, False)
         sp.close_tons(True)    
-    # key signature in [-6 .. 6], jazz antic modes
+    # major, minor, jazz antic modes, KS in [-6 .. 6] 
     elif tons == 104:
         for k in range(-6, 7):            
             sp.add_ton(k, pse.Mode.Ionian,     True)
@@ -221,7 +227,7 @@ def add_tons(tons, sp):
             sp.add_ton(k, pse.Mode.Locrian,    False)
             sp.add_ton(k, pse.Mode.Minor,      True)
         sp.close_tons(False)    
-    # key signature in [-7 .. 7], jazz antic modes
+    # major, minor, jazz antic modes, KS in [-7 .. 7] 
     elif tons == 135:
         for k in range(-7, 8):      
             sp.add_ton(k, pse.Mode.Major,      True)
@@ -775,13 +781,16 @@ def spellable(part):
     #    return False        
     return True
 
-def spell(code, ln, k0, stat, debug):
+def speller(code, ln, k0, stat, fdebug):
     if (code == "PS13"):
-        return spell_PS13(ln, debug)
+        return speller_PS13(ln, stat, fdebug)
+    if (code == "PS24T1D"):
+        return speller_T1(notes=ln, stats=stat, nbtons=24, 
+                          cost_type=00, tonal=False, det=True, debug=fdebug)
     else:
         print("Unknown algo code")
         
-def spell_PS13(ln, stat, debug):
+def speller_PS13(ln, stat, debug):
     print('algo PS13', end='\n', flush=True)
     kpre=33
     kpost=23
@@ -798,8 +807,20 @@ def spell_PS13(ln, stat, debug):
     stat.stop_timer()
     return sp
 
-
-
+def speller_T1(notes, stats, nbtons, cost_type, tonal, det, debug):
+    print('algo PSD 1 Table', end='\n', flush=True)
+    sp = pse.Speller()
+    sp.debug(debug)  
+    # build the ton index
+    add_tons(nbtons, sp)         
+    # feed speller with input notes
+    for (n, b, s) in notes:   # note, bar number, simultaneous flag
+        sp.add(midi=n.pitch.midi, bar=b, simultaneous=s)
+    print('spelling...', end='\n', flush=True)
+    stats.start_timer()
+    sp.eval_table(cost_type, tonal, det)
+    stats.stop_timer()
+    return sp
 
 
 
@@ -856,7 +877,7 @@ def eval_part(part, stat, code, debug=False, mark=False):
     print(len(ln), 'notes,', count_measures(part), 'bars,', end=' ')
     # create and activate speller
     print('spelling...', end='\n', flush=True)
-    sp = spell(code, ln, k0, stat, debug)
+    sp = speller(code, ln, k0, stat, debug)
     print('spell finished', end='\n', flush=True)
     # extract estimated global ton from speller
     (gt, i) = get_global(sp, k0)
@@ -910,8 +931,8 @@ def eval_part_algo(part, stat,
         sp = pse.PS13()
         sp.set_Kpre(kpre)
         sp.set_Kpost(kpost)
-    elif algo == pse.Algo_PS14:
-        print('algo PS14', end='\n', flush=True)
+    elif algo == pse.Algo_PSD:
+        print('algo PS14', nbtons, 'tons', end='\n', flush=True)
         sp = pse.PS14()
         add_tons(nbtons, sp)
     else:
@@ -931,7 +952,7 @@ def eval_part_algo(part, stat,
     print('spell finished', end='\n', flush=True)
     # extract tonality estimation results
     goodgtindex=0
-    if (algo == pse.Algo_PSE or algo == pse.Algo_PS14):
+    if (algo == pse.Algo_PSE or algo == pse.Algo_PSD):
         nbg = sp.globals0()
         ton_est = sp.global_ton(0)
         #print(ton_est)
@@ -985,7 +1006,7 @@ def eval_part_algo(part, stat,
     # annotations
     if mark:
         anote_rediff(ln, ld0, ld1) # anote_diff(ln, ld0, 'red')
-        if (algo == pse.Algo_PSE or algo == pse.Algo_PS14):
+        if (algo == pse.Algo_PSE or algo == pse.Algo_PSD):
             anote_local_part(part, sp, sp.global_ton0(goodgtindex))         
     return (k0, ton_est, len(ln), ld1)
 

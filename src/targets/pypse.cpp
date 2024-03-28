@@ -32,9 +32,9 @@ PYBIND11_MODULE(pse, m)
     m.attr("excuseme") = what;
 
     py::enum_<enum pse::Algo>(m, "Algo", "Pitch Spelling Algo")
-        .value("Algo_PSE",   pse::Algo::PSE,   "Engraving based Pitch Spelling")
-        .value("Algo_PS13",  pse::Algo::PS13,  "PS 13")
-        .value("Algo_PS14",  pse::Algo::PS14,  "PS 14")
+        .value("Algo_PSE",   pse::Algo::PSE, "Exhaustive Pitch Spelling")
+        .value("Algo_PSD",  pse::Algo::PSD, "Deterministic Pitch Spelling")
+        .value("Algo_PS13",  pse::Algo::PS13, "Meredith;sPS 13")
         .value("Algo_Undef", pse::Algo::Undef, "Undef")
         .export_values();
 
@@ -137,6 +137,7 @@ PYBIND11_MODULE(pse, m)
              // py::arg("ton"), py::arg("bar"))
         .def("local_note", &pse::Speller::localNote, "estimated local tonality for a note");
    
+    // TBR ?
     py::class_<pse::PSE>(m, "PSE")
         .def(py::init<>(), "Spell Checker PSE")
         .def("algo", &pse::PSE::algo, "name of spelling algorithm")
@@ -224,6 +225,7 @@ PYBIND11_MODULE(pse, m)
         .def("globals", &pse::PS13::globals, "the glocal tonality candidates have been estimated")
         .def("global_ton", &pse::PS13::global, "estimated global tonality (undef)");
     
+    // TBR ?
     py::class_<pse::PS14>(m, "PS14")
         .def(py::init<>(), "Spell Checker PS14")
         .def("algo", &pse::PS14::algo, "name of spelling algorithm")

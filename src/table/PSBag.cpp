@@ -61,7 +61,7 @@ void PSB::init(const Cost& seed, const Ton& ton, const Ton& lton, bool tonal)
     // at least one note, the bag cannot be empty.
     assert(_enum.first() < _enum.stop());
 
-    assert((_algo == Algo::PSE) || (_algo == Algo::PS14));
+    assert((_algo == Algo::PSE) || (_algo == Algo::PSD));
     //Transition transition(a, _enum);
     
     // backup of configurations during construction
@@ -243,7 +243,7 @@ void PSB::get_names(size_t id, const Ton& gton,
     // chroma in 0..11
     int m = pm % 12;
 
-    // 3 potential successors in algo PSE
+    // 3 potential successors in exhaustive search algo PSE
     // if ((_algo == Algo::PSE0) || (_algo == Algo::PSE1))
     if (_algo == Algo::PSE)
     {
@@ -260,8 +260,8 @@ void PSB::get_names(size_t id, const Ton& gton,
             //prints.push(false); // no force print
         }
     }
-    // only 1 potential successor in algo PS14
-    else if (_algo == Algo::PS14)
+    // only 1 potential successor in determonistic variant PSD
+    else if (_algo == Algo::PSD)
     {
         // const Scale& scale = gton.chromatic();
         // int p = scale.pitchClass(0); // pitch class of tonic of scale

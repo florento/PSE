@@ -25,20 +25,15 @@ enum class Algo
     /// Unknown
     Undef,
     
-    /// algo PSE, both passes
+    /// exhaustive PSE, explore all paths for the construction of tables.
     PSE,
-    
-    // algo PSE, step 0
-    // PSE0,
 
-    // algo PSE, step 1
-    // PSE1,
+    /// deterministic restriction os PSE
+    /// (paths conform to chromanic harmonic scale).
+    PSD,
 
     /// Meredith's PS13
     PS13,
-
-    /// specialisation or Meredith's PS13
-    PS14,
     
     /// rewriting of passing notes
     RewritePassing

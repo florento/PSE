@@ -207,7 +207,7 @@ void PSV::init_psbs(const Cost& seed, bool tonal)
               enumerator().first(), enumerator().stop(), ton(i));
         assert(_psbs[i] == nullptr);
         const Ton& toni = ton(i);
-        if (_algo == Algo::PSE || _algo == Algo::PS14)
+        if (_algo == Algo::PSE || _algo == Algo::PSD)
         {
             // arg local ton is ignored
             _psbs[i] = std::shared_ptr<const PSB>(new
@@ -249,7 +249,7 @@ void PSV::init_psbs(const Cost& seed,
         const Ton& ltoni = ton(locals.at(i));
         assert(ltoni.defined());
         // PS Bag is empty if first() = last()
-        if (_algo == Algo::PSE || _algo == Algo::PS14)
+        if (_algo == Algo::PSE || _algo == Algo::PSD)
         {
             // arg local ton is ignored
             _psbs[i] = std::shared_ptr<const PSB>(new

@@ -106,6 +106,7 @@ private: // data
     // const Ton& _ton;
 
     /// name  of algorithm to consider for computing the transitions.
+    /// @todo replace by flag: exhaustive or deterministic choice of names
     Algo _algo;
     
     /// enumerator of notes for computing transitions between configs.

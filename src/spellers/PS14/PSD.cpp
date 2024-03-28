@@ -15,7 +15,7 @@ namespace pse {
 
 
 PS14::PS14(size_t nbTons, bool dflag):
-Speller2Pass(Algo::PS14, nbTons, dflag)
+Speller2Pass(Algo::PSD, nbTons, dflag)
 { }
 
 

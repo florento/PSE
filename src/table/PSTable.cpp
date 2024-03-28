@@ -27,7 +27,7 @@ _debug(dflag)
 {
     TRACE("new PS Table {}-{} for {}", e.first(), e.stop(), a);
        
-    if (a == Algo::PSE || a == Algo::PS14)
+    if (a == Algo::PSE || a == Algo::PSD)
     {
         bool status = init_psvs(seed, tonal);
         if (status == false)
@@ -90,7 +90,7 @@ _debug(dflag)
           _enum.first(), _enum.stop(), _algo);
     assert(locals.rowNb() == _index.size());
     assert(locals.columnNb() == tab.columnNb());
-    assert(_algo == Algo::PSE || _algo == Algo::PS14);
+    assert(_algo == Algo::PSE || _algo == Algo::PSD);
     bool status = init_psvs(tab, seed, globals, locals, tonal);
     if (status == false)
     {
