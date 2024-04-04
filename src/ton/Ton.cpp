@@ -25,7 +25,7 @@ namespace pse {
 int Ton::init_KSofMode(int ks, ModeName mode)
 {
     assert(-7 <= ks);
-    assert(ks <= 7);
+    assert(ks <= 10); // chromatic Ton uses -7 to 10
     
     switch (mode)
     {
@@ -218,6 +218,22 @@ int Ton::getRealKS() const
     if (_mode == ModeName::Mixolydian) return _sig - 1 ;
     if (_mode == ModeName::Locrian) return _sig - 2 ;
     else return _sig ;
+}
+
+
+// @todo more clever case analysis
+bool Ton::equivalent(const Ton& rhs, bool tonal) const
+{
+    for (int n = 0; n < 7; ++n)
+    {
+        // tonal mode
+        if (tonal && (accidKey(n) != rhs.accidKey(n)))
+            return false;
+        // modal mode
+        else if (!tonal && (accidScale(n) != rhs.accidScale(n)))
+            return false;
+    }
+    return true;
 }
 
 

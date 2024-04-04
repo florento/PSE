@@ -14,7 +14,7 @@
 
 #include <iostream>
 #include <assert.h>
-
+#include <functional>
 
 
 namespace pse {

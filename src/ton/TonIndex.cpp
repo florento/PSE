@@ -21,6 +21,8 @@ const size_t TonIndex::FAILED = MAXTONS+2;
 
 TonIndex::TonIndex(size_t n):
 _tons(), // vector initially empty
+_repr_tonal(),
+_repr_modal(),
 _rankWeber(),
 _closed(false),
 _WeberTonal(true)
@@ -105,6 +107,33 @@ const Ton& TonIndex::ton(size_t i) const
 {
     assert(i < _tons.size());
     return _tons.at(i).first;
+}
+
+
+size_t TonIndex::irepresentative(size_t i, bool tonal) const
+{
+    size_t j = _tons.size();
+    if (tonal)
+    {
+        assert(i < _repr_tonal.size());
+        j = _repr_tonal.at(i);
+    }
+    else
+    {
+        assert(i < _repr_modal.size());
+        j = _repr_modal.at(i);
+    }
+
+    assert(j < _tons.size());
+    return j;
+}
+
+
+const Ton& TonIndex::representative(size_t i, bool tonal) const
+{
+    size_t j = irepresentative(i, tonal);
+    assert(j < _tons.size());
+    return _tons.at(j).first;
 }
 
 
@@ -209,9 +238,38 @@ void TonIndex::add(const Ton& ton, bool global)
     }
     
     if (_tons.size() < MAXTONS)
+    {
         _tons.push_back(std::make_pair(ton, global)); // copy
+    }
     else
+    {
         ERROR("TonIndex add: array of tons overfull");
+        return;
+    }
+    
+    // search for earlier equivalent tons
+    assert(!_tons.empty());
+    size_t last = _tons.size() - 1; // index of last ton added to this index
+    for (size_t i = 0; i < _tons.size(); ++i)
+    {
+        const Ton& toni = _tons.at(i).first;
+        const Ton& ton = _tons.back().first; // last ton added
+        if ((toni == ton) || toni.equivalent(ton, false)) // modal equiv
+        {
+            _repr_modal.push_back(i);
+            _repr_tonal.push_back(i);
+        }
+        else if (toni.equivalent(ton, true))
+        {
+            _repr_modal.push_back(last);
+            _repr_tonal.push_back(i);
+        }
+        else
+        {
+            _repr_modal.push_back(last);
+            _repr_tonal.push_back(last);
+        }
+    }
 }
 
 

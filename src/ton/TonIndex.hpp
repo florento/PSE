@@ -58,7 +58,7 @@ public:
     /// the empty array of tonalities (case 0) is not closed.
     /// All the others are closed.
     TonIndex(size_t nb=0);
-
+    
     /// destructor.
     virtual ~TonIndex();
     
@@ -72,6 +72,18 @@ public:
     /// @param i an index in this array of tonalities.
     /// must be smaller than size().
     const Ton& ton(size_t i) const;
+
+    /// Tonal or modal representative Ton  in the equivalence class of the Ton af the given index
+    /// in this array of tonalities.
+    /// @param i an index in this array of tonalities. must be smaller than size().
+    /// @param tonal mode: tonal or modal, for the construction of initial state (from the ton at i).
+    const Ton& representative(size_t i, bool tonal) const;
+
+    /// Index of the tonal or modal representative Ton  in the equivalence class of the Ton
+    /// af the given index in this array of tonalities.
+    /// @param i an index in this array of tonalities. must be smaller than size().
+    /// @param tonal mode: tonal or modal, for the construction of initial state (from the ton at i).
+    size_t irepresentative(size_t i, bool tonal) const;
 
     /// Whether the tonality at the given index can be considered as global.
     /// @param i an index in this array of tonalities.
@@ -144,7 +156,15 @@ private: // data
     /// every tonality is associated a flag saying whether
     /// it can be considered as global.
     std::vector<std::pair<const Ton, bool>> _tons;
-    
+
+    /// vector of index of representative of each ton,
+    /// in the class of tonal equivalent tons.
+    std::vector<size_t> _repr_tonal;
+
+    /// vector of index of representative of each ton,
+    /// in the class of modal equivalent tons.
+    std::vector<size_t> _repr_modal;
+
     /// ranks of ton wrt Weber distance:
     /// _rankWeber[i, j] is the rank of ton i in this index, wrt to
     /// to the distance to ton j in this index.
@@ -192,7 +212,6 @@ private:
     /// a ton in the given mode can be considered global.
     /// for automatically constructed arrays.
     static bool global(const ModeName& mode);
-    
     
     // static bool pcompare(const std::pair <size_t, unsigned int>& a,
     //                      const std::pair <size_t, unsigned int>& b);

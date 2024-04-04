@@ -123,7 +123,15 @@ public:
     
     /// key signature truly reflecting the notes constituting the considered scale
     int getRealKS() const;
-    
+
+    /// this ton is equivalent to the given one wrt best path for costA (accids only) 
+    /// in tonal or modal mode.
+    /// equivalent means the tons will produce the same PSState in modal mode.
+    /// @param rhs other ton to be compered to.
+    /// @param tonal mode: tonal or modal, for the construction of initial state (from this ton).
+    /// @see PSState
+    bool equivalent(const Ton& rhs, bool tonal) const;
+
     /// accidental in the key signature of this ton for a given pitch name.
     /// @param n an encapsulated note name
     /// @return the number of accidents, in the key signature, for n, in -2..2.

@@ -246,7 +246,7 @@ private: // data
     // @todo rm or estimated()
     // bool _estimated;
 
-private:
+private: // convenience functions
 
     /// fill the vector _psbs with PS Bags constructed with the notes enumerated.
     /// @param seed cost value of specialized type used to create a null cost

@@ -63,6 +63,7 @@ _psbs(i.size(), nullptr),
 //_local_cands(), // emptyset
 _tiebfail(0)
 {
+    ERROR("this PSV constructor should not be called");
     // give the vector their definitive size (to use as arrays)
     //_psbs.assign(_index.size(), nullptr);
     //_psb_total.assign(_index.size(), nullptr);
@@ -84,6 +85,7 @@ _psbs(i.size(), nullptr),
 //_local_cands(), // emptyset
 _tiebfail(0)
 {
+    ERROR("this PSV constructor should not be called");
     //_psbs.assign(_index.size(), nullptr);
     //_psb_total.assign(_index.size(), nullptr);
     //_local.assign(_index.size(), TonIndex::UNDEF);
@@ -209,9 +211,26 @@ void PSV::init_psbs(const Cost& seed, bool tonal)
         const Ton& toni = ton(i);
         if (_algo == Algo::PSE || _algo == Algo::PSD)
         {
-            // arg local ton is ignored
-            _psbs[i] = std::shared_ptr<const PSB>(new
-                       PSB(_algo, seed, enumerator(), toni, tonal));
+            assert(i < _psbs.size());
+            assert(_psbs.at(i) == nullptr);
+            size_t j = _index.irepresentative(i, tonal);
+            assert(j < _index.size());
+            // compute PSB of i
+            if (j == i)
+            {
+                // arg local ton is ignored
+                _psbs[i] = std::shared_ptr<const PSB>(new
+                        PSB(_algo, seed, enumerator(), toni, tonal));
+            }
+            // optimization: do not rebuilt PSB
+            // when it was computed for an equivalent ton
+            // @todo only when see is CostA
+            else
+            {
+                assert(j < _psbs.size());
+                assert(_psbs.at(j) != nullptr);
+                _psbs[i] = _psbs[j]; // shred_ptr copy
+            }
         }
         else
         {

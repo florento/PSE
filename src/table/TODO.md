@@ -40,17 +40,22 @@ optimisation calcul de la table 1
 - en mode modal, certains tons sont équivalents pour calcul de la table1 (sans ton locaux)
   e.g. C maj (KS=0), D dorien (KS=-1), E phrygien (KS=1) *etc*
   car ils donnent le même état initial (cf. les tables de `Ton.cpp`)
+  
 - [ ] limiter le calcul des  meilleurs chemin à un représentant
   e.g. plus petit index dans le `TonIndex`
-- [ ] ajouter la relation d'équivalence dans le `TonIndex` ? 
+  
+- [x] equivalence de Tons (même PSState initial)
+  fonction binaire d'équivalence de tons ?
+
+- [x] ajouter la relation d'équivalence dans le `TonIndex` ? 
   pour tout ton qui n'est pas un représentant, pointer l'index de son représentant
   `add` : pour tout ton ajouté, vérifier (depuis 0) si il a un équivalent (et pointer le premier trouvé)
-- [ ] fonction binaire d'équivalence de tons ?
-- [ ] calcul des colonnes (`PSV`) : 
-  - ~~par copie (des `PSB`)~~ 
-  - ou pointeurs intelligents (partagés): le contenu devient un vecteur de `shared_ptr<PSB>`
-  - ou références (sur `PSB` représentant)
-  - ou redéfinir `bag(i)` = `bag(representant(i))`
+  
+- [x] calcul des colonnes (`PSV`) : 
+  - [ ] ~~par copie (des `PSB`)~~ 
+  - [x] ou pointeurs intelligents (partagés): le contenu devient un vecteur de `shared_ptr<PSB>`
+  - [ ] ou références (sur `PSB` représentant)
+  - [ ] ou redéfinir `bag(i)` = `bag(representant(i))`
 
 - c'est vrai aussi en mode tonal, pour le calcul de la table 1
 

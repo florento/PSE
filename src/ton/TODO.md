@@ -7,6 +7,3 @@
   → replace by auxiliary table of pointers in `TonIndex` ?
 
 
-
-
-
