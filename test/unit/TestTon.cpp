@@ -32,14 +32,22 @@ TEST(Ton, C_maj)
     EXPECT_EQ(t.getName(), pse::NoteName::C);
     EXPECT_EQ(t.getAccidental(), pse::Accid::Natural);
     EXPECT_EQ(t.getMode(), pse::ModeName::Major);
-    
-    EXPECT_EQ(t.accidDia(pse::NoteName::C), pse::Accid::Natural);
-    EXPECT_EQ(t.accidDia(pse::NoteName::D), pse::Accid::Natural);
-    EXPECT_EQ(t.accidDia(pse::NoteName::E), pse::Accid::Natural);
-    EXPECT_EQ(t.accidDia(pse::NoteName::F), pse::Accid::Natural);
-    EXPECT_EQ(t.accidDia(pse::NoteName::G), pse::Accid::Natural);
-    EXPECT_EQ(t.accidDia(pse::NoteName::A), pse::Accid::Natural);
-    EXPECT_EQ(t.accidDia(pse::NoteName::B), pse::Accid::Natural);
+    EXPECT_EQ(t.getRealKS(), 0);
+
+    EXPECT_EQ(t.accidScale(pse::NoteName::C), 
+              pse::Accids::encode(pse::Accid::Natural));
+    EXPECT_EQ(t.accidScale(pse::NoteName::D), 
+              pse::Accids::encode(pse::Accid::Natural));
+    EXPECT_EQ(t.accidScale(pse::NoteName::E), 
+              pse::Accids::encode(pse::Accid::Natural));
+    EXPECT_EQ(t.accidScale(pse::NoteName::F), 
+              pse::Accids::encode(pse::Accid::Natural));
+    EXPECT_EQ(t.accidScale(pse::NoteName::G), 
+              pse::Accids::encode(pse::Accid::Natural));
+    EXPECT_EQ(t.accidScale(pse::NoteName::A), 
+              pse::Accids::encode(pse::Accid::Natural));
+    EXPECT_EQ(t.accidScale(pse::NoteName::B), 
+              pse::Accids::encode(pse::Accid::Natural));
 }
 
 
@@ -52,6 +60,7 @@ TEST(Ton, C_min)
     EXPECT_EQ(t.getName(), pse::NoteName::C);
     EXPECT_EQ(t.getAccidental(), pse::Accid::Natural);
     EXPECT_EQ(t.getMode(), pse::ModeName::Minor);
+    EXPECT_EQ(t.getRealKS(), -3);
     
     EXPECT_EQ(t.accidKey(pse::NoteName::C), pse::Accid::Natural);
     EXPECT_EQ(t.accidKey(pse::NoteName::D), pse::Accid::Natural);
@@ -61,13 +70,20 @@ TEST(Ton, C_min)
     EXPECT_EQ(t.accidKey(pse::NoteName::A), pse::Accid::Flat);
     EXPECT_EQ(t.accidKey(pse::NoteName::B), pse::Accid::Flat);
     
-    EXPECT_EQ(t.accidDia(pse::NoteName::C), pse::Accid::Natural);
-    EXPECT_EQ(t.accidDia(pse::NoteName::D), pse::Accid::Natural);
-    EXPECT_EQ(t.accidDia(pse::NoteName::E), pse::Accid::Flat);
-    EXPECT_EQ(t.accidDia(pse::NoteName::F), pse::Accid::Natural);
-    EXPECT_EQ(t.accidDia(pse::NoteName::G), pse::Accid::Natural);
-    EXPECT_EQ(t.accidDia(pse::NoteName::A), pse::Accid::Flat);
-    EXPECT_EQ(t.accidDia(pse::NoteName::B), pse::Accid::Natural);
+    EXPECT_EQ(t.accidScale(pse::NoteName::C), 
+              pse::Accids::encode(pse::Accid::Natural));
+    EXPECT_EQ(t.accidScale(pse::NoteName::D), 
+              pse::Accids::encode(pse::Accid::Natural));
+    EXPECT_EQ(t.accidScale(pse::NoteName::E), 
+              pse::Accids::encode(pse::Accid::Flat));
+    EXPECT_EQ(t.accidScale(pse::NoteName::F), 
+              pse::Accids::encode(pse::Accid::Natural));
+    EXPECT_EQ(t.accidScale(pse::NoteName::G), 
+              pse::Accids::encode(pse::Accid::Natural));
+    EXPECT_EQ(t.accidScale(pse::NoteName::A), 
+              pse::Accids::encode(pse::Accid::Flat));
+    EXPECT_EQ(t.accidScale(pse::NoteName::B), 
+              pse::Accids::encode(pse::Accid::Natural));
 }
 
 
@@ -80,14 +96,22 @@ TEST(Ton, D_maj)
     EXPECT_EQ(t.getName(), pse::NoteName::D);
     EXPECT_EQ(t.getAccidental(), pse::Accid::Natural);
     EXPECT_EQ(t.getMode(), pse::ModeName::Major);
+    EXPECT_EQ(t.getRealKS(), 2);
     
-    EXPECT_EQ(t.accidDia(pse::NoteName::D), pse::Accid::Natural);
-    EXPECT_EQ(t.accidDia(pse::NoteName::E), pse::Accid::Natural);
-    EXPECT_EQ(t.accidDia(pse::NoteName::F), pse::Accid::Sharp);
-    EXPECT_EQ(t.accidDia(pse::NoteName::G), pse::Accid::Natural);
-    EXPECT_EQ(t.accidDia(pse::NoteName::A), pse::Accid::Natural);
-    EXPECT_EQ(t.accidDia(pse::NoteName::B), pse::Accid::Natural);
-    EXPECT_EQ(t.accidDia(pse::NoteName::C), pse::Accid::Sharp);
+    EXPECT_EQ(t.accidScale(pse::NoteName::D), 
+              pse::Accids::encode(pse::Accid::Natural));
+    EXPECT_EQ(t.accidScale(pse::NoteName::E), 
+              pse::Accids::encode(pse::Accid::Natural));
+    EXPECT_EQ(t.accidScale(pse::NoteName::F), 
+              pse::Accids::encode(pse::Accid::Sharp));
+    EXPECT_EQ(t.accidScale(pse::NoteName::G), 
+              pse::Accids::encode(pse::Accid::Natural));
+    EXPECT_EQ(t.accidScale(pse::NoteName::A), 
+              pse::Accids::encode(pse::Accid::Natural));
+    EXPECT_EQ(t.accidScale(pse::NoteName::B), 
+              pse::Accids::encode(pse::Accid::Natural));
+    EXPECT_EQ(t.accidScale(pse::NoteName::C), 
+              pse::Accids::encode(pse::Accid::Sharp));
 }
 
 
@@ -100,14 +124,22 @@ TEST(Ton, B_maj)
     EXPECT_EQ(t.getName(), pse::NoteName::B);
     EXPECT_EQ(t.getAccidental(), pse::Accid::Natural);
     EXPECT_EQ(t.getMode(), pse::ModeName::Major);
-    
-    EXPECT_EQ(t.accidDia(pse::NoteName::B), pse::Accid::Natural);
-    EXPECT_EQ(t.accidDia(pse::NoteName::C), pse::Accid::Sharp);
-    EXPECT_EQ(t.accidDia(pse::NoteName::D), pse::Accid::Sharp);
-    EXPECT_EQ(t.accidDia(pse::NoteName::E), pse::Accid::Natural);
-    EXPECT_EQ(t.accidDia(pse::NoteName::F), pse::Accid::Sharp);
-    EXPECT_EQ(t.accidDia(pse::NoteName::G), pse::Accid::Sharp);
-    EXPECT_EQ(t.accidDia(pse::NoteName::A), pse::Accid::Sharp);
+    EXPECT_EQ(t.getRealKS(), 5);
+
+    EXPECT_EQ(t.accidScale(pse::NoteName::B), 
+              pse::Accids::encode(pse::Accid::Natural));
+    EXPECT_EQ(t.accidScale(pse::NoteName::C), 
+              pse::Accids::encode(pse::Accid::Sharp));
+    EXPECT_EQ(t.accidScale(pse::NoteName::D), 
+              pse::Accids::encode(pse::Accid::Sharp));
+    EXPECT_EQ(t.accidScale(pse::NoteName::E), 
+              pse::Accids::encode(pse::Accid::Natural));
+    EXPECT_EQ(t.accidScale(pse::NoteName::F), 
+              pse::Accids::encode(pse::Accid::Sharp));
+    EXPECT_EQ(t.accidScale(pse::NoteName::G), 
+              pse::Accids::encode(pse::Accid::Sharp));
+    EXPECT_EQ(t.accidScale(pse::NoteName::A), 
+              pse::Accids::encode(pse::Accid::Sharp));
 }
 
 
@@ -120,6 +152,7 @@ TEST(Ton, Cb_maj)
     EXPECT_EQ(t.getName(), pse::NoteName::C);
     EXPECT_EQ(t.getAccidental(), pse::Accid::Flat);
     EXPECT_EQ(t.getMode(), pse::ModeName::Major);
+    EXPECT_EQ(t.getRealKS(), -7);
 
     EXPECT_EQ(t.accidKey(pse::NoteName::C), pse::Accid::Flat);
     EXPECT_EQ(t.accidKey(pse::NoteName::D), pse::Accid::Flat);
@@ -129,13 +162,20 @@ TEST(Ton, Cb_maj)
     EXPECT_EQ(t.accidKey(pse::NoteName::A), pse::Accid::Flat);
     EXPECT_EQ(t.accidKey(pse::NoteName::B), pse::Accid::Flat);
 
-    EXPECT_EQ(t.accidDia(pse::NoteName::C), pse::Accid::Flat);
-    EXPECT_EQ(t.accidDia(pse::NoteName::D), pse::Accid::Flat);
-    EXPECT_EQ(t.accidDia(pse::NoteName::E), pse::Accid::Flat);
-    EXPECT_EQ(t.accidDia(pse::NoteName::F), pse::Accid::Flat);
-    EXPECT_EQ(t.accidDia(pse::NoteName::G), pse::Accid::Flat);
-    EXPECT_EQ(t.accidDia(pse::NoteName::A), pse::Accid::Flat);
-    EXPECT_EQ(t.accidDia(pse::NoteName::B), pse::Accid::Flat);
+    EXPECT_EQ(t.accidScale(pse::NoteName::C), 
+              pse::Accids::encode(pse::Accid::Flat));
+    EXPECT_EQ(t.accidScale(pse::NoteName::D), 
+              pse::Accids::encode(pse::Accid::Flat));
+    EXPECT_EQ(t.accidScale(pse::NoteName::E), 
+              pse::Accids::encode(pse::Accid::Flat));
+    EXPECT_EQ(t.accidScale(pse::NoteName::F), 
+              pse::Accids::encode(pse::Accid::Flat));
+    EXPECT_EQ(t.accidScale(pse::NoteName::G), 
+              pse::Accids::encode(pse::Accid::Flat));
+    EXPECT_EQ(t.accidScale(pse::NoteName::A), 
+              pse::Accids::encode(pse::Accid::Flat));
+    EXPECT_EQ(t.accidScale(pse::NoteName::B), 
+              pse::Accids::encode(pse::Accid::Flat));
 }
 
 TEST(Ton, Bb_min)
@@ -147,6 +187,7 @@ TEST(Ton, Bb_min)
     EXPECT_EQ(t.getName(), pse::NoteName::B);
     EXPECT_EQ(t.getAccidental(), pse::Accid::Flat);
     EXPECT_EQ(t.getMode(), pse::ModeName::Minor);
+    EXPECT_EQ(t.getRealKS(), -5);
     
     EXPECT_EQ(t.accidKey(pse::NoteName::B), pse::Accid::Flat);
     EXPECT_EQ(t.accidKey(pse::NoteName::C), pse::Accid::Natural);
@@ -156,13 +197,20 @@ TEST(Ton, Bb_min)
     EXPECT_EQ(t.accidKey(pse::NoteName::G), pse::Accid::Flat);
     EXPECT_EQ(t.accidKey(pse::NoteName::A), pse::Accid::Flat);
     
-    EXPECT_EQ(t.accidDia(pse::NoteName::B), pse::Accid::Flat);
-    EXPECT_EQ(t.accidDia(pse::NoteName::C), pse::Accid::Natural);
-    EXPECT_EQ(t.accidDia(pse::NoteName::D), pse::Accid::Flat);
-    EXPECT_EQ(t.accidDia(pse::NoteName::E), pse::Accid::Flat);
-    EXPECT_EQ(t.accidDia(pse::NoteName::F), pse::Accid::Natural);
-    EXPECT_EQ(t.accidDia(pse::NoteName::G), pse::Accid::Flat);
-    EXPECT_EQ(t.accidDia(pse::NoteName::A), pse::Accid::Natural);
+    EXPECT_EQ(t.accidScale(pse::NoteName::B), 
+              pse::Accids::encode(pse::Accid::Flat));
+    EXPECT_EQ(t.accidScale(pse::NoteName::C), 
+              pse::Accids::encode(pse::Accid::Natural));
+    EXPECT_EQ(t.accidScale(pse::NoteName::D), 
+              pse::Accids::encode(pse::Accid::Flat));
+    EXPECT_EQ(t.accidScale(pse::NoteName::E), 
+              pse::Accids::encode(pse::Accid::Flat));
+    EXPECT_EQ(t.accidScale(pse::NoteName::F), 
+              pse::Accids::encode(pse::Accid::Natural));
+    EXPECT_EQ(t.accidScale(pse::NoteName::G), 
+              pse::Accids::encode(pse::Accid::Flat));
+    EXPECT_EQ(t.accidScale(pse::NoteName::A), 
+              pse::Accids::encode(pse::Accid::Natural));
 }
 
 TEST(Ton, As_min)
@@ -174,6 +222,7 @@ TEST(Ton, As_min)
     EXPECT_EQ(t.getName(), pse::NoteName::A);
     EXPECT_EQ(t.getAccidental(), pse::Accid::Sharp);
     EXPECT_EQ(t.getMode(), pse::ModeName::Minor);
+    EXPECT_EQ(t.getRealKS(), 7);
     
     EXPECT_EQ(t.accidKey(pse::NoteName::A), pse::Accid::Sharp);
     EXPECT_EQ(t.accidKey(pse::NoteName::B), pse::Accid::Sharp);
@@ -183,11 +232,18 @@ TEST(Ton, As_min)
     EXPECT_EQ(t.accidKey(pse::NoteName::F), pse::Accid::Sharp);
     EXPECT_EQ(t.accidKey(pse::NoteName::G), pse::Accid::Sharp);
 
-    EXPECT_EQ(t.accidDia(pse::NoteName::A), pse::Accid::Sharp);
-    EXPECT_EQ(t.accidDia(pse::NoteName::B), pse::Accid::Sharp);
-    EXPECT_EQ(t.accidDia(pse::NoteName::C), pse::Accid::Sharp);
-    EXPECT_EQ(t.accidDia(pse::NoteName::D), pse::Accid::Sharp);
-    EXPECT_EQ(t.accidDia(pse::NoteName::E), pse::Accid::Sharp);
-    EXPECT_EQ(t.accidDia(pse::NoteName::F), pse::Accid::Sharp);
-    EXPECT_EQ(t.accidDia(pse::NoteName::G), pse::Accid::DoubleSharp);
+    EXPECT_EQ(t.accidScale(pse::NoteName::A), 
+              pse::Accids::encode(pse::Accid::Sharp));
+    EXPECT_EQ(t.accidScale(pse::NoteName::B), 
+              pse::Accids::encode(pse::Accid::Sharp));
+    EXPECT_EQ(t.accidScale(pse::NoteName::C), 
+              pse::Accids::encode(pse::Accid::Sharp));
+    EXPECT_EQ(t.accidScale(pse::NoteName::D), 
+              pse::Accids::encode(pse::Accid::Sharp));
+    EXPECT_EQ(t.accidScale(pse::NoteName::E), 
+              pse::Accids::encode(pse::Accid::Sharp));
+    EXPECT_EQ(t.accidScale(pse::NoteName::F), 
+              pse::Accids::encode(pse::Accid::Sharp));
+    EXPECT_EQ(t.accidScale(pse::NoteName::G), 
+              pse::Accids::encode(pse::Accid::DoubleSharp));
 }

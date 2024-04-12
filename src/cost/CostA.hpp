@@ -130,6 +130,9 @@ public:
     //             const enum NoteName& name, const enum Accid& accid,
     //             bool print, size_t nbocc,
     //             const Ton& gton, const Ton& lton) override;
+        
+    /// Cost type of this const value.
+    virtual CostType type() const override;
     
     /// @param o output stream where to print this cost.
     void print(std::ostream& o) const override;

@@ -20,7 +20,6 @@
 #include "AlgoName.hpp"
 #include "PSEnum.hpp"
 #include "TonIndex.hpp"
-//#include "PSCost.hpp"
 #include "Cost.hpp"
 //#include "PSTable.hpp"
 

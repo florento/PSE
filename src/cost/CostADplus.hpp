@@ -75,6 +75,9 @@ public:
                 bool print,
                 const Ton& gton, const Ton& lton = Ton()) override;
     
+    /// Cost type of this const value.
+    virtual CostType type() const override;
+    
     /// @param o output stream where to print this cost.
     void print(std::ostream& o) const override;
     

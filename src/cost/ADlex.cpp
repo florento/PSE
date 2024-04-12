@@ -108,6 +108,12 @@ void CostADlex::update(const enum NoteName& name, const enum Accid& accid,
 }
 
 
+CostType CostADlex::type() const
+{
+    return CostType::ADlex;
+}
+
+
 void CostADlex::print(std::ostream& o) const
 {
     CostAD::print(o);

@@ -9,7 +9,7 @@ Created on Wed Nov 23 13:18:18 2022
 #import sys
 import os
 import time
-#from pathlib import Path, PosixPath
+from pathlib import Path  #PosixPath
 #from dataclasses import dataclass
 import numpy as np
 import pandas as pd
@@ -349,7 +349,7 @@ def m21_key(ton):
 
 ####################
 ##                ##
-## diff PSE / M21 ##
+## diff PS / M21  ##
 ##                ##
 ####################
 
@@ -602,9 +602,9 @@ class Stats:
         # composer of the score currently proceeded
         self._current_composer = ''
         # start time for spelling of the part currently proceeded
-        self._current_t0 = time.time()
-        # time for spelling of the part currently proceeded
-        self._current_time = 0
+        # self._current_t0 = time.time()
+        # array of timers for storing processing time
+        self._timer = []
         
     ## record evaluation results
 
@@ -623,12 +623,13 @@ class Stats:
         else:
             self._current_composer = composer        
 
-    def start_timer(self):
-        """record starting time for processing of a part"""
-        self._current_t0 = time.time()
+    def start_timer(self, i=1):
+        """record starting time for timer i"""
+        self._timer[i] = time.time()
              
-    def stop_timer(self):
-        self._current_time = time.time() - self._current_t0
+    def stop_timer(self, i=1):
+        """record processing time for timer i"""
+        self._timer[i] = time.time() - self._timer[i]
                  
     def record_part(self, part_id, k_gt, ton_est, nb_notes, nb_err):
         """add a new row in evaluation table"""
@@ -654,7 +655,8 @@ class Stats:
             row.append(strk(m21_key(ton_est))) # current key estimation
         row.append(nb_notes)               # nb notes in part 
         row.append(nb_err)
-        row.append(self._current_time)
+        for t in self._timer:
+            row.append(t)
         self._table.append(row)
 
     ## getters 
@@ -701,8 +703,17 @@ class Stats:
     def get_dataframe(self):
         """return a panda dataframe of the evaluation"""
         df = pd.DataFrame(self._table)
-        df.columns = ['id', 'title','composer', 'part', 'KSgt', 'KSest', 'notes', 'err', 'time']
-        df['time'] = df['time'].map('{:,.3f}'.format)
+        nb_timers = len(self._timer)
+        timers = [] # list of timer's names
+        for i in range(nb_timers):
+            if (i == 1 and nb_timers == 1):
+                timers.append('time')
+            else:
+                timers.append('time_'+str(i))            
+        df.columns = ['id', 'title','composer', 'part', 'KSgt', 'KSest', 
+                      'notes', 'err']+timers
+        for t in timers:
+            df[t] = df[t].map('{:,.3f}'.format)
         # every KSestimated identical to corresp. KSgt becomes NaN
         #df.loc[df['KSgt'] == df['KSest'], 'KSest'] = np.nan
         df.loc[df['KSgt'] == '', 'KSgt'] = np.nan
@@ -766,7 +777,7 @@ def sp_errors(df):
 
 ###################################
 ##                               ##
-##      evaluation scenarii      ##
+##      spelling algorithms      ##
 ##                               ##
 ###################################
 
@@ -781,7 +792,19 @@ def spellable(part):
     #    return False        
     return True
 
-def speller(code, ln, k0, stat, fdebug):
+
+# spelling environment: wrapper for the C++ pse.Speller
+class SpellEnv:
+    """environment for a spelling algorithm"""
+    _UNDEF_KS = 99
+    
+    def __init__(self):        
+        # part containing the input notes to be spelled
+        self._part
+        
+
+
+def make_speller(code, ln, k0, stat, fdebug):
     if (code == "PS13"):
         return speller_PS13(ln, stat, fdebug)
     if (code == "PS24T1D"):
@@ -802,13 +825,12 @@ def speller_PS13(ln, stat, debug):
     for (n, b, s) in ln:   # note, bar number, simultaneous flag
         sp.add(midi=n.pitch.midi, bar=b, simultaneous=s)
     print('spelling...', end='\n', flush=True)
-    stat.start_timer()
+    stat.start_timer(1) # single timer
     sp.spell()
-    stat.stop_timer()
+    stat.stop_timer(1)
     return sp
 
-def speller_T1(notes, stats, nbtons, cost_type, tonal, det, debug):
-    print('algo PSD 1 Table', end='\n', flush=True)
+def base_speller(notes, nbtons, debug):
     sp = pse.Speller()
     sp.debug(debug)  
     # build the ton index
@@ -816,12 +838,35 @@ def speller_T1(notes, stats, nbtons, cost_type, tonal, det, debug):
     # feed speller with input notes
     for (n, b, s) in notes:   # note, bar number, simultaneous flag
         sp.add(midi=n.pitch.midi, bar=b, simultaneous=s)
+    return sp;
+     
+def speller_T1(notes, stats, nbtons, cost_type, tonal, det, debug):
+    print('algo PSE 1 Table', end='\n', flush=True)
+    sp = base_speller(notes, nbtons, debug)
     print('spelling...', end='\n', flush=True)
-    stats.start_timer()
+    stats.start_timer(1)
     sp.eval_table(cost_type, tonal, det)
-    stats.stop_timer()
+    stats.stop_timer(1)
     return sp
 
+def speller_T2(notes, stats, nbtons, 
+               cost_type1, tonal1, det1, 
+               cost_type2, tonal2, det2, debug):
+    print('algo PSE 2 Tables', end='\n', flush=True)
+    sp = base_speller(notes, nbtons, debug)
+    print('spelling...', end='\n', flush=True)
+    stats.start_timer(1)
+    sp.eval_table(cost_type1, tonal1, det1)
+    stats.stop_timer(1)
+
+    stats.start_timer(2)
+    sp.eval_grid()
+    stats.stop_timer(2)
+    
+    stats.start_timer(3)
+    sp.reval_table(cost_type2, tonal2, det2)
+    stats.stop_timer(3)
+    return sp
 
 
 ###################################
@@ -863,6 +908,7 @@ def get_global(sp, k0):
         else:
             return (sp.global_ton(0), sp.iglobal_ton(0))
 
+# string parameter code (new version)
 def eval_part(part, stat, code, debug=False, mark=False):
     """evaluate spelling for one part in a score and mark errors"""
     
@@ -877,7 +923,7 @@ def eval_part(part, stat, code, debug=False, mark=False):
     print(len(ln), 'notes,', count_measures(part), 'bars,', end=' ')
     # create and activate speller
     print('spelling...', end='\n', flush=True)
-    sp = speller(code, ln, k0, stat, debug)
+    sp = make_speller(code, ln, k0, stat, debug)
     print('spell finished', end='\n', flush=True)
     # extract estimated global ton from speller
     (gt, i) = get_global(sp, k0)
@@ -906,8 +952,37 @@ def eval_part(part, stat, code, debug=False, mark=False):
         if (sp.locals()):
             anote_local_part(part, sp, i)         
     return (k0, gt, len(ln), ld1)
+
+# string parameter code (new version)
+def eval_score(score, stat, sid, title, composer,  
+               code, debug=False, mark=False):
+    """evaluate spelling for all parts in a score"""
+    if stat == None:
+        stat = Stats()
+    if title == None:
+        title=score.metadata.title, 
+    if composer == None:
+        composer=score.metadata.composer        
+    stat.new_score(score_id=sid, title=title, composer=composer)
+    lp = score.getElementsByClass(m21.stream.Part)
+    nbparts = len(lp)
+    ls = []
+    lld = []
+    for i in range(nbparts):    
+        print(score.metadata.title, score.metadata.composer, end=' ')
+        part = lp[i]
+        if (nbparts > 1):
+            print('part', i+1, '/', len(lp), end=' ', flush=True)
+        if (spellable(part)):
+            (k_gt, ton_est, nn, ld) = eval_part(part, stat, code, debug, mark)
+            stat.record_part(i, k_gt, ton_est, nn, len(ld))
+            ls.append(ton_est)
+            lld.append(ld)
+        else:
+            print('cannot spell, skip', flush=True)
+    return (ls, lld)
    
-# parameter algo (old style)
+# parameter algo (previous version)
 def eval_part_algo(part, stat, 
                    algo=pse.Algo_PSE,
                    nbtons=0,          # for PSE (default)
@@ -945,7 +1020,7 @@ def eval_part_algo(part, stat,
     for (n, b, s) in ln:   # note, bar number, simultaneous flag
         sp.add(midi=n.pitch.midi, bar=b, simultaneous=s)
     # spell
-    stat.start_timer()
+    stat.start_timer() # singla timer
     print('spelling...', end='\n', flush=True)
     sp.spell()
     stat.stop_timer()
@@ -1010,12 +1085,13 @@ def eval_part_algo(part, stat,
             anote_local_part(part, sp, sp.global_ton0(goodgtindex))         
     return (k0, ton_est, len(ln), ld1)
 
-def eval_score(score, stat, 
-               sid, title, composer,  
-               algo=pse.Algo_PSE,
-               nbtons=0,          # for PSE (default)
-               kpre=33, kpost=23, # for PS13 (window size)
-               debug=False, mark=False):
+# parameter algo (previous version)
+def eval_score_algo(score, stat, 
+                    sid, title, composer,  
+                    algo=pse.Algo_PSE,
+                    nbtons=0,          # for PSE (default)
+                    kpre=33, kpost=23, # for PS13 (window size)
+                    debug=False, mark=False):
     """evaluate spelling for all parts in a score"""
     if stat == None:
         stat = Stats()

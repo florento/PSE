@@ -78,6 +78,18 @@ PYBIND11_MODULE(pse, m)
         .value("Locrian", pse::ModeName::Locrian, "Locrian")
         .export_values();
     
+    py::enum_<enum pse::CostType>(m, "CostType", "Cost Type")
+        .value("UNDEF", pse::CostType::UNDEF, "Undef type")
+        .value("ACCID", pse::CostType::ACCID,
+               "number of accidentals without discount for lead tons")
+        .value("ACCIDlead", pse::CostType::ACCIDlead, 
+               "number of accidentals with discount for lead tons")
+        .value("ADplus", pse::CostType::ADplus, 
+               "number of accidentals and distance to local ton, sum of values")
+        .value("ADlex", pse::CostType::ADlex,
+               "number of accidentals and distance to local ton, lexicographic comparison values")
+        .export_values();
+    
     py::class_<pse::Ton>(m, "Ton")
     //.def(py::init<>(), "Ton", py::arg("ks"))
         .def("mode", &pse::Ton::getMode, "get mode of ton")

@@ -26,6 +26,7 @@
 #include "PSRawEnum.hpp"
 #include "PSTable.hpp"
 #include "AlgoName.hpp"
+#include "CostType.hpp"
 #include "CostA.hpp"
 #include "CostADplus.hpp"
 #include "CostADlex.hpp"
@@ -195,27 +196,26 @@ public:
     //
 
     /// construct the first spelling table.
-    /// @param ctype code for cost type:
-    /// - 00 costA with discount for lead tons
-    /// - 01 costA without discount for lead tons
-    /// - 02 costADplus
-    /// - 03 costADlex
+    /// @param type of cost domain.
     /// @param tonal tonal or modal construction of initial state in each cell.
     /// @param chromatic whether transitions for best-path comp. are deterministic.
     /// @return whether computation was succesfull.
     /// @warning if the table exists it is overwritten.
     /// @see sampleCost
-    bool evalTable(int ctype, bool tonal=true, bool chromatic=false);
+    bool evalTable(CostType ctype, bool tonal=true, bool chromatic=false);
 
     /// construct a second spelling table, using
     /// - a first spelling table (use the same index)
     /// - the array of global candidates if it exists
     ///   (otherwise, we consider all tonalities)
     /// - the grid of local tonalities
+    /// @param type of cost domain.
+    /// @param tonal tonal or modal construction of initial state in each cell.
+    /// @param chromatic whether transitions for best-path comp. are deterministic.
     /// @return whether computation was succesfull.
     /// @warning the first spelling table must have been constructed.
     /// @warning the first spelling table is deleted.
-    bool revalTable(int ctype, bool tonal=true, bool chromatic=false);
+    bool revalTable(CostType ctype, bool tonal=true, bool chromatic=false);
 
     /// construct the grid of local tons (1 ton for each initial ton and measure)
     /// - a spelling table.
@@ -382,7 +382,6 @@ protected: // data
     /// undefined tonality, for errors.
     Ton* _uton; // std::shared_ptr<Ton>
     
-    
 protected:
     
     /// time lapsed, in milli seconds, since the given start date.
@@ -392,14 +391,16 @@ protected:
 private:
     
     /// construct a sample cost value (zero) for the construction of tables.
+    /// @param ct type of cost domain.
+    /// @return the cost value constructed.
+    Cost& sampleCost(CostType ct);
+
     /// @param c code for cost type:
     /// - 00 costA with discount for lead tons
     /// - 01 costA without discount for lead tons
     /// - 02 costADplus
     /// - 03 costADlex
-    /// @return the cost value constructed.
-    Cost& sampleCost(int c);
-    
+
 };
 
 } // namespace pse

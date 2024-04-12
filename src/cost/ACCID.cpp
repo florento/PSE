@@ -237,6 +237,15 @@ void CostA::update(const enum NoteName& name, const enum Accid& accid,
 //}
 
 
+CostType CostA::type() const
+{
+    if (_discount)
+        return CostType::ACCIDlead;
+    else
+        return CostType::ACCID;
+}
+
+
 void CostA::print(std::ostream& o) const
 {
     o << "a+d=" << _accid;

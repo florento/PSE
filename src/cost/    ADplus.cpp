@@ -115,6 +115,12 @@ void CostADplus::update(const enum NoteName& name, const enum Accid& accid,
 }
 
 
+CostType CostADplus::type() const
+{
+    return CostType::ADplus;
+}
+
+
 void CostADplus::print(std::ostream& o) const
 {
     CostAD::print(o);

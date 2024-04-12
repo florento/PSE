@@ -111,6 +111,9 @@ int Ton::init_KSofMode(int ks, ModeName mode)
                 return ks;
             }
 
+        case ModeName::Chromatic:
+            return ks;
+            
         case ModeName::Undef:
             ERROR("Ton constructor: UNDEF mode");
             return ks;

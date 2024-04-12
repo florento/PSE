@@ -12,7 +12,7 @@ import os
 from pathlib import Path, PosixPath
 from datetime import datetime
 
-import pandas as pd
+# import pandas as pd
 import music21 as m21
 import PSeval as ps
 

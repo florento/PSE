@@ -7,7 +7,6 @@ Created on Mon Feb  5 14:02:31 2024
 Evaluation of the score of the Fake Real Book dataset
 """
 
-
 #import sys
 #import logging
 import os
@@ -36,7 +35,7 @@ _score_suffix = '.musicxml'
 _eval_root = '../../PSeval'
 
 # name of dir for evaluation output
-_output_dir = 'augASAP'
+# _output_dir = 'augASAP'
 
 timestamp = str(datetime.today().strftime('%Y%m%d-%H%M'))
 
@@ -125,8 +124,8 @@ def FRB_table(corpus='leads'):
 # list of opus names with issues 
 skip = ['Autumn in New York']
 
-def eval_FRB(corpus='leads', algo=ps.pse.Algo_PSE, 
-             tons=135, kpre=33, kpost=23, 
+def eval_FRB(corpus='leads', 
+             algo=ps.pse.Algo_PSE, tons=135, kpre=33, kpost=23, 
              output_dir='', filename='',             
              debug=True, mark=True):
     global _eval_root
@@ -142,6 +141,7 @@ def eval_FRB(corpus='leads', algo=ps.pse.Algo_PSE,
         os.mkdir(output_path)
     else:
         print('WARNING: dir', output_path, 'exists')
+    # input data and processing   
     stat = ps.Stats()   
     dataset = FRB_corpus(corpus)
     names = sorted(list(dataset)) # list of index in dataset   
@@ -156,6 +156,7 @@ def eval_FRB(corpus='leads', algo=ps.pse.Algo_PSE,
         file = dataset[name]
         print('\n', name, '\n')
         s = m21.converter.parse(file.as_posix())
+
         (ls, lld) = ps.eval_score(score=s, stat=stat, 
                                   sid=0, title=name, composer='', 
                                   algo=algo,
@@ -175,8 +176,9 @@ def eval_FRB(corpus='leads', algo=ps.pse.Algo_PSE,
     stat.write_datasum(output_path/(filename+'_sum.csv'))    
     
     
-def eval_FRBitem(name, corpus='leads', algo=ps.pse.Algo_PSE, 
-                 tons=135, kpre=33, kpost=23, dflag=True, mflag=True):
+def eval_FRBitem(name, corpus='leads', 
+                 algo=ps.pse.Algo_PSE, tons=135, kpre=33, kpost=23, 
+                 dflag=True, mflag=True):
     assert(len(name) > 0)
     assert(corpus == 'leads' or corpus == 'piano')
     dataset = FRB_corpus(corpus)

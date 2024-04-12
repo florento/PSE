@@ -17,7 +17,6 @@
 #include "trace.hpp"
 #include "AlgoName.hpp"
 #include "PSEnum.hpp"
-#include "PSCost.hpp"
 #include "PSOrder.hpp"
 #include "PSConfig0.hpp" // PSC0, PSCQueue
 #include "PSConfig1.hpp"

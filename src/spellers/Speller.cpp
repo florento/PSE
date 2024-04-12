@@ -197,28 +197,28 @@ bool Speller::closedTons() const
 // prepare spelling
 //
 
-Cost& Speller::sampleCost(int c)
+Cost& Speller::sampleCost(CostType ct)
 {
-    switch (c)
+    switch (ct)
     {
-        case 0:
+        case CostType::ACCIDlead:
             return _seedAdiscount;
             break;
             
-        case 1:
+        case CostType::ACCID:
             return _seedAnodiscount;
             break;
             
-        case 2:
+        case CostType::ADplus:
             return _seedADplus;
             break;
             
-        case 3:
+        case CostType::ADlex:
             return _seedADlex;
             break;
             
         default:
-            ERROR("Speller sampleCost unexpected code {}", c);
+            ERROR("Speller sampleCost unexpected code {}", ct);
             return _seedAdiscount;
     }
 }
@@ -247,7 +247,7 @@ Cost& Speller::sampleCost(int c)
 //
 
 
-bool Speller::evalTable(int ctype, bool tonal, bool chromatic)
+bool Speller::evalTable(CostType ctype, bool tonal, bool chromatic)
 {
     if (_table)
     {
@@ -268,7 +268,7 @@ bool Speller::evalTable(int ctype, bool tonal, bool chromatic)
 }
 
 
-bool Speller::revalTable(int ctype, bool tonal, bool chromatic)
+bool Speller::revalTable(CostType ctype, bool tonal, bool chromatic)
 {
     if (_table == nullptr)
     {

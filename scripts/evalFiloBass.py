@@ -7,13 +7,10 @@ Created on Mon Feb  5 14:02:31 2024
 Evaluation of the score of the Fake Real Book dataset
 """
 
-
 import sys
 import logging
-
 #sys.path.append('/Users/xavriley/Projects/pse/lib')
-import pse
-
+#import pse
 import os
 from pathlib import Path, PosixPath
 from datetime import datetime
@@ -43,7 +40,7 @@ _eval_root = '../../PSeval'
 Path(_eval_root).mkdir(parents=True, exist_ok=True)
 
 # name of dir for evaluation output
-_output_dir = 'augASAP'
+# _output_dir = 'augASAP'
 
 timestamp = str(datetime.today().strftime('%Y%m%d-%H%M'))
 
@@ -130,7 +127,7 @@ def FiloBass_table():
 # list of opus names with issues 
 skip = ['All-the-Things-You-Are',
         'Alone-Together',
-        'Apple-Jump',]
+        'Apple-Jump']
 
 def eval_FiloBass(algo=ps.pse.Algo_PSE, 
              tons=135, kpre=33, kpost=23, 
