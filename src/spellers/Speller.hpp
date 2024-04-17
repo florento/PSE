@@ -91,6 +91,9 @@ public:
     // notes
     //
     
+    /// empty the list of notes in the enumerator of this speller.
+    void reset();
+    
     /// add a new input note to the enumerator of notes to spell.
     /// @param note MIDI key of the new input note.
     /// @param bar bar number of the new input note.
@@ -209,7 +212,7 @@ public:
     /// - the array of global candidates if it exists
     ///   (otherwise, we consider all tonalities)
     /// - the grid of local tonalities
-    /// @param type of cost domain.
+    /// @param ctype type of cost domain.
     /// @param tonal tonal or modal construction of initial state in each cell.
     /// @param chromatic whether transitions for best-path comp. are deterministic.
     /// @return whether computation was succesfull.
@@ -240,8 +243,7 @@ public:
     /// @return whether computation was succesfull.
     virtual bool spell();
 
-    /// rename all notes read by this speller,
-    /// according to a given global tonality.
+    /// rename all notes read by this speller, according to a given global tonality.
     /// @param i index of tonality in the index.
     /// @return whether renaming succeded for all measures.
     virtual bool rename(size_t i);
@@ -331,6 +333,7 @@ public:
 protected: // data
         
     /// name of the algorithm implemented.
+    /// @todo TBR obsolete
     const Algo _algo;
 
     /// enumerator of the input notes.

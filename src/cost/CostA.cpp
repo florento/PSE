@@ -20,7 +20,8 @@ _discount(discount)
 
 
 CostA::CostA(const CostA& rhs):
-_accid(rhs._accid)
+_accid(rhs._accid),
+_discount(rhs._discount)
 {}
 
 

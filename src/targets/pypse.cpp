@@ -79,14 +79,14 @@ PYBIND11_MODULE(pse, m)
         .export_values();
     
     py::enum_<enum pse::CostType>(m, "CostType", "Cost Type")
-        .value("UNDEF", pse::CostType::UNDEF, "Undef type")
-        .value("ACCID", pse::CostType::ACCID,
+        .value("CTYPE_UNDEF", pse::CostType::UNDEF, "Undef type")
+        .value("CTYPE_ACCID", pse::CostType::ACCID,
                "number of accidentals without discount for lead tons")
-        .value("ACCIDlead", pse::CostType::ACCIDlead, 
+        .value("CTYPE_ACCIDlead", pse::CostType::ACCIDlead,
                "number of accidentals with discount for lead tons")
-        .value("ADplus", pse::CostType::ADplus, 
+        .value("CTYPE_ADplus", pse::CostType::ADplus,
                "number of accidentals and distance to local ton, sum of values")
-        .value("ADlex", pse::CostType::ADlex,
+        .value("CTYPE_ADlex", pse::CostType::ADlex,
                "number of accidentals and distance to local ton, lexicographic comparison values")
         .export_values();
     
@@ -102,6 +102,7 @@ PYBIND11_MODULE(pse, m)
         .def(py::init<>(), "Modular Spell Checker")
         .def("debug", &pse::Speller::debug, "set debug mode", py::arg("on"))
         .def("size", &pse::Speller::size, "number of notes to spell")
+        .def("reset", &pse::Speller::reset, "clear the list of notes to spell")
         .def("add", &pse::Speller::add_pybindwod, "add a new note to spell",
              py::arg("midi"), py::arg("bar"), py::arg("simultaneous"))
         .def("addlong", &pse::Speller::add_pybindwd, "add a new note to spell",
@@ -216,6 +217,7 @@ PYBIND11_MODULE(pse, m)
         .def("algo", &pse::PS13::algo, "name of spelling algorithm")
         .def("debug", &pse::PS13::debug, "set debug mode", py::arg("on"))
         .def("size", &pse::PS13::size, "number notes to spell")
+        .def("reset", &pse::PS13::reset, "clear the list of notes to spell")
         .def("set_Kpre", &pse::PS13::setKpre, "set the Kpre parameter of PS13")
         .def("set_Kpost", &pse::PS13::setKpost, "set the Kpost parameter of PS13")
         .def("add", &pse::PS13::add_pybindwod, "add a new note to spell",

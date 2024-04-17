@@ -82,7 +82,7 @@ public:
     /// to read in e.
     virtual std::unique_ptr<PSEnum> clone(size_t i0) const = 0;
 
-    /// whther this PS Enumerator is open: the interval of index of
+    /// whether this PS Enumerator is open: the interval of index of
     /// accessible notes is unbounded on right.
     bool open() const;
         
@@ -221,6 +221,7 @@ protected:
     void reset(size_t i0, size_t i1 = PSEnum::ID_INF);
     
 private:
+    
     /// rewrite a trigram of notes starting at the given position.
     /// @param i index of a note in this enumerator.
     /// @return whether the trigram at i was rewritten.

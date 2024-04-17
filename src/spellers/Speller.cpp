@@ -107,6 +107,12 @@ size_t Speller::size() const
 }
 
 
+void Speller::reset()
+{
+    _enum.reset();
+}
+
+
 void Speller::add(int note, int bar, bool simult, const Rational& dur)
 {
     TRACE("Speller: add {} {} {}", note, bar, dur);
@@ -349,19 +355,16 @@ bool Speller::evalGlobal(double d, bool refine)
     
     if (refine)
     {
-        if (_global)
-        {
-            PSO* global_pre = _global;
-            _global = new PSO(*global_pre, *_table, d, _debug);
-            assert(global_pre);
-            delete global_pre;
-            return true;
-        }
-        else
+        if (_global == nullptr)
         {
             ERROR("Speller evalGlobal by refinement: no previous global");
             return false;
         }
+        PSO* global_pre = _global;
+        _global = new PSO(*global_pre, *_table, d, _debug);
+        assert(global_pre);
+        delete global_pre;
+        return true;
     }
     else
     {
@@ -466,7 +469,7 @@ size_t Speller::iglobal(size_t n) const
 {
     if (_global == nullptr)
     {
-        ERROR("Speller global: evalGlobal not called");
+        ERROR("Speller iglobal: evalGlobal not called");
         return TonIndex::UNDEF;
     }
     else

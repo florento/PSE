@@ -166,6 +166,27 @@ size_t PSRawEnum::size() const
 }
 
 
+void PSRawEnum::reset()
+{
+    assert(_notes);
+    _notes->clear();
+    assert(_barnum);
+    _barnum->clear();
+    assert(_simult);
+    _simult->clear();
+    assert(_durations);
+    _durations->clear();
+    assert(_names);
+    _names->clear();
+    assert(_accids);
+    _accids->clear();
+    assert(_octs);
+    _octs->clear();
+    assert(_prints);
+    _prints->clear();
+}
+
+
 void PSRawEnum::add(int note, int bar, bool simult, const Rational& dur)
 {
     assert(sanity_check());
@@ -203,6 +224,7 @@ void PSRawEnum::add(int note, int bar, bool simult, const Rational& dur)
     if (! open() && (_notes->size() > _stop))
         _stop = _notes->size();
 }
+
 
 void PSRawEnum::addlong(int note, int bar, bool simult, long dur_num, long dur_den)
 {

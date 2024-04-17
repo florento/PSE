@@ -115,25 +115,35 @@ def FRB_table(corpus='leads'):
 # df.fillna('NaN').to_csv(file, header=True, index=False)
         
         
-###########################################
-##                                       ##
-## automatic evaluation of whole dataset ##
-##                                       ##
-###########################################
+#####################################
+##                                 ##
+## automatic evaluation of dataset ##
+##                                 ##
+#####################################
 
 # list of opus names with issues 
 skip = ['Autumn in New York']
 
+# PS13: kpre=33, kpost=23
+# PSE:  tons=135, 
+# PSE table1:  costtype1 = ps.CTYPE_ACCID | CTYPE_ACCIDlead | CTYPE_ADplus | CTYPE_ADlex
+# PSE table2:  costtype2 = ps.CTYPE_ACCID | CTYPE_ACCIDlead | CTYPE_ADplus | CTYPE_ADlex
 def eval_FRB(corpus='leads', 
-             algo=ps.pse.Algo_PSE, tons=135, kpre=33, kpost=23, 
+             kpre=0, kpost=0,  # PS13 parameters
+             tons=0,         # PSE: nb of Tons in TonIndex
+             costtype1=ps.CTYPE_UNDEF, tonal1=True, det1=True, # PSE: table1
+             costtype2=ps.CTYPE_UNDEF, tonal2=True, det2=True, # PSE: table2 
              output_dir='', filename='',             
-             debug=True, mark=True):
+             dflag=True, mflag=True):
     global _eval_root
     assert(corpus == 'leads' or corpus == 'piano')
     timestamp = datetime.today().strftime('%Y%m%d-%H%M')
+    algo = ps.algo(kpre, kpost, tons, 
+                   costtype1, tonal1, det1, 
+                   costtype2, tonal2, det2)
     # default output dir name
     if output_dir == '':
-       output_dir = timestamp
+       output_dir = algo+'_'+timestamp
     output_path = Path(_eval_root)/'evalFRB'/output_dir
     if not os.path.isdir(output_path):
         if not os.path.isdir(Path(_eval_root)/'evalFRB'):
@@ -159,11 +169,12 @@ def eval_FRB(corpus='leads',
 
         (ls, lld) = ps.eval_score(score=s, stat=stat, 
                                   sid=0, title=name, composer='', 
-                                  algo=algo,
-                                  nbtons=tons,           # for PSE 
-                                  kpre=kpre, kpost=kpost,  # for PS13                                  
-                                  debug=debug, mark=mark)
-        if mark and not ps.empty_difflist(lld):
+                                  kpre=kpre, kpost=kpost, # for PS13                                  
+                                  nbtons=tons,            # for PSE 
+                                  costtype1=costtype1, tonal1=tonal1, det1=det1,
+                                  costtype2=costtype2, tonal1=tonal2, det1=det2,
+                                  debug=dflag, mark=mflag)
+        if mflag and not ps.empty_difflist(lld):
             write_score(s, output_path, name)
     # display and save evaluation table
     # default table file name
@@ -174,10 +185,17 @@ def eval_FRB(corpus='leads',
     df.pop('part') # del column part number (always 0)
     df.to_csv(output_path/(filename+'.csv') , header=True, index=False)
     stat.write_datasum(output_path/(filename+'_sum.csv'))    
-    
-    
+        
+# PS13: kpre=33, kpost=23
+# PSE:  tons=135, 
+# PSE table1:  costtype1 = ps.CTYPE_ACCID | CTYPE_ACCIDlead | CTYPE_ADplus | CTYPE_ADlex
+# PSE table2:  costtype2 = ps.CTYPE_ACCID | CTYPE_ACCIDlead | CTYPE_ADplus | CTYPE_ADlex
 def eval_FRBitem(name, corpus='leads', 
-                 algo=ps.pse.Algo_PSE, tons=135, kpre=33, kpost=23, 
+                 kpre=0, kpost=0,  # PS13 parameters
+                 tons=0,         # PSE: nb of Tons in TonIndex
+                 costtype1=ps.CTYPE_UNDEF, tonal1=True, det1=True, # PSE: table1
+                 costtype2=ps.CTYPE_UNDEF, tonal2=True, det2=True, # PSE: table2 
+                 output_dir='', filename='',             
                  dflag=True, mflag=True):
     assert(len(name) > 0)
     assert(corpus == 'leads' or corpus == 'piano')
@@ -193,9 +211,10 @@ def eval_FRBitem(name, corpus='leads',
     #                                      debug=dflag, mark=mflag)
     (ls, lld) = ps.eval_score(score=score, stat=stat, 
                               sid=0, title=name, composer='', 
-                              algo=algo,
-                              nbtons=tons,          # for PSE 
                               kpre=kpre, kpost=kpost, # for PS13                                  
+                              nbtons=tons,            # for PSE 
+                              costtype1=costtype1, tonal1=tonal1, det1=det1,
+                              costtype2=costtype2, tonal1=tonal2, det1=det2,
                               debug=dflag, mark=mflag)
     stat.show()   
     assert(len(lld) == 1) # always 1 unique part in LG dataset
@@ -222,6 +241,7 @@ def write_score2(score, output_path, outname):
     # os.system(_mscore + ' -o ' + pdffile + ' ' + xmlfile)
 
 
+# compute C++ add instructions for given score, for debugging with gdb
 def debug(name, corpus='leads'):    
     assert(len(name) > 0)
     dataset = FRB_corpus(corpus)
