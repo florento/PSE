@@ -293,5 +293,28 @@ TEST(TonIndex, 30_name)
     EXPECT_EQ(id.ton(29).getName(), pse::NoteName::A);  // 7
     EXPECT_EQ(id.ton(29).getAccidental(), pse::Accid::Sharp);
     EXPECT_EQ(id.ton(29).getMode(), pse::ModeName::Minor);
+}
 
+TEST(TonIndex, 30_equiv)
+{
+    pse::TonIndex id(30);
+    EXPECT_EQ(id.size(), 30);
+    EXPECT_FALSE(id.empty());
+    
+    
+    // tonal representative
+    for (size_t i = 0; i < 15; ++i) // major : self
+    {
+        EXPECT_EQ(id.irepresentative(i, true), i);
+    }
+    for (size_t i = 15; i < 30; ++i) // minor : relative (same ks)
+    {
+        EXPECT_EQ(id.irepresentative(i, true), i-15);
+    }
+
+    // modal representative
+    for (size_t i = 0; i < 30; ++i) // always self
+    {
+        EXPECT_EQ(id.irepresentative(i, false), i);
+    }
 }

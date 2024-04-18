@@ -77,6 +77,7 @@ public:
     /// in this array of tonalities.
     /// @param i an index in this array of tonalities. must be smaller than size().
     /// @param tonal mode: tonal or modal, for the construction of initial state (from the ton at i).
+    /// @return the first ton in this tonIntdex equivalent to i, wrt
     const Ton& representative(size_t i, bool tonal) const;
 
     /// Index of the tonal or modal representative Ton  in the equivalence class of the Ton

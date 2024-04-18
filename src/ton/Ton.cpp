@@ -227,16 +227,24 @@ int Ton::getRealKS() const
 // @todo more clever case analysis
 bool Ton::equivalent(const Ton& rhs, bool tonal) const
 {
-    for (int n = 0; n < 7; ++n)
+    if (tonal) // tonal mode
     {
-        // tonal mode
-        if (tonal && (accidKey(n) != rhs.accidKey(n)))
-            return false;
-        // modal mode
-        else if (!tonal && (accidScale(n) != rhs.accidScale(n)))
-            return false;
+        for (int n = 0; n < 7; ++n)
+        {
+            if (accidKey(n) != rhs.accidKey(n))
+                return false;
+        }
+        return true;
     }
-    return true;
+    else // modal mode
+    {
+        for (int n = 0; n < 7; ++n)
+        {
+            if (accidScale(n) != rhs.accidScale(n))
+                return false;
+        }
+        return true;
+    }
 }
 
 

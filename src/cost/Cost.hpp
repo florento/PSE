@@ -83,7 +83,7 @@ public:
     /// @param accid chosen alteration for the received pitch, in -2..2.
     /// @param print whether the accidental must be printed in score.
     /// @param gton conjectured main (global) tonality (key signature).
-    /// @param lton conjectured local tonality or undef tonlity if it is
+    /// @param lton conjectured local tonality or undef tonality by default.
     /// not known.
     virtual void update(const enum NoteName& name,
                         const enum Accid& accid,

@@ -16,13 +16,16 @@ namespace pse {
 CostA::CostA(bool discount):
 _accid(0),
 _discount(discount)
-{}
+{
+    if (discount)
+        WARN("CostA: discount obsolete");
+}
 
 
 CostA::CostA(const CostA& rhs):
 _accid(rhs._accid),
 _discount(rhs._discount)
-{}
+{ }
 
 
 CostA::~CostA()
@@ -113,11 +116,18 @@ bool CostA::updateAccid(const enum Accid& accid)
     }
 }
 
-
 // update cost when accident for the name was updated
 void CostA::update(const enum NoteName& name, const enum Accid& accid,
-                   bool print,
-                   const Ton& gton, const Ton& lton)
+                   bool print, const Ton& gton, const Ton& lton)
+{
+    if (print)
+        updateAccid(accid);
+}
+
+/*
+// update cost when accident for the name was updated
+void CostA::update(const enum NoteName& name, const enum Accid& accid,
+                   bool print, const Ton& gton, const Ton& lton)
 {
     // second pass
     // @todo revise this case
@@ -147,7 +157,7 @@ void CostA::update(const enum NoteName& name, const enum Accid& accid,
         }
     }
 }
-
+*/
 
 //void CostA::update(const PSC1& c, const PSEnum& e, const Ton& gton)
 //{
@@ -249,7 +259,7 @@ CostType CostA::type() const
 
 void CostA::print(std::ostream& o) const
 {
-    o << "a+d=" << _accid;
+    o << _accid;
 }
 
 

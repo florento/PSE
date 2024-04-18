@@ -352,7 +352,7 @@ bool Speller::evalGlobal(double d, bool refine)
         ERROR("Speller evalGlobal: eval table first");
         return false;
     }
-    
+    // _table->dump_table();
     if (refine)
     {
         if (_global == nullptr)

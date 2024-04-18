@@ -316,8 +316,8 @@ private:
     bool init_psvs(const PST& tab, const Cost& seed,
                    const PSO& globals, const PSG& locals, bool tonal=true);
     
-    /// initialise the vector of row costs as null vector.
-    void init_rowcosts(const Cost& seed);
+    // initialise the vector of row costs as null vector.
+    // void init_rowcosts(const Cost& seed);
     
     /// fill the the vector of row costs.
     void compute_rowcosts(const Cost& seed);

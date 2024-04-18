@@ -958,7 +958,6 @@ class Spellew:
         # assert(self._spelled)
         sp = self._speller
         goodgtindex=0
-        sp.eval_global(0.01, False) # 5% tolerance
         nbg = sp.globals() 
         # no evaluation of global ton (ex. PS13)
         if nbg == 0: 
@@ -970,8 +969,8 @@ class Spellew:
             return (sp.global_ton(0), sp.iglobal_ton(0))
         # ambigous evaluation of global ton
         elif nbg > 1: 
-            print('pse get_global:', nbg, ' candidates global', end=' ')
-            print("real global tone :", k0)
+            print('pse get_global:', nbg, 'candidates global.', end=' ')
+            print("real global tone:", k0)
             c = 0
             enharm = False
             present = False
@@ -1023,7 +1022,9 @@ class Spellew:
         print('spelling with', self._algo_name, self._algo_params, end='\n', flush=True)
         self.spell(ln, stats)   #print('spell finished', end='\n', flush=True)   
         # extract estimated global ton from speller
+        self._speller.eval_global(5, False) # 5% tolerance
         (gt, i) = self.get_global(k0)
+        print('pse eval_part: golbal selected:', i, flush=True)
         # apply the spelling in the row of the estimated global
         self._speller.rename(i)
         # eval estimation of global key

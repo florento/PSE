@@ -118,6 +118,8 @@
 		437C73742BADD6D000E9478C /* Accids.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 437C73702BADD6D000E9478C /* Accids.cpp */; };
 		437C73752BADD6D000E9478C /* Accids.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 437C73712BADD6D000E9478C /* Accids.hpp */; };
 		437C73772BADEA4200E9478C /* TestAccids.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 437C73762BADEA4200E9478C /* TestAccids.cpp */; };
+		437C8B092BD1750000440909 /* TestBag.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 437C8B082BD1750000440909 /* TestBag.cpp */; };
+		437C8B0B2BD18E4F00440909 /* TestCostA.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 437C8B0A2BD18E4F00440909 /* TestCostA.cpp */; };
 		438A581129E03FBB0073A32C /* PS13.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 432E7A5229D45FE2000E2B72 /* PS13.cpp */; };
 		438A581229E03FC10073A32C /* PSE.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 432E7A4C29D427FD000E2B72 /* PSE.cpp */; };
 		438A581329E049020073A32C /* PSTable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43ABA51F29242418002AC1D4 /* PSTable.cpp */; };
@@ -362,6 +364,8 @@
 		437C73702BADD6D000E9478C /* Accids.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Accids.cpp; path = src/pitch/Accids.cpp; sourceTree = "<group>"; };
 		437C73712BADD6D000E9478C /* Accids.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Accids.hpp; path = src/pitch/Accids.hpp; sourceTree = "<group>"; };
 		437C73762BADEA4200E9478C /* TestAccids.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TestAccids.cpp; sourceTree = "<group>"; };
+		437C8B082BD1750000440909 /* TestBag.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TestBag.cpp; sourceTree = "<group>"; };
+		437C8B0A2BD18E4F00440909 /* TestCostA.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TestCostA.cpp; sourceTree = "<group>"; };
 		4380D1E82A4DB78700AC1164 /* TestCostADlex.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TestCostADlex.cpp; sourceTree = "<group>"; };
 		438587EB2A5C0631006FB312 /* PSChord.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = PSChord.cpp; path = chord/PSChord.cpp; sourceTree = "<group>"; };
 		438587EC2A5C0631006FB312 /* PSChord.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = PSChord.hpp; path = chord/PSChord.hpp; sourceTree = "<group>"; };
@@ -617,21 +621,23 @@
 				435081DD29D6C93000465943 /* unit_test.cpp */,
 				4350820229D6E3AB00465943 /* TestNoteName.cpp */,
 				43791C8D29D8392200DE8796 /* TestAccidental.cpp */,
-				43139F7B2A0D3D9D00A8E764 /* TestFifths.cpp */,
+				437C73762BADEA4200E9478C /* TestAccids.cpp */,
 				4350820729D7032B00465943 /* TestMidiNum.cpp */,
+				43139F7B2A0D3D9D00A8E764 /* TestFifths.cpp */,
+				4308A70B2A28EC9B007F7A55 /* TestKeyFifth.cpp */,
 				43316FFF29DD934E00BA534D /* TestEnharmonic.cpp */,
 				4350820429D6FDA100465943 /* TestMode.cpp */,
 				435081CE29D6C04600465943 /* TestScale.cpp */,
-				4308A70B2A28EC9B007F7A55 /* TestKeyFifth.cpp */,
 				4308A7092A28E04F007F7A55 /* TestTon.cpp */,
 				4308A70D2A28F9B8007F7A55 /* TestTonIndex.cpp */,
 				4353AE3729DDAD3E00FAF8A3 /* TestPSEnum.cpp */,
 				4353AE3929DDB2CC00FAF8A3 /* TestPSRawEnum.cpp */,
-				432A0F8B2A311889007D5CA2 /* TestRewritePassing.cpp */,
 				4308A7072A28DF0F007F7A55 /* TestState.cpp */,
+				437C8B082BD1750000440909 /* TestBag.cpp */,
+				432A0F8B2A311889007D5CA2 /* TestRewritePassing.cpp */,
+				437C8B0A2BD18E4F00440909 /* TestCostA.cpp */,
 				4380D1E82A4DB78700AC1164 /* TestCostADlex.cpp */,
 				439DBF2F2A4FFF6800565CC4 /* TestRankWeber.cpp */,
-				437C73762BADEA4200E9478C /* TestAccids.cpp */,
 			);
 			path = unit;
 			sourceTree = "<group>";
@@ -1024,6 +1030,7 @@
 				438A581229E03FC10073A32C /* PSE.cpp in Sources */,
 				4350820329D6E3AB00465943 /* TestNoteName.cpp in Sources */,
 				432586A82A40EBB30069D796 /* Rational.cpp in Sources */,
+				437C8B0B2BD18E4F00440909 /* TestCostA.cpp in Sources */,
 				435081EE29D6D75600465943 /* Scale.cpp in Sources */,
 				4308A70C2A28EC9B007F7A55 /* TestKeyFifth.cpp in Sources */,
 				430627B32A44A4D80046FD99 /* PSConfig2.cpp in Sources */,
@@ -1067,6 +1074,7 @@
 				4350820129D6D85100465943 /* trace.cpp in Sources */,
 				435081EF29D6D75A00465943 /* Mode.cpp in Sources */,
 				435081EC29D6D74E00465943 /* KeyFifth.cpp in Sources */,
+				437C8B092BD1750000440909 /* TestBag.cpp in Sources */,
 				4309605F2A0D03C10097487A /* AlgoName.cpp in Sources */,
 				4346CB382A1FF62100756DE3 /* PSGlobal.cpp in Sources */,
 				435081FA29D6D78900465943 /* PSRawEnum.cpp in Sources */,

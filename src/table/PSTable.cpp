@@ -124,44 +124,48 @@ bool PST::status() const
 }
 
  
-void PST::init_rowcosts(const Cost& seed)
-{
-    TRACE("PST: initialize row costs to zero");
-    assert(_rowcost.empty());
-    
-    // one different shared pointer for each row cost
-    for (size_t i = 0; i < _index.size(); ++i)
-        _rowcost.push_back(seed.shared_zero());
-}
+//void PST::init_rowcosts(const Cost& seed)
+//{
+//    TRACE("PST: initialize row costs to zero");
+//    assert(_rowcost.empty());
+//    
+//    // one different shared pointer for each row cost
+//    for (size_t i = 0; i < _index.size(); ++i)
+//        _rowcost.push_back(seed.shared_zero());
+//}
 
 
 void PST::compute_rowcosts(const Cost& seed)
 {
-    const PSO allglobals(_index, _debug, true); // full
-    compute_rowcosts(seed, allglobals);
+//    const PSO allglobals(_index, _debug, true); // full
+//    compute_rowcosts(seed, allglobals);
 //    init_rowcosts(seed);
-//    for (size_t j = 0; j < _psvs.size(); ++j)
-//    {
-//        assert(_psvs[j]);
-//        PSV& psv = *(_psvs[j]);
-//        assert(psv.size() == _index.size());
-//        for (size_t i = 0; i < psv.size(); ++i)
-//        {
-//            const PSB& psb = psv.bag(i);
-//            assert(_rowcost.at(i));
-//            if (! psb.empty())
-//            {
-//                Cost& rc = *(_rowcost.at(i));
-//                rc += psb.cost();
-//            }
-//        }
-//    }
+    for (size_t i = 0; i < _index.size(); ++i)
+    {
+        _rowcost.push_back(seed.shared_zero());
+        assert(_rowcost.back());
+        for (size_t j = 0; j < _psvs.size(); ++j)
+        {
+            assert(_psvs[j]);
+            assert(_psvs[j]->size() == _index.size());
+            const PSB& psb = _psvs[j]->bag(i);
+            if (! psb.empty())
+            {
+                _rowcost.back()->operator+=(psb.cost());
+            }
+        }
+    }
 }
 
 
 void PST::compute_rowcosts(const Cost& seed, const PSO& globals)
 {
-    init_rowcosts(seed);
+    // init_rowcosts: one different shared pointer for each row cost
+    // TRACE("PST: initialize row costs to zero");
+    assert(_rowcost.empty());
+    for (size_t i = 0; i < _index.size(); ++i)
+        _rowcost.push_back(seed.shared_zero());
+
     for (size_t j = 0; j < _psvs.size(); ++j)
     {
         assert(_psvs[j]);
@@ -178,8 +182,7 @@ void PST::compute_rowcosts(const Cost& seed, const PSO& globals)
             if (! psb.empty())
             {
                 assert(_rowcost.at(ig));
-                Cost& rc = *(_rowcost.at(ig));
-                rc += psb.cost();
+                (_rowcost.at(ig))->operator+=(psb.cost());
             }
         }
     }
@@ -862,7 +865,7 @@ void PST::dump_table() const
         }
         assert(_rowcost.at(i));
         std::string hrow; // header
-        DEBUGU("PST row {} {}: {}", _index.ton(i), rowCost(i), srow);
+        DEBUGU("{} {} {}: {}", i, _index.ton(i), rowCost(i), srow);
     }
 }
 

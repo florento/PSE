@@ -35,6 +35,7 @@ public:
     /// null cost.
     /// @param discount apply or not a discount (during update) for accidentals
     /// in the assumed  scale (lead degrees).
+    /// @warning discount is obsolete (ignored).
     CostA(bool discount=false);
     
     /// copy constructor.
@@ -81,9 +82,8 @@ public:
     /// @param name chosen name for the received pitch, in 0..6 (0 is 'C', 6 is 'B').
     /// @param accid chosen alteration for the received pitch, in -2..2.
     /// @param print whether the accidental must be printed in score.
-    /// @param gton conjectured main (global) tonality (key signature).
-    /// @param lton conjectured local tonality or undef tonlity if it is
-    /// not known.
+    /// @param gton conjectured main (global) tonality (key signature). ignored for CostA.
+    /// @param lton conjectured local tonality or undef tonlity if it is unknown. ignored for CostA.
     void update(const enum NoteName& name,
                 const enum Accid& accid,
                 bool print,
@@ -130,7 +130,10 @@ public:
     //             const enum NoteName& name, const enum Accid& accid,
     //             bool print, size_t nbocc,
     //             const Ton& gton, const Ton& lton) override;
-        
+            
+    /// accessor for debug.
+    inline size_t get_accid() const { return _accid; }
+
     /// Cost type of this const value.
     virtual CostType type() const override;
     

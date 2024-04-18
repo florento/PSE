@@ -247,14 +247,12 @@ void CostAD::update_tonale(const enum NoteName& name,
                 case Accid::DoubleSharp:
                 case Accid::DoubleFlat:
                     _dist += 2;
-                    //_dist += 3;
                     break;
 
                 case Accid::Sharp:
                 case Accid::Flat:
                 case Accid::Natural:
                     _dist += 1;
-                    //_dist += 2;
                     break;
 
                 default:

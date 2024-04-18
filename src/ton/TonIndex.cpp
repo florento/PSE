@@ -20,7 +20,7 @@ const size_t TonIndex::UNDEF  = MAXTONS+1;
 const size_t TonIndex::FAILED = MAXTONS+2;
 
 TonIndex::TonIndex(size_t n):
-_tons(), // vector initially empty
+_tons(),        // vector initially empty
 _repr_tonal(),
 _repr_modal(),
 _rankWeber(),
@@ -112,20 +112,18 @@ const Ton& TonIndex::ton(size_t i) const
 
 size_t TonIndex::irepresentative(size_t i, bool tonal) const
 {
-    size_t j = _tons.size();
     if (tonal)
     {
         assert(i < _repr_tonal.size());
-        j = _repr_tonal.at(i);
+        assert(_repr_tonal.at(i) < _tons.size());
+        return _repr_tonal.at(i);
     }
     else
     {
         assert(i < _repr_modal.size());
-        j = _repr_modal.at(i);
+        assert(_repr_modal.at(i) < _tons.size());
+        return _repr_modal.at(i);
     }
-
-    assert(j < _tons.size());
-    return j;
 }
 
 
@@ -231,6 +229,8 @@ void TonIndex::setModal()
 
 void TonIndex::add(const Ton& ton, bool global)
 {
+    assert(_tons.size() == _repr_modal.size());
+    assert(_tons.size() == _repr_tonal.size());
     if (_closed)
     {
         ERROR("TonIndex add: array of tons is closed");
@@ -249,27 +249,37 @@ void TonIndex::add(const Ton& ton, bool global)
     
     // search for earlier equivalent tons
     assert(!_tons.empty());
-    size_t last = _tons.size() - 1; // index of last ton added to this index
-    for (size_t i = 0; i < _tons.size(); ++i)
+    size_t ilast = _tons.size() - 1; // index of last ton added to this index
+    if (ilast == 0)
+    {
+        _repr_modal.push_back(ilast);
+        _repr_tonal.push_back(ilast);
+        return;
+    }
+    
+    bool found_tonal = false;
+    bool found_modal = false;
+    for (size_t i = 0; i < ilast && (!found_tonal || !found_modal); ++i)
     {
         const Ton& toni = _tons.at(i).first;
-        const Ton& ton = _tons.back().first; // last ton added
-        if ((toni == ton) || toni.equivalent(ton, false)) // modal equiv
+        assert(toni != ton); // no duplicates in TonIndex
+        if (!found_tonal && ton.equivalent(toni, true))  // tonal equiv
+        {
+            _repr_tonal.push_back(i);
+            found_tonal = true;
+        }
+        if (!found_modal && ton.equivalent(toni, false)) // modal equiv
         {
             _repr_modal.push_back(i);
-            _repr_tonal.push_back(i);
-        }
-        else if (toni.equivalent(ton, true))
-        {
-            _repr_modal.push_back(last);
-            _repr_tonal.push_back(i);
-        }
-        else
-        {
-            _repr_modal.push_back(last);
-            _repr_tonal.push_back(last);
+            found_modal = true;
         }
     }
+    
+    if (!found_tonal)
+        _repr_tonal.push_back(ilast);
+
+    if (!found_modal)
+        _repr_modal.push_back(ilast);
 }
 
 
