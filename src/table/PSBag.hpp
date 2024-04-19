@@ -75,7 +75,7 @@ public:
     /// whether this bag is empty.
     bool empty() const;
     
-    /// number of PS Configs in this bag
+    /// number of PS Configs in this bag.
     size_t size() const;
     
     /// cost of the best path in this bag.

@@ -104,7 +104,7 @@ public:
     size_t size() const override;
     
     /// empty the list of notes in this enumerator.
-    void reset();
+    void reset(size_t i0, size_t i1 = PSEnum::ID_INF) override;
     
     /// add a new input note to the list of enumerated notes.
     /// @param note MIDI key of the new input note.

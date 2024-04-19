@@ -92,7 +92,11 @@ public:
     //
     
     /// empty the list of notes in the enumerator of this speller.
-    void reset();
+    /// @param i0 new index of the first note accessible by this enumerator.
+    /// @param i1 new index of the note after the last note accessible by this
+    /// enumerator. optional (can be ommited for open PS Enum).
+    /// if given it must be larger than or equal to first.
+    void reset(size_t i0, size_t i1 = PSEnum::ID_INF);
     
     /// add a new input note to the enumerator of notes to spell.
     /// @param note MIDI key of the new input note.
@@ -344,8 +348,9 @@ protected: // data
     
     /// @warning we compute one sample cost for cost type.
 
-    /// sample cost (zero) for the construction of tables.
-    CostA _seedAdiscount;
+    // sample cost (zero) for the construction of tables.
+    // @warning discount Obsolete for CostA
+    // CostA _seedAdiscount;
 
     /// sample cost (zero) for the construction of tables.
     CostA _seedAnodiscount;

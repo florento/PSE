@@ -46,6 +46,9 @@ class PSEnum
 {
 public:
     
+    /// value of right bound when this enumerator is open.
+    static const size_t ID_INF;
+    
     /// Pitch Spelling enumerator with starting note and (optional) ending note.
     /// @param i0 index of the first note accessible by this enumerator.
     /// @param i1 index of the note after the last note accessible by this
@@ -202,6 +205,13 @@ public:
     /// @return how many rewriting wer performed.
     size_t rewritePassing();
     
+    /// set the bounds of interval of accessible indexes to new values.
+    /// @param i0 new index of the first note accessible by this enumerator.
+    /// @param i1 new index of the note after the last note accessible by this
+    /// enumerator. optional (can be ommited for open PS Enum).
+    /// if given it must be larger than or equal to first.
+    virtual void reset(size_t i0, size_t i1 = PSEnum::ID_INF);
+    
 protected:
 
     /// index of the first note accessible by this enumerator.
@@ -209,16 +219,6 @@ protected:
     
     /// index of the note after the last note accessible by this enumerator.
     size_t _stop;
-
-    /// value of right bound when this enumerator is open.
-    static const size_t ID_INF;
-    
-    /// set the bounds of interval of accessible indexes to new values.
-    /// @param i0 new index of the first note accessible by this enumerator.
-    /// @param i1 new index of the note after the last note accessible by this
-    /// enumerator. optional (can be ommited for open PS Enum).
-    /// if given it must be larger than or equal to first.
-    void reset(size_t i0, size_t i1 = PSEnum::ID_INF);
     
 private:
     

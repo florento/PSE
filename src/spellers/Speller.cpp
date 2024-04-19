@@ -19,7 +19,7 @@ _index(nbt),
 //_seed(nullptr),
 //_initial_state(0), // default
 //_chromatic(false),
-_seedAdiscount(true),
+//_seedAdiscount(true), // discount obsolete for CostA
 _seedAnodiscount(false),
 _seedADplus(),
 _seedADlex(),
@@ -108,9 +108,9 @@ size_t Speller::size() const
 }
 
 
-void Speller::reset()
+void Speller::reset(size_t i0, size_t i1)
 {
-    _enum.reset();
+    _enum.reset(i0, i1);
 }
 
 
@@ -209,24 +209,21 @@ Cost& Speller::sampleCost(CostType ct)
     switch (ct)
     {
         case CostType::ACCIDlead:
-            return _seedAdiscount;
-            break;
+            WARN("Speller: discount obsolete for CostA (ignored)");
+            return _seedAnodiscount;
             
         case CostType::ACCID:
             return _seedAnodiscount;
-            break;
             
         case CostType::ADplus:
             return _seedADplus;
-            break;
             
         case CostType::ADlex:
             return _seedADlex;
-            break;
             
         default:
             ERROR("Speller sampleCost unexpected code {}", ct);
-            return _seedAdiscount;
+            return _seedAnodiscount;
     }
 }
 

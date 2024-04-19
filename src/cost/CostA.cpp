@@ -34,6 +34,25 @@ CostA::~CostA()
 }
 
 
+
+std::shared_ptr<Cost> CostA::shared_zero() const
+{
+    return std::shared_ptr<Cost>(new CostA(_discount));
+}
+
+
+std::shared_ptr<Cost> CostA::shared_clone() const
+{
+    return std::shared_ptr<Cost>(new CostA(*this));
+}
+
+
+std::unique_ptr<Cost> CostA::unique_clone() const
+{
+    return std::unique_ptr<Cost>(new CostA(*this));
+}
+
+
 //CostA& CostA::operator=(const CostA& rhs)
 //{
 //    if (this != &rhs)
@@ -73,25 +92,6 @@ CostA& CostA::operator+=(const CostA& rhs)
 //{
 //    return c1.operator+(c2);
 //}
-
-
-std::shared_ptr<Cost> CostA::shared_zero() const
-{
-    return std::shared_ptr<Cost>(new CostA());
-}
-
-
-std::shared_ptr<Cost> CostA::shared_clone() const
-{
-    return std::shared_ptr<Cost>(new CostA(*this));
-}
-
-
-std::unique_ptr<Cost> CostA::unique_clone() const
-{
-    return std::unique_ptr<Cost>(new CostA(*this));
-}
-
 
 bool CostA::updateAccid(const enum Accid& accid)
 {

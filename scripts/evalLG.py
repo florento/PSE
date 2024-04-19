@@ -160,25 +160,24 @@ def eval_LG(output_dir:str='', tablename:str='',
     opath = Path(_eval_root)/output_dir
     if not os.path.isdir(opath):
         opath.mkdir(parents=True, exist_ok=True) # Python ≥ 3.5
-    else:
-        print('WARNING: output dir', opath, 'exists')
-        return
     # process all LG opus
     stat = ps.Stats() # will be updated by the speller 
     dataset = LG_map()
     li = sorted(list(dataset)) # list of index in dataset   
     print('starting evaluation of LG dataset -', len(li), 'entries', flush=True)
     for i in li:
-        if (i in skip):
-            continue # skip score
+        if (i in skip): # skip particular score
+            print('eval LG: skip', i, flush=True)
+            continue 
         file = dataset[i] # should always be present
         filep = file.parts
         t = ''
-        if (filep[-2] == 'ref'):
-            t = filep[-3]
+        if (filep[-3] == 'ref'):
+            t = filep[-4]
         else:
+            print('eval LG: skip', i, '(ref/ not found)', flush=True)
             continue # skip score
-        print('evaluation of', t, flush=True)
+        print('\n evaluation of', t, flush=True)
         s = m21.converter.parse(file.as_posix())
         (ls, lld) = sp.eval_score(score=s, stats=stat, 
                                   score_id=i, title=t, composer='', 

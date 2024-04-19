@@ -735,9 +735,11 @@ class Stats:
     def show(self):
         """display statistics"""
         print('parts spelled   :', self._global_parts)            
-        print('notes spelled   :', self._global_notes)            
-        print('correct spelling:', "{:.2f}".format(self.percent_spell()), '%')            
-        print('correct KS estim:', "{:.2f}".format(self.percent_ks()), '%')            
+        print('notes spelled   :', self._global_notes)     
+        if self._global_notes > 0:
+            print('correct spelling:', "{:.2f}".format(self.percent_spell()), '%')            
+        if self._global_parts > 0:
+            print('correct KS estim:', "{:.2f}".format(self.percent_ks()), '%')            
              
     def get_table(self):
         """return the global evaluation table"""
@@ -917,7 +919,7 @@ class Spellew:
 
     def spell(self, notes, stat):
         """run spell checking algo"""
-        self._speller.reset()
+        self._speller.reset(0, 0)
         # feed speller with input notes
         for (n, b, s) in notes:   # note, bar number, simultaneous flag
             self._speller.add(midi=n.pitch.midi, bar=b, simultaneous=s)
@@ -1114,11 +1116,11 @@ def write_score(score, output_path, name):
     # create any missing directories along the path
     if not os.path.isdir(output_path):
         output_path.mkdir(parents=True, exist_ok=True) # Python ≥ 3.5
-    else:
-        print('WARNING: output dir', output_path, 'exists')
-        return
-    #    if not os.path.isdir(output_path):
-    #        os.mkdir(output_path)
+  # else:
+  #     print('WARNING: output dir', output_path, 'exists')
+  #     return
+  # if not os.path.isdir(output_path):
+  #     os.mkdir(output_path)
     xmlfile = output_path/(name+'.musicxml')
     # M21 export
     score.write('musicxml', fp=xmlfile) 

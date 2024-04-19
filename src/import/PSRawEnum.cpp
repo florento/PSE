@@ -166,8 +166,9 @@ size_t PSRawEnum::size() const
 }
 
 
-void PSRawEnum::reset()
+void PSRawEnum::reset(size_t i0, size_t i1)
 {
+    PSEnum::reset(i0, i1); // reset bounds
     assert(_notes);
     _notes->clear();
     assert(_barnum);
