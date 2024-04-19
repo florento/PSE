@@ -928,7 +928,10 @@ class Spellew:
         else:
             assert(self._algo_name == "PSE")
             assert(self._ct1 != pse.CTYPE_UNDEF)
-            print('algo PSE compute Table 1', end=' ', flush=True)
+            print('algo PSE compute Table 1', 
+                  'cost type1:', self._ct1,
+                  'tonal1:', self._tonal1,
+                  'deterministic1:', self._det1, end=' ', flush=True)
             stat.start_timer(1)
             self._speller.eval_table(self._ct1, self._tonal1, self._det1)
             stat.stop_timer(1)
@@ -941,7 +944,10 @@ class Spellew:
                 self._speller.eval_grid()
                 stat.stop_timer(2)                
                 print("{0:0.2f}".format(stat.get_timer(2)), 'ms', end='\n', flush=True)
-                print('algo PSE compute Table 2', end=' ', flush=True)
+                print('algo PSE compute Table 2', 
+                      'cost type2:', self._ct2,
+                      'tonal2:', self._tonal2,
+                      'deterministic2:', self._det2, end=' ', flush=True)
                 stat.start_timer(3)
                 self._speller.reval_table(self._ct2, self._tonal2, self._det2)
                 stat.stop_timer(3)
@@ -1024,11 +1030,11 @@ class Spellew:
         # extract estimated global ton from speller
         self._speller.eval_global(5, False) # 5% tolerance
         (gt, i) = self.get_global(k0)
-        print('pse eval_part: golbal selected:', i, flush=True)
+        print('pse eval_part: global selected:', i, flush=True)
         # apply the spelling in the row of the estimated global
         self._speller.rename(i)
         # eval estimation of global key
-        if not gt.undef:
+        if not gt.undef():
             if compare_key(k0, gt):
                 print('global ton: OK:', '(', m21_key(gt), 
                       '), has the same signature as', k0, end=' ')

@@ -198,7 +198,7 @@ const PSB& PSV::bag(size_t i) const
 //}
 
 
-// compute _psbs
+// compute _psbs without local tons
 void PSV::init_psbs(const Cost& seed, bool tonal)
 {
     for (size_t i = 0; i < _index.size(); ++i)
@@ -210,16 +210,16 @@ void PSV::init_psbs(const Cost& seed, bool tonal)
         const Ton& toni = ton(i);
         if (_algo == Algo::PSE || _algo == Algo::PSD)
         {
+            // compute PSB of i, optimization to reuse comp. åfor equivalent ton
             assert(i < _psbs.size());
             assert(_psbs.at(i) == nullptr);
             size_t j = _index.irepresentative(i, tonal);
             assert(j < _index.size());
-            // compute PSB of i
             if (j == i)
             {
                 // arg local ton is ignored
                 _psbs[i] = std::shared_ptr<const PSB>(new
-                        PSB(_algo, seed, enumerator(), toni, tonal));
+                        PSB(_algo, seed, enumerator(), tonal, toni));
             }
             // optimization: do not rebuilt PSB
             // when it was computed for an equivalent ton
@@ -228,7 +228,8 @@ void PSV::init_psbs(const Cost& seed, bool tonal)
             {
                 assert(j < _psbs.size());
                 assert(_psbs.at(j) != nullptr);
-                _psbs[i] = _psbs[j]; // shred_ptr copy
+                DEBUGU("init_psbs OPTIM {}={}", i, j);
+                _psbs[i] = _psbs[j]; // shared_ptr copy
             }
         }
         else
@@ -269,9 +270,9 @@ void PSV::init_psbs(const Cost& seed,
         // PS Bag is empty if first() = last()
         if (_algo == Algo::PSE || _algo == Algo::PSD)
         {
-            // arg local ton is ignored
+            // no optimization for second table
             _psbs[i] = std::shared_ptr<const PSB>(new
-                       PSB(_algo, seed, enumerator(), toni, ltoni, tonal));
+                       PSB(_algo, seed, enumerator(), tonal, toni, ltoni));
         }
         else
         {

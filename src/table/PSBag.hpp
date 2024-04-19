@@ -67,8 +67,8 @@ public:
     /// distance value used for tie break.
     /// @param tonal mode: tonal or modal, for the construction of initial state.
     /// @see State constructor for tonal/modal mode
-    PSB(const Algo& a, const Cost& seed,
-        PSEnum& e, const Ton& ton, const Ton& lton = Ton(), bool tonal = true);
+    PSB(const Algo& a, const Cost& seed, PSEnum& e, bool tonal,
+        const Ton& ton, const Ton& lton = Ton());
     
     ~PSB();
     

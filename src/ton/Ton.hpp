@@ -124,11 +124,12 @@ public:
     /// key signature truly reflecting the notes constituting the considered scale
     int getRealKS() const;
 
-    /// this ton will produce the same PSState as the given ton,  in tonal or modal mode.
+    /// this ton has the same accidents, in Key Signature or Scale, as the given ton.
     /// @param rhs other ton to be compered to.
-    /// @param tonal mode: tonal or modal, for the construction of initial state (from this ton).
+    /// @param ks consider the accidents in Key Signature for equivalence, otherwise consider
+    /// the accidents in scale.
     /// @see PSState
-    bool equivalent(const Ton& rhs, bool tonal) const;
+    bool equivalent(const Ton& rhs, bool ks) const;
 
     /// accidental in the key signature of this ton for a given pitch name.
     /// @param n an encapsulated note name

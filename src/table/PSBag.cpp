@@ -15,8 +15,8 @@
 namespace pse {
 
 
-PSB::PSB(const Algo& a, const Cost& seed, PSEnum& e,
-         const Ton& gton, const Ton& lton, bool tonal):
+PSB::PSB(const Algo& a, const Cost& seed, PSEnum& e, bool tonal,
+         const Ton& gton, const Ton& lton):
 _algo(a),
 _enum(e),
 _bests(),   // empty

@@ -88,6 +88,7 @@ Speller::~Speller()
 void Speller::debug(bool flag)
 {
     TRACE("Speller: debug mode {}", flag);
+    _debug = flag;
     if (flag)
         spdlog_setVerbosity(5);
     else
@@ -352,7 +353,8 @@ bool Speller::evalGlobal(double d, bool refine)
         ERROR("Speller evalGlobal: eval table first");
         return false;
     }
-    // _table->dump_table();
+    if (_debug)
+        _table->dump_table();
     if (refine)
     {
         if (_global == nullptr)

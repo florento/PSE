@@ -24,7 +24,7 @@ TEST(PSBag, Eb_maj0)
     e.add(55, 0); // G3
       
     // gton=t, lton-UNDEF, tonal flag
-    pse::PSB b(pse::Algo::PSE, c0, e, t, pse::Ton(), true);
+    pse::PSB b(pse::Algo::PSE, c0, e, true, t, pse::Ton());
     
     EXPECT_FALSE(b.empty());
     EXPECT_EQ(b.cost(), c0);
@@ -49,7 +49,7 @@ TEST(PSBag, Eb_maj1)
     e.add(54, 0); // G3
       
     // gton=t, lton-UNDEF, tonal flag
-    pse::PSB b(pse::Algo::PSE, c0, e, t, pse::Ton(), true);
+    pse::PSB b(pse::Algo::PSE, c0, e, true, t, pse::Ton());
     
     EXPECT_FALSE(b.empty());
     EXPECT_EQ(b.cost(), c1);
@@ -74,7 +74,7 @@ TEST(PSBag, Eb_maj2)
     e.add(57, 0); // A3
       
     // gton=t, lton-UNDEF, tonal flag
-    pse::PSB b(pse::Algo::PSE, c0, e, t, pse::Ton(), true);
+    pse::PSB b(pse::Algo::PSE, c0, e, true, t, pse::Ton());
     
     EXPECT_FALSE(b.empty());
     EXPECT_EQ(b.cost(), c1);
@@ -94,7 +94,7 @@ TEST(PSBag, Eb_maj3)
     e.add(46, 0); // Bb2
       
     // gton=t, lton-UNDEF, tonal flag
-    pse::PSB b(pse::Algo::PSE, c0, e, t, pse::Ton(), true);
+    pse::PSB b(pse::Algo::PSE, c0, e, true, t, pse::Ton());
     
     EXPECT_FALSE(b.empty());
     EXPECT_EQ(b.cost(), c0);
@@ -114,7 +114,7 @@ TEST(PSBag, Cmin3)
     e.add(46, 0); // Bb2
       
     // gton=t, lton-UNDEF, tonal flag
-    pse::PSB b(pse::Algo::PSE, c0, e, t, pse::Ton(), true);
+    pse::PSB b(pse::Algo::PSE, c0, e, true, t, pse::Ton());
     
     EXPECT_FALSE(b.empty());
     EXPECT_EQ(b.cost(), c0);
@@ -138,7 +138,7 @@ TEST(PSBag, Cmin3d)
     e.add(46, 0); // Bb2
       
     // gton=t, lton-UNDEF, modal flag
-    pse::PSB b(pse::Algo::PSE, c0, e, t, pse::Ton(), false);
+    pse::PSB b(pse::Algo::PSE, c0, e, false, t, pse::Ton());
     
     EXPECT_FALSE(b.empty());
     EXPECT_EQ(b.cost(), c1);

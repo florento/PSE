@@ -303,7 +303,7 @@ TEST(TonIndex, 30_equiv)
     
     
     // tonal representative
-    for (size_t i = 0; i < 15; ++i) // major : self
+    for (size_t i = 0; i < 15; ++i)  // major : self
     {
         EXPECT_EQ(id.irepresentative(i, true), i);
     }
