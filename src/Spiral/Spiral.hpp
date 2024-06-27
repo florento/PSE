@@ -19,7 +19,7 @@
 #include "Accidental.hpp"
 #include "Pitch.hpp"
 
-namespace scoremodel {
+namespace pse {
 
 /// @brief Elaine Chew's spiral of fifths.
 /// for pitch spelling.
@@ -197,7 +197,7 @@ const pse::NoteName& closest(unsigned int pitch, const SpiralPoint& p);
 }
 
 
-} // namespace scoremodel
+} // namespace pse
 
 #endif /* Spiral_hpp */
 
