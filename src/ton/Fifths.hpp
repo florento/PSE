@@ -23,7 +23,7 @@ namespace pse {
 
 /// static array of fifths, with double sharps and flats.
 /// every note is presented with 2 values :
-/// - name : NoteName in 0..6 for C, D, E, F, G, A, B (see table Pitch::name_to_int)
+/// - name : NoteName in 0..6 for C, D, E, F, G, A, B (see table pse::Pitch::name_to_int)
 /// - alteration : Accid in -3..3
 ///
 /// Fbb Cbb Gbb Dbb Abb Ebb Bbb Fb Cb Gb Db Ab Eb Bb
@@ -100,7 +100,7 @@ private:
     /// name of the ith entry in the array of fifth.
     /// @param i index in the array of fifth, between -15 and 19 (0 is 'C').
     /// @return a note name in 0..6 for C, D, E, F, G, A, B
-    /// @see table Pitch::name_to_int
+    /// @see table pse::Pitch::name_to_int
     //static int iname(int i);
     
 };

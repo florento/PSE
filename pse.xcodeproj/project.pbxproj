@@ -376,7 +376,7 @@
 		439DBF2F2A4FFF6800565CC4 /* TestRankWeber.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TestRankWeber.cpp; sourceTree = "<group>"; };
 		439DBF312A516F7500565CC4 /* utils.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = utils.cpp; path = src/general/utils.cpp; sourceTree = "<group>"; };
 		439DBF322A516F7500565CC4 /* utils.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = utils.hpp; path = src/general/utils.hpp; sourceTree = "<group>"; };
-		439DBF372A51C06100565CC4 /* utils.tpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = utils.tpp; path = src/general/utils.tpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		439DBF372A51C06100565CC4 /* utils.tpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = utils.tpp; path = src/general/utils.tpp; sourceTree = "<group>"; };
 		43A24E422A3A0BD50041B004 /* Rational.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rational.cpp; path = src/general/Rational.cpp; sourceTree = "<group>"; };
 		43A24E432A3A0BD50041B004 /* Rational.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Rational.hpp; path = src/general/Rational.hpp; sourceTree = "<group>"; };
 		43A2543E29280D8900D559D2 /* trace.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = trace.cpp; path = src/general/trace.cpp; sourceTree = "<group>"; };

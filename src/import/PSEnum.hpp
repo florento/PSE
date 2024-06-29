@@ -161,7 +161,7 @@ public:
     /// @param accid accidental in [-2, 2] where 1 is a half tone
     /// @param oct octave number in -10..10
     /// @param altprint whether the accidental must be printed.
-    /// @see Pitch::rename()
+    /// @see pse::Pitch::rename()
     virtual void rename(size_t i,
                         const enum NoteName& name, const enum Accid& accid,
                         int oct, bool altprint) = 0;

@@ -59,7 +59,7 @@ public:
     /// @param name note name in 'A'..'G'.
     /// @param accid in [-2, 2] where 1.0 is half tone
     /// @param oct in -10..10
-    /// @see table Pitch::NAME
+    /// @see table pse::Pitch::NAME
     Pitch(const enum NoteName& name,
           const enum Accid& accid,
           int oct = 0);

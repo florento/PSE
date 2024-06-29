@@ -150,7 +150,7 @@ public:
     /// @param a accidental in [-2, 2] where 1 is a half tone
     /// @param o octave number in -10..10
     /// @param altprint whether the accidental must be printed.
-    /// @see Pitch::rename()
+    /// @see pse::Pitch::rename()
     /// @warning the triplet n, a, o must correspond to the midi value
     /// of this pitch.
     /// @warning the notes cannot be renamed in place because the Python
@@ -163,7 +163,7 @@ public:
     /// of given index. The accidental and octave are deduced from
     /// @param i index of a note. must be inside the interval of this enumerator.
     /// @param n note name in 'A'..'G'.
-    /// @see Pitch::rename()
+    /// @see pse::Pitch::rename()
     /// @warning the name n must be a possible name for the current midi value
     /// of this pitch.
     /// @warning the alt-print flag is set arbitrarily to true.

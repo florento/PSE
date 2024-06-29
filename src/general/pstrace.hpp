@@ -1,12 +1,12 @@
 //
-//  trace.hpp
+//  pstrace.hpp
 //  pypse
 //
 //  Created by Florent Jacquemard on 18/11/2022.
 //
 
-#ifndef trace_hpp
-#define trace_hpp
+#ifndef pstrace_hpp
+#define pstrace_hpp
 
 #include <iostream>
 #include <string>
@@ -20,6 +20,7 @@
 #define WARN(...)  spdlog::warn(__VA_ARGS__)
 #define INFO(...)  spdlog::info(__VA_ARGS__)
 #define TRACE(...) spdlog::trace(__VA_ARGS__)
+#define DEBUG(...) spdlog::debug(__VA_ARGS__)
 #define DEBUGU(...) spdlog::debug(__VA_ARGS__)
 
 //inline void ERROR(...) { spdlog::error(__VA_ARGS__); }

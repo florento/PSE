@@ -123,7 +123,7 @@ const PSC0* PSC::previous() const
         //assert(ton <= 7);
         // int alt = accidental();
         //DEBUGU("Dist. of {}({}){} to {}: {}",
-        //      Pitch::name_of_int(_name), _name, alt, ton,
+        //      pse::Pitch::name_of_int(_name), _name, alt, ton,
         //      KeySig::distTon(_name, alt, ton));
         /// @todo REVISE
         //_dist += KeySig::distTon(_name, alt, ton);

@@ -11,7 +11,7 @@
 #ifndef PSNoteEnum_hpp
 #define PSNoteEnum_hpp
 
-#include <stdio.h>
+#include <iostream>
 #include <assert.h>
 #include <memory>
 
@@ -129,7 +129,7 @@ public:
     /// @param accid accidetal in [-2, 2] where 1 is a half tone
     /// @param oct octave number in -10..10
     /// @param altprint whether the accidental must be printed.
-    /// @see Pitch::rename()
+    /// @see pse::Pitch::rename()
     virtual void rename(size_t i, const pse::NoteName& name,
                         const pse::Accid& accid, int oct, bool altprint);
     
