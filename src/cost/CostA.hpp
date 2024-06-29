@@ -159,8 +159,11 @@ protected: // convenience function
 
 std::ostream& operator<<(std::ostream& o, const CostA& c);
 
-
 } // namespace pse
+
+/// fmt v10 and above requires `fmt::formatter<T>` extends `fmt::ostream_formatter`.
+/// @see: https://github.com/fmtlib/fmt/issues/3318
+template<> struct fmt::formatter<pse::CostA> : fmt::ostream_formatter {};
 
 #endif /* CostA_hpp */
 

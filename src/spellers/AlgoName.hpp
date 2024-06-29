@@ -45,8 +45,11 @@ std::string tostring(const Algo& a);
 
 std::ostream& operator<<(std::ostream& o, const Algo& m);
 
-
 } // end namespace pse
+
+/// fmt v10 and above requires `fmt::formatter<T>` extends `fmt::ostream_formatter`.
+/// @see: https://github.com/fmtlib/fmt/issues/3318
+template<> struct fmt::formatter<pse::Algo> : fmt::ostream_formatter {};
 
 #endif /* AlgoName_hpp */
 

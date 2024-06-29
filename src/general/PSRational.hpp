@@ -182,6 +182,9 @@ bool operator>(const Rational& lhs, const Rational& rhs);
 std::ostream& operator<< (std::ostream& ostr, const Rational& r);
 std::istream& operator>> (std::istream& istr, Rational& r);
 
+// fmt v10 and above requires `fmt::formatter<T>` extends `fmt::ostream_formatter`.
+// See: https://github.com/fmtlib/fmt/issues/3318
+template<> struct fmt::formatter<Rational> : fmt::ostream_formatter {};
 
 namespace std
 {

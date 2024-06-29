@@ -88,12 +88,14 @@ protected: // data
     size_t _sum;
     
 };
-    
-    
+     
 std::ostream& operator<<(std::ostream& o, const CostADplus& c);
 
-
 } // namespace pse
+
+/// fmt v10 and above requires `fmt::formatter<T>` extends `fmt::ostream_formatter`.
+/// @see: https://github.com/fmtlib/fmt/issues/3318
+template<> struct fmt::formatter<pse::CostADplus> : fmt::ostream_formatter {};
 
 #endif /* CostADplus_hpp */
 

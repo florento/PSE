@@ -70,8 +70,11 @@ enum NoteName NoteName(int i);
     
 std::ostream& operator<<(std::ostream& o, const enum NoteName& c);
 
-
 } // namespace pse
+
+/// fmt v10 and above requires `fmt::formatter<T>` extends `fmt::ostream_formatter`.
+/// @see: https://github.com/fmtlib/fmt/issues/3318
+template<> struct fmt::formatter<enum pse::NoteName> : fmt::ostream_formatter {};
 
 #endif /* NoteName_hpp */
 

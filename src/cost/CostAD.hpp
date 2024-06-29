@@ -195,8 +195,11 @@ protected: // data
 
 std::ostream& operator<<(std::ostream& o, const CostAD& c);
 
-
 } // namespace pse
+
+/// fmt v10 and above requires `fmt::formatter<T>` extends `fmt::ostream_formatter`.
+/// @see: https://github.com/fmtlib/fmt/issues/3318
+template<> struct fmt::formatter<pse::CostAD> : fmt::ostream_formatter {};
 
 #endif /* CostAD_hpp */
 

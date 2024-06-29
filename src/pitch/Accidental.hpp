@@ -16,7 +16,7 @@
 #include <string>
 
 #include "trace.hpp"
-//#include "Rational.hpp"
+//#include "PSRational.hpp"
 
 
 namespace pse {
@@ -109,6 +109,10 @@ std::string tostring(const enum Accid& a);
 std::ostream& operator<<(std::ostream& o, const enum Accid& c);
 
 } // namespace pse
+
+/// fmt v10 and above requires `fmt::formatter<T>` extends `fmt::ostream_formatter`.
+/// @see: https://github.com/fmtlib/fmt/issues/3318
+template<> struct fmt::formatter<enum pse::Accid> : fmt::ostream_formatter {};
 
 #endif /* Accidental_hpp */
 

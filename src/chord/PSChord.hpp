@@ -18,7 +18,7 @@
 #include <vector>
 
 #include "trace.hpp"
-#include "Rational.hpp"
+#include "PSRational.hpp"
 #include "NoteName.hpp"
 #include "Accidental.hpp"
 #include "PSEnum.hpp"

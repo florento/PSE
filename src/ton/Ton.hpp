@@ -448,6 +448,10 @@ std::ostream& operator<<(std::ostream& o, const Ton& ton);
 
 } // end namespace pse
     
+/// fmt v10 and above requires `fmt::formatter<T>` extends `fmt::ostream_formatter`.
+/// @see: https://github.com/fmtlib/fmt/issues/3318
+template<> struct fmt::formatter<pse::Ton> : fmt::ostream_formatter {};
+
 #endif /* Ton_hpp */
 
 /// @} // end group pse

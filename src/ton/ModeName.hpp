@@ -97,8 +97,11 @@ std::string tostring(const ModeName& m);
 
 std::ostream& operator<<(std::ostream& o, const ModeName& m);
 
-
 } // end namespace pse
+
+/// fmt v10 and above requires `fmt::formatter<T>` extends `fmt::ostream_formatter`.
+/// @see: https://github.com/fmtlib/fmt/issues/3318
+template<> struct fmt::formatter<enum pse::ModeName> : fmt::ostream_formatter {};
 
 #endif /* ModeName_hpp */
 
