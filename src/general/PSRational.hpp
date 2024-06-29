@@ -1,10 +1,10 @@
 //
-//  Rational.hpp
+//  PSRational.hpp
 //
 //
 
-#ifndef Rational_hpp
-#define Rational_hpp
+#ifndef PSRational_hpp
+#define PSRational_hpp
 
 #include <iostream>
 #include <sstream>
@@ -209,5 +209,5 @@ namespace std
 }
 
 
-#endif /* Rational_hpp */
+#endif /* PSRational_hpp */
 
