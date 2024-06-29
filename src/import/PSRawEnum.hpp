@@ -26,6 +26,7 @@
 #include "PSEnum.hpp"
 //#include "Stream.hpp"
 
+
 namespace pse {
 
 
@@ -54,7 +55,8 @@ public:
     /// if given it must be larger than or equal to i0.
     PSRawEnum(size_t i0, size_t i1 = PSEnum::ID_INF);
 
-    // Pitch Spelling enumerator from list of notes with midi pitch and bar number.
+    // Pitch Spelling enumerator from list of notes with midi pitch 
+    // and bar number.
     // PSRawEnum(const std::vector<int>& notes, const std::vector<int>& barnum);
 
     // @param s list of Music 21 Note objects (references).
@@ -107,8 +109,8 @@ public:
     void reset(size_t i0, size_t i1 = PSEnum::ID_INF) override;
     
     /// add a new input note to the list of enumerated notes.
-    /// @param note MIDI key of the new input note.
-    /// @param bar bar number of the new input note.
+    /// @param note MIDI key of the new input note. must be in 0..128.
+    /// @param bar bar number of the new input note. must be positive.
     /// @param simult whether the new input note is simultaneous with the
     /// next note.
     /// @param dur note duration, in fraction of bars.
@@ -133,16 +135,16 @@ public:
 
     /// midi key number in 0..128 of the note of the given index.
     /// @param i index of a note. must be inside the interval of this enumerator.
-    virtual unsigned int midipitch(size_t i) const override;
+    unsigned int midipitch(size_t i) const override;
 
     /// number of measure the note of given index belongs to.
     /// midi key number in 0..128 of the note of the given index.
     /// @param i index of a note. must be inside the interval of this enumerator.
-    virtual long measure(size_t i) const override;
+    long measure(size_t i) const override;
 
     /// whether the note of given index is simultaneous with the next note.
     /// @param i index of a note. must be inside the interval of this enumerator.
-    virtual bool simultaneous(size_t i) const override;
+    bool simultaneous(size_t i) const override;
 
     /// record new NoteName, Accid, Octave, print flag for the note of given index.
     /// @param i index of a note. must be inside the interval of this enumerator.
@@ -155,9 +157,9 @@ public:
     /// of this pitch.
     /// @warning the notes cannot be renamed in place because the Python
     /// lists in argument contain const objects.
-    virtual void rename(size_t i,
-                        const enum NoteName& n, const enum Accid& a, int o,
-                        bool altprint) override;
+    void rename(size_t i,
+                const enum NoteName& n, const enum Accid& a, int o,
+                bool altprint) override;
     
     /// record new note name, accidental, octave, print flag for the note
     /// of given index. The accidental and octave are deduced from
@@ -169,7 +171,7 @@ public:
     /// @warning the alt-print flag is set arbitrarily to true.
     /// @warning the notes cannot be renamed in place because the Python
     /// lists in argument contain const objects.
-    virtual void rename(size_t i, const enum NoteName& n, bool altprint=true) override;
+    void rename(size_t i, const enum NoteName& n, bool altprint=true) override;
        
     /// estimated name for the note of given index in the best path,
     /// in 0..6 (0 is 'C', 6 is 'B').
