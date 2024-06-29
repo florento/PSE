@@ -74,9 +74,11 @@ bool operator!=(const PWO& lhs, const PWO& rhs);
 
 std::ostream& operator<<(std::ostream& o, const PWO& p);
 
-
-
 } // namespace pse
+
+/// fmt v10 and above requires `fmt::formatter<T>` extends `fmt::ostream_formatter`.
+/// @see: https://github.com/fmtlib/fmt/issues/3318
+template<> struct fmt::formatter<pse::PWO> : fmt::ostream_formatter {};
 
 #endif /* PWO_hpp */
 

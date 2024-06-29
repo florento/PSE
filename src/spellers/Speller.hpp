@@ -17,7 +17,7 @@
 #include <time.h>
 
 #include "trace.hpp"
-#include "Rational.hpp"
+#include "PSRational.hpp"
 #include "NoteName.hpp"
 #include "Accidental.hpp"
 #include "ModeName.hpp"

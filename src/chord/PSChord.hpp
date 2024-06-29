@@ -18,7 +18,7 @@
 #include <vector>
 
 #include "trace.hpp"
-#include "Rational.hpp"
+#include "PSRational.hpp"
 #include "NoteName.hpp"
 #include "Accidental.hpp"
 #include "PSEnum.hpp"
@@ -119,8 +119,9 @@ public:
     /// duration, in number of bars, of the note of given index,
     /// if it has been set, otherwise 0.
     /// @param i index of note in the list of input notes.
-    Rational duration(size_t i) const override;
-    
+    long duration_num(size_t i) const override;
+    long duration_den(size_t i) const override;
+
     /// print flag for the note of given index, if it has been set,
     /// otherwise true.
     /// This flags says wether the accidental of the note must be printed or not.

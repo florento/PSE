@@ -250,8 +250,7 @@ private:
     // static const int PC[7];
     
 }; // end MidiNum
-    
-    
+        
 //} // namespace MidiNum
 
 

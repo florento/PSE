@@ -1,10 +1,10 @@
 //
-//  Rational.hpp
+//  PSRational.hpp
 //
 //
 
-#ifndef Rational_hpp
-#define Rational_hpp
+#ifndef PSRational_hpp
+#define PSRational_hpp
 
 #include <iostream>
 #include <sstream>
@@ -65,6 +65,8 @@ public:
 #include <limits>
 using std::numeric_limits;
 #endif
+
+namespace pse {
 
 /// class of rational numbers
 class Rational
@@ -182,14 +184,19 @@ bool operator>(const Rational& lhs, const Rational& rhs);
 std::ostream& operator<< (std::ostream& ostr, const Rational& r);
 std::istream& operator>> (std::istream& istr, Rational& r);
 
+} // end namespace pse
+
+// fmt v10 and above requires `fmt::formatter<T>` extends `fmt::ostream_formatter`.
+// See: https://github.com/fmtlib/fmt/issues/3318
+template<> struct fmt::formatter<pse::Rational> : fmt::ostream_formatter {};
 
 namespace std
 {
     template<>
-    class hash<Rational>
+    class hash<pse::Rational>
     {
     public:
-        std::size_t operator()(const Rational& x) const
+        std::size_t operator()(const pse::Rational& x) const
         {
             using std::hash;
          
@@ -205,6 +212,5 @@ namespace std
     };
 }
 
-
-#endif /* Rational_hpp */
+#endif /* PSRational_hpp */
 

@@ -207,12 +207,13 @@ private:
     
 };
 
-
 std::ostream& operator<<(std::ostream& o, const PSO& globals);
 
-
-
 } // namespace pse
+
+/// fmt v10 and above requires `fmt::formatter<T>` extends `fmt::ostream_formatter`.
+/// @see: https://github.com/fmtlib/fmt/issues/3318
+template<> struct fmt::formatter<pse::PSO> : fmt::ostream_formatter {};
 
 #endif /* PSGlobal_hpp */
 

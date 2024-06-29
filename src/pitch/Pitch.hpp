@@ -251,6 +251,10 @@ inline bool operator>=(const Pitch& lhs, const Pitch& rhs)
 
 } // namespace pse
 
+/// fmt v10 and above requires `fmt::formatter<T>` extends `fmt::ostream_formatter`.
+/// @see: https://github.com/fmtlib/fmt/issues/3318
+template<> struct fmt::formatter<pse::Pitch> : fmt::ostream_formatter {};
+
 #endif /* Pitch_hpp */
 
 /// @}

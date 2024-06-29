@@ -1,11 +1,11 @@
 //
-//  Rational.cpp
+//  PSRational.cpp
 //  qparse
 //
 //  Created by Florent Jacquemard on 02/11/16.
 //
 
-#include "Rational.hpp"
+#include "PSRational.hpp"
 
 
 // default constructor

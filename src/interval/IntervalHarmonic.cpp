@@ -5,11 +5,11 @@
 //  Created by Florent Jacquemard on 12/02/2023.
 //
 
-#include "Interval.hpp"
+#include "IntervalHarmonic.hpp"
 
 namespace pse {
 
-Interval::Interval(const Pitch& p1, const Pitch& p2):
+HarmonicInterval::HarmonicInterval(const Pitch& p1, const Pitch& p2):
 SimpleInterval(), // undef
 _ascending(p1 <= p2),
 _dist(MidiDist(p1, p2)),
@@ -45,7 +45,7 @@ _octaves(_dist/12)
 }
 
 
-unsigned int Interval::MidiDist(const Pitch& p1, const Pitch& p2)
+unsigned int HarmonicInterval::MidiDist(const Pitch& p1, const Pitch& p2)
 {
     if (p1.undef())
     {
@@ -58,7 +58,7 @@ unsigned int Interval::MidiDist(const Pitch& p1, const Pitch& p2)
 }
 
 
-void Interval::init_name(const Pitch& p1, const Pitch& p2)
+void HarmonicInterval::init_name(const Pitch& p1, const Pitch& p2)
 {
     assert(p1.named() && p2.named());
     int n1;
@@ -98,7 +98,7 @@ void Interval::init_name(const Pitch& p1, const Pitch& p2)
 }
 
 
-void Interval::init_quality()
+void HarmonicInterval::init_quality()
 {
     assert(1 <= _nb && _nb <= 8);
     assert(_dist >= 0);
@@ -137,19 +137,17 @@ void Interval::init_quality()
 }
 
 
-
-void Interval::print(std::ostream& o) const
+void HarmonicInterval::print(std::ostream& o) const
 {
     o << _nb << tostring(_quality);
 }
 
 
-std::ostream& operator<<(std::ostream& o, const Interval& i)
+std::ostream& operator<<(std::ostream& o, const HarmonicInterval& i)
 {
     i.print(o);
     return o;
 }
-
 
 
 //void Interval::init_quality()

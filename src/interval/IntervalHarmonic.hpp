@@ -1,5 +1,5 @@
 //
-//  Interval.hpp
+//  IntervalHarmonic.hpp
 //  pse
 //
 //  Created by Florent Jacquemard on 12/02/2023.
@@ -7,8 +7,8 @@
 /// @addtogroup pitch
 /// @{
 
-#ifndef Interval_hpp
-#define Interval_hpp
+#ifndef IntervalHarmonic_hpp
+#define IntervalHarmonic_hpp
 
 #include <iostream>
 #include <assert.h>
@@ -25,12 +25,12 @@ namespace pse {
 
 
 /// 
-class Interval : public SimpleInterval
+class HarmonicInterval : public SimpleInterval
 {
 public:
     
     /// main constructor
-    Interval(const Pitch& p1, const Pitch& p2);
+    HarmonicInterval(const Pitch& p1, const Pitch& p2);
        
     /// interval printer
     void print(std::ostream& o) const;
@@ -63,12 +63,15 @@ private:
     
 };
 
-
-std::ostream& operator<<(std::ostream& o, const Interval& i);
-
+std::ostream& operator<<(std::ostream& o, const HarmonicInterval& i);
 
 } // namespace pse
 
-#endif /* Interval_hpp */
+/// fmt v10 and above requires `fmt::formatter<T>` extends `fmt::ostream_formatter`.
+/// @see: https://github.com/fmtlib/fmt/issues/3318
+template<> struct fmt::formatter<pse::HarmonicInterval> : 
+                                                    fmt::ostream_formatter {};
+
+#endif /* IntervalHarmonic_hpp */
 
 /// @}

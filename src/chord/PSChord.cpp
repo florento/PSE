@@ -92,9 +92,15 @@ int PSChord::octave(size_t i) const
 }
 
 
-Rational PSChord::duration(size_t i) const
+long PSChord::duration_num(size_t i) const
 {
-    return _enum.duration(i);
+    return _enum.duration_num(i);
+}
+
+
+long PSChord::duration_den(size_t i) const
+{
+    return _enum.duration_den(i);
 }
 
 

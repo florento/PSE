@@ -29,9 +29,9 @@ _global(nullptr),
 _debug(dflag),
 _uton(new Ton()) // undef
 {
-    spdlog_setVerbosity(4);
+    setVerbosityLevel(4);
     debug(dflag);
-    spdlog_setPattern();
+    spdlog::set_pattern("[%^%l%$] %v");
 }
 
 
@@ -90,9 +90,9 @@ void Speller::debug(bool flag)
     TRACE("Speller: debug mode {}", flag);
     _debug = flag;
     if (flag)
-        spdlog_setVerbosity(5);
+        setVerbosityLevel(5);
     else
-        spdlog_setVerbosity(4);
+        setVerbosityLevel(4);
 }
 
 

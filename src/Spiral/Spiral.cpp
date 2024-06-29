@@ -11,7 +11,7 @@
 
 #include "Spiral.hpp"
 
-namespace scoremodel {
+namespace pse {
 
 SpiralPoint::SpiralPoint(double vx, double vy, double vz):
 x(vx),
@@ -326,6 +326,6 @@ const SpiralName& SpiralName::closest(unsigned int m, const SpiralPoint& p)
 }
 
 
-} // end namespace scoremodel
+} // end namespace pse
 
 /// @}

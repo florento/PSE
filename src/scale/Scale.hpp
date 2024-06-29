@@ -151,11 +151,13 @@ protected:
 
 };
 
-
 std::ostream& operator<<(std::ostream& o, const Scale& s);
 
-
 } // end namespace pse
+
+/// fmt v10 and above requires `fmt::formatter<T>` extends `fmt::ostream_formatter`.
+/// @see: https://github.com/fmtlib/fmt/issues/3318
+template<> struct fmt::formatter<pse::Scale> : fmt::ostream_formatter {};
 
 #endif /* Scale_hpp */
 

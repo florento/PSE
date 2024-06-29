@@ -16,10 +16,11 @@
 #include <memory>
 
 #include "trace.hpp"
-#include "Rational.hpp"
+#include "PSRational.hpp"
 #include "NoteName.hpp"
 #include "Accidental.hpp"
 #include "MidiNum.hpp"
+
 
 namespace pse {
 
@@ -147,8 +148,9 @@ public:
     /// duration, in number of bars, of the note at the given index,
     /// if it has been set, otherwise 0.
     /// @param i index of note in the list of input notes.
-    virtual Rational duration(size_t i) const = 0;
-    
+    virtual long duration_num(size_t i) const = 0;
+    virtual long duration_den(size_t i) const = 0;
+
     /// print flag for the note at the given index, if it has been set,
     /// otherwise true.
     /// This flags says wether the accidental of the note must be printed or not.

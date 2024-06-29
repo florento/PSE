@@ -120,10 +120,12 @@ protected:
 
 std::ostream& operator<<(std::ostream&, const KeyFifth&);
 
-
-
 } // end namespace pse
-    
+
+/// fmt v10 and above requires `fmt::formatter<T>` extends `fmt::ostream_formatter`.
+/// @see: https://github.com/fmtlib/fmt/issues/3318
+template<> struct fmt::formatter<pse::KeyFifth> : fmt::ostream_formatter {};
+
 #endif /* KeyFifth_hpp */
 
 /// @} // end group pse

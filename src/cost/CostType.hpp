@@ -40,14 +40,16 @@ enum class CostType
 
 };
 
-
 /// string of cost type.
 std::string tostring(const CostType& m);
 
 std::ostream& operator<<(std::ostream& o, const CostType& m);
 
-
 } // end namespace pse
+
+/// fmt v10 and above requires `fmt::formatter<T>` extends `fmt::ostream_formatter`.
+/// @see: https://github.com/fmtlib/fmt/issues/3318
+template<> struct fmt::formatter<pse::CostType> : fmt::ostream_formatter {};
 
 #endif /* CostType_hpp */
 

@@ -257,11 +257,19 @@ bool PSRawEnum::simultaneous(size_t i) const
 }
 
 
-Rational PSRawEnum::duration(size_t i) const
+long PSRawEnum::duration_num(size_t i) const
 {
     assert(_durations);
     assert(i < _durations->size());
-    return _durations->at(i);
+    return _durations->at(i).numerator();
+}
+
+
+long PSRawEnum::duration_den(size_t i) const
+{
+    assert(_durations);
+    assert(i < _durations->size());
+    return _durations->at(i).denominator();
 }
 
 
