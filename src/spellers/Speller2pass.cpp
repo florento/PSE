@@ -130,9 +130,9 @@ bool Speller2Pass::spell(const Cost& seed0, const Cost& seed1,
         
         if (ig != TonIndex::UNDEF)
         {
-            assert(ig < _index.size());
+            assert(ig < nbTons());
             TRACE("Pitch Spelling: estimated global tonality: {} ({})",
-                  ig, _index.ton(ig).fifths());
+                  ig, ton(ig).fifths());
             
             // will update the lists _names, _accids and _octave
             TRACE("pitch-spelling: renaming");

@@ -103,9 +103,9 @@ PYBIND11_MODULE(pse, m)
         .def("debug", &pse::Speller::debug, "set debug mode", py::arg("on"))
         .def("size", &pse::Speller::size, "number of notes to spell")
         .def("reset", &pse::Speller::reset, "clear the list of notes to spell")
-        .def("add", &pse::Speller::add_pybindwod, "add a new note to spell",
+        .def("add", &pse::Speller::add0, "add a new note to spell",
              py::arg("midi"), py::arg("bar"), py::arg("simultaneous"))
-        .def("addlong", &pse::Speller::add_pybindwd, "add a new note to spell",
+        .def("addlong", &pse::Speller::add2, "add a new note to spell",
              py::arg("midi"), py::arg("bar"), py::arg("simultaneous"),
              py::arg("dur_num"), py::arg("dur_den"))
         .def("nb_tons", &pse::Speller::nbTons,
@@ -128,7 +128,7 @@ PYBIND11_MODULE(pse, m)
         .def("reval_table", &pse::Speller::revalTable, "reconstruct the spelling table")
         .def("eval_grid", &pse::Speller::evalGrid, "construct the grid of local tons")
         .def("eval_global", &pse::Speller::evalGlobal,
-             "compute the subarray of tons selected as candidate global tonality,")
+             "compute the subarray of tons selected as candidate global tonality")
         .def("rename", &pse::Speller::rename, "rename input notes")
         .def("rewrite_passing", &pse::Speller::rewritePassing, "rewrite passing notes")
         .def("name",  &pse::Speller::name, "estimated name of note",
@@ -156,9 +156,9 @@ PYBIND11_MODULE(pse, m)
         .def("algo", &pse::PSE::algo, "name of spelling algorithm")
         .def("debug", &pse::PSE::debug, "set debug mode", py::arg("on"))
         .def("size", &pse::PSE::size, "number of notes to spell")
-        .def("add", &pse::PSE::add_pybindwod, "add a new note to spell",
+        .def("add", &pse::PSE::add0, "add a new note to spell",
              py::arg("midi"), py::arg("bar"), py::arg("simultaneous"))
-        .def("addlong", &pse::PSE::add_pybindwd, "add a new note to spell",
+        .def("addlong", &pse::PSE::add2, "add a new note to spell",
              py::arg("midi"), py::arg("bar"), py::arg("simultaneous"),
              py::arg("dur_num"), py::arg("dur_den"))
         .def("nb_tons", &pse::PSE::nbTons,
@@ -220,9 +220,9 @@ PYBIND11_MODULE(pse, m)
         .def("reset", &pse::PS13::reset, "clear the list of notes to spell")
         .def("set_Kpre", &pse::PS13::setKpre, "set the Kpre parameter of PS13")
         .def("set_Kpost", &pse::PS13::setKpost, "set the Kpost parameter of PS13")
-        .def("add", &pse::PS13::add_pybindwod, "add a new note to spell",
+        .def("add", &pse::PS13::add0, "add a new note to spell",
              py::arg("midi"), py::arg("bar"), py::arg("simultaneous"))
-        .def("addlong", &pse::PS13::add_pybindwd, "add a new note to spell",
+        .def("addlong", &pse::PS13::add2, "add a new note to spell",
              py::arg("midi"), py::arg("bar"), py::arg("simultaneous"),
              py::arg("dur_num"), py::arg("dur_den"))
         .def("spell", &pse::PS13::spell, "spell notes")
@@ -245,9 +245,9 @@ PYBIND11_MODULE(pse, m)
         .def("algo", &pse::PS14::algo, "name of spelling algorithm")
         .def("debug", &pse::PS14::debug, "set debug mode", py::arg("on"))
         .def("size", &pse::PS14::size, "number notes to spell")
-        .def("add", &pse::PS14::add_pybindwod, "add a new note to spell",
+        .def("add", &pse::PS14::add0, "add a new note to spell",
              py::arg("midi"), py::arg("bar"), py::arg("simultaneous"))
-        .def("addlong", &pse::PSE::add_pybindwd, "add a new note to spell",
+        .def("addlong", &pse::PSE::add2, "add a new note to spell",
              py::arg("midi"), py::arg("bar"), py::arg("simultaneous"),
              py::arg("dur_num"), py::arg("dur_den"))
         .def("nb_tons", &pse::PS14::nbTons,

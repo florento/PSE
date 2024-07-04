@@ -40,7 +40,6 @@
 		431586342983E89B00918B1B /* PSM21Enum.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 4315862C2983E89B00918B1B /* PSM21Enum.hpp */; };
 		431586352983E89B00918B1B /* PSRawEnum.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4315862D2983E89B00918B1B /* PSRawEnum.cpp */; };
 		431586362983E89B00918B1B /* PSEnum.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 4315862E2983E89B00918B1B /* PSEnum.hpp */; };
-		431586382983E89B00918B1B /* PSNoteEnum.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 431586302983E89B00918B1B /* PSNoteEnum.hpp */; };
 		431586392983ED5B00918B1B /* NoteName.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 436C6C4D2924023100152D8C /* NoteName.hpp */; };
 		4315863A2983EDD900918B1B /* PSRawEnum.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 431586292983E89B00918B1B /* PSRawEnum.hpp */; };
 		4315863B2983F15400918B1B /* PSEnum.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4315862B2983E89B00918B1B /* PSEnum.cpp */; };
@@ -293,13 +292,11 @@
 		431586232983E86E00918B1B /* InputSegmentSpiral.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = InputSegmentSpiral.cpp; path = src/Spiral/InputSegmentSpiral.cpp; sourceTree = "<group>"; };
 		431586242983E86E00918B1B /* Spiral.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Spiral.cpp; path = src/Spiral/Spiral.cpp; sourceTree = "<group>"; };
 		431586292983E89B00918B1B /* PSRawEnum.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = PSRawEnum.hpp; path = src/import/PSRawEnum.hpp; sourceTree = "<group>"; };
-		4315862A2983E89B00918B1B /* PSNoteEnum.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PSNoteEnum.cpp; path = src/import/PSNoteEnum.cpp; sourceTree = "<group>"; };
 		4315862B2983E89B00918B1B /* PSEnum.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PSEnum.cpp; path = src/import/PSEnum.cpp; sourceTree = "<group>"; };
 		4315862C2983E89B00918B1B /* PSM21Enum.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = PSM21Enum.hpp; path = src/import/PSM21Enum.hpp; sourceTree = "<group>"; };
 		4315862D2983E89B00918B1B /* PSRawEnum.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PSRawEnum.cpp; path = src/import/PSRawEnum.cpp; sourceTree = "<group>"; };
 		4315862E2983E89B00918B1B /* PSEnum.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = PSEnum.hpp; path = src/import/PSEnum.hpp; sourceTree = "<group>"; };
 		4315862F2983E89B00918B1B /* PSM21Enum.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PSM21Enum.cpp; path = src/import/PSM21Enum.cpp; sourceTree = "<group>"; };
-		431586302983E89B00918B1B /* PSNoteEnum.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = PSNoteEnum.hpp; path = src/import/PSNoteEnum.hpp; sourceTree = "<group>"; };
 		4325869B2A40508A0069D796 /* PSConfig2-chroma.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "PSConfig2-chroma.cpp"; sourceTree = "<group>"; };
 		4325869C2A40508A0069D796 /* PSConfig2-chroma.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = "PSConfig2-chroma.hpp"; sourceTree = "<group>"; };
 		432586A12A4050C80069D796 /* PSConfig1c.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PSConfig1c.cpp; sourceTree = "<group>"; };
@@ -575,8 +572,6 @@
 				4315862F2983E89B00918B1B /* PSM21Enum.cpp */,
 				431586292983E89B00918B1B /* PSRawEnum.hpp */,
 				4315862D2983E89B00918B1B /* PSRawEnum.cpp */,
-				431586302983E89B00918B1B /* PSNoteEnum.hpp */,
-				4315862A2983E89B00918B1B /* PSNoteEnum.cpp */,
 			);
 			name = import;
 			sourceTree = "<group>";
@@ -920,7 +915,6 @@
 				431586342983E89B00918B1B /* PSM21Enum.hpp in Headers */,
 				434B1E03298FD4FE001CE41C /* PSChord.hpp in Headers */,
 				4315863A2983EDD900918B1B /* PSRawEnum.hpp in Headers */,
-				431586382983E89B00918B1B /* PSNoteEnum.hpp in Headers */,
 				43D7BAC22A27E31600570C47 /* PS14.hpp in Headers */,
 				4342FD1929268C78004E914F /* pypse.hpp in Headers */,
 			);

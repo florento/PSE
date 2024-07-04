@@ -39,25 +39,189 @@
 namespace pse {
 
 
-/// abstract class wrapping main pitch-spelling functionalities.
-/// interface between pitch spelling algorithm and structures.
-/// It contains:
-/// - one algorithm name.
-/// - a note enumerator. @see PSRawEnum
+/// backbone of class for pitch-spelling functionalities,
+/// containing the following paramters:
 /// - one array of tonalities considered for pitch spelling.
 /// - one debug flag.
-class Speller
+/// - generic cost values.
+class Spelli
+{
+public:
+    /// main constructor.
+    /// @param nbTons use default list of tonalities (default: empty).
+    /// @param dflag debug mode.
+    /// @see TonIndex for supported values for nbTons.
+    Spelli(size_t nbTons=0, bool dflag=false);
+    
+    /// constructor with given TonIndex.
+    /// @param id a Ton Index. must be closed.
+    /// @param dflag debug mode.
+    /// @see TonIndex for supported values for nbTons.
+    Spelli(std::shared_ptr<TonIndex> id, bool dflag=false);
+
+
+    /// destructor
+    virtual ~Spelli();
+
+public: // debug flag
+
+    /// set debug mode (log messages for debugging)
+    void debug(bool flag);
+
+public: // array of tonalities (Ton index)
+    
+    /// array of tonalities considered for pitch spelling.
+    /// @todo const ?
+    TonIndex& index();
+    
+    /// number of tonalities considered for pitch spelling.
+    /// It is the size of array of tonalities.
+    size_t nbTons() const;
+
+    /// tonality (for pitch spelling) of given index.
+    /// @param i an index in the array of tonalities.
+    /// must be smaller than nbtons().
+    /// @see nbTons()
+    const Ton& ton(size_t i) const;
+    
+    /// empty the array of tonalities considered for pitch-spelling vectors,
+    /// and rebuild it with the given default number of tonalities.
+    /// The array is unclosed.
+    /// @param n number of default list of tonalities.
+    /// @see constructor TonIndex
+    /// @see addTon
+    void resetTons(size_t n = 0);
+    
+    /// add one tonality to the array of tonalities considered for
+    /// pitch-spelling vectors.
+    /// @param ks number of flats if negative int,
+    /// or number of sharps if positive int. must be in -7..7.
+    /// @param mode mode of the tonality added.
+    /// @param global whether ton can be considered as a global tonality.
+    /// @see Ton
+    /// @warning with n=0, close() must be called aterwards.
+    void addTon(int ks, ModeName mode = ModeName::Major, bool global=true);
+
+    /// for Python binder, same as addTon (overloaded).
+    inline void addTon3(int ks, ModeName mode, bool global)
+    { addTon(ks, mode, global); }
+    
+    /// add a tonality for pitch spelling.
+    /// @param ton the tonality to add to this speller.
+    /// @param global whether ton can be considered as a global tonality.
+    void addTon(const Ton& ton, bool global=true);
+    
+    /// switch the array of tonalities to tonal mode
+    /// for the conmputation of Weber distance at closing.
+    /// @warning the array of tonalities array must not be closed.
+    void WeberTonal();
+
+    /// switch the array of tonalities to tonal mode
+    /// for the conmputation of Weber distance at closing.
+    /// @warning the array of tonalities array must not be closed.
+    void WeberModal();
+
+    /// close the array of tonalities and finish its initlialization.
+    /// No ton can be added after closure.
+    /// @param tonal_flag tonal or modal mode for the computation of
+    /// Weber distance (default tonal).
+    void closeTons(bool tonal_flag);
+    
+    /// the array of tonalities is closed.
+    bool closedTons() const;
+       
+protected: // data
+        
+    /// array of tonalities that shall be considered for pitch spelling.
+    std::shared_ptr<TonIndex> _index;
+    
+    /// @warning we compute one sample cost for cost type.
+
+    // sample cost (zero) for the construction of tables.
+    // @warning discount Obsolete for CostA
+    // CostA _seedAdiscount;
+
+    /// sample cost (zero) for the construction of tables.
+    CostA _seedAnodiscount;
+
+    /// sample cost (zero) for the construction of tables.
+    CostADplus _seedADplus;
+
+    /// sample cost (zero) for the construction of tables.
+    CostADlex _seedADlex;
+
+    /// debug mode activated.
+    bool _debug;
+    
+    /// undefined tonality, for errors.
+    Ton* _uton; // std::shared_ptr<Ton>
+        
+protected:
+    
+    /// construct a sample cost value (zero) for the construction of tables.
+    /// @param ct type of cost domain.
+    /// @return the cost value constructed.
+    Cost& sampleCost(CostType ct);
+
+    /// @param c code for cost type:
+    /// - 00 costA with discount for lead tons
+    /// - 01 costA without discount for lead tons
+    /// - 02 costADplus
+    /// - 03 costADlex
+
+};
+
+
+
+
+/// class wrapping main pitch-spelling functionalities
+/// i.e. interface between pitch spelling algorithm and structures.
+/// It is associated with a fixed note enumerator
+/// (giving acces to the notes to be spelled), which can be external,
+/// or an internal raw enumerator feed manually.
+/// @see PSEnum
+/// @see PSRawEnum
+class Speller : public Spelli
 {
 public:
     
-    /// main constructor. initially empty list of notes to spell.
+    /// speller with raw enumerator (initially empty) of notes to spell.
     /// @param algo name of the algorithm implemented in speller class.
-    /// @param nbTons use default list of tonalities (default: empty).
-    /// @see TonIndex for supported values pf nbTons.
+    /// obsolete. not used anymore.
+    /// @param nbtons use default list of tonalities (default: empty).
     /// @param dflag debug mode.
+    /// @see TonIndex for supported values for nbTons.
     /// @see PSTable
+    /// @warning the enumerator must be feeded with add()
     Speller(const Algo& algo=Algo::Undef,
-            size_t nbTons=0,
+            size_t nbtons=0,
+            bool dflag=false);
+
+    /// speller with given (fixed) enumerator of notes to spell.
+    /// @param algo name of the algorithm implemented in speller class.
+    /// obsolete. not used anymore.
+    /// @param nbtons use default list of tonalities (default: empty).
+    /// @param dflag debug mode.
+    /// @see TonIndex for supported values for nbTons.
+    /// @warning this speller cannot be reused for other notes than those
+    /// in the given enumerator.
+    Speller(PSEnum& enu,
+            const Algo& algo=Algo::Undef,
+            size_t nbtons=0,
+            bool dflag=false);
+
+    /// speller with given (fixed) enumerator of notes to spell
+    /// and given TonIndex.
+    /// @param algo name of the algorithm implemented in speller class.
+    /// obsolete. not used anymore.
+    /// @param id a Ton Index. must be closed.
+    /// @param dflag debug mode.
+    /// @see TonIndex for supported values for nbTons.
+    /// @warning this speller cannot be reused for other notes than those
+    /// in the given enumerator.
+    Speller(PSEnum& enu,
+            std::shared_ptr<TonIndex> id,
+            const Algo& algo=Algo::Undef,
             bool dflag=false);
 
     /// copy constructor forbidden.
@@ -80,17 +244,11 @@ public:
     /// @return Algo::Undef by default.
     const Algo& algo() const { return _algo; }
     
-    /// set debug mode (log messages for debugging)
-    void debug(bool flag);
+public: // notes
 
     /// number of input notes in the enumerator of notes to spell.
     size_t size() const;
 
-    
-    //
-    // notes
-    //
-    
     /// empty the list of notes in the enumerator of this speller.
     /// @param i0 new index of the first note accessible by this enumerator.
     /// @param i1 new index of the note after the last note accessible by this
@@ -116,7 +274,7 @@ public:
     /// @param dur_num numerator of note duration, in fraction of bars.
     /// @param dur_den denominator of note duration, in fraction of bars.
     /// @warning for Phython binding
-    void add_pybindwd(int note, int bar, bool simult=false,
+    void add2(int note, int bar, bool simult=false,
                       long dur_num=0, long dur_den=1);
 
     /// for pybind: add a new input note to the enumerator of notes to spell
@@ -126,63 +284,9 @@ public:
     /// @param simult whether the new input note is simultaneous with the
     /// next note.
     /// @warning for Phython binding
-    void add_pybindwod(int note, int bar, bool simult=false);
+    void add0(int note, int bar, bool simult=false);
 
 
-    //
-    // array of tonalities
-    //
-    
-    /// number of tonalities considered for pitch spelling.
-    /// It is the size of array of tonalities.
-    size_t nbTons() const;
-
-    /// tonality (for pitch spelling) of given index.
-    /// @param i an index in the array of tonalities.
-    /// must be smaller than nbtons().
-    /// @see nbTons()
-    const Ton& ton(size_t i) const;
-    
-    /// empty the array of tonalities considered for pitch-spelling vectors.
-    /// @see addTon
-    void resetTons();
-    
-    /// add one tonality to the array of tonalities considered for
-    /// pitch-spelling vectors.
-    /// @param ks number of flats if negative int,
-    /// or number of sharps if positive int. must be in -7..7.
-    /// @param mode mode of the tonality added.
-    /// @param global whether ton can be considered as a global tonality.
-    /// @see Ton
-    void addTon(int ks, ModeName mode = ModeName::Major, bool global=true);
-
-    /// for Python binder, same as addTon (overloaded).
-    inline void addTon3(int ks, ModeName mode, bool global)
-    { addTon(ks, mode, global); }
-    
-    /// add a tonality for pitch spelling.
-    /// @param ton the tonality to add to this speller.
-    /// @param global whether ton can be considered as a global tonality.
-    void addTon(const Ton& ton, bool global=true);
-    
-    /// switch the array of tonalities to tonal mode
-    /// for the conmputation of Weber distance at closing.
-    /// @warning the array of tonalities array must not be closed.
-    void WeberTonal();
-
-    /// switch the array of tonalities to tonal mode
-    /// for the conmputation of Weber distance at closing.
-    /// @warning the array of tonalities array must not be closed.
-    void WeberModal();
-
-    /// close the array of tonalities and finish its initlialization.
-    /// No ton can be added after closure.
-    void closeTons(bool tonal_flag);
-    
-    /// the array of tonalities is closed.
-    bool closedTons() const;
-       
-    
     //
     // prepare spelling
     //
@@ -198,12 +302,10 @@ public:
     // wether the transitions for construction of tables shall be deterministic.
     // void setChromatic(bool flag);
     
-    //
-    // spelling
-    //
+public: // spelling
 
     /// construct the first spelling table.
-    /// @param type of cost domain.
+    /// @param ctype type of cost domain.
     /// @param tonal tonal or modal construction of initial state in each cell.
     /// @param chromatic whether transitions for best-path comp. are deterministic.
     /// @return whether computation was succesfull.
@@ -258,10 +360,7 @@ public:
     /// @see class RewritePassing
     size_t rewritePassing();
     
-    
-    //
-    // results feedback
-    //
+public: // results feedback
     
     /// estimated name for the note of given index, in 0..6 (0 is 'C', 6 is 'B').
     /// @param i index of note in the enumerator of input notes.
@@ -340,27 +439,14 @@ protected: // data
     /// @todo TBR obsolete
     const Algo _algo;
 
+    /// raw enumerator allocated internally for this speller, or
+    /// null for a speller build on top of a given external enum,
+    std::unique_ptr<PSEnum> _penum;
+
     /// enumerator of the input notes.
     PSRawEnum _enum;
-
-    /// array of tonalities that shall be considered for pitch spelling.
-    TonIndex _index;
+    // PSEnum& _enum;
     
-    /// @warning we compute one sample cost for cost type.
-
-    // sample cost (zero) for the construction of tables.
-    // @warning discount Obsolete for CostA
-    // CostA _seedAdiscount;
-
-    /// sample cost (zero) for the construction of tables.
-    CostA _seedAnodiscount;
-
-    /// sample cost (zero) for the construction of tables.
-    CostADplus _seedADplus;
-
-    /// sample cost (zero) for the construction of tables.
-    CostADlex _seedADlex;
-
     // tonal or modal construction of initial state for construction of tables.
     // - 0 for constructor default (unset in this speller).
     // - 1 for tonal.
@@ -383,32 +469,12 @@ protected: // data
 
     /// subarray of tons selected as candidate global tonality.
     PSO* _global;
-    
-    /// debug mode activated.
-    bool _debug;
-    
-    /// undefined tonality, for errors.
-    Ton* _uton; // std::shared_ptr<Ton>
-    
+
 protected:
     
     /// time lapsed, in milli seconds, since the given start date.
     static double duration(clock_t start);
     
-    
-private:
-    
-    /// construct a sample cost value (zero) for the construction of tables.
-    /// @param ct type of cost domain.
-    /// @return the cost value constructed.
-    Cost& sampleCost(CostType ct);
-
-    /// @param c code for cost type:
-    /// - 00 costA with discount for lead tons
-    /// - 01 costA without discount for lead tons
-    /// - 02 costADplus
-    /// - 03 costADlex
-
 };
 
 } // namespace pse

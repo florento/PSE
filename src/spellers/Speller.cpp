@@ -12,20 +12,13 @@
 namespace pse {
 
 
-Speller::Speller(const Algo& algo, size_t nbt, bool dflag):
-_algo(algo),
-_enum(0, 0),
-_index(nbt),
+Spelli::Spelli(size_t nbton, bool dflag):
+_index(new TonIndex(nbton)),
 //_seed(nullptr),
-//_initial_state(0), // default
-//_chromatic(false),
 //_seedAdiscount(true), // discount obsolete for CostA
 _seedAnodiscount(false),
 _seedADplus(),
 _seedADlex(),
-_table(nullptr),
-_grid(nullptr),
-_global(nullptr),
 _debug(dflag),
 _uton(new Ton()) // undef
 {
@@ -35,6 +28,193 @@ _uton(new Ton()) // undef
 }
 
 
+Spelli::Spelli(std::shared_ptr<TonIndex> id, bool dflag):
+_index(id), // copy
+_seedAnodiscount(false),
+_seedADplus(),
+_seedADlex(),
+_debug(dflag),
+_uton(new Ton()) // undef
+{
+    assert(id);
+    assert(id->closed());
+    spdlog_setVerbosity(4);
+    debug(dflag);
+    spdlog_setPattern();
+}
+
+
+Spelli::~Spelli()
+{
+    assert(_uton);
+    delete _uton;
+}
+
+
+void Spelli::debug(bool flag)
+{
+    TRACE("Speller: debug mode {}", flag);
+    _debug = flag;
+    if (flag)
+        spdlog_setVerbosity(5);
+    else
+        spdlog_setVerbosity(4);
+}
+
+
+//
+// array of tonalities
+//
+
+TonIndex& Spelli::index()
+{
+    assert(_index);
+    return *_index;
+}
+
+
+size_t Spelli::nbTons() const
+{
+    assert(_index);
+    return _index->size();  // nbTons();
+}
+
+
+const Ton& Spelli::ton(size_t i) const
+{
+    assert(_index);
+    return _index->ton(i);
+}
+
+
+void Spelli::resetTons(size_t n)
+{
+    assert(_index);
+    _index->reset(n);
+}
+
+
+void Spelli::addTon(const Ton& ton, bool global)
+{
+    TRACE("Speller: add tonality {}", ton);
+    assert(_index);
+    _index->add(ton);
+}
+
+
+void Spelli::addTon(int ks, ModeName mode, bool global)
+{
+    if (ks < -7 || 7 < ks)
+    {
+        ERROR("Speller addTon: wrong key signature value {}", ks);
+    }
+    TRACE("Speller: add tonality {} {}", ks, mode);
+    assert(_index);
+    _index->add(ks, mode, global);
+}
+
+void Spelli::WeberTonal()
+{
+    assert(_index);
+    _index->setTonal();
+}
+
+
+void Spelli::WeberModal()
+{
+    assert(_index);
+    _index->setModal();
+}
+
+
+void Spelli::closeTons(bool tonal_flag)
+{
+    assert(_index);
+    _index->close(tonal_flag);
+}
+
+
+bool Spelli::closedTons() const
+{
+    assert(_index);
+    return _index->closed();
+}
+
+
+//
+// prepare spelling
+//
+
+Cost& Spelli::sampleCost(CostType ct)
+{
+    switch (ct)
+    {
+        case CostType::ACCIDlead:
+            WARN("Speller: discount obsolete for CostA (ignored)");
+            return _seedAnodiscount;
+            
+        case CostType::ACCID:
+            return _seedAnodiscount;
+            
+        case CostType::ADplus:
+            return _seedADplus;
+            
+        case CostType::ADlex:
+            return _seedADlex;
+            
+        default:
+            ERROR("Speller sampleCost unexpected code {}", ct);
+            return _seedAnodiscount;
+    }
+}
+
+
+
+
+
+
+
+
+Speller::Speller(const Algo& algo, size_t nbton, bool dflag):
+Spelli(nbton, dflag),
+_algo(algo),
+// _penum(new PSRawEnum(0, 0)),
+// _enum(*_penum),
+_enum(0, 0),
+_table(nullptr),
+_grid(nullptr),
+_global(nullptr)
+{ }
+
+
+Speller::Speller(PSEnum& enu, const Algo& algo, size_t nbton, bool dflag):
+Spelli(nbton, dflag),
+_algo(algo),
+// _penum(nullptr),
+// _enum(enu),
+_enum(0, 0),
+_table(nullptr),
+_grid(nullptr),
+_global(nullptr)
+{ }
+
+
+Speller::Speller(PSEnum& enu, std::shared_ptr<TonIndex> id,
+        const Algo& algo, bool dflag):
+Spelli(id, dflag),
+_algo(algo),
+// _penum(nullptr),
+// _enum(enu),
+_enum(0, 0),
+_table(nullptr),
+_grid(nullptr),
+_global(nullptr)
+{
+    
+}
+
+
+// copy forbiddend
 //Speller::Speller(const Speller& rhs):
 //_algo(rhs._algo),
 //_enum(rhs._enum),  /// @todo AV copy
@@ -53,9 +233,6 @@ Speller::~Speller()
         delete _grid;
     if (_table)
         delete _table;
- 
-    assert(_uton);
-    delete _uton;
 }
 
 
@@ -85,15 +262,6 @@ Speller::~Speller()
 //}
 
 
-void Speller::debug(bool flag)
-{
-    TRACE("Speller: debug mode {}", flag);
-    _debug = flag;
-    if (flag)
-        spdlog_setVerbosity(5);
-    else
-        spdlog_setVerbosity(4);
-}
 
 
 //
@@ -121,7 +289,7 @@ void Speller::add(int note, int bar, bool simult, const Rational& dur)
 }
 
 
-void Speller::add_pybindwd(int note, int bar, bool simult,
+void Speller::add2(int note, int bar, bool simult,
                              long dur_num, long dur_den)
 {
     TRACE("Speller: add {} {} {}", note, bar, Rational(dur_num, dur_den));
@@ -129,102 +297,10 @@ void Speller::add_pybindwd(int note, int bar, bool simult,
 }
 
 
-void Speller::add_pybindwod(int note, int bar, bool simult)
+void Speller::add0(int note, int bar, bool simult)
 {
     TRACE("Speller: add {} {}", note, bar);
     _enum.add(note, bar, simult);
-}
-
-
-//
-// array of tonalities
-//
-
-
-size_t Speller::nbTons() const
-{
-    return _index.size();  // nbTons();
-}
-
-
-const Ton& Speller::ton(size_t i) const
-{
-    return _index.ton(i);
-}
-
-
-void Speller::resetTons()
-{
-    _index.reset();
-}
-
-
-void Speller::addTon(const Ton& ton, bool global)
-{
-    TRACE("Speller: add tonality {}", ton);
-    _index.add(ton);
-}
-
-
-void Speller::addTon(int ks, ModeName mode, bool global)
-{
-    if (ks < -7 || 7 < ks)
-    {
-        ERROR("Speller addTon: wrong key signature value {}", ks);
-    }
-    TRACE("Speller: add tonality {} {}", ks, mode);
-    _index.add(ks, mode, global);
-}
-
-void Speller::WeberTonal()
-{
-    _index.setTonal();
-}
-
-
-void Speller::WeberModal()
-{
-    _index.setModal();
-}
-
-
-void Speller::closeTons(bool tonal_flag)
-{
-    _index.close(tonal_flag);
-}
-
-
-bool Speller::closedTons() const
-{
-    return _index.closed();
-}
-
-
-//
-// prepare spelling
-//
-
-Cost& Speller::sampleCost(CostType ct)
-{
-    switch (ct)
-    {
-        case CostType::ACCIDlead:
-            WARN("Speller: discount obsolete for CostA (ignored)");
-            return _seedAnodiscount;
-            
-        case CostType::ACCID:
-            return _seedAnodiscount;
-            
-        case CostType::ADplus:
-            return _seedADplus;
-            
-        case CostType::ADlex:
-            return _seedADlex;
-            
-        default:
-            ERROR("Speller sampleCost unexpected code {}", ct);
-            return _seedAnodiscount;
-    }
 }
 
 
@@ -266,7 +342,7 @@ bool Speller::evalTable(CostType ctype, bool tonal, bool chromatic)
 //    }
     
     const Algo algo(chromatic?Algo::PSD:Algo::PSE);
-    _table = new PST(algo, sampleCost(ctype), _index, _enum, tonal, _debug);
+    _table = new PST(algo, sampleCost(ctype), index(), _enum, tonal, _debug);
 
     return true;
 }
@@ -304,7 +380,7 @@ bool Speller::revalTable(CostType ctype, bool tonal, bool chromatic)
     }
     else
     {
-        PSO full(_index, _debug, true);
+        PSO full(index(), _debug, true);
         _table = new PST(algo, *table_pre, sampleCost(ctype), full, *_grid,
                          tonal, _debug);
     }
@@ -328,7 +404,8 @@ bool Speller::evalGrid()
         return false;
     }
     
-    std::vector<bool> mask(_index.size(), true); // all true by default
+    assert(_index);
+    std::vector<bool> mask(_index->size(), true); // all true by default
 
     if (_global)
     {
@@ -381,7 +458,8 @@ bool Speller::evalGlobal(double d, bool refine)
 bool Speller::rename(size_t i)
 {
     assert(i != TonIndex::UNDEF);
-    assert(i < _index.size());
+    assert(_index);
+    assert(i < _index->size());
 
     if (_table == nullptr)
     {
@@ -519,8 +597,9 @@ const Ton& Speller::local(size_t i, size_t j) const
     }
     else
     {
-        assert(it < _index.size());
-        return _index.ton(it);
+        assert(_index);
+        assert(it < _index->size());
+        return _index->ton(it);
     }
 }
 

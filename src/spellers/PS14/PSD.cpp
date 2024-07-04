@@ -34,15 +34,15 @@ PS14::~PS14()
 bool PS14::spell()
 {
     //DEBUGU("Speller respell: nb tonalities in table: {}", _table.nbTons());
-    if (_index.size() == 0)
+    if (nbTons() == 0)
     {
         /// reset to default
         /// @todo mv to speller cstr?
         WARN("Speller respell: no tonality added, use default 30 tonality array");
         for (int ks = -7; ks <= 7; ++ks)
-            _index.add(ks, ModeName::Major);
+            addTon(ks, ModeName::Major);
         for (int ks = -7; ks <= 7; ++ks)
-            _index.add(ks, ModeName::Minor);
+            addTon(ks, ModeName::Minor);
     }
     
     /// @todo replace by other specialized costs

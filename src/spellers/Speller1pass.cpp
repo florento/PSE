@@ -29,14 +29,15 @@ Speller1Pass::~Speller1Pass()
 
 void Speller1Pass::setGlobal(size_t i, PSO* g) // std::shared_ptr<PSO>
 {
-    if (i >= _index.size())
+    if (i >= nbTons())
     {
         WARN("Speller1Pass: set global {}: not a ton (ignored)", i);
         return;
     }
     if (g == nullptr)
     {
-        g = new PSO(_index, _debug); // empty
+        assert(_index);
+        g = new PSO(index(), _debug); // empty
     }
     else
     {
@@ -67,7 +68,7 @@ const Ton& Speller1Pass::globalCand(size_t i, const PSO* g) const // std::shared
     // if (it != TonIndex::UNDEF)
     if ((g != nullptr) && (i <  g->size()))
     {
-        assert(_index.size() == g->index().size());  // same index
+        assert(nbTons() == g->index().size());  // same index
         return g->global(i);
     }
     else
@@ -85,7 +86,7 @@ size_t Speller1Pass::iglobalCand(size_t i, const PSO* g) const // std::shared_pt
 {
     if ((g != nullptr) && (i <  g->size()))
     {
-        assert(_index.size() == g->index().size()); // same index
+        assert(nbTons() == g->index().size()); // same index
         return g->iglobal(i);
     }
     else
@@ -170,7 +171,7 @@ bool Speller1Pass::spell(const Cost& seed0, double diff0,
     }
     
     clock_t time_start = clock();
-    _table0 = new PST(_algo, seed0, _index, _enum, false, _debug); // modal mode
+    _table0 = new PST(_algo, seed0, index(), _enum, false, _debug); // modal mode
     _time_table0 = duration(time_start);
     TRACE("pitch-spelling: {} bars", _table0->size());
     if (_debug)
@@ -239,7 +240,7 @@ bool Speller1Pass::spell(const Cost& seed0, double diff0,
 
         if (ig != TonIndex::UNDEF)
         {
-            assert(ig < _index.size());
+            assert(ig < nbTons());
             TRACE("Pitch Spelling: renaming with estimated global tonality: {}",
                   ig);
             rename(ig);
