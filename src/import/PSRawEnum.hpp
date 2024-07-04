@@ -115,7 +115,7 @@ public:
     /// next note.
     /// @param dur note duration, in fraction of bars.
     void add(int note, int bar, bool simult=false,
-             const Rational& dur = Rational(0));
+             const PSRatio& dur = PSRatio(0));
     
     /// add a new input note to the list of enumerated notes.
     /// @param note MIDI key of the new input note.
@@ -224,7 +224,7 @@ private: // data (shared by all copies of this enumerator)
     
     /// list of durations of input notes.
     /// entered with method add().
-    std::shared_ptr<std::vector<Rational>> _durations;
+    std::shared_ptr<std::vector<PSRatio>> _durations;
     
     /// list of the estimated best note name (in 0..6) for each input note.
     /// copy of the values of the PSPaths (best paths) in the columns of table,

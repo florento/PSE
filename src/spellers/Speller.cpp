@@ -114,7 +114,7 @@ void Speller::reset(size_t i0, size_t i1)
 }
 
 
-void Speller::add(int note, int bar, bool simult, const Rational& dur)
+void Speller::add(int note, int bar, bool simult, const PSRatio& dur)
 {
     TRACE("Speller: add {} {} {}", note, bar, dur);
     _enum.add(note, bar, simult, dur);
@@ -124,8 +124,8 @@ void Speller::add(int note, int bar, bool simult, const Rational& dur)
 void Speller::add_pybindwd(int note, int bar, bool simult,
                              long dur_num, long dur_den)
 {
-    TRACE("Speller: add {} {} {}", note, bar, Rational(dur_num, dur_den));
-    _enum.add(note, bar, simult, Rational(dur_num, dur_den));
+    TRACE("Speller: add {} {} {}", note, bar, PSRatio(dur_num, dur_den));
+    _enum.add(note, bar, simult, PSRatio(dur_num, dur_den));
 }
 
 

@@ -18,7 +18,7 @@ PSEnum(i0, i1), // empty
 _notes(new std::vector<int>), // empty initial vector
 _barnum(new std::vector<int>),
 _simult(new std::vector<bool>),
-_durations(new std::vector<Rational>),
+_durations(new std::vector<PSRatio>),
 _names(new std::vector<enum NoteName>),
 _accids(new std::vector<enum Accid>),
 _octs(new std::vector<int>),
@@ -188,7 +188,7 @@ void PSRawEnum::reset(size_t i0, size_t i1)
 }
 
 
-void PSRawEnum::add(int note, int bar, bool simult, const Rational& dur)
+void PSRawEnum::add(int note, int bar, bool simult, const PSRatio& dur)
 {
     assert(sanity_check());
 
@@ -229,7 +229,7 @@ void PSRawEnum::add(int note, int bar, bool simult, const Rational& dur)
 
 void PSRawEnum::addlong(int note, int bar, bool simult, long dur_num, long dur_den)
 {
-    add(note, bar, simult, Rational(dur_num, dur_den));
+    add(note, bar, simult, PSRatio(dur_num, dur_den));
 }
 
 

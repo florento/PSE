@@ -69,18 +69,18 @@ using std::numeric_limits;
 namespace pse {
 
 /// class of rational numbers
-class Rational
+class PSRatio
 {
 public:
-    Rational() : num(0), den(1) {}
+    PSRatio() : num(0), den(1) {}
 
     /// default constructor
-    Rational(long n, long d = 1);
+    PSRatio(long n, long d = 1);
     
     /// copy constructor
-    Rational(const Rational& rhs) : num(rhs.num), den(rhs.den) {}
+    PSRatio(const PSRatio& rhs) : num(rhs.num), den(rhs.den) {}
     
-    ~Rational(void) {}
+    ~PSRatio(void) {}
     
     long numerator(void) const { return num; }
     long denominator(void) const { return den; }
@@ -89,31 +89,31 @@ public:
     bool integral(void) const { return (den == 1L); }
     
     /// assignment operator
-    Rational& operator=(const Rational& rhs);
+    PSRatio& operator=(const PSRatio& rhs);
 
     /// assignment operator
-    Rational& operator=(long rhs);
+    PSRatio& operator=(long rhs);
     
     // unary operators
-    Rational operator+(void) const { return *this; }
-    Rational operator-(void) const { return Rational(-num, den); }
-    Rational invert(void) const { return Rational(den, num); }
+    PSRatio operator+(void) const { return *this; }
+    PSRatio operator-(void) const { return PSRatio(-num, den); }
+    PSRatio invert(void) const { return PSRatio(den, num); }
     
     // binary shortcut operators
-    const Rational& operator+=(const Rational& rhs);
-    const Rational& operator-=(const Rational& rhs);
-    const Rational& operator*=(const Rational& rhs);
-    const Rational& operator/=(const Rational& rhs);
-    const Rational& operator+=(long rhs);
-    const Rational& operator-=(long rhs);
-    const Rational& operator*=(long rhs);
-    const Rational& operator/=(long rhs);
+    const PSRatio& operator+=(const PSRatio& rhs);
+    const PSRatio& operator-=(const PSRatio& rhs);
+    const PSRatio& operator*=(const PSRatio& rhs);
+    const PSRatio& operator/=(const PSRatio& rhs);
+    const PSRatio& operator+=(long rhs);
+    const PSRatio& operator-=(long rhs);
+    const PSRatio& operator*=(long rhs);
+    const PSRatio& operator/=(long rhs);
     
     // increment/decrement iterators
-    const Rational& operator++();
-    const Rational operator++(int);
-    const Rational& operator--();
-    const Rational operator--(int);
+    const PSRatio& operator++();
+    const PSRatio operator++(int);
+    const PSRatio& operator--();
+    const PSRatio operator--(int);
     
     // -- better implemented as explicit conversion
     // -- function toDouble (see below)
@@ -140,63 +140,63 @@ private:
 };
 
 /// double -> Rational conversion
-Rational toRational(double x, int iterations = 5);
+PSRatio toRational(double x, int iterations = 5);
 
 /// Rational -> double conversion
-double toDouble(const Rational& r);
+double toDouble(const PSRatio& r);
 
 /// Rational -> long conversion
-long trunc(const Rational& r);
+long trunc(const PSRatio& r);
 
 /// Rational -> long conversion
-long floor(const Rational& r);
+long floor(const PSRatio& r);
 
 /// Rational -> long conversion
-long ceil(const Rational& r);
+long ceil(const PSRatio& r);
 
 /// logarithm base 2 rounded to long
 /// @param r must be strictly positive.
-long log2floor(const Rational& r);
+long log2floor(const PSRatio& r);
 
 /// logarithm base 2 rounded to long
 /// @param r must be strictly positive.
-long log2ceil(const Rational& r);
+long log2ceil(const PSRatio& r);
 
 /// power of 2
-Rational pow2Rational(long n);
+PSRatio pow2Rational(long n);
 
 /// binary operators
-const Rational operator+(const Rational& lhs, const Rational& rhs);
-const Rational operator-(const Rational& lhs, const Rational& rhs);
-const Rational operator*(const Rational& lhs, const Rational& rhs);
-const Rational operator/(const Rational& lhs, const Rational& rhs);
-Rational rabs(const Rational& rhs);
+const PSRatio operator+(const PSRatio& lhs, const PSRatio& rhs);
+const PSRatio operator-(const PSRatio& lhs, const PSRatio& rhs);
+const PSRatio operator*(const PSRatio& lhs, const PSRatio& rhs);
+const PSRatio operator/(const PSRatio& lhs, const PSRatio& rhs);
+PSRatio rabs(const PSRatio& rhs);
 
 /// boolean operators
-bool operator==(const Rational& lhs, const Rational& rhs);
-bool operator!=(const Rational& lhs, const Rational& rhs);
-bool operator<=(const Rational& lhs, const Rational& rhs);
-bool operator>=(const Rational& lhs, const Rational& rhs);
-bool operator<(const Rational& lhs, const Rational& rhs);
-bool operator>(const Rational& lhs, const Rational& rhs);
+bool operator==(const PSRatio& lhs, const PSRatio& rhs);
+bool operator!=(const PSRatio& lhs, const PSRatio& rhs);
+bool operator<=(const PSRatio& lhs, const PSRatio& rhs);
+bool operator>=(const PSRatio& lhs, const PSRatio& rhs);
+bool operator<(const PSRatio& lhs, const PSRatio& rhs);
+bool operator>(const PSRatio& lhs, const PSRatio& rhs);
 
 // output operator
-std::ostream& operator<< (std::ostream& ostr, const Rational& r);
-std::istream& operator>> (std::istream& istr, Rational& r);
+std::ostream& operator<< (std::ostream& ostr, const PSRatio& r);
+std::istream& operator>> (std::istream& istr, PSRatio& r);
 
 } // end namespace pse
 
 // fmt v10 and above requires `fmt::formatter<T>` extends `fmt::ostream_formatter`.
 // See: https://github.com/fmtlib/fmt/issues/3318
-template<> struct fmt::formatter<pse::Rational> : fmt::ostream_formatter {};
+template<> struct fmt::formatter<pse::PSRatio> : fmt::ostream_formatter {};
 
 namespace std
 {
     template<>
-    class hash<pse::Rational>
+    class hash<pse::PSRatio>
     {
     public:
-        std::size_t operator()(const pse::Rational& x) const
+        std::size_t operator()(const pse::PSRatio& x) const
         {
             using std::hash;
          

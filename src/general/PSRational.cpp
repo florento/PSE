@@ -7,9 +7,10 @@
 
 #include "PSRational.hpp"
 
+namespace pse {
 
 // default constructor
-Rational::Rational(long n, long d)
+PSRatio::PSRatio(long n, long d)
 {
     if (d == 0L)
     {
@@ -30,7 +31,7 @@ Rational::Rational(long n, long d)
 }
 
 
-Rational& Rational::operator=(const Rational& rhs)
+PSRatio& PSRatio::operator=(const PSRatio& rhs)
 {
     num = rhs.num;
     den = rhs.den;
@@ -38,7 +39,7 @@ Rational& Rational::operator=(const Rational& rhs)
 }
 
 
-Rational& Rational::operator=(long rhs)
+PSRatio& PSRatio::operator=(long rhs)
 {
     num = rhs;
     den = 1;
@@ -47,7 +48,7 @@ Rational& Rational::operator=(long rhs)
 
 
 // binary shortcut operators
-const Rational& Rational::operator+=(const Rational& rhs)
+const PSRatio& PSRatio::operator+=(const PSRatio& rhs)
 {
     long g1 = gcd(den, rhs.den);
     if (g1 == 1L)
@@ -66,14 +67,14 @@ const Rational& Rational::operator+=(const Rational& rhs)
 }
 
 
-const Rational& Rational::operator+=(long rhs)
+const PSRatio& PSRatio::operator+=(long rhs)
 {
     num = num + den*rhs;
     return *this;
 }
 
 
-const Rational& Rational::operator-=(const Rational& rhs)
+const PSRatio& PSRatio::operator-=(const PSRatio& rhs)
 {
     long g1 = gcd(den, rhs.den);
     if (g1 == 1L)
@@ -92,14 +93,14 @@ const Rational& Rational::operator-=(const Rational& rhs)
 }
 
 
-const Rational& Rational::operator-=(long rhs)
+const PSRatio& PSRatio::operator-=(long rhs)
 {
     num = num - den*rhs;
     return *this;
 }
 
 
-const Rational& Rational::operator*=(const Rational& rhs)
+const PSRatio& PSRatio::operator*=(const PSRatio& rhs)
 {
     long g1 = gcd(num, rhs.den);
     long g2 = gcd(den, rhs.num);
@@ -109,7 +110,7 @@ const Rational& Rational::operator*=(const Rational& rhs)
 }
 
 
-const Rational& Rational::operator*=(long rhs)
+const PSRatio& PSRatio::operator*=(long rhs)
 {
     long g = gcd(den, rhs);
     num *= rhs/g;
@@ -118,7 +119,7 @@ const Rational& Rational::operator*=(long rhs)
 }
 
 
-const Rational& Rational::operator/=(const Rational& rhs)
+const PSRatio& PSRatio::operator/=(const PSRatio& rhs)
 {
     if (rhs == 0)
     {
@@ -135,7 +136,7 @@ const Rational& Rational::operator/=(const Rational& rhs)
 }
 
 
-const Rational& Rational::operator/=(long rhs)
+const PSRatio& PSRatio::operator/=(long rhs)
 {
     if (rhs == 0L)
     {
@@ -152,29 +153,29 @@ const Rational& Rational::operator/=(long rhs)
 
 
 // increment/decrement iterators
-const Rational& Rational::operator++()
+const PSRatio& PSRatio::operator++()
 {
     return (*this += 1);
 }
 
 
-const Rational Rational::operator++(int)
+const PSRatio PSRatio::operator++(int)
 {
-    Rational oldVal = *this;
+    PSRatio oldVal = *this;
     ++(*this);
     return oldVal;
 }
 
 
-const Rational& Rational::operator--()
+const PSRatio& PSRatio::operator--()
 {
     return (*this -= 1);
 }
 
 
-const Rational Rational::operator--(int)
+const PSRatio PSRatio::operator--(int)
 {
-    Rational oldVal = *this;
+    PSRatio oldVal = *this;
     --(*this);
     return oldVal;
 }
@@ -182,7 +183,7 @@ const Rational Rational::operator--(int)
 
 // greatest common divisor: // euclid's algorithm
 // static
-long Rational::gcd(long u, long v)
+long PSRatio::gcd(long u, long v)
 {
     long a = labs(u); // absolute value
     long b = labs(v);
@@ -216,7 +217,7 @@ long Rational::gcd(long u, long v)
 
 
 // static
-long Rational::lcm(long u, long v)
+long PSRatio::lcm(long u, long v)
 {
     long a = labs(u);
     long b = labs(v);
@@ -226,31 +227,31 @@ long Rational::lcm(long u, long v)
 
 
 // binary operators
-const Rational operator+(const Rational& lhs, const Rational& rhs)
+const PSRatio operator+(const PSRatio& lhs, const PSRatio& rhs)
 {
-    return Rational(lhs) += rhs;
+    return PSRatio(lhs) += rhs;
 }
 
 
-const Rational operator-(const Rational& lhs, const Rational& rhs)
+const PSRatio operator-(const PSRatio& lhs, const PSRatio& rhs)
 {
-    return Rational(lhs) -= rhs;
+    return PSRatio(lhs) -= rhs;
 }
 
 
-const Rational operator*(const Rational& lhs, const Rational& rhs)
+const PSRatio operator*(const PSRatio& lhs, const PSRatio& rhs)
 {
-    return Rational(lhs) *= rhs;
+    return PSRatio(lhs) *= rhs;
 }
 
 
-const Rational operator/(const Rational& lhs, const Rational& rhs)
+const PSRatio operator/(const PSRatio& lhs, const PSRatio& rhs)
 {
-    return Rational(lhs) /= rhs;
+    return PSRatio(lhs) /= rhs;
 }
 
 
-Rational rabs(const Rational& r)
+PSRatio rabs(const PSRatio& r)
 {
     if (r.numerator() < 0)
         return -r;
@@ -260,45 +261,45 @@ Rational rabs(const Rational& r)
 
 
 // boolean operators
-bool operator==(const Rational& lhs, const Rational& rhs)
+bool operator==(const PSRatio& lhs, const PSRatio& rhs)
 {
     return (lhs.numerator() == rhs.numerator() &&
             lhs.denominator() == rhs.denominator());
 }
 
 
-bool operator!=(const Rational& lhs, const Rational& rhs)
+bool operator!=(const PSRatio& lhs, const PSRatio& rhs)
 {
     return (lhs.numerator() != rhs.numerator() ||
             lhs.denominator() != rhs.denominator());
 }
 
 
-bool operator<(const Rational& lhs, const Rational& rhs)
+bool operator<(const PSRatio& lhs, const PSRatio& rhs)
 {
     return (toDouble(lhs) < toDouble(rhs));
 }
 
 
-bool operator>(const Rational& lhs, const Rational& rhs)
+bool operator>(const PSRatio& lhs, const PSRatio& rhs)
 {
     return (toDouble(lhs) > toDouble(rhs));
 }
 
 
-bool operator<=(const Rational& lhs, const Rational& rhs)
+bool operator<=(const PSRatio& lhs, const PSRatio& rhs)
 {
     return ((lhs < rhs) || (lhs == rhs));
 }
 
 
-bool operator>=(const Rational& lhs, const Rational& rhs)
+bool operator>=(const PSRatio& lhs, const PSRatio& rhs)
 {
     return ((lhs > rhs) || (lhs == rhs));
 }
 
 
-std::ostream& operator<<(std::ostream& ostr, const Rational& r)
+std::ostream& operator<<(std::ostream& ostr, const PSRatio& r)
 {
     if (r.denominator() == 1L)
         ostr << r.numerator();
@@ -317,7 +318,7 @@ std::ostream& operator<<(std::ostream& ostr, const Rational& r)
 }
 
 
-std::istream& operator>>(std::istream& istr, Rational& r)
+std::istream& operator>>(std::istream& istr, PSRatio& r)
 {
     // accepted format # and #/#
     // where # is integer number
@@ -329,14 +330,14 @@ std::istream& operator>>(std::istream& istr, Rational& r)
         istr.ignore(1);
         istr >> d;
     }
-    if ( istr ) r = Rational(n,d);
+    if ( istr ) r = PSRatio(n,d);
 
     return istr;
 }
 
 
 // double -> Rational conversion
-static Rational toRational(double x, double limit, int iterations)
+static PSRatio toRational(double x, double limit, int iterations)
 {
     double intpart;
     double fractpart = modf(x, &intpart);
@@ -345,22 +346,22 @@ static Rational toRational(double x, double limit, int iterations)
 
     if ( d > limit || iterations == 0 )
     {
-        return Rational(left);
+        return PSRatio(left);
     }
     else
     {
-        return Rational(left) + toRational(d, limit * 0.1, --iterations).invert();
+        return PSRatio(left) + toRational(d, limit * 0.1, --iterations).invert();
     }
 }
 
 
-Rational toRational(double x, int iterations)
+PSRatio toRational(double x, int iterations)
 {
     if ( x == 0.0 ||
          x < numeric_limits<long>::min() ||
          x > numeric_limits<long>::max() )
     {
-        return Rational(0,1);
+        return PSRatio(0,1);
     }
     else
     {
@@ -369,53 +370,53 @@ Rational toRational(double x, int iterations)
     }
 }
 
-double toDouble(const Rational& r)
+double toDouble(const PSRatio& r)
 {
     return double(r.numerator())/r.denominator();
 }
 
-long trunc(const Rational& r)
+long trunc(const PSRatio& r)
 {
     return r.numerator() / r.denominator();
 }
 
-long floor(const Rational& r)
+long floor(const PSRatio& r)
 {
     long q = r.numerator() / r.denominator();
     return (r.numerator() < 0 && r.denominator() != 1) ? --q : q;
 }
 
-long ceil(const Rational& r)
+long ceil(const PSRatio& r)
 {
     long q = r.numerator() / r.denominator();
     return (r.numerator() >= 0 && r.denominator() != 1) ? ++q : q;
 }
 
-Rational pow2Rational(long n)
+PSRatio pow2Rational(long n)
 {
     if (n >= 0)
-        return Rational(((long) 1) << n, 1);
+        return PSRatio(((long) 1) << n, 1);
     else
-        return Rational(1, ((long) 1) << (- n));    
+        return PSRatio(1, ((long) 1) << (- n));    
 }
 
 
-long log2floor(const Rational& r)
+long log2floor(const PSRatio& r)
 {
-    if (r <= Rational(0, 1))
+    if (r <= PSRatio(0, 1))
     {
         ERROR("log2floor({}) undef", r);
         return LONG_MIN;
     }
-    else if (r == Rational(1, 1))
+    else if (r == PSRatio(1, 1))
     {
         return 0;
     }
-    else if (Rational(1, 1) < r)
+    else if (PSRatio(1, 1) < r)
     {
         long c = 2;
         long ret = 0;
-        while (Rational(c, 1) <= r)
+        while (PSRatio(c, 1) <= r)
         {
             c <<= 1;
             ++ret;
@@ -424,10 +425,10 @@ long log2floor(const Rational& r)
     }
     else
     {
-        assert (r < Rational(1, 1));
+        assert (r < PSRatio(1, 1));
         long c = 1;
         long ret = 0;
-        while (r < Rational(1, c))
+        while (r < PSRatio(1, c))
         {
             c <<= 1;
             --ret;
@@ -437,22 +438,22 @@ long log2floor(const Rational& r)
 }
 
 
-long log2ceil(const Rational& r)
+long log2ceil(const PSRatio& r)
 {
-    if (r <= Rational(0, 1))
+    if (r <= PSRatio(0, 1))
     {
         ERROR("log2ceil({}) undef", r);
         return LONG_MIN;
     }
-    else if (r == Rational(1, 1))
+    else if (r == PSRatio(1, 1))
     {
         return 0;
     }
-    else if (r > Rational(1, 1))
+    else if (r > PSRatio(1, 1))
     {
         long c = 1;
         long ret = 0;
-        while (r > Rational(c, 1))
+        while (r > PSRatio(c, 1))
         {
             c <<= 1;
             ++ret;
@@ -461,10 +462,10 @@ long log2ceil(const Rational& r)
     }
     else
     {
-        assert (r < Rational(1, 1));
+        assert (r < PSRatio(1, 1));
         long c = 2;
         long ret = 0;
-        while (r <= Rational(1, c))
+        while (r <= PSRatio(1, c))
         {
             c <<= 1;
             --ret;
@@ -474,10 +475,10 @@ long log2ceil(const Rational& r)
 }
 
 
-std::ostream& Rational::printint(std::ostream& o) const
+std::ostream& PSRatio::printint(std::ostream& o) const
 {
     long i = floor(*this);
-    Rational rest = *this - Rational(i);
+    PSRatio rest = *this - PSRatio(i);
 
     if (i == 0)
     {
@@ -498,9 +499,12 @@ std::ostream& Rational::printint(std::ostream& o) const
 }
 
 
-std::string Rational::to_string() const
+std::string PSRatio::to_string() const
 {
     std::stringstream s = std::stringstream();
     printint(s);
     return s.str();
 }
+
+
+} // end namespace pse

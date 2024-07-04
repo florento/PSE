@@ -105,7 +105,7 @@ public:
     /// next note.
     /// @param dur note duration, in fraction of bars.
     void add(int note, int bar, bool simult=false,
-             const Rational& dur = Rational(0));
+             const PSRatio& dur = PSRatio(0));
 
     /// for pybind: add a new input note to the enumerator of notes to spell
     /// with duration.

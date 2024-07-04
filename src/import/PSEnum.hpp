@@ -128,8 +128,6 @@ public:
     /// @param i index of a note. must be inside the interval of this enumerator.
     virtual bool simultaneous(size_t i) const = 0;
 
-    // midi key number in 0..128 of the note of the given index.
-
     /// name for the note at the given index, if it has been set,
     /// otherwise Undef.
     /// @param i index of note in the list of input notes.
