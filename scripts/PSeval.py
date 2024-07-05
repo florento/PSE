@@ -129,7 +129,7 @@ def extract_measure(m, b):
     assert(isinstance(m, m21.stream.Measure))
     ln = []
     prev_n = None        
-    prev_offset = 0              # onset of prev note in measure       
+    prev_offset = 0            # onset of prev note in measure       
     for e in m.flatten():      # merge voices in measure
         if isinstance(e, m21.note.Note):
             insert_note(prev_n, prev_offset, e, e.offset, b, ln)
@@ -1128,8 +1128,6 @@ def write_score(score, output_path, name):
     # os.system(_mscore + ' -o ' + pdffile + ' ' + xmlfile)
 
                
-
-
 ##################################
 ##                              ##
 ##  pdf export with MuseScore   ##

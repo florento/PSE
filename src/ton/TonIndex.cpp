@@ -27,62 +27,7 @@ _rankWeber(),
 _closed(false),
 _WeberTonal(true)
 {
-    switch (n)
-    {
-        case 0:
-            _WeberTonal = false;
-            // close() must be called afterwards
-            break;
-
-        case 25:
-            init25();
-            close(true); // tonal Weber
-            break;
-
-        case 26:
-            init13(ModeName::Major, true); // global flag
-            init13(ModeName::Minor, true);
-            close(true); // tonal Weber
-            break;
-
-        case 30:
-            init15(ModeName::Major, true);
-            init15(ModeName::Minor, true);
-            close(true); // tonal Weber
-            break;
-
-        case 104:
-            _WeberTonal = false;
-            // init13(ModeName::Major);
-            init13(ModeName::Minor, true);
-            init13(ModeName::Ionian, true);
-            init13(ModeName::Dorian, false);
-            init13(ModeName::Phrygian, false);
-            init13(ModeName::Lydian, false);
-            init13(ModeName::Mixolydian, false);
-            init13(ModeName::Aeolian, false);
-            init13(ModeName::Locrian, false);
-            close(false); // modal Weber
-            break;
-            
-        case 135:
-            _WeberTonal = false;
-            init15(ModeName::Major, true); // Ionian
-            init15(ModeName::Minor, false);
-            init15(ModeName::MinorMel, false);
-            init15(ModeName::Dorian, false);
-            init15(ModeName::Phrygian, false);
-            init15(ModeName::Lydian, false);
-            init15(ModeName::Mixolydian, false);
-            init15(ModeName::Aeolian, false);
-            init15(ModeName::Locrian, false);
-            close(false); // modal Weber
-            break;
-            
-        default:
-            ERROR("TonIndex: unsupported list of default tons: {}", n);
-            break;
-    }
+    init(n);
 }
 
 TonIndex::~TonIndex()
@@ -205,12 +150,13 @@ size_t TonIndex::enharmonic(size_t i) const
 }
 
 
-void TonIndex::reset()
+void TonIndex::reset(size_t n)
 {
     TRACE("TonIndex: empty the list of tonalities (row headers)");
     _tons.clear();
     _closed = false;
     _WeberTonal = true;
+    init(n);
 }
 
 void TonIndex::setTonal()
@@ -300,6 +246,68 @@ void TonIndex::close(bool tonal_flag)
 bool TonIndex::closed() const
 {
     return _closed;
+}
+
+
+void TonIndex::init(size_t n)
+{
+    switch (n)
+    {
+        case 0:
+            _WeberTonal = false;
+            // close() must be called afterwards
+            break;
+
+        case 25:
+            init25();
+            close(true); // tonal Weber
+            break;
+
+        case 26:
+            init13(ModeName::Major, true); // global flag
+            init13(ModeName::Minor, true);
+            close(true); // tonal Weber
+            break;
+
+        case 30:
+            init15(ModeName::Major, true);
+            init15(ModeName::Minor, true);
+            close(true); // tonal Weber
+            break;
+
+        case 104:
+            _WeberTonal = false;
+            // init13(ModeName::Major);
+            init13(ModeName::Minor, true);
+            init13(ModeName::Ionian, true);
+            init13(ModeName::Dorian, false);
+            init13(ModeName::Phrygian, false);
+            init13(ModeName::Lydian, false);
+            init13(ModeName::Mixolydian, false);
+            init13(ModeName::Aeolian, false);
+            init13(ModeName::Locrian, false);
+            close(false); // modal Weber
+            break;
+            
+        case 135:
+            _WeberTonal = false;
+            init15(ModeName::Major, true); // Ionian
+            init15(ModeName::Minor, false);
+            init15(ModeName::MinorMel, false);
+            init15(ModeName::Dorian, false);
+            init15(ModeName::Phrygian, false);
+            init15(ModeName::Lydian, false);
+            init15(ModeName::Mixolydian, false);
+            init15(ModeName::Aeolian, false);
+            init15(ModeName::Locrian, false);
+            close(false); // modal Weber
+            break;
+            
+        default:
+            ERROR("TonIndex: unsupported list of default tons: {}", n);
+            break;
+    }
+
 }
 
 

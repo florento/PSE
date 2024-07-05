@@ -26,6 +26,7 @@
 
 namespace pse {
 
+
 /// index (list of row headers) for PSTable and PSVector (column in table).
 /// The array of tonalities for PS is encapsulated,
 /// and every tonality is indexed in 0..TonIndex::size()
@@ -50,13 +51,13 @@ public:
     /// - 26 : major and harmonic minor, KS between -6 and 6.
     /// - 30 : major and harmonic minor, KS between -7 and 7.
     /// - 25 : tonalities of Bach's Wohltemperierte Clavier
-    ///        major      KS -4 to 7 : C, C#, D, Eb, E, F, F#, G, Ab, A, Bb, B
-    ///        minor harm KS -6 to 6 : C, C#, D, Eb, D#, E, F, F#, G, G#, A, Bb, B
+    ///   major      KS -4 to 7 : C, C#, D, Eb, E, F, F#, G, Ab, A, Bb, B
+    ///   minor harm KS -6 to 6 : C, C#, D, Eb, D#, E, F, F#, G, G#, A, Bb, B
     /// - 104: major, minor, all jazz modes, KS in -6..6
     /// - 120: major, minor, all jazz modes, KS in -7..7
     /// - 135: modal: TBC
-    /// the empty array of tonalities (case 0) is not closed.
-    /// All the others are closed.
+    /// @warning the empty array of tonalities (case nb=0) is not closed
+    /// (close() must be called aterwards). All the others are closed.
     TonIndex(size_t nb=0);
     
     /// destructor.
@@ -107,10 +108,14 @@ public:
     /// - FAIL in case of error.
     size_t enharmonic(size_t i) const;
 
-    /// empty this index of tonalities.
+    /// empty this index of tonalities, and rebuild it with
+    /// the given default number of tonalities
     /// The array is unclosed.
+    /// @param n number of default list of tonalities.
+    /// @see constructor TonIndex
     /// @see addTon
-    void reset();
+    /// @warning with n=0, close() must be called aterwards.
+    void reset(size_t n=0);
 
     ///add a tonality to this array of tonalities.
     /// @param ton the tonality to add to this index.
@@ -189,6 +194,10 @@ private:
     /// @return the index of ton or UNDEF if not found.
     size_t find(int ks, const ModeName& mode) const;
 
+    /// @param n number of default list of tonalities.
+    /// @see constructor TonIndex
+    void init(size_t n);
+    
     /// default array of 13 tonalities, ks between -6 and 6.
     /// @param mode must not be ModeName::Undef.
     /// @param global whether ton can be considered as a global tonality.

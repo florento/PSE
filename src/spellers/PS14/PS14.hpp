@@ -31,6 +31,7 @@ namespace pse {
 
 
 /// specific structure for the PS14 algorithm.
+/// deterministic evaluation.
 class PS14 : public Speller2Pass
 {
 public:
