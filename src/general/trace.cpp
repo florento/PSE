@@ -31,7 +31,7 @@ int spdlog_setPattern(const std::string& s)
 }
 
 
-int spdlog_setVerbosity(int verbosity)
+int setVerbosityLevel(int verbosity)
 {
     switch (verbosity)
     {

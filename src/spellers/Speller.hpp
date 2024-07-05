@@ -306,11 +306,12 @@ public: // spelling
 
     /// construct the first spelling table.
     /// @param ctype type of cost domain.
-    /// @param tonal tonal or modal construction of initial state in each cell.
+    /// @param tonal tonal or modal construction of the initial state in each cell.
     /// @param chromatic whether transitions for best-path comp. are deterministic.
     /// @return whether computation was succesfull.
     /// @warning if the table exists it is overwritten.
     /// @see sampleCost
+    /// @see PSState for the construction of the initial state and tonal/modal flag
     bool evalTable(CostType ctype, bool tonal=true, bool chromatic=false);
 
     /// construct a second spelling table, using
@@ -324,6 +325,7 @@ public: // spelling
     /// @return whether computation was succesfull.
     /// @warning the first spelling table must have been constructed.
     /// @warning the first spelling table is deleted.
+    /// @see PSState for the construction of the initial state and tonal/modal flag
     bool revalTable(CostType ctype, bool tonal=true, bool chromatic=false);
 
     /// construct the grid of local tons (1 ton for each initial ton and measure)
@@ -339,7 +341,7 @@ public: // spelling
     /// cost approximatively equal in the global ton search.
     /// @param refine whether we restart from the current global subarray
     /// and refine, or from scratch. 
-    /// if true, one global sbuarray must have been computed.
+    /// if true, one global subarray must have been computed.
     /// @return whether computation was succesfull.
     /// @warning a table must have been evaluated.
     bool evalGlobal(double d, bool refine=false);
@@ -381,7 +383,7 @@ public: // results feedback
     
     /// number of candidates estimated global tonality (ties).
     /// @return the size of _global or 0 if evalGlobal was not called.
-    virtual size_t globals() const;
+    virtual   const;
     
     /// n-best estimated global tonality.
     /// @param n number of candidate estimated global tonality,

@@ -28,7 +28,7 @@
 namespace pse {
 
 
-/// An Accident State is a mapping associated one accident (in -2..2)
+/// An Accident State is a mapping associating one accident (in -2..2)
 /// to each pitch name (in 0..6).
 /// - accident number -2 is a double flat
 /// - accident number -1 is a flat
@@ -49,7 +49,7 @@ public:
     ///   compute the initial state only according to the KS of ton,
     ///   i.e. initial state is the one of the major mode (whatever the actual mode)
     /// - if false: modal mode:
-    ///   compute the initial state only according to the actual mode,
+    ///   compute the initial state according to the actual mode,
     ///   i.e. discount alterations of the mode that do not belong to the KS.
     PSState(const Ton& ton, bool tonal = true);
 
