@@ -12,8 +12,8 @@
 namespace pse {
 
 
-Speller2Pass::Speller2Pass(const Algo& algo, size_t nbTons, bool dflag):
-Speller1Pass(algo, nbTons, dflag),
+Speller2Pass::Speller2Pass( size_t nbTons, const Algo& algo, bool dflag):
+Speller1Pass(nbTons, algo, dflag),
 _table1(nullptr),
 _global1(nullptr)
 { }
@@ -140,8 +140,9 @@ bool Speller2Pass::spell(const Cost& seed0, const Cost& seed1,
         }
         else
         {
+            assert(_enum);
             ERROR("Speller: failure with spelling table {}-{}",
-                  _enum.first(), _enum.stop());
+                  _enum->first(), _enum->stop());
             status = false;
         }
 

@@ -12,7 +12,7 @@ namespace pse {
 
 
 PS13::PS13(size_t kpre, size_t kpost, bool dflag):
-Speller(Algo::PS13, dflag),
+SpellerEnum(0, Algo::PS13, dflag),
 _scales(),       // empty vector
 _Kpre(kpre),
 _Kpost(kpost),
@@ -70,10 +70,11 @@ void PS13::init_scales()
 bool PS13::spell()
 {
     // step 1: name all notes in enumerator
-    for (size_t n = _enum.first(); n < _enum.stop(); ++n)
+    assert(_enum);
+    for (size_t n = _enum->first(); n < _enum->stop(); ++n)
     {
         // pitch class of n
-        int nm = _enum.midipitch(n);
+        int nm = _enum->midipitch(n);
         assert(0 <= nm);
         assert(nm <= 128);
         unsigned int nc = nm % 12;
@@ -110,7 +111,8 @@ bool PS13::spell()
         assert(0 <= maxi);
         assert(maxi < 7);
         assert(maxName != NoteName::Undef);
-        _enum.rename(n, maxName);
+        assert(_enum);
+        _enum->rename(n, maxName);
         DEBUGU("PS13: rename {} with {}", n, maxName);
     }
     
@@ -128,31 +130,31 @@ bool PS13::rename(size_t n)
 
 size_t PS13::count(int c, size_t n) const
 {
-    return _enum.count(c, n, _Kpre, _Kpost);
-//    assert(0 <= c);
-//    assert(c < 12);
-//    assert(! _enum.open());
-//    assert(! _enum.empty());
-//    size_t efirst = _enum.first();
-//    size_t estop = _enum.stop();
-//    assert(efirst <= n);
-//    assert(n <= _enum.stop());
-//    size_t left = (n - efirst >= _Kpre)?(n - _Kpre):efirst;
-//    size_t right = (estop - n >= _Kpost)?(n + _Kpost):estop;
-//    assert(left <= right);
-//    unsigned int cpt = 0;
-//    for (size_t i = left; i < right; ++i)
-//    {
-//        assert(efirst <= i);
-//        assert(i < estop);
-//        unsigned int mp = _enum.midipitch(i);
-//        assert(0 <= mp);
-//        assert(mp <= 128);
-//        if (mp%12 == c)
-//            ++cpt;
-//    }
-//
-//    return cpt;
+    assert(_enum);
+    return _enum->count(c, n, _Kpre, _Kpost);
+    // assert(0 <= c);
+    // assert(c < 12);
+    // assert(! _enum.open());
+    // assert(! _enum.empty());
+    // size_t efirst = _enum.first();
+    // size_t estop = _enum.stop();
+    // assert(efirst <= n);
+    // assert(n <= _enum.stop());
+    // size_t left = (n - efirst >= _Kpre)?(n - _Kpre):efirst;
+    // size_t right = (estop - n >= _Kpost)?(n + _Kpost):estop;
+    // assert(left <= right);
+    // unsigned int cpt = 0;
+    // for (size_t i = left; i < right; ++i)
+    // {
+    //     assert(efirst <= i);
+    //     assert(i < estop);
+    //     unsigned int mp = _enum.midipitch(i);
+    //     assert(0 <= mp);
+    //     assert(mp <= 128);
+    //     if (mp%12 == c)
+    //         ++cpt;
+    // }
+    // return cpt;
 }
 
 

@@ -30,7 +30,7 @@ namespace pse {
 
 /// wrapper on top of PSRawEnum implementing D. Meredith PS13 algorithm.
 /// interface to pybind.
-class PS13 : public Speller
+class PS13 : public SpellerEnum
 {
 public:
 

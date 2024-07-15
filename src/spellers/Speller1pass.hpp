@@ -26,7 +26,7 @@ namespace pse {
 
 
 /// speller in 1 pass, with 1 table.
-class Speller1Pass : public Speller
+class Speller1Pass : public SpellerEnum
 {
 public:
     
@@ -34,7 +34,8 @@ public:
     /// @param nbTons use default list of tonalities (default: empty).
     /// @param dflag debug mode.
     /// @see PSTable
-    Speller1Pass(const Algo& algo=Algo::Undef, size_t nbTons=0,
+    Speller1Pass(size_t nbTons=0,
+                 const Algo& algo=Algo::Undef, // TBR
                  bool dflag=true);
     
     /// destructor

@@ -61,7 +61,6 @@ void Spelli::debug(bool flag)
         setVerbosityLevel(4);
 }
 
-
 //
 // array of tonalities
 //
@@ -140,7 +139,6 @@ bool Spelli::closedTons() const
     return _index->closed();
 }
 
-
 //
 // prepare spelling
 //
@@ -169,48 +167,52 @@ Cost& Spelli::sampleCost(CostType ct)
 }
 
 
+//Algo Speller::algo() const
+//{
+//    return Algo::Undef;
+//}
 
 
+//void Speller::setTonal()
+//{
+//    _initial_state = 1;
+//}
 
 
+//void Speller::setModal()
+//{
+//    _initial_state = 2;
+//}
 
 
-Speller::Speller(const Algo& algo, size_t nbton, bool dflag):
+//void Speller::setChromatic(bool flag)
+//{
+//    _chromatic = flag;
+//}
+
+
+Speller::Speller(PSEnum* e, size_t nbton, const Algo& algo, bool dflag):
 Spelli(nbton, dflag),
 _algo(algo),
-// _penum(new PSRawEnum(0, 0)),
-// _enum(*_penum),
-_enum(0, 0),
+_enum(e),
 _table(nullptr),
 _grid(nullptr),
 _global(nullptr)
-{ }
+{ 
+    assert(e);
+}
 
 
-Speller::Speller(PSEnum& enu, const Algo& algo, size_t nbton, bool dflag):
-Spelli(nbton, dflag),
-_algo(algo),
-// _penum(nullptr),
-// _enum(enu),
-_enum(0, 0),
-_table(nullptr),
-_grid(nullptr),
-_global(nullptr)
-{ }
-
-
-Speller::Speller(PSEnum& enu, std::shared_ptr<TonIndex> id,
+Speller::Speller(PSEnum* e, std::shared_ptr<TonIndex> id,
         const Algo& algo, bool dflag):
 Spelli(id, dflag),
 _algo(algo),
-// _penum(nullptr),
-// _enum(enu),
-_enum(0, 0),
+_enum(e),
 _table(nullptr),
 _grid(nullptr),
 _global(nullptr)
 {
-    
+    assert(e);
 }
 
 
@@ -256,79 +258,15 @@ Speller::~Speller()
 //}
 
 
-//Algo Speller::algo() const
-//{
-//    return Algo::Undef;
-//}
-
-
-//
-// notes
-//
-
-
-size_t Speller::size() const
-{
-    //TRACE("Speller::size");
-    return _enum.size();
-}
-
-
-void Speller::reset(size_t i0, size_t i1)
-{
-    _enum.reset(i0, i1);
-}
-
-
-void Speller::add(int note, int bar, bool simult, const PSRatio& dur)
-{
-    TRACE("Speller: add {} {} {}", note, bar, dur);
-    _enum.add(note, bar, simult, dur);
-}
-
-
-void Speller::add2(int note, int bar, bool simult,
-                             long dur_num, long dur_den)
-{
-    TRACE("Speller: add {} {} {}", note, bar, PSRatio(dur_num, dur_den));
-    _enum.add(note, bar, simult, PSRatio(dur_num, dur_den));
-}
-
-
-void Speller::add0(int note, int bar, bool simult)
-{
-    TRACE("Speller: add {} {}", note, bar);
-    _enum.add(note, bar, simult);
-}
-
-
-//void Speller::setTonal()
-//{
-//    _initial_state = 1;
-//}
-
-
-//void Speller::setModal()
-//{
-//    _initial_state = 2;
-//}
-
-
-//void Speller::setChromatic(bool flag)
-//{
-//    _chromatic = flag;
-//}
-
-
 //
 // spelling
 //
-
 
 bool Speller::evalTable(CostType ctype, bool tonal, bool chromatic)
 {
     if (_table)
     {
+        WARN("deleting current pitch spelling table");
         delete _table;
         _table = nullptr;
     }
@@ -340,7 +278,8 @@ bool Speller::evalTable(CostType ctype, bool tonal, bool chromatic)
 //    }
     
     const Algo algo(chromatic?Algo::PSD:Algo::PSE);
-    _table = new PST(algo, sampleCost(ctype), index(), _enum, tonal, _debug);
+    assert(_enum);
+    _table = new PST(algo, sampleCost(ctype), index(), *_enum, tonal, _debug);
 
     return true;
 }
@@ -472,7 +411,8 @@ bool Speller::rename(size_t i)
 size_t Speller::rewritePassing()
 {
     TRACE("Rewriting passing notes");
-    return _enum.rewritePassing();
+    assert(_enum);
+    return _enum->rewritePassing();
 }
 
 
@@ -489,25 +429,30 @@ bool Speller::spell()
 
 enum NoteName Speller::name(size_t i) const
 {
-    return _enum.name(i);
+    assert(_enum);
+    return _enum->name(i);
 }
 
 
 enum Accid Speller::accidental(size_t i) const
+
 {
-    return _enum.accidental(i);
+    assert(_enum);
+    return _enum->accidental(i);
 }
 
 
 int Speller::octave(size_t i) const
 {
-    return _enum.octave(i);
+    assert(_enum);
+    return _enum->octave(i);
 }
 
 
 bool Speller::printed(size_t i) const
 {
-    return _enum.printed(i);
+    assert(_enum);
+    return _enum->printed(i);
 }
 
 
@@ -604,8 +549,9 @@ const Ton& Speller::local(size_t i, size_t j) const
 
 const Ton& Speller::localNote(size_t i, size_t j) const
 {
-    assert(_enum.inside(j));
-    size_t bar = _enum.measure(j);
+    assert(_enum);
+    assert(_enum->inside(j));
+    size_t bar = _enum->measure(j);
     return local(i, bar);
 }
 
@@ -615,6 +561,74 @@ double Speller::duration(clock_t start)
 {
     return ((double)(clock() - start)/CLOCKS_PER_SEC * 1000);
 }
+
+
+
+
+
+
+
+SpellerEnum::SpellerEnum(size_t nbton, const Algo& algo, bool dflag):
+Speller(new PSRawEnum(0, 0), nbton, algo, dflag)
+{ }
+
+
+SpellerEnum::~SpellerEnum()
+{
+    assert(_enum);
+    delete _enum;
+}
+
+
+//
+// notes
+//
+
+
+size_t SpellerEnum::size() const
+{
+    //TRACE("Speller::size");
+    return rawenum().size();
+}
+
+
+void SpellerEnum::reset(size_t i0, size_t i1)
+{
+    rawenum().reset(i0, i1);
+}
+
+
+void SpellerEnum::add(int note, int bar, bool simult, const PSRatio& dur)
+{
+    TRACE("Speller: add {} {} {}", note, bar, dur);
+    rawenum().add(note, bar, simult, dur);
+}
+
+
+void SpellerEnum::add2(int note, int bar, bool simult,
+                             long dur_num, long dur_den)
+{
+    TRACE("Speller: add {} {} {}", note, bar, PSRatio(dur_num, dur_den));
+    rawenum().add(note, bar, simult, PSRatio(dur_num, dur_den));
+}
+
+
+void SpellerEnum::add0(int note, int bar, bool simult)
+{
+    TRACE("Speller: add {} {}", note, bar);
+    rawenum().add(note, bar, simult);
+}
+
+
+PSRawEnum& SpellerEnum::rawenum() const
+{
+    assert(_enum);
+    PSRawEnum* penum = dynamic_cast<PSRawEnum*>(_enum);
+    assert(penum);
+    return *penum;
+}
+
+
 
 
 } // namespace pse

@@ -9,8 +9,8 @@
 
 namespace pse {
 
-Speller1Pass::Speller1Pass(const Algo& algo, size_t nbTons, bool dflag):
-Speller(algo, nbTons, dflag),
+Speller1Pass::Speller1Pass(size_t nbTons, const Algo& algo, bool dflag):
+SpellerEnum(nbTons, algo, dflag),
 _table0(nullptr),
 _global0(nullptr),
 _time_table0(0),
@@ -171,7 +171,8 @@ bool Speller1Pass::spell(const Cost& seed0, double diff0,
     }
     
     clock_t time_start = clock();
-    _table0 = new PST(_algo, seed0, index(), _enum, false, _debug); // modal mode
+    assert(_enum);
+    _table0 = new PST(_algo, seed0, index(), *_enum, false, _debug); // modal mode
     _time_table0 = duration(time_start);
     TRACE("pitch-spelling: {} bars", _table0->size());
     if (_debug)

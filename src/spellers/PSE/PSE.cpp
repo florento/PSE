@@ -14,7 +14,7 @@ namespace pse {
 
 
 PSE::PSE(size_t nbTons, bool dflag):
-Speller2Pass(Algo::PSE, nbTons, dflag)
+Speller2Pass(nbTons, Algo::PSE, dflag)
 {
 //_table0(Algo::PSE, _index, _enum, dflag)
 // init table with default vector of tons

@@ -28,7 +28,8 @@ public:
     /// @param nbTons use default list of tonalities (default: empty).
     /// @param dflag debug mode.
     /// @see PSTable
-    Speller2Pass(const Algo& algo=Algo::Undef, size_t nbTons=0,
+    Speller2Pass( size_t nbTons=0,
+                 const Algo& algo=Algo::Undef, // TBR
                  bool dflag=true);
     
     /// destructor
