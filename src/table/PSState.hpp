@@ -15,7 +15,7 @@
 #include <assert.h>
 #include <array>
 
-#include "trace.hpp"
+#include "pstrace.hpp"
 #include "NoteName.hpp"
 #include "Accidental.hpp"
 #include "Accids.hpp"

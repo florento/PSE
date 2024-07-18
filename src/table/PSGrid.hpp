@@ -16,7 +16,7 @@
 #include <vector>
 #include <set>
 
-#include "trace.hpp"
+#include "pstrace.hpp"
 #include "utils.hpp"
 #include "TonIndex.hpp"
 #include "Cost.hpp"

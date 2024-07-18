@@ -867,12 +867,17 @@ class Spellew:
     def __init__(self, 
                  ps13_kpre=0, ps13_kpost=0, # parameters specific to PS13
                  nbtons=0,                  # nb of Tons in TonIndex
-                 t1_costtype=pse.CTYPE_UNDEF, 
+                 t1_costtype=pse.CTYPE_UNDEF, # 1st table
                  t1_tonal=True, 
                  t1_det=True, 
-                 t2_costtype=pse.CTYPE_UNDEF, 
+                 t2_costtype=pse.CTYPE_UNDEF, # 2d table 
                  t2_tonal=True, 
                  t2_det=True, 
+                 mask=False, # compute a 1st list if canditate globals 
+                             # (after 1st table) 
+                             # for optim comp. grid (mask) and 2d table
+                 global1=0,  # % of error for 1st list candidate globals
+                 global2=0,  # % of error for 1st list candidate globals
                  debug=False):      # mark flag ?    
         if (ps13_kpre > 0 and ps13_kpost > 0):
             self._algo_name = "PS13"
@@ -882,7 +887,7 @@ class Spellew:
             self._speller.set_Kpost(ps13_kpost)
         else:
             assert(t1_costtype != pse.CTYPE_UNDEF)
-            self._algo_name = "PSE"
+            self._algo_name = "PS14"
             self._algo_params = str(nbtons)
             assert(t1_costtype != pse.CTYPE_UNDEF)
             self._algo_params += '_1'
@@ -906,6 +911,9 @@ class Spellew:
         self._ct2     = t2_costtype
         self._tonal2  = t2_tonal
         self._det2    = t2_det
+        self._mask    = mask
+        self._global1 = global1
+        self._global2 = global2        
         # self._spelled = False
 
     def new_dir(self):
@@ -928,9 +936,9 @@ class Spellew:
             self._speller.spell()
             stat.stop_timer(1)
         else:
-            assert(self._algo_name == "PSE")
+            assert(self._algo_name == "PS14")
             assert(self._ct1 != pse.CTYPE_UNDEF)
-            print('algo PSE compute Table 1', 
+            print('algo PS14 compute Table 1', 
                   'cost type1:', self._ct1,
                   'tonal1:', self._tonal1,
                   'deterministic1:', self._det1, end=' ', flush=True)
@@ -939,8 +947,10 @@ class Spellew:
             stat.stop_timer(1)
             print("{0:0.2f}".format(stat.get_timer(1)), 'ms', end='\n', flush=True)
             if self._ct2 != pse.CTYPE_UNDEF:
-                self._speller.eval_global(5, False) # 5% tolerance
-                print(self._speller.globals(), 'candidates global from 1st table', flush=True)
+                if self._mask:
+                    print('evaluate first list of global candidates', self._global1, '%', flush=True)
+                    self._speller.eval_global(self._global1, False)
+                    print(self._speller.globals(), 'candidates global from 1st table', flush=True)
                 print('algo PSE compute Grid', end=' ', flush=True)
                 stat.start_timer(2)
                 self._speller.eval_grid()
@@ -1027,13 +1037,15 @@ class Spellew:
         assert(count_notes(part) == len(ln)) # print('ERROR',  count_notes(part), len(ln))
         print(len(ln), 'notes,', count_measures(part), 'bars,', end=' ')
         # spell        
-        print('spelling with', self._algo_name, self._algo_params, end='\n', flush=True)
+        print('spelling with', self._algo_name+'_'+self._algo_params, end='\n', flush=True)
         self.spell(ln, stats)   #print('spell finished', end='\n', flush=True)   
         # extract estimated global ton from speller
-        self._speller.eval_global(5, False) # 5% tolerance
+        print('evaluate final list of global tonalities', self._global2, '%', flush=True)
+        self._speller.eval_global(self._global2, self._mask) 
         (gt, i) = self.get_global(k0)
         print('pse eval_part: global selected:', i, flush=True)
         # apply the spelling in the row of the estimated global
+        print('RENAME')
         self._speller.rename(i)
         # eval estimation of global key
         if not gt.undef():

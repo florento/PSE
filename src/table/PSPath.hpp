@@ -19,7 +19,7 @@
 #include <stack>
 #include <queue>   // std::priority_queue
 
-#include "trace.hpp"
+#include "pstrace.hpp"
 //#include "Pitch.hpp"
 //#include "KeyFifth.hpp"
 #include "PSState.hpp"

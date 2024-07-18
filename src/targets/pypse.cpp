@@ -98,19 +98,19 @@ PYBIND11_MODULE(pse, m)
         .def("fifths", &pse::Ton::fifths, "get key signature")
         .def("undef", &pse::Ton::undef, "ton is undef");
   
-    py::class_<pse::Speller>(m, "Speller")
+    py::class_<pse::SpellerEnum>(m, "Speller")
         .def(py::init<>(), "Modular Spell Checker")
-        .def("debug", &pse::Speller::debug, "set debug mode", py::arg("on"))
-        .def("size", &pse::Speller::size, "number of notes to spell")
-        .def("reset", &pse::Speller::reset, "clear the list of notes to spell")
-        .def("add", &pse::Speller::add0, "add a new note to spell",
+        .def("debug", &pse::SpellerEnum::debug, "set debug mode", py::arg("on"))
+        .def("size", &pse::SpellerEnum::size, "number of notes to spell")
+        .def("reset", &pse::SpellerEnum::reset, "clear the list of notes to spell")
+        .def("add", &pse::SpellerEnum::add0, "add a new note to spell",
              py::arg("midi"), py::arg("bar"), py::arg("simultaneous"))
-        .def("addlong", &pse::Speller::add2, "add a new note to spell",
+        .def("addlong", &pse::SpellerEnum::add2, "add a new note to spell",
              py::arg("midi"), py::arg("bar"), py::arg("simultaneous"),
              py::arg("dur_num"), py::arg("dur_den"))
-        .def("nb_tons", &pse::Speller::nbTons,
+        .def("nb_tons", &pse::SpellerEnum::nbTons,
              "number of tonalities considered for pitch spelling")
-        .def("reset_tons", &pse::Speller::resetTons,
+        .def("reset_tons", &pse::SpellerEnum::resetTons,
              "clear the array of tonalities for pitch spelling")
     // disambiguate overloaded method
         .def("add_ton",
@@ -119,36 +119,36 @@ PYBIND11_MODULE(pse, m)
          py::arg("ks"),
          py::arg("mode"),
          py::arg("f_global"))
-        .def("Weber_tonal", &pse::Speller::WeberTonal,
+        .def("Weber_tonal", &pse::SpellerEnum::WeberTonal,
              "switch the array of tonalities to tonal mode for Weber dist.")
-        .def("Weber_modal", &pse::Speller::WeberModal,
+        .def("Weber_modal", &pse::SpellerEnum::WeberModal,
              "switch the array of tonalities to modal mode for Weber dist.")
-        .def("close_tons", &pse::Speller::closeTons, "close the array of tonalities")
-        .def("eval_table", &pse::Speller::evalTable, "construct the spelling table")
-        .def("reval_table", &pse::Speller::revalTable, "reconstruct the spelling table")
-        .def("eval_grid", &pse::Speller::evalGrid, "construct the grid of local tons")
-        .def("eval_global", &pse::Speller::evalGlobal,
+        .def("close_tons", &pse::SpellerEnum::closeTons, "close the array of tonalities")
+        .def("eval_table", &pse::SpellerEnum::evalTable, "construct the spelling table")
+        .def("reval_table", &pse::SpellerEnum::revalTable, "reconstruct the spelling table")
+        .def("eval_grid", &pse::SpellerEnum::evalGrid, "construct the grid of local tons")
+        .def("eval_global", &pse::SpellerEnum::evalGlobal,
              "compute the subarray of tons selected as candidate global tonality")
-        .def("rename", &pse::Speller::rename, "rename input notes")
-        .def("rewrite_passing", &pse::Speller::rewritePassing, "rewrite passing notes")
-        .def("name",  &pse::Speller::name, "estimated name of note",
+        .def("rename", &pse::SpellerEnum::rename, "rename input notes")
+        .def("rewrite_passing", &pse::SpellerEnum::rewritePassing, "rewrite passing notes")
+        .def("name",  &pse::SpellerEnum::name, "estimated name of note",
              py::arg("i"))
-        .def("accidental", &pse::Speller::accidental,
+        .def("accidental", &pse::SpellerEnum::accidental,
              "estimated accidental of note", py::arg("i"))
-        .def("octave", &pse::Speller::octave, "estimated octave of note",
+        .def("octave", &pse::SpellerEnum::octave, "estimated octave of note",
              py::arg("i"))
-        .def("printed", &pse::Speller::printed, "estimated print flag of note",
+        .def("printed", &pse::SpellerEnum::printed, "estimated print flag of note",
              py::arg("i"))
-        .def("globals", &pse::Speller::globals,
+        .def("globals", &pse::SpellerEnum::globals,
              "get number of candidates (ties) for the estimatation of the global tonality")
-        .def("global_ton", &pse::Speller::global, "get candidate global tonality")
-        .def("iglobal_ton", &pse::Speller::iglobal, "get index of candidate global tonality ")
-        .def("iglobal_ton", &pse::Speller::iglobal,
+        .def("global_ton", &pse::SpellerEnum::global, "get candidate global tonality")
+        .def("iglobal_ton", &pse::SpellerEnum::iglobal, "get index of candidate global tonality ")
+        .def("iglobal_ton", &pse::SpellerEnum::iglobal,
              "get index of estimated global tonality")
         .def("locals", &pse::PSE::locals, "the local tonality grid has been estimated")
-        .def("local_bar", &pse::Speller::local, "estimated local tonality for a bar")
+        .def("local_bar", &pse::SpellerEnum::local, "estimated local tonality for a bar")
              // py::arg("ton"), py::arg("bar"))
-        .def("local_note", &pse::Speller::localNote, "estimated local tonality for a note");
+        .def("local_note", &pse::SpellerEnum::localNote, "estimated local tonality for a note");
    
     // TBR ?
     py::class_<pse::PSE>(m, "PSE")

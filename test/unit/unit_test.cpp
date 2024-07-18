@@ -10,7 +10,7 @@
 #include "gtest/gtest.h"
 
 #include "config.h" // check compile flags
-//#include "trace.hpp"
+//#include "pstrace.hpp"
 
 
 int main(int argc, char** argv)

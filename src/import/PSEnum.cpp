@@ -182,7 +182,7 @@ bool PSEnum::rewritePassing(size_t i)
     // if (estop - i < 3) return false;
     if (outside(i) || outside(i+1) || outside(i+2))
         return false;
-    DEBUG("rewritePassing {}", i);
+    // DEBUG("rewritePassing {}", i);
 
     int d0 = ((int) midipitch(i+1)) - ((int) midipitch(i));
     int d1 = ((int) midipitch(i+2)) - ((int) midipitch(i+1));

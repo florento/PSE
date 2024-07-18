@@ -17,7 +17,7 @@
 #include <array>
 #include <vector>
 
-#include "trace.hpp"
+#include "pstrace.hpp"
 #include "Accidental.hpp"
 #include "PSConfig0.hpp"
 #include "PSConfig.hpp"

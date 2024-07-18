@@ -11,7 +11,7 @@
 #include <stdlib.h>
 #include <math.h>
 
-#include "trace.hpp"
+#include "pstrace.hpp"
 // #include "hash.hpp"
 
 #if defined(__GNUC__) && (__GNUC__ < 3) && !defined(__SPSL__)

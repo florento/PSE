@@ -17,7 +17,7 @@
 #include <vector>
 #include <memory>
 
-#include "trace.hpp"
+#include "pstrace.hpp"
 #include "utils.hpp"
 //#include "Pitch.hpp"
 #include "KeyFifth.hpp"

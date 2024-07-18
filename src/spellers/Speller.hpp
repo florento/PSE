@@ -16,7 +16,7 @@
 #include <memory>
 #include <time.h>
 
-#include "trace.hpp"
+#include "pstrace.hpp"
 #include "PSRational.hpp"
 #include "NoteName.hpp"
 #include "Accidental.hpp"
@@ -292,7 +292,7 @@ public: // spelling
     /// if true, one global subarray must have been computed.
     /// @return whether computation was succesfull.
     /// @warning a table must have been evaluated.
-    bool evalGlobal(double d, bool refine=false);
+    bool evalGlobal(double d=0, bool refine=false);
     
     /// monolithic spelling function.
     /// should not be called for this speller.

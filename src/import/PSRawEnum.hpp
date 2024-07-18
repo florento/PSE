@@ -18,7 +18,7 @@
 #include <memory>
 #include <vector>
 
-#include "trace.hpp"
+#include "pstrace.hpp"
 #include "PSRational.hpp"
 #include "NoteName.hpp"
 #include "Accidental.hpp"

@@ -41,7 +41,7 @@ int spdlog_setPattern(const std::string& s = "[%^pse_%l%$] %v");
 /// error    = 2,
 /// critical = 1,
 /// off      = 0
-int spdlog_setVerbosity(int verbosity);
+int setVerbosityLevel(int verbosity);
 
 
 #endif /* trace_hpp */

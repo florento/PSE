@@ -15,7 +15,7 @@
 #include <assert.h>
 #include <memory>
 
-#include "trace.hpp"
+#include "pstrace.hpp"
 #include "Cost.hpp"
 #include "Costt.hpp"
 #include "CostAD.hpp"

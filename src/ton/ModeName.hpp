@@ -14,7 +14,7 @@
 #include <iostream>
 #include <string>
 
-#include "trace.hpp"
+#include "pstrace.hpp"
 
 
 namespace pse {

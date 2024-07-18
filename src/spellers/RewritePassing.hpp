@@ -13,7 +13,7 @@
 #include <assert.h>
 #include <memory>
 
-#include "trace.hpp"
+#include "pstrace.hpp"
 #include "NoteName.hpp"
 #include "Accidental.hpp"
 #include "Speller.hpp"
