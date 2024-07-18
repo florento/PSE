@@ -16,7 +16,7 @@
 #include <memory>
 #include <time.h>
 
-#include "trace.hpp"
+#include "pstrace.hpp"
 #include "PSTable.hpp"
 #include "PSGlobal.hpp"
 #include "PSGrid.hpp"

@@ -13,7 +13,7 @@
 #include <iostream>
 #include <vector>
 
-#include "trace.hpp"
+#include "pstrace.hpp"
 #include "ModeName.hpp"
 
 

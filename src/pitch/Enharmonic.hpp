@@ -13,7 +13,7 @@
 
 #include <iostream>
 
-#include "trace.hpp"
+#include "pstrace.hpp"
 #include "NoteName.hpp"
 #include "Accidental.hpp"
 #include "PWO.hpp"  // pitch without octave

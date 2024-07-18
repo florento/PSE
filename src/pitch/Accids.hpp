@@ -15,7 +15,7 @@
 #include <assert.h>
 #include <string>
 
-#include "trace.hpp"
+#include "pstrace.hpp"
 #include "Accidental.hpp"
 
 

@@ -18,7 +18,7 @@
 #include <memory>
 #include <vector>
 
-#include "trace.hpp"
+#include "pstrace.hpp"
 #include "AlgoName.hpp"
 #include "PSEnum.hpp"
 #include "TonIndex.hpp"
@@ -237,7 +237,7 @@ public:
 private: // data
 
     /// name  of the pitch spelling algorithm implemented with this table.
-    const Algo& _algo;
+    const Algo _algo;
     
     /// enumerator of notes used to build this PS table.
     PSEnum& _enum;

@@ -19,7 +19,7 @@
 #include <set>
 #include <memory>
 
-#include "trace.hpp"
+#include "pstrace.hpp"
 #include "utils.hpp"
 //#include "MTU.hpp"
 #include "AlgoName.hpp"
@@ -200,7 +200,7 @@ public:
 private: // data
     
     /// name  of the pitch spelling algorithm implemented.
-    const Algo& _algo;
+    const Algo _algo;
     
     /// header of rows: vector of tonalities.
     /// it is the row-index of the embedding table.

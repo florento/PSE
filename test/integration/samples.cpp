@@ -10,7 +10,7 @@
 
 
 // ASAP Bach BWV 858 Fugue bar 17
-void issue7(pse::Speller& sp)
+void issue7(pse::SpellerEnum& sp)
 {
     sp.add(73, 17, true);
     sp.add(70, 17, false);
@@ -57,7 +57,7 @@ void issue7(pse::Speller& sp)
 
 
 // content of LG 101
-void LG101(pse::Speller& sp)
+void LG101(pse::SpellerEnum& sp)
 {
     sp.add(64, 0, false);
     sp.add(76, 1, false);
@@ -132,7 +132,7 @@ void LG101(pse::Speller& sp)
 }
 
 // content of LG 102
-void LG102(pse::Speller& sp)
+void LG102(pse::SpellerEnum& sp)
 {
     sp.add(61, 1, false);
     sp.add(65, 1, false);
@@ -233,7 +233,7 @@ void LG102(pse::Speller& sp)
 }
 
 // content of LG 128
-void LG128(pse::Speller& sp)
+void LG128(pse::SpellerEnum& sp)
 {
     sp.add(67, 0);
     sp.add(67, 0);
@@ -335,7 +335,7 @@ void LG128(pse::Speller& sp)
 // content of LG 228
 // 228 Schuman Myrthen 7 op25
 // 62 notes
-void LG228(pse::Speller& sp)
+void LG228(pse::SpellerEnum& sp)
 {
     sp.add(68, 0, false);
     sp.add(68, 1, false);
@@ -404,7 +404,7 @@ void LG228(pse::Speller& sp)
 // content of LG 275
 // 275 Bartok dance Roumaine 1
 // 1 chord (final)
-void LG275(pse::Speller& sp)
+void LG275(pse::SpellerEnum& sp)
 {
     sp.add(72, 0, false);
     sp.add(71, 1, false);
@@ -529,7 +529,7 @@ void LG275(pse::Speller& sp)
 }
 
 
-void LG349(pse::Speller& sp)
+void LG349(pse::SpellerEnum& sp)
 {
     sp.add(61, 0, false);
     sp.add(66, 1, false);
@@ -635,7 +635,7 @@ void LG349(pse::Speller& sp)
 // content of LG 405
 // 405 Bach prelude 13
 // 102 notes, 12 bars
-void LG405(pse::Speller& sp)
+void LG405(pse::SpellerEnum& sp)
 {
     sp.add(66, 0, false);
     sp.add(70, 0, false);
@@ -743,7 +743,7 @@ void LG405(pse::Speller& sp)
 
 
 // content of LG 461
-void LG461(pse::Speller& sp)
+void LG461(pse::SpellerEnum& sp)
 {
     sp.add(78, 0, false);
     sp.add(78, 1, true);
@@ -1260,7 +1260,7 @@ void LG461(pse::Speller& sp)
 
 
 // content of LG 470 (to debug a loop)
-void LG470(pse::Speller& sp)
+void LG470(pse::SpellerEnum& sp)
 {
     sp.add(60, 0);
     sp.add(60, 0);
@@ -1427,7 +1427,7 @@ void LG470(pse::Speller& sp)
 
 
 // content of prelude of ASAP Bach BWV 857
-void BWV_857prelude(pse::Speller& sp)
+void BWV_857prelude(pse::SpellerEnum& sp)
 {
     sp.add(65, 0, true);
     sp.add(65, 0, false);
@@ -1827,7 +1827,7 @@ void BWV_857prelude(pse::Speller& sp)
 
 
 // content of fugue of ASAP Bach BWV 857
-void BWV_857fugue(pse::Speller& sp)
+void BWV_857fugue(pse::SpellerEnum& sp)
 {
     sp.add(60, 0, false);
     sp.add(61, 0, false);
@@ -2568,7 +2568,7 @@ void BWV_857fugue(pse::Speller& sp)
 
 
 // content of prelude of ASAP Bach BWV 858
-void BWV_858prelude(pse::Speller& sp)
+void BWV_858prelude(pse::SpellerEnum& sp)
 {
     sp.add(66, 0, false);
     sp.add(70, 0, false);
@@ -2868,7 +2868,7 @@ void BWV_858prelude(pse::Speller& sp)
 
 
 // content of fugue of ASAP Bach BWV 864
-void BWV_864fugue(pse::Speller& sp)
+void BWV_864fugue(pse::SpellerEnum& sp)
 {
     sp.add(69, 0, false);
     sp.add(68, 0, false);
@@ -3687,7 +3687,7 @@ void BWV_864fugue(pse::Speller& sp)
 
 
 // content of prelude of ASAP Bach BWV 875
-void BWV_875prelude(pse::Speller& sp)
+void BWV_875prelude(pse::SpellerEnum& sp)
 {
     sp.add(74, 0, false);
     sp.add(72, 0, false);
@@ -4278,7 +4278,7 @@ void BWV_875prelude(pse::Speller& sp)
 
 // content of left hand of Beethoven Sonata 21, mvt 1
 // to debug pruning
-void Waldstein(pse::Speller& sp)
+void Waldstein(pse::SpellerEnum& sp)
 {
 // measure 1 (39)
     sp.add(36, 0, false);
@@ -8229,7 +8229,7 @@ void Waldstein(pse::Speller& sp)
 }
 
 
-void Airegin(pse::Speller& sp)
+void Airegin(pse::SpellerEnum& sp)
 {
     sp.add(65, 0, false);
     sp.add(66, 0, false);

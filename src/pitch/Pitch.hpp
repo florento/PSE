@@ -15,7 +15,7 @@
 #include <assert.h>
 #include <vector>
 
-#include "trace.hpp"
+#include "pstrace.hpp"
 #include "NoteName.hpp"    // in PSE
 #include "Accidental.hpp"  // in PSE
 #include "MidiNum.hpp"     // in PSE (for def midi_to_octave)

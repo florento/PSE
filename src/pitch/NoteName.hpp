@@ -15,7 +15,7 @@
 #include <iostream>
 #include <assert.h>
 
-#include "trace.hpp"
+#include "pstrace.hpp"
 
 
 namespace pse {

@@ -143,7 +143,11 @@ def eval_LG(output_dir:str='', tablename:str='',
             ct2=ps.pse.CTYPE_UNDEF, # PSE: table2, cost type 
             tonal2=True,            # PSE: table2, tonal/modal flag 
             det2=True,              # PSE: table2, deterministic (PS14) flag
-            dflag=True, mflag=True): # debug and mark flags
+            emask=False,           # restrict candidate globals after 1st table
+            eglobal1=0,            # % tolerance for restricted list candidate globals
+            eglobal2=0,            # % tolerance for final list globals
+            dflag=True,             # debug flag
+            mflag=True):            # mark flag
     """eval the whole LG corpus with given algo parameters"""
     # construction of speller PS13
     if (ct1 == ps.pse.CTYPE_UNDEF):
@@ -153,6 +157,7 @@ def eval_LG(output_dir:str='', tablename:str='',
         sp = ps.Spellew(nbtons=nbtons,
                         t1_costtype=ct1, t1_tonal=tonal1, t1_det=det1, 
                         t2_costtype=ct2, t2_tonal=tonal2, t2_det=det2, 
+                        mask=emask, global1=eglobal1, global2=eglobal2,
                         debug=dflag) 
     # output path
     if not output_dir:
@@ -177,7 +182,8 @@ def eval_LG(output_dir:str='', tablename:str='',
         else:
             print('eval LG: skip', i, '(ref/ not found)', flush=True)
             continue # skip score
-        print('\n evaluation of', t, flush=True)
+        print('   ')
+        print('evaluation of', t, flush=True)
         s = m21.converter.parse(file.as_posix())
         (ls, lld) = sp.eval_score(score=s, stats=stat, 
                                   score_id=i, title=t, composer='', 
@@ -200,7 +206,11 @@ def eval_LGitem(score_id,
                 ct2=ps.pse.CTYPE_UNDEF, # PSE: table2, cost type 
                 tonal2=True,            # PSE: table2, tonal/modal flag 
                 det2=True,              # PSE: table2, deterministic (PS14) flag 
-                dflag=True, mflag=True):
+                emask=False,             # restrict candidate globals after 1st table
+                eglobal1=0,               # % tolerance for restricted list candidate globals
+                eglobal2=0,               # % tolerance for final list globals
+                dflag=True, 
+                mflag=True):
     # construction of speller PS13
     if (ct1 == ps.pse.CTYPE_UNDEF):
         sp = ps.Spellew(ps13_kpre=kpre, ps13_kpost=kpost, debug=debug) 
@@ -209,6 +219,7 @@ def eval_LGitem(score_id,
         sp = ps.Spellew(nbtons=nbtons,
                         t1_costtype=ct1, t1_tonal=tonal1, t1_det=det1, 
                         t2_costtype=ct2, t2_tonal=tonal2, t2_det=det2, 
+                        mask=emask, global1=eglobal1, global2=eglobal2,
                         debug=dflag) 
     stat = ps.Stats()   
     opath=Path(os.getcwd())

@@ -11,7 +11,7 @@
 #include <iostream>
 #include <vector>
 
-#include "trace.hpp"
+#include "pstrace.hpp"
 #include "NoteName.hpp"
 #include "Accidental.hpp"
 #include "MidiNum.hpp"

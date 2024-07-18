@@ -16,7 +16,7 @@
 #include <vector>
 #include <set>
 
-#include "trace.hpp"
+#include "pstrace.hpp"
 #include "AlgoName.hpp"
 #include "PSEnum.hpp"
 #include "TonIndex.hpp"

@@ -14,7 +14,7 @@
 #include <iostream>
 #include <assert.h>
 
-#include "trace.hpp"
+#include "pstrace.hpp"
 #include "PSEnum.hpp"
 // #include "Cost.hpp"
 #include "PSConfig0.hpp"

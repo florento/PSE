@@ -14,7 +14,7 @@
 
 #include <iostream>
 
-#include "trace.hpp"
+#include "pstrace.hpp"
 #include "Fifths.hpp"
 
 
@@ -48,6 +48,8 @@ class KeyFifth
 {
 
 public:
+
+    static const int UNDEF = 999;
 
     /// main constructor
     /// @param signature number of flats if negative int,

@@ -16,7 +16,7 @@
 #include <stdlib.h>     //  abs
 #include <vector>
 
-#include "trace.hpp"
+#include "pstrace.hpp"
 #include "Pitch.hpp"
 
 namespace pse {
