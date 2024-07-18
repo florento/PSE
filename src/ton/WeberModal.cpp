@@ -411,6 +411,7 @@ size_t WeberModal::neighbour_modal(size_t i, size_t n)
                 return WMS_NBTONS;
             case 7:
                 return WMS_NBTONS;
+                //homonymous blues scale
             case 8:
                 assert(k+FIRST_BLMAJ < WMS_NBTONS);
                 return (k+FIRST_BLMAJ);
@@ -450,6 +451,7 @@ size_t WeberModal::neighbour_modal(size_t i, size_t n)
             case 7:
                 assert(k-FIRST_MIN_MEL >= 0);
                 return (k-FIRST_AEOL+FIRST_MIN_MEL);
+                //homonymous blues scale
             case 8:
                 assert(k+FIRST_BLMIN < WMS_NBTONS);
                 return (k+FIRST_BLMIN);

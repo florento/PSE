@@ -303,6 +303,23 @@ void TonIndex::init(size_t n)
             close(false); // modal Weber
             break;
             
+        case 165:
+            _WeberTonal = false;
+            init15(ModeName::Major, true); // Ionian
+            init15(ModeName::Minor, false);
+            init15(ModeName::MinorMel, false);
+            init15(ModeName::Dorian, false);
+            init15(ModeName::Phrygian, false);
+            init15(ModeName::Lydian, false);
+            init15(ModeName::Mixolydian, false);
+            init15(ModeName::Aeolian, false);
+            init15(ModeName::Locrian, false);
+            init15(ModeName::MajorBlues, false);
+            init15(ModeName::MinorBlues, false);
+            close(false); // modal Weber
+            break;
+            
+            
         default:
             ERROR("TonIndex: unsupported list of default tons: {}", n);
             break;
