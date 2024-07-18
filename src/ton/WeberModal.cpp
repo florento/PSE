@@ -97,7 +97,7 @@ void WeberModal::init()
             assert(distik != WS_UNDEFDIST);
             
             // explore the neighbour tonalities of k
-            for (size_t l = 0; l < 8; ++l)
+            for (size_t l = 0; l < 9; ++l)
             {
                 size_t nl = neighbour_modal(k, l);
                 assert(nl <= WMS_NBTONS);
@@ -143,14 +143,16 @@ void WeberModal::dump() const
 size_t WeberModal::neighbour_modal(size_t i, size_t n)
 {
     assert(n < 8);
-    size_t FIRST_MIN_HARM = WMS_NBTONS/9;
-    size_t FIRST_MIN_MEL = 2*WMS_NBTONS/9;
-    size_t FIRST_DOR = 3*WMS_NBTONS/9;
-    size_t FIRST_PHRY = 4*WMS_NBTONS/9;
-    size_t FIRST_LYD = 5*WMS_NBTONS/9;
-    size_t FIRST_MIXO = 6*WMS_NBTONS/9;
-    size_t FIRST_AEOL = 7*WMS_NBTONS/9;
-    size_t FIRST_LOC = 8*WMS_NBTONS/9;
+    size_t FIRST_MIN_HARM = WMS_NBTONS/11;
+    size_t FIRST_MIN_MEL = 2*WMS_NBTONS/11;
+    size_t FIRST_DOR = 3*WMS_NBTONS/11;
+    size_t FIRST_PHRY = 4*WMS_NBTONS/11;
+    size_t FIRST_LYD = 5*WMS_NBTONS/11;
+    size_t FIRST_MIXO = 6*WMS_NBTONS/11;
+    size_t FIRST_AEOL = 7*WMS_NBTONS/11;
+    size_t FIRST_LOC = 8*WMS_NBTONS/11;
+    size_t FIRST_BLMAJ = 9*WMS_NBTONS/11;
+    size_t FIRST_BLMIN = 10*WMS_NBTONS/11;
     
     long k = i; // signed
     assert(0 <= k);
@@ -188,6 +190,10 @@ size_t WeberModal::neighbour_modal(size_t i, size_t n)
             case 7:
                 assert(k+FIRST_MIN_MEL < WMS_NBTONS);
                 return (k+FIRST_MIN_MEL);
+                // homonymous blues scale
+            case 8:
+                assert(k+FIRST_BLMAJ < WMS_NBTONS);
+                return (k+FIRST_BLMAJ);
             default:
                 ERROR("Weber neighbour: unexpected neighbour number {}", n);
                 return WMS_NBTONS;
@@ -225,6 +231,10 @@ size_t WeberModal::neighbour_modal(size_t i, size_t n)
             case 7:
                 assert(k-FIRST_MIN_HARM >= 0);
                 return (k-FIRST_MIN_HARM+FIRST_AEOL);
+                // homonymous blues scale
+            case 8:
+                assert(k+FIRST_BLMIN < WMS_NBTONS);
+                return (k+FIRST_BLMIN);
             default:
                 ERROR("Weber neighbour: unexpected neighbour number {}", n);
                 return WMS_NBTONS;
@@ -261,6 +271,10 @@ size_t WeberModal::neighbour_modal(size_t i, size_t n)
             case 7:
                 assert(k-FIRST_MIN_MEL >= 0);
                 return (k-FIRST_MIN_MEL+FIRST_AEOL);
+                // homonymous blues scale
+            case 8:
+                assert(k+FIRST_BLMIN < WMS_NBTONS);
+                return (k+FIRST_BLMIN);
             default:
                 ERROR("Weber neighbour: unexpected neighbour number {}", n);
                 return WMS_NBTONS;
@@ -294,6 +308,10 @@ size_t WeberModal::neighbour_modal(size_t i, size_t n)
                 return ((k+1 < FIRST_PHRY)?(k+1-FIRST_DOR+FIRST_MIN_MEL):WMS_NBTONS);
             case 7:
                 return ((k+1 < FIRST_PHRY)?(k+1-FIRST_DOR+FIRST_AEOL):WMS_NBTONS);
+                // homonymous blues scale
+            case 8:
+                assert(k+FIRST_BLMIN < WMS_NBTONS);
+                return (k+FIRST_BLMIN);
             default:
                 ERROR("Weber neighbour: unexpected neighbour number {}", n);
                 return WMS_NBTONS;
@@ -327,6 +345,8 @@ size_t WeberModal::neighbour_modal(size_t i, size_t n)
                 return ((k-1 >= FIRST_PHRY)?(k-1-FIRST_PHRY+FIRST_MIN_MEL):WMS_NBTONS);
             case 7:
                 return ((k-1 >= FIRST_PHRY)?(k-1-FIRST_PHRY+FIRST_AEOL):WMS_NBTONS);
+            case 8:
+                return WMS_NBTONS;
             default:
                 ERROR("Weber neighbour: unexpected neighbour number {}", n);
                 return WMS_NBTONS;
@@ -357,6 +377,8 @@ size_t WeberModal::neighbour_modal(size_t i, size_t n)
             case 6:
                 return WMS_NBTONS;
             case 7:
+                return WMS_NBTONS;
+            case 8:
                 return WMS_NBTONS;
             default:
                 ERROR("Weber neighbour: unexpected neighbour number {}", n);
@@ -389,6 +411,9 @@ size_t WeberModal::neighbour_modal(size_t i, size_t n)
                 return WMS_NBTONS;
             case 7:
                 return WMS_NBTONS;
+            case 8:
+                assert(k+FIRST_BLMAJ < WMS_NBTONS);
+                return (k+FIRST_BLMAJ);
             default:
                 ERROR("Weber neighbour: unexpected neighbour number {}", n);
                 return WMS_NBTONS;
@@ -425,6 +450,9 @@ size_t WeberModal::neighbour_modal(size_t i, size_t n)
             case 7:
                 assert(k-FIRST_MIN_MEL >= 0);
                 return (k-FIRST_AEOL+FIRST_MIN_MEL);
+            case 8:
+                assert(k+FIRST_BLMIN < WMS_NBTONS);
+                return (k+FIRST_BLMIN);
             default:
                 ERROR("Weber neighbour: unexpected neighbour number {}", n);
                 return WMS_NBTONS;
@@ -455,6 +483,8 @@ size_t WeberModal::neighbour_modal(size_t i, size_t n)
             case 6:
                 return WMS_NBTONS;
             case 7:
+                return WMS_NBTONS;
+            case 8:
                 return WMS_NBTONS;
             default:
                 ERROR("Weber neighbour: unexpected neighbour number {}", n);
