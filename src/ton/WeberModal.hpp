@@ -23,7 +23,7 @@
 //#include "KeyFifth.hpp"
 #include "Ton.hpp"
 #include "Weber_static.hpp"
-#include "WeberModal_static.hpp"
+#include "WeberBluesModal_static.hpp"
 
 namespace pse {
 
@@ -54,10 +54,10 @@ public:
 private: // data
 
     // number of tonalities considered.
-    // static const size_t NB_TONS = 135;
+    // static const size_t NB_TONS = 165;
     
     /// internal alias
-    static const size_t WMS_NBTONS = WeberModal_static::NB_TONS;
+    static const size_t WMS_NBTONS = WeberBluesModal_static::NB_TONS;
     
     /// internal alias
     static const int WS_UNDEFDIST; //  = Weber_static::UNDEF_DIST;

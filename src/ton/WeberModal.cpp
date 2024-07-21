@@ -8,7 +8,7 @@
 
 #include "WeberModal.hpp"
 #include "Weber_static.hpp"
-#include "WeberModal_static.hpp"
+#include "WeberBluesModal_static.hpp"
 
 
 namespace pse {
@@ -166,9 +166,9 @@ size_t WeberModal::neighbour_modal(size_t i, size_t n)
                 // up : next major after k in array of fifths
             case 0:
                 return ((k+1 < FIRST_MIN_HARM)?(k+1):WMS_NBTONS);
-                // left = parallel minor of k : "ton homonyme"
+                // left : parallel minor of k : "ton homonyme"
             case 1:
-                return ((k-3 >= 0)?(k-3+FIRST_MIN_HARM):WMS_NBTONS);
+                return ((k-3 >= 0)?(k-3+FIRST_MIN_HARM):k+9+FIRST_MIN_HARM);
                 // right : relative minor of k
             case 2:
                 assert(k+FIRST_MIN_HARM < FIRST_MIN_MEL);
@@ -211,10 +211,9 @@ size_t WeberModal::neighbour_modal(size_t i, size_t n)
             case 1:
                 assert(k-FIRST_MIN_HARM >= 0);
                 return (k-FIRST_MIN_HARM);
-                // right : next major after left in array of fifths
-                //        = parallel major of k "ton homonyme"
+                // right : parallel major of k "ton homonyme"
             case 2:
-                return ((k+3 < FIRST_MIN_MEL)?(k+3-FIRST_MIN_HARM):WMS_NBTONS);
+                return ((k+3 < FIRST_MIN_MEL)?(k+3-FIRST_MIN_HARM):k-9-FIRST_MIN_HARM);
                 // down : previous minor before k in array of fifths
             case 3:
                 return ((k-1 >= FIRST_MIN_HARM)?(k-1):WMS_NBTONS);
@@ -251,10 +250,9 @@ size_t WeberModal::neighbour_modal(size_t i, size_t n)
             case 1:
                 assert(k-FIRST_MIN_MEL >= 0);
                 return (k-FIRST_MIN_MEL);
-                // right : next major after left in array of fifths
-                //        = parallel major of k "ton homonyme"
+                // right : parallel major of k "ton homonyme"
             case 2:
-                return ((k+3 < FIRST_DOR)?(k+3-FIRST_MIN_MEL):WMS_NBTONS);
+                return ((k+3 < FIRST_DOR)?(k+3-FIRST_MIN_MEL):k-9-FIRST_MIN_MEL);
                 // down : previous minor before k in array of fifths
             case 3:
                 return ((k-1 >= FIRST_MIN_MEL)?(k-1):WMS_NBTONS);
@@ -293,7 +291,7 @@ size_t WeberModal::neighbour_modal(size_t i, size_t n)
                 return (k-FIRST_DOR+FIRST_LYD);
                 // right = parallel lydian of k
             case 2:
-                return ((k+3 < FIRST_PHRY)?(k+3-FIRST_DOR+FIRST_LYD):WMS_NBTONS);
+                return ((k+3 < FIRST_PHRY)?(k+3-FIRST_DOR+FIRST_LYD):k-9-FIRST_DOR+FIRST_LYD);
                 // down : previous dorian before k in array of fifths
             case 3:
                 return ((k-1 >= FIRST_DOR)?(k-1):WMS_NBTONS);
@@ -330,7 +328,7 @@ size_t WeberModal::neighbour_modal(size_t i, size_t n)
                 return (k-FIRST_PHRY+FIRST_MIXO);
                 // right = parallel mixolydian of k
             case 2:
-                return ((k+3 < FIRST_LYD)?(k+3-FIRST_PHRY+FIRST_MIXO):WMS_NBTONS);
+                return ((k+3 < FIRST_LYD)?(k+3-FIRST_PHRY+FIRST_MIXO):k-9-FIRST_PHRY+FIRST_MIXO);
                 // down : previous phrygian before k in array of fifths
             case 3:
                 return ((k-1 >= FIRST_PHRY)?(k-1):WMS_NBTONS);
@@ -362,10 +360,9 @@ size_t WeberModal::neighbour_modal(size_t i, size_t n)
                 // right : relative dorian of k
             case 1:
                 return ((k-FIRST_LYD >= 0)?(k-FIRST_LYD+FIRST_DOR):WMS_NBTONS);
-                // left : next dorian after right in array of fifths
-                //        = parallel dorian of k
+                // left : parallel dorian of k
             case 2:
-                return ((k-3>=FIRST_LYD)?(k-3-FIRST_LYD+FIRST_DOR):WMS_NBTONS);
+                return ((k-3>=FIRST_LYD)?(k-3-FIRST_LYD+FIRST_DOR):k+9-FIRST_LYD+FIRST_DOR);
                 // down : previous lydian before k in array of fifths
             case 3:
                 return ((k-1 >= FIRST_LYD)?(k-1):WMS_NBTONS);
@@ -389,7 +386,7 @@ size_t WeberModal::neighbour_modal(size_t i, size_t n)
     {
         switch (n)
         {
-                // up : next lydian after k in array of fifths
+                // up : next mixolydian after k in array of fifths
             case 0:
                 return ((k+1 < FIRST_AEOL)?(k+1):WMS_NBTONS);
                 // right : relative phrygian of k
@@ -397,7 +394,7 @@ size_t WeberModal::neighbour_modal(size_t i, size_t n)
                 return ((k-FIRST_MIXO >= 0)?(k-FIRST_MIXO+FIRST_PHRY):WMS_NBTONS);
                 // left = parallel phrygian of k
             case 2:
-                return ((k-3>=FIRST_MIXO)?(k-3-FIRST_MIXO+FIRST_PHRY):WMS_NBTONS);
+                return ((k-3>=FIRST_MIXO)?(k-3-FIRST_MIXO+FIRST_PHRY):k+9-FIRST_MIXO+FIRST_PHRY);
                 // down : previous mixolydian before k in array of fifths
             case 3:
                 return ((k-1 >= FIRST_MIXO)?(k-1):WMS_NBTONS);
@@ -431,10 +428,9 @@ size_t WeberModal::neighbour_modal(size_t i, size_t n)
             case 1:
                 assert(k-FIRST_AEOL >= 0);
                 return (k-FIRST_AEOL);
-                // right : next major after left in array of fifths
-                //        = parallel major of k "ton homonyme"
+                // right : parallel major of k "ton homonyme"
             case 2:
-                return ((k+3 < FIRST_LOC)?(k+3-FIRST_AEOL):WMS_NBTONS);
+                return ((k+3 < FIRST_LOC)?(k+3-FIRST_AEOL):k-9-FIRST_AEOL);
                 // down : previous minor before k in array of fifths
             case 3:
                 return ((k-1 >= FIRST_AEOL)?(k-1):WMS_NBTONS);
@@ -460,7 +456,7 @@ size_t WeberModal::neighbour_modal(size_t i, size_t n)
                 return WMS_NBTONS;
         }
     }
-    else if (FIRST_LOC <= k && k < WMS_NBTONS)
+    else if (FIRST_LOC <= k && k < FIRST_BLMAJ)
     {
         switch (n)
         {
@@ -469,8 +465,7 @@ size_t WeberModal::neighbour_modal(size_t i, size_t n)
                 return ((k+1 < WMS_NBTONS)?(k+1):WMS_NBTONS);
                 // left : "relative dorian" of k
             case 1:
-                assert(k-3-FIRST_LOC >= 0);
-                return (k-3-FIRST_LOC+FIRST_DOR);
+                return ((k-3-FIRST_LOC >= 0)?(k-3-FIRST_LOC+FIRST_DOR):(k+9-FIRST_LOC+FIRST_DOR);
                 // right = parallel dorian of k
             case 2:
                 return (k-FIRST_LOC+FIRST_DOR);
@@ -485,6 +480,77 @@ size_t WeberModal::neighbour_modal(size_t i, size_t n)
             case 6:
                 return WMS_NBTONS;
             case 7:
+                return WMS_NBTONS;
+            case 8:
+                return WMS_NBTONS;
+            default:
+                ERROR("Weber neighbour: unexpected neighbour number {}", n);
+                return WMS_NBTONS;
+        }
+    }
+    else if (FIRST_BLMAJ <= k && k < FIRST_BLMIN){
+        switch (n)
+        {
+                // up : next major blues after k in array of fifths
+            case 0:
+                return ((k+1 < FIRST_BLMIN)?(k+1):WMS_NBTONS);
+                // left : parallel minor blues of k : "ton homonyme"
+            case 1:
+                return ((k-3 >= FIRST_BLMAJ)?(k-3-FIRST_BLMAJ+FIRST_BLMIN):k+9-FIRST_BLMAJ+FIRST_BLMIN);
+                // right : relative minor blues of k
+            case 2:
+                assert(k-FIRST_BLMAJ+FIRST_BLMIN < WMS_NBTONS);
+                return (k-FIRST_BLMAJ+FIRST_BLMIN);
+                // down : previous major blues before k in array of fifths
+            case 3:
+                return ((k-1 >= FIRST_BLMAJ)?(k-1):WMS_NBTONS);
+                // back : lydian mode with the same key signature
+            case 4:
+                return ((k-1 >= FIRST_BLMAJ)?(k-1-FIRST_BLMAJ+FIRST_LYD):WMS_NBTONS);
+                // front : major mode with the same key signature
+            case 5:
+                return ((k-FIRST_BLMAJ < FIRST_MIN_HARM)?(k-FIRST_BLMAJ):WMS_NBTONS);
+                
+            case 6:
+                return WMS_NBTONS;//peut-etre pourrait-on ajouter un voisin mixolydien car pas de raison d'etre plus proche du lydien que du mixolydien... mais cela casserait l'architecture de la table alternative modale de Weber proposee
+            case 7:
+                return WMS_NBTONS;
+            case 8:
+                return WMS_NBTONS;
+            default:
+                ERROR("Weber neighbour: unexpected neighbour number {}", n);
+                return WMS_NBTONS;
+        }
+    }
+    else if (FIRST_BLMIN <= k && k < WMS_NBTONS)
+    {
+        switch (n)
+        {
+                // up : next minor blues after k in array of fifths
+            case 0:
+                return ((k+1 < WMS_NBTONS)?(k+1):WMS_NBTONS);
+                // left : relative major blues of k
+            case 1:
+                assert(k-FIRST_BLMIN >= 0);
+                return (k-FIRST_BLMIN+FIRST_BLMAJ);
+                // right : parallel major blues of k "ton homonyme"
+            case 2:
+                return ((k+3 < WMS_NBTONS)?(k+3-FIRST_BLMIN+FIRST_BLMAJ):k-9-FIRST_BLMIN+FIRST_BLMAJ);//ex sol# min a pour homonyme non pas sol# Maj qui n'existe pas mais bien lab Maj (9 quintes plus bas dans le cycle)
+                // down : previous minor blues before k in array of fifths
+            case 3:
+                return ((k-1 >= FIRST_BLMIN)?(k-1):WMS_NBTONS);
+                // back : dorian mode with the same key sig
+            case 4:
+                return ((k-1 >= FIRST_BLMIN)?((k-1)+FIRST_DOR-FIRST_BLMIN):WMS_NBTONS);
+                // front : aeolian minor mode with the same key sig
+            case 5:
+                return (k+FIRST_AEOL-FIRST_BLMIN);
+                // the other minor modes have to be close too... or do they? not sure on this one as the aeolian mode is closer to minor blues than the harmonic and ascending minor ones, so let's just stick with the aeolian
+            case 6:
+               // return (k+FIRST_MIN_MEL-FIRST_BLMIN);
+                return WMS_NBTONS;
+            case 7:
+                //return (k+FIRST_MIN_HARM-FIRST_BLMIN);
                 return WMS_NBTONS;
             case 8:
                 return WMS_NBTONS;

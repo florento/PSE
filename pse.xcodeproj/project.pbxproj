@@ -241,6 +241,10 @@
 		43FBEAD22930CEDD008FC486 /* PSVector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43ABA51529242417002AC1D4 /* PSVector.cpp */; };
 		43FBEAD32930CEDD008FC486 /* PSTable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43ABA51F29242418002AC1D4 /* PSTable.cpp */; };
 		43FBEAD42930CEDD008FC486 /* PSPath.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43ABA51629242417002AC1D4 /* PSPath.cpp */; };
+		80604E452C4D094A0085488C /* WeberBluesModal_static.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 80604E432C4D094A0085488C /* WeberBluesModal_static.cpp */; };
+		80604E462C4D094A0085488C /* WeberBluesModal_static.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 80604E432C4D094A0085488C /* WeberBluesModal_static.cpp */; };
+		80604E472C4D094A0085488C /* WeberBluesModal_static.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 80604E432C4D094A0085488C /* WeberBluesModal_static.cpp */; };
+		80604E482C4D094A0085488C /* WeberBluesModal_static.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 80604E442C4D094A0085488C /* WeberBluesModal_static.hpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -449,6 +453,8 @@
 		43F9BE6D29CC7DB000B0A7F8 /* ModeFactory.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ModeFactory.hpp; sourceTree = "<group>"; };
 		43FBEAB52930CB16008FC486 /* debugpse.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = debugpse.cpp; sourceTree = "<group>"; };
 		43FBEABD2930CD21008FC486 /* debugpse */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = debugpse; sourceTree = BUILT_PRODUCTS_DIR; };
+		80604E432C4D094A0085488C /* WeberBluesModal_static.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = WeberBluesModal_static.cpp; sourceTree = "<group>"; };
+		80604E442C4D094A0085488C /* WeberBluesModal_static.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = WeberBluesModal_static.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -517,6 +523,8 @@
 				43EFF3612B8E526C000CA4B2 /* WeberModal.cpp */,
 				43D9DB512B964A0F005F0A13 /* WeberModal_static.hpp */,
 				43D9DB502B964A0F005F0A13 /* WeberModal_static.cpp */,
+				80604E432C4D094A0085488C /* WeberBluesModal_static.cpp */,
+				80604E442C4D094A0085488C /* WeberBluesModal_static.hpp */,
 			);
 			name = ton;
 			sourceTree = "<group>";
@@ -890,6 +898,7 @@
 				4310526929CDD15000694D5A /* Scale.hpp in Headers */,
 				43C4A6552A1E7EBB00925A99 /* PSGrid.hpp in Headers */,
 				432E7A5629D45FE2000E2B72 /* PS13.hpp in Headers */,
+				80604E482C4D094A0085488C /* WeberBluesModal_static.hpp in Headers */,
 				432586A62A4050C80069D796 /* PSConfig1c.hpp in Headers */,
 				430CDFF22924E6D800A84650 /* KeyFifth.hpp in Headers */,
 				43ABA510292423E8002AC1D4 /* Ton.hpp in Headers */,
@@ -1026,6 +1035,7 @@
 				435081EE29D6D75600465943 /* Scale.cpp in Sources */,
 				4308A70C2A28EC9B007F7A55 /* TestKeyFifth.cpp in Sources */,
 				430627B32A44A4D80046FD99 /* PSConfig2.cpp in Sources */,
+				80604E472C4D094A0085488C /* WeberBluesModal_static.cpp in Sources */,
 				435081EB29D6D74800465943 /* Ton.cpp in Sources */,
 				435081FC29D6D7E300465943 /* Weber.cpp in Sources */,
 				435081F229D6D76500465943 /* PWO.cpp in Sources */,
@@ -1104,6 +1114,7 @@
 				43F9BE6429CC423E00B0A7F8 /* ModeName.cpp in Sources */,
 				4342FD1229267895004E914F /* MidiNum.cpp in Sources */,
 				4346CB362A1FF62100756DE3 /* PSGlobal.cpp in Sources */,
+				80604E452C4D094A0085488C /* WeberBluesModal_static.cpp in Sources */,
 				430960532A0CD2C60097487A /* AlgoName.cpp in Sources */,
 				43A24E442A3A0BD50041B004 /* PSRational.cpp in Sources */,
 				43D7BABF2A27E31600570C47 /* PSD.cpp in Sources */,
@@ -1182,6 +1193,7 @@
 				434B1DF9298ED0A0001CE41C /* PSConfig1.cpp in Sources */,
 				43B35FB62BC940F2004F7691 /* CostType.cpp in Sources */,
 				430627B42A44A4D90046FD99 /* PSConfig2.cpp in Sources */,
+				80604E462C4D094A0085488C /* WeberBluesModal_static.cpp in Sources */,
 				4310526829CDD15000694D5A /* Scale.cpp in Sources */,
 				432657E4294E2FB100515080 /* Weber.cpp in Sources */,
 				43600D562A45C94E002704E0 /* CostAD.cpp in Sources */,
