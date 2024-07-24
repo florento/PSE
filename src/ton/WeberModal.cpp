@@ -34,9 +34,9 @@ WeberModal::~WeberModal()
 
 int WeberModal::dist(const Ton& ton1, const Ton& ton2)
 {
-    size_t i1 = WeberModal_static::index(ton1);
+    size_t i1 = WeberBluesModal_static::index(ton1);
     assert(i1 < WMS_NBTONS);
-    size_t i2 = WeberModal_static::index(ton2);
+    size_t i2 = WeberBluesModal_static::index(ton2);
     assert(i2 < WMS_NBTONS);
     return DIST[i1][i2];
 }
@@ -142,7 +142,7 @@ void WeberModal::dump() const
 // static
 size_t WeberModal::neighbour_modal(size_t i, size_t n)
 {
-    assert(n < 8);
+    assert(n < 9);
     size_t FIRST_MIN_HARM = WMS_NBTONS/11;
     size_t FIRST_MIN_MEL = 2*WMS_NBTONS/11;
     size_t FIRST_DOR = 3*WMS_NBTONS/11;
@@ -232,8 +232,8 @@ size_t WeberModal::neighbour_modal(size_t i, size_t n)
                 return (k-FIRST_MIN_HARM+FIRST_AEOL);
                 // homonymous blues scale
             case 8:
-                assert(k+FIRST_BLMIN < WMS_NBTONS);
-                return (k+FIRST_BLMIN);
+                assert(k-FIRST_MIN_HARM+FIRST_BLMIN < WMS_NBTONS);
+                return (k-FIRST_MIN_HARM+FIRST_BLMIN);
             default:
                 ERROR("Weber neighbour: unexpected neighbour number {}", n);
                 return WMS_NBTONS;
@@ -271,8 +271,8 @@ size_t WeberModal::neighbour_modal(size_t i, size_t n)
                 return (k-FIRST_MIN_MEL+FIRST_AEOL);
                 // homonymous blues scale
             case 8:
-                assert(k+FIRST_BLMIN < WMS_NBTONS);
-                return (k+FIRST_BLMIN);
+                assert(k-FIRST_MIN_MEL+FIRST_BLMIN < WMS_NBTONS);
+                return (k-FIRST_MIN_MEL+FIRST_BLMIN);
             default:
                 ERROR("Weber neighbour: unexpected neighbour number {}", n);
                 return WMS_NBTONS;
@@ -308,8 +308,8 @@ size_t WeberModal::neighbour_modal(size_t i, size_t n)
                 return ((k+1 < FIRST_PHRY)?(k+1-FIRST_DOR+FIRST_AEOL):WMS_NBTONS);
                 // homonymous blues scale
             case 8:
-                assert(k+FIRST_BLMIN < WMS_NBTONS);
-                return (k+FIRST_BLMIN);
+                assert(k-FIRST_DOR+FIRST_BLMIN < WMS_NBTONS);
+                return (k-FIRST_DOR+FIRST_BLMIN);
             default:
                 ERROR("Weber neighbour: unexpected neighbour number {}", n);
                 return WMS_NBTONS;
@@ -410,8 +410,8 @@ size_t WeberModal::neighbour_modal(size_t i, size_t n)
                 return WMS_NBTONS;
                 //homonymous blues scale
             case 8:
-                assert(k+FIRST_BLMAJ < WMS_NBTONS);
-                return (k+FIRST_BLMAJ);
+                assert(k-FIRST_MIXO+FIRST_BLMAJ < WMS_NBTONS);
+                return (k-FIRST_MIXO+FIRST_BLMAJ);
             default:
                 ERROR("Weber neighbour: unexpected neighbour number {}", n);
                 return WMS_NBTONS;
@@ -445,12 +445,12 @@ size_t WeberModal::neighbour_modal(size_t i, size_t n)
                 assert(k-FIRST_AEOL >= 0);
                 return (k-FIRST_AEOL+FIRST_MIN_HARM);
             case 7:
-                assert(k-FIRST_MIN_MEL >= 0);
+                assert(k-FIRST_AEOL >= 0);
                 return (k-FIRST_AEOL+FIRST_MIN_MEL);
                 //homonymous blues scale
             case 8:
-                assert(k+FIRST_BLMIN < WMS_NBTONS);
-                return (k+FIRST_BLMIN);
+                assert(k-FIRST_AEOL+FIRST_BLMIN < WMS_NBTONS);
+                return (k-FIRST_AEOL+FIRST_BLMIN);
             default:
                 ERROR("Weber neighbour: unexpected neighbour number {}", n);
                 return WMS_NBTONS;
@@ -465,7 +465,7 @@ size_t WeberModal::neighbour_modal(size_t i, size_t n)
                 return ((k+1 < WMS_NBTONS)?(k+1):WMS_NBTONS);
                 // left : "relative dorian" of k
             case 1:
-                return ((k-3-FIRST_LOC >= 0)?(k-3-FIRST_LOC+FIRST_DOR):(k+9-FIRST_LOC+FIRST_DOR);
+                return ((k-3-FIRST_LOC >= 0)?(k-3-FIRST_LOC+FIRST_DOR):(k+9-FIRST_LOC+FIRST_DOR));
                 // right = parallel dorian of k
             case 2:
                 return (k-FIRST_LOC+FIRST_DOR);

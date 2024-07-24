@@ -132,9 +132,9 @@ int main(int argc, const char* argv[])
     setVerbosityLevel(5);
     spdlog_setPattern();
 
-    // pse::WeberModal godfried;
-    // godfried.dump();
-    // return 0;
+    pse::WeberModal godfried;
+    godfried.dump();
+    return 0;
 
     pse::SpellerEnum sp(26, pse::Algo::Undef, true);
     //pse::PS13 sp;
