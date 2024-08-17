@@ -165,7 +165,7 @@ size_t WeberModal::neighbour_modal(size_t i, size_t n)
         {
                 // up : next major after k in array of fifths
             case 0:
-                return ((k+1 < FIRST_MIN_HARM)?(k+1):WMS_NBTONS);
+                return ((k+1 < FIRST_MIN_HARM)?(k+1):(k-11));
                 // left : parallel minor of k : "ton homonyme"
             case 1:
                 return ((k-3 >= 0)?(k-3+FIRST_MIN_HARM):k+9+FIRST_MIN_HARM);
@@ -175,13 +175,13 @@ size_t WeberModal::neighbour_modal(size_t i, size_t n)
                 return (k+FIRST_MIN_HARM);
                 // down : previous major before k in array of fifths
             case 3:
-                return ((k-1 >= 0)?(k-1):WMS_NBTONS);
+                return ((k-1 >= 0)?(k-1):(k+11));
                 // back : lydian mode with the same key signature
             case 4:
-                return ((k-1 >= 0)?(k-1+FIRST_LYD):WMS_NBTONS);
+                return ((k-1 >= 0)?(k-1+FIRST_LYD):k+11+FIRST_LYD);
                 // front : mixolydian mode with the same key signature
             case 5:
-                return ((k+1+FIRST_MIXO < FIRST_AEOL)?(k+1+FIRST_MIXO):WMS_NBTONS);
+                return ((k+1+FIRST_MIXO < FIRST_AEOL)?(k+1+FIRST_MIXO):k-11+FIRST_MIXO);
                 // relative min_nat
             case 6:
                 assert(k+FIRST_AEOL < WMS_NBTONS);
@@ -206,7 +206,7 @@ size_t WeberModal::neighbour_modal(size_t i, size_t n)
         {
                 // up : next minor after k in array of fifths
             case 0:
-                return ((k+1 < FIRST_MIN_MEL)?(k+1):WMS_NBTONS);
+                return ((k+1 < FIRST_MIN_MEL)?(k+1):k-11);
                 // left : relative major of k
             case 1:
                 assert(k-FIRST_MIN_HARM >= 0);
@@ -216,13 +216,13 @@ size_t WeberModal::neighbour_modal(size_t i, size_t n)
                 return ((k+3 < FIRST_MIN_MEL)?(k+3-FIRST_MIN_HARM):k-9-FIRST_MIN_HARM);
                 // down : previous minor before k in array of fifths
             case 3:
-                return ((k-1 >= FIRST_MIN_HARM)?(k-1):WMS_NBTONS);
+                return ((k-1 >= FIRST_MIN_HARM)?(k-1):k+11);
                 // back : dorian mode with the same key sig
             case 4:
-                return ((k-1 >= FIRST_MIN_HARM)?((k-1)+FIRST_DOR-FIRST_MIN_HARM):WMS_NBTONS);
+                return ((k-1 >= FIRST_MIN_HARM)?((k-1)+FIRST_DOR-FIRST_MIN_HARM):(k+11+FIRST_DOR-FIRST_MIN_HARM));
                 // front : phrygian mode with the same key sig
             case 5:
-                return ((k+1 < FIRST_MIN_MEL)?(k+1+FIRST_PHRY-FIRST_MIN_HARM):WMS_NBTONS);
+                return ((k+1 < FIRST_MIN_MEL)?(k+1+FIRST_PHRY-FIRST_MIN_HARM):(k-11+FIRST_PHRY-FIRST_MIN_HARM));
                 // the other minor modes have to be close too...
             case 6:
                 assert(k-FIRST_MIN_HARM >= 0);
@@ -245,7 +245,7 @@ size_t WeberModal::neighbour_modal(size_t i, size_t n)
         {
                 // up : next minor after k in array of fifths
             case 0:
-                return ((k+1 < FIRST_DOR)?(k+1):WMS_NBTONS);
+                return ((k+1 < FIRST_DOR)?(k+1):k-11);
                 // left : relative major of k
             case 1:
                 assert(k-FIRST_MIN_MEL >= 0);
@@ -255,13 +255,13 @@ size_t WeberModal::neighbour_modal(size_t i, size_t n)
                 return ((k+3 < FIRST_DOR)?(k+3-FIRST_MIN_MEL):k-9-FIRST_MIN_MEL);
                 // down : previous minor before k in array of fifths
             case 3:
-                return ((k-1 >= FIRST_MIN_MEL)?(k-1):WMS_NBTONS);
+                return ((k-1 >= FIRST_MIN_MEL)?(k-1):k+11);
                 // back : dorian mode with the same key sig
             case 4:
-                return ((k-1 >= FIRST_MIN_MEL)?((k-1)+FIRST_DOR-FIRST_MIN_MEL):WMS_NBTONS);
+                return ((k-1 >= FIRST_MIN_MEL)?((k-1)+FIRST_DOR-FIRST_MIN_MEL):((k+11)+FIRST_DOR-FIRST_MIN_MEL));
                 // front : phrygian mode with the same key sig
             case 5:
-                return ((k+1 < FIRST_DOR)?(k+1+FIRST_PHRY-FIRST_MIN_MEL):WMS_NBTONS);
+                return ((k+1 < FIRST_DOR)?(k+1+FIRST_PHRY-FIRST_MIN_MEL):k-11+FIRST_PHRY-FIRST_MIN_MEL);
                 // the other minor modes have to be close too...
             case 6:
                 assert(k-FIRST_MIN_MEL >= 0);
@@ -284,7 +284,7 @@ size_t WeberModal::neighbour_modal(size_t i, size_t n)
         {
                 // up : next dorian after k in array of fifths
             case 0:
-                return ((k+1 < FIRST_PHRY)?(k+1):WMS_NBTONS);
+                return ((k+1 < FIRST_PHRY)?(k+1):k-11);
                 // left : relative lydian of k
             case 1:
                 assert(k-FIRST_DOR >= 0);
@@ -294,18 +294,18 @@ size_t WeberModal::neighbour_modal(size_t i, size_t n)
                 return ((k+3 < FIRST_PHRY)?(k+3-FIRST_DOR+FIRST_LYD):k-9-FIRST_DOR+FIRST_LYD);
                 // down : previous dorian before k in array of fifths
             case 3:
-                return ((k-1 >= FIRST_DOR)?(k-1):WMS_NBTONS);
+                return ((k-1 >= FIRST_DOR)?(k-1):k+11);
                 // back : mixolydian mode with the same key sig
             case 4:
-                return ((k+2 < FIRST_PHRY)?((k+2)-FIRST_DOR+FIRST_MIXO):WMS_NBTONS);
+                return ((k+2 < FIRST_PHRY)?((k+2)-FIRST_DOR+FIRST_MIXO):((k-10)-FIRST_DOR+FIRST_MIXO));
                 // front : minor mode with the same key sig
             case 5:
-                return ((k+1 < FIRST_PHRY)?(k+1-FIRST_DOR+FIRST_MIN_HARM):WMS_NBTONS);
+                return ((k+1 < FIRST_PHRY)?(k+1-FIRST_DOR+FIRST_MIN_HARM):(k-11-FIRST_DOR+FIRST_MIN_HARM));
                 // the other minor modes have to be close too...
             case 6:
-                return ((k+1 < FIRST_PHRY)?(k+1-FIRST_DOR+FIRST_MIN_MEL):WMS_NBTONS);
+                return ((k+1 < FIRST_PHRY)?(k+1-FIRST_DOR+FIRST_MIN_MEL):k-11-FIRST_DOR+FIRST_MIN_MEL);
             case 7:
-                return ((k+1 < FIRST_PHRY)?(k+1-FIRST_DOR+FIRST_AEOL):WMS_NBTONS);
+                return ((k+1 < FIRST_PHRY)?(k+1-FIRST_DOR+FIRST_AEOL):k-11-FIRST_DOR+FIRST_AEOL);
                 // homonymous blues scale
             case 8:
                 assert(k-FIRST_DOR+FIRST_BLMIN < WMS_NBTONS);
@@ -321,7 +321,7 @@ size_t WeberModal::neighbour_modal(size_t i, size_t n)
         {
                 // up : next phrygian after k in array of fifths
             case 0:
-                return ((k+1 < FIRST_LYD)?(k+1):WMS_NBTONS);
+                return ((k+1 < FIRST_LYD)?(k+1):k-11);
                 // left : relative mixolydian of k
             case 1:
                 assert(k-FIRST_PHRY >= 0);
@@ -331,18 +331,18 @@ size_t WeberModal::neighbour_modal(size_t i, size_t n)
                 return ((k+3 < FIRST_LYD)?(k+3-FIRST_PHRY+FIRST_MIXO):k-9-FIRST_PHRY+FIRST_MIXO);
                 // down : previous phrygian before k in array of fifths
             case 3:
-                return ((k-1 >= FIRST_PHRY)?(k-1):WMS_NBTONS);
+                return ((k-1 >= FIRST_PHRY)?(k-1):k+11);
                 // back : minor mode with the same key sig
             case 4:
-                return ((k-1 >= FIRST_PHRY)?(k-1-FIRST_PHRY+FIRST_MIN_HARM):WMS_NBTONS);
+                return ((k-1 >= FIRST_PHRY)?(k-1-FIRST_PHRY+FIRST_MIN_HARM):(k+11-FIRST_PHRY+FIRST_MIN_HARM));
                 // front : locrian mode with the same key sig
             case 5:
-                return ((k+1 < FIRST_LYD)?(k+1-FIRST_PHRY+FIRST_LOC):WMS_NBTONS);
+                return ((k+1 < FIRST_LYD)?(k+1-FIRST_PHRY+FIRST_LOC):(k-11-FIRST_PHRY+FIRST_LOC));
                 // the other minor modes have to be close too...
             case 6:
-                return ((k-1 >= FIRST_PHRY)?(k-1-FIRST_PHRY+FIRST_MIN_MEL):WMS_NBTONS);
+                return ((k-1 >= FIRST_PHRY)?(k-1-FIRST_PHRY+FIRST_MIN_MEL):k+11-FIRST_PHRY+FIRST_MIN_MEL);
             case 7:
-                return ((k-1 >= FIRST_PHRY)?(k-1-FIRST_PHRY+FIRST_AEOL):WMS_NBTONS);
+                return ((k-1 >= FIRST_PHRY)?(k-1-FIRST_PHRY+FIRST_AEOL):(k+11-FIRST_PHRY+FIRST_AEOL));
             case 8:
                 return WMS_NBTONS;
             default:
@@ -356,7 +356,7 @@ size_t WeberModal::neighbour_modal(size_t i, size_t n)
         {
                 // up : next lydian after k in array of fifths
             case 0:
-                return ((k+1 < FIRST_MIXO)?(k+1):WMS_NBTONS);
+                return ((k+1 < FIRST_MIXO)?(k+1):k-11);
                 // right : relative dorian of k
             case 1:
                 return ((k-FIRST_LYD >= 0)?(k-FIRST_LYD+FIRST_DOR):WMS_NBTONS);
@@ -365,10 +365,10 @@ size_t WeberModal::neighbour_modal(size_t i, size_t n)
                 return ((k-3>=FIRST_LYD)?(k-3-FIRST_LYD+FIRST_DOR):k+9-FIRST_LYD+FIRST_DOR);
                 // down : previous lydian before k in array of fifths
             case 3:
-                return ((k-1 >= FIRST_LYD)?(k-1):WMS_NBTONS);
+                return ((k-1 >= FIRST_LYD)?(k-1):k+11);
                 // front : Major tone with the same key signature
             case 4:
-                return ((k+1 < FIRST_MIXO)?(k+1-FIRST_LYD):WMS_NBTONS);
+                return ((k+1 < FIRST_MIXO)?(k+1-FIRST_LYD):k-11-FIRST_LYD);
             case 5:
                 return WMS_NBTONS;
             case 6:
@@ -388,7 +388,7 @@ size_t WeberModal::neighbour_modal(size_t i, size_t n)
         {
                 // up : next mixolydian after k in array of fifths
             case 0:
-                return ((k+1 < FIRST_AEOL)?(k+1):WMS_NBTONS);
+                return ((k+1 < FIRST_AEOL)?(k+1):k-11);
                 // right : relative phrygian of k
             case 1:
                 return ((k-FIRST_MIXO >= 0)?(k-FIRST_MIXO+FIRST_PHRY):WMS_NBTONS);
@@ -397,13 +397,13 @@ size_t WeberModal::neighbour_modal(size_t i, size_t n)
                 return ((k-3>=FIRST_MIXO)?(k-3-FIRST_MIXO+FIRST_PHRY):k+9-FIRST_MIXO+FIRST_PHRY);
                 // down : previous mixolydian before k in array of fifths
             case 3:
-                return ((k-1 >= FIRST_MIXO)?(k-1):WMS_NBTONS);
+                return ((k-1 >= FIRST_MIXO)?(k-1):k+11);
                 // front : dorian tone with the same key signature
             case 4:
-                return ((k-2 >= FIRST_MIXO)?(k-2-FIRST_MIXO+FIRST_DOR):WMS_NBTONS);
+                return ((k-2 >= FIRST_MIXO)?(k-2-FIRST_MIXO+FIRST_DOR):k+10-FIRST_MIXO+FIRST_DOR);
                 // back : major tone with the same key signature
             case 5:
-                return ((k-1 >= FIRST_MIXO)?(k-1-FIRST_MIXO):WMS_NBTONS);
+                return ((k-1 >= FIRST_MIXO)?(k-1-FIRST_MIXO):k+11-FIRST_MIXO);
             case 6:
                 return WMS_NBTONS;
             case 7:
@@ -423,7 +423,7 @@ size_t WeberModal::neighbour_modal(size_t i, size_t n)
         {
                 // up : next minor after k in array of fifths
             case 0:
-                return ((k+1 < FIRST_LOC)?(k+1):WMS_NBTONS);
+                return ((k+1 < FIRST_LOC)?(k+1):k-11);
                 // left : relative major of k
             case 1:
                 assert(k-FIRST_AEOL >= 0);
@@ -433,13 +433,13 @@ size_t WeberModal::neighbour_modal(size_t i, size_t n)
                 return ((k+3 < FIRST_LOC)?(k+3-FIRST_AEOL):k-9-FIRST_AEOL);
                 // down : previous minor before k in array of fifths
             case 3:
-                return ((k-1 >= FIRST_AEOL)?(k-1):WMS_NBTONS);
+                return ((k-1 >= FIRST_AEOL)?(k-1):k+11);
                 // back : dorian mode with the same key sig
             case 4:
-                return ((k-1 >= FIRST_AEOL)?((k-1)+FIRST_DOR-FIRST_AEOL):WMS_NBTONS);
+                return ((k-1 >= FIRST_AEOL)?((k-1)+FIRST_DOR-FIRST_AEOL):(k+11)+FIRST_DOR-FIRST_AEOL);
                 // front : phrygian mode with the same key sig
             case 5:
-                return ((k+1 < FIRST_LOC)?(k+1+FIRST_PHRY-FIRST_AEOL):WMS_NBTONS);
+                return ((k+1 < FIRST_LOC)?(k+1+FIRST_PHRY-FIRST_AEOL):(k-11+FIRST_PHRY-FIRST_AEOL));
                 // the other minor modes have to be close too...
             case 6:
                 assert(k-FIRST_AEOL >= 0);
@@ -462,7 +462,7 @@ size_t WeberModal::neighbour_modal(size_t i, size_t n)
         {
                 // up : next locrian after k in array of fifths
             case 0:
-                return ((k+1 < WMS_NBTONS)?(k+1):WMS_NBTONS);
+                return ((k+1 < WMS_NBTONS)?(k+1):k-11);
                 // left : "relative dorian" of k
             case 1:
                 return ((k-3-FIRST_LOC >= 0)?(k-3-FIRST_LOC+FIRST_DOR):(k+9-FIRST_LOC+FIRST_DOR));
@@ -471,10 +471,10 @@ size_t WeberModal::neighbour_modal(size_t i, size_t n)
                 return (k-FIRST_LOC+FIRST_DOR);
                 // down : previous locrian before k in array of fifths
             case 3:
-                return ((k-1 >= FIRST_LOC)?(k-1):WMS_NBTONS);
+                return ((k-1 >= FIRST_LOC)?(k-1):k+11);
                 // back : phrygian mode with the same key sig
             case 4:
-                return ((k-1 >= FIRST_LOC)?((k-1)+FIRST_PHRY-FIRST_LOC):WMS_NBTONS);
+                return ((k-1 >= FIRST_LOC)?((k-1)+FIRST_PHRY-FIRST_LOC):(k+11)+FIRST_PHRY-FIRST_LOC);
             case 5:
                 return WMS_NBTONS;
             case 6:
@@ -493,7 +493,7 @@ size_t WeberModal::neighbour_modal(size_t i, size_t n)
         {
                 // up : next major blues after k in array of fifths
             case 0:
-                return ((k+1 < FIRST_BLMIN)?(k+1):WMS_NBTONS);
+                return ((k+1 < FIRST_BLMIN)?(k+1):k-11);
                 // left : parallel minor blues of k : "ton homonyme"
             case 1:
                 return ((k-3 >= FIRST_BLMAJ)?(k-3-FIRST_BLMAJ+FIRST_BLMIN):k+9-FIRST_BLMAJ+FIRST_BLMIN);
@@ -503,10 +503,10 @@ size_t WeberModal::neighbour_modal(size_t i, size_t n)
                 return (k-FIRST_BLMAJ+FIRST_BLMIN);
                 // down : previous major blues before k in array of fifths
             case 3:
-                return ((k-1 >= FIRST_BLMAJ)?(k-1):WMS_NBTONS);
+                return ((k-1 >= FIRST_BLMAJ)?(k-1):k+11);
                 // back : lydian mode with the same key signature
             case 4:
-                return ((k-1 >= FIRST_BLMAJ)?(k-1-FIRST_BLMAJ+FIRST_LYD):WMS_NBTONS);
+                return ((k-1 >= FIRST_BLMAJ)?(k-1-FIRST_BLMAJ+FIRST_LYD):(k+11-FIRST_BLMAJ+FIRST_LYD));
                 // front : major mode with the same key signature
             case 5:
                 return ((k-FIRST_BLMAJ < FIRST_MIN_HARM)?(k-FIRST_BLMAJ):WMS_NBTONS);
@@ -528,7 +528,7 @@ size_t WeberModal::neighbour_modal(size_t i, size_t n)
         {
                 // up : next minor blues after k in array of fifths
             case 0:
-                return ((k+1 < WMS_NBTONS)?(k+1):WMS_NBTONS);
+                return ((k+1 < WMS_NBTONS)?(k+1):k-11);
                 // left : relative major blues of k
             case 1:
                 assert(k-FIRST_BLMIN >= 0);
@@ -538,10 +538,10 @@ size_t WeberModal::neighbour_modal(size_t i, size_t n)
                 return ((k+3 < WMS_NBTONS)?(k+3-FIRST_BLMIN+FIRST_BLMAJ):k-9-FIRST_BLMIN+FIRST_BLMAJ);//ex sol# min a pour homonyme non pas sol# Maj qui n'existe pas mais bien lab Maj (9 quintes plus bas dans le cycle)
                 // down : previous minor blues before k in array of fifths
             case 3:
-                return ((k-1 >= FIRST_BLMIN)?(k-1):WMS_NBTONS);
+                return ((k-1 >= FIRST_BLMIN)?(k-1):k+11);
                 // back : dorian mode with the same key sig
             case 4:
-                return ((k-1 >= FIRST_BLMIN)?((k-1)+FIRST_DOR-FIRST_BLMIN):WMS_NBTONS);
+                return ((k-1 >= FIRST_BLMIN)?((k-1)+FIRST_DOR-FIRST_BLMIN):(k+11)+FIRST_DOR-FIRST_BLMIN);
                 // front : aeolian minor mode with the same key sig
             case 5:
                 return (k+FIRST_AEOL-FIRST_BLMIN);
