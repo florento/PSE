@@ -22,7 +22,7 @@
 //#include "Fifthspse::Weber
 //#include "KeyFifth.hpp"
 #include "Ton.hpp"
-#include "Weber_static.hpp"
+#include "WeberModal_static.hpp"
 #include "WeberBluesModal_static.hpp"
 
 namespace pse {
@@ -62,7 +62,6 @@ private: // data
     /// internal alias
     static const int WS_UNDEFDIST; //  = Weber_static::UNDEF_DIST;
 
-
     // array of tonalities considered.
     // const std::array<const Ton, WMS_NBTONS> TON;
 
@@ -99,6 +98,8 @@ private:
     ///        - 1 for left
     ///        - 2 for right
     ///        - 3 for down
+    ///        - 4 for back
+    ///        - 5 for front
     /// @return the index of the neighbour tonality of NB_TONS if there is none.
     static size_t neighbour_modal(size_t i, size_t j);
 

@@ -8,6 +8,7 @@
 
 #include "WeberModal.hpp"
 #include "Weber_static.hpp"
+//#include "WeberModal_static.hpp"
 #include "WeberBluesModal_static.hpp"
 
 
@@ -21,9 +22,11 @@ const int WeberModal::WS_UNDEFDIST = Weber_static::UNDEF_DIST;
 WeberModal::WeberModal():
 DIST()
 {
-    
+    // fill the whole DIST table with UNDEF values
     for (size_t i = 0; i < WMS_NBTONS; ++i)
         DIST[i].fill(WS_UNDEFDIST);
+    
+    
     init();
 }
 
@@ -44,7 +47,7 @@ int WeberModal::dist(const Ton& ton1, const Ton& ton2)
 
 // static
 size_t WeberModal::extractMin(std::array<bool, WMS_NBTONS>& heap,
-                         const std::array<int, WMS_NBTONS>& dist)
+                        const std::array<int,  WMS_NBTONS>& dist)
 {
     size_t m = WMS_NBTONS; // undef
     for (size_t i = 0; i < WMS_NBTONS; ++i)
@@ -74,7 +77,37 @@ bool WeberModal::isEmpty(const std::array<bool, WMS_NBTONS>& heap)
 
 void WeberModal::init()
 {
-    // row i
+    // null distance in diagonal
+    for (size_t i = 0; i < WMS_NBTONS; i++)
+    {
+        DIST[i][i] = 0;
+    }
+
+    // null distance for enhamonics (of same mode)
+    for (size_t i = 0; i < WMS_NBTONS; i++)
+    {
+        int i_fifths = (i%15)-7);
+        for (size_t j = i+1; j < WMS_NBTONS; j++)
+        {
+            int j_fifths = (j%15)-7);
+            // i/15 = j/15   (floor)
+            if (WeberBluesModal_static::mode(i) == WeberBluesModal_static::mode(j))
+            {
+                if ((i_fifths == -7 && j_fifths ==  5) ||
+                    (i_fifths == -6 && j_fifths ==  6) ||
+                    (i_fifths == -5 && j_fifths ==  7) ||
+                    (i_fifths ==  5 && j_fifths == -7) ||
+                    (i_fifths ==  6 && j_fifths == -6) ||
+                    (i_fifths ==  7 && j_fifths == -5))
+                {
+                    DIST[i][j] = 0;
+                    DIST[j][i] = 0;
+                }
+            }
+        }
+    }
+
+    // process row i
     for (size_t i = 0; i < WMS_NBTONS; i++)
     {
         //typedef std::priority_queue<size_t, std::vector<size_t>, decltype(comparinfi)> q;
@@ -83,7 +116,7 @@ void WeberModal::init()
         heap.fill(true); // all in heap
         
         // null diagonal
-        DIST[i][i] = 0;
+        // DIST[i][i] = 0;
         //for (size_t j = 0; j < WMS_NBTONS; ++j)
         //    pqueue.push(j); // std::make_pair(j, WS_UNDEFDIST));
 

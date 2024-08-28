@@ -5,14 +5,10 @@ differentes classes de coût pour calcul d'un spelling par recherche de plus cou
 `cost.update` appelé pour création d'une config. `PSC1` à partir d'une config. `PSC0`  (par transition).
 
 
-
-
-
 ## `costA`
 
 - number of printed accidentals
 - flag: with or without discount for accidental in the scale (lead degrees)
-
 
 
 ## `costAD`
@@ -26,9 +22,6 @@ differentes classes de coût pour calcul d'un spelling par recherche de plus cou
 - number of accidentals with color different from the assumed global tonality.
 
 - number of printed and non lead Cb B# E# Fb.
-
-
-
 
 
 ## `costADplus`

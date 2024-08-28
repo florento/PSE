@@ -130,6 +130,8 @@ ex: 6te augmentée, [3 cas](https://fr.wikipedia.org/wiki/Sixte_augmentée)
 
 http://musictheory.pugetsound.edu/mt21c/TypesOfAugmentedSixthChords.html
 
+
+
 ## 4. tonalités locales
 
 actuellement, on détermine une tonalité locale par mesure

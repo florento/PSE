@@ -453,8 +453,8 @@
 		43F9BE6D29CC7DB000B0A7F8 /* ModeFactory.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ModeFactory.hpp; sourceTree = "<group>"; };
 		43FBEAB52930CB16008FC486 /* debugpse.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = debugpse.cpp; sourceTree = "<group>"; };
 		43FBEABD2930CD21008FC486 /* debugpse */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = debugpse; sourceTree = BUILT_PRODUCTS_DIR; };
-		80604E432C4D094A0085488C /* WeberBluesModal_static.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = WeberBluesModal_static.cpp; sourceTree = "<group>"; };
-		80604E442C4D094A0085488C /* WeberBluesModal_static.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = WeberBluesModal_static.hpp; sourceTree = "<group>"; };
+		80604E432C4D094A0085488C /* WeberBluesModal_static.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = WeberBluesModal_static.cpp; path = src/ton/WeberBluesModal_static.cpp; sourceTree = "<group>"; };
+		80604E442C4D094A0085488C /* WeberBluesModal_static.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = WeberBluesModal_static.hpp; path = src/ton/WeberBluesModal_static.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -523,8 +523,8 @@
 				43EFF3612B8E526C000CA4B2 /* WeberModal.cpp */,
 				43D9DB512B964A0F005F0A13 /* WeberModal_static.hpp */,
 				43D9DB502B964A0F005F0A13 /* WeberModal_static.cpp */,
-				80604E432C4D094A0085488C /* WeberBluesModal_static.cpp */,
 				80604E442C4D094A0085488C /* WeberBluesModal_static.hpp */,
+				80604E432C4D094A0085488C /* WeberBluesModal_static.cpp */,
 			);
 			name = ton;
 			sourceTree = "<group>";

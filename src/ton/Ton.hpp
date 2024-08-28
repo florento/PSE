@@ -165,13 +165,13 @@ public:
     /// accidental in the diatonic scale of this ton for a given pitch name.
     /// @param n an encapsulated note name.
     /// @return the accidental, in scale, for note name n.
-    /// @todo replace by accidScale
+    /// @todo replaced by accidScale
     enum Accid accidDia(const enum NoteName& n) const;
 
     /// accidental in the diatonic scale of this ton for a given pitch name.
     /// @param n a note name, in 0..6 (0 is 'C', 6 is 'B').
     /// @return the accidental, in scale, for note n.
-    /// @todo replace by accidScale
+    /// @todo replaced by accidScale
     enum Accid accidDia(int n) const;
 
     /// accidental in the diatonic scale of this ton for a given pitch name.
