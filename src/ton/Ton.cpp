@@ -573,6 +573,10 @@ unsigned int Ton::distDiatonic(const Ton& rhs) const
 
 unsigned int Ton::distWeber(const Ton& rhs) const
 {
+    assert(_mode == ModeName::Major ||
+           _mode == ModeName::Minor);
+    assert(rhs._mode == ModeName::Major ||
+           rhs._mode == ModeName::Minor);
     int res = Weber_static::dist(*this, rhs);
     assert(res != Weber_static::UNDEF_DIST);
     return res;
@@ -580,6 +584,62 @@ unsigned int Ton::distWeber(const Ton& rhs) const
 
 unsigned int Ton::distWeberModal(const Ton& rhs) const
 {
+    assert(_mode == ModeName::Major ||
+           _mode == ModeName::Minor ||
+           _mode == ModeName::MinorMel ||
+           _mode == ModeName::MinorNat || // Aeolian
+           _mode == ModeName::Ionian ||
+           _mode == ModeName::Dorian ||
+           _mode == ModeName::Phrygian ||
+           _mode == ModeName::Lydian ||
+           _mode == ModeName::Mixolydian ||
+           _mode == ModeName::Aeolian ||
+           _mode == ModeName::Locrian);
+    assert(rhs._mode == ModeName::Major ||
+           rhs._mode == ModeName::Minor ||
+           rhs._mode == ModeName::MinorMel ||
+           rhs._mode == ModeName::MinorNat || // Aeolian
+           rhs._mode == ModeName::Ionian ||
+           rhs._mode == ModeName::Dorian ||
+           rhs._mode == ModeName::Phrygian ||
+           rhs._mode == ModeName::Lydian ||
+           rhs._mode == ModeName::Mixolydian ||
+           rhs._mode == ModeName::Aeolian ||
+           rhs._mode == ModeName::Locrian);
+    int res = WeberModal_static::dist(*this, rhs);
+    assert(res != Weber_static::UNDEF_DIST);
+    return res;
+}
+
+
+unsigned int Ton::distWeberBluesModal(const Ton& rhs) const
+{
+    assert(_mode == ModeName::Major ||
+           _mode == ModeName::Minor ||
+           _mode == ModeName::MinorMel ||
+           _mode == ModeName::MinorNat || // Aeolian
+           _mode == ModeName::Ionian ||
+           _mode == ModeName::Dorian ||
+           _mode == ModeName::Phrygian ||
+           _mode == ModeName::Lydian ||
+           _mode == ModeName::Mixolydian ||
+           _mode == ModeName::Aeolian ||
+           _mode == ModeName::Locrian ||
+           _mode == ModeName::MajorBlues ||
+           _mode == ModeName::MinorBlues);
+    assert(rhs._mode == ModeName::Major ||
+           rhs._mode == ModeName::Minor ||
+           rhs._mode == ModeName::MinorMel ||
+           rhs._mode == ModeName::MinorNat || // Aeolian
+           rhs._mode == ModeName::Ionian ||
+           rhs._mode == ModeName::Dorian ||
+           rhs._mode == ModeName::Phrygian ||
+           rhs._mode == ModeName::Lydian ||
+           rhs._mode == ModeName::Mixolydian ||
+           rhs._mode == ModeName::Aeolian ||
+           rhs._mode == ModeName::Locrian ||
+           rhs._mode == ModeName::MajorBlues ||
+           rhs._mode == ModeName::MinorBlues);
     int res = WeberModal_static::dist(*this, rhs);
     assert(res != Weber_static::UNDEF_DIST);
     return res;

@@ -126,10 +126,10 @@ void Spelli::WeberModal()
 }
 
 
-void Spelli::closeTons(bool tonal_flag)
+void Spelli::closeTons()
 {
     assert(_index);
-    _index->close(tonal_flag);
+    _index->close();
 }
 
 

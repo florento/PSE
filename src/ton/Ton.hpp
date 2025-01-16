@@ -124,10 +124,11 @@ public:
     /// key signature truly reflecting the notes constituting the considered scale
     int getRealKS() const;
 
-    /// this ton has the same accidents, in Key Signature or Scale, as the given ton.
+    /// this ton has the same accidents, in Key Signature or Scale,
+    /// as the given ton.
     /// @param rhs other ton to be compered to.
-    /// @param ks consider the accidents in Key Signature for equivalence, otherwise consider
-    /// the accidents in scale.
+    /// @param ks consider the accidents in Key Signature for equivalence,
+    /// otherwise consider the accidents in scale.
     /// @see PSState
     bool equivalent(const Ton& rhs, bool ks) const;
 
@@ -240,6 +241,11 @@ public:
     /// based on the extension of the table of J.G. Weber.
     /// @see WeberModal.hpp
     unsigned int distWeberModal(const Ton& rhs) const;
+
+    /// distance between this tonality and another tonality
+    /// based on the extension of the table of J.G. Weber.
+    /// @see WeberBluesModal.hpp
+    unsigned int distWeberBluesModal(const Ton& rhs) const;
 
     // distance, in the array of fifths, between the note (given by name)
     // and the tonic of the given tonality.

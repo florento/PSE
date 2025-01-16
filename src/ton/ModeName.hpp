@@ -92,6 +92,15 @@ enum class ModeName
     
 };
 
+
+/// the given mode name is one of Ionian, Dorian, Phrygian, Lydian,
+/// Mixolydian, Aeolian, Locrian
+bool greek(const ModeName& m);
+
+/// the given mode name is one of Ionian, Dorian, Phrygian, Lydian,
+/// Mixolydian, Aeolian, Locrian
+bool greek(const ModeName& m);
+
 /// string of mode name.
 std::string tostring(const ModeName& m);
 

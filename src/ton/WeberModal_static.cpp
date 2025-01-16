@@ -17,7 +17,7 @@ namespace pse {
 int WeberModal_static::dist(const Ton& ton1, const Ton& ton2)
 {
     size_t i1 = index(ton1);
-    // DEBUG("{} in NB_TONS={}", i1, NB_TONS);
+    DEBUG("WeberModal_static:L ton {} in NB_TONS={}", i1, NB_TONS);
     
     assert(i1 < WeberModal_static::NB_TONS);
     size_t i2 = index(ton2);
@@ -56,7 +56,8 @@ size_t WeberModal_static::index(const Ton& ton)
     {
         return ton.fifths() + 97;
     }
-    else if (ton.getMode() == ModeName::Aeolian)
+    else if (ton.getMode() == ModeName::Aeolian ||
+             ton.getMode() == ModeName::MinorNat)
     {
         return ton.fifths() + 112;
     }

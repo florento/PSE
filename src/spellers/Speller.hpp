@@ -122,9 +122,7 @@ public: // array of tonalities (Ton index)
 
     /// close the array of tonalities and finish its initlialization.
     /// No ton can be added after closure.
-    /// @param tonal_flag tonal or modal mode for the computation of
-    /// Weber distance (default tonal).
-    void closeTons(bool tonal_flag);
+    void closeTons();
     
     /// the array of tonalities is closed.
     bool closedTons() const;

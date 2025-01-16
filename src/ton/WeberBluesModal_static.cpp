@@ -56,7 +56,8 @@ size_t WeberBluesModal_static::index(const Ton& ton)
     {
         return ton.fifths() + 97;
     }
-    else if (ton.getMode() == ModeName::Aeolian)
+    else if (ton.getMode() == ModeName::Aeolian ||
+             ton.getMode() == ModeName::MinorNat)
     {
         return ton.fifths() + 112;
     }

@@ -54,8 +54,8 @@ public:
     /// - 26 : major and harmonic minor, KS between -6 and 6.
     /// - 30 : major and harmonic minor, KS between -7 and 7.
     /// - 104: major, minor, greek modes, KS in -6..6
-    /// - 120: major, minor, greek modes, KS in -7..7
-    /// - 135: modal: TBC
+    /// - 135: major, minor, greek modes, KS in -7..7
+    /// - 165: modal: major, minor, greek modes, blues maojr and minor, KS in -7..7
     /// @warning the empty array of tonalities (case nb=0) is not closed
     /// (close() must be called aterwards). All the others are closed.
     TonIndex(size_t nb=0);
@@ -74,17 +74,21 @@ public:
     /// must be smaller than size().
     const Ton& ton(size_t i) const;
 
-    /// Tonal or modal representative Ton  in the equivalence class of the Ton af the given index
-    /// in this array of tonalities.
-    /// @param i an index in this array of tonalities. must be smaller than size().
-    /// @param tonal mode: tonal or modal, for the construction of initial state (from the ton at i).
+    /// Tonal or modal representative Ton in the equivalence class of the Ton
+    /// af the given index in this array of tonalities.
+    /// @param i an index in this array of tonalities.
+    /// must be smaller than size().
+    /// @param tonal mode: tonal or modal, for the construction of initial state
+    /// (from the ton at i).
     /// @return the first ton in this tonIntdex equivalent to i, wrt
     const Ton& representative(size_t i, bool tonal) const;
 
-    /// Index of the tonal or modal representative Ton  in the equivalence class of the Ton
-    /// af the given index in this array of tonalities.
-    /// @param i an index in this array of tonalities. must be smaller than size().
-    /// @param tonal mode: tonal or modal, for the construction of initial state (from the ton at i).
+    /// Index of the tonal or modal representative Ton in the equivalence class
+    /// of the Ton af the given index in this array of tonalities.
+    /// @param i an index in this array of tonalities.
+    /// must be smaller than size().
+    /// @param tonal mode: tonal or modal, for the construction of initial state
+    /// (from the ton at i).
     size_t irepresentative(size_t i, bool tonal) const;
 
     /// Whether the tonality at the given index can be considered as global.
@@ -141,12 +145,15 @@ public:
     
     /// close this array of tonalities and finish initlialization.
     /// No ton can be added after closure.
-    /// @param tonal_flag tonal or modal mode for the computation of
-    /// Weber distance (default tonal).
-    void close(bool tonal_flag = true);
+    void close();
 
     /// this array of tonalities is closed (no ton can be added).
     bool closed() const;
+
+    /// distance between the two tons of given indices,
+    /// in the table of Weber, or WeberModal, or WeberBluesModal,
+    /// avvording to the content of this array of tonalities.
+    int distWeber(size_t i, size_t j) const;
     
     /// ranks of second given ton wrt Weber distance to first given ton.
     /// @param i index of ton in this array of tonalities.
@@ -154,6 +161,7 @@ public:
     /// @return the rank of j in the vector of Weber distances to ton i of
     /// all the tons of this array of tonalities.
     /// @warning this array of tonalities must be closed.
+    /// @todo remplacer par dist
     size_t rankWeber(size_t i, size_t j) const;
     
 private: // data
@@ -174,6 +182,7 @@ private: // data
     /// ranks of ton wrt Weber distance:
     /// _rankWeber[i, j] is the rank of ton i in this index, wrt to
     /// to the distance to ton j in this index.
+    /// tabulation for speedup
     std::vector<std::vector<size_t>> _rankWeber;
     
     /// this ton index has been closed:
@@ -181,9 +190,15 @@ private: // data
 
     /// true if we use the tonal (original) Weber distance,
     /// false if we use the modal Weber distance.
-    /// @todo TBR not used
+    /// @todo TBR not used, replaced by _WeberModal and _WeberBlues
     bool _WeberTonal;
-    
+
+    /// this array of tonalities contains at least one ton with greek mode.
+    bool _WeberModal;
+
+    /// this array of tonalities contains at least one ton with a blues mode.
+    bool _WeberBluesModal;
+      
 private:
     
     /// find the index of a ton defined by given key signature and mode
@@ -214,10 +229,8 @@ private:
     void init25();
     void initmodal();
     
-    /// initialize the table _rankWeber.
-    /// @param tonal_flag tonal or modal mode
-    /// for the computation of Weber distance.
-    void initRankWeber(bool tonal_flag);
+    /// initialize the table _rankWeber of rank wrt Weber distance.
+    void initRankWeber();
     
     /// a ton in the given mode can be considered global.
     /// for automatically constructed arrays.

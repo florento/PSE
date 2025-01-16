@@ -183,6 +183,7 @@ void TonIndex::add(const Ton& ton, bool global)
         return;
     }
     
+    // add the ton to this array
     if (_tons.size() < MAXTONS)
     {
         _tons.push_back(std::make_pair(ton, global)); // copy
@@ -191,6 +192,37 @@ void TonIndex::add(const Ton& ton, bool global)
     {
         ERROR("TonIndex add: array of tons overfull");
         return;
+    }
+    
+    // update flags Weber
+    switch (ton.getMode())
+    {
+        // table of Weber
+        case ModeName::Major:
+        case ModeName::Minor:
+        // case ModeName::MinorMel:
+
+        // table of WeberModal
+        case ModeName::Ionian:
+        case ModeName::Dorian:
+        case ModeName::Phrygian:
+        case ModeName::Lydian:
+        case ModeName::Mixolydian:
+        case ModeName::MinorNat:
+        case ModeName::Aeolian:
+        case ModeName::Locrian:
+            _WeberModal = true;
+            break;
+
+        // table of WeberBluesModal
+        case ModeName::MajorBlues:
+        case ModeName::MinorBlues:
+            _WeberBluesModal = true;
+            break;
+                        
+        default:
+            WARN("ton {} not in Weber table", ton);
+            break;
     }
     
     // search for earlier equivalent tons
@@ -235,11 +267,10 @@ void TonIndex::add(int ks, const ModeName& mode, bool global)
 }
 
 
-void TonIndex::close(bool tonal_flag)
+void TonIndex::close()
 {
     _closed = true;
-    // tonal flag : ugly
-    initRankWeber((_tons.size() > 30)?false:tonal_flag);
+    initRankWeber();
 }
 
 
@@ -260,19 +291,19 @@ void TonIndex::init(size_t n)
 
         case 25:
             init25();
-            close(true); // tonal Weber
+            close(); // tonal Weber
             break;
 
         case 26:
             init13(ModeName::Major, true); // global flag
             init13(ModeName::Minor, true);
-            close(true); // tonal Weber
+            close(); // tonal Weber
             break;
 
         case 30:
             init15(ModeName::Major, true);
             init15(ModeName::Minor, true);
-            close(true); // tonal Weber
+            close(); // tonal Weber
             break;
 
         case 104:
@@ -286,12 +317,12 @@ void TonIndex::init(size_t n)
             init13(ModeName::Mixolydian, false);
             init13(ModeName::Aeolian, false);
             init13(ModeName::Locrian, false);
-            close(false); // modal Weber
+            close(); // modal Weber
             break;
             
-        case 120:
+        case 135:
             _WeberTonal = false;
-            // init15(ModeName::Major, true); // Ionian
+            init15(ModeName::Major, true); // Ionian
             init15(ModeName::Minor, false);
             init15(ModeName::MinorMel, false);
             init15(ModeName::Dorian, false);
@@ -300,12 +331,12 @@ void TonIndex::init(size_t n)
             init15(ModeName::Mixolydian, false);
             init15(ModeName::Aeolian, false);
             init15(ModeName::Locrian, false);
-            close(false); // modal Weber
+            close(); // modal Weber
             break;
             
         case 165:
             _WeberTonal = false;
-            // init15(ModeName::Major, true); // Ionian
+            init15(ModeName::Major, true); // Ionian
             init15(ModeName::Minor, false);
             init15(ModeName::MinorMel, false);
             init15(ModeName::Dorian, false);
@@ -316,7 +347,7 @@ void TonIndex::init(size_t n)
             init15(ModeName::Locrian, false);
             init15(ModeName::MajorBlues, false);
             init15(ModeName::MinorBlues, false);
-            close(false); // modal Weber
+            close(); // modal Weber with Blues
             break;
             
             
@@ -419,7 +450,19 @@ bool TonIndex::global(const ModeName& m)
 }
 
 
-void TonIndex::initRankWeber(bool tonal_flag)
+int TonIndex::distWeber(size_t i, size_t j) const
+{
+    assert(_closed);
+    if (_WeberBluesModal)
+        return ton(i).distWeberBluesModal(ton(j));
+    else if (_WeberModal)
+        return ton(i).distWeberModal(ton(j));
+    else
+        return ton(i).distWeber(ton(j));
+}
+
+
+void TonIndex::initRankWeber()
 {
     assert(_rankWeber.empty());
     assert(_closed);
@@ -427,7 +470,7 @@ void TonIndex::initRankWeber(bool tonal_flag)
     for (size_t i = 0; i < _tons.size(); ++i)
     {
         // _rankWeber.emplace_back(_tons.size(), 0);
-        const Ton& toni = ton(i);
+        // const Ton& toni = ton(i);
 
         // pair (j, dist(i, j))
         //std::vector<std::pair <size_t, unsigned int>> pcol; // empty
@@ -435,10 +478,11 @@ void TonIndex::initRankWeber(bool tonal_flag)
         
         for (size_t j = 0; j < _tons.size(); ++j)
         {
-            if (tonal_flag)
-                pcol.push_back(toni.distWeber(ton(j)));
-            else
-                pcol.push_back(toni.distWeberModal(ton(j)));
+            pcol.push_back(distWeber(i, j));
+            // if (tonal_flag)
+            //     pcol.push_back(toni.distWeber(ton(j)));
+            // else
+            //     pcol.push_back(toni.distWeberModal(ton(j)));
             // pcol.push_back(std::make_pair(j, toni.distWeber(ton(j))));
         }
             

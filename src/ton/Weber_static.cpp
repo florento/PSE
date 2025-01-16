@@ -27,6 +27,7 @@ int Weber_static::dist(const Ton& ton1, const Ton& ton2)
 }
 
 // static
+/// @todo TBC for MinorNat (Aeolian) and MinorMel
 size_t Weber_static::index(const Ton& ton)
 {
     if (ton.getMode() == ModeName::Major)
