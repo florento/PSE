@@ -143,9 +143,9 @@ def eval_LG(output_dir:str='', tablename:str='',
             ct2=ps.pse.CTYPE_UNDEF, # PSE: table2, cost type 
             tonal2=True,            # PSE: table2, tonal/modal flag 
             det2=True,              # PSE: table2, deterministic (PS14) flag
-            emask=False,           # restrict candidate globals after 1st table
-            eglobal1=0,            # % tolerance for restricted list candidate globals
-            eglobal2=0,            # % tolerance for final list globals
+            emask=False,            # restrict candidate globals after 1st table
+            eglobal1=0,             # % tolerance for restricted list candidate globals
+            eglobal2=0,             # % tolerance for final list globals
             dflag=True,             # debug flag
             mflag=True):            # mark flag
     """eval the whole LG corpus with given algo parameters"""
@@ -222,7 +222,7 @@ def eval_LGitem(score_id,
                         mask=emask, global1=eglobal1, global2=eglobal2,
                         debug=dflag) 
     stat = ps.Stats()   
-    opath=Path(os.getcwd())
+    opath = Path(os.getcwd())
     # process the LG opus of given id
     dataset = LG_map()
     file = dataset.get(score_id)

@@ -417,7 +417,7 @@ protected: // data
     /// grid of local tons (1 ton for each initial ton and measure)
     PSG* _grid; // std::shared_ptr<PSG>
     
-    /// subarray of tons selected as candidate global tonality.
+    /// sub-array of tons selected as candidate global tonality.
     PSO* _global;
     
 protected:

@@ -12,7 +12,7 @@
 namespace pse {
 
 
-Speller2Pass::Speller2Pass( size_t nbTons, const Algo& algo, bool dflag):
+Speller2Pass::Speller2Pass(size_t nbTons, const Algo& algo, bool dflag):
 Speller1Pass(nbTons, algo, dflag),
 _table1(nullptr),
 _global1(nullptr)

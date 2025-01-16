@@ -48,13 +48,13 @@ public:
     /// @param nb default list of tonalities.
     /// currently supported:
     /// - 0  : empty list. tons can be added with add()
-    /// - 26 : major and harmonic minor, KS between -6 and 6.
-    /// - 30 : major and harmonic minor, KS between -7 and 7.
     /// - 25 : tonalities of Bach's Wohltemperierte Clavier
     ///   major      KS -4 to 7 : C, C#, D, Eb, E, F, F#, G, Ab, A, Bb, B
     ///   minor harm KS -6 to 6 : C, C#, D, Eb, D#, E, F, F#, G, G#, A, Bb, B
-    /// - 104: major, minor, all jazz modes, KS in -6..6
-    /// - 120: major, minor, all jazz modes, KS in -7..7
+    /// - 26 : major and harmonic minor, KS between -6 and 6.
+    /// - 30 : major and harmonic minor, KS between -7 and 7.
+    /// - 104: major, minor, greek modes, KS in -6..6
+    /// - 120: major, minor, greek modes, KS in -7..7
     /// - 135: modal: TBC
     /// @warning the empty array of tonalities (case nb=0) is not closed
     /// (close() must be called aterwards). All the others are closed.

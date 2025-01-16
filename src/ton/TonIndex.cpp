@@ -289,9 +289,9 @@ void TonIndex::init(size_t n)
             close(false); // modal Weber
             break;
             
-        case 135:
+        case 120:
             _WeberTonal = false;
-            init15(ModeName::Major, true); // Ionian
+            // init15(ModeName::Major, true); // Ionian
             init15(ModeName::Minor, false);
             init15(ModeName::MinorMel, false);
             init15(ModeName::Dorian, false);
@@ -305,7 +305,7 @@ void TonIndex::init(size_t n)
             
         case 165:
             _WeberTonal = false;
-            init15(ModeName::Major, true); // Ionian
+            // init15(ModeName::Major, true); // Ionian
             init15(ModeName::Minor, false);
             init15(ModeName::MinorMel, false);
             init15(ModeName::Dorian, false);

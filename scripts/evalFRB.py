@@ -129,21 +129,38 @@ skip = ['Autumn in New York']
 # PSE table1:  costtype1 = ps.CTYPE_ACCID | CTYPE_ACCIDlead | CTYPE_ADplus | CTYPE_ADlex
 # PSE table2:  costtype2 = ps.CTYPE_ACCID | CTYPE_ACCIDlead | CTYPE_ADplus | CTYPE_ADlex
 def eval_FRB(corpus='leads', 
-             kpre=0, kpost=0,  # PS13 parameters
-             tons=0,         # PSE: nb of Tons in TonIndex
-             costtype1=ps.CTYPE_UNDEF, tonal1=True, det1=True, # PSE: table1
-             costtype2=ps.CTYPE_UNDEF, tonal2=True, det2=True, # PSE: table2 
-             output_dir='', filename='',             
-             dflag=True, mflag=True):
+             kpre=0, kpost=0, # parameters specific to PS13
+             tons=0,          # PSE: nb of Tons in TonIndex
+             costtype1=ps.pse.CTYPE_UNDEF, 
+                              # PSE: table1, cost type. if set, PSE is used, otherwise, PS13 is used
+             tonal1=True,     # PSE: table1, tonal/modal flag for initial state
+             det1=True,       # PSE: table1, deterministic/exhaustive flag
+             global1=100,     # percentage approx for intermediate list of global candidate
+             costtype2=ps.pse.CTYPE_UNDEF, 
+                              # PSE: table2, cost type. if unset, skip table2
+             tonal2=True,     # PSE: table2, tonal/modal flag for initial state
+             det2=True,       # PSE: table2, deterministic/exhaustive flag 
+             global2=0,       # percentage approx for final list of global candidate
+             output_dir='', 
+             tablename='',    # filename of csv table         
+             dflag=True,      # debug flag
+             mflag=True):     # mark flag
+    """eval the whole FRG corpus with given algo and parameters"""
     global _eval_root
     assert(corpus == 'leads' or corpus == 'piano')
     timestamp = datetime.today().strftime('%Y%m%d-%H%M')
-    algo = ps.algo(kpre, kpost, tons, 
-                   costtype1, tonal1, det1, 
-                   costtype2, tonal2, det2)
+    # initialize a speller
+    sp = ps.Spellew(ps13_kpre=kpre, ps13_kpost=kpost, 
+                    nbtons=tons,
+                    t1_costtype=costtype1, t1_tonal=tonal1, t1_det=det1, 
+                    global1=global1,
+                    t2_costtype=costtype2, t2_tonal=tonal2, t2_det=det2,
+                    global2=global2,
+                    debug=dflag)
+    algoname = sp.algoname()
     # default output dir name
     if output_dir == '':
-       output_dir = algo+'_'+timestamp
+       output_dir = algoname+'_'+timestamp
     output_path = Path(_eval_root)/'evalFRB'/output_dir
     if not os.path.isdir(output_path):
         if not os.path.isdir(Path(_eval_root)/'evalFRB'):
@@ -158,47 +175,62 @@ def eval_FRB(corpus='leads',
     print('\n', 'starting evaluation of FRB dataset -', len(names), 'entries\n')
     for name in names:
         if (name in skip):
-            print('\n', name, 'SKIP\n')
+            print('\n', name, 'SKIP\n', flush=True)
             continue
-        if (dataset.get(name) == None):
-            print(name, "not found in dataset", corpus)
+        if (not dataset.get(name)):
+            print('\n', name, "not found in dataset, skip", corpus)
             continue
         file = dataset[name]
         print('\n', name, '\n')
         s = m21.converter.parse(file.as_posix())
 
-        (ls, lld) = ps.eval_score(score=s, stat=stat, 
-                                  sid=0, title=name, composer='', 
-                                  kpre=kpre, kpost=kpost, # for PS13                                  
-                                  nbtons=tons,            # for PSE 
-                                  costtype1=costtype1, tonal1=tonal1, det1=det1,
-                                  costtype2=costtype2, tonal1=tonal2, det1=det2,
-                                  debug=dflag, mark=mflag)
+        (ls, lld) = sp.eval_score(score=s, stat=stat, 
+                                  score_id=0, title=name, composer='', 
+                                  output_path=output_path)
         if mflag and not ps.empty_difflist(lld):
             write_score(s, output_path, name)
     # display and save evaluation table
     # default table file name
-    if filename == '':
-       filename =  'FRWeval'+'_'+corpus+str(tons)+'_'+timestamp
+    if not tablename:
+       tablename =  'FRBeval'+'_'+corpus+str(tons)+'_'+timestamp
     stat.show()    
-    df = stat.get_dataframe() # create pands dataframe
+    df = stat.get_dataframe() # create pandas dataframe
     df.pop('part') # del column part number (always 0)
-    df.to_csv(output_path/(filename+'.csv') , header=True, index=False)
-    stat.write_datasum(output_path/(filename+'_sum.csv'))    
+    df.to_csv(output_path/(tablename+'.csv') , header=True, index=False)
+    stat.write_datasum(output_path/(tablename+'_sum.csv'))    
         
 # PS13: kpre=33, kpost=23
 # PSE:  tons=135, 
 # PSE table1:  costtype1 = ps.CTYPE_ACCID | CTYPE_ACCIDlead | CTYPE_ADplus | CTYPE_ADlex
 # PSE table2:  costtype2 = ps.CTYPE_ACCID | CTYPE_ACCIDlead | CTYPE_ADplus | CTYPE_ADlex
 def eval_FRBitem(name, corpus='leads', 
-                 kpre=0, kpost=0,  # PS13 parameters
-                 tons=0,         # PSE: nb of Tons in TonIndex
-                 costtype1=ps.CTYPE_UNDEF, tonal1=True, det1=True, # PSE: table1
-                 costtype2=ps.CTYPE_UNDEF, tonal2=True, det2=True, # PSE: table2 
-                 output_dir='', filename='',             
-                 dflag=True, mflag=True):
+                 kpre=0, kpost=0, # PS13 parameters
+                 tons=0,          # PSE: nb of Tons in TonIndex
+                 costtype1=ps.pse.CTYPE_UNDEF, 
+                                  # PSE: table1, cost type. if set, PSE is used, otherwise, PS13 is used
+                 tonal1=True,     # PSE: table1, tonal/modal flag for initial state
+                 det1=True,       # PSE: table1, deterministic/exhaustive flag
+                 global1=100,     # percentage approx for intermediate list of global candidate
+                 costtype2=ps.pse.CTYPE_UNDEF, 
+                                  # PSE: table2, cost type. if unset, skip table2
+                 tonal2=True,     # PSE: table2, tonal/modal flag for initial state
+                 det2=True,       # PSE: table2, deterministic/exhaustive flag 
+                 global2=0,       # percentage approx for final list of global candidate                 
+                 output_dir='', 
+                 filename='',             
+                 dflag=True,      # debug flag
+                 mflag=True):     # mark flag
     assert(len(name) > 0)
     assert(corpus == 'leads' or corpus == 'piano')
+    # initialize a speller
+    sp = ps.Spellew(ps13_kpre=kpre, ps13_kpost=kpost, 
+                    nbtons=tons,
+                    t1_costtype=costtype1, t1_tonal=tonal1, t1_det=det1, 
+                    global1=global1,
+                    t2_costtype=costtype2, t2_tonal=tonal2, t2_det=det2,
+                    global2=global2,
+                    debug=dflag)
+    # input data
     dataset = FRB_corpus(corpus)
     if (dataset.get(name) == None):
         print(name, "not found in dataset", corpus)
@@ -206,16 +238,13 @@ def eval_FRBitem(name, corpus='leads',
     file = dataset[name]
     score = m21.converter.parse(file.as_posix())
     stat = ps.Stats()   
+    opath = Path(os.getcwd()) if output_dir=='' else Path(output_dir)
     # ground truth ks, estimated ks, nnb of nontes and list of diff notes
     #(k_gt, gt_est, nn, ld) = ps.eval_part(part=part, stat=stat, nbtons=tons, 
     #                                      debug=dflag, mark=mflag)
-    (ls, lld) = ps.eval_score(score=score, stat=stat, 
-                              sid=0, title=name, composer='', 
-                              kpre=kpre, kpost=kpost, # for PS13                                  
-                              nbtons=tons,            # for PSE 
-                              costtype1=costtype1, tonal1=tonal1, det1=det1,
-                              costtype2=costtype2, tonal1=tonal2, det1=det2,
-                              debug=dflag, mark=mflag)
+    (ls, lld) = sp.eval_score(score=score, stat=stat, 
+                              score_id=0, title=name, composer='', 
+                              output_path=opath)    
     stat.show()   
     assert(len(lld) == 1) # always 1 unique part in LG dataset
     if mflag and len(lld[0]) > 0:

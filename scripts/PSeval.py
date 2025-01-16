@@ -584,10 +584,11 @@ def anote_score(score, k, lld):
         anote_part(lp[i], lld[i])    
 
 def print_score(score, outfile):
-    musescore = "/MuseScore 3.app/Contents/MacOS/mscore"
+    musescore = '/Applications/MuseScore 4.app/Contents/MacOS/mscore'
     pdffile = outfile+".pdf"
     mxfile  = outfile+".musicxml"
-    os.system(musescore + " -o " + pdffile + " " + mxfile)
+    # os.system(musescore + " -o " + pdffile + " " + mxfile)
+    subprocess.call(musescore + " -o " + pdffile + " " + mxfile, shell=True)
 
 
 #########################
@@ -833,32 +834,37 @@ def spellable(part):
     #    return False        
     return True
 
-def algo(ps13_kpre=0, ps13_kpost=0, # parameters specific to PS13
-         nbtons=0,                  # nb of Tons in TonIndex
-         t1_costtype=pse.CTYPE_UNDEF, 
-         t1_tonal=True, 
-         t1_det=True, 
-         t2_costtype=pse.CTYPE_UNDEF, 
-         t2_tonal=True, 
-         t2_det=True, 
-         debug=False):
+def algoname(ps13_kpre=0, ps13_kpost=0, # parameters specific to PS13
+             nbtons=0,                  # nb of Tons in TonIndex
+             t1_costtype=pse.CTYPE_UNDEF, 
+             t1_tonal=True, 
+             t1_det=True, 
+             global1=100,
+             t2_costtype=pse.CTYPE_UNDEF, 
+             t2_tonal=True, 
+             t2_det=True, 
+             global2=0):
     """summary of algo name and parameters"""
     """"PS13 or PSE nbtons _tablenb costtype1 Tonal or Modal Deterministic of Exhaustive"""
     if ps13_kpre > 0:
-        return 'PS13_'+str(ps13_kpre)+'_'+str(ps13_kpre)
-    name = 'PSE'
-    name += str(nbtons)
-    assert(t1_costtype != pse.CTYPE_UNDEF)
-    name += '_1'
-    name += ctype_tostring(t1_costtype)
-    name += 'T' if t1_tonal  else 'M'
-    name += 'D' if t1_det  else 'E'            
-    if t2_costtype != pse.CTYPE_UNDEF:
-        name += '_2'
-        name += ctype_tostring(t2_costtype)
-        name += 'T' if t2_tonal  else 'M'
-        name += 'D' if t2_det  else 'E'            
-    return name
+        return 'PS13_'+str(ps13_kpre)+'_'+str(ps13_kpost)
+    else:
+        name = 'PSE'
+        name += str(nbtons)
+        assert(t1_costtype != pse.CTYPE_UNDEF)
+        if t2_costtype == pse.CTYPE_UNDEF:
+            name += '1_'
+        else:
+            name += '2_'
+        name += ctype_tostring(t1_costtype)
+        name += '_T' if t1_tonal  else '_M'
+        name += 'D' if t1_det  else 'E'            
+        if t2_costtype != pse.CTYPE_UNDEF:
+            name += '_'
+            name += ctype_tostring(t2_costtype)
+            name += '_T' if t2_tonal  else '_M'
+            name += 'D' if t2_det  else 'E'            
+        return name
 
 # spelling environment: wrapper for a C++ speller (pse.PS13 or pse.Speller)
 class Spellew:
@@ -873,106 +879,175 @@ class Spellew:
                  t2_costtype=pse.CTYPE_UNDEF, # 2d table 
                  t2_tonal=True, 
                  t2_det=True, 
-                 mask=False, # compute a 1st list if canditate globals 
-                             # (after 1st table) 
-                             # for optim comp. grid (mask) and 2d table
-                 global1=0,  # % of error for 1st list candidate globals
-                 global2=0,  # % of error for 1st list candidate globals
+                 global1=100, # if < 100, compute an intermediate list candidate globals,
+                              # with the given percentagle of error,
+                              # after building the 1st table, 
+                              # for optimizing the computation of the grid (mask) and 2d table
+                              # if = 100, do not compute this list of canditate globals.
+                 global2=0,   # percentagle of error for computing the final list candidate globals
                  debug=False):      # mark flag ?    
         if (ps13_kpre > 0 and ps13_kpost > 0):
-            self._algo_name = "PS13"
+            self._algo_name = 'PS13'
             self._algo_params = str(ps13_kpre) + '_' + str(ps13_kpre)
             self._speller = pse.PS13()
             self._speller.set_Kpre(ps13_kpre)
             self._speller.set_Kpost(ps13_kpost)
         else:
             assert(t1_costtype != pse.CTYPE_UNDEF)
-            self._algo_name = "PS14"
+            self._algo_name = 'PSE'
             self._algo_params = str(nbtons)
             assert(t1_costtype != pse.CTYPE_UNDEF)
-            self._algo_params += '_1'
+            if t2_costtype == pse.CTYPE_UNDEF:                
+                self._algo_params += '_1_'
+            else:
+                self._algo_params += '_2_'
             self._algo_params += ctype_tostring(t1_costtype)
-            self._algo_params += 'T' if t1_tonal  else 'M'
+            self._algo_params += '_T' if t1_tonal  else '_M'
             self._algo_params += 'D' if t1_det  else 'E'            
             if t2_costtype != pse.CTYPE_UNDEF:
-                self._algo_params += '_2'
+                self._algo_params += '_'
                 self._algo_params += ctype_tostring(t2_costtype)
-                self._algo_params += 'T' if t2_tonal  else 'M'
+                self._algo_params += '_T' if t2_tonal  else '_M'
                 self._algo_params += 'D' if t2_det  else 'E'  
-            self._speller = pse.Speller()
-        # debug flag of speller
+            self._speller = pse.Speller() # is a spellerenum nbtons = 0
+        # set debug flag of speller
         self._speller.debug(debug)
         # build the ton index for speller
         add_tons(nbtons, self._speller)         
-        # parameters of spelling algo PSE
+        # parameters for the spelling algo PSE
         self._ct1     = t1_costtype
         self._tonal1  = t1_tonal
         self._det1    = t1_det
         self._ct2     = t2_costtype
         self._tonal2  = t2_tonal
         self._det2    = t2_det
-        self._mask    = mask
+        assert(global1 >= 0)
+        assert(global1 <= 100)
         self._global1 = global1
+        assert(global2 >= 0)
+        assert(global2 <= 100)
         self._global2 = global2        
         # self._spelled = False
+        
+    def mask(self):
+       """an intermediate list candidate global is computed"""
+       """after building the 1st table, for optimizing the computation of the grid (mask) and 2d table"""
+       return self._global1 == 100 
+       
+    def set_global(self, step, percent):
+        """PSE: set the percentage of approximation for computing"""
+        """the intermediate list of candidate globals (before second step) if step = 1"""
+        """the final list of candidate globals if step = 2"""
+        if (step == 1):
+            self._global1 = percent
+        elif (step == 2):
+            self._global2 = percent
 
+    def set_costtype(self, step, ct):
+        """PSE: set the cost type for the given step"""
+        if (step == 1):
+            self._ct1 = ct
+        elif (step == 2):
+            self._ct2 = ct
+
+    def set_startstate(self, step, tonal):
+        """PSE: set the flag tonal/modal for initial state for the given step"""
+        if (step == 1):
+            self._tonal1 = tonal
+        elif (step == 2):
+            self._tonal2 = tonal
+
+    def set_deterministic(self, step, det):
+        """PSE: set the flag deterministic/exhaustive for the given step"""
+        if (step == 1):
+            self._det1 = det
+        elif (step == 2):
+            self._det2 = det
+            
+    def set_debug(self, debug):
+        """set the debug flag of speller"""
+        self._speller.debug(debug)
+            
     def new_dir(self):
-        """create unique dir name for recording the results of evaluation with this algorithm"""
+        """create unique dir name for recording the results of evaluation"""
+        """with the algorithm specified"""
         """"PS13 or PSE nbtons _tablenb costtype1 Tonal or Modal Deterministic of Exhaustive"""
         timestamp = datetime.today().strftime('%Y%m%d-%H%M')
         return self._algo_name + '_' + self._algo_params + '_' + timestamp
         
+    def algoname(self):
+        return self._algo_name + '_' + self._algo_params
+    
     def get_speller(self):
         return self._speller
+    
+    def diff(self, notes):
+        """compute the diff list between original and spelled notes"""
+        # assert(self._spelled)
+        return diff(notes, self._speller) 
+                        
+    def spell_PS13(self, stat):
+        """spell with algo PS13"""
+        assert(self._algo_name == 'PS13')
+        stat.start_timer(1) # single timer
+        self._speller.spell()
+        stat.stop_timer(1)
 
+    def spell_PSE(self, stat):
+        """spell with algo PSE"""
+        assert(self._algo_name == 'PSE')
+        # modal step: compute the first spelling table 
+        assert(self._ct1 != pse.CTYPE_UNDEF)
+        print('algo PSE compute Table 1', 
+              'cost type1:', self._ct1,
+              'tonal1:', self._tonal1,
+              'deterministic1:', self._det1, end=' ', flush=True)
+        stat.start_timer(1)
+        self._speller.eval_table(self._ct1, self._tonal1, self._det1)
+        stat.stop_timer(1)
+        print("{0:0.2f}".format(stat.get_timer(1)), 'ms', end='\n', flush=True)
+        # compute the subarray of tons selected as candidate global tonality
+        # with a tolerance distance 
+        if self.mask():
+            assert(self._global1 >= 0)
+            assert(self._global1 < 100)
+            print('evaluate first list of global candidates', self._global1, '%', flush=True)
+            self._speller.eval_global(self._global1, False)
+            print(self._speller.globals(), 'candidates global from 1st table', flush=True)                
+        # construct the grid of local tonalities
+        print('algo PSE compute Grid', end=' ', flush=True)
+        stat.start_timer(2)
+        self._speller.eval_grid()
+        stat.stop_timer(2)                
+        print("{0:0.2f}".format(stat.get_timer(2)), 'ms', end='\n', flush=True)
+        print('algo PSE compute Table 2', 
+              'cost type2:', self._ct2,
+              'tonal2:', self._tonal2,
+              'deterministic2:', self._det2, end=' ', flush=True)
+        # tonal step: compute the second spelling table 
+        if self._ct2 != pse.CTYPE_UNDEF:
+            stat.start_timer(3)
+            self._speller.reval_table(self._ct2, self._tonal2, self._det2)
+            stat.stop_timer(3)
+            print("{0:0.2f}".format(stat.get_timer(3)), 'ms', end='\n', flush=True)
+            
     def spell(self, notes, stat):
         """run spell checking algo"""
         self._speller.reset(0, 0)
         # feed speller with input notes
         for (n, b, s) in notes:   # note, bar number, simultaneous flag
             self._speller.add(midi=n.pitch.midi, bar=b, simultaneous=s)
-        if self._algo_name == "PS13":
-            stat.start_timer(1) # single timer
-            self._speller.spell()
-            stat.stop_timer(1)
+        # spell with algo specified
+        if self._algo_name == 'PS13':
+            self.spell_PS13(stat)
         else:
-            assert(self._algo_name == "PS14")
-            assert(self._ct1 != pse.CTYPE_UNDEF)
-            print('algo PS14 compute Table 1', 
-                  'cost type1:', self._ct1,
-                  'tonal1:', self._tonal1,
-                  'deterministic1:', self._det1, end=' ', flush=True)
-            stat.start_timer(1)
-            self._speller.eval_table(self._ct1, self._tonal1, self._det1)
-            stat.stop_timer(1)
-            print("{0:0.2f}".format(stat.get_timer(1)), 'ms', end='\n', flush=True)
-            if self._ct2 != pse.CTYPE_UNDEF:
-                if self._mask:
-                    print('evaluate first list of global candidates', self._global1, '%', flush=True)
-                    self._speller.eval_global(self._global1, False)
-                    print(self._speller.globals(), 'candidates global from 1st table', flush=True)
-                print('algo PSE compute Grid', end=' ', flush=True)
-                stat.start_timer(2)
-                self._speller.eval_grid()
-                stat.stop_timer(2)                
-                print("{0:0.2f}".format(stat.get_timer(2)), 'ms', end='\n', flush=True)
-                print('algo PSE compute Table 2', 
-                      'cost type2:', self._ct2,
-                      'tonal2:', self._tonal2,
-                      'deterministic2:', self._det2, end=' ', flush=True)
-                stat.start_timer(3)
-                self._speller.reval_table(self._ct2, self._tonal2, self._det2)
-                stat.stop_timer(3)
-                print("{0:0.2f}".format(stat.get_timer(3)), 'ms', end='\n', flush=True)
+            assert(self._algo_name == 'PSE')
+            self.spell_PSE(stat)
         #self._spelled = True
-    
-    def diff(self, notes):
-        """compute the diff list between original and spelled notes"""
-        # assert(self._spelled)
-        return diff(notes, self._speller) 
-        
+
     def get_global(self, k0):
         """extract estimated global tonality from speller"""
+        """and compare to the reference k0"""
         # assert(self._spelled)
         sp = self._speller
         goodgtindex=0
@@ -1007,7 +1082,7 @@ class Spellew:
                 return (sp.global_ton(goodgtindex), sp.iglobal_ton(goodgtindex))
             else:
                 return (sp.global_ton(0), sp.iglobal_ton(0))        
-                
+
     def rename(self, i):
         # assert(self._spelled)
         assert(i < self._speller.nb_tons())
@@ -1025,29 +1100,27 @@ class Spellew:
     def anote_global_part(self, part, gt):
         # assert(self._spelled)
         anote_global_part(part, self._speller, gt)              
-        
+    
     def eval_part(self, part, stats, mark=False):
         """evaluate spelling for one part in a score and mark errors"""        
         assert(stats is not None)
-        #if stat == None:
-        #    stat=Stats()
-        # extract key and notes from part
+        # extract real key and notes from part
         k0 = get_key(part)
         ln = extract_part(part)  # input note list
         assert(count_notes(part) == len(ln)) # print('ERROR',  count_notes(part), len(ln))
         print(len(ln), 'notes,', count_measures(part), 'bars,', end=' ')
-        # spell        
+        # spell with algo
         print('spelling with', self._algo_name+'_'+self._algo_params, end='\n', flush=True)
         self.spell(ln, stats)   #print('spell finished', end='\n', flush=True)   
-        # extract estimated global ton from speller
+        # extract the estimated global ton from speller
         print('evaluate final list of global tonalities', self._global2, '%', flush=True)
-        self._speller.eval_global(self._global2, self._mask) 
+        self._speller.eval_global(self._global2) # compute the subarray of globals from scratch
         (gt, i) = self.get_global(k0)
         print('pse eval_part: global selected:', i, flush=True)
         # apply the spelling in the row of the estimated global
-        print('RENAME')
-        self._speller.rename(i)
-        # eval estimation of global key
+        print('rename with the spelling computed')
+        self.rename(i)
+        # eval the estimation of global key
         if not gt.undef():
             if compare_key(k0, gt):
                 print('global ton: OK:', '(', m21_key(gt), 
@@ -1094,7 +1167,7 @@ class Spellew:
             print(title, composer, end=' ')
             part = lp[i]
             if (nbparts > 1):
-                print('part', i+1, '/', len(lp), end=' ', flush=True)
+                print('part', i+1, '/', nbparts, end=' ', flush=True)
             if (spellable(part)):
                 (k_gt, ton_est, nn, ld) = self.eval_part(part, stats, mark)
                 # add one row in stat table for each part
@@ -1111,7 +1184,7 @@ class Spellew:
     
 ###################################
 ##                               ##
-##   evaluation and feedback     ##
+##     evaluation feedback       ##
 ##                               ##
 ###################################
 
@@ -1150,6 +1223,7 @@ def write_score(score, output_path, name):
 # path to MuseScore command line
 _musescore = '/Applications/MuseScore 4.app/Contents/MacOS/mscore'
 
+
 def is_musicxml(p, filename):
     ''' the given filename in directory of path p is a musicxml'''
     pf = pf = Path(p, filename)
@@ -1157,6 +1231,7 @@ def is_musicxml(p, filename):
 
 def mk_pdf(p, filename):
     ''' make a pdf from the given musicxml filename, in directory of path p'''
+    global _musescore
     if not is_musicxml(p, filename):
         print('ERROR mk_pdf: ', filename, 'not a musicxml file')
         return
