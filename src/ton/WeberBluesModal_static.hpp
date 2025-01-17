@@ -33,7 +33,7 @@ class WeberBluesModal_static
 public:
 
     /// number of tonalities considered.
-    static const size_t NB_TONS = 165;
+    static const size_t NB_TONS; 
     
     /// Weber distance between two tonalities,
     /// extracted from the static distance matrix WEBER_DIST

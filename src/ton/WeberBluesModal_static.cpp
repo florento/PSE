@@ -9,15 +9,16 @@
 
 namespace pse {
 
-// number of tonalities considered.
-// static const size_t WeberModal_static::NB_TONS = 165;
+
+/// static , number of tonalities considered.
+const size_t WeberBluesModal_static::NB_TONS = 165;
 
 
 // static
 int WeberBluesModal_static::dist(const Ton& ton1, const Ton& ton2)
 {
     size_t i1 = index(ton1);
-    // DEBUG("{} in NB_TONS={}", i1, NB_TONS);
+    // DEBUG("Ton {} in NB_TONS={}", i1, NB_TONS);
     
     assert(i1 < WeberBluesModal_static::NB_TONS);
     size_t i2 = index(ton2);

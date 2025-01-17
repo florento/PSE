@@ -37,7 +37,7 @@ public:
     static const int UNDEF_DIST; // = -1;
 
     /// number of tonalities considered.
-    static const size_t NB_TONS = 30;
+    static const size_t NB_TONS;
     
     /// Weber distance between two tonalities,
     /// extracted from the static distance matrix WEBER_DIST

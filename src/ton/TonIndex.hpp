@@ -48,6 +48,7 @@ public:
     /// @param nb default list of tonalities.
     /// currently supported:
     /// - 0  : empty list. tons can be added with add()
+    /// - 24 : major and harmonic minor, KS between -5 and 6.
     /// - 25 : tonalities of Bach's Wohltemperierte Clavier
     ///   major      KS -4 to 7 : C, C#, D, Eb, E, F, F#, G, Ab, A, Bb, B
     ///   minor harm KS -6 to 6 : C, C#, D, Eb, D#, E, F, F#, G, G#, A, Bb, B
@@ -212,21 +213,30 @@ private:
     /// @param n number of default list of tonalities.
     /// @see constructor TonIndex
     void init(size_t n);
-    
-    /// default array of 13 tonalities, ks between -6 and 6.
-    /// @param mode must not be ModeName::Undef.
-    /// @param global whether ton can be considered as a global tonality.
-    void init13(const ModeName& mode, bool global);
 
-    /// default array of 15 tonalities, ks between -7 and 7.
+    /// add to the array of tonalities the tons with ks between the given
+    /// bounds, and of given mode.
+    /// @param ksmin lower bound (included) of ks added.
+    /// @param ksmax upper bound (included) of ks added.
     /// @param mode must not be ModeName::Undef.
     /// @param global whether ton can be considered as a global tonality.
-    void init15(const ModeName& mode, bool global);
+    void init(int ksmin, int ksmax, const ModeName& mode, bool global);
+
+    // default array of 13 tonalities, ks between -6 and 6.
+    // @param mode must not be ModeName::Undef.
+    // @param global whether ton can be considered as a global tonality.
+    // void init13(const ModeName& mode, bool global);
+
+    // default array of 15 tonalities, ks between -7 and 7.
+    // @param mode must not be ModeName::Undef.
+    // @param global whether ton can be considered as a global tonality.
+    // void init15(const ModeName& mode, bool global);
     
     /// array of tonalities of Bach's Wohltemperierte Clavier.
     /// major          KS -4 to 7 : C, C#, D, Eb, E, F, F#, G, Ab, A, Bb, B
     /// minor harmonic KS -6 to 6 : C, C#, D, Eb, D#, E, F, F#, G, G#, A, Bb, B
     void init25();
+    
     void initmodal();
     
     /// initialize the table _rankWeber of rank wrt Weber distance.

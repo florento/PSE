@@ -57,7 +57,7 @@ private: // data
     // static const size_t NB_TONS = 165;
     
     /// internal alias
-    static const size_t WMS_NBTONS = WeberBluesModal_static::NB_TONS;
+    static const size_t WMS_NBTONS = 135; // WeberModal_static::NB_TONS;
     
     /// internal alias
     static const int WS_UNDEFDIST; //  = Weber_static::UNDEF_DIST;

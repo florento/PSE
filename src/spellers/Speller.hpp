@@ -438,14 +438,14 @@ class SpellerEnum : public Speller
 public:
     
     /// speller with raw enumerator (initially empty) of notes to spell.
+    /// @param nbtons use default list of tonalities (default: empty).
     /// @param algo name of the algorithm implemented in speller class.
     /// obsolete. not used anymore.
-    /// @param nbtons use default list of tonalities (default: empty).
     /// @param dflag debug mode.
     /// @see TonIndex for supported values for nbTons.
     /// @see PSTable
     /// @warning the enumerator must be feeded with add()
-    SpellerEnum(size_t nbtons=0,
+    SpellerEnum(size_t nbtons,
                 const Algo& algo=Algo::Undef, // TBR
                 bool dflag=false);
 

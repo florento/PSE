@@ -10,10 +10,11 @@
 namespace pse {
 
 
-// static const size_t Weber_static::NB_TONS = 30;
-
 // static 
 const int Weber_static::UNDEF_DIST = -1;
+
+// static
+const size_t Weber_static::NB_TONS = 30;
 
 
 // static

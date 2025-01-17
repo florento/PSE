@@ -76,6 +76,8 @@ PYBIND11_MODULE(pse, m)
         .value("Mixolydian", pse::ModeName::Mixolydian, "Mixolydian")
         .value("Aeolian", pse::ModeName::Aeolian, "Aeolian")
         .value("Locrian", pse::ModeName::Locrian, "Locrian")
+        .value("MajorBlues", pse::ModeName::MajorBlues, "Major Blues")
+        .value("MinorBlues", pse::ModeName::MinorBlues, "Minor Blues")
         .export_values();
     
     py::enum_<enum pse::CostType>(m, "CostType", "Cost Type")
@@ -99,7 +101,7 @@ PYBIND11_MODULE(pse, m)
         .def("undef", &pse::Ton::undef, "ton is undef");
   
     py::class_<pse::SpellerEnum>(m, "Speller")
-        .def(py::init<>(), "Modular Spell Checker")
+        .def(py::init<size_t>(), "Modular Spell Checker, initialized with nb of tons")
         .def("debug", &pse::SpellerEnum::debug, "set debug mode", py::arg("on"))
         .def("size", &pse::SpellerEnum::size, "number of notes to spell")
         .def("reset", &pse::SpellerEnum::reset, "clear the list of notes to spell")
@@ -128,7 +130,8 @@ PYBIND11_MODULE(pse, m)
         .def("reval_table", &pse::SpellerEnum::revalTable, "reconstruct the spelling table")
         .def("eval_grid", &pse::SpellerEnum::evalGrid, "construct the grid of local tons")
         .def("eval_global", &pse::SpellerEnum::evalGlobal,
-             "compute the subarray of tons selected as candidate global tonality")
+             "compute the subarray of tons selected as candidate global tonality",
+             py::arg("d") = 0, py::arg("refine") = false)
         .def("rename", &pse::SpellerEnum::rename, "rename input notes")
         .def("rewrite_passing", &pse::SpellerEnum::rewritePassing, "rewrite passing notes")
         .def("name",  &pse::SpellerEnum::name, "estimated name of note",

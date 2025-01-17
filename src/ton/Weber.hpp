@@ -72,7 +72,7 @@ public:
 private: // data
   
     /// internal alias
-    static const size_t WS_NBTONS = Weber_static::NB_TONS;
+    static const size_t WS_NBTONS = 30; // Weber_static::NB_TONS;
     
     /// internal alias
     static const int WS_UNDEFDIST; //  = Weber_static::UNDEF_DIST;

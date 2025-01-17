@@ -132,21 +132,21 @@ int main(int argc, const char* argv[])
     setVerbosityLevel(5);
     spdlog_setPattern();
 
-    pse::WeberModal godfried;
-    godfried.dump();
-    return 0;
+    // pse::WeberModal godfried;
+    // godfried.dump();
+    // return 0;
 
-    pse::SpellerEnum sp(26, pse::Algo::Undef, true);
+    pse::SpellerEnum sp(30, pse::Algo::Undef, true); // debug flag
     //pse::PS13 sp;
 
     // issue7(sp);
     // BWV_858prelude(sp);
     // BWV_857fugue(sp);
     // BWV_864fugue(sp);
-    LG101(sp);
+    // LG101(sp);
     // LG461(sp);
     // Waldstein(sp);
-    //Airegin(sp);
+    Airegin(sp);
 
     std::cout << "spelling " << sp.size() << " notes" << std::endl;
     int ks = spellKE(sp,

@@ -289,64 +289,70 @@ void TonIndex::init(size_t n)
             // close() must be called afterwards
             break;
 
+        case 24:
+            init(-5, 6, ModeName::Major, true); // global flag
+            init(-5, 6, ModeName::Minor, true);
+            close(); // tonal Weber
+            break;
+
         case 25:
             init25();
             close(); // tonal Weber
             break;
 
         case 26:
-            init13(ModeName::Major, true); // global flag
-            init13(ModeName::Minor, true);
+            init(-6, 6, ModeName::Major, true); // global flag
+            init(-6, 6, ModeName::Minor, true);
             close(); // tonal Weber
             break;
 
         case 30:
-            init15(ModeName::Major, true);
-            init15(ModeName::Minor, true);
+            init(-7, 7, ModeName::Major, true); // global flag
+            init(-7, 7, ModeName::Minor, true);
             close(); // tonal Weber
             break;
 
         case 104:
             _WeberTonal = false;
             // init13(ModeName::Major);
-            init13(ModeName::Minor, true);
-            init13(ModeName::Ionian, true);
-            init13(ModeName::Dorian, false);
-            init13(ModeName::Phrygian, false);
-            init13(ModeName::Lydian, false);
-            init13(ModeName::Mixolydian, false);
-            init13(ModeName::Aeolian, false);
-            init13(ModeName::Locrian, false);
+            init(-6, 6, ModeName::Minor, true);
+            init(-6, 6, ModeName::Ionian, true);
+            init(-6, 6, ModeName::Dorian, false);
+            init(-6, 6, ModeName::Phrygian, false);
+            init(-6, 6, ModeName::Lydian, false);
+            init(-6, 6, ModeName::Mixolydian, false);
+            init(-6, 6, ModeName::Aeolian, false);
+            init(-6, 6, ModeName::Locrian, false);
             close(); // modal Weber
             break;
             
         case 135:
             _WeberTonal = false;
-            init15(ModeName::Major, true); // Ionian
-            init15(ModeName::Minor, false);
-            init15(ModeName::MinorMel, false);
-            init15(ModeName::Dorian, false);
-            init15(ModeName::Phrygian, false);
-            init15(ModeName::Lydian, false);
-            init15(ModeName::Mixolydian, false);
-            init15(ModeName::Aeolian, false);
-            init15(ModeName::Locrian, false);
+            init(-7, 7, ModeName::Major, true); // Ionian
+            init(-7, 7, ModeName::Minor, false);
+            init(-7, 7, ModeName::MinorMel, false);
+            init(-7, 7, ModeName::Dorian, false);
+            init(-7, 7, ModeName::Phrygian, false);
+            init(-7, 7, ModeName::Lydian, false);
+            init(-7, 7, ModeName::Mixolydian, false);
+            init(-7, 7, ModeName::Aeolian, false);
+            init(-7, 7, ModeName::Locrian, false);
             close(); // modal Weber
             break;
             
         case 165:
             _WeberTonal = false;
-            init15(ModeName::Major, true); // Ionian
-            init15(ModeName::Minor, false);
-            init15(ModeName::MinorMel, false);
-            init15(ModeName::Dorian, false);
-            init15(ModeName::Phrygian, false);
-            init15(ModeName::Lydian, false);
-            init15(ModeName::Mixolydian, false);
-            init15(ModeName::Aeolian, false);
-            init15(ModeName::Locrian, false);
-            init15(ModeName::MajorBlues, false);
-            init15(ModeName::MinorBlues, false);
+            init(-7, 7, ModeName::Major, true); // Ionian
+            init(-7, 7, ModeName::Minor, false);
+            init(-7, 7, ModeName::MinorMel, false);
+            init(-7, 7, ModeName::Dorian, false);
+            init(-7, 7, ModeName::Phrygian, false);
+            init(-7, 7, ModeName::Lydian, false);
+            init(-7, 7, ModeName::Mixolydian, false);
+            init(-7, 7, ModeName::Aeolian, false);
+            init(-7, 7, ModeName::Locrian, false);
+            init(-7, 7, ModeName::MajorBlues, false);
+            init(-7, 7, ModeName::MinorBlues, false);
             close(); // modal Weber with Blues
             break;
             
@@ -359,23 +365,33 @@ void TonIndex::init(size_t n)
 }
 
 
-void TonIndex::init13(const ModeName& mode, bool f_global)
+void TonIndex::init(int ksmin, int ksmax, const ModeName& mode, bool f_global)
 {
+    assert(-7 <= ksmin);
+    assert(ksmin <= 7); // chromatic Ton uses -7 to 10
+    assert(-7 <= ksmax);
+    assert(ksmax <= 7); // chromatic Ton uses -7 to 10
+    assert(ksmin <= ksmax);
     assert(mode != ModeName::Undef);
-    // bool f_global = global(mode);
-    for (int ks = -6; ks <= 6; ++ks)
+    for (int ks = ksmin; ks <= ksmax; ++ks)
         add(ks, mode, f_global);
 }
 
 
-void TonIndex::init15(const ModeName& mode, bool f_global)
-{
-    assert(mode != ModeName::Undef);
-    // bool f_global = global(mode);
-    add(-7, mode, f_global);
-    init13(mode, f_global);
-    add(7, mode, f_global);
-}
+//void TonIndex::init13(const ModeName& mode, bool f_global)
+//{
+//    assert(mode != ModeName::Undef);
+//    init(-6, 6, mode, f_global);
+//}
+
+
+//void TonIndex::init15(const ModeName& mode, bool f_global)
+//{
+//    assert(mode != ModeName::Undef);
+//     add(-7, mode, f_global);
+//     init13(mode, f_global);
+//     add(7, mode, f_global);
+//}
 
 
 void TonIndex::init25()
@@ -386,26 +402,19 @@ void TonIndex::init25()
         add(ks, ModeName::Minor, true);
 }
 
+
+// not used
 void TonIndex::initmodal()
 {
-    for (int ks = -7; ks <= 7; ++ks)
-        add(ks, ModeName::Major, true);
-    for (int ks = -7; ks <= 7; ++ks)
-        add(ks, ModeName::Minor, true);
-    for (int ks = -7; ks <= 7; ++ks)
-        add(ks, ModeName::MinorMel, true);
-    for (int ks = -7; ks <= 7; ++ks)
-        add(ks, ModeName::Dorian, true);
-    for (int ks = -7; ks <= 7; ++ks)
-        add(ks, ModeName::Phrygian, true);
-    for (int ks = -7; ks <= 7; ++ks)
-        add(ks, ModeName::Lydian, true);
-    for (int ks = -7; ks <= 7; ++ks)
-        add(ks, ModeName::Mixolydian, true);
-    for (int ks = -7; ks <= 7; ++ks)
-        add(ks, ModeName::Aeolian, true);
-    for (int ks = -7; ks <= 7; ++ks)
-        add(ks, ModeName::Locrian, true);
+    init(-7, 7, ModeName::Major, true);
+    init(-7, 7, ModeName::Minor, true);
+    init(-7, 7, ModeName::MinorMel, true);
+    init(-7, 7, ModeName::Dorian, true);
+    init(-7, 7, ModeName::Phrygian, true);
+    init(-7, 7, ModeName::Lydian, true);
+    init(-7, 7, ModeName::Mixolydian, true);
+    init(-7, 7, ModeName::Aeolian, true);
+    init(-7, 7, ModeName::Locrian, true);
 }
 
 

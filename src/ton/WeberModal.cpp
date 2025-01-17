@@ -15,6 +15,10 @@
 namespace pse {
 
 
+// static, private
+// const size_t WeberModal::WMS_NBTONS = WeberBluesModal_static::NB_TONS;
+
+
 // static
 const int WeberModal::WS_UNDEFDIST = Weber_static::UNDEF_DIST;
 
@@ -86,10 +90,10 @@ void WeberModal::init()
     // null distance for enhamonics (of same mode)
     for (size_t i = 0; i < WMS_NBTONS; i++)
     {
-        int i_fifths = (i%15)-7);
+        int i_fifths = (i%15)-7;
         for (size_t j = i+1; j < WMS_NBTONS; j++)
         {
-            int j_fifths = (j%15)-7);
+            int j_fifths = (j%15)-7;
             // i/15 = j/15   (floor)
             if (WeberBluesModal_static::mode(i) == WeberBluesModal_static::mode(j))
             {

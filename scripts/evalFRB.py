@@ -184,7 +184,7 @@ def eval_FRB(corpus='leads',
         print('\n', name, '\n')
         s = m21.converter.parse(file.as_posix())
 
-        (ls, lld) = sp.eval_score(score=s, stat=stat, 
+        (ls, lld) = sp.eval_score(score=s, stats=stat, 
                                   score_id=0, title=name, composer='', 
                                   output_path=output_path)
         if mflag and not ps.empty_difflist(lld):
@@ -242,7 +242,7 @@ def eval_FRBitem(name, corpus='leads',
     # ground truth ks, estimated ks, nnb of nontes and list of diff notes
     #(k_gt, gt_est, nn, ld) = ps.eval_part(part=part, stat=stat, nbtons=tons, 
     #                                      debug=dflag, mark=mflag)
-    (ls, lld) = sp.eval_score(score=score, stat=stat, 
+    (ls, lld) = sp.eval_score(score=score, stats=stat, 
                               score_id=0, title=name, composer='', 
                               output_path=opath)    
     stat.show()   

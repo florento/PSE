@@ -347,7 +347,7 @@ accids_t Ton::accidScale(int n, ModeName mode) const
 
         case ModeName::Chromatic:
             assert(-7 <= _sig && _sig <= 10);
-            return CHROMATIC[_sig][n];
+            return CHROMATIC[_sig+7][n];
 
         default:
         {

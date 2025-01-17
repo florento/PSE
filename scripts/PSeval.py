@@ -184,6 +184,8 @@ def add_ton(ks, mode, f_global, sp):
     sp.add_ton(ks, mode, f_global)
 
 
+# redundancy with the default values for PSE::Speller
+# not called in these cases
 def add_tons(tons, sp):
     """add predefined group of tonalities to a speller"""
     print('add_tons', tons, flush=True)
@@ -195,7 +197,7 @@ def add_tons(tons, sp):
         for k in range(-5, 7):            
             sp.add_ton(k, pse.Mode.Major, True) # can be global
             sp.add_ton(k, pse.Mode.Minor, True) 
-        sp.close_tons(True)   
+        sp.close_tons()   
     # Bach DWK
     elif tons == 25:    
         # maj key signature in [-4 .. 7]       
@@ -206,19 +208,19 @@ def add_tons(tons, sp):
         # C, C#, D, Eb, D#, E, F, F#, G, G#, A, Bb, B
         for k in range(-6, 7):           
             sp.add_ton(k, pse.Mode.Minor, True) 
-        sp.close_tons(True)    
+        sp.close_tons()    
     # major, minor, KS in [-6 .. 6]
     elif tons == 26:
         for k in range(-6, 7):            
             sp.add_ton(k, pse.Mode.Major, True)
             sp.add_ton(k, pse.Mode.Minor, True)
-        sp.close_tons(True)    
+        sp.close_tons()    
     # major, minor, KS in [-7 .. 7]
     elif tons == 30:
         for k in range(-7, 8):     
             sp.add_ton(k, pse.Mode.Major, True)
             sp.add_ton(k, pse.Mode.Minor, False)
-        sp.close_tons(True)    
+        sp.close_tons()    
     # major, minor, jazz antic modes, KS in [-6 .. 6] 
     elif tons == 104:
         for k in range(-6, 7):            
@@ -230,7 +232,7 @@ def add_tons(tons, sp):
             sp.add_ton(k, pse.Mode.Aeolian,    False)
             sp.add_ton(k, pse.Mode.Locrian,    False)
             sp.add_ton(k, pse.Mode.Minor,      True)
-        sp.close_tons(False)    
+        sp.close_tons()    
     # major, minor, jazz antic modes, KS in [-7 .. 7] 
     elif tons == 135:
         for k in range(-7, 8):      
@@ -243,7 +245,22 @@ def add_tons(tons, sp):
             sp.add_ton(k, pse.Mode.Mixolydian, False)
             sp.add_ton(k, pse.Mode.Aeolian,    False)
             sp.add_ton(k, pse.Mode.Locrian,    False)
-        sp.close_tons(False)    
+        sp.close_tons()    
+    # major, minor, jazz antic modes, blues, KS in [-7 .. 7] 
+    elif tons == 165:
+        for k in range(-7, 8):      
+            sp.add_ton(k, pse.Mode.Major,      True)
+            sp.add_ton(k, pse.Mode.Minor,      False)
+            sp.add_ton(k, pse.Mode.MinorMel,   False)
+            sp.add_ton(k, pse.Mode.Dorian,     False)
+            sp.add_ton(k, pse.Mode.Phrygian,   False)
+            sp.add_ton(k, pse.Mode.Lydian,     False)
+            sp.add_ton(k, pse.Mode.Mixolydian, False)
+            sp.add_ton(k, pse.Mode.Aeolian,    False)
+            sp.add_ton(k, pse.Mode.Locrian,    False)
+            sp.add_ton(k, pse.Mode.MajorBlues, False)
+            sp.add_ton(k, pse.Mode.MinorBlues, False)
+        sp.close_tons()       
     else:
         print('ERROR: unsupported number of tons', tons, flush=True)
         sp.close_tons()    
@@ -887,13 +904,16 @@ class Spellew:
                  global2=0,   # percentagle of error for computing the final list candidate globals
                  debug=False):      # mark flag ?    
         if (ps13_kpre > 0 and ps13_kpost > 0):
+            # algo name
             self._algo_name = 'PS13'
             self._algo_params = str(ps13_kpre) + '_' + str(ps13_kpre)
+            # create a speller object    
             self._speller = pse.PS13()
             self._speller.set_Kpre(ps13_kpre)
             self._speller.set_Kpost(ps13_kpost)
         else:
             assert(t1_costtype != pse.CTYPE_UNDEF)
+            # algo name
             self._algo_name = 'PSE'
             self._algo_params = str(nbtons)
             assert(t1_costtype != pse.CTYPE_UNDEF)
@@ -909,11 +929,18 @@ class Spellew:
                 self._algo_params += ctype_tostring(t2_costtype)
                 self._algo_params += '_T' if t2_tonal  else '_M'
                 self._algo_params += 'D' if t2_det  else 'E'  
-            self._speller = pse.Speller() # is a spellerenum nbtons = 0
+            # create a speller object    
+            if (nbtons not in [0, 24, 25, 26, 30, 194, 135, 165]):
+                print('speller: unsupported default number of tons', nbtons);
+                self._speller = pse.Speller(0) # is a spellerenum nbtons = 0
+            else:
+                self._speller = pse.Speller(nbtons) # is a spellerenum nbtons = 0
+        # construction of the ton index for speller (not default)
+        if (self._speller.nb_tons() == 0):
+            print('speller: addition of an ad hoc list of', nbtons, 'tons');           
+            add_tons(nbtons, self._speller)         
         # set debug flag of speller
         self._speller.debug(debug)
-        # build the ton index for speller
-        add_tons(nbtons, self._speller)         
         # parameters for the spelling algo PSE
         self._ct1     = t1_costtype
         self._tonal1  = t1_tonal
@@ -1110,7 +1137,7 @@ class Spellew:
         assert(count_notes(part) == len(ln)) # print('ERROR',  count_notes(part), len(ln))
         print(len(ln), 'notes,', count_measures(part), 'bars,', end=' ')
         # spell with algo
-        print('spelling with', self._algo_name+'_'+self._algo_params, end='\n', flush=True)
+        print('spelling with', self._algo_name+self._algo_params, end='\n', flush=True)
         self.spell(ln, stats)   #print('spell finished', end='\n', flush=True)   
         # extract the estimated global ton from speller
         print('evaluate final list of global tonalities', self._global2, '%', flush=True)
