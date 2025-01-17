@@ -110,10 +110,9 @@ def FRB_table(corpus='leads'):
     df = pandas.DataFrame(table)
     df.columns = ['name', 'KS','# bars', '# notes', '# accids', '# parts', '# keys']
     df['KS'] = df['KS'].map('{:n}'.format)
-    return df
+    return df  
 
-# df.fillna('NaN').to_csv(file, header=True, index=False)
-        
+
         
 #####################################
 ##                                 ##
@@ -219,7 +218,7 @@ def eval_FRBitem(name, corpus='leads',
                  output_dir='', 
                  filename='',             
                  dflag=True,      # debug flag
-                 mflag=True):     # mark flag
+                 mflag=False):    # mark flag
     assert(len(name) > 0)
     assert(corpus == 'leads' or corpus == 'piano')
     # initialize a speller

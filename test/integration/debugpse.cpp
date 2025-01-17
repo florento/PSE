@@ -30,50 +30,57 @@ using namespace pse;
 int spellKE(SpellerEnum& sp,
             enum CostType c1, bool tonal1, bool det1,
             enum CostType c2, bool tonal2, bool det2,
-            bool mask, int global1, int global2)
+            int global1, int global2)
 {
-    //clear the list of notes to spell
-    // _speller.reset(0);
-    
     // construct the first spelling table
     if (c1 == CostType::UNDEF)
     {
         ERROR("spellKE: cannot build first table (undef cost type)");
         return KeyFifth::UNDEF;
     }
+
+    // spelling algo in two steps
+    // clear the list of notes to spell
+    // _speller.reset(0);
+
+    // step1: construct the first spelling table
+    DEBUG("evalTable {} {} {}", c1, tonal1, det1);
     bool fstatus = sp.evalTable(c1, tonal1, det1);
     if (fstatus == false)
     {
-        ERROR("spellKE: failed to build first table");
+        ERROR("failed to build first table");
         return KeyFifth::UNDEF;
     }
     
-    // algo in two steps
-    // reconstruct the spelling table using the grid of local tonalities
-    if (c2 != pse::CostType::UNDEF)
+    // compute the subarray of tons selected as candidate global tonality
+    // tolerance distance 5%
+    assert(0 <= global1);
+    assert(global1 <= 100);
+    bool mask = (global1 < 100);
+    if (mask)
     {
-        // compute the subarray of tons selected as candidate global tonality
-        // tolerance distance 5%
-        if (mask)
-        {
-            assert(0 <= global1);
-            assert(global1 <= 100);
-            fstatus = sp.evalGlobal(global1, false);
-            if (fstatus == false)
-            {
-                ERROR("spellKE: failed to evaluate global tonalities");
-                return KeyFifth::UNDEF;
-            }
-        }
-        
-        // construct the grid of local tonalities
-        fstatus = sp.evalGrid();
+        DEBUG("evalGlobal (1) {}", global1);
+        fstatus = sp.evalGlobal(global1, false);
         if (fstatus == false)
         {
-            ERROR("spellKE: failed to evaluate grid of local tonalities");
+            ERROR("failed to evaluate global tonalities");
             return KeyFifth::UNDEF;
         }
-        
+    }
+    
+    // construct the grid of local tonalities
+    DEBUG("evalGrid");
+    fstatus = sp.evalGrid();
+    if (fstatus == false)
+    {
+        ERROR("failed to evaluate grid of local tonalities");
+        return KeyFifth::UNDEF;
+    }
+    
+    // step2: reconstruct the spelling table using the grid of local tonalities
+    if (c2 != pse::CostType::UNDEF)
+    {
+        DEBUG("revalTable {} {} {}", c2, tonal2, det2);
         fstatus = sp.revalTable(c2, tonal2, det2);
         if (fstatus == false)
         {
@@ -86,10 +93,11 @@ int spellKE(SpellerEnum& sp,
     // tolerance distance global2%
     assert(0 <= global2);
     assert(global2 <= 100);
+    DEBUG("evalGlobal (2) {}", global2);
     fstatus = sp.evalGlobal(global2, mask);
     if (fstatus == false)
     {
-        ERROR("spellKE: failed to evaluate global tonalities");
+        ERROR("failed to evaluate global tonalities");
         return KeyFifth::UNDEF;
     }
 
@@ -114,10 +122,12 @@ int spellKE(SpellerEnum& sp,
           ig, sp.ton(ig), sp.ton(ig).fifths());
     
     // rename input notes, using the spelling table computed
+    DEBUG("spellKE: renaming");
     assert(ig < sp.nbTons());
     sp.rename(ig);
 
     // rewrite passing notes
+    DEBUG("spellKE: rewriting");
     sp.rewritePassing();
       
     return sp.ton(ig).fifths();
@@ -139,6 +149,7 @@ int main(int argc, const char* argv[])
     pse::SpellerEnum sp(30, pse::Algo::Undef, true); // debug flag
     //pse::PS13 sp;
 
+    // feed the speller sp with notes in sample.cpp
     // issue7(sp);
     // BWV_858prelude(sp);
     // BWV_857fugue(sp);
@@ -146,16 +157,17 @@ int main(int argc, const char* argv[])
     // LG101(sp);
     // LG461(sp);
     // Waldstein(sp);
-    Airegin(sp);
+    //Airegin(sp);
+    Afternoon(sp);
 
     std::cout << "spelling " << sp.size() << " notes" << std::endl;
     int ks = spellKE(sp,
-                  //                        modal  deterministic
+                  // cost                   modal  deterministic
                      pse::CostType::ACCID,  false, true,
-                  //                        tonal  deterministic
+                  // cost                   tonal  deterministic
                      pse::CostType::ADplus, true, true,
-                  // mask   global1 global2
-                     true, 5,      5);
+                  // global1 global2
+                     5,      5);
 
     if (ks == KeyFifth::UNDEF)
     {

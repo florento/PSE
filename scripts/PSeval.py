@@ -454,10 +454,12 @@ def diff(ln, sp):
             i = i+1
         else:
             d = (i, sp.name(i), sp.accidental(i), sp.octave(i), sp.printed(i))
+            print('diff at note', i, d[1], d[2], 'vs', n)
+            ld.append(d)
             i = i+1
-            ld = ld+[d]
     return ld
 
+# not used
 def diffrec(ln, sp, i, ld):
     if (len(ln) == 0):
         return ld
@@ -959,7 +961,7 @@ class Spellew:
     def mask(self):
        """an intermediate list candidate global is computed"""
        """after building the 1st table, for optimizing the computation of the grid (mask) and 2d table"""
-       return self._global1 == 100 
+       return self._global1 < 100 
        
     def set_global(self, step, percent):
         """PSE: set the percentage of approximation for computing"""
@@ -1137,15 +1139,15 @@ class Spellew:
         assert(count_notes(part) == len(ln)) # print('ERROR',  count_notes(part), len(ln))
         print(len(ln), 'notes,', count_measures(part), 'bars,', end=' ')
         # spell with algo
-        print('spelling with', self._algo_name+self._algo_params, end='\n', flush=True)
+        print('spelling with', self._algo_name+self._algo_params, flush=True)
         self.spell(ln, stats)   #print('spell finished', end='\n', flush=True)   
         # extract the estimated global ton from speller
         print('evaluate final list of global tonalities', self._global2, '%', flush=True)
-        self._speller.eval_global(self._global2) # compute the subarray of globals from scratch
+        self._speller.eval_global(self._global2, self.mask()) # compute the subarray of globals from scratch
         (gt, i) = self.get_global(k0)
         print('pse eval_part: global selected:', i, flush=True)
         # apply the spelling in the row of the estimated global
-        print('rename with the spelling computed')
+        print('renaming with the spelling computed')
         self.rename(i)
         # eval the estimation of global key
         if not gt.undef():
@@ -1160,7 +1162,7 @@ class Spellew:
             print('ERROR eval_part: gt undef')
         # compute diff list between reference score and respell
         ld0 = diff(ln, self._speller) 
-        print('diff:', len(ld0), end='\n', flush=True)
+        print('diff before rewriting:', len(ld0), end='\n', flush=True)
         # rewrite the passing notes
         print('rewrite passing notes', end='\n', flush=True)
         self._speller.rewrite_passing()
