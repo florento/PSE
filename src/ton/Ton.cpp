@@ -16,6 +16,7 @@
 //#include "PSState.hpp"
 #include "Weber_static.hpp" // Weber distance
 #include "WeberModal_static.hpp" // Weber distance
+#include "WeberBluesModal_static.hpp" // Weber distance
 //#include "Scale.hpp" // dependency
 
 
@@ -640,7 +641,7 @@ unsigned int Ton::distWeberBluesModal(const Ton& rhs) const
            rhs._mode == ModeName::Locrian ||
            rhs._mode == ModeName::MajorBlues ||
            rhs._mode == ModeName::MinorBlues);
-    int res = WeberModal_static::dist(*this, rhs);
+    int res = WeberBluesModal_static::dist(*this, rhs);
     assert(res != Weber_static::UNDEF_DIST);
     return res;
 }

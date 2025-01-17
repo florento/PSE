@@ -146,7 +146,7 @@ int main(int argc, const char* argv[])
     // godfried.dump();
     // return 0;
 
-    pse::SpellerEnum sp(30, pse::Algo::Undef, true); // debug flag
+    pse::SpellerEnum sp(165, pse::Algo::Undef, true); // debug flag
     //pse::PS13 sp;
 
     // feed the speller sp with notes in sample.cpp
