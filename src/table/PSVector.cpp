@@ -228,7 +228,7 @@ void PSV::init_psbs(const Cost& seed, bool tonal)
             {
                 assert(j < _psbs.size());
                 assert(_psbs.at(j) != nullptr);
-                DEBUGU("init_psbs OPTIM {}={}", i, j);
+                // DEBUGU("init_psbs OPTIM {}={}", i, j);
                 _psbs[i] = _psbs[j]; // shared_ptr copy
             }
         }

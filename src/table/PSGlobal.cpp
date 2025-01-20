@@ -46,7 +46,9 @@ _debug(dflag)
 PSO::PSO(const PST& tab, double d, bool dflag):
 // first argument (full PSO) is the former set of global candidates
 PSO(PSO(tab.index(), dflag, true), tab, d, dflag)
-{ assert(d >= 0); }
+{
+    assert(d >= 0);
+}
 
 
 PSO::PSO(const TonIndex& id, double dflag, double full):
@@ -304,7 +306,7 @@ std::vector<bool> PSO::getMask() const
 }
 
 
-void PSO::setGlobal(size_t ig)
+void PSO::addGlobal(size_t ig)
 {
     assert(ig < _index.size());
     _globals.push_back(ig);

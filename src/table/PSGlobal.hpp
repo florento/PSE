@@ -29,8 +29,11 @@ namespace pse {
 
 class PST;
 
-/// Structure for the estimation, from a table,
-/// of a glabal tonality, or several candidates for glabal tonality.
+/// list of candidates for a glabal tonality,
+/// usable for the estimation of one glabal tonality or for filtering.
+/// It is associated to a TonIndex and the candidate global tonalities
+/// are indices in this TonIndex.
+/// @todo redundant with the flag global in the TonIndex ?
 class PSO
 {
     
@@ -53,7 +56,7 @@ public:
     // and operator< on cost.
     PSO(const PST& tab, double d=0, bool dflag=false); // const TonIndex& i
     
-    /// Refine a given store of global tonality candidates, given a new table.
+    /// Refine a given store of global tonality candidates, given a table.
     /// @param globals former list of global tonality conditates.
     /// @param tab table for the extraction of new global tonality condidates,
     /// amongsts the candidates of globals.
@@ -84,22 +87,22 @@ public:
     
     /// vector of tonalities associated to the estimated global tonalities
     /// contained in this structure.
-    /// it is the row-index of the table for the estimation
+    /// it is the row-index of the table for the estimation.
     inline const TonIndex& index() const { return _index; }
 
-    /// estimated candidate global tonality.
-    /// @param i candidate number, must be in 0..globalNb().
+    /// ith estimated candidate global tonality.
+    /// @param i candidate number, must be in 0..size().
     const Ton& global(size_t i = 0) const;
 
-    /// index of an estimated candidate global tonality.
-    /// @param i candidate number, must be in 0..globalNb().
+    /// index of the ith estimated candidate global tonality.
+    /// @param i candidate number, must be in 0..size().
     /// @return index in in 0..index.size() of the ith global candidate.
     // @warning iglobal(0) = TonIndex::FAILED if the evaluation failed.
     size_t iglobal(size_t i = 0) const;
     
     /// Enharmonic tonality of the candidate of the given index.
     /// It is added to this list of candidates if necessary.
-    /// @param i a candidate number, must be in 0..globalNb().
+    /// @param i a candidate number, must be in 0..size().
     /// @return the following index:
     /// - i if the candidate i has no enharmonics,
     /// - j != i if the candidate j is an enharmonic of the candidate i.
@@ -123,14 +126,12 @@ public:
     std::vector<size_t>::const_iterator cend() const;
 
     /// force a global tonality.
-    /// @param ig index of global tonality in ton index.
-    /// It must be in the index of tonalities used to create this structure
-    /// (i.e. in 0..globalNb()).
+    /// @param ig index of global tonality in the ton index.
     /// The given tonality index ig is added at the end of candidate list.
-    void setGlobal(size_t ig);
+    void addGlobal(size_t ig);
 
-    /// mask corresponding to the global tonality candidates in this structure.
-    /// @todo STUB: all true.
+    /// mask for the ton index corresponding to the global tonality
+    /// candidates in this structure (characteristic function).
     std::vector<bool> getMask() const;
     
     // empty the set of candidate global tonality.

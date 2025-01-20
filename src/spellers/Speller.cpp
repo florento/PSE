@@ -112,18 +112,18 @@ void Spelli::addTon(int ks, ModeName mode, bool global)
     _index->add(ks, mode, global);
 }
 
-void Spelli::WeberTonal()
-{
-    assert(_index);
-    _index->setTonal();
-}
+//void Spelli::WeberTonal()
+//{
+//    assert(_index);
+//    _index->setTonal();
+//}
 
 
-void Spelli::WeberModal()
-{
-    assert(_index);
-    _index->setModal();
-}
+//void Spelli::WeberModal()
+//{
+//    assert(_index);
+//    _index->setModal();
+//}
 
 
 void Spelli::closeTons()

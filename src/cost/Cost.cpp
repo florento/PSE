@@ -48,7 +48,7 @@ double distCost(const double lhs, const double rhs)
     if (d < 0)
     {
         assert(rhs > 0);
-        return (d/rhs)*100;
+        return (-d/rhs)*100;
     }
     else if (d > 0)
     {

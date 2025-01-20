@@ -63,23 +63,25 @@ public:
     /// @param i1 index of the note after the last note to read in enumerator.
     /// must be superior of equal to i0.
     /// the sequence is empty iff if i0 == i1.
-    /// @param bar number of bar corresp.  to this vector (column number in table).
-    /// @param tonal mode: tonal or modal, for the construction of initial state.
-    ///        default = modal.
+    /// @param bar number of bar corresp.  to this vector
+    /// (column number in table).
+    /// @param tonal mode: tonal or modal, for the construction
+    /// of initial state. default = modal.
     PSV(const Algo& a, const Cost& seed, const TonIndex& index,
         const PSEnum& e, size_t i0, size_t i1, size_t bar, bool tonal=false);
     
     /// rebuid a column with the same algo, index, and enumerator as the given
     /// column, and the new given seed and given column of local tonalities.
-    /// @param col PS vector whose algo, ton index, and enumerator will be copied.
+    /// @param col PS vector whose algo, ton index, and enumerator
+    /// will be copied.
     /// @param seed cost value of specialized type used to create a null cost
     /// of the same type.
     /// @param globals candidate global tonalities. They must refer to the same
     /// TonIndex as col and locals.
     /// @param locals column of local tonalities for tab. Its dimension must be
     /// the same as col.
-    /// @param tonal mode: tonal or modal, for the construction of initial state.
-    ///        default = tonal.
+    /// @param tonal mode: tonal or modal, for the construction
+    /// of initial state. default = tonal.
     PSV(const PSV& col, const Cost& seed,
         const PSO& globals, const std::vector<size_t>& locals,
         bool tonal=true);
@@ -90,7 +92,8 @@ public:
     /// of the same type.
     /// @param index array of tonalities. dimension of this vector.
     /// @param e an enumerator of notes for transitions of configs.
-    /// @param bar number of bar corresp.  to this vector (column number in table).
+    /// @param bar number of bar corresp.  to this vector
+    /// (column number in table).
     /// @warning the enumerator cannot be changed once the object created.
     /// @todo not used
     PSV(const Algo& a, const Cost& seed, const TonIndex& index,
@@ -105,7 +108,8 @@ public:
     /// @param i0 index of the first note to read in enumerator.
     /// The enumeration starts at i0 and stops
     /// when there are no more notes to read in e.
-    /// @param bar number of bar corresp.  to this vector (column number in table).
+    /// @param bar number of bar corresponding to this vector
+    /// (column number in table).
     /// @todo not used
     PSV(const Algo& a, const Cost& seed, const TonIndex& index,
         const PSEnum& e, size_t i0, size_t bar);
@@ -135,7 +139,8 @@ public:
     inline const TonIndex& index() const { return _index; }
 
     /// bag of target configs for best paths for the ton of given index.
-    /// @param i index in array of tonalities. must be smaller than index.size().
+    /// @param i index in array of tonalities.
+    /// must be smaller than index.size().
     /// @return the bag of configs at position i in this vector.
     const PSB& bag(size_t i) const;
     
@@ -193,7 +198,8 @@ public:
     
     /// rename all notes read to build this PS vector.
     /// local tonality is estimated if this was not done before.
-    /// @param i index in array of tonalities. must be smaller than index.size().
+    /// @param i index in array of tonalities.
+    /// must be smaller than index.size().
     /// @return whether renaming succeeded for this measure.
     bool rename(size_t i);
              
@@ -248,19 +254,22 @@ private: // data
 
 private: // convenience functions
 
-    /// fill the vector _psbs with PS Bags constructed with the notes enumerated.
+    /// fill the vector _psbs with PS Bags constructed with the notes
+    /// enumerated.
     /// @param seed cost value of specialized type used to create a null cost
     /// of the same type.
-    /// @param tonal mode: tonal or modal, for the construction of initial state.
+    /// @param tonal mode: tonal or modal, for the construction
+    /// of initial state.
     void init_psbs(const Cost& seed, bool tonal=false);
     
-    /// fill the vector _psbs with PS Bags constructed with the notes enumerated
-    /// and the given local tons.
+    /// fill the vector _psbs with PS Bags constructed with the notes
+    /// enumerated and the given local tons.
     /// @param seed cost value of specialized type used to create a null cost
     /// of the same type.
     /// @param globals candidate global tonalities.
     /// @param locals column of local tonalities for tab.
-    /// @param tonal mode: tonal or modal, for the construction of initial state.
+    /// @param tonal mode: tonal or modal, for the construction
+    /// of initial state.
     void init_psbs(const Cost& seed,
                    const PSO& globals, const std::vector<size_t>& locals,
                    bool tonal=true);

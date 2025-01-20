@@ -55,39 +55,6 @@ const Ton& TonIndex::ton(size_t i) const
 }
 
 
-size_t TonIndex::irepresentative(size_t i, bool tonal) const
-{
-    if (tonal)
-    {
-        assert(i < _repr_tonal.size());
-        assert(_repr_tonal.at(i) < _tons.size());
-        return _repr_tonal.at(i);
-    }
-    else
-    {
-        assert(i < _repr_modal.size());
-        assert(_repr_modal.at(i) < _tons.size());
-        return _repr_modal.at(i);
-    }
-}
-
-
-const Ton& TonIndex::representative(size_t i, bool tonal) const
-{
-    size_t j = irepresentative(i, tonal);
-    assert(j < _tons.size());
-    return _tons.at(j).first;
-}
-
-
-bool TonIndex::global(size_t i) const
-{
-    assert(i < _tons.size());
-    return _tons.at(i).second;
-
-}
-
-
 size_t TonIndex::find(const Ton& ton) const
 {
     for (size_t i = 0; i < _tons.size(); ++i)
@@ -111,6 +78,31 @@ size_t TonIndex::find(int ks, const ModeName& mode) const
     }
     // not found
     return UNDEF;
+}
+
+
+size_t TonIndex::irepresentative(size_t i, bool tonal) const
+{
+    if (tonal)
+    {
+        assert(i < _repr_tonal.size());
+        assert(_repr_tonal.at(i) < _tons.size());
+        return _repr_tonal.at(i);
+    }
+    else
+    {
+        assert(i < _repr_modal.size());
+        assert(_repr_modal.at(i) < _tons.size());
+        return _repr_modal.at(i);
+    }
+}
+
+
+const Ton& TonIndex::representative(size_t i, bool tonal) const
+{
+    size_t j = irepresentative(i, tonal);
+    assert(j < _tons.size());
+    return _tons.at(j).first;
 }
 
 
@@ -157,19 +149,6 @@ void TonIndex::reset(size_t n)
     _closed = false;
     _WeberTonal = true;
     init(n);
-}
-
-void TonIndex::setTonal()
-{
-    assert(!_closed);
-    _WeberTonal = true;
-}
-
-
-void TonIndex::setModal()
-{
-    assert(!_closed);
-    _WeberTonal = false;
 }
 
 
@@ -329,7 +308,7 @@ void TonIndex::init(size_t n)
         case 135:
             _WeberTonal = false;
             init(-7, 7, ModeName::Major, true); // Ionian
-            init(-7, 7, ModeName::Minor, false);
+            init(-7, 7, ModeName::Minor, true);
             init(-7, 7, ModeName::MinorMel, false);
             init(-7, 7, ModeName::Dorian, false);
             init(-7, 7, ModeName::Phrygian, false);
@@ -343,7 +322,7 @@ void TonIndex::init(size_t n)
         case 165:
             _WeberTonal = false;
             init(-7, 7, ModeName::Major, true); // Ionian
-            init(-7, 7, ModeName::Minor, false);
+            init(-7, 7, ModeName::Minor, true);
             init(-7, 7, ModeName::MinorMel, false);
             init(-7, 7, ModeName::Dorian, false);
             init(-7, 7, ModeName::Phrygian, false);
@@ -418,7 +397,45 @@ void TonIndex::initmodal()
 }
 
 
+/// @todo TBR
+//void TonIndex::setTonal()
+//{
+//    assert(!_closed);
+//    _WeberTonal = true;
+//}
+
+
+/// @todo TBR
+//void TonIndex::setModal()
+//{
+//    assert(!_closed);
+//    _WeberTonal = false;
+//}
+
+
+bool TonIndex::global(size_t i) const
+{
+    assert(i < _tons.size());
+    return _tons.at(i).second;
+}
+
+
+void TonIndex::setGlobal(size_t i)
+{
+    assert(i < _tons.size());
+    _tons.at(i).second = true;
+}
+
+
+void TonIndex::unsetGlobal(size_t i) 
+{
+    assert(i < _tons.size());
+    _tons.at(i).second = false;
+}
+
+
 // static
+/// @todo not used
 bool TonIndex::global(const ModeName& m)
 {
     switch (m)

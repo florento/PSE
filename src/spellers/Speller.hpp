@@ -101,31 +101,33 @@ public: // array of tonalities (Ton index)
     /// @warning with n=0, close() must be called aterwards.
     void addTon(int ks, ModeName mode = ModeName::Major, bool global=true);
 
-    /// for Python binder, same as addTon (overloaded).
-    inline void addTon3(int ks, ModeName mode, bool global)
-    { addTon(ks, mode, global); }
-    
     /// add a tonality for pitch spelling.
     /// @param ton the tonality to add to this speller.
     /// @param global whether ton can be considered as a global tonality.
     void addTon(const Ton& ton, bool global=true);
     
-    /// switch the array of tonalities to tonal mode
-    /// for the conmputation of Weber distance at closing.
-    /// @warning the array of tonalities array must not be closed.
-    void WeberTonal();
-
-    /// switch the array of tonalities to tonal mode
-    /// for the conmputation of Weber distance at closing.
-    /// @warning the array of tonalities array must not be closed.
-    void WeberModal();
-
+    /// for Python binder, same as addTon (overloaded).
+    inline void addTon3(int ks, ModeName mode, bool global)
+    { addTon(ks, mode, global); }
+    
     /// close the array of tonalities and finish its initlialization.
     /// No ton can be added after closure.
     void closeTons();
     
     /// the array of tonalities is closed.
     bool closedTons() const;
+
+    // switch the array of tonalities to tonal mode
+    // for the conmputation of Weber distance at closing.
+    // @warning the array of tonalities array must not be closed.
+    // @todo TBR obsolete
+    // void WeberTonal();
+
+    // switch the array of tonalities to tonal mode
+    // for the conmputation of Weber distance at closing.
+    // @warning the array of tonalities array must not be closed.
+    // @todo TBR obsolete
+    // void WeberModal();
        
 protected: // data
         
@@ -252,12 +254,15 @@ public: // spelling
     
     /// construct the first spelling table.
     /// @param ctype type of cost domain.
-    /// @param tonal tonal or modal construction of the initial state in each cell.
-    /// @param chromatic whether transitions for best-path comp. are deterministic.
+    /// @param tonal tonal or modal construction of the initial state
+    /// in each cell.
+    /// @param chromatic whether transitions for best-path computation
+    /// are deterministic.
     /// @return whether computation was succesfull.
     /// @warning if the table exists it is overwritten.
     /// @see sampleCost
-    /// @see PSState for the construction of the initial state and tonal/modal flag
+    /// @see PSState for the construction of the initial state
+    /// and tonal/modal flag.
     bool evalTable(CostType ctype, bool tonal=true, bool chromatic=false);
     
     /// construct a second spelling table, using
@@ -267,14 +272,16 @@ public: // spelling
     /// - the grid of local tonalities
     /// @param ctype type of cost domain.
     /// @param tonal tonal or modal construction of initial state in each cell.
-    /// @param chromatic whether transitions for best-path comp. are deterministic.
+    /// @param chromatic whether transitions for best-path computation
+    /// are deterministic.
     /// @return whether computation was succesfull.
     /// @warning the first spelling table must have been constructed.
     /// @warning the first spelling table is deleted.
-    /// @see PSState for the construction of the initial state and tonal/modal flag
+    /// @see PSState for the construction of the initial state
+    /// and tonal/modal flag
     bool revalTable(CostType ctype, bool tonal=true, bool chromatic=false);
     
-    /// construct the grid of local tons (1 ton for each initial ton and measure)
+    /// construct the grid of local tons (1 ton for each initial ton and measure) using
     /// - a spelling table.
     /// - the array of global candidates if it exists
     ///   (otherwise, we consider all tonalities).
@@ -297,7 +304,8 @@ public: // spelling
     /// @return whether computation was succesfull.
     virtual bool spell();
     
-    /// rename all notes read by this speller, according to a given global tonality.
+    /// rename all notes read by this speller,
+    /// according to a given global tonality.
     /// @param i index of tonality in the index.
     /// @return whether renaming succeded for all measures.
     virtual bool rename(size_t i);
@@ -310,7 +318,8 @@ public: // spelling
     
 public: // results feedback
     
-    /// estimated name for the note of given index, in 0..6 (0 is 'C', 6 is 'B').
+    /// estimated name for the note of given index,
+    /// in 0..6 (0 is 'C', 6 is 'B').
     /// @param i index of note in the enumerator of input notes.
     enum NoteName name(size_t i) const;
     
@@ -323,7 +332,8 @@ public: // results feedback
     int octave(size_t i) const;
     
     /// estimated print flag for the note of given index in the best path.
-    /// This flags says wether the accidental of the note must be printed or not.
+    /// This flags says wether the accidental of the note must be printed
+    /// or not.
     /// @param i index of note in the enumerator of input notes.
     bool printed(size_t i) const;
     
@@ -412,10 +422,11 @@ protected: // data
     // for 2 steps procedure.
     // PST* _table_post;
     
-    /// grid of local tons (1 ton for each initial ton and measure)
+    /// grid of local tons: 1 ton for each candidate initial ton and measure.
     PSG* _grid; // std::shared_ptr<PSG>
     
     /// sub-array of tons selected as candidate global tonality.
+    /// contains a ton index.
     PSO* _global;
     
 protected:
@@ -449,9 +460,7 @@ public:
                 const Algo& algo=Algo::Undef, // TBR
                 bool dflag=false);
 
-//    SpellEnum(const Algo& algo=Algo::Undef, size_t nbtons=0, bool dflag=false);
-    
-    
+ // SpellEnum(const Algo& algo=Algo::Undef, size_t nbtons=0, bool dflag=false);
     
     /// destructor
     virtual ~SpellerEnum();

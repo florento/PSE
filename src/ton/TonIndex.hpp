@@ -33,7 +33,8 @@ namespace pse {
 /// and can be accessed with TonIndex::ton(i).
 class TonIndex
 {
-public:
+    
+public: // constants
     
     /// maximal number of tonalities considered for Pitch Spelling.
     static const size_t MAXTONS;
@@ -43,7 +44,9 @@ public:
 
     /// a tonality whose estimation failed.
     static const size_t FAILED; // = MAXTONS+2;
-    
+
+public: // construction
+
     /// main constructor.
     /// @param nb default list of tonalities.
     /// currently supported:
@@ -63,56 +66,9 @@ public:
     
     /// destructor.
     virtual ~TonIndex();
+
+public: // incremental construction
     
-    /// number of tons in this array of tonalities.
-    size_t size() const;
-
-    /// there are no tons in this array of tonalities.
-    bool empty() const;
-
-    /// Tonality at the given index in this array of tonalities.
-    /// @param i an index in this array of tonalities.
-    /// must be smaller than size().
-    const Ton& ton(size_t i) const;
-
-    /// Tonal or modal representative Ton in the equivalence class of the Ton
-    /// af the given index in this array of tonalities.
-    /// @param i an index in this array of tonalities.
-    /// must be smaller than size().
-    /// @param tonal mode: tonal or modal, for the construction of initial state
-    /// (from the ton at i).
-    /// @return the first ton in this tonIntdex equivalent to i, wrt
-    const Ton& representative(size_t i, bool tonal) const;
-
-    /// Index of the tonal or modal representative Ton in the equivalence class
-    /// of the Ton af the given index in this array of tonalities.
-    /// @param i an index in this array of tonalities.
-    /// must be smaller than size().
-    /// @param tonal mode: tonal or modal, for the construction of initial state
-    /// (from the ton at i).
-    size_t irepresentative(size_t i, bool tonal) const;
-
-    /// Whether the tonality at the given index can be considered as global.
-    /// @param i an index in this array of tonalities.
-    /// must be smaller than size().
-    bool global(size_t i) const;
-
-    /// find the index of a ton in current array of tonalities.
-    /// @param ton a given tonality.
-    /// @return the index of ton or UNDEF if not found.
-    size_t find(const Ton& ton) const;
-        
-    /// Enharmonic tonality corresponding to the given index.
-    /// @param i an index in this array of tonalities.
-    /// must be smaller than size().
-    /// @return the following index:
-    /// - i if the tonality i in this array has no enharmonics,
-    /// - j != i if the tonality j in this array is an enharmonic of i.
-    /// - UNDEF if if the tonality i in this array has an enharmonic that is not
-    ///   present in this array.
-    /// - FAIL in case of error.
-    size_t enharmonic(size_t i) const;
-
     /// empty this index of tonalities, and rebuild it with
     /// the given default number of tonalities
     /// The array is unclosed.
@@ -135,14 +91,6 @@ public:
     /// @param global whether the tonality can be considered as global.
     /// @see Ton
     void add(int ks, const ModeName& mode = ModeName::Major, bool global=true);
-
-    /// switch to tonal mode for the conmputation of Weber distance.
-    /// @warning this array must not be closed.
-    void setTonal();
-
-    /// switch to modal mode for the computation of Weber distance.
-    /// @warning this array must not be closed.
-    void setModal();
     
     /// close this array of tonalities and finish initlialization.
     /// No ton can be added after closure.
@@ -151,6 +99,83 @@ public:
     /// this array of tonalities is closed (no ton can be added).
     bool closed() const;
 
+public: // access
+
+    /// number of tons in this array of tonalities.
+    size_t size() const;
+
+    /// there are no tons in this array of tonalities.
+    bool empty() const;
+
+    /// Tonality at the given index in this array of tonalities.
+    /// @param i an index in this array of tonalities.
+    /// must be smaller than size().
+    /// @see inverse of TonIndex::find.
+    const Ton& ton(size_t i) const;
+
+    /// find the index of a ton in current array of tonalities.
+    /// @param ton a given tonality.
+    /// @return the index of ton or UNDEF if not found.
+    /// @see inverse of TonIndex::ton.
+    size_t find(const Ton& ton) const;
+        
+    /// Tonal or modal representative Ton in the equivalence class of the Ton
+    /// af the given index in this array of tonalities.
+    /// @param i an index in this array of tonalities.
+    /// must be smaller than size().
+    /// @param tonal mode: tonal or modal, for the construction of initial state
+    /// (from the ton at i).
+    /// @return the first ton in this tonIntdex equivalent to i, wrt
+    const Ton& representative(size_t i, bool tonal) const;
+
+    /// Index of the tonal or modal representative Ton in the equivalence class
+    /// of the Ton af the given index in this array of tonalities.
+    /// @param i an index in this array of tonalities.
+    /// must be smaller than size().
+    /// @param tonal mode: tonal or modal, for the construction of initial state
+    /// (from the ton at i).
+    size_t irepresentative(size_t i, bool tonal) const;
+
+    /// Enharmonic tonality corresponding to the given index.
+    /// @param i an index in this array of tonalities.
+    /// must be smaller than size().
+    /// @return the following index:
+    /// - i if the tonality i in this array has no enharmonics,
+    /// - j != i if the tonality j in this array is an enharmonic of i.
+    /// - UNDEF if if the tonality i in this array has an enharmonic that is not
+    ///   present in this array.
+    /// - FAIL in case of error.
+    size_t enharmonic(size_t i) const;
+
+public: // sub array of tonalities that can be global
+    
+    /// Whether the tonality at the given index can be considered as global.
+    /// @param i an index in this array of tonalities.
+    /// must be smaller than size().
+    bool global(size_t i) const;
+
+    /// declare that the tonality at the given index can be global.
+    /// @param i an index in this array of tonalities.
+    /// must be smaller than size().
+    void setGlobal(size_t i);
+
+    /// declare that the tonality at the given index cannot be global.
+    /// @param i an index in this array of tonalities.
+    /// must be smaller than size().
+    void unsetGlobal(size_t i);
+
+    // switch to tonal mode for the conmputation of Weber distance.
+    // @warning this array must not be closed.
+    // @todo TBR
+    // void setTonal();
+
+    // switch to modal mode for the computation of Weber distance.
+    // @warning this array must not be closed.
+    // @todo TBR
+    // void setModal();
+
+public: // Weber distances
+    
     /// distance between the two tons of given indices,
     /// in the table of Weber, or WeberModal, or WeberBluesModal,
     /// avvording to the content of this array of tonalities.
@@ -200,7 +225,7 @@ private: // data
     /// this array of tonalities contains at least one ton with a blues mode.
     bool _WeberBluesModal;
       
-private:
+private: // construction and convenience
     
     /// find the index of a ton defined by given key signature and mode
     /// in the current array of tonalities.
@@ -244,6 +269,7 @@ private:
     
     /// a ton in the given mode can be considered global.
     /// for automatically constructed arrays.
+    /// @todo not used
     static bool global(const ModeName& mode);
     
     // static bool pcompare(const std::pair <size_t, unsigned int>& a,

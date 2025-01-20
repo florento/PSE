@@ -14,6 +14,9 @@ import evalDRB
 
 sp = ps.Spellew(nbtons=30, t1_costtype=ps.pse.CTYPE_ACCID, t1_tonal=False, t1_det=True, t2_costtype=ps.pse.CTYPE_ADplus, t2_tonal=True, t2_det=True, global1=5, global2=5, debug=True)
 name = 'Afternoon in Paris'
+
+name = 'Airegin'
+
 dataset = FRB_corpus('leads')
 file = dataset[name]
 score = m21.converter.parse(file.as_posix())

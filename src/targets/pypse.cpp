@@ -121,10 +121,10 @@ PYBIND11_MODULE(pse, m)
          py::arg("ks"),
          py::arg("mode"),
          py::arg("f_global"))
-        .def("Weber_tonal", &pse::SpellerEnum::WeberTonal,
-             "switch the array of tonalities to tonal mode for Weber dist.")
-        .def("Weber_modal", &pse::SpellerEnum::WeberModal,
-             "switch the array of tonalities to modal mode for Weber dist.")
+//        .def("Weber_tonal", &pse::SpellerEnum::WeberTonal,
+//             "switch the array of tonalities to tonal mode for Weber dist.")
+//        .def("Weber_modal", &pse::SpellerEnum::WeberModal,
+//             "switch the array of tonalities to modal mode for Weber dist.")
         .def("close_tons", &pse::SpellerEnum::closeTons, "close the array of tonalities")
         .def("eval_table", &pse::SpellerEnum::evalTable, "construct the spelling table")
         .def("reval_table", &pse::SpellerEnum::revalTable, "reconstruct the spelling table")
@@ -175,10 +175,10 @@ PYBIND11_MODULE(pse, m)
          py::arg("ks"),
          py::arg("mode"),
          py::arg("f_global"))
-        .def("set_tonal", &pse::PSE::WeberTonal,
-             "switch the array of tonalities to tonal mode for Weber dist.")
-        .def("set_modal", &pse::PSE::WeberModal,
-             "switch the array of tonalities to modal mode for Weber dist.")
+//        .def("set_tonal", &pse::PSE::WeberTonal,
+//             "switch the array of tonalities to tonal mode for Weber dist.")
+//        .def("set_modal", &pse::PSE::WeberModal,
+//             "switch the array of tonalities to modal mode for Weber dist.")
         .def("close_tons", &pse::PSE::closeTons, "close the array of tonalities")
         .def("set_global", &pse::PSE::setGlobal, "force global tonality")
         .def("spell", &pse::PSE::spell, "compute spelling")
@@ -264,10 +264,10 @@ PYBIND11_MODULE(pse, m)
              py::arg("ks"),
              py::arg("mode"), 
              py::arg("f_global"))
-        .def("set_tonal", &pse::PS14::WeberTonal,
-             "switch the array of tonalities to tonal mode for Weber dist.")
-        .def("set_modal", &pse::PS14::WeberModal,
-             "switch the array of tonalities to modal mode for Weber dist.")
+//        .def("set_tonal", &pse::PS14::WeberTonal,
+//             "switch the array of tonalities to tonal mode for Weber dist.")
+//        .def("set_modal", &pse::PS14::WeberModal,
+//             "switch the array of tonalities to modal mode for Weber dist.")
         .def("close_tons", &pse::PS14::closeTons, "close the array of tonalities")
         .def("set_global", &pse::PS14::setGlobal, "force global tonality")
         .def("spell", &pse::PS14::spell, "compute spelling")

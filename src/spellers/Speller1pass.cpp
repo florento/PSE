@@ -44,7 +44,7 @@ void Speller1Pass::setGlobal(size_t i, PSO* g) // std::shared_ptr<PSO>
         WARN("Speller1Pass: set global {}: there are already () global candidates",
              i, g->size());
     }
-    g->setGlobal(i);
+    g->addGlobal(i);
 }
  
 
