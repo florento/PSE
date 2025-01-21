@@ -50,7 +50,7 @@ _mscore = '/Applications/MuseScore 4.app/Contents/MacOS/mscore'
 #################################
 
 # corpus can be 'leads' or 'piano'
-def FRB_corpus(corpus):
+def FRB_corpus(corpus='leads'):
     """build a list of scores in a subdirectory of the FRB"""
     global _dataset_root
     global _score_suffix
@@ -122,30 +122,40 @@ def FRB_table(corpus='leads'):
 
 # list of opus names with issues 
 skip = ['Autumn in New York']
+       
 
 # PS13: kpre=33, kpost=23
 # PSE:  tons=135, 
 # PSE table1:  costtype1 = ps.CTYPE_ACCID | CTYPE_ACCIDlead | CTYPE_ADplus | CTYPE_ADlex
 # PSE table2:  costtype2 = ps.CTYPE_ACCID | CTYPE_ACCIDlead | CTYPE_ADplus | CTYPE_ADlex
 def eval_FRB(corpus='leads', 
-             kpre=0, kpost=0, # parameters specific to PS13
-             tons=0,          # PSE: nb of Tons in TonIndex
-             costtype1=ps.pse.CTYPE_UNDEF, 
-                              # PSE: table1, cost type. if set, PSE is used, otherwise, PS13 is used
-             tonal1=True,     # PSE: table1, tonal/modal flag for initial state
-             det1=True,       # PSE: table1, deterministic/exhaustive flag
-             global1=100,     # percentage approx for intermediate list of global candidate
-             costtype2=ps.pse.CTYPE_UNDEF, 
-                              # PSE: table2, cost type. if unset, skip table2
-             tonal2=True,     # PSE: table2, tonal/modal flag for initial state
-             det2=True,       # PSE: table2, deterministic/exhaustive flag 
-             global2=0,       # percentage approx for final list of global candidate
-             output_dir='', 
-             tablename='',    # filename of csv table         
-             dflag=True,      # debug flag
-             mflag=True):     # mark flag
-    """eval the whole FRG corpus with given algo and parameters"""
+             kpre=0, kpost=0, tons=0, 
+             costtype1=ps.pse.CTYPE_UNDEF, tonal1=True, det1=True, 
+             global1=100, 
+             costtype2=ps.pse.CTYPE_UNDEF, tonal2=True, det2=True,
+             global2=0,
+             output_dir='', tablename='',
+             dflag=True, mflag=True, csflag=False):
+    """eval the whole FRB corpus with given algo and parameters"""
+    """corpus: leads or piano (obsolete)"""
+    """kpre: parameter specific to PS13"""
+    """kpost: parameter specific to PS13"""
+    """tons: nb of Tons in TonIndex (PSE)"""
+    """costtype1: table1, cost type. if set, PSE is used, otherwise, PS13 is used"""
+    """tonal1: table1, tonal/modal flag for initial state (PSE)"""
+    """det1: table1, deterministic/exhaustive flag for transitions (PSE)"""
+    """global1: percentage approx for intermediate list of global candidate"""
+    """costtype2: table2, cost type. if unset, skip table2 (PSE)"""
+    """tonal2: table2, tonal/modal flag for initial state (PSE)"""
+    """det2: table2, deterministic/exhaustive flag for transitions (PSE)"""
+    """global2: percentage approx for final list of global candidate"""
+    """output_dir: where files will be written"""
+    """tablename: filename of csv table"""
+    """dflag: debug flag"""
+    """mflag: mark flag"""
+    """csflag: spell also chord symbols"""
     global _eval_root
+    global skip
     assert(corpus == 'leads' or corpus == 'piano')
     timestamp = datetime.today().strftime('%Y%m%d-%H%M')
     # initialize a speller
@@ -172,6 +182,7 @@ def eval_FRB(corpus='leads',
     dataset = FRB_corpus(corpus)
     names = sorted(list(dataset)) # list of index in dataset   
     print('\n', 'starting evaluation of FRB dataset -', len(names), 'entries\n')
+    i = 0 # score id
     for name in names:
         if (name in skip):
             print('\n', name, 'SKIP\n', flush=True)
@@ -182,10 +193,10 @@ def eval_FRB(corpus='leads',
         file = dataset[name]
         print('\n', name, '\n')
         s = m21.converter.parse(file.as_posix())
-
-        (ls, lld) = sp.eval_score(score=s, stats=stat, 
-                                  score_id=0, title=name, composer='', 
-                                  output_path=output_path)
+        (ls, lld) = sp.eval_score(score=s, stats=stat, score_id=i, 
+                                  title=name, composer='', 
+                                  output_path=output_path, chord_sym=csflag)
+        i += 1
         if mflag and not ps.empty_difflist(lld):
             write_score(s, output_path, name)
     # display and save evaluation table
@@ -196,29 +207,38 @@ def eval_FRB(corpus='leads',
     df = stat.get_dataframe() # create pandas dataframe
     df.pop('part') # del column part number (always 0)
     df.to_csv(output_path/(tablename+'.csv') , header=True, index=False)
-    stat.write_datasum(output_path/(tablename+'_sum.csv'))    
         
 # PS13: kpre=33, kpost=23
 # PSE:  tons=135, 
 # PSE table1:  costtype1 = ps.CTYPE_ACCID | CTYPE_ACCIDlead | CTYPE_ADplus | CTYPE_ADlex
 # PSE table2:  costtype2 = ps.CTYPE_ACCID | CTYPE_ACCIDlead | CTYPE_ADplus | CTYPE_ADlex
 def eval_FRBitem(name, corpus='leads', 
-                 kpre=0, kpost=0, # PS13 parameters
-                 tons=0,          # PSE: nb of Tons in TonIndex
-                 costtype1=ps.pse.CTYPE_UNDEF, 
-                                  # PSE: table1, cost type. if set, PSE is used, otherwise, PS13 is used
-                 tonal1=True,     # PSE: table1, tonal/modal flag for initial state
-                 det1=True,       # PSE: table1, deterministic/exhaustive flag
-                 global1=100,     # percentage approx for intermediate list of global candidate
-                 costtype2=ps.pse.CTYPE_UNDEF, 
-                                  # PSE: table2, cost type. if unset, skip table2
-                 tonal2=True,     # PSE: table2, tonal/modal flag for initial state
-                 det2=True,       # PSE: table2, deterministic/exhaustive flag 
-                 global2=0,       # percentage approx for final list of global candidate                 
-                 output_dir='', 
-                 filename='',             
-                 dflag=True,      # debug flag
-                 mflag=False):    # mark flag
+                 kpre=0, kpost=0, tons=0,          
+                 costtype1=ps.pse.CTYPE_UNDEF, tonal1=True, det1=True,       
+                 global1=100,     
+                 costtype2=ps.pse.CTYPE_UNDEF, tonal2=True, det2=True,      
+                 global2=0,       
+                 output_dir='', filename='',             
+                 dflag=True, mflag=False, csflag=False):   
+    """eval one item of the FRB corpus with given algo and parameters"""
+    """name: filename of item (prefix) in the dataset"""
+    """corpus: leads or piano (obsolete)"""
+    """kpre: parameter specific to PS13"""
+    """kpost: parameter specific to PS13"""
+    """tons: nb of Tons in TonIndex (PSE)"""
+    """costtype1: table1, cost type. if set, PSE is used, otherwise, PS13 is used"""
+    """tonal1: table1, tonal/modal flag for initial state (PSE)"""
+    """det1: table1, deterministic/exhaustive flag for transitions (PSE)"""
+    """global1: percentage approx for intermediate list of global candidate"""
+    """costtype2: table2, cost type. if unset, skip table2 (PSE)"""
+    """tonal2: table2, tonal/modal flag for initial state (PSE)"""
+    """det2: table2, deterministic/exhaustive flag for transitions (PSE)"""
+    """global2: percentage approx for final list of global candidate"""
+    """output_dir: where files will be written"""
+    """tablename: filename of csv table"""
+    """dflag: debug flag"""
+    """mflag: mark flag"""
+    """csflag: spell also chord symbols"""
     assert(len(name) > 0)
     assert(corpus == 'leads' or corpus == 'piano')
     # initialize a speller
@@ -241,9 +261,9 @@ def eval_FRBitem(name, corpus='leads',
     # ground truth ks, estimated ks, nnb of nontes and list of diff notes
     #(k_gt, gt_est, nn, ld) = ps.eval_part(part=part, stat=stat, nbtons=tons, 
     #                                      debug=dflag, mark=mflag)
-    (ls, lld) = sp.eval_score(score=score, stats=stat, 
-                              score_id=0, title=name, composer='', 
-                              output_path=opath)    
+    (ls, lld) = sp.eval_score(score=score, stats=stat, score_id=0, 
+                              title=name, composer='', output_path=opath, 
+                              chord_sym = csflag)    
     stat.show()   
     assert(len(lld) == 1) # always 1 unique part in LG dataset
     if mflag and len(lld[0]) > 0:
@@ -267,7 +287,6 @@ def write_score2(score, output_path, outname):
     score.write('musicxml', fp=xmlfile)
     # pdffile = dirname+'/'+outname+'.pdf'
     # os.system(_mscore + ' -o ' + pdffile + ' ' + xmlfile)
-
 
 # compute C++ add instructions for given score, for debugging with gdb
 def debug(name, corpus='leads'):    
@@ -294,6 +313,28 @@ def debug(name, corpus='leads'):
     #ps.add_tons(0, sp)
     #sp.add_notes(ln1[:61], sp)
     #sp.spell()
-    
 
-
+def atonals(file=''):
+    """list of opus of FRB without KS"""
+    dataset = FRB_corpus('leads')
+    names = sorted(list(dataset)) # list of index in dataset   
+    keys = []
+    for name in names:
+        if (not dataset.get(name)):
+            print('\n', name, "not found in dataset, skip")
+            continue
+        file = dataset[name]
+        score = m21.converter.parse(file.as_posix())
+        lp = score.getElementsByClass(m21.stream.Part)
+        ks = ps.get_key(lp[0])
+        if (ks):            
+            print(name, ks.sharps)
+            keys.append({'name': name, 'key': ks.sharps})
+        else:
+            print(name, 'NONE')           
+            keys.append({'name': name, 'key': None})
+    if file:
+        df_raw = pandas.DataFrame(keys)
+        df = df_raw.convert_dtypes() # convert to int even when there are NaN (which is float)
+        df.to_csv(file, header=True, index=True)
+    return keys

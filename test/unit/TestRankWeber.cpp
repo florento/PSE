@@ -11,7 +11,7 @@
 #include "Weber.hpp"
 
  
-TEST(TestRankWeber, ton1)
+TEST(RankWeber, ton1)
 {
     pse::TonIndex index;
     index.add(0, pse::ModeName::Major); // C maj
@@ -20,7 +20,7 @@ TEST(TestRankWeber, ton1)
 }
 
 
-TEST(TestRankWeber, ton3)
+TEST(RankWeber, ton3)
 {
     pse::TonIndex index;
     index.add(0, pse::ModeName::Major); // C maj
@@ -42,7 +42,7 @@ TEST(TestRankWeber, ton3)
 }
 
 
-TEST(TestRankWeber, ton30)
+TEST(RankWeber, ton30)
 {
     pse::TonIndex index(30);
     for (size_t i = 0; i < 30; ++i)
@@ -50,19 +50,23 @@ TEST(TestRankWeber, ton30)
         const pse::Ton& toni = index.ton(i);
         for (size_t j = 0; j < 30; ++j)
         {
-            const pse::Ton& tonj = index.ton(j);
+            unsigned int dij = index.distWeber(i, j);
+            // const pse::Ton& tonj = index.ton(j);
+            EXPECT_EQ(dij, toni.distWeber(index.ton(j)));
+            size_t rij = index.rankWeber(i, j);
+            
             for (size_t k = 0; k < j; ++k)
             {
-                const pse::Ton& tonk = index.ton(k);
-                size_t rij = index.rankWeber(i, j);
+                unsigned int dik = index.distWeber(i, k);
+                // const pse::Ton& tonk = index.ton(k);
+                EXPECT_EQ(dik, toni.distWeber(index.ton(k)));
                 size_t rik = index.rankWeber(i, k);
-                unsigned int dij = toni.distWeber(tonj);
-                unsigned int dik = toni.distWeber(tonk);
-
                 // assert((rij == rik) == (dij == dik));
                 // assert((rij  < rik) == (dij < dik));
                 // assert((rij  > rik) == (dij > dik));
                 
+                // INFO("i = {} j = {} dij = {} rij = {}", i, j, dij, rij);
+                // INFO("i = {} k = {} dik = {} rik = {}", i, k, dik, rik);
                 ASSERT_EQ(rij == rik, dij == dik);
                 ASSERT_EQ(rij < rik, dij < dik);
                 ASSERT_EQ(rij > rik, dij > dik);
@@ -70,3 +74,72 @@ TEST(TestRankWeber, ton30)
         }
     }
 }
+
+
+TEST(RankWeber, ton135) // > 280ms
+{
+    pse::TonIndex index(135);
+    for (size_t i = 0; i < 135; ++i)
+    {
+        const pse::Ton& toni = index.ton(i);
+        for (size_t j = 0; j < 135; ++j)
+        {
+            unsigned int dij = index.distWeber(i, j);
+            // const pse::Ton& tonj = index.ton(j);
+            EXPECT_EQ(dij, toni.distWeberModal(index.ton(j)));
+            size_t rij = index.rankWeber(i, j);
+            
+            for (size_t k = 0; k < j; ++k)
+            {
+                unsigned int dik = index.distWeber(i, k);
+                // const pse::Ton& tonk = index.ton(k);
+                EXPECT_EQ(dik, toni.distWeberModal(index.ton(k)));
+                size_t rik = index.rankWeber(i, k);
+                // assert((rij == rik) == (dij == dik));
+                // assert((rij  < rik) == (dij < dik));
+                // assert((rij  > rik) == (dij > dik));
+                
+                // INFO("i = {} j = {} dij = {} rij = {}", i, j, dij, rij);
+                // INFO("i = {} k = {} dik = {} rik = {}", i, k, dik, rik);
+                ASSERT_EQ(rij == rik, dij == dik);
+                ASSERT_EQ(rij < rik, dij < dik);
+                ASSERT_EQ(rij > rik, dij > dik);
+            }
+        }
+    }
+}
+
+
+TEST(RankWeber, ton165) // > 500ms
+{
+    pse::TonIndex index(165);
+    for (size_t i = 0; i < 165; ++i)
+    {
+        const pse::Ton& toni = index.ton(i);
+        for (size_t j = 0; j < 165; ++j)
+        {
+            unsigned int dij = index.distWeber(i, j);
+            // const pse::Ton& tonj = index.ton(j);
+            EXPECT_EQ(dij, toni.distWeberBluesModal(index.ton(j)));
+            size_t rij = index.rankWeber(i, j);
+            
+            for (size_t k = 0; k < j; ++k)
+            {
+                unsigned int dik = index.distWeber(i, k);
+                // const pse::Ton& tonk = index.ton(k);
+                EXPECT_EQ(dik, toni.distWeberBluesModal(index.ton(k)));
+                size_t rik = index.rankWeber(i, k);
+                // assert((rij == rik) == (dij == dik));
+                // assert((rij  < rik) == (dij < dik));
+                // assert((rij  > rik) == (dij > dik));
+                
+                // INFO("i = {} j = {} dij = {} rij = {}", i, j, dij, rij);
+                // INFO("i = {} k = {} dik = {} rik = {}", i, k, dik, rik);
+                ASSERT_EQ(rij == rik, dij == dik);
+                ASSERT_EQ(rij < rik, dij < dik);
+                ASSERT_EQ(rij > rik, dij > dik);
+            }
+        }
+    }
+}
+

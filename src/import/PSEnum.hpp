@@ -111,21 +111,24 @@ public:
     /// @param i index of note.
     virtual bool inside(size_t i) const;
 
-    /// the note at the given index is not within the interval of notes accessible
-    /// to this eumerator.
+    /// the note at the given index is not within the interval of notes
+    /// accessible to this eumerator.
     /// @param i index of note.
     bool outside(size_t i) const;
 
     /// midi key number in 0..128 of the note at the given index.
-    /// @param i index of a note. must be inside the interval of this enumerator.
+    /// @param i index of a note. must be inside the interval
+    /// of this enumerator.
     virtual unsigned int midipitch(size_t i) const = 0;
 
     /// number of the measure containing the note at the given index.
-    /// @param i index of a note. must be inside the interval of this enumerator.
+    /// @param i index of a note. must be inside the interval
+    /// of this enumerator.
     virtual long measure(size_t i) const = 0;
 
     /// whether the note at the given index is simultaneous with the next note.
-    /// @param i index of a note. must be inside the interval of this enumerator.
+    /// @param i index of a note. must be inside the interval
+    /// of this enumerator.
     virtual bool simultaneous(size_t i) const = 0;
 
     /// name for the note at the given index, if it has been set,

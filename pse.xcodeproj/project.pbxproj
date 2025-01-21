@@ -122,6 +122,7 @@
 		437C73772BADEA4200E9478C /* TestAccids.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 437C73762BADEA4200E9478C /* TestAccids.cpp */; };
 		437C8B092BD1750000440909 /* TestBag.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 437C8B082BD1750000440909 /* TestBag.cpp */; };
 		437C8B0B2BD18E4F00440909 /* TestCostA.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 437C8B0A2BD18E4F00440909 /* TestCostA.cpp */; };
+		437E31642D3FA9EE00ECDE7A /* TestRank.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 437E31632D3FA9EE00ECDE7A /* TestRank.cpp */; };
 		438A581129E03FBB0073A32C /* PS13.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 432E7A5229D45FE2000E2B72 /* PS13.cpp */; };
 		438A581229E03FC10073A32C /* PSE.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 432E7A4C29D427FD000E2B72 /* PSE.cpp */; };
 		438A581329E049020073A32C /* PSTable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43ABA51F29242418002AC1D4 /* PSTable.cpp */; };
@@ -368,6 +369,7 @@
 		437C73762BADEA4200E9478C /* TestAccids.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TestAccids.cpp; sourceTree = "<group>"; };
 		437C8B082BD1750000440909 /* TestBag.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TestBag.cpp; sourceTree = "<group>"; };
 		437C8B0A2BD18E4F00440909 /* TestCostA.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TestCostA.cpp; sourceTree = "<group>"; };
+		437E31632D3FA9EE00ECDE7A /* TestRank.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TestRank.cpp; sourceTree = "<group>"; };
 		4380D1E82A4DB78700AC1164 /* TestCostADlex.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TestCostADlex.cpp; sourceTree = "<group>"; };
 		438587EB2A5C0631006FB312 /* PSChord.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = PSChord.cpp; path = chord/PSChord.cpp; sourceTree = "<group>"; };
 		438587EC2A5C0631006FB312 /* PSChord.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = PSChord.hpp; path = chord/PSChord.hpp; sourceTree = "<group>"; };
@@ -640,6 +642,7 @@
 				437C8B0A2BD18E4F00440909 /* TestCostA.cpp */,
 				4380D1E82A4DB78700AC1164 /* TestCostADlex.cpp */,
 				439DBF2F2A4FFF6800565CC4 /* TestRankWeber.cpp */,
+				437E31632D3FA9EE00ECDE7A /* TestRank.cpp */,
 			);
 			path = unit;
 			sourceTree = "<group>";
@@ -1034,6 +1037,7 @@
 				437C8B0B2BD18E4F00440909 /* TestCostA.cpp in Sources */,
 				435081EE29D6D75600465943 /* Scale.cpp in Sources */,
 				4308A70C2A28EC9B007F7A55 /* TestKeyFifth.cpp in Sources */,
+				437E31642D3FA9EE00ECDE7A /* TestRank.cpp in Sources */,
 				430627B32A44A4D80046FD99 /* PSConfig2.cpp in Sources */,
 				80604E472C4D094A0085488C /* WeberBluesModal_static.cpp in Sources */,
 				435081EB29D6D74800465943 /* Ton.cpp in Sources */,

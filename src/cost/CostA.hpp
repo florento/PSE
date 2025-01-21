@@ -52,7 +52,7 @@ public:
     /// @param rhs a cost to compare to.
     bool operator==(const CostA& rhs) const;
     
-    /// a distance value, in percent of the bigger cost.
+    /// a distance value, in percent of the smaller cost.
     /// used for approximate equality.
     double dist(const CostA& rhs) const;
     

@@ -51,7 +51,7 @@ namespace pse {
 class PSV
 {
 
-public:
+public: // constructors
 
     /// main constructor.
     /// @param a name of pitch-spelling algorithm implemented.
@@ -115,6 +115,8 @@ public:
         const PSEnum& e, size_t i0, size_t bar);
 
     ~PSV();
+    
+public: // access
   
     /// length of the vector
     size_t size() const;
@@ -122,7 +124,7 @@ public:
     /// enumerator of input notes used to build this vector.
     PSEnum& enumerator() const;
     
-    /// number of bar corresp.  to this vector (column number in table).
+    /// number of bar corresponding to this vector (column number in table).
     size_t bar() const;
     
     /// first id of the enumerator of input notes.
@@ -144,10 +146,19 @@ public:
     /// @return the bag of configs at position i in this vector.
     const PSB& bag(size_t i) const;
     
-    /// get the list of ranks of each ton in the array of tonalities,
+    /// compute the list of ranks of each ton in the array of tonalities,
     /// wrt the cost of corresponding bag in this vector.
-    /// @param rk container to receive the list of ranks
+    /// @param rk container to receive the list of ranks.
+    /// must be empty.
     void ranks(std::vector<size_t>& rk) const;
+
+    /// compute the list of indexes of tonalities
+    /// with a cost close to the minimal cost in the bags of this vector.
+    /// @param ties vector to receive the list of bests indices.
+    /// must be empty.
+    /// @param d maximal distance to best cost, in percents,
+    /// for selection of bests.
+    void bests(std::vector<size_t>& ties, double d) const;
 
     // bag of target configs for best paths for the ton of given index.
     // @param step number of step, 0 or 1.

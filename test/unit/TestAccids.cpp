@@ -11,7 +11,7 @@
 
 
 
-TEST(TestAccids, undef)
+TEST(Accids, undef)
 {
     pse::accids_t _UU = pse::Accids::encode();
 
@@ -23,7 +23,7 @@ TEST(TestAccids, undef)
     EXPECT_FALSE(pse::Accids::contained(pse::Accid::Natural, _UU));
 }
 
-TEST(TestAccids, unary)
+TEST(Accids, unary)
 {
     pse::accids_t _f_ = pse::Accids::encode(pse::Accid::Flat);
     // pse::accids_t _n_ = pse::Accids::encode(pse::Accid::Natural);
@@ -38,7 +38,7 @@ TEST(TestAccids, unary)
     EXPECT_FALSE(pse::Accids::contained(pse::Accid::Natural, _f_));
 }
 
-TEST(TestAccids, flatnat)
+TEST(Accids, flatnat)
 {
     pse::accids_t _fn = pse::Accids::encode(pse::Accid::Flat,
                                             pse::Accid::Natural);
@@ -52,7 +52,7 @@ TEST(TestAccids, flatnat)
     EXPECT_TRUE(pse::Accids::contained(pse::Accid::Natural, _fn));
 }
 
-TEST(TestAccids, natsharp)
+TEST(Accids, natsharp)
 {
     pse::accids_t _ns = pse::Accids::encode(pse::Accid::Natural,
                                             pse::Accid::Sharp);
@@ -68,7 +68,7 @@ TEST(TestAccids, natsharp)
     EXPECT_FALSE(pse::Accids::contained(pse::Accid::DoubleFlat, _ns));
 }
 
-TEST(TestAccids, sharpdoublesharp)
+TEST(Accids, sharpdoublesharp)
 {
     pse::accids_t _sS = pse::Accids::encode(pse::Accid::Sharp,
                                             pse::Accid::DoubleSharp);
@@ -84,7 +84,7 @@ TEST(TestAccids, sharpdoublesharp)
     EXPECT_FALSE(pse::Accids::contained(pse::Accid::Natural, _sS));
 }
 
-//TEST(TestAccids, doubleflatflat)
+//TEST(Accids, doubleflatflat)
 //{
 //    pse::accids_t _Ff = pse::Accids::encode(pse::Accid::DoubleFlat,
 //                                            pse::Accid::Flat);

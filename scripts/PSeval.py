@@ -63,48 +63,58 @@ def get_key(part):
     else:
         return None
 
-def count_notes(part):
+def count_notes(part, chord_symb = False):
     """return the number of notes in a music21 part"""    
+    """part: the M21 part to process"""
+    """chord_symb: whether we count the notes of chord symbols or not"""   
     fpart = part.flatten()
     nn = len(fpart.getElementsByClass(m21.note.Note))
     for c in fpart.getElementsByClass(m21.chord.Chord):
-        nn += len(c)
+        if (chord_symb or not isinstance(c, m21.harmony.ChordSymbol)):
+            nn += len(c)
     return nn    
 
-def count_chords(part):
+def count_chords(part, chord_symb = False):
     """return the number of chords in a music21 part"""    
-    cl = part.getElementsByClass(m21.chord.Chord)
-    return len(cl) 
+    """part: the M21 part to process"""
+    """chord_symb: whether we count the chord symbols or not"""   
+    fpart = part.flatten()
+    nc = 0
+    for c in fpart.getElementsByClass(m21.chord.Chord):
+        if (chord_symb or not isinstance(c, m21.harmony.ChordSymbol)):
+            nc += 1   
+    # cl = part.getElementsByClass(m21.chord.Chord)
+    return nc 
 
 def count_measures(part):
     """return the number of measures in a music21 part"""    
     ml = part.getElementsByClass(m21.stream.Measure)
     return len(ml) 
 
-def extract_notes(part):
-    """extract the list of barred notes occurring in a music21 part"""    
-    mes = part.getElementsByClass(m21.stream.Measure)
-    b = 0
-    ln = []
-    #max_notes = 0
-    #max_bar = 0
-    for m in mes:
-        #nn = 0
-        for e in m.flatten():                      # merge voices in measure
-            if isinstance(e, m21.note.Note):
-                ln.append((e, b))                  # append a pair          
-                #nn = nn+1
-            elif isinstance(e, m21.chord.Chord):
-                for n in e:
-                    assert(isinstance(n, m21.note.Note))
-                    ln.append((n, b))
-                    #nn = nn+1
-        #if (nn > max_notes):
-            #max_notes = nn
-            #max_bar = b
-        b  += 1
-    #print('max notes per bar = ', max_notes, 'in bar: ', max_bar)
-    return ln
+# def extract_notes(part):
+#     """extract the list of barred notes occurring in a music21 part"""    
+#     mes = part.getElementsByClass(m21.stream.Measure)
+#     b = 0
+#     ln = []
+#     #max_notes = 0
+#     #max_bar = 0
+#     for m in mes:
+#         #nn = 0
+#         for e in m.flatten():                      # merge voices in measure
+#             if isinstance(e, m21.note.Note):
+#                 ln.append((e, b))                  # append a pair          
+#                 #nn = nn+1
+#             elif isinstance(e, m21.chord.Chord):
+#                 for n in e:
+#                     assert(isinstance(n, m21.note.Note))
+#                     ln.append((n, b))
+#                     #nn = nn+1
+#         #if (nn > max_notes):
+#             #max_notes = nn
+#             #max_bar = b
+#         b  += 1
+#     #print('max notes per bar = ', max_notes, 'in bar: ', max_bar)
+#     return ln
 
 def insert_note(note, date, next_note, next_date, bar, note_list):
     """insert note as a barred note at the end of note_list"""
@@ -124,18 +134,23 @@ def insert_note(note, date, next_note, next_date, bar, note_list):
         else:            
             note_list.append((note, bar, (date == next_date))) #(note.offset == next_note.offset)))
 
-def extract_measure(m, b):
+def extract_measure(m, b, chord_symb = False):
     """extract the list of barred notes occurring in a music21 part"""    
+    """m: the M21 measure to process"""
+    """b: measure number of m"""
+    """chord_symb: whether we add the notes of chord symbols or not"""   
     assert(isinstance(m, m21.stream.Measure))
     ln = []
     prev_n = None        
     prev_offset = 0            # onset of prev note in measure       
     for e in m.flatten():      # merge voices in measure
+        # case of single note
         if isinstance(e, m21.note.Note):
             insert_note(prev_n, prev_offset, e, e.offset, b, ln)
             prev_n = e
             prev_offset = e.offset
-        elif isinstance(e, m21.chord.Chord):
+        # case of chord symbol in jazz harmony (descendant of Chord)
+        elif isinstance(e, m21.chord.Chord) and (chord_symb or not isinstance(e, m21.harmony.ChordSymbol)):
             for cn in e:
                 assert(isinstance(cn, m21.note.Note))
                 insert_note(prev_n, prev_offset, cn, e.offset, b, ln)
@@ -144,13 +159,15 @@ def extract_measure(m, b):
     insert_note(prev_n, prev_offset, None, 0, b, ln)      # insert last note
     return ln
     
-def extract_part(part):
+def extract_part(part, chord_symb = False):
     """extract the list of barred notes occurring in a music21 part"""    
+    """part: the M21 part to process"""
+    """chord_symb: whether we add the notes of chord symbols or not"""   
     mes = part.getElementsByClass(m21.stream.Measure)
     ln = []
     b = 0
     for m in mes:
-        ln += extract_measure(m, b)
+        ln += extract_measure(m, b, chord_symb)
         b  += 1
     return ln
 
@@ -224,14 +241,27 @@ def add_tons(tons, sp):
     # major, minor, jazz antic modes, KS in [-6 .. 6] 
     elif tons == 104:
         for k in range(-6, 7):            
-            sp.add_ton(k, pse.Mode.Ionian,     True)
+            sp.add_ton(k, pse.Mode.Major,      True)
+            sp.add_ton(k, pse.Mode.Minor,      True)
             sp.add_ton(k, pse.Mode.Dorian,     False)
             sp.add_ton(k, pse.Mode.Phrygian,   False)
             sp.add_ton(k, pse.Mode.Lydian,     False)
             sp.add_ton(k, pse.Mode.Mixolydian, False)
             sp.add_ton(k, pse.Mode.Aeolian,    False)
             sp.add_ton(k, pse.Mode.Locrian,    False)
+        sp.close_tons()    
+    # major, minor, min. mel jazz antic modes, KS in [-6 .. 6] 
+    elif tons == 117:
+        for k in range(-6, 7):            
+            sp.add_ton(k, pse.Mode.Major,      True)
             sp.add_ton(k, pse.Mode.Minor,      True)
+            sp.add_ton(k, pse.Mode.MinorMel,   True)
+            sp.add_ton(k, pse.Mode.Dorian,     False)
+            sp.add_ton(k, pse.Mode.Phrygian,   False)
+            sp.add_ton(k, pse.Mode.Lydian,     False)
+            sp.add_ton(k, pse.Mode.Mixolydian, False)
+            sp.add_ton(k, pse.Mode.Aeolian,    False)
+            sp.add_ton(k, pse.Mode.Locrian,    False)
         sp.close_tons()    
     # major, minor, jazz antic modes, KS in [-7 .. 7] 
     elif tons == 135:
@@ -446,6 +476,7 @@ def diff(ln, sp):
     i = 0
     ld = []
     for (n, m, simult) in ln:
+        # print(i, m, n, sp.name(i), sp.accidental(i), sp.printed(i))
         if (compare_name(n, sp.name(i)) and
             compare_accid(n, sp.accidental(i), sp.printed(i)) and 
             n.octave == sp.octave(i)):
@@ -454,7 +485,7 @@ def diff(ln, sp):
             i = i+1
         else:
             d = (i, sp.name(i), sp.accidental(i), sp.octave(i), sp.printed(i))
-            print('diff at note', i, d[1], d[2], 'vs', n)
+            print('diff at note', i, 'mes', m, d[1], d[2], 'vs', n)
             ld.append(d)
             i = i+1
     return ld
@@ -715,6 +746,11 @@ class Stats:
             row.append(strk(m21_key(ton_est))) # current key estimation
         row.append(nb_notes)               # nb notes in part 
         row.append(nb_err)
+        if nb_notes > 0:
+            row.append((nb_notes - nb_err) * 100 / nb_notes)       
+        else:
+            assert(nb_err == 0)
+            row.append(0)                  
         # append ordered timer values
         self.sort_timers()
         for i in self._timer:
@@ -767,19 +803,38 @@ class Stats:
     
     def get_dataframe(self):
         """return a panda dataframe of the evaluation"""
+        size = len(self._table) # number of rows
         df = pd.DataFrame(self._table)
         timers = [] # list of timer's names
         self.sort_timers()
         for i in self._timer:
             timers.append('time_'+str(i))            
         df.columns = ['id', 'title','composer', 'part', 'KSgt', 'KSest', 
-                      'notes', 'err']+timers
+                      'notes', 'err', 'success']+timers
         for t in timers:
             df[t] = df[t].map('{:,.3f}'.format)
         # every KSestimated identical to corresp. KSgt becomes NaN
         #df.loc[df['KSgt'] == df['KSest'], 'KSest'] = np.nan
         df.loc[df['KSgt'] == '', 'KSgt'] = np.nan
         # d = df['KSgt'].compare(df['KSest'], keep_shape=True)['other'].fillna('')        
+        # last line
+        df.at['total', 'notes'] = df['notes'].sum()
+        df.at['total', 'err'] = df['err'].sum()
+        nb_n = df.at['total', 'notes']
+        nb_e = df.at['total', 'err']
+        if nb_n > 0:
+            df.at['total', 'success'] = (nb_n - nb_e)*100/nb_n
+        else:
+            df.at['total', 'success'] = 0
+        df['success'] = df['success'].map('{:,.2f}'.format) 
+        # nb of errors in KS estimation
+        df.at['total', 'KSgt'] = size
+        df.at['total', 'KSest'] = df['KSgt'].isna().sum() # correct extimations of KS
+        assert(size > 0)
+        df.at['percent', 'KSest'] = df.at['total', 'KSest']*100/size
+        df.at['percent', 'KSest'] = df.at['percent', 'KSest']
+        #df.at['percent', 'KSest'].apply('{:,.2f}'.format) 
+        df = df.convert_dtypes()
         return df
 
     def write_dataframe(self, file):
@@ -932,11 +987,11 @@ class Spellew:
                 self._algo_params += '_T' if t2_tonal  else '_M'
                 self._algo_params += 'D' if t2_det  else 'E'  
             # create a speller object    
-            if (nbtons not in [0, 24, 25, 26, 30, 194, 135, 165]):
+            if (nbtons in [0, 24, 25, 26, 30, 104, 117, 135, 165]):
+                self._speller = pse.Speller(nbtons) # is a spellerenum nbtons = 0
+            else:
                 print('speller: unsupported default number of tons', nbtons);
                 self._speller = pse.Speller(0) # is a spellerenum nbtons = 0
-            else:
-                self._speller = pse.Speller(nbtons) # is a spellerenum nbtons = 0
         # construction of the ton index for speller (not default)
         if (self._speller.nb_tons() == 0):
             print('speller: addition of an ad hoc list of', nbtons, 'tons');           
@@ -1130,13 +1185,15 @@ class Spellew:
         # assert(self._spelled)
         anote_global_part(part, self._speller, gt)              
     
-    def eval_part(self, part, stats, mark=False):
-        """evaluate spelling for one part in a score and mark errors"""        
+    def eval_part(self, part, stats, mark=False, chord_sym = False):
+        """evaluate spelling for one part in a score and mark errors"""     
+        """part: the M21 part to process"""
+        """chord_symb: whether we spell the notes of chord symbols or not"""   
         assert(stats is not None)
         # extract real key and notes from part
         k0 = get_key(part)
-        ln = extract_part(part)  # input note list
-        assert(count_notes(part) == len(ln)) # print('ERROR',  count_notes(part), len(ln))
+        ln = extract_part(part, chord_sym)  # input note list
+        assert(count_notes(part, chord_sym) == len(ln)) 
         print(len(ln), 'notes,', count_measures(part), 'bars,', end=' ')
         # spell with algo
         print('spelling with', self._algo_name+self._algo_params, flush=True)
@@ -1177,8 +1234,11 @@ class Spellew:
         return (k0, gt, len(ln), ld1)
 
     def eval_score(self, score, stats=Stats(),
-                   score_id=0, title:str='', composer:str='', output_path=None):        
+                   score_id=0, title:str='', composer:str='', output_path=None, 
+                   chord_sym = False):        
         """evaluate spelling for all parts in a score"""
+        """score: the M21 part to process"""
+        """chord_symb: whether we spell the notes of chord symbols or not"""   
         # DO IN CALLER
         if not title: 
             title=score.metadata.title
@@ -1198,7 +1258,7 @@ class Spellew:
             if (nbparts > 1):
                 print('part', i+1, '/', nbparts, end=' ', flush=True)
             if (spellable(part)):
-                (k_gt, ton_est, nn, ld) = self.eval_part(part, stats, mark)
+                (k_gt, ton_est, nn, ld) = self.eval_part(part, stats, mark, chord_sym)
                 # add one row in stat table for each part
                 stats.record_part(i, k_gt, ton_est, nn, len(ld))
                 ls.append(ton_est)

@@ -39,22 +39,26 @@ premiers résultats d'évaluation Pitch Spelling'
   
       cf  `LGassert`   dans `LGok.py`
 
-- [ ] ajouter mode mineur mélodique ascendant
+- [x] ajouter mode mineur mélodique ascendant
   ascendant: pour degrés 5-6-7-1
 
 - [x] table de Weber: distance entre tons  
+
+
 
 ## todo (moyen terme)
 
 - [ ] autoriser modulations? en nombre borné?
 
-- [ ] modes jazz (dorien etc) : pour PS jazz?
+- [x] modes jazz (dorien etc) : pour PS jazz?
+
+
 
 ## experimentations
 
 - [ ] datasets FiloBass, FiloSax, Weimar (Jazzomath)
 - [ ] dataset Meredith (subsety of Musedata)
-- [ ] dataset ASAP: subset of Francesco et al.  
+- [x] dataset ASAP: subset of Francesco et al.  
 - [x] dataset ASAP: Bach
 - [x] dataset ASAP: Beethoven
 - [ ] dataset ASAP: Chopin
@@ -63,10 +67,18 @@ premiers résultats d'évaluation Pitch Spelling'
 
 
 
-
-
 - [ ]  revise CmakeList
 
+
+
+## Comments
+
+- [ ] `PSeval.py` `extract_notes` : ne pas ajouter les notes des accords écrits dans ln
+  ou en option
+
+
+
+- [ ] `PSeval.py` table: ajouter une ligne total (au lieu de table séparée)
 
 
 

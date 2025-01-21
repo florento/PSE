@@ -301,6 +301,55 @@ bool PSV::smaller_pcost(const Cost* a, const Cost* b)
     return (*a < *b);
 }
 
+
+void PSV::bests(std::vector<size_t>& ties, double d) const
+{
+    assert(ties.empty());
+    assert(_psbs.size() == _index.size());
+    
+    // index of the current bag (tonality) with best cost.
+    // initialized out of range.
+    size_t ibest = TonIndex::UNDEF;
+
+    // find the best cost value
+    for (size_t i = 0; i < _psbs.size(); ++i)
+    {
+        const PSB* psb= _psbs.at(i).get();
+
+        // empty iff first() == last(),
+        // and in this case all the bags are empty.
+        if (psb == nullptr || psb->empty())
+            break;
+        
+        const Cost& cost = psb->cost(); // shared_clone();
+        assert(ibest == TonIndex::UNDEF || _psbs.at(ibest) != nullptr);
+        assert(ibest == TonIndex::UNDEF || !_psbs.at(ibest)->empty());
+
+        if ((ibest == TonIndex::UNDEF) || (cost < bag(ibest).cost()))
+            ibest = i;
+        // otherwise keep the current best
+    }
+    
+    if (ibest == TonIndex::UNDEF)
+    {
+        ERROR("PSG extractBests: could not find a best cost");
+        return;
+    }
+    const Cost& bestCost(bag(ibest).cost());
+    
+    // push to ties all indices close to best cost
+    for (size_t i = 0; i < _psbs.size(); ++i)
+    {
+        const PSB* psb= _psbs.at(i).get();
+        if (psb == nullptr || psb->empty())
+            break;
+        
+        if (bestCost.dist(psb->cost()) <= d)
+            ties.push_back(i);
+    }
+}
+
+
 void PSV::ranks(std::vector<size_t>& rk) const
 {
     assert(_psbs.size() == _index.size());

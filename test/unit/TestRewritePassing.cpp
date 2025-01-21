@@ -18,7 +18,7 @@
 
 TEST(RewritePassing, rewritePassing_a)
 {
-    pse::PSRawEnum e(0); // open
+    pse::PSRawEnum e(0, 0); // empty, not open
     
     // midi key, bar nb, simult
     e.add(48, 0, false); // C3
@@ -58,8 +58,8 @@ TEST(RewritePassing, rewritePassing_a)
 
 TEST(RewritePassing, rewritePassing_b)
 {
-    pse::PSRawEnum e(0); // open
-    
+    pse::PSRawEnum e(0, 0); // empty, not open
+
     // midi key, bar nb, simult
     e.add(48, 0, false); // C3
     e.add(49, 0, false); // C#3
@@ -98,8 +98,8 @@ TEST(RewritePassing, rewritePassing_b)
 
 TEST(RewritePassing, rewritePassing_c)
 {
-    pse::PSRawEnum e(0); // open
-    
+    pse::PSRawEnum e(0, 0); // empty, not open
+
     // midi key, bar nb, simult
     e.add(48, 0, false); // C3
     e.add(47, 0, false); // Cb3
@@ -138,8 +138,8 @@ TEST(RewritePassing, rewritePassing_c)
 
 TEST(RewritePassing, rewritePassing_d)
 {
-    pse::PSRawEnum e(0); // open
-    
+    pse::PSRawEnum e(0, 0); // empty, not open
+
     // midi key, bar nb, simult
     e.add(45, 0, false); // A2
     e.add(47, 0, false); // Cb3
@@ -178,8 +178,8 @@ TEST(RewritePassing, rewritePassing_d)
 
 TEST(RewritePassing, rewritePassing_e)
 {
-    pse::PSRawEnum e(0); // open
-    
+    pse::PSRawEnum e(0, 0); // empty, not open
+
     // midi key, bar nb, simult
     e.add(48, 0, false); // C3
     e.add(46, 0, false); // A#3
@@ -218,8 +218,8 @@ TEST(RewritePassing, rewritePassing_e)
 
 TEST(RewritePassing, rewritePassing_f)
 {
-    pse::PSRawEnum e(0); // open
-    
+    pse::PSRawEnum e(0, 0); // empty, not open
+
     // midi key, bar nb, simult
     e.add(45, 0, false); // A2
     e.add(46, 0, false); // A#3
@@ -258,8 +258,8 @@ TEST(RewritePassing, rewritePassing_f)
 
 TEST(RewritePassing, rewritePassing_a4)
 {
-    pse::PSRawEnum e(0); // open
-    
+    pse::PSRawEnum e(0, 0); // empty, not open
+
     // midi key, bar nb, simult
     e.add(48, 0, false); // C3
     e.add(48, 0, false); // C3    rewrite position

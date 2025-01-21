@@ -43,7 +43,8 @@ namespace pse {
 ///   filled by callback of the rename() function.
 struct PSRawEnum : public PSEnum
 {
-public:
+    
+public: // construction
 
     /// undefined octave number.
     static int OCTAVE_UNDEF;
@@ -97,6 +98,8 @@ public:
     /// The enumeration starts at i0 and stops when there are no more notes
     /// to read in e.
     std::unique_ptr<PSEnum> clone(size_t i0) const override;
+
+public: // access
 
     /// number of notes accessible to this enumerator.
     /// if the enumerator is open, it the real number of notes minus first(),

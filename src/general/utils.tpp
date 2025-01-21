@@ -20,7 +20,7 @@ void ranks(std::vector<E>& v,
     assert(ranks.empty());
     if (v.empty()) return;
 
-    // list of ranks, initialy a null vector.
+    // list of ranks, initialy filled with zeros
     ranks.insert(ranks.begin(), v.size(), 0);
     
     // list pf pairs index / value
@@ -39,7 +39,7 @@ void ranks(std::vector<E>& v,
     assert(0 < v.size());
     size_t rank = 0;
     size_t ties = 1;
-    E dprec = v1.at(0).second; // dist value of previous
+    E dprec = v1.at(0).second; // value of previous (copy)
     
     for (size_t i = 1; i < v1.size(); ++i)
     {

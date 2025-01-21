@@ -23,6 +23,7 @@ _content()
 }
 
 
+// not used
 PSG::PSG(const PST& tab):
 PSG(tab, std::vector<bool>(tab.index().size(), true))
 { }
@@ -38,6 +39,7 @@ size_t PSG::size() const
 }
 
 
+// accessor
 size_t PSG::ilocal(size_t i, size_t j) const
 {
     assert(j < _content.size());
@@ -47,6 +49,7 @@ size_t PSG::ilocal(size_t i, size_t j) const
 }
 
 
+// accessor
 const Ton& PSG::local(size_t i, size_t j) const
 {
     size_t it = ilocal(i, j);
@@ -55,6 +58,7 @@ const Ton& PSG::local(size_t i, size_t j) const
 }
 
 
+// accessor
 const std::vector<size_t>& PSG::column(size_t j) const
 {
     assert(j < _content.size());
@@ -70,10 +74,11 @@ const std::vector<size_t>& PSG::column(size_t j) const
 void PSG::init(const PST& tab, std::vector<bool> mask, bool flag)
 {
     // for each bar (column)
-    for (size_t j = 0; j < tab.columnNb(); ++j)
+    for (size_t j = 0; j < tab.size(); ++j)
     {
         // column of best paths for measure j
         const PSV& vec = tab.column(j);
+        assert(vec.size() == _index.size());
         assert(vec.size() == mask.size());
 
         // set of index of elements in vec with a best cost.
@@ -100,15 +105,17 @@ void PSG::init(const PST& tab, std::vector<bool> mask, bool flag)
             // in the first column (first measure)
             else if (_content.size() == 1)
             {
-                if (flag == true) // estimation locals by mean of ranks
+                // estimation locals by extractbests then distances
+                if (flag == false)
+                {
+                    current.push_back(breakTieBests(vec, cands, i, i));
+                }
+                // estimation locals by mean of ranks
+                else
                 {
                     std::vector<size_t> ties; // empty
                     extractRank(vec, ties, i, i);
-                    current.push_back(breakTie2(ties, vec, i, i));
-                }
-                else // estimation locals by extractbests then distances
-                {
-                    current.push_back(breakTie1(cands, vec, i, i));
+                    current.push_back(breakTieRank(vec, ties, i, i));
                 }
             }
             // otherwise, consider previous column
@@ -118,20 +125,21 @@ void PSG::init(const PST& tab, std::vector<bool> mask, bool flag)
                 assert(j-1 < _content.size());
                 assert(i < _content.at(j-1).size());
                 size_t iprev = _content.at(j-1).at(i);
-                if (flag == true) // estimation locals by mean of ranks
+                // estimation locals by extractbests then distances
+                if (flag == false)
+                {
+                    current.push_back(breakTieBests(vec, cands, i, iprev));
+                }
+                // estimation locals by mean of ranks
+                else
                 {
                     std::vector<size_t> ties; // empty
                     extractRank(vec, ties, i, iprev);
-                    current.push_back(breakTie2(ties, vec, i, iprev));
-                }
-                else // estimation locals by extractbests then distances
-                {
-                    current.push_back(breakTie1(cands, vec, i, iprev));
+                    current.push_back(breakTieRank(vec, ties, i, iprev));
                 }
             }
             assert(current.back() == TonIndex::UNDEF ||
                    current.back() < _index.size());
-            //INFO("BUG 102: {} (UNDEF={})", _content.back().back(), TonIndex::UNDEF);
         }
         assert(current.size() == vec.size());
     }
@@ -145,61 +153,7 @@ void PSG::init(const PST& tab, std::vector<bool> mask, bool flag)
 void PSG::extractBests(const PSV& vec, std::vector<size_t>& ties, double d)
 {
     assert(ties.empty());
-    
-    // index of the current best local tonality.
-    // out of range. initialized to avoid warning.
-    // size_t ibest = TonIndex::UNDEF;
-
-    // cost for the current best local tonality.
-    std::shared_ptr<Cost> cbest = nullptr;     // WARNING: initialized to 0.
-
-    // compute the best cost value
-    for (size_t j = 0; j < vec.size(); ++j)
-    {
-        const PSB& psb = vec.bag(j);
-        
-        // occurs iff first() == last(), and in this case all the bags are empty.
-        if (psb.empty())
-            break; // break
-        
-        const Cost& cost = psb.cost(); // shared_clone();
-        
-        // new best cost     // cbest = 0 when j = 0
-        if ((j == 0) || ((cbest != nullptr) && (cost < *cbest)))
-        {
-            // ibest = j;
-            cbest = cost.shared_clone();
-            //ties.clear();
-            //auto ret = ties.insert(j);
-            //assert(ret.second == true); // j was inserted
-        }
-    }
-    // push to ties all index close to best cost
-    for (size_t j = 0; j < vec.size(); ++j)
-    {
-        const PSB& psb = vec.bag(j);
-        
-        // occurs iff first() == last(), and in this case all the bags are empty.
-        if (psb.empty())
-            break; // break
-        
-        const Cost& cost = psb.cost(); // shared_clone();
-        // tie break
-        if ((cbest != nullptr) && (cost.dist(*cbest) <= d))
-        {
-            ties.push_back(j);
-            //auto ret = ties.insert(j);
-            //assert(ret.second == true); // j was inserted
-        }
-        // otherwise keep the current best
-        else
-        {
-            // we did not forget a case
-            assert((cbest == nullptr) || (cost > *cbest));
-        }
-    }
-    //printf("nombre de tonalités candidates : %lu",ties.size());
-    //assert(! ties.empty());
+    vec.bests(ties, d);
 }
 
 
@@ -217,7 +171,7 @@ void PSG::extractRank(const PSV& vec, std::vector<size_t>& ties,
     // 0. rank in column of spelling table.
     // 1. rank for distance to previous in row.
     // 2. rank for distance to global in row.
-    const std::array<size_t, 3> COEFF{ 1, 1, 0 };
+    const std::array<size_t, 3> COEFF{1, 1, 1};
     
     assert(vec.size() == _index.size());
     assert(ig != TonIndex::UNDEF);
@@ -230,8 +184,6 @@ void PSG::extractRank(const PSV& vec, std::vector<size_t>& ties,
     /// ranks for costs of bags
     std::vector<size_t> rank_bags; // empty
     vec.ranks(rank_bags);
-//    if (rank_bags.size() != _index.size()) ERROR("bar {} index={}, rank={}",
-//                                   vec.bar(), _index.size(), rank_bags.size());
     assert(rank_bags.size() == _index.size());
 
     /// ranks for distance to prev local.
@@ -300,7 +252,7 @@ void PSG::extractRank(const PSV& vec, std::vector<size_t>& ties,
 // this function chooses among the best possible local tonalities
 // (obtained with extract_bests)
 // the closest one to the previous local tone and to the global tone.
-size_t PSG::breakTie1(std::vector<size_t>& cands, const PSV& vec,
+size_t PSG::breakTieBests(const PSV& vec, const std::vector<size_t>& cands,
                       size_t ig, size_t iprev)
 {
     // no candidates in case of empty bar: keep the previous local
@@ -401,7 +353,6 @@ size_t PSG::breakTie1(std::vector<size_t>& cands, const PSV& vec,
 }
 
 
-
 size_t PSG::findbyKS(int ks, const std::vector<size_t>& cands)
 {
     assert(-7 <= ks);
@@ -419,7 +370,7 @@ size_t PSG::findbyKS(int ks, const std::vector<size_t>& cands)
 
 
 // this function filters out the set of candidates local tonality.
-size_t PSG::breakTie2(std::vector<size_t>& cands, const PSV& vec,
+size_t PSG::breakTieRank(const PSV& vec, const std::vector<size_t>& cands,
                       size_t ig, size_t iprev)
 {
     // no candidates in case of empty bar: keep the previous local
@@ -495,7 +446,7 @@ size_t PSG::breakTie2(std::vector<size_t>& cands, const PSV& vec,
     }
     
     // still a tie.
-    size_t choice = breakTie1(cands_majmin, vec, ig, iprev); // cands_majmin.front();
+    size_t choice = breakTieBests(vec, cands_majmin, ig, iprev); // cands_majmin.front();
     // WARN_TIE(vec.bar(), cands_majmin, choice);
     return choice;
 }

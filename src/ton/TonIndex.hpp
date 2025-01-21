@@ -179,7 +179,7 @@ public: // Weber distances
     /// distance between the two tons of given indices,
     /// in the table of Weber, or WeberModal, or WeberBluesModal,
     /// avvording to the content of this array of tonalities.
-    int distWeber(size_t i, size_t j) const;
+    unsigned int distWeber(size_t i, size_t j) const;
     
     /// ranks of second given ton wrt Weber distance to first given ton.
     /// @param i index of ton in this array of tonalities.
@@ -197,6 +197,9 @@ private: // data
     /// it can be considered as global.
     std::vector<std::pair<const Ton, bool>> _tons;
 
+    /// this ton index has been closed:
+    bool _closed;
+
     /// vector of index of representative of each ton,
     /// in the class of tonal equivalent tons.
     std::vector<size_t> _repr_tonal;
@@ -205,19 +208,10 @@ private: // data
     /// in the class of modal equivalent tons.
     std::vector<size_t> _repr_modal;
 
-    /// ranks of ton wrt Weber distance:
-    /// _rankWeber[i, j] is the rank of ton i in this index, wrt to
-    /// to the distance to ton j in this index.
-    /// tabulation for speedup
-    std::vector<std::vector<size_t>> _rankWeber;
-    
-    /// this ton index has been closed:
-    bool _closed;
-
-    /// true if we use the tonal (original) Weber distance,
-    /// false if we use the modal Weber distance.
-    /// @todo TBR not used, replaced by _WeberModal and _WeberBlues
-    bool _WeberTonal;
+    // true if we use the tonal (original) Weber distance,
+    // false if we use the modal Weber distance.
+    // @todo TBR not used, replaced by _WeberModal and _WeberBlues
+    // bool _WeberTonal;
 
     /// this array of tonalities contains at least one ton with greek mode.
     bool _WeberModal;
@@ -225,6 +219,12 @@ private: // data
     /// this array of tonalities contains at least one ton with a blues mode.
     bool _WeberBluesModal;
       
+    /// ranks of ton wrt Weber distance:
+    /// _rankWeber[i, j] is the rank of ton j in this index, wrt to
+    /// to the distance to ton i in this index.
+    /// tabulation for speedup
+    std::vector<std::vector<size_t>> _rankWeber;
+    
 private: // construction and convenience
     
     /// find the index of a ton defined by given key signature and mode

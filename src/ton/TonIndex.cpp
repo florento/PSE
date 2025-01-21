@@ -21,11 +21,13 @@ const size_t TonIndex::FAILED = MAXTONS+2;
 
 TonIndex::TonIndex(size_t n):
 _tons(),        // vector initially empty
+_closed(false),
 _repr_tonal(),
 _repr_modal(),
-_rankWeber(),
-_closed(false),
-_WeberTonal(true)
+// _WeberTonal(true)
+_WeberModal(false),
+_WeberBluesModal(false),
+_rankWeber()
 {
     init(n);
 }
@@ -147,7 +149,8 @@ void TonIndex::reset(size_t n)
     TRACE("TonIndex: empty the list of tonalities (row headers)");
     _tons.clear();
     _closed = false;
-    _WeberTonal = true;
+    _WeberModal = false;
+    _WeberBluesModal = false;
     init(n);
 }
 
@@ -179,15 +182,16 @@ void TonIndex::add(const Ton& ton, bool global)
         // table of Weber
         case ModeName::Major:
         case ModeName::Minor:
-        // case ModeName::MinorMel:
-
+            break;
+            
         // table of WeberModal
+        case ModeName::MinorMel:
         case ModeName::Ionian:
         case ModeName::Dorian:
         case ModeName::Phrygian:
         case ModeName::Lydian:
         case ModeName::Mixolydian:
-        case ModeName::MinorNat:
+        case ModeName::MinorNat: // = Aeolian
         case ModeName::Aeolian:
         case ModeName::Locrian:
             _WeberModal = true;
@@ -204,39 +208,45 @@ void TonIndex::add(const Ton& ton, bool global)
             break;
     }
     
-    // search for earlier equivalent tons
-    assert(!_tons.empty());
-    size_t ilast = _tons.size() - 1; // index of last ton added to this index
-    if (ilast == 0)
-    {
-        _repr_modal.push_back(ilast);
-        _repr_tonal.push_back(ilast);
-        return;
-    }
+    // search and store earlier equivalent tons
+    assert( _tons.size() > 0);
     
-    bool found_tonal = false;
-    bool found_modal = false;
-    for (size_t i = 0; i < ilast && (!found_tonal || !found_modal); ++i)
+    // it is the first ton added
+    if ( _tons.size() == 1)
     {
-        const Ton& toni = _tons.at(i).first;
-        assert(toni != ton); // no duplicates in TonIndex
-        if (!found_tonal && ton.equivalent(toni, true))  // tonal equiv
-        {
-            _repr_tonal.push_back(i);
-            found_tonal = true;
-        }
-        if (!found_modal && ton.equivalent(toni, false)) // modal equiv
-        {
-            _repr_modal.push_back(i);
-            found_modal = true;
-        }
+        _repr_modal.push_back(0);
+        _repr_tonal.push_back(0);
     }
-    
-    if (!found_tonal)
-        _repr_tonal.push_back(ilast);
-
-    if (!found_modal)
-        _repr_modal.push_back(ilast);
+    else
+    {
+        size_t current = _tons.size() - 1; // index of last ton added to this index
+        assert(_tons[current].first == ton);
+        assert(_tons[current].second == global);
+        bool found_tonal = false;
+        bool found_modal = false;
+        
+        for (size_t i = 0; i < current && (!found_tonal || !found_modal); ++i)
+        {
+            const Ton& toni = _tons.at(i).first;
+            assert(toni != ton); // no duplicates in TonIndex
+            if (!found_tonal && ton.equivalent(toni, true))  // tonal equiv
+            {
+                _repr_tonal.push_back(i);
+                found_tonal = true;
+            }
+            if (!found_modal && ton.equivalent(toni, false)) // modal equiv
+            {
+                _repr_modal.push_back(i);
+                found_modal = true;
+            }
+        }
+        
+        if (!found_tonal)
+            _repr_tonal.push_back(current); // tonal equivalent is self
+        
+        if (!found_modal)
+            _repr_modal.push_back(current); // modal equivalent is self
+    }
 }
 
 
@@ -264,38 +274,49 @@ void TonIndex::init(size_t n)
     switch (n)
     {
         case 0:
-            _WeberTonal = false;
+            // _WeberTonal = false;
             // close() must be called afterwards
+            assert(!_WeberModal);
+            assert(!_WeberBluesModal);
             break;
 
         case 24:
             init(-5, 6, ModeName::Major, true); // global flag
             init(-5, 6, ModeName::Minor, true);
             close(); // tonal Weber
+            assert(!_WeberModal);
+            assert(!_WeberBluesModal);
             break;
 
         case 25:
             init25();
             close(); // tonal Weber
+            assert(!_WeberModal);
+            assert(!_WeberBluesModal);
             break;
 
         case 26:
             init(-6, 6, ModeName::Major, true); // global flag
             init(-6, 6, ModeName::Minor, true);
             close(); // tonal Weber
+            assert(!_WeberModal);
+            assert(!_WeberBluesModal);
             break;
 
         case 30:
             init(-7, 7, ModeName::Major, true); // global flag
             init(-7, 7, ModeName::Minor, true);
             close(); // tonal Weber
+            assert(!_WeberModal);
+            assert(!_WeberBluesModal);
             break;
 
         case 104:
-            _WeberTonal = false;
+            // _WeberTonal = false;
             // init13(ModeName::Major);
+            init(-6, 6, ModeName::Major, true);
             init(-6, 6, ModeName::Minor, true);
-            init(-6, 6, ModeName::Ionian, true);
+            // init(-6, 6, ModeName::Ionian, true); // Major
             init(-6, 6, ModeName::Dorian, false);
             init(-6, 6, ModeName::Phrygian, false);
             init(-6, 6, ModeName::Lydian, false);
@@ -303,10 +324,30 @@ void TonIndex::init(size_t n)
             init(-6, 6, ModeName::Aeolian, false);
             init(-6, 6, ModeName::Locrian, false);
             close(); // modal Weber
+            assert(_WeberModal);
+            assert(!_WeberBluesModal);
+            break;
+
+        case 117:
+            // _WeberTonal = false;
+            // init13(ModeName::Major);
+            init(-6, 6, ModeName::Major, true);
+            init(-6, 6, ModeName::Minor, true);
+            init(-6, 6, ModeName::MinorMel, false);
+            // init(-6, 6, ModeName::Ionian, true); // Major
+            init(-6, 6, ModeName::Dorian, false);
+            init(-6, 6, ModeName::Phrygian, false);
+            init(-6, 6, ModeName::Lydian, false);
+            init(-6, 6, ModeName::Mixolydian, false);
+            init(-6, 6, ModeName::Aeolian, false);
+            init(-6, 6, ModeName::Locrian, false);
+            close(); // modal Weber
+            assert(_WeberModal);
+            assert(!_WeberBluesModal);
             break;
             
         case 135:
-            _WeberTonal = false;
+            // _WeberTonal = false;
             init(-7, 7, ModeName::Major, true); // Ionian
             init(-7, 7, ModeName::Minor, true);
             init(-7, 7, ModeName::MinorMel, false);
@@ -317,10 +358,12 @@ void TonIndex::init(size_t n)
             init(-7, 7, ModeName::Aeolian, false);
             init(-7, 7, ModeName::Locrian, false);
             close(); // modal Weber
+            assert(_WeberModal);
+            assert(!_WeberBluesModal);
             break;
             
         case 165:
-            _WeberTonal = false;
+            // _WeberTonal = false;
             init(-7, 7, ModeName::Major, true); // Ionian
             init(-7, 7, ModeName::Minor, true);
             init(-7, 7, ModeName::MinorMel, false);
@@ -333,6 +376,7 @@ void TonIndex::init(size_t n)
             init(-7, 7, ModeName::MajorBlues, false);
             init(-7, 7, ModeName::MinorBlues, false);
             close(); // modal Weber with Blues
+            assert(_WeberBluesModal);
             break;
             
             
@@ -476,7 +520,7 @@ bool TonIndex::global(const ModeName& m)
 }
 
 
-int TonIndex::distWeber(size_t i, size_t j) const
+unsigned int TonIndex::distWeber(size_t i, size_t j) const
 {
     assert(_closed);
     if (_WeberBluesModal)
@@ -514,6 +558,7 @@ void TonIndex::initRankWeber()
             
         // pcol is sorted by weber distance to i.
         _rankWeber.emplace_back(); // empty column
+        assert(_rankWeber.back().empty());
         util::ranks<unsigned int>(pcol,
                  [](unsigned int a, unsigned int b) { return (a == b); },
                  [](unsigned int a, unsigned int b) { return (a <  b); },

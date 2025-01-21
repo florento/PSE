@@ -33,12 +33,16 @@ class PST;
 /// @todo grid with a different TonIndex as the PST table
 class PSG
 {
-public:
+    
+public: // construction
         
     /// main constructor.
     /// @param tab pitch spelling table used to estimated the locals.
     /// @param mask bitvector of global tonalities for which locals must
     /// be estimated. must be of the same length as the Ton index of tab.
+    /// @todo suppr. mask. use the TonIndex of tab (or an optional second TonIndex given)
+    /// @todo flag mask
+    /// @todo flak atonal
     PSG(const PST& tab, std::vector<bool> mask);
     
     /// constructor without mask.
@@ -46,15 +50,17 @@ public:
     PSG(const PST& tab);
     
     virtual ~PSG();
+
+public: // access
+    
+    /// number of columns in this table, i.e. nb of measures spelled.
+    size_t size() const;
     
     /// vector of tonalities (row-index) associated to this table.
     inline const TonIndex& index() const { return _index; }
     
     /// number of rows in this table, i.e. nb of tons considered for spelling.
     inline size_t rowNb() const { return _index.size(); }
-    
-    /// number of columns in this table, i.e. nb of measures spelled.
-    size_t size() const;
     
     /// number of columns (PS Vectors) in this table, i.e. nb of measures spelled.
     inline size_t columnNb() const { return size(); }
@@ -98,7 +104,7 @@ private: // data
     ///   @see columnNb()
     std::vector<std::vector<size_t>> _content;
     
-private:
+private: // construction
     
     /// fill this table of local tons.
     /// @param flag whether the local estimation is done with rank means.
@@ -142,7 +148,7 @@ private:
     /// @param vec vector of best spelling, one for each possible local tonality.
     /// @param ig index of assumed global tonality.
     /// @param iprev index of estimated local tonality for previous measure.
-    size_t breakTie1(std::vector<size_t>& cands, const PSV& vec,
+    size_t breakTieBests(const PSV& vec, const std::vector<size_t>& cands,
                      size_t ig, size_t iprev);
     
     /// select in the given set of candidates an unique index for local tonality,
@@ -152,7 +158,7 @@ private:
     /// @param vec vector of best spelling, one for each possible local tonality.
     /// @param ig index of assumed global tonality.
     /// @param iprev index of estimated local tonality for previous measure.
-    size_t breakTie2(std::vector<size_t>& cands, const PSV& vec,
+    size_t breakTieRank(const PSV& vec, const std::vector<size_t>& cands,
                      size_t ig, size_t iprev);
         
     /// select a local tonality for a measure.
