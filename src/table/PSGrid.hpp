@@ -148,7 +148,7 @@ private: // construction
     /// @param vec vector of best spelling, one for each possible local tonality.
     /// @param ig index of assumed global tonality.
     /// @param iprev index of estimated local tonality for previous measure.
-    size_t breakTieBests(const PSV& vec, const std::vector<size_t>& cands,
+    size_t breakTieBest(const PSV& vec, const std::vector<size_t>& cands,
                      size_t ig, size_t iprev);
     
     /// select in the given set of candidates an unique index for local tonality,

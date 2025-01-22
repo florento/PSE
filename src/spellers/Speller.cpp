@@ -266,7 +266,7 @@ bool Speller::evalTable(CostType ctype, bool tonal, bool chromatic)
 {
     if (_table)
     {
-        WARN("deleting current pitch spelling table");
+        TRACE("deleting current pitch spelling table");
         delete _table;
         _table = nullptr;
     }
@@ -277,6 +277,7 @@ bool Speller::evalTable(CostType ctype, bool tonal, bool chromatic)
 //        _seed = new CostA(true); // with discount
 //    }
     
+    /// @todo remplacer algo par flag chromatic
     const Algo algo(chromatic?Algo::PSD:Algo::PSE);
     assert(_enum);
     _table = new PST(algo, sampleCost(ctype), index(), *_enum, tonal, _debug);
@@ -309,7 +310,8 @@ bool Speller::revalTable(CostType ctype, bool tonal, bool chromatic)
     PST* table_pre = _table;
     const Algo algo(chromatic?Algo::PSD:Algo::PSE);
     
-    
+    /// @todo suppr. _global et full, remplacé par index de table_pre (flag global)
+    /// @todo remplacer algo par flag chromatic
     if (_global)
     {
         _table = new PST(algo, *table_pre, sampleCost(ctype), *_global, *_grid,

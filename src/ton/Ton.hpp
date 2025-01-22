@@ -104,7 +104,11 @@ public:
     bool operator==(const Ton& rhs) const;
     bool operator!=(const Ton& rhs) const;
     
+    /// mode of this tonality.
     inline ModeName getMode() const { return _mode; }
+
+    /// the mode of this tonality is major or minor harmonic.
+    bool isMajorMinor() const;
 
     /// this tonality is undefined.
     bool undef() const;

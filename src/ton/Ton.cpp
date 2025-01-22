@@ -194,6 +194,12 @@ bool Ton::undef() const
 }
 
 
+bool Ton::isMajorMinor() const
+{
+    return (_mode == ModeName::Major) || (_mode == ModeName::Minor);
+}
+
+
 const enum NoteName Ton::getName() const
 {
     return Fifths::name(tonicFifth());

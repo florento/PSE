@@ -183,7 +183,8 @@ protected:
 /// @see PSRawEnum
 class Speller : public Spelli
 {
-public:
+
+public: // construction
     
     /// speller with given (fixed) enumerator of notes to spell.
     /// @param e external exnumerator of the notes to spell.
@@ -250,14 +251,14 @@ public:
     // wether the transitions for construction of tables shall be deterministic.
     // void setChromatic(bool flag);
     
-public: // spelling
+public: // spelling : computation of tables and grid
     
     /// construct the first spelling table.
     /// @param ctype type of cost domain.
     /// @param tonal tonal or modal construction of the initial state
     /// in each cell.
     /// @param chromatic whether transitions for best-path computation
-    /// are deterministic.
+    /// are deterministic or exhaustive.
     /// @return whether computation was succesfull.
     /// @warning if the table exists it is overwritten.
     /// @see sampleCost
@@ -429,7 +430,7 @@ protected: // data
     /// contains a ton index.
     PSO* _global;
     
-protected:
+protected: // debug
     
     /// time lapsed, in milli seconds, since the given start date.
     static double duration(clock_t start);

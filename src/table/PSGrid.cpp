@@ -69,9 +69,9 @@ const std::vector<size_t>& PSG::column(size_t j) const
 
 
 // 2 modes of selection of best local, according to flag :
-// - true for selection with rank
-// - false for selection lexico
-void PSG::init(const PST& tab, std::vector<bool> mask, bool flag)
+// - mode = true for selection by mean of 3 ranks
+// - mode = false for selection lexico
+void PSG::init(const PST& tab, std::vector<bool> mask, bool mode)
 {
     // for each bar (column)
     for (size_t j = 0; j < tab.size(); ++j)
@@ -85,8 +85,8 @@ void PSG::init(const PST& tab, std::vector<bool> mask, bool flag)
         // (there are several in case of tie).
         std::vector<size_t> cands; // empty
         
-        if (flag == false)
-            extractBests(vec, cands, 50);  // printf("%lu",cands.size());
+        if (mode == false) extractBests(vec, cands, 50);
+        
         // cands empty in case of empty measure
         
         // add empty column to the grid
@@ -94,11 +94,11 @@ void PSG::init(const PST& tab, std::vector<bool> mask, bool flag)
         _content.emplace_back();
         std::vector<size_t>& current = _content.back();
 
-        // compute every row in this new column
+        // compute every row in this new column of grid
         for (size_t i = 0; i < vec.size(); ++i)
         {
             // i is masked : do not estimate local for i
-            if (mask[i] == false)
+            if (mask[i] == false) // (!_index.global(i))
             {
                 current.push_back(TonIndex::UNDEF);
             }
@@ -106,15 +106,15 @@ void PSG::init(const PST& tab, std::vector<bool> mask, bool flag)
             else if (_content.size() == 1)
             {
                 // estimation locals by extractbests then distances
-                if (flag == false)
+                if (mode == false)
                 {
-                    current.push_back(breakTieBests(vec, cands, i, i));
+                    current.push_back(breakTieBest(vec, cands, i, i));
                 }
                 // estimation locals by mean of ranks
                 else
                 {
                     std::vector<size_t> ties; // empty
-                    extractRank(vec, ties, i, i);
+                    extractRank(vec, ties, i, i); // global and prev
                     current.push_back(breakTieRank(vec, ties, i, i));
                 }
             }
@@ -126,15 +126,16 @@ void PSG::init(const PST& tab, std::vector<bool> mask, bool flag)
                 assert(i < _content.at(j-1).size());
                 size_t iprev = _content.at(j-1).at(i);
                 // estimation locals by extractbests then distances
-                if (flag == false)
+                if (mode == false)
                 {
-                    current.push_back(breakTieBests(vec, cands, i, iprev));
+                    // global = i
+                    current.push_back(breakTieBest(vec, cands, i, iprev));
                 }
                 // estimation locals by mean of ranks
                 else
                 {
                     std::vector<size_t> ties; // empty
-                    extractRank(vec, ties, i, iprev);
+                    extractRank(vec, ties, i, iprev); // global = i
                     current.push_back(breakTieRank(vec, ties, i, iprev));
                 }
             }
@@ -147,13 +148,13 @@ void PSG::init(const PST& tab, std::vector<bool> mask, bool flag)
 
 
 // this function determines the best local tonalities
-// according to the bags of the studied measure
+// according to the bags of the studied measure (column)
 // However it has an important flaw : no tonal context is taken into account
 // to determine the local tones.
 void PSG::extractBests(const PSV& vec, std::vector<size_t>& ties, double d)
 {
     assert(ties.empty());
-    vec.bests(ties, d);
+    vec.bests(ties, d); // push the bests in ties
 }
 
 
@@ -252,8 +253,8 @@ void PSG::extractRank(const PSV& vec, std::vector<size_t>& ties,
 // this function chooses among the best possible local tonalities
 // (obtained with extract_bests)
 // the closest one to the previous local tone and to the global tone.
-size_t PSG::breakTieBests(const PSV& vec, const std::vector<size_t>& cands,
-                      size_t ig, size_t iprev)
+size_t PSG::breakTieBest(const PSV& vec, const std::vector<size_t>& cands,
+                         size_t ig, size_t iprev)
 {
     // no candidates in case of empty bar: keep the previous local
     if (cands.empty())
@@ -263,84 +264,102 @@ size_t PSG::breakTieBests(const PSV& vec, const std::vector<size_t>& cands,
     assert(iprev != TonIndex::FAILED);
     assert(iprev < _index.size());
 
-    // const Ton& pton = _index.ton(iprev);
-    // const Ton& gton = _index.ton(ig);
-
     // index of the current best local tonality.
     size_t ibest = TonIndex::UNDEF; // out of range. initialized to avoid warning.
-
-    // cost for the current best local tonality.
-    std::shared_ptr<Cost> cbest = nullptr;     // WARNING: initialized to 0.
-    
-    // rank for distance to previous local ton. iprev for current best
-    size_t bestrankp = 999; // initialized to avoid warning
-
-    // rank for distance to global ton. ig current best
-    size_t bestrankg = 999; // initialized to avoid warning
-
-    // absolute number of fifth of current best
-    int bestfifth = 999; // initialized to avoid warning
 
     for (size_t j : cands)
     {
         const PSB& psb = vec.bag(j);
+        
         // occurs iff first() == last(), and in this case all the bags are empty.
         if (psb.empty()) break; // break
-        const Cost& cost = psb.cost(); // shared_clone();
-        const Ton& jton = _index.ton(j);
-        size_t rankp = _index.rankWeber(iprev, j);  // dist = pton.distWeber(jton);
-        size_t rankg = _index.rankWeber(ig, j); // gton.distWeber(jton);
-        int fifths = std::abs(jton.fifths());
         
-        if ((cbest == nullptr) || (cost < *cbest))
+        const Cost& cost = psb.cost();
+        
+        // first j
+        if (ibest == TonIndex::UNDEF)
         {
             ibest = j;
-            cbest = cost.shared_clone();
-            bestrankp = rankp;
-            bestrankg = rankg;
-            bestfifth = fifths;
         }
-        else if (cost == *cbest)
+        else
         {
-            // tie break criteria 1:
-            // best distance (of current tonality j)
-            // to the previous local tonality for ig
-            if (rankp < bestrankp)
+            const Cost& bestcost = vec.bag(ibest).cost();
+            if (cost < bestcost)
             {
-                ibest = j; // new best
-                bestrankp = rankp;
-                bestrankg = rankg;
-                bestfifth = fifths;
+                ibest = j;
             }
-            // tie break criteria 2:
-            // best distance (of current tonality j) to the global tonality ig
-            else if (rankp == bestrankp)
+            else if (cost == bestcost)
             {
-                if (rankg < bestrankg)
+                // tie break criteria 1:
+                // best distance (of current tonality j)
+                // to the previous local tonality for ig
+                // dist = pton.distWeber(jton);
+                size_t rankp = _index.rankWeber(iprev, j);
+                size_t bestrankp = _index.rankWeber(iprev, ibest);
+                if (rankp < bestrankp)
                 {
                     ibest = j; // new best
-                    bestrankg = rankg;
-                    bestfifth = fifths;
                 }
-                // tie break criteria 3:
-                // smallest key signature
-                // ALT: best distance between the previous local tonality and
-                // a config in bag for the current tonality j
-                else if (rankg == bestrankg)
+                // tie break criteria 2:
+                // best distance (of current tonality j)
+                // to the global tonality ig
+                else if (rankp == bestrankp)
                 {
-                    const Ton& bton = _index.ton(ibest);
-                    if (fifths < bestfifth)
+                    // gton.distWeber(jton);
+                    size_t rankg = _index.rankWeber(ig, j);
+                    size_t bestrankg = _index.rankWeber(ig, ibest);
+                    if (rankg < bestrankg)
                     {
                         ibest = j; // new best
-                        bestfifth = fifths;
                     }
-                    // tie break fail
-                    else if ((fifths == bestfifth) && (j != ibest))
+                    // tie break criteria 3:
+                    // smallest key signature
+                    // ALT: best distance between the previous local tonality and
+                    // a config in bag for the current tonality j
+                    else if (rankg == bestrankg)
                     {
-                        WARN("PSGrid: tie break1 fail {}:{} vs {}:{}",
-                             j, jton, ibest, bton);
-                        // WARN_TIE(vec.bar(), cands, ibest);
-                        // keep the smallest ibest
+                        const Ton& ton = _index.ton(j);
+                        int fifths = std::abs(ton.fifths());
+                        const Ton& bestton = _index.ton(ibest);
+                        int bestfifth = std::abs(bestton.fifths());
+                        if (fifths < bestfifth)
+                        {
+                            ibest = j; // new best
+                        }
+                        // tie break fail
+                        else if (fifths == bestfifth)
+                        {
+                            assert(j != ibest);
+                            // tie break criteria 4:
+                            // Major, Minor > modes
+                            if (ton.isMajorMinor() && !bestton.isMajorMinor())
+                            {
+                                ibest = j; // new best
+                            }
+                            else if (ton.isMajorMinor() and
+                                     bestton.isMajorMinor())
+                            {
+                                // tie break criteria 5:
+                                // Major > Minor
+                                if ((ton.getMode() == ModeName::Major) and
+                                    (bestton.getMode() == ModeName::Minor))
+                                {
+                                    ibest = j; // new best
+                                }
+                                // signal
+                                // - different color (same abs)
+                                // - uncomparable modes
+                                else if ((ton.fifths() != bestton.fifths()) or
+                                         (!ton.isMajorMinor() and
+                                          !bestton.isMajorMinor()))
+                                {
+                                    WARN("PSGrid: tie break fail {}: {}:{} vs {}:{}",
+                                         vec.bar(), j, ton, ibest, bestton);
+                                    // WARN_TIE(vec.bar(), cands, ibest);
+                                    // keep the former (smaller) ibest
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -376,6 +395,7 @@ size_t PSG::breakTieRank(const PSV& vec, const std::vector<size_t>& cands,
     // no candidates in case of empty bar: keep the previous local
     if (cands.empty())
         return iprev;  // TonIndex::FAILED; // TonIndex::UNDEF
+    // no ties: return the single candidate
     else if (cands.size() == 1)
         return cands.front();
     
@@ -386,6 +406,7 @@ size_t PSG::breakTieRank(const PSV& vec, const std::vector<size_t>& cands,
     // const Ton& pton = _index.ton(iprev);
     // const Ton& gton = _index.ton(ig);
     
+    // tie break
     // first pass to extract the sublist of candidates not with church mode.
     std::vector<size_t> cands_majmin; // empty
     for (size_t j : cands)
@@ -434,7 +455,6 @@ size_t PSG::breakTieRank(const PSV& vec, const std::vector<size_t>& cands,
     cands_majmin.insert(cands_majmin.end(),
                         cands_church.begin(), cands_church.end() );
     
-
     if (cands_majmin.empty()) // should not happen
     {
         ERROR("PSG breakTie2: filtering error");
@@ -446,7 +466,7 @@ size_t PSG::breakTieRank(const PSV& vec, const std::vector<size_t>& cands,
     }
     
     // still a tie.
-    size_t choice = breakTieBests(vec, cands_majmin, ig, iprev); // cands_majmin.front();
+    size_t choice = breakTieBest(vec, cands_majmin, ig, iprev);
     // WARN_TIE(vec.bar(), cands_majmin, choice);
     return choice;
 }
@@ -474,6 +494,7 @@ void PSG::WARN_TIE(size_t barnb, const std::vector<size_t>& ties,
 // this alternative function determines the best local tonality by restraining
 // its search only on tones close to the previous or global one
 // and then choosing the one minimizing accidents
+/// #todo AV not used?
 size_t PSG::estimateLocalLexico(const PSV& vec, size_t ig, size_t iprev,
                                 unsigned int d)
 {
@@ -573,7 +594,8 @@ size_t PSG::estimateLocalLexico(const PSV& vec, size_t ig, size_t iprev,
 }
 
 
-//real function using ranks, used when the init flag is true
+// real function using ranks, used when the init flag is true
+/// #todo AV not used?
 size_t PSG::estimateLocalRank(const PSV& vec, size_t ig, size_t iprev)
 {
     // case of empty bar: keep the previous local
@@ -653,17 +675,12 @@ size_t PSG::estimateLocalRank(const PSV& vec, size_t ig, size_t iprev)
     }
 }
 
+
+
 } // end namespace pse
 
 
-
-
-
-
-
-//______________________________________________________________________________//
 /*
-
 
 void PSG::init(const PST& tab, std::vector<bool> mask)
 {
