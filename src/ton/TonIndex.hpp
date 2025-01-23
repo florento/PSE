@@ -156,7 +156,7 @@ public: // sub array of tonalities that can be global.
     /// Whether the tonality at the given index can be considered as global.
     /// @param i an index in this array of tonalities.
     /// must be smaller than size().
-    bool global(size_t i) const;
+    bool isGlobal(size_t i) const;
     
     /// number of tons in this array of tonalities that can be
     /// candidates estimated global.
@@ -171,6 +171,14 @@ public: // sub array of tonalities that can be global.
     /// @param i an index in this array of tonalities.
     /// must be smaller than size().
     void unsetGlobal(size_t i);
+    
+    /// index of the n-best candidate global tonality.
+    /// @param n number of candidate global tonality,
+    /// must be in 0..globals().
+    /// @return the index of the n-best global tonality
+    /// in this index of tons, in 0..index.size(),
+    /// or TonIndex::UNDEF in case of error.
+    size_t getGlobal(size_t n = 0) const;
 
     /// Estimate and store the global tonality candidates
     /// according to the costs in the given table.

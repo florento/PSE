@@ -465,8 +465,9 @@ void TonIndex::initmodal()
 //}
 
 
-bool TonIndex::global(size_t i) const
+bool TonIndex::isGlobal(size_t i) const
 {
+    assert(i != TonIndex::UNDEF);
     assert(i < _tons.size());
     return _tons.at(i).second;
 }
@@ -476,7 +477,7 @@ size_t TonIndex::globals() const
 {
     size_t c = 0;
     for (size_t i = 0; i < _tons.size(); ++i)
-        if (_tons.at(i).second) c++;
+        if (isGlobal(i)) c++;
     return c;
 }
 
@@ -492,6 +493,24 @@ void TonIndex::unsetGlobal(size_t i)
 {
     assert(i < _tons.size());
     _tons.at(i).second = false;
+}
+
+
+size_t TonIndex::getGlobal(size_t n) const
+{
+    size_t c = 0;
+    for (size_t i = 0; i < size(); ++i)
+    {
+        if (isGlobal(i))
+        {
+            if (c == n)
+                return i; // return the index in Ton Index
+            else
+                c++;
+        }
+        // ignore non global
+    }
+    return TonIndex::UNDEF;
 }
 
 
@@ -522,7 +541,7 @@ void TonIndex::selectGlobals(const PST& tab, double d, bool refine)
     for (size_t i = 0; i < _tons.size(); ++i)
     {
         // skip
-        if (refine and !global(i))
+        if (refine and !isGlobal(i))
             continue;
 
         assert(i != TonIndex::FAILED);
@@ -554,7 +573,7 @@ void TonIndex::selectGlobals(const PST& tab, double d, bool refine)
         assert(i != TonIndex::UNDEF);
 
         // skip
-        if (refine and !global(i))
+        if (refine and !isGlobal(i))
             continue;
 
 
@@ -579,19 +598,24 @@ void TonIndex::selectGlobals(const PST& tab, double d, bool refine)
     }
     
     // at least ibest
-    assert(global(ibest));
+    assert(isGlobal(ibest));
 }
 
 
 bool TonIndex::selectGlobal()
 {
     size_t ibest = bestGlobal();
-
+    if (ibest == TonIndex::UNDEF)
+    {
+        WARN("TonIndex selectGlobal: best global not found");
+        return false;
+    }
+    
     for (size_t i = 0; i < _tons.size(); ++i)
     {
         if (ibest == i)
         {
-            assert(global(i));
+            assert(isGlobal(i));
             // setGlobal(i);
         }
         else
@@ -600,8 +624,9 @@ bool TonIndex::selectGlobal()
         }
 
     }
-    assert(ibest == TonIndex::UNDEF || globals() == 1);
-    assert(ibest != TonIndex::UNDEF || globals() == 0);
+    size_t nbg = globals();
+    assert(ibest == TonIndex::UNDEF || nbg == 1);
+    assert(ibest != TonIndex::UNDEF || nbg == 0);
     return (ibest != TonIndex::UNDEF);
 }
 
@@ -613,20 +638,24 @@ size_t TonIndex::bestGlobal() const
     
     for (size_t i = 0; i < _tons.size(); ++i)
     {
-        if (!global(i)) // ignore non global
-            break;
+        if (!isGlobal(i)) // ignore non global
+            continue;
             
         // first i
         if (ibest == TonIndex::UNDEF)
         {
+            assert(isGlobal(i));
             ibest = i;
         }
         else
         {
             // tie break criteria 1:
             // smallest key signature
+            assert(isGlobal(i));
             const Ton& toni = ton(i);
             int fifths = std::abs(toni.fifths());
+            assert(ibest != TonIndex::UNDEF);
+            assert(isGlobal(ibest));
             const Ton& tonbest = ton(ibest);
             int bestfifth = std::abs(tonbest.fifths());
             if (fifths < bestfifth)
@@ -673,6 +702,9 @@ size_t TonIndex::bestGlobal() const
         }
     }
     
+    if (ibest == TonIndex::UNDEF)
+        ERROR("TonIndex bestGlobal: not found");
+
     return ibest;
 }
 

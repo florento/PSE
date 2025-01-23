@@ -30,7 +30,8 @@ using namespace pse;
 int spellKE(SpellerEnum& sp,
             enum CostType c1, bool tonal1, bool det1,
             enum CostType c2, bool tonal2, bool det2,
-            int global1, int global2)
+            int global1,
+            int global2) // global2 not used
 {
     // construct the first spelling table
     if (c1 == CostType::UNDEF)
@@ -44,11 +45,11 @@ int spellKE(SpellerEnum& sp,
     // _speller.reset(0);
 
     // step1: construct the first spelling table
-    DEBUG("evalTable {} {} {}", c1, tonal1, det1);
+    DEBUG("spellKE: eval Table1 {} {} {}", c1, tonal1, det1);
     bool fstatus = sp.evalTable(c1, tonal1, det1);
     if (fstatus == false)
     {
-        ERROR("failed to build first table");
+        ERROR("spellKE: failed to compute Table1");
         return KeyFifth::UNDEF;
     }
     
@@ -59,45 +60,46 @@ int spellKE(SpellerEnum& sp,
     bool mask = (global1 < 100);
     if (mask)
     {
-        DEBUG("evalGlobal (1) {}", global1);
+        DEBUG("spellKE: eval Globals {}% approx.", global1);
         fstatus = sp.selectGlobals(global1, false);
         if (fstatus == false)
         {
-            ERROR("failed to evaluate global tonalities");
+            ERROR("spellKE: failed to evaluate global tonalities");
             return KeyFifth::UNDEF;
         }
+        size_t nbg = sp.globals();
+        DEBUG("spellKE: {} Globals selected", nbg);
     }
     
     // construct the grid of local tonalities
-    DEBUG("evalGrid");
-    fstatus = sp.evalGrid();
-    if (fstatus == false)
-    {
-        ERROR("failed to evaluate grid of local tonalities");
-        return KeyFifth::UNDEF;
-    }
-    
-    // step2: reconstruct the spelling table using the grid of local tonalities
     if (c2 != pse::CostType::UNDEF)
     {
-        DEBUG("revalTable {} {} {}", c2, tonal2, det2);
+        DEBUG("spellKE: compute Grid");
+        fstatus = sp.evalGrid();
+        if (fstatus == false)
+        {
+            ERROR("spellKE: failed to evaluate Grid of local tonalities");
+            return KeyFifth::UNDEF;
+        }
+    
+    // step2: reconstruct the spelling table using the grid of local tonalities
+        DEBUG("spellKE: reval Table2 {} {} {}", c2, tonal2, det2);
         fstatus = sp.revalTable(c2, tonal2, det2);
         if (fstatus == false)
         {
-            ERROR("spellKE: failed to build second table");
+            ERROR("spellKE: failed to build Table2");
             return KeyFifth::UNDEF;
         }
     }
     
-    // compute the subarray of tons selected as candidate global tonality
-    // tolerance distance global2%
-    assert(0 <= global2);
-    assert(global2 <= 100);
-    DEBUG("evalGlobal (2) {}", global2);
-    fstatus = sp.selectGlobals(global2, mask);
+    // extract the estimated global ton from speller
+    // assert(0 <= global2);
+    // assert(global2 <= 100);
+    DEBUG("spellKE: evaluation final list of Global tonalities");
+    fstatus = sp.selectGlobals(0, true);
     if (fstatus == false)
     {
-        ERROR("failed to evaluate global tonalities");
+        ERROR("spellKE: failed to evaluate  final list of Global tonalities");
         return KeyFifth::UNDEF;
     }
 
@@ -105,21 +107,31 @@ int spellKE(SpellerEnum& sp,
     size_t nbg = sp.globals();
     if (nbg == 0)
     {
-        ERROR("spellKE: could not evaluate a global ton");
+        ERROR("spellKE: zero global ton selected");
         return KeyFifth::UNDEF;
     }
     else if (nbg > 1)
     {
-        WARN("spellKE: {} tie estimated global tons:", nbg);
+        WARN("spellKE: {} ties global tons in final selection:", nbg);
         for (size_t j = 0; j < nbg; ++j)
-            WARN("estimated global ton {}: {} ({})",
-                 j, sp.global(j), sp.iglobal(j));
+            WARN("         global ton {}/{}: {} ({})",
+                 j, nbg, sp.global(j), sp.iglobal(j));
+        DEBUG("spellKE: selecting unique Global");
+        if (fstatus == false)
+        {
+            ERROR("spellKE: failed to break ties for {} Global tonalities",
+                  nbg);
+            return KeyFifth::UNDEF;
+        }
     }
-    
+    nbg = sp.globals();
+    assert(nbg == 1);
     // index of best estimation of global ton in the array of tons of speller.
     size_t ig = sp.iglobal(0);
-    DEBUG("spellKE: best ig={}, ton={} ({})",
-          ig, sp.ton(ig), sp.ton(ig).fifths());
+    assert(ig != TonIndex::UNDEF);
+    const Ton& gton(sp.global(0));
+    assert(!gton.undef());
+    DEBUG("spellKE: best ig={}, ton={} ({})", ig, gton, gton.fifths());
     
     // rename input notes, using the spelling table computed
     DEBUG("spellKE: renaming");
@@ -157,8 +169,8 @@ int main(int argc, const char* argv[])
     // LG101(sp);
     // LG461(sp);
     // Waldstein(sp);
-    //Airegin(sp);
-    Afternoon(sp);
+    Airegin(sp);
+    //Afternoon(sp);
 
     std::cout << "spelling " << sp.size() << " notes" << std::endl;
     int ks = spellKE(sp,

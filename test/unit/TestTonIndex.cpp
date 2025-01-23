@@ -318,3 +318,23 @@ TEST(TonIndex, 30_equiv)
         EXPECT_EQ(id.irepresentative(i, false), i);
     }
 }
+
+TEST(TonIndex, 30_selectGlobal)
+{
+    pse::TonIndex id(30);
+    // unset all
+    for (size_t i = 0; i < id.size(); ++i)
+        id.unsetGlobal(i);
+    id.setGlobal(4); // E- major (-3)
+    id.setGlobal(5); // B- major (-2)
+    EXPECT_FALSE(id.isGlobal(0));
+    EXPECT_TRUE(id.isGlobal(4));
+    EXPECT_TRUE(id.isGlobal(5));
+    EXPECT_EQ(id.globals(), 2);
+    EXPECT_EQ(id.bestGlobal(), 5);
+    
+    EXPECT_TRUE(id.selectGlobal());
+    EXPECT_EQ(id.globals(), 1);
+    EXPECT_FALSE(id.isGlobal(4));
+    EXPECT_TRUE(id.isGlobal(5));
+}

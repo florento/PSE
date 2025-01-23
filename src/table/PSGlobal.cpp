@@ -32,7 +32,7 @@ _debug(dflag)
             assert(i != TonIndex::FAILED);
             assert(i != TonIndex::UNDEF);
             assert(i < _index.size());
-            assert(_index.global(i)); // i can be global (if globals was well formed)
+            assert(_index.isGlobal(i)); // i can be global (if globals was well formed)
             _globals.push_back(i);
         }
     }
@@ -60,7 +60,7 @@ _debug(dflag)
     if (full) // full list of candidate global ton
     {
         for (size_t i = 0; i < _index.size(); ++i)
-            if (_index.global(i)) // i can be global
+            if (_index.isGlobal(i)) // i can be global
                 _globals.push_back(i);
     }
 }
@@ -93,7 +93,7 @@ void PSO::init(const PSO& globals, const PST& tab, double d)
         assert(i != TonIndex::FAILED);
         assert(i != TonIndex::UNDEF);
         assert(i < _index.size());
-        assert(_index.global(i)); // i can be global (if globals was well formed)
+        assert(_index.isGlobal(i)); // i can be global (if globals was well formed)
         //     for (size_t i = 1; ; ++i)
         // all elements of cands have same cost
         const Cost& bestCost = tab.rowCost(ibest);
@@ -117,7 +117,7 @@ void PSO::init(const PSO& globals, const PST& tab, double d)
         assert(i != TonIndex::FAILED);
         assert(i != TonIndex::UNDEF);
         assert(i < _index.size());
-        assert(_index.global(i)); // i can be global (if globals was well formed)
+        assert(_index.isGlobal(i)); // i can be global (if globals was well formed)
         const Cost& rc = tab.rowCost(i);
 
         // real tie

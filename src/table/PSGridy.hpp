@@ -36,9 +36,10 @@ public: // construction
 
     /// construction of grid from a table.
     /// @param tab pitch spelling table used to estimated the locals.
+    /// @param initialize compute the table content with greedy/best algo
     /// @todo flag mask
     /// @todo flak atonal
-    PSGy(const PST& tab);
+    PSGy(const PST& tab, bool initialize=true);
     
     virtual ~PSGy();
     

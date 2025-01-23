@@ -10,11 +10,13 @@
 namespace pse {
 
 
-PSGy::PSGy(const PST& tab): // std::vector<bool> mask:
+PSGy::PSGy(const PST& tab, bool initialize): // std::vector<bool> mask:
 PSG(tab)
 {
     // assert(mask.size() == _index.size());
-    init(tab);
+    assert(_content.empty());
+    if (initialize)
+        init(tab);
 }
 
 
@@ -48,7 +50,7 @@ void PSGy::init(const PST& tab)
         for (size_t i = 0; i < vec.size(); ++i)
         {
             // i is masked (not global) : do not estimate local for i
-            if (!_index.global(i)) // (mask[i] == false) //
+            if (!_index.isGlobal(i)) // (mask[i] == false) //
             {
                 current.push_back(TonIndex::UNDEF);
             }

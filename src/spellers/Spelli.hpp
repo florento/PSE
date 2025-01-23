@@ -42,7 +42,9 @@ namespace pse {
 /// - generic cost values.
 class Spelli
 {
-public:
+    
+public: // construction
+    
     /// main constructor.
     /// @param nbTons use default list of tonalities (default: empty).
     /// @param dflag debug mode.
@@ -58,12 +60,7 @@ public:
     /// destructor
     virtual ~Spelli();
 
-public: // debug flag
-
-    /// set debug mode (log messages for debugging)
-    void debug(bool flag);
-
-public: // array of tonalities (Ton index)
+public: // access array of tonalities (Ton index)
     
     /// array of tonalities considered for pitch spelling.
     /// @todo const ?
@@ -78,7 +75,9 @@ public: // array of tonalities (Ton index)
     /// must be smaller than nbtons().
     /// @see nbTons()
     const Ton& ton(size_t i) const;
-    
+
+public: // construct array of tonalities (Ton index)
+
     /// empty the array of tonalities considered for pitch-spelling vectors,
     /// and rebuild it with the given default number of tonalities.
     /// The array is unclosed.
@@ -124,7 +123,35 @@ public: // array of tonalities (Ton index)
     // @warning the array of tonalities array must not be closed.
     // @todo TBR obsolete
     // void WeberModal();
-       
+
+public: // results feedback : global ton estimation
+
+    /// number of candidates estimated global tonality (ties).
+    /// @return the size of _global or 0 if evalGlobal was not called.
+    virtual size_t globals() const;
+    
+    /// n-best candidate global tonality.
+    /// @param n number of candidate estimated global tonality,
+    /// must be in 0..globals().
+    /// @return the n-best estimated global tonality,
+    /// or an undef ton if there is none.
+    /// @warning evalGlobals must have been called.
+    virtual const Ton& global(size_t n = 0) const;
+    
+    /// index of the n-best candidate global tonality.
+    /// @param n number of candidate global tonality,
+    /// must be in 0..globals().
+    /// @return the index of the n-best global tonality
+    /// in the index of tons, in 0..index.size(),
+    /// or TonIndex::UNDEF in case of error.
+    /// @warning spell() must have been called.
+    virtual size_t iglobal(size_t n = 0) const;
+
+public: // debug flag
+
+        /// set debug mode (log messages for debugging)
+        void debug(bool flag);
+
 protected: // data
         
     /// array of tonalities that shall be considered for pitch spelling.

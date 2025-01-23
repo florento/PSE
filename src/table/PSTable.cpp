@@ -792,8 +792,7 @@ bool PST::rename(size_t ig)
     }
     
     assert(ig < _index.size());
-    const Ton& gton = _index.ton(ig);
-    TRACE("PST: rename with estimated global ton {}", gton);
+    TRACE("PST: rename with estimated global ton {}", _index.ton(ig));
     
     for (size_t i = 0; i < _psvs.size(); ++i)
     {

@@ -23,11 +23,6 @@ namespace py = pybind11;
 #include "Speller.hpp"
 
 
-
-
-
-
-
 #endif /* pypse_hpp */
 
 /// @}

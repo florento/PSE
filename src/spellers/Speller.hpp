@@ -175,7 +175,7 @@ public: // spelling : computation of tables and grid
     /// @see class RewritePassing
     size_t rewritePassing();
     
-public: // results feedback
+public: // results feedback : notes
     
     /// estimated name for the note of given index,
     /// in 0..6 (0 is 'C', 6 is 'B').
@@ -195,28 +195,9 @@ public: // results feedback
     /// or not.
     /// @param i index of note in the enumerator of input notes.
     bool printed(size_t i) const;
-    
-    /// number of candidates estimated global tonality (ties).
-    /// @return the size of _global or 0 if evalGlobal was not called.
-    virtual size_t globals() const;
-    
-    /// n-best candidate global tonality.
-    /// @param n number of candidate estimated global tonality,
-    /// must be in 0..globals().
-    /// @return the n-best estimated global tonality,
-    /// or an undef ton if there is none.
-    /// @warning evalGlobals must have been called.
-    virtual const Ton& global(size_t n = 0) const;
-    
-    /// index of the n-best candidate global tonality.
-    /// @param n number of candidate global tonality,
-    /// must be in 0..globals().
-    /// @return the index of the n-best global tonality
-    /// in the index of tons, in 0..index.size(),
-    /// or TonIndex::UNDEF in case of error.
-    /// @warning spell() must have been called.
-    virtual size_t iglobal(size_t n = 0) const;
-    
+
+public: // results feedback : grid
+
     /// the grid of local tonalities has been computaed.
     /// i.e. evalGrid() has been called.
     virtual bool locals() const;

@@ -11,9 +11,10 @@
 namespace pse {
 
 PSGr::PSGr(const PST& tab): // std::vector<bool> mask
-PSGy(tab)
+PSGy(tab, false) // do not compute table (yet empty)
 {
     // assert(mask.size() == _index.size());
+    assert(_content.empty());
     init(tab);
 }
 
@@ -48,7 +49,7 @@ void PSGr::init(const PST& tab)
         for (size_t i = 0; i < vec.size(); ++i)
         {
             // i is masked (not global): do not estimate local for i
-            if (!_index.global(i)) // (mask[i] == false)
+            if (!_index.isGlobal(i)) // (mask[i] == false)
             {
                 current.push_back(TonIndex::UNDEF);
             }

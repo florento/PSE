@@ -1082,7 +1082,7 @@ class Spellew:
         assert(self._algo_name == 'PSE')
         # modal step: compute the first spelling table 
         assert(self._ct1 != pse.CTYPE_UNDEF)
-        print('algo PSE compute Table 1', 
+        print('PSE: computing Table 1', 
               'cost type1:', self._ct1,
               'tonal1:', self._tonal1,
               'deterministic1:', self._det1, end=' ', flush=True)
@@ -1095,21 +1095,23 @@ class Spellew:
         if self.mask():
             assert(self._global1 >= 0)
             assert(self._global1 < 100)
-            print('evaluate first list of global candidates', self._global1, '%', flush=True)
-            self._speller.eval_global(self._global1, False)
-            print(self._speller.globals(), 'candidates global from 1st table', flush=True)                
-        # construct the grid of local tonalities
-        print('algo PSE compute Grid', end=' ', flush=True)
-        stat.start_timer(2)
-        self._speller.eval_grid()
-        stat.stop_timer(2)                
-        print("{0:0.2f}".format(stat.get_timer(2)), 'ms', end='\n', flush=True)
-        print('algo PSE compute Table 2', 
-              'cost type2:', self._ct2,
-              'tonal2:', self._tonal2,
-              'deterministic2:', self._det2, end=' ', flush=True)
-        # tonal step: compute the second spelling table 
+            print('PSE: evaluation first list of Global candidates', 
+                  self._global1, '%', flush=True)
+            self._speller.select_globals(self._global1, False)
+            nbg = self._speller.globals()
+            print('PSE:', nbg, 'candidate global from 1st table', flush=True)                
         if self._ct2 != pse.CTYPE_UNDEF:
+        # construct the grid of local tonalities
+            print('PSE: computing Grid', end=' ', flush=True)
+            stat.start_timer(2)
+            self._speller.eval_grid()
+            stat.stop_timer(2)                
+            print("{0:0.2f}".format(stat.get_timer(2)), 'ms', end='\n', flush=True)
+        # tonal step: compute the second spelling table 
+            print('PSE: computing Table 2', 
+                  'cost type2:', self._ct2,
+                  'tonal2:', self._tonal2,
+                  'deterministic2:', self._det2, end=' ', flush=True)
             stat.start_timer(3)
             self._speller.reval_table(self._ct2, self._tonal2, self._det2)
             stat.stop_timer(3)
@@ -1196,47 +1198,73 @@ class Spellew:
         ln = extract_part(part, chord_sym)  # input note list
         assert(count_notes(part, chord_sym) == len(ln)) 
         print(len(ln), 'notes,', count_measures(part), 'bars,', end=' ')
+        
         # spell with algo
-        print('spelling with', self._algo_name+self._algo_params, flush=True)
+        print('PSE: spelling with', self._algo_name+self._algo_params, flush=True)
         self.spell(ln, stats)   #print('spell finished', end='\n', flush=True)   
+        
         # extract the estimated global ton from speller
-        print('evaluate final list of global tonalities', self._global2, '%', flush=True)
+        print('PSE: evaluation final list of Global tonalities', 
+              self._global2, '% approx.', flush=True)
         self._speller.select_globals(0, True)  # select the best global (can be tiesa)
-        status = self._speller.select_global() # break ties        
-        assert(not status == self._speller.global_ton(0).undef())                
-        assert(    status or self._speller.globals() == 0)
-        assert(not status or self._speller.globals() == 1)
-        (gt, i) = (self._speller.global_ton(0), self._speller.iglobal_ton(0))
-        print('pse eval_part: global selected:', i, flush=True)
-        # apply the spelling in the row of the estimated global
-        print('renaming with the spelling computed')
-        self.rename(i)
+        nbg = self._speller.globals()
+        print('PSE:', nbg, 'global(s) in final selection:', flush=True)
+        if nbg > 1:
+            for j in range(nbg):
+                tonj = self._speller.global_ton(j)
+                print('PSE: global', j+1, '/', nbg, ':',  
+                      m21_key(tonj), '(', tonj.fifths(), ')', 
+                      'index:', self._speller.iglobal_ton(j), flush=True)  
+            print('PSE: tie breaking Global', flush=True)                 
+            status = self._speller.select_global() # break ties
+            nbg = self._speller.globals()        
+            if not status:
+                print('PSE: failed tie breaking final list of Global tonalities')
+                assert(nbg == 0)
+            else:
+                assert(nbg == 1)
+        (gt, i) = (self._speller.global_ton(0), self._speller.iglobal_ton(0))       
+        assert(nbg == 0 or nbg == 1)
+        assert(nbg == 0 or not gt.undef()) 
+        print('PSE: global selected:', i, m21_key(gt), 
+              '(', gt.fifths(), ')', flush=True)
+        
         # eval the estimation of global key
         if not gt.undef():
             if compare_key(k0, gt):
                 print('global ton: OK:', '(', m21_key(gt), 
-                      '), has the same signature as', k0, end=' ')
+                      '), has the same signature as', k0)
             else:
-                print('global ton: NO:', '(', m21_key(gt), 'was', k0, '),', end=' ')
+                print('global ton: NO:', '(', m21_key(gt), 'was', k0, '),')
                 if mark:
                     self.anote_global_part(part, gt) 
         else:
-            print('ERROR eval_part: gt undef')
+            print('PSE: ERROR eval_part: gt undef')
+
+        # apply the spelling in the row of the estimated global
+        if not gt.undef():
+            print('PSE: renaming with the spelling computed', i, m21_key(gt))
+            self.rename(i)
+        
         # compute diff list between reference score and respell
         ld0 = diff(ln, self._speller) 
-        print('diff before rewriting:', len(ld0), end='\n', flush=True)
+        print('PSE: diff before rewriting:', len(ld0), end='\n', flush=True)
+
         # rewrite the passing notes
-        print('rewrite passing notes', end='\n', flush=True)
+        print('PSE: rewrite passing notes', end='\n', flush=True)
         self._speller.rewrite_passing()
+
         # compute diff list between reference score and rewritten
         ld1 = diff(ln, self._speller) 
-        print('diff after rewriting:', len(ld1), end='\n', flush=True)
+        print('PSE: diff after rewriting:', len(ld1), end='\n', flush=True)
+
         # annotations
         if mark:
             anote_rediff(ln, ld0, ld1) # anote_diff(ln, ld0, 'red')
             if (self._speller.locals()):
                 anote_local_part(part, self._speller, i)    
         return (k0, gt, len(ln), ld1)
+
 
     def eval_score(self, score, stats=Stats(),
                    score_id=0, title:str='', composer:str='', output_path=None, 

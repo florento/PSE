@@ -138,6 +138,68 @@ bool Spelli::closedTons() const
     return _index->closed();
 }
 
+
+size_t Spelli::globals() const
+{
+    assert(_index);
+    return _index->globals();
+    // if (_global == nullptr)
+    // {
+    //     WARN("Speller globals: evalGlobal not called");
+    //     return 0;
+    // }
+    // else
+    // {
+    //     return _global->size();
+    // }
+}
+
+
+size_t Spelli::iglobal(size_t n) const
+{
+    assert(_index);
+    return _index->getGlobal(n);
+    
+    // if (_global == nullptr)
+    // {
+    //     ERROR("Speller iglobal: evalGlobal not called");
+    //     return TonIndex::UNDEF;
+    // }
+    // else
+    // {
+    //     return _global->iglobal(n);
+    // }
+}
+
+
+const Ton& Spelli::global(size_t n) const
+{
+    assert(_index);
+    size_t ig = iglobal(n);
+    if (ig == TonIndex::UNDEF)
+    {
+        ERROR("Speller global: no global nb {}", n);
+        return _index->undef();
+    }
+    else
+    {
+        assert(ig < _index->size());
+        return _index->ton(ig);
+    }
+    
+    // if (_global == nullptr)
+    // {
+    //     ERROR("Speller global: evalGlobal not called");
+    //     assert(_uton);
+    //     return *_uton;
+    // }
+    // else
+    // {
+    //     return _global->global(n);
+    // }
+}
+
+
 //
 // prepare spelling
 //
