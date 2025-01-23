@@ -26,6 +26,7 @@
 
 namespace pse {
 
+class PST;
 
 /// index (list of row headers) for PSTable and PSVector (column in table).
 /// The array of tonalities for PS is encapsulated,
@@ -113,6 +114,9 @@ public: // access
     /// @see inverse of TonIndex::find.
     const Ton& ton(size_t i) const;
 
+    /// reference to an undef ton.
+    const Ton& undef() const;
+   
     /// find the index of a ton in current array of tonalities.
     /// @param ton a given tonality.
     /// @return the index of ton or UNDEF if not found.
@@ -147,12 +151,16 @@ public: // access
     /// - FAIL in case of error.
     size_t enharmonic(size_t i) const;
 
-public: // sub array of tonalities that can be global
+public: // sub array of tonalities that can be global.
     
     /// Whether the tonality at the given index can be considered as global.
     /// @param i an index in this array of tonalities.
     /// must be smaller than size().
     bool global(size_t i) const;
+    
+    /// number of tons in this array of tonalities that can be
+    /// candidates estimated global.
+    size_t globals() const;
 
     /// declare that the tonality at the given index can be global.
     /// @param i an index in this array of tonalities.
@@ -164,6 +172,31 @@ public: // sub array of tonalities that can be global
     /// must be smaller than size().
     void unsetGlobal(size_t i);
 
+    /// Estimate and store the global tonality candidates
+    /// according to the costs in the given table.
+    /// @param tab for the extraction of global tonality.
+    /// The index of tonalities stored refer to the ton index of this table.
+    /// @param d tolerance distance (in percent) for considering two
+    /// cost approximatively equal in the global ton search.
+    /// @param refine whether we consider only current global tons or all tons
+    /// of this ton index in the selection of new globals.
+    /// in the first case, the new set of globals is a subset of the current
+    /// one, in the second case, it may be orthogonal.
+    // @warning call eGlobals_eq and eGlobals_less variants to operator==
+    // and operator< on cost.
+    void selectGlobals(const PST& tab, double d=0, bool refine=true);
+    
+    /// select in the global tons a unique index on ton,
+    /// according to the following criteria, and unselect the others.
+    /// @return whether the operation was succesful.
+    bool selectGlobal();
+
+    /// select in the global tons a unique index on ton,
+    /// according to the following criteria.
+    /// @return the selected best global tonality in tie or
+    /// TonIndex::UNDEF if tie break failed.
+    size_t bestGlobal() const;
+    
     // switch to tonal mode for the conmputation of Weber distance.
     // @warning this array must not be closed.
     // @todo TBR
@@ -196,6 +229,9 @@ private: // data
     /// every tonality is associated a flag saying whether
     /// it can be considered as global.
     std::vector<std::pair<const Ton, bool>> _tons;
+
+    /// one undef ton.
+    Ton _undef;
 
     /// this ton index has been closed:
     bool _closed;

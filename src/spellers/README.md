@@ -25,7 +25,7 @@ Their methods can be called in Python, through the binding, to specify the notes
 
 ## speller methods
 
-see `Speller.hpp` (documented)
+see documentation in  `Speller.hpp` 
 
 
 
@@ -44,7 +44,9 @@ see `Speller.hpp` (documented)
 
 
 
-#### array of tonalities
+#### array of tonalities 
+
+`TonIndex`
 
 - `addTon`
   add a ton to the array of tonalities
@@ -143,3 +145,50 @@ see `Speller.hpp` (documented)
 - `ilocal(i, j)`
   index of local ton in `grid`
 - timings for preparation of TonIndex, construction of tables, grid, globals...
+
+
+
+## Classes of Spellers
+
+```mermaid
+classDiagram
+
+class Spelli
+Spelli: +ton index
+Spelli --|> Speller
+
+class Speller
+Speller: +abs enum 
+Speller: +table
+Speller: +grid
+Speller: -globals
+Speller --|> SpellerEnum
+
+class SpellerEnum
+SpellerEnum: +raw enum
+SpellerEnum --|> PS13
+SpellerEnum --|> Speller1Pass
+
+class PS13
+PS13: +chromatic scale
+PS13: +kpre
+PS13: +kpost
+PS13: +globals
+
+
+class Speller1Pass
+Speller1Pass: +table1
+Speller1Pass: +globals1
+Speller1Pass --|> Speller2Pass
+
+class Speller2Pass
+Speller2Pass: +table2
+Speller2Pass: +globals2
+
+Speller2Pass --|> PS14
+Speller2Pass --|> PSE
+
+
+
+```
+

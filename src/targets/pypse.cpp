@@ -129,9 +129,11 @@ PYBIND11_MODULE(pse, m)
         .def("eval_table", &pse::SpellerEnum::evalTable, "construct the spelling table")
         .def("reval_table", &pse::SpellerEnum::revalTable, "reconstruct the spelling table")
         .def("eval_grid", &pse::SpellerEnum::evalGrid, "construct the grid of local tons")
-        .def("eval_global", &pse::SpellerEnum::evalGlobal,
-             "compute the subarray of tons selected as candidate global tonality",
+        .def("select_globals", &pse::SpellerEnum::selectGlobals,
+             "compute the subarray of tons selected as candidate global tonality, using the spell table",
              py::arg("d") = 0, py::arg("refine") = false)
+        .def("select_global", &pse::SpellerEnum::selectGlobal,
+             "select a unique ton amongst candidate globals")
         .def("rename", &pse::SpellerEnum::rename, "rename input notes")
         .def("rewrite_passing", &pse::SpellerEnum::rewritePassing, "rewrite passing notes")
         .def("name",  &pse::SpellerEnum::name, "estimated name of note",
@@ -144,10 +146,10 @@ PYBIND11_MODULE(pse, m)
              py::arg("i"))
         .def("globals", &pse::SpellerEnum::globals,
              "get number of candidates (ties) for the estimatation of the global tonality")
-        .def("global_ton", &pse::SpellerEnum::global, "get candidate global tonality")
-        .def("iglobal_ton", &pse::SpellerEnum::iglobal, "get index of candidate global tonality ")
+        .def("global_ton", &pse::SpellerEnum::global,
+             "get candidate global tonality")
         .def("iglobal_ton", &pse::SpellerEnum::iglobal,
-             "get index of estimated global tonality")
+             "get index of candidate global tonality ")
         .def("locals", &pse::PSE::locals, "the local tonality grid has been estimated")
         .def("local_bar", &pse::SpellerEnum::local, "estimated local tonality for a bar")
              // py::arg("ton"), py::arg("bar"))

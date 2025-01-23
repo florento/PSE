@@ -9,6 +9,7 @@
 #include <algorithm>    // std::sort
 
 #include "TonIndex.hpp"
+#include "PSTable.hpp"
 
 
 namespace pse {
@@ -20,7 +21,8 @@ const size_t TonIndex::UNDEF  = MAXTONS+1;
 const size_t TonIndex::FAILED = MAXTONS+2;
 
 TonIndex::TonIndex(size_t n):
-_tons(),        // vector initially empty
+_tons(),    // vector initially empty
+_undef(),   // undef ton
 _closed(false),
 _repr_tonal(),
 _repr_modal(),
@@ -54,6 +56,12 @@ const Ton& TonIndex::ton(size_t i) const
 {
     assert(i < _tons.size());
     return _tons.at(i).first;
+}
+
+
+const Ton& TonIndex::undef() const
+{
+    return _undef;
 }
 
 
@@ -464,6 +472,15 @@ bool TonIndex::global(size_t i) const
 }
 
 
+size_t TonIndex::globals() const
+{
+    size_t c = 0;
+    for (size_t i = 0; i < _tons.size(); ++i)
+        if (_tons.at(i).second) c++;
+    return c;
+}
+
+
 void TonIndex::setGlobal(size_t i)
 {
     assert(i < _tons.size());
@@ -475,6 +492,188 @@ void TonIndex::unsetGlobal(size_t i)
 {
     assert(i < _tons.size());
     _tons.at(i).second = false;
+}
+
+
+void TonIndex::selectGlobals(const PST& tab, double d, bool refine)
+{
+    assert(0 <= d);
+    assert(d <= 100);
+
+    // select all tons
+    if (d == 100)
+    {
+        if (refine)
+            return;
+        // select all tons as global
+        else
+        {
+            for (size_t i = 0; i < _tons.size(); ++i)
+                setGlobal(i);
+            return;
+        }
+    }
+    
+    // index of row in tab with best cost cummultated cost
+    size_t ibest = TonIndex::UNDEF;
+    
+    // estimate the best tonality in tab wrt costs (nb accidentals)
+    // amongst the current globals if refine
+    for (size_t i = 0; i < _tons.size(); ++i)
+    {
+        // skip
+        if (refine and !global(i))
+            continue;
+
+        assert(i != TonIndex::FAILED);
+        assert(i != TonIndex::UNDEF);
+                                
+        // new best ton
+        if (ibest == TonIndex::UNDEF or tab.rowCost(i) < tab.rowCost(ibest))
+        {
+            ibest = i;
+        }
+    }
+    
+    if (ibest == TonIndex::UNDEF)
+    {
+        assert(empty() or refine); // refine and no globals
+        if (refine)
+            WARN("TonIndex selectGlobals: refine mode and no globals");
+        return;
+    }
+    
+    assert(ibest < _tons.size());
+    const Cost& bestCost = tab.rowCost(ibest);
+    
+    // mark as global (candidates) all tonality
+    // at distance to ibest smaller than d
+    for (size_t i = 0; i < _tons.size(); ++i)
+    {
+        assert(i != TonIndex::FAILED);
+        assert(i != TonIndex::UNDEF);
+
+        // skip
+        if (refine and !global(i))
+            continue;
+
+
+        const Cost& rc = tab.rowCost(i);
+
+        // real tie
+        if (rc == bestCost)
+        {
+            setGlobal(i);
+        }
+        // approx tie
+        // we keep this case apart from real tie because of floating approx.
+        // (dist is double)
+        else if ((d > 0) && (rc.dist(bestCost) <= d))
+        {
+            setGlobal(i);
+        }
+        else
+        {
+            unsetGlobal(i);
+        }
+    }
+    
+    // at least ibest
+    assert(global(ibest));
+}
+
+
+bool TonIndex::selectGlobal()
+{
+    size_t ibest = bestGlobal();
+
+    for (size_t i = 0; i < _tons.size(); ++i)
+    {
+        if (ibest == i)
+        {
+            assert(global(i));
+            // setGlobal(i);
+        }
+        else
+        {
+            unsetGlobal(i);
+        }
+
+    }
+    assert(ibest == TonIndex::UNDEF || globals() == 1);
+    assert(ibest != TonIndex::UNDEF || globals() == 0);
+    return (ibest != TonIndex::UNDEF);
+}
+
+
+size_t TonIndex::bestGlobal() const
+{
+    // index of the selected best ton.
+    size_t ibest = TonIndex::UNDEF; // out of range.
+    
+    for (size_t i = 0; i < _tons.size(); ++i)
+    {
+        if (!global(i)) // ignore non global
+            break;
+            
+        // first i
+        if (ibest == TonIndex::UNDEF)
+        {
+            ibest = i;
+        }
+        else
+        {
+            // tie break criteria 1:
+            // smallest key signature
+            const Ton& toni = ton(i);
+            int fifths = std::abs(toni.fifths());
+            const Ton& tonbest = ton(ibest);
+            int bestfifth = std::abs(tonbest.fifths());
+            if (fifths < bestfifth)
+            {
+                ibest = i; // new best
+            }
+            else if (fifths == bestfifth)
+            {
+                assert(i != ibest);
+                // tie break criteria 2:
+                // Major, Minor > modes
+                if (toni.isMajorMinor() and !tonbest.isMajorMinor())
+                {
+                    ibest = i; // new best
+                }
+                else if (toni.isMajorMinor() and
+                         tonbest.isMajorMinor())
+                {
+                    // tie break criteria 5:
+                    // Major > Minor
+                    if ((toni.getMode() == ModeName::Major) and
+                        (tonbest.getMode() == ModeName::Minor))
+                    {
+                        ibest = i; // new best
+                    }
+                    // keep the former (smaller) ibest
+                    // signal
+                    // - different color (same abs)
+                    // - uncomparable modes
+                    else if ((toni.fifths() != tonbest.fifths()) or
+                             (!toni.isMajorMinor() and
+                              !tonbest.isMajorMinor()))
+                    {
+                        WARN("PSGrid: tie break fail {}:{} vs {}:{}",
+                             i, toni, ibest, tonbest);
+                    }
+                    else
+                    {
+                        DEBUG("PSGrid: tie break fail {}:{} vs {}:{}",
+                              i, toni, ibest, tonbest);
+                    }
+                }
+            }
+        }
+    }
+    
+    return ibest;
 }
 
 

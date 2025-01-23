@@ -6,6 +6,7 @@
 //
 
 #include "Speller1pass.hpp"
+#include "PSGridr.hpp"
 
 namespace pse {
 
@@ -140,11 +141,11 @@ size_t Speller1Pass::ilocal(size_t i, size_t j) const
     {
         ERROR("Speller1Pass local: call spell() first");
     }
-    else if (j >= _grid->columnNb())
+    else if (j >= _grid->nbMeasures())
     {
         ERROR("Speller1Pass local: no bar {}", j);
     }
-    else if (i >= _grid->rowNb())
+    else if (i >= _grid->nbTons())
     {
         ERROR("Speller1Pass local: no ton of index {}", i);
     }
@@ -211,7 +212,8 @@ bool Speller1Pass::spell(const Cost& seed0, double diff0,
     }
     
     time_start = clock();
-    _grid = new PSG(*_table0, _global0->getMask()); // std::unique_ptr<PSG>
+    //_grid = new PSG(*_table0, _global0->getMask()); // std::unique_ptr<PSG>
+    _grid = new PSGr(*_table0); // std::unique_ptr<PSG>
     _time_grid = duration(time_start);
     if (_debug)
     {

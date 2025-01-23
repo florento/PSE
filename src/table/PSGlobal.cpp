@@ -12,6 +12,7 @@
 namespace pse {
 
 
+// refine globals
 PSO::PSO(const PSO& globals, const PST& tab, double d, bool dflag):
 _index(tab.index()),
 _globals(), // empty

@@ -44,6 +44,22 @@
 		4315863A2983EDD900918B1B /* PSRawEnum.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 431586292983E89B00918B1B /* PSRawEnum.hpp */; };
 		4315863B2983F15400918B1B /* PSEnum.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4315862B2983E89B00918B1B /* PSEnum.cpp */; };
 		4315863D2983F15400918B1B /* PSRawEnum.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4315862D2983E89B00918B1B /* PSRawEnum.cpp */; };
+		4317D8392D4123C6007C71C7 /* PSGridy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4317D8382D4123C6007C71C7 /* PSGridy.cpp */; };
+		4317D83A2D4123C6007C71C7 /* PSGridy.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 4317D8372D4123C6007C71C7 /* PSGridy.hpp */; };
+		4317D83B2D4123C6007C71C7 /* PSGridy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4317D8382D4123C6007C71C7 /* PSGridy.cpp */; };
+		4317D83C2D4123C6007C71C7 /* PSGridy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4317D8382D4123C6007C71C7 /* PSGridy.cpp */; };
+		4317D83F2D4144DE007C71C7 /* PSGridr.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 4317D83D2D4144DE007C71C7 /* PSGridr.hpp */; };
+		4317D8402D4144DE007C71C7 /* PSGridr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4317D83E2D4144DE007C71C7 /* PSGridr.cpp */; };
+		4317D8412D4144DE007C71C7 /* PSGridr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4317D83E2D4144DE007C71C7 /* PSGridr.cpp */; };
+		4317D8422D4144DE007C71C7 /* PSGridr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4317D83E2D4144DE007C71C7 /* PSGridr.cpp */; };
+		4317D8452D4246A5007C71C7 /* Spelli.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4317D8442D4246A5007C71C7 /* Spelli.cpp */; };
+		4317D8462D4246A5007C71C7 /* Spelli.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4317D8442D4246A5007C71C7 /* Spelli.cpp */; };
+		4317D8472D4246A5007C71C7 /* Spelli.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 4317D8432D4246A5007C71C7 /* Spelli.hpp */; };
+		4317D8482D4246A5007C71C7 /* Spelli.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4317D8442D4246A5007C71C7 /* Spelli.cpp */; };
+		4317D84B2D4246BC007C71C7 /* SpellerEnum.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4317D84A2D4246BC007C71C7 /* SpellerEnum.cpp */; };
+		4317D84C2D4246BC007C71C7 /* SpellerEnum.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 4317D8492D4246BC007C71C7 /* SpellerEnum.hpp */; };
+		4317D84D2D4246BC007C71C7 /* SpellerEnum.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4317D84A2D4246BC007C71C7 /* SpellerEnum.cpp */; };
+		4317D84E2D4246BC007C71C7 /* SpellerEnum.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4317D84A2D4246BC007C71C7 /* SpellerEnum.cpp */; };
 		432586A02A40508A0069D796 /* PSConfig2-chroma.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 4325869C2A40508A0069D796 /* PSConfig2-chroma.hpp */; };
 		432586A32A4050C80069D796 /* PSConfig1c.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 432586A12A4050C80069D796 /* PSConfig1c.cpp */; };
 		432586A42A4050C80069D796 /* PSConfig1c.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 432586A12A4050C80069D796 /* PSConfig1c.cpp */; };
@@ -302,6 +318,14 @@
 		4315862D2983E89B00918B1B /* PSRawEnum.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PSRawEnum.cpp; path = src/import/PSRawEnum.cpp; sourceTree = "<group>"; };
 		4315862E2983E89B00918B1B /* PSEnum.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = PSEnum.hpp; path = src/import/PSEnum.hpp; sourceTree = "<group>"; };
 		4315862F2983E89B00918B1B /* PSM21Enum.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PSM21Enum.cpp; path = src/import/PSM21Enum.cpp; sourceTree = "<group>"; };
+		4317D8372D4123C6007C71C7 /* PSGridy.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = PSGridy.hpp; sourceTree = "<group>"; };
+		4317D8382D4123C6007C71C7 /* PSGridy.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PSGridy.cpp; sourceTree = "<group>"; };
+		4317D83D2D4144DE007C71C7 /* PSGridr.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = PSGridr.hpp; sourceTree = "<group>"; };
+		4317D83E2D4144DE007C71C7 /* PSGridr.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PSGridr.cpp; sourceTree = "<group>"; };
+		4317D8432D4246A5007C71C7 /* Spelli.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Spelli.hpp; sourceTree = "<group>"; };
+		4317D8442D4246A5007C71C7 /* Spelli.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Spelli.cpp; sourceTree = "<group>"; };
+		4317D8492D4246BC007C71C7 /* SpellerEnum.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SpellerEnum.hpp; sourceTree = "<group>"; };
+		4317D84A2D4246BC007C71C7 /* SpellerEnum.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SpellerEnum.cpp; sourceTree = "<group>"; };
 		4325869B2A40508A0069D796 /* PSConfig2-chroma.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "PSConfig2-chroma.cpp"; sourceTree = "<group>"; };
 		4325869C2A40508A0069D796 /* PSConfig2-chroma.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = "PSConfig2-chroma.hpp"; sourceTree = "<group>"; };
 		432586A12A4050C80069D796 /* PSConfig1c.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PSConfig1c.cpp; sourceTree = "<group>"; };
@@ -562,6 +586,10 @@
 				43ABA51F29242418002AC1D4 /* PSTable.cpp */,
 				43C4A6512A1E7EBB00925A99 /* PSGrid.hpp */,
 				43C4A6502A1E7EBB00925A99 /* PSGrid.cpp */,
+				4317D8372D4123C6007C71C7 /* PSGridy.hpp */,
+				4317D8382D4123C6007C71C7 /* PSGridy.cpp */,
+				4317D83D2D4144DE007C71C7 /* PSGridr.hpp */,
+				4317D83E2D4144DE007C71C7 /* PSGridr.cpp */,
 				4346CB352A1FF62100756DE3 /* PSGlobal.hpp */,
 				4346CB342A1FF62100756DE3 /* PSGlobal.cpp */,
 				43ABA51C29242418002AC1D4 /* PSPath.hpp */,
@@ -665,8 +693,12 @@
 				434317252A1156F900D685A1 /* PSE */,
 				430960522A0CD2C60097487A /* AlgoName.hpp */,
 				430960512A0CD2C60097487A /* AlgoName.cpp */,
+				4317D8432D4246A5007C71C7 /* Spelli.hpp */,
+				4317D8442D4246A5007C71C7 /* Spelli.cpp */,
 				432EF6AC292D405400C620CF /* Speller.hpp */,
 				432EF6AB292D405400C620CF /* Speller.cpp */,
+				4317D8492D4246BC007C71C7 /* SpellerEnum.hpp */,
+				4317D84A2D4246BC007C71C7 /* SpellerEnum.cpp */,
 				43D7BAB22A27CFA500570C47 /* Speller1pass.hpp */,
 				43D7BAB12A27CFA500570C47 /* Speller1pass.cpp */,
 				43D7BAB82A27CFBD00570C47 /* Speller2pass.hpp */,
@@ -901,6 +933,7 @@
 				4310526929CDD15000694D5A /* Scale.hpp in Headers */,
 				43C4A6552A1E7EBB00925A99 /* PSGrid.hpp in Headers */,
 				432E7A5629D45FE2000E2B72 /* PS13.hpp in Headers */,
+				4317D83F2D4144DE007C71C7 /* PSGridr.hpp in Headers */,
 				80604E482C4D094A0085488C /* WeberBluesModal_static.hpp in Headers */,
 				432586A62A4050C80069D796 /* PSConfig1c.hpp in Headers */,
 				430CDFF22924E6D800A84650 /* KeyFifth.hpp in Headers */,
@@ -915,10 +948,13 @@
 				43ABA53029242418002AC1D4 /* PSConfig0.hpp in Headers */,
 				43ABA52B29242418002AC1D4 /* PSConfig.hpp in Headers */,
 				430960562A0CD2C60097487A /* AlgoName.hpp in Headers */,
+				4317D84C2D4246BC007C71C7 /* SpellerEnum.hpp in Headers */,
 				43316F2429AA73DC000160EA /* TonIndex.hpp in Headers */,
 				43ABA52A29242418002AC1D4 /* PSBag.hpp in Headers */,
+				4317D83A2D4123C6007C71C7 /* PSGridy.hpp in Headers */,
 				4397A5DE29A6CDB300C2CC9A /* PSOrder.hpp in Headers */,
 				43D7BABC2A27CFBD00570C47 /* Speller2pass.hpp in Headers */,
+				4317D8472D4246A5007C71C7 /* Spelli.hpp in Headers */,
 				434B1DFE298ED394001CE41C /* PSConfig2.hpp in Headers */,
 				43ABA52C29242418002AC1D4 /* PSPath.hpp in Headers */,
 				432865452BA983CA00761737 /* AccidPair.hpp in Headers */,
@@ -1039,6 +1075,7 @@
 				4308A70C2A28EC9B007F7A55 /* TestKeyFifth.cpp in Sources */,
 				437E31642D3FA9EE00ECDE7A /* TestRank.cpp in Sources */,
 				430627B32A44A4D80046FD99 /* PSConfig2.cpp in Sources */,
+				4317D8452D4246A5007C71C7 /* Spelli.cpp in Sources */,
 				80604E472C4D094A0085488C /* WeberBluesModal_static.cpp in Sources */,
 				435081EB29D6D74800465943 /* Ton.cpp in Sources */,
 				435081FC29D6D7E300465943 /* Weber.cpp in Sources */,
@@ -1068,6 +1105,7 @@
 				438A581729E0492A0073A32C /* PSConfig1.cpp in Sources */,
 				43C4A6542A1E7EBB00925A99 /* PSGrid.cpp in Sources */,
 				4309605D2A0D034A0097487A /* Speller.cpp in Sources */,
+				4317D8412D4144DE007C71C7 /* PSGridr.cpp in Sources */,
 				432A0F8D2A311889007D5CA2 /* TestRewritePassing.cpp in Sources */,
 				43EFF3652B8E526C000CA4B2 /* WeberModal.cpp in Sources */,
 				438A581329E049020073A32C /* PSTable.cpp in Sources */,
@@ -1089,8 +1127,10 @@
 				435081F629D6D77200465943 /* NoteName.cpp in Sources */,
 				43600D552A45C94E002704E0 /* CostAD.cpp in Sources */,
 				43139F7C2A0D3D9D00A8E764 /* TestFifths.cpp in Sources */,
+				4317D84E2D4246BC007C71C7 /* SpellerEnum.cpp in Sources */,
 				43D31A142A1426A300234527 /* Cost.cpp in Sources */,
 				438EFD812A0D4C8600FF3733 /* PSOrder.cpp in Sources */,
+				4317D83C2D4123C6007C71C7 /* PSGridy.cpp in Sources */,
 				435081F529D6D76F00465943 /* Accidental.cpp in Sources */,
 				439DBF302A4FFF6800565CC4 /* TestRankWeber.cpp in Sources */,
 				438A581429E049190073A32C /* PSVector.cpp in Sources */,
@@ -1123,6 +1163,7 @@
 				43A24E442A3A0BD50041B004 /* PSRational.cpp in Sources */,
 				43D7BABF2A27E31600570C47 /* PSD.cpp in Sources */,
 				43ABA511292423E8002AC1D4 /* Enharmonic.cpp in Sources */,
+				4317D84D2D4246BC007C71C7 /* SpellerEnum.cpp in Sources */,
 				43ABA50C292423E8002AC1D4 /* Fifths.cpp in Sources */,
 				43C2BA192999529E0084AB3B /* PWO.cpp in Sources */,
 				430CDFF12924E6D800A84650 /* KeyFifth.cpp in Sources */,
@@ -1138,9 +1179,11 @@
 				434B1DF8298ECCF1001CE41C /* PSConfig1.cpp in Sources */,
 				430627B52A44A4D90046FD99 /* PSConfig2.cpp in Sources */,
 				43ABA52E29242418002AC1D4 /* PSState.cpp in Sources */,
+				4317D8482D4246A5007C71C7 /* Spelli.cpp in Sources */,
 				43600D572A45C94F002704E0 /* CostAD.cpp in Sources */,
 				4310526729CDD15000694D5A /* Scale.cpp in Sources */,
 				43ABA53129242418002AC1D4 /* PSConfig0.cpp in Sources */,
+				4317D83B2D4123C6007C71C7 /* PSGridy.cpp in Sources */,
 				439DBF332A516F7500565CC4 /* utils.cpp in Sources */,
 				437C73722BADD6D000E9478C /* Accids.cpp in Sources */,
 				432E7A5429D45FE2000E2B72 /* PS13.cpp in Sources */,
@@ -1165,6 +1208,7 @@
 				43D7BAB32A27CFA500570C47 /* Speller1pass.cpp in Sources */,
 				43723E942C47ABC2004DD860 /* pstrace.cpp in Sources */,
 				4306C0EC2B27156700CD3FAE /* pypse.cpp in Sources */,
+				4317D8402D4144DE007C71C7 /* PSGridr.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1190,6 +1234,7 @@
 				43D31A132A1426A300234527 /* Cost.cpp in Sources */,
 				43D9DB4D2B964412005F0A13 /* Weber_static.cpp in Sources */,
 				43D5EC682A4C7D2100693E37 /* samples.cpp in Sources */,
+				4317D84B2D4246BC007C71C7 /* SpellerEnum.cpp in Sources */,
 				432E7A4F29D427FD000E2B72 /* PSE.cpp in Sources */,
 				437C73732BADD6D000E9478C /* Accids.cpp in Sources */,
 				43FBEACC2930CEDD008FC486 /* KeyFifth.cpp in Sources */,
@@ -1211,6 +1256,7 @@
 				43C2BA1729994F630084AB3B /* Pitch.cpp in Sources */,
 				432865432BA983CA00761737 /* AccidPair.cpp in Sources */,
 				43D9DB532B964A0F005F0A13 /* WeberModal_static.cpp in Sources */,
+				4317D8422D4144DE007C71C7 /* PSGridr.cpp in Sources */,
 				4309605E2A0D034D0097487A /* Speller.cpp in Sources */,
 				430627C62A4586380046FD99 /* CostADlex.cpp in Sources */,
 				43FBEACF2930CEDD008FC486 /* PSConfig0.cpp in Sources */,
@@ -1219,7 +1265,9 @@
 				43C2BA11299946150084AB3B /* IntervalHarmonic.cpp in Sources */,
 				43D7BABA2A27CFBD00570C47 /* Speller2pass.cpp in Sources */,
 				430627C32A4586320046FD99 /* CostADplus.cpp in Sources */,
+				4317D8462D4246A5007C71C7 /* Spelli.cpp in Sources */,
 				43FBEAD12930CEDD008FC486 /* PSBag.cpp in Sources */,
+				4317D8392D4123C6007C71C7 /* PSGridy.cpp in Sources */,
 				43C4A6532A1E7EBB00925A99 /* PSGrid.cpp in Sources */,
 				43FBEAD22930CEDD008FC486 /* PSVector.cpp in Sources */,
 				43FBEAD32930CEDD008FC486 /* PSTable.cpp in Sources */,

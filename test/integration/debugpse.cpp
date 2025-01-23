@@ -60,7 +60,7 @@ int spellKE(SpellerEnum& sp,
     if (mask)
     {
         DEBUG("evalGlobal (1) {}", global1);
-        fstatus = sp.evalGlobal(global1, false);
+        fstatus = sp.selectGlobals(global1, false);
         if (fstatus == false)
         {
             ERROR("failed to evaluate global tonalities");
@@ -94,7 +94,7 @@ int spellKE(SpellerEnum& sp,
     assert(0 <= global2);
     assert(global2 <= 100);
     DEBUG("evalGlobal (2) {}", global2);
-    fstatus = sp.evalGlobal(global2, mask);
+    fstatus = sp.selectGlobals(global2, mask);
     if (fstatus == false)
     {
         ERROR("failed to evaluate global tonalities");

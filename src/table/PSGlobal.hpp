@@ -4,6 +4,7 @@
 //
 //  Created by Florent Jacquemard on 25/05/2023.
 //
+// OBSOLETE. replaced by flags `global` in TonIndex.
 /// @addtogroup pitch
 /// @{
 
@@ -33,7 +34,7 @@ class PST;
 /// usable for the estimation of one glabal tonality or for filtering.
 /// It is associated to a TonIndex and the candidate global tonalities
 /// are indices in this TonIndex.
-/// @todo redundant with the flag global in the TonIndex ?
+/// @todo not used anymore. replaced by flags `global` in TonIndex
 class PSO
 {
     

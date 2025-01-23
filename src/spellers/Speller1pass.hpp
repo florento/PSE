@@ -4,6 +4,7 @@
 //
 //  Created by Florent Jacquemard on 31/05/2023.
 //
+// OBSOLETE. replaced by SpellerEnum.
 /// @addtogroup pitch
 /// @{
 
@@ -20,7 +21,7 @@
 #include "PSTable.hpp"
 #include "PSGlobal.hpp"
 #include "PSGrid.hpp"
-#include "Speller.hpp"
+#include "SpellerEnum.hpp"
 
 namespace pse {
 

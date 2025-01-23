@@ -16,162 +16,13 @@
 #include <memory>
 #include <time.h>
 
-#include "pstrace.hpp"
-#include "PSRational.hpp"
-#include "NoteName.hpp"
-#include "Accidental.hpp"
-#include "ModeName.hpp"
-#include "Ton.hpp"
-#include "TonIndex.hpp"
-#include "PSRawEnum.hpp"
-#include "PSTable.hpp"
-#include "AlgoName.hpp"
-#include "CostType.hpp"
-#include "CostA.hpp"
-#include "CostADplus.hpp"
-#include "CostADlex.hpp"
-
+#include "Spelli.hpp"
 
 
 // TODO
 // - const ln & lb
 
 namespace pse {
-
-
-/// backbone of class for pitch-spelling functionalities,
-/// containing the following paramters:
-/// - one array of tonalities considered for pitch spelling.
-/// - one debug flag.
-/// - generic cost values.
-class Spelli
-{
-public:
-    /// main constructor.
-    /// @param nbTons use default list of tonalities (default: empty).
-    /// @param dflag debug mode.
-    /// @see TonIndex for supported values for nbTons.
-    Spelli(size_t nbTons=0, bool dflag=false);
-    
-    /// constructor with given TonIndex.
-    /// @param id a Ton Index. must be closed.
-    /// @param dflag debug mode.
-    /// @see TonIndex for supported values for nbTons.
-    Spelli(std::shared_ptr<TonIndex> id, bool dflag=false);
-
-    /// destructor
-    virtual ~Spelli();
-
-public: // debug flag
-
-    /// set debug mode (log messages for debugging)
-    void debug(bool flag);
-
-public: // array of tonalities (Ton index)
-    
-    /// array of tonalities considered for pitch spelling.
-    /// @todo const ?
-    TonIndex& index();
-    
-    /// number of tonalities considered for pitch spelling.
-    /// It is the size of array of tonalities.
-    size_t nbTons() const;
-
-    /// tonality (for pitch spelling) of given index.
-    /// @param i an index in the array of tonalities.
-    /// must be smaller than nbtons().
-    /// @see nbTons()
-    const Ton& ton(size_t i) const;
-    
-    /// empty the array of tonalities considered for pitch-spelling vectors,
-    /// and rebuild it with the given default number of tonalities.
-    /// The array is unclosed.
-    /// @param n number of default list of tonalities.
-    /// @see constructor TonIndex
-    /// @see addTon
-    void resetTons(size_t n = 0);
-    
-    /// add one tonality to the array of tonalities considered for
-    /// pitch-spelling vectors.
-    /// @param ks number of flats if negative int,
-    /// or number of sharps if positive int. must be in -7..7.
-    /// @param mode mode of the tonality added.
-    /// @param global whether ton can be considered as a global tonality.
-    /// @see Ton
-    /// @warning with n=0, close() must be called aterwards.
-    void addTon(int ks, ModeName mode = ModeName::Major, bool global=true);
-
-    /// add a tonality for pitch spelling.
-    /// @param ton the tonality to add to this speller.
-    /// @param global whether ton can be considered as a global tonality.
-    void addTon(const Ton& ton, bool global=true);
-    
-    /// for Python binder, same as addTon (overloaded).
-    inline void addTon3(int ks, ModeName mode, bool global)
-    { addTon(ks, mode, global); }
-    
-    /// close the array of tonalities and finish its initlialization.
-    /// No ton can be added after closure.
-    void closeTons();
-    
-    /// the array of tonalities is closed.
-    bool closedTons() const;
-
-    // switch the array of tonalities to tonal mode
-    // for the conmputation of Weber distance at closing.
-    // @warning the array of tonalities array must not be closed.
-    // @todo TBR obsolete
-    // void WeberTonal();
-
-    // switch the array of tonalities to tonal mode
-    // for the conmputation of Weber distance at closing.
-    // @warning the array of tonalities array must not be closed.
-    // @todo TBR obsolete
-    // void WeberModal();
-       
-protected: // data
-        
-    /// array of tonalities that shall be considered for pitch spelling.
-    std::shared_ptr<TonIndex> _index;
-    
-    /// @warning we compute one sample cost for cost type.
-
-    // sample cost (zero) for the construction of tables.
-    // @warning discount Obsolete for CostA
-    // CostA _seedAdiscount;
-
-    /// sample cost (zero) for the construction of tables.
-    CostA _seedAnodiscount;
-
-    /// sample cost (zero) for the construction of tables.
-    CostADplus _seedADplus;
-
-    /// sample cost (zero) for the construction of tables.
-    CostADlex _seedADlex;
-
-    /// debug mode activated.
-    bool _debug;
-    
-    /// undefined tonality, for errors.
-    Ton* _uton; // std::shared_ptr<Ton>
-        
-protected:
-    
-    /// construct a sample cost value (zero) for the construction of tables.
-    /// @param ct type of cost domain.
-    /// @return the cost value constructed.
-    Cost& sampleCost(CostType ct);
-
-    /// @param c code for cost type:
-    /// - 00 costA with discount for lead tons
-    /// - 01 costA without discount for lead tons
-    /// - 02 costADplus
-    /// - 03 costADlex
-};
-
-
-
-
 
 /// class wrapping main pitch-spelling functionalities
 /// i.e. interface between pitch spelling algorithm and structures.
@@ -298,8 +149,15 @@ public: // spelling : computation of tables and grid
     /// if true, one global subarray must have been computed.
     /// @return whether computation was succesfull.
     /// @warning a table must have been evaluated.
-    bool evalGlobal(double d=0, bool refine=false);
-    
+    bool selectGlobals(double d=0, bool refine=false);
+
+    /// select a unique index on ton in the global tons,
+    /// mark all others as non global.
+    /// @return whether the opration was successful.
+    /// if it was, there is exactly one global ton,
+    /// otherwise there is zero.
+    bool selectGlobal();
+
     /// monolithic spelling function.
     /// should not be called for this speller.
     /// @return whether computation was succesfull.
@@ -342,19 +200,19 @@ public: // results feedback
     /// @return the size of _global or 0 if evalGlobal was not called.
     virtual size_t globals() const;
     
-    /// n-best estimated global tonality.
+    /// n-best candidate global tonality.
     /// @param n number of candidate estimated global tonality,
     /// must be in 0..globals().
-    /// @return the n-best estimated global tonality.
-    /// It is ton(iglobal(n)) or an undef ton in case of error.
-    /// @warning evalGlobal must have been called.
+    /// @return the n-best estimated global tonality,
+    /// or an undef ton if there is none.
+    /// @warning evalGlobals must have been called.
     virtual const Ton& global(size_t n = 0) const;
     
-    /// index of the n-best estimated global tonality.
-    /// @param n number of candidate estimated global tonality,
+    /// index of the n-best candidate global tonality.
+    /// @param n number of candidate global tonality,
     /// must be in 0..globals().
-    /// @return the index of the n-best estimated global tonality
-    /// in the index of tons, in 0..index.size()
+    /// @return the index of the n-best global tonality
+    /// in the index of tons, in 0..index.size(),
     /// or TonIndex::UNDEF in case of error.
     /// @warning spell() must have been called.
     virtual size_t iglobal(size_t n = 0) const;
@@ -428,6 +286,7 @@ protected: // data
     
     /// sub-array of tons selected as candidate global tonality.
     /// contains a ton index.
+    /// @todo TBR. replaced by global tags in ton index.
     PSO* _global;
     
 protected: // debug
@@ -441,78 +300,7 @@ protected: // debug
 
 
 
-/// Special case of speller class
-/// with an internal raw note enumerator feed manually.
-/// @see PSEnum
-/// @see PSRawEnum
-class SpellerEnum : public Speller
-{
-public:
-    
-    /// speller with raw enumerator (initially empty) of notes to spell.
-    /// @param nbtons use default list of tonalities (default: empty).
-    /// @param algo name of the algorithm implemented in speller class.
-    /// obsolete. not used anymore.
-    /// @param dflag debug mode.
-    /// @see TonIndex for supported values for nbTons.
-    /// @see PSTable
-    /// @warning the enumerator must be feeded with add()
-    SpellerEnum(size_t nbtons,
-                const Algo& algo=Algo::Undef, // TBR
-                bool dflag=false);
 
- // SpellEnum(const Algo& algo=Algo::Undef, size_t nbtons=0, bool dflag=false);
-    
-    /// destructor
-    virtual ~SpellerEnum();
-
-public: // note enumerator
-
-    /// number of input notes in the enumerator of notes to spell.
-    size_t size() const;
-
-    /// empty the list of notes in the enumerator of this speller.
-    /// @param i0 new index of the first note accessible by this enumerator.
-    /// @param i1 new index of the note after the last note accessible by this
-    /// enumerator. optional (can be ommited for open PS Enum).
-    /// if given it must be larger than or equal to first.
-    void reset(size_t i0, size_t i1 = PSEnum::ID_INF);
-    
-    /// add a new input note to the enumerator of notes to spell.
-    /// @param note MIDI key of the new input note.
-    /// @param bar bar number of the new input note.
-    /// @param simult whether the new input note is simultaneous with the
-    /// next note.
-    /// @param dur note duration, in fraction of bars.
-    void add(int note, int bar, bool simult=false,
-             const PSRatio& dur = PSRatio(0));
-
-    /// for pybind: add a new input note to the enumerator of notes to spell
-    /// with duration.
-    /// @param note MIDI key of the new input note.
-    /// @param bar bar number of the new input note.
-    /// @param simult whether the new input note is simultaneous with the
-    /// next note.
-    /// @param dur_num numerator of note duration, in fraction of bars.
-    /// @param dur_den denominator of note duration, in fraction of bars.
-    /// @warning for Phython binding
-    void add2(int note, int bar, bool simult=false,
-                      long dur_num=0, long dur_den=1);
-
-    /// for pybind: add a new input note to the enumerator of notes to spell
-    /// without duration.
-    /// @param note MIDI key of the new input note.
-    /// @param bar bar number of the new input note.
-    /// @param simult whether the new input note is simultaneous with the
-    /// next note.
-    /// @warning for Phython binding
-    void add0(int note, int bar, bool simult=false);
-
-private:
-    
-    PSRawEnum& rawenum() const;
-    
-};
 
 } // namespace pse
 

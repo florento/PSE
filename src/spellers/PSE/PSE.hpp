@@ -24,7 +24,7 @@
 #include "PSRawEnum.hpp"
 #include "Speller2pass.hpp"
 #include "PSTable.hpp"
-#include "PSGlobal.hpp"
+// #include "PSGlobal.hpp"
 #include "PSGrid.hpp"
 
 

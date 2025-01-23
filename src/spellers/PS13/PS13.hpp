@@ -24,7 +24,7 @@
 #include "ModeFactory.hpp"
 #include "Scale.hpp"
 #include "PSRawEnum.hpp"
-#include "Speller.hpp"
+#include "SpellerEnum.hpp"
 
 namespace pse {
 

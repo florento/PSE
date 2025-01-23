@@ -1134,11 +1134,12 @@ class Spellew:
         """and compare to the reference k0"""
         # assert(self._spelled)
         sp = self._speller
-        goodgtindex=0
+        goodgtindex = 0
         nbg = sp.globals() 
         # no evaluation of global ton (ex. PS13)
         if nbg == 0: 
             print('pse get_global: no gt found')
+            assert(sp.global_ton(0).undef())                
             return (sp.global_ton(0), 0) # gt is undef 
         # unambigous evaluation of global ton
         elif nbg == 1: 
@@ -1161,7 +1162,7 @@ class Spellew:
                 else:
                     c += 1
             if c > 0:
-                enharm=False
+                enharm = False
             if present and enharm: 
                 return (sp.global_ton(goodgtindex), sp.iglobal_ton(goodgtindex))
             else:
@@ -1200,8 +1201,12 @@ class Spellew:
         self.spell(ln, stats)   #print('spell finished', end='\n', flush=True)   
         # extract the estimated global ton from speller
         print('evaluate final list of global tonalities', self._global2, '%', flush=True)
-        self._speller.eval_global(self._global2, self.mask()) # compute the subarray of globals from scratch
-        (gt, i) = self.get_global(k0)
+        self._speller.select_globals(0, True)  # select the best global (can be tiesa)
+        status = self._speller.select_global() # break ties        
+        assert(not status == self._speller.global_ton(0).undef())                
+        assert(    status or self._speller.globals() == 0)
+        assert(not status or self._speller.globals() == 1)
+        (gt, i) = (self._speller.global_ton(0), self._speller.iglobal_ton(0))
         print('pse eval_part: global selected:', i, flush=True)
         # apply the spelling in the row of the estimated global
         print('renaming with the spelling computed')

@@ -6,166 +6,11 @@
 //
 
 #include "Speller.hpp"
+#include "PSGridr.hpp"
 
 
 
 namespace pse {
-
-
-Spelli::Spelli(size_t nbton, bool dflag):
-_index(new TonIndex(nbton)),
-//_seed(nullptr),
-//_seedAdiscount(true), // discount obsolete for CostA
-_seedAnodiscount(false),
-_seedADplus(),
-_seedADlex(),
-_debug(dflag),
-_uton(new Ton()) // undef
-{
-    setVerbosityLevel(4);
-    debug(dflag);
-    spdlog::set_pattern("[%^%l%$] %v");
-}
-
-
-Spelli::Spelli(std::shared_ptr<TonIndex> id, bool dflag):
-_index(id), // copy
-_seedAnodiscount(false),
-_seedADplus(),
-_seedADlex(),
-_debug(dflag),
-_uton(new Ton()) // undef
-{
-    assert(id);
-    assert(id->closed());
-    setVerbosityLevel(4);
-    debug(dflag);
-    spdlog_setPattern();
-}
-
-
-Spelli::~Spelli()
-{
-    assert(_uton);
-    delete _uton;
-}
-
-
-void Spelli::debug(bool flag)
-{
-    TRACE("Speller: debug mode {}", flag);
-    _debug = flag;
-    if (flag)
-        setVerbosityLevel(5);
-    else
-        setVerbosityLevel(4);
-}
-
-//
-// array of tonalities
-//
-
-TonIndex& Spelli::index()
-{
-    assert(_index);
-    return *_index;
-}
-
-
-size_t Spelli::nbTons() const
-{
-    assert(_index);
-    return _index->size();  // nbTons();
-}
-
-
-const Ton& Spelli::ton(size_t i) const
-{
-    assert(_index);
-    return _index->ton(i);
-}
-
-
-void Spelli::resetTons(size_t n)
-{
-    assert(_index);
-    _index->reset(n);
-}
-
-
-void Spelli::addTon(const Ton& ton, bool global)
-{
-    TRACE("Speller: add tonality {}", ton);
-    assert(_index);
-    _index->add(ton);
-}
-
-
-void Spelli::addTon(int ks, ModeName mode, bool global)
-{
-    if (ks < -7 || 7 < ks)
-    {
-        ERROR("Speller addTon: wrong key signature value {}", ks);
-    }
-    TRACE("Speller: add tonality {} {}", ks, mode);
-    assert(_index);
-    _index->add(ks, mode, global);
-}
-
-//void Spelli::WeberTonal()
-//{
-//    assert(_index);
-//    _index->setTonal();
-//}
-
-
-//void Spelli::WeberModal()
-//{
-//    assert(_index);
-//    _index->setModal();
-//}
-
-
-void Spelli::closeTons()
-{
-    assert(_index);
-    _index->close();
-}
-
-
-bool Spelli::closedTons() const
-{
-    assert(_index);
-    return _index->closed();
-}
-
-//
-// prepare spelling
-//
-
-Cost& Spelli::sampleCost(CostType ct)
-{
-    switch (ct)
-    {
-        case CostType::ACCIDlead:
-            WARN("Speller: discount obsolete for CostA (ignored)");
-            return _seedAnodiscount;
-            
-        case CostType::ACCID:
-            return _seedAnodiscount;
-            
-        case CostType::ADplus:
-            return _seedADplus;
-            
-        case CostType::ADlex:
-            return _seedADlex;
-            
-        default:
-            ERROR("Speller sampleCost unexpected code {}", ct);
-            return _seedAnodiscount;
-    }
-}
-
 
 //Algo Speller::algo() const
 //{
@@ -346,53 +191,63 @@ bool Speller::evalGrid()
     assert(_index);
     std::vector<bool> mask(_index->size(), true); // all true by default
 
-    if (_global)
-    {
-        mask = _global->getMask(); // copy
-    }
+//    if (_global)
+//    {
+//        mask = _global->getMask(); // copy
+//    }
 
-    _grid = new PSG(*_table, mask);
+    _grid = new PSGr(*_table);
     return true;
 }
 
 
-bool Speller::evalGlobal(double d, bool refine)
+bool Speller::selectGlobals(double d, bool refine)
 {
     assert(0 <= d);
     assert(d <= 100);
     
     if (_table == nullptr)
     {
-        ERROR("Speller evalGlobal: eval table first");
+        ERROR("Speller selectGlobals: eval table first");
         return false;
     }
     // if (_debug)
     // {
     //     _table->dump_table();
     // }
-    if (refine)
-    {
-        if (_global == nullptr)
-        {
-            ERROR("Speller evalGlobal by refinement: no previous global");
-            return false;
-        }
-        PSO* global_pre = _global;
-        _global = new PSO(*global_pre, *_table, d, _debug);
-        assert(global_pre);
-        delete global_pre;
-        return true;
-    }
-    else
-    {
-        if (_global)
-        {
-            delete _global;
-            _global = nullptr;
-        }
-        _global = new PSO(*_table, d, _debug);
-        return true;
-    }
+    assert(_index);
+    _index->selectGlobals(*_table, d, refine);
+    return true;
+//    if (refine)
+//    {
+//        if (_global == nullptr)
+//        {
+//            ERROR("Speller evalGlobal by refinement: no previous global");
+//            return false;
+//        }
+//        PSO* global_pre = _global;
+//        _global = new PSO(*global_pre, *_table, d, _debug);
+//        assert(global_pre);
+//        delete global_pre;
+//        return true;
+//    }
+//    else
+//    {
+//        if (_global)
+//        {
+//            delete _global;
+//            _global = nullptr;
+//        }
+//        _global = new PSO(*_table, d, _debug);
+//        return true;
+//    }
+}
+
+
+bool Speller::selectGlobal()
+{
+    assert(_index);
+    return _index->selectGlobal();
 }
 
 
@@ -462,44 +317,70 @@ bool Speller::printed(size_t i) const
 
 size_t Speller::globals() const
 {
-    if (_global == nullptr)
-    {
-        WARN("Speller globals: evalGlobal not called");
-        return 0;
-    }
-    else
-    {
-        return _global->size();
-    }
-}
-
-
-const Ton& Speller::global(size_t n) const
-{
-    if (_global == nullptr)
-    {
-        ERROR("Speller global: evalGlobal not called");
-        assert(_uton);
-        return *_uton;
-    }
-    else
-    {
-        return _global->global(n);
-    }
+    assert(_index);
+    return _index->globals();
+    // if (_global == nullptr)
+    // {
+    //     WARN("Speller globals: evalGlobal not called");
+    //     return 0;
+    // }
+    // else
+    // {
+    //     return _global->size();
+    // }
 }
 
 
 size_t Speller::iglobal(size_t n) const
 {
-    if (_global == nullptr)
+    assert(_index);
+    size_t c = 0;
+    for (size_t i = 0; i < _index->size(); ++i)
     {
-        ERROR("Speller iglobal: evalGlobal not called");
-        return TonIndex::UNDEF;
+        if (_index->global(i))
+        {
+            if (c == n)
+                return i;
+            else
+                c++;
+        }
     }
+    return TonIndex::UNDEF;
+
+    // if (_global == nullptr)
+    // {
+    //     ERROR("Speller iglobal: evalGlobal not called");
+    //     return TonIndex::UNDEF;
+    // }
+    // else
+    // {
+    //     return _global->iglobal(n);
+    // }
+}
+
+
+const Ton& Speller::global(size_t n) const
+{
+    assert(_index);
+    size_t ig = iglobal(n);
+    if (ig == TonIndex::UNDEF)
+        return _index->undef();
     else
     {
-        return _global->iglobal(n);
+        assert(ig < _index->size());
+        return _index->ton(ig);
     }
+    
+    // if (_global == nullptr)
+    // {
+    //     ERROR("Speller global: evalGlobal not called");
+    //     assert(_uton);
+    //     return *_uton;
+    // }
+    // else
+    // {
+    //     return _global->global(n);
+    // }
 }
 
 
@@ -515,11 +396,11 @@ size_t Speller::ilocal(size_t i, size_t j) const
     {
         ERROR("Speller ilocal: eval grid first");
     }
-    else if (j >= _grid->columnNb())
+    else if (j >= _grid->nbMeasures())
     {
         ERROR("Speller ilocal: no bar {}", j);
     }
-    else if (i >= _grid->rowNb())
+    else if (i >= _grid->nbTons())
     {
         ERROR("Speller ilocal: no ton of index {}", i);
     }
@@ -565,74 +446,6 @@ double Speller::duration(clock_t start)
 {
     return ((double)(clock() - start)/CLOCKS_PER_SEC * 1000);
 }
-
-
-
-
-
-
-
-SpellerEnum::SpellerEnum(size_t nbton, const Algo& algo, bool dflag):
-Speller(new PSRawEnum(0, 0), nbton, algo, dflag)
-{ }
-
-
-SpellerEnum::~SpellerEnum()
-{
-    assert(_enum);
-    delete _enum;
-}
-
-
-//
-// notes
-//
-
-
-size_t SpellerEnum::size() const
-{
-    //TRACE("Speller::size");
-    return rawenum().size();
-}
-
-
-void SpellerEnum::reset(size_t i0, size_t i1)
-{
-    rawenum().reset(i0, i1);
-}
-
-
-void SpellerEnum::add(int note, int bar, bool simult, const PSRatio& dur)
-{
-    TRACE("Speller: add {} {} {}", note, bar, dur);
-    rawenum().add(note, bar, simult, dur);
-}
-
-
-void SpellerEnum::add2(int note, int bar, bool simult,
-                             long dur_num, long dur_den)
-{
-    TRACE("Speller: add {} {} {}", note, bar, PSRatio(dur_num, dur_den));
-    rawenum().add(note, bar, simult, PSRatio(dur_num, dur_den));
-}
-
-
-void SpellerEnum::add0(int note, int bar, bool simult)
-{
-    TRACE("Speller: add {} {}", note, bar);
-    rawenum().add(note, bar, simult);
-}
-
-
-PSRawEnum& SpellerEnum::rawenum() const
-{
-    assert(_enum);
-    PSRawEnum* penum = dynamic_cast<PSRawEnum*>(_enum);
-    assert(penum);
-    return *penum;
-}
-
-
 
 
 } // namespace pse

@@ -88,8 +88,8 @@ _debug(dflag)
 {
     TRACE("new PS Table {}-{} from grid, for {}",
           _enum.first(), _enum.stop(), _algo);
-    assert(locals.rowNb() == _index.size());
-    assert(locals.columnNb() == tab.columnNb());
+    assert(locals.nbTons() == _index.size());
+    assert(locals.nbMeasures() == tab.columnNb());
     assert(_algo == Algo::PSE || _algo == Algo::PSD);
     bool status = init_psvs(tab, seed, globals, locals, tonal);
     if (status == false)
