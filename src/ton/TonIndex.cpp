@@ -413,8 +413,16 @@ void TonIndex::init(int ksmin, int ksmax, const ModeName& mode, bool f_global)
     assert(ksmax <= 7); // chromatic Ton uses -7 to 10
     assert(ksmin <= ksmax);
     assert(mode != ModeName::Undef);
-    for (int ks = ksmin; ks <= ksmax; ++ks)
-        add(ks, mode, f_global);
+    
+    if (ksmin <= 0 and 0 <= ksmax)
+        add(0, mode, f_global);
+    for (int ks = 1; ks <= 7; ++ks)
+    {
+        if (ksmin <= ks and ks <= ksmax)
+            add(ks, mode, f_global);
+        if (ksmin <= -ks and -ks <= ksmax)
+            add(-ks, mode, f_global);
+    }
 }
 
 

@@ -373,7 +373,7 @@ def m21_mode(m):
     elif (m == pse.Mode.Minor):
         return 'minor'
     elif (m == pse.Mode.MinorNat):
-        return 'minor'   # not found
+        return 'aeolian'   # not found
     elif (m == pse.Mode.MinorMel):
         return 'minor'   # not found
     elif (m == pse.Mode.Ionian):

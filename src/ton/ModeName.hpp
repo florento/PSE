@@ -54,7 +54,7 @@ enum class ModeName
     /// Mode of G
     Mixolydian,
     
-    /// Mode of A
+    /// Mode of A = Minor Natural
     Aeolian,
     
     /// Mode of B
