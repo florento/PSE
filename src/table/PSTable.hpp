@@ -156,16 +156,16 @@ public: // access
 
     /// number of columns (PS Vectors) in this table,
     /// i.e. nb of measures spelled.
-    inline size_t columnNb() const { return size(); }
+    inline size_t measures() const { return size(); }
 
     /// the enumerator of input notes used to construict the column of given
     /// index in this table.
     /// @param j the index of a column (ie a bar number).
-    /// must be smaller than columnNb().
+    /// must be smaller than measures().
     const PSEnum& columnHeader(size_t j) const;
 
     /// access a column (PS vector) of this table.
-    /// @param j column number (number of bar). must be smaller than columnNb().
+    /// @param j column number (number of bar). must be smaller than measures().
     PSV& column(size_t j) const;
     
     // force a global tonality.

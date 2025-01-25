@@ -94,7 +94,8 @@ public:
     size_t first() const;
     
     /// index of the note after the last note to read in enumerator.
-    /// @warning if this PS Enumerator is open, the return value is undeterminated.
+    /// @warning if this PS Enumerator is open, the return value
+    /// is undeterminated.
     /// @see open()
     size_t stop() const;
     

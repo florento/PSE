@@ -77,6 +77,7 @@ _debug(dflag)
 //}
 
 
+/// @todo remove globals, replaced by global flag in ton index
 PST::PST(const Algo& a, const PST& tab, const Cost& seed,
          const PSO& globals, const PSG& locals, bool tonal, bool dflag):
 _algo(a),
@@ -89,7 +90,7 @@ _debug(dflag)
     TRACE("new PS Table {}-{} from grid, for {}",
           _enum.first(), _enum.stop(), _algo);
     assert(locals.nbTons() == _index.size());
-    assert(locals.nbMeasures() == tab.columnNb());
+    assert(locals.measures() == tab.measures());
     assert(_algo == Algo::PSE || _algo == Algo::PSD);
     bool status = init_psvs(tab, seed, globals, locals, tonal);
     if (status == false)
@@ -104,6 +105,7 @@ _debug(dflag)
 }
 
 
+/// @todo remove globals, replaced by global flag in ton index
 PST::PST(const PST& tab, const Cost& seed,
          const PSO& globals, const PSG& locals, bool tonal, bool dflag):
 PST(tab._algo, tab, seed, globals, locals, tonal, dflag)
@@ -158,6 +160,7 @@ void PST::compute_rowcosts(const Cost& seed)
 }
 
 
+/// @todo remove globals, replaced by global flag in ton index
 void PST::compute_rowcosts(const Cost& seed, const PSO& globals)
 {
     // init_rowcosts: one different shared pointer for each row cost
@@ -173,9 +176,14 @@ void PST::compute_rowcosts(const Cost& seed, const PSO& globals)
         assert(psv.size() == _index.size());
 
         // compute the rowcosts only for candidate global tonalities
-        for (auto it = globals.cbegin(); it != globals.cend(); ++it)
+        // for (auto it = globals.cbegin(); it != globals.cend(); ++it)
+        for (size_t ig = 0; ig < _index.size(); ++ig)
         {
-            size_t ig = *it; // index of global tnolity in tonindex.
+            // size_t ig = *it; // index of global tnolity in tonindex.
+            if (!_index.isGlobal(ig))
+            {
+                continue;
+            }
             assert(ig < _index.size());
             assert(ig < psv.size());
             const PSB& psb = psv.bag(ig);
@@ -253,6 +261,7 @@ bool PST::init_psvs(const Cost& seed, bool tonal)
 }
 
 
+/// @todo remove globals, replaced by global flag in ton index
 bool PST::init_psvs(const PST& tab, const Cost& seed,
                     const PSO& globals, const PSG& grid, bool tonal)
 {

@@ -141,7 +141,7 @@ size_t Speller1Pass::ilocal(size_t i, size_t j) const
     {
         ERROR("Speller1Pass local: call spell() first");
     }
-    else if (j >= _grid->nbMeasures())
+    else if (j >= _grid->measures())
     {
         ERROR("Speller1Pass local: no bar {}", j);
     }

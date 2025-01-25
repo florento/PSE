@@ -8,7 +8,7 @@
 #include "Speller.hpp"
 #include "PSGridy.hpp"
 #include "PSGridr.hpp"
-#include "PSGride.hpp"
+#include "PSGridx.hpp"
 
 
 namespace pse {
@@ -158,17 +158,18 @@ bool Speller::revalTable(CostType ctype, bool tonal, bool chromatic)
     
     /// @todo suppr. _global et full, remplacé par index de table_pre (flag global)
     /// @todo remplacer algo par flag chromatic
-    if (_global)
-    {
-        _table = new PST(algo, *table_pre, sampleCost(ctype), *_global, *_grid,
-                         tonal, _debug);
-    }
-    else
-    {
-        PSO full(index(), _debug, true);
-        _table = new PST(algo, *table_pre, sampleCost(ctype), full, *_grid,
-                         tonal, _debug);
-    }
+    // global is ignored
+    //    if (_global)
+    //    {
+    _table = new PST(algo, *table_pre, sampleCost(ctype), *_global, *_grid,
+                     tonal, _debug);
+    //    }
+//    else
+//    {
+//        PSO full(index(), _debug, true);
+//        _table = new PST(algo, *table_pre, sampleCost(ctype), full, *_grid,
+//                         tonal, _debug);
+//    }
 
     assert(table_pre);
     delete table_pre;
@@ -208,7 +209,7 @@ bool Speller::evalGrid(const GridAlgo& algo)
             break;
 
         case GridAlgo::Exhaustive:
-            _grid = new PSGe(*_table);
+            _grid = new PSGx(*_table);
             break;
 
         default:
@@ -306,6 +307,26 @@ bool Speller::spell()
 // results feedback
 //
 
+
+size_t Speller::measures() const
+{
+    assert(_enum);
+    size_t m;
+    if (_enum->empty())
+        m = 0;
+    else
+    {
+        size_t last =  _enum->stop()-1;
+        m = _enum->measure(last)+1;
+    }
+    
+    
+    assert(_table == nullptr or _table->size() == m);
+    assert(_grid == nullptr or _grid->measures() == m);
+    return m;
+}
+
+
 enum NoteName Speller::name(size_t i) const
 {
     assert(_enum);
@@ -314,7 +335,6 @@ enum NoteName Speller::name(size_t i) const
 
 
 enum Accid Speller::accidental(size_t i) const
-
 {
     assert(_enum);
     return _enum->accidental(i);
@@ -347,7 +367,7 @@ size_t Speller::ilocal(size_t i, size_t j) const
     {
         ERROR("Speller ilocal: eval grid first");
     }
-    else if (j >= _grid->nbMeasures())
+    else if (j >= _grid->measures())
     {
         ERROR("Speller ilocal: no bar {}", j);
     }

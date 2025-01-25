@@ -182,6 +182,10 @@ public: // spelling : computation of tables and grid
     
 public: // results feedback : notes
     
+    /// nb of measures processed by this speller.
+    /// it is the number of measure in the enumarator.
+    size_t measures() const;
+    
     /// estimated name for the note of given index,
     /// in 0..6 (0 is 'C', 6 is 'B').
     /// @param i index of note in the enumerator of input notes.

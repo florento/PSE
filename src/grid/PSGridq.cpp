@@ -5,7 +5,7 @@
 //  Created by Florent Jacquemard on 24/01/2025.
 //
 
-#include "PSGride.hpp"
+#include "PSGridq.hpp"
 
 namespace pse {
 
@@ -16,7 +16,7 @@ measure(j),
 cost(c),
 previous(nullptr) // initial state
 {
-    TRACE("new initial state: {}, {} ({})", ton, measure, cost);
+    DEBUG("new initial state: {}, {} ({})", ton, measure, cost);
 }
 
 
@@ -28,7 +28,7 @@ cost(s->cost + costplus),
 previous(s) // successor of s in best path. shared ptr copy.
 {
     assert(s);
-    TRACE("new state: {}, {} ({})", ton, measure, cost);
+    DEBUG("new state: {}, {} ({})", ton, measure, cost);
 }
 
 
@@ -194,7 +194,7 @@ void PSGe::init(const PST& tab, size_t ig)
         }
     }
 
-    // DEBUG(".....initilization of priority queue");
+    DEBUG(".....initilization of priority queue");
     if (ig == TonIndex::UNDEF) // modal case
     {
         init_queue(q, tab, ranks);
@@ -204,7 +204,7 @@ void PSGe::init(const PST& tab, size_t ig)
         assert(ig < _index.size());
         init_queue(q, tab, ranks, ig);
     }
-    // DEBUG(".....loop");
+    DEBUG(".....loop");
     // loop(q, tab, ties);
     bool terminated = false;
     
@@ -213,7 +213,7 @@ void PSGe::init(const PST& tab, size_t ig)
         terminated = step(q, tab, ranks, visited, ties);
     }
 
-    // DEBUG(".....end");
+    DEBUG(".....end");
     if (ties.empty())
     {
         ERROR("PSGride: no best path found ({})",
@@ -347,6 +347,8 @@ bool PSGe::step(PSGQueue& q, const PST& tab,
     // assert(current->ton < visited.size());
     // assert(current->measure < visited.at(current->ton).size());
     visited[current->ton][current->measure] = true;
+    DEBUG("Gride pop: {}, {} ({})",
+          current->ton, current->measure, current->cost);
 
     if (!ties.empty())
     {
@@ -400,10 +402,10 @@ bool PSGe::step(PSGQueue& q, const PST& tab,
         {
             // rank of each bag in the column j (one for each ton)
             assert(j < ranks.size());
-            const std::vector<size_t>& rank_bags(ranks.at(j));
-            assert(rank_bags.size() == _index.size());
+            // const std::vector<size_t>& rank_bags(ranks.at(j));
+            assert(ranks.at(j).size() == _index.size());
             size_t i0 = current->ton;
-            for (size_t i = 0; i < rank_bags.size(); ++i)
+            for (size_t i = 0; i < ranks.at(j).size(); ++i)
             {
                 // construct a std::shared_ptr<const GridState>
                 // with cost = rank
@@ -412,7 +414,7 @@ bool PSGe::step(PSGQueue& q, const PST& tab,
                 {
                     q.emplace(new GridState(current, i,
                                             _index.rankWeber(i0, i)
-                                            + rank_bags.at(i)));
+                                            + ranks.at(j).at(i)));
                 }
             }
             return false;

@@ -1,5 +1,5 @@
 //
-//  PSGride.hpp
+//  PSGridq.hpp
 //  pse
 //
 //  Created by Florent Jacquemard on 24/01/2025.

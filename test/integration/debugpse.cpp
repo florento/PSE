@@ -31,7 +31,7 @@ int spellKE(SpellerEnum& sp,
             enum CostType c1, bool tonal1, bool det1,
             enum CostType c2, bool tonal2, bool det2,
             int global1,
-            int global2) // global2 not used
+            const GridAlgo& grid)
 {
     // construct the first spelling table
     if (c1 == CostType::UNDEF)
@@ -74,8 +74,8 @@ int spellKE(SpellerEnum& sp,
     // construct the grid of local tonalities
     if (c2 != pse::CostType::UNDEF)
     {
-        DEBUG("spellKE: compute Grid");
-        fstatus = sp.evalGrid();
+        DEBUG("spellKE: compute Grid with {}", grid);
+        fstatus = sp.evalGrid(grid);
         if (fstatus == false)
         {
             ERROR("spellKE: failed to evaluate Grid of local tonalities");
@@ -178,8 +178,8 @@ int main(int argc, const char* argv[])
                      pse::CostType::ACCID,  false, true,
                   // cost                   tonal  deterministic
                      pse::CostType::ADplus, true, true,
-                  // global1 global2
-                     5,      5);
+                  // global1 grid algo
+                     5,      GridAlgo::Exhaustive);
 
     if (ks == KeyFifth::UNDEF)
     {

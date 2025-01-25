@@ -157,6 +157,8 @@ PYBIND11_MODULE(pse, m)
              "rename input notes")
         .def("rewrite_passing", &pse::SpellerEnum::rewritePassing,
              "rewrite passing notes")
+        .def("measures",  &pse::SpellerEnum::measures,
+             "nb of measures processed by this speller")
         .def("name",  &pse::SpellerEnum::name,
              "estimated name of note",
              py::arg("i"))

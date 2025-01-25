@@ -116,19 +116,19 @@ void PSGr::extractRank(const PSV& vec, std::vector<size_t>& ties,
     /// ranks for distance to global.
     std::vector<size_t> rank_glob; // empty
 
-    for (size_t j = 0; j < _index.size(); ++j)
+    for (size_t i = 0; i < _index.size(); ++i)
     {
-        rank_prev.push_back(_index.rankWeber(iprev, j));
-        rank_glob.push_back(_index.rankWeber(ig, j));
+        rank_prev.push_back(_index.rankWeber(iprev, i));
+        rank_glob.push_back(_index.rankWeber(ig, i));
     }
 
     /// list of means of the ranks in the 3 lists (unweighted)
     std::vector<size_t> means; // empty
-    for (size_t j = 0; j < _index.size(); ++j)
+    for (size_t i = 0; i < _index.size(); ++i)
     {
-        means.push_back(COEFF[0] * rank_bags.at(j) +
-                        COEFF[1] * rank_prev.at(j) +
-                        COEFF[2] * rank_glob.at(j));
+        means.push_back(COEFF[0] * rank_bags.at(i) +
+                        COEFF[1] * rank_prev.at(i) +
+                        COEFF[2] * rank_glob.at(i));
     }
     
     std::vector<size_t> rank_mean; // empty
@@ -144,14 +144,14 @@ void PSGr::extractRank(const PSV& vec, std::vector<size_t>& ties,
     // std::vector<size_t> ties; // empty
     bool found1 = false; // only for debugging
     // size_t ibest = 0;
-    for (size_t j = 0; j < rank_mean.size(); ++j)
+    for (size_t i = 0; i < rank_mean.size(); ++i)
     {
-        if (rank_mean.at(j) == 0)
+        if (rank_mean.at(i) == 0)
         {
-            ties.push_back(j);
+            ties.push_back(i);
             // ibest=j;
         }
-        else if (rank_mean.at(j) == 1)
+        else if (rank_mean.at(i) == 1)
         {
             found1 = true;
         }

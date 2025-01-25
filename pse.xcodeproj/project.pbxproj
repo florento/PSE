@@ -130,6 +130,10 @@
 		43723E942C47ABC2004DD860 /* pstrace.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43723E922C47ABC2004DD860 /* pstrace.cpp */; };
 		43723E952C47ABC2004DD860 /* pstrace.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43723E922C47ABC2004DD860 /* pstrace.cpp */; };
 		43723E962C47ABC2004DD860 /* pstrace.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43723E922C47ABC2004DD860 /* pstrace.cpp */; };
+		437790EB2D45552800FC7278 /* PSGridx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 437790EA2D45552800FC7278 /* PSGridx.cpp */; };
+		437790EC2D45552800FC7278 /* PSGridx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 437790EA2D45552800FC7278 /* PSGridx.cpp */; };
+		437790ED2D45552800FC7278 /* PSGridx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 437790EA2D45552800FC7278 /* PSGridx.cpp */; };
+		437790EE2D45552800FC7278 /* PSGridx.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 437790E92D45552800FC7278 /* PSGridx.hpp */; };
 		43791C8E29D8392200DE8796 /* TestAccidental.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43791C8D29D8392200DE8796 /* TestAccidental.cpp */; };
 		437C73722BADD6D000E9478C /* Accids.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 437C73702BADD6D000E9478C /* Accids.cpp */; };
 		437C73732BADD6D000E9478C /* Accids.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 437C73702BADD6D000E9478C /* Accids.cpp */; };
@@ -138,10 +142,10 @@
 		437C73772BADEA4200E9478C /* TestAccids.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 437C73762BADEA4200E9478C /* TestAccids.cpp */; };
 		437C8B092BD1750000440909 /* TestBag.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 437C8B082BD1750000440909 /* TestBag.cpp */; };
 		437C8B0B2BD18E4F00440909 /* TestCostA.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 437C8B0A2BD18E4F00440909 /* TestCostA.cpp */; };
-		437DB73F2D43702F009BCD2F /* PSGride.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 437DB73E2D43702F009BCD2F /* PSGride.cpp */; };
-		437DB7402D43702F009BCD2F /* PSGride.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 437DB73E2D43702F009BCD2F /* PSGride.cpp */; };
-		437DB7412D43702F009BCD2F /* PSGride.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 437DB73D2D43702F009BCD2F /* PSGride.hpp */; };
-		437DB7422D43702F009BCD2F /* PSGride.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 437DB73E2D43702F009BCD2F /* PSGride.cpp */; };
+		437DB73F2D43702F009BCD2F /* PSGridq.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 437DB73E2D43702F009BCD2F /* PSGridq.cpp */; };
+		437DB7402D43702F009BCD2F /* PSGridq.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 437DB73E2D43702F009BCD2F /* PSGridq.cpp */; };
+		437DB7412D43702F009BCD2F /* PSGridq.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 437DB73D2D43702F009BCD2F /* PSGridq.hpp */; };
+		437DB7422D43702F009BCD2F /* PSGridq.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 437DB73E2D43702F009BCD2F /* PSGridq.cpp */; };
 		437E31642D3FA9EE00ECDE7A /* TestRank.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 437E31632D3FA9EE00ECDE7A /* TestRank.cpp */; };
 		438A581129E03FBB0073A32C /* PS13.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 432E7A5229D45FE2000E2B72 /* PS13.cpp */; };
 		438A581229E03FC10073A32C /* PSE.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 432E7A4C29D427FD000E2B72 /* PSE.cpp */; };
@@ -391,14 +395,16 @@
 		436C6C4D2924023100152D8C /* NoteName.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = NoteName.hpp; path = src/pitch/NoteName.hpp; sourceTree = "<group>"; };
 		43723E912C47ABC2004DD860 /* pstrace.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = pstrace.hpp; path = src/general/pstrace.hpp; sourceTree = "<group>"; };
 		43723E922C47ABC2004DD860 /* pstrace.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = pstrace.cpp; path = src/general/pstrace.cpp; sourceTree = "<group>"; };
+		437790E92D45552800FC7278 /* PSGridx.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = PSGridx.hpp; sourceTree = "<group>"; };
+		437790EA2D45552800FC7278 /* PSGridx.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PSGridx.cpp; sourceTree = "<group>"; };
 		43791C8D29D8392200DE8796 /* TestAccidental.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TestAccidental.cpp; sourceTree = "<group>"; };
 		437C73702BADD6D000E9478C /* Accids.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Accids.cpp; path = src/pitch/Accids.cpp; sourceTree = "<group>"; };
 		437C73712BADD6D000E9478C /* Accids.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Accids.hpp; path = src/pitch/Accids.hpp; sourceTree = "<group>"; };
 		437C73762BADEA4200E9478C /* TestAccids.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TestAccids.cpp; sourceTree = "<group>"; };
 		437C8B082BD1750000440909 /* TestBag.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TestBag.cpp; sourceTree = "<group>"; };
 		437C8B0A2BD18E4F00440909 /* TestCostA.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TestCostA.cpp; sourceTree = "<group>"; };
-		437DB73D2D43702F009BCD2F /* PSGride.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = PSGride.hpp; sourceTree = "<group>"; };
-		437DB73E2D43702F009BCD2F /* PSGride.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PSGride.cpp; sourceTree = "<group>"; };
+		437DB73D2D43702F009BCD2F /* PSGridq.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = PSGridq.hpp; sourceTree = "<group>"; };
+		437DB73E2D43702F009BCD2F /* PSGridq.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PSGridq.cpp; sourceTree = "<group>"; };
 		437E31632D3FA9EE00ECDE7A /* TestRank.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TestRank.cpp; sourceTree = "<group>"; };
 		4380D1E82A4DB78700AC1164 /* TestCostADlex.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TestCostADlex.cpp; sourceTree = "<group>"; };
 		438587EB2A5C0631006FB312 /* PSChord.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = PSChord.cpp; path = chord/PSChord.cpp; sourceTree = "<group>"; };
@@ -825,10 +831,13 @@
 				4317D8382D4123C6007C71C7 /* PSGridy.cpp */,
 				4317D83D2D4144DE007C71C7 /* PSGridr.hpp */,
 				4317D83E2D4144DE007C71C7 /* PSGridr.cpp */,
-				437DB73D2D43702F009BCD2F /* PSGride.hpp */,
-				437DB73E2D43702F009BCD2F /* PSGride.cpp */,
+				437DB73D2D43702F009BCD2F /* PSGridq.hpp */,
+				437DB73E2D43702F009BCD2F /* PSGridq.cpp */,
+				437790E92D45552800FC7278 /* PSGridx.hpp */,
+				437790EA2D45552800FC7278 /* PSGridx.cpp */,
 			);
-			path = grid;
+			name = grid;
+			path = src/grid;
 			sourceTree = "<group>";
 		};
 		438EFD822A0E3EB200FF3733 /* cost */ = {
@@ -965,10 +974,11 @@
 				43ABA52B29242418002AC1D4 /* PSConfig.hpp in Headers */,
 				430960562A0CD2C60097487A /* AlgoName.hpp in Headers */,
 				4317D84C2D4246BC007C71C7 /* SpellerEnum.hpp in Headers */,
-				437DB7412D43702F009BCD2F /* PSGride.hpp in Headers */,
+				437DB7412D43702F009BCD2F /* PSGridq.hpp in Headers */,
 				43316F2429AA73DC000160EA /* TonIndex.hpp in Headers */,
 				43ABA52A29242418002AC1D4 /* PSBag.hpp in Headers */,
 				4317D83A2D4123C6007C71C7 /* PSGridy.hpp in Headers */,
+				437790EE2D45552800FC7278 /* PSGridx.hpp in Headers */,
 				4397A5DE29A6CDB300C2CC9A /* PSOrder.hpp in Headers */,
 				43D7BABC2A27CFBD00570C47 /* Speller2pass.hpp in Headers */,
 				4317D8472D4246A5007C71C7 /* Spelli.hpp in Headers */,
@@ -1146,6 +1156,7 @@
 				43139F7C2A0D3D9D00A8E764 /* TestFifths.cpp in Sources */,
 				4317D84E2D4246BC007C71C7 /* SpellerEnum.cpp in Sources */,
 				43D31A142A1426A300234527 /* Cost.cpp in Sources */,
+				437790EB2D45552800FC7278 /* PSGridx.cpp in Sources */,
 				438EFD812A0D4C8600FF3733 /* PSOrder.cpp in Sources */,
 				4317D83C2D4123C6007C71C7 /* PSGridy.cpp in Sources */,
 				435081F529D6D76F00465943 /* Accidental.cpp in Sources */,
@@ -1154,7 +1165,7 @@
 				4308A7082A28DF0F007F7A55 /* TestState.cpp in Sources */,
 				4308A70E2A28F9B8007F7A55 /* TestTonIndex.cpp in Sources */,
 				435081F829D6D78200465943 /* PSChord.cpp in Sources */,
-				437DB73F2D43702F009BCD2F /* PSGride.cpp in Sources */,
+				437DB73F2D43702F009BCD2F /* PSGridq.cpp in Sources */,
 				4331700029DD934E00BA534D /* TestEnharmonic.cpp in Sources */,
 				438A581F29E0496D0073A32C /* PSPath.cpp in Sources */,
 				438A581529E0491D0073A32C /* PSBag.cpp in Sources */,
@@ -1170,6 +1181,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				43D9DB4C2B964412005F0A13 /* Weber_static.cpp in Sources */,
+				437790ED2D45552800FC7278 /* PSGridx.cpp in Sources */,
 				43ABA4FE292423C5002AC1D4 /* NoteName.cpp in Sources */,
 				43ABA50F292423E8002AC1D4 /* Accidental.cpp in Sources */,
 				432865422BA983CA00761737 /* AccidPair.cpp in Sources */,
@@ -1204,7 +1216,7 @@
 				4317D83B2D4123C6007C71C7 /* PSGridy.cpp in Sources */,
 				439DBF332A516F7500565CC4 /* utils.cpp in Sources */,
 				437C73722BADD6D000E9478C /* Accids.cpp in Sources */,
-				437DB7402D43702F009BCD2F /* PSGride.cpp in Sources */,
+				437DB7402D43702F009BCD2F /* PSGridq.cpp in Sources */,
 				432E7A5429D45FE2000E2B72 /* PS13.cpp in Sources */,
 				43C2BA1D299A5FEE0084AB3B /* IntervalSimple.cpp in Sources */,
 				43ABA52729242418002AC1D4 /* PSConfig.cpp in Sources */,
@@ -1235,7 +1247,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				437DB7422D43702F009BCD2F /* PSGride.cpp in Sources */,
+				437DB7422D43702F009BCD2F /* PSGridq.cpp in Sources */,
 				43FBEAC72930CEDD008FC486 /* NoteName.cpp in Sources */,
 				43F9BE6529CC423E00B0A7F8 /* ModeName.cpp in Sources */,
 				432586A72A40EBB30069D796 /* PSRational.cpp in Sources */,
@@ -1245,6 +1257,7 @@
 				43D7BAC02A27E31600570C47 /* PSD.cpp in Sources */,
 				43FBEAC92930CEDD008FC486 /* MidiNum.cpp in Sources */,
 				43FBEACA2930CEDD008FC486 /* Enharmonic.cpp in Sources */,
+				437790EC2D45552800FC7278 /* PSGridx.cpp in Sources */,
 				43C2BA1A2999529E0084AB3B /* PWO.cpp in Sources */,
 				43FBEACB2930CEDD008FC486 /* Fifths.cpp in Sources */,
 				43F9BE6A29CC696C00B0A7F8 /* Mode.cpp in Sources */,

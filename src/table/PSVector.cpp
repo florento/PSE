@@ -35,6 +35,7 @@ _tiebfail(0)
 }
 
 
+/// @todo remove globals, replaced by global flag in ton index
 PSV::PSV(const PSV& col, const Cost& seed,
          const PSO& globals, const std::vector<size_t>& locals, bool tonal):
 _index(col._index),
@@ -246,15 +247,21 @@ void PSV::init_psbs(const Cost& seed, bool tonal)
 
 
 // compute _psbs with given local tons
+/// @todo remove globals, replaced by global flag in ton index
 void PSV::init_psbs(const Cost& seed,
                     const PSO& globals, const std::vector<size_t>& locals,
                     bool tonal)
 {
     assert(locals.size() == _index.size());
     
-    for (auto it = globals.cbegin(); it != globals.cend(); ++it)
+    // for (auto it = globals.cbegin(); it != globals.cend(); ++it)
+    for (size_t i = 0; i < _index.size(); ++i)
     {
-        size_t i = *it; // index of global ton
+        if (!_index.isGlobal(i))
+        {
+            // skip
+            continue;
+        }
         TRACE("PSV {}-{} ton {}",
               enumerator().first(), enumerator().stop(), ton(i));
         assert(i < _psbs.size());
@@ -281,7 +288,6 @@ void PSV::init_psbs(const Cost& seed,
         assert(_psbs[i]);
         TRACE("compute the best spelling for notes {}-{}, ton = {}",
               enumerator().first(), enumerator().stop(), ton(i));
-        // "{} accid", _psbs[i]->cost()
     }
 }
 

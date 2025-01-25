@@ -84,7 +84,7 @@ public: // access
     /// number of columns (PS Vectors) in this grid, i.e. nb of measures
     /// spelled.
     /// @see same as PSG::size()
-    inline size_t nbMeasures() const { return size(); }
+    inline size_t measures() const { return size(); }
 
     /// vector of tonalities (row-index) associated to this grid.
     inline const TonIndex& index() const { return _index; }
@@ -93,7 +93,8 @@ public: // access
     inline size_t nbTons() const { return _index.size(); }
         
     /// one column of this table (corresponding to a measure).
-    const std::vector<size_t>& column(size_t i) const;
+    /// @param j measure number.
+    const std::vector<size_t>& column(size_t j) const;
     
     /// index (in the TonIndex) of the estimated local tonality,
     /// for the given row number (assumed a global tonality)
@@ -128,7 +129,7 @@ protected: // data
     /// - the dimension of inner vectors (columns) is the size of TonIndex.
     ///   @see rowNb()
     /// - the dimension of outer vectors (rows) is the number of measures.
-    ///   @see columnNb()
+    ///   @see measures()
     std::vector<std::vector<size_t>> _content;
     
     // add one column

@@ -611,11 +611,15 @@ def anote_global_part(part, sp, ton_est):
 def anote_local_part(part, sp, i):
     # i = sp.iglobal_ton0(goodgtindex)
     ml = part.getElementsByClass(m21.stream.Measure)    
-    for j in range(len(ml)):
-        k = m21_key(sp.local_bar(i, j))
-        e = m21.expressions.TextExpression(strk(k))
-        e.style.fontStyle = 'italic'
-        ml[j].insert(0, e)
+    #for j in range(len(ml)):
+    for j in range(sp.measures()):       
+        assert(j < len(ml))
+        ton = sp.local_bar(i, j)
+        if not ton.undef():
+            k = m21_key(ton)
+            e = m21.expressions.TextExpression(strk(k))
+            e.style.fontStyle = 'italic'
+            ml[j].insert(0, e)
         
 def anote_part(part, ld):
     """mark mispells in red in a part, based on a diff-list"""

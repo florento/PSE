@@ -30,7 +30,7 @@ void PSGy::init(const PST& tab)
     // for each bar (column)
     for (size_t j = 0; j < tab.size(); ++j)
     {
-        // column of best paths for measure j
+        // column of best spelling paths for measure j
         const PSV& vec = tab.column(j);
         assert(vec.size() == _index.size());
 
@@ -239,7 +239,7 @@ void PSGy::WARN_TIE(size_t barnb, const std::vector<size_t>& ties,
 void PSGy::init(const PST& tab, std::vector<bool> mask)
 {
 
-    for (size_t j = 0; j < tab.columnNb(); ++j)
+    for (size_t j = 0; j < tab.measures(); ++j)
     {
         // column of best paths for measure j
         const PSV& vec = tab.column(j);
