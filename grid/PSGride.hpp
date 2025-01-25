@@ -152,14 +152,16 @@ private: // construction
     /// for a modal construction of the grid (no global tonality).
     /// @warning the table must be non empty (nb bars > 0).
     /// @warning q must be empty.
-    void init_queue(PSGQueue& q, const PST& tab);
+    void init_queue(PSGQueue& q, const PST& tab,
+                    std::vector<std::vector<size_t>>& ranks);
 
     /// add the first grid states to the given queue,
     /// according to the spelling costs in the first column of the given table
     /// and the given assumed global ton.
     /// @warning the table must be non empty (nb bars > 0).
     /// @warning q must be empty.
-    void init_queue(PSGQueue& q, const PST& tab, size_t ig);
+    void init_queue(PSGQueue& q, const PST& tab,
+                    std::vector<std::vector<size_t>>& ranks, size_t ig);
 
 private: // data
     
@@ -169,6 +171,7 @@ private: // data
     /// @return whether the computation is terminated.
     /// @warning the table must be non empty (nb bars > 0).
     bool step(PSGQueue& q, const PST& tab,
+              std::vector<std::vector<size_t>>& ranks,
               std::vector<std::vector<bool>>& visited,
               std::vector<std::shared_ptr<const GridState>>& ties);
 

@@ -27,6 +27,29 @@ namespace pse {
 
 class PST;
 
+/// names of algorithms for the computation of the grid.
+enum class GridAlgo
+{
+    /// Unknown
+    Undef,
+
+    /// Greedy algo with best costs
+    Best,
+
+    /// Greedy algo with ranks
+    Rank,
+
+    /// Best path search
+    Exhaustive,
+
+};
+
+/// string of mode name.
+std::string tostring(const GridAlgo& m);
+
+std::ostream& operator<<(std::ostream& o, const GridAlgo& m);
+
+
 /// Grid of estimated local tonalities, for each measure (X) and
 /// each possible global tonality (Y) in a TonIndex.
 /// This class only construct an empty grid, descendants shall construct
@@ -119,6 +142,12 @@ protected: // construction
 };
 
 } // namespace pse
+
+
+/// fmt v10 and above requires `fmt::formatter<T>` extends `fmt::ostream_formatter`.
+/// @see: https://github.com/fmtlib/fmt/issues/3318
+template<> struct fmt::formatter<enum pse::GridAlgo> : fmt::ostream_formatter {};
+
 
 #endif /* PSGrid_hpp */
 

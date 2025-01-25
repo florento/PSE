@@ -132,7 +132,7 @@ skip = ['Autumn in New York']
 def eval_FRB(corpus='leads', 
              kpre=0, kpost=0, tons=0, 
              costtype1=ps.pse.CTYPE_UNDEF, tonal1=True, det1=True, 
-             global1=100, 
+             global1=100, grid=ps.pse.Grid_Rank, 
              costtype2=ps.pse.CTYPE_UNDEF, tonal2=True, det2=True,
              output_dir='', tablename='',
              dflag=True, mflag=True, csflag=False):
@@ -144,6 +144,7 @@ def eval_FRB(corpus='leads',
     """costtype1: table1, cost type. if set, PSE is used, otherwise, PS13 is used"""
     """tonal1: table1, tonal/modal flag for initial state (PSE)"""
     """det1: table1, deterministic/exhaustive flag for transitions (PSE)"""
+    """grid: name of algorithm for the computation of the grid"""
     """global1: percentage approx for intermediate list of global candidate"""
     """costtype2: table2, cost type. if unset, skip table2 (PSE)"""
     """tonal2: table2, tonal/modal flag for initial state (PSE)"""
@@ -161,7 +162,7 @@ def eval_FRB(corpus='leads',
     sp = ps.Spellew(ps13_kpre=kpre, ps13_kpost=kpost, 
                     nbtons=tons,
                     t1_costtype=costtype1, t1_tonal=tonal1, t1_det=det1, 
-                    global1=global1,
+                    global1=global1, grid=grid,
                     t2_costtype=costtype2, t2_tonal=tonal2, t2_det=det2,
                     debug=dflag)
     algoname = sp.algoname()
@@ -213,7 +214,7 @@ def eval_FRB(corpus='leads',
 def eval_FRBitem(name, corpus='leads', 
                  kpre=0, kpost=0, tons=0,          
                  costtype1=ps.pse.CTYPE_UNDEF, tonal1=True, det1=True,       
-                 global1=100,     
+                 global1=100, grid=ps.pse.Grid_Rank,
                  costtype2=ps.pse.CTYPE_UNDEF, tonal2=True, det2=True,      
                  output_dir='', filename='',             
                  dflag=True, mflag=False, csflag=False):   
@@ -226,6 +227,7 @@ def eval_FRBitem(name, corpus='leads',
     """costtype1: table1, cost type. if set, PSE is used, otherwise, PS13 is used"""
     """tonal1: table1, tonal/modal flag for initial state (PSE)"""
     """det1: table1, deterministic/exhaustive flag for transitions (PSE)"""
+    """grid: name of algorithm for the computation of the grid"""
     """global1: percentage approx for intermediate list of global candidate"""
     """costtype2: table2, cost type. if unset, skip table2 (PSE)"""
     """tonal2: table2, tonal/modal flag for initial state (PSE)"""
@@ -241,7 +243,7 @@ def eval_FRBitem(name, corpus='leads',
     sp = ps.Spellew(ps13_kpre=kpre, ps13_kpost=kpost, 
                     nbtons=tons,
                     t1_costtype=costtype1, t1_tonal=tonal1, t1_det=det1, 
-                    global1=global1,
+                    global1=global1, grid=grid,
                     t2_costtype=costtype2, t2_tonal=tonal2, t2_det=det2,
                     debug=dflag)
     # input data

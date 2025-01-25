@@ -139,8 +139,11 @@ public: // spelling : computation of tables and grid
     /// - a spelling table.
     /// - the array of global candidates if it exists
     ///   (otherwise, we consider all tonalities).
+    /// @param algo algorithm for the computation of the grid.
+    /// possible values are GridAlgo::Best, GridAlgo::Rank,
+    /// GridAlgo::Exhaustive.
     /// @return whether computation was succesfull.
-    bool evalGrid();
+    bool evalGrid(const GridAlgo& algo = GridAlgo::Rank);
     
     /// compute the subarray of tons selected as candidate global tonality,
     /// using the evaluated table.

@@ -952,6 +952,7 @@ class Spellew:
                  t2_costtype=pse.CTYPE_UNDEF, # 2d table 
                  t2_tonal=True, 
                  t2_det=True, 
+                 grid=pse.Grid_Rank,
                  global1=100, # if < 100, compute an intermediate list candidate globals,
                               # with the given percentagle of error,
                               # after building the 1st table, 
@@ -1008,6 +1009,7 @@ class Spellew:
         self._ct2     = t2_costtype
         self._tonal2  = t2_tonal
         self._det2    = t2_det
+        self._gridalgo = grid
         self._global1 = global1
         
     def mask(self):
@@ -1097,9 +1099,9 @@ class Spellew:
             print('PSE:', nbg, 'candidate global from 1st table', flush=True)                
         if self._ct2 != pse.CTYPE_UNDEF:
         # construct the grid of local tonalities
-            print('PSE: computing Grid', end=' ', flush=True)
+            print('PSE: computing Grid with algo:', self._gridalgo, end=' ', flush=True)
             stat.start_timer(2)
-            self._speller.eval_grid()
+            self._speller.eval_grid(self._gridalgo)
             stat.stop_timer(2)                
             print("{0:0.2f}".format(stat.get_timer(2)), 'ms', end='\n', flush=True)
         # tonal step: compute the second spelling table 

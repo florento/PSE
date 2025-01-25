@@ -80,4 +80,37 @@ void PSG::init_empty(const PST& tab)
 }
 
 
+// static
+std::string tostring(const GridAlgo& m)
+{
+    switch (m)
+    {
+        case GridAlgo::Undef:
+            return "Undef";
+            
+        case GridAlgo::Best:
+            return "Best";
+            
+        case GridAlgo::Rank:
+            return "Rank";
+            
+        case GridAlgo::Exhaustive:
+            return "Exhaustive";
+            
+        default:
+        {
+            ERROR("unexpected Grid algorithm");
+            return "ERROR";
+        }
+    }
+}
+            
+
+std::ostream& operator<<(std::ostream& o, const GridAlgo& mode)
+{
+    o << tostring(mode);
+    return o;
+}
+
+
 } // end namespace pse

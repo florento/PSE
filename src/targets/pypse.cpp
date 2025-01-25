@@ -92,6 +92,13 @@ PYBIND11_MODULE(pse, m)
                "number of accidentals and distance to local ton, lexicographic comparison values")
         .export_values();
     
+    py::enum_<enum pse::GridAlgo>(m, "GridAlgo", "Algo for Grid Construction")
+        .value("Grid_Best",  pse::GridAlgo::Best, "Greedy algo with best costs")
+        .value("Grid_Rank",  pse::GridAlgo::Rank, "Greedy algo with ranks")
+        .value("Grid_Exhaustive",  pse::GridAlgo::Exhaustive, "est path search")
+        .value("Grid_Undef", pse::GridAlgo::Undef, "Undef")
+        .export_values();
+    
     py::class_<pse::Ton>(m, "Ton")
     //.def(py::init<>(), "Ton", py::arg("ks"))
         .def("mode", &pse::Ton::getMode, "get mode of ton")

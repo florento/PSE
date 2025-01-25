@@ -11,7 +11,6 @@
 #include "PSGride.hpp"
 
 
-
 namespace pse {
 
 //Algo Speller::algo() const
@@ -177,7 +176,7 @@ bool Speller::revalTable(CostType ctype, bool tonal, bool chromatic)
 }
 
 
-bool Speller::evalGrid()
+bool Speller::evalGrid(const GridAlgo& algo)
 {
     if (_grid)
     {
@@ -198,7 +197,27 @@ bool Speller::evalGrid()
     //     mask = _global->getMask(); // copy
     // }
 
-    _grid = new PSGe(*_table);
+    switch (algo)
+    {
+        case GridAlgo::Best:
+            _grid = new PSGy(*_table);
+            break;
+
+        case GridAlgo::Rank:
+            _grid = new PSGr(*_table);
+            break;
+
+        case GridAlgo::Exhaustive:
+            _grid = new PSGe(*_table);
+            break;
+
+        default:
+        {
+            ERROR("unexpected Grid algorithm");
+            break;
+        }
+    }
+
     return true;
 }
 

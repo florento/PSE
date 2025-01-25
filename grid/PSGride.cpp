@@ -73,8 +73,13 @@ bool GridState::operator!=(const GridState& rhs) const
 bool GridState::operator<(const GridState& rhs) const
 {
     if (this->cost == rhs.cost)
+    {
         // priority to states more advanved in score
-        return this->measure < rhs.measure;
+        if (this->measure == rhs.measure)
+            return this->ton < rhs.ton;
+        else
+            return this->measure < rhs.measure;
+    }
     else
         return (this->cost > rhs.cost);
 }
@@ -143,7 +148,7 @@ PSG(tab)
         {
             if (_index.isGlobal(ig))
             {
-                DEBUG("PSGride: computing grid row {} ({})", ig, _index.ton(ig));
+                // DEBUG("PSGride: computing grid row {} ({})", ig, _index.ton(ig));
                 init(tab, ig);
             }
         }
@@ -157,23 +162,47 @@ PSGe::~PSGe()
 
 void PSGe::init(const PST& tab, size_t ig)
 {
+    // priority queue for best-path computation
     PSGQueue q = PSGQueue(PSGSOrder()); // empty
-    std::vector<std::shared_ptr<const GridState>> ties;
+
+    // marking visited nodes during best-path computattion
     std::vector<std::vector<bool>> visited;
     size_t columns = tab.size(); // number of measures
     for (size_t i = 0; i < _index.size(); ++i)
         visited.emplace_back(columns, false);
 
-    // DEBUG(".....init queue");
-    // modal case
-    if (ig == TonIndex::UNDEF)
+    // best path ties
+    std::vector<std::shared_ptr<const GridState>> ties;
+
+    // tabulation of ranks of tons / measure from the cost of tab
+    std::vector<std::vector<size_t>> ranks;
+    for (size_t j = 0; j < tab.size(); ++j)
     {
-        init_queue(q, tab);
+        const PSV& vec = tab.column(j);
+        assert(vec.size() == _index.size());
+        // empty bars: no rank to compute
+        if (vec.first() == vec.stop())
+        {
+            ranks.emplace_back(); // empty column
+        }
+        else
+        {
+            ranks.emplace_back();
+            assert(ranks.back().empty());
+            vec.ranks(ranks.back());
+            assert(ranks.back().size() == _index.size());
+        }
+    }
+
+    // DEBUG(".....initilization of priority queue");
+    if (ig == TonIndex::UNDEF) // modal case
+    {
+        init_queue(q, tab, ranks);
     }
     else
     {
         assert(ig < _index.size());
-        init_queue(q, tab, ig);
+        init_queue(q, tab, ranks, ig);
     }
     // DEBUG(".....loop");
     // loop(q, tab, ties);
@@ -181,7 +210,7 @@ void PSGe::init(const PST& tab, size_t ig)
     
     while (!q.empty() and !terminated)
     {
-        terminated = step(q, tab, visited, ties);
+        terminated = step(q, tab, ranks, visited, ties);
     }
 
     // DEBUG(".....end");
@@ -195,12 +224,13 @@ void PSGe::init(const PST& tab, size_t ig)
     }
 
     if (ties.size() > 1)
-        WARN("PSGride row {}: {} best paths ({})",
-             (ig != TonIndex::UNDEF?std::to_string(ig):std::string("U")),
-             ties.size(),
-             (ig != TonIndex::UNDEF?
-              std::string("ton "+std::to_string(ig)):
-              std::string("modal")));
+    {
+        if (ig == TonIndex::UNDEF) // modal
+            WARN("PSGride (modal): {} best paths", ties.size());
+        else
+            WARN("PSGride row {} ({}): {} best paths",
+                 ig, _index.ton(ig), ties.size());
+    }
     
     // modal: fill the first row
     // @todo other ton ?
@@ -233,9 +263,11 @@ void PSGe::init_modal(const PST& tab)
 
 
 // modal case
-void PSGe::init_queue(PSGQueue& q, const PST& tab)
+void PSGe::init_queue(PSGQueue& q, const PST& tab,
+                      std::vector<std::vector<size_t>>& ranks)
 {
     assert(tab.size() > 0);
+    assert(ranks.size() == tab.size());
     assert(q.empty());
         
     // search for the first non-empty measure (column nb j)
@@ -250,12 +282,12 @@ void PSGe::init_queue(PSGQueue& q, const PST& tab)
             continue;
         
         // rank of each bag in the column j (one for each ton)
-        std::vector<size_t> rank_bags; // empty
-        vec.ranks(rank_bags);
+        assert(j < ranks.size());
+        std::vector<size_t>& rank_bags(ranks.at(j));
         assert(rank_bags.size() == _index.size());
         for (size_t i = 0; i < rank_bags.size(); ++i)
         {
-            // construct a std::shared_ptr<const GridState>
+            // construct an initial  std::shared_ptr<const GridState>
             // with cost = rank
             q.emplace(new GridState(i, j, rank_bags.at(i)));
         }
@@ -264,9 +296,11 @@ void PSGe::init_queue(PSGQueue& q, const PST& tab)
 
 
 // tonal case: start from global ton gton
-void PSGe::init_queue(PSGQueue& q, const PST& tab, size_t ig)
+void PSGe::init_queue(PSGQueue& q, const PST& tab,
+                      std::vector<std::vector<size_t>>& ranks, size_t ig)
 {
     assert(tab.size() > 0);
+    assert(ranks.size() == tab.size());
     assert(q.empty());
     std::shared_ptr<const GridState> pred = nullptr;
 
@@ -281,8 +315,7 @@ void PSGe::init_queue(PSGQueue& q, const PST& tab, size_t ig)
     else
     {
         // rank of each bag in the column 0 (one for each ton)
-        std::vector<size_t> rank_bags; // empty
-        vec.ranks(rank_bags);
+        std::vector<size_t>& rank_bags(ranks.at(0));
         assert(rank_bags.size() == _index.size());
         for (size_t i = 0; i < rank_bags.size(); ++i)
         {
@@ -296,9 +329,12 @@ void PSGe::init_queue(PSGQueue& q, const PST& tab, size_t ig)
 
 
 bool PSGe::step(PSGQueue& q, const PST& tab,
+                std::vector<std::vector<size_t>>& ranks,
                 std::vector<std::vector<bool>>& visited,
                 std::vector<std::shared_ptr<const GridState>>& ties)
 {
+    assert(tab.size() > 0);
+    assert(ranks.size() == tab.size());
     if (q.empty())
     {
         return true;
@@ -311,8 +347,6 @@ bool PSGe::step(PSGQueue& q, const PST& tab,
     // assert(current->ton < visited.size());
     // assert(current->measure < visited.at(current->ton).size());
     visited[current->ton][current->measure] = true;
-    // DEBUG("state {}, {} ({})",
-    //       current->ton, current->measure, current->cost);
 
     if (!ties.empty())
     {
@@ -365,8 +399,8 @@ bool PSGe::step(PSGQueue& q, const PST& tab,
         else
         {
             // rank of each bag in the column j (one for each ton)
-            std::vector<size_t> rank_bags; // empty
-            vec.ranks(rank_bags);
+            assert(j < ranks.size());
+            const std::vector<size_t>& rank_bags(ranks.at(j));
             assert(rank_bags.size() == _index.size());
             size_t i0 = current->ton;
             for (size_t i = 0; i < rank_bags.size(); ++i)
@@ -375,9 +409,11 @@ bool PSGe::step(PSGQueue& q, const PST& tab,
                 // with cost = rank
                 assert(current->measure + 1 == j);
                 if (!visited[i][j])
+                {
                     q.emplace(new GridState(current, i,
                                             _index.rankWeber(i0, i)
                                             + rank_bags.at(i)));
+                }
             }
             return false;
         }
