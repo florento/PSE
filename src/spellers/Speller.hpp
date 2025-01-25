@@ -17,6 +17,8 @@
 #include <time.h>
 
 #include "Spelli.hpp"
+#include "PSTable.hpp"
+#include "PSGrid.hpp"
 
 
 // TODO
@@ -147,9 +149,9 @@ public: // spelling : computation of tables and grid
     /// @param refine whether we restart from the current global subarray
     /// and refine, or from scratch.
     /// if true, one global subarray must have been computed.
-    /// @return whether computation was succesfull.
+    /// @return the number of tonalities selected by this function.
     /// @warning a table must have been evaluated.
-    bool selectGlobals(double d=0, bool refine=false);
+    size_t selectGlobals(double d=0, bool refine=false);
 
     /// select a unique index on ton in the global tons,
     /// mark all others as non global.

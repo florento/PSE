@@ -79,8 +79,6 @@ private: // construction
         
 };
 
-
-
 } // namespace pse
 
 #endif /* PSGridr_hpp */

@@ -190,9 +190,10 @@ public: // sub array of tonalities that can be global.
     /// of this ton index in the selection of new globals.
     /// in the first case, the new set of globals is a subset of the current
     /// one, in the second case, it may be orthogonal.
+    /// @return the number of tonalities selected by this function.
     // @warning call eGlobals_eq and eGlobals_less variants to operator==
     // and operator< on cost.
-    void selectGlobals(const PST& tab, double d=0, bool refine=true);
+    size_t selectGlobals(const PST& tab, double d=0, bool refine=true);
     
     /// select in the global tons a unique index on ton,
     /// according to the following criteria, and unselect the others.

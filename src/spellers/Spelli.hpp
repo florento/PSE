@@ -24,8 +24,6 @@
 #include "Ton.hpp"
 #include "TonIndex.hpp"
 #include "PSRawEnum.hpp"
-#include "PSTable.hpp"
-#include "PSGrid.hpp"
 #include "AlgoName.hpp"
 #include "CostType.hpp"
 #include "CostA.hpp"

@@ -54,13 +54,22 @@ bool TonIndex::empty() const
 
 const Ton& TonIndex::ton(size_t i) const
 {
-    assert(i < _tons.size());
-    return _tons.at(i).first;
+    if (i == UNDEF)
+    {
+        assert(_undef.undef());
+        return _undef;
+    }
+    else
+    {
+        assert(i < _tons.size());
+        return _tons.at(i).first;
+    }
 }
 
 
 const Ton& TonIndex::undef() const
 {
+    assert(_undef.undef());
     return _undef;
 }
 
@@ -514,7 +523,7 @@ size_t TonIndex::getGlobal(size_t n) const
 }
 
 
-void TonIndex::selectGlobals(const PST& tab, double d, bool refine)
+size_t TonIndex::selectGlobals(const PST& tab, double d, bool refine)
 {
     assert(0 <= d);
     assert(d <= 100);
@@ -523,21 +532,24 @@ void TonIndex::selectGlobals(const PST& tab, double d, bool refine)
     if (d == 100)
     {
         if (refine)
-            return;
+            return 0;
         // select all tons as global
         else
         {
             for (size_t i = 0; i < _tons.size(); ++i)
                 setGlobal(i);
-            return;
+            return _tons.size();
         }
     }
+    
+    // counter of selected
+    size_t cpt = 0;
     
     // index of row in tab with best cost cummultated cost
     size_t ibest = TonIndex::UNDEF;
     
     // estimate the best tonality in tab wrt costs (nb accidentals)
-    // amongst the current globals if refine
+    // if refine, restrict the serach to the current globals
     for (size_t i = 0; i < _tons.size(); ++i)
     {
         // skip
@@ -559,7 +571,7 @@ void TonIndex::selectGlobals(const PST& tab, double d, bool refine)
         assert(empty() or refine); // refine and no globals
         if (refine)
             WARN("TonIndex selectGlobals: refine mode and no globals");
-        return;
+        return 0;
     }
     
     assert(ibest < _tons.size());
@@ -576,13 +588,13 @@ void TonIndex::selectGlobals(const PST& tab, double d, bool refine)
         if (refine and !isGlobal(i))
             continue;
 
-
         const Cost& rc = tab.rowCost(i);
 
         // real tie
         if (rc == bestCost)
         {
             setGlobal(i);
+            cpt++;
         }
         // approx tie
         // we keep this case apart from real tie because of floating approx.
@@ -590,6 +602,7 @@ void TonIndex::selectGlobals(const PST& tab, double d, bool refine)
         else if ((d > 0) && (rc.dist(bestCost) <= d))
         {
             setGlobal(i);
+            cpt++;
         }
         else
         {
@@ -599,6 +612,7 @@ void TonIndex::selectGlobals(const PST& tab, double d, bool refine)
     
     // at least ibest
     assert(isGlobal(ibest));
+    return cpt;
 }
 
 

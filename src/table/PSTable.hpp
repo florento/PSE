@@ -51,7 +51,7 @@ class PSG;
 class PST
 {
     
-public:
+public: // construction
    
     /// main constructor.
     /// @param a name of pitch-spelling algorithm implemented with this table.
@@ -116,12 +116,17 @@ public:
     PST(const PST& tab, const Cost& seed,
         const PSO& globals, const PSG& locals, 
         bool tonal=true, bool dflag=false);
+    
+    /// a table cannot be copied
+    PST(const PST& rhs) = delete;
 
     /// destructor.
     virtual ~PST();
+    
+    /// a table cannot be copied
+    PST& operator=(const PST& rhs) = delete;
       
-    /// the table content has been correctly initialized.
-    bool status() const;
+public: // access
     
     /// enumerator of input notes used to build this vector.
     inline PSEnum& enumerator() const { return _enum; }
@@ -231,6 +236,11 @@ public:
     /// @param ig index of cestimated global tonality = row index.
     /// @return whether renaming succeded for all measures.
     bool rename(size_t ig);
+
+public: // debug
+
+    /// the table content has been correctly initialized.
+    bool status() const;
     
     /// debug: print the array of row costs.
     void dump_rowcost() const;

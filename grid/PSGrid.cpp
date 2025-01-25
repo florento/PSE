@@ -68,4 +68,16 @@ const std::vector<size_t>& PSG::column(size_t j) const
 }
 
 
+void PSG::init_empty(const PST& tab)
+{
+    size_t rows = tab.index().size();
+    
+    // for each bar (column)
+    for (size_t j = 0; j < tab.size(); ++j)
+    {
+        _content.emplace_back(rows, TonIndex::UNDEF);
+    }
+}
+
+
 } // end namespace pse

@@ -110,7 +110,12 @@ protected: // data
     
     // add one column
     // void init(const PSV& vec, std::vector<bool> mask);
-                    
+             
+protected: // construction
+
+    // fill a grid (with the size of tab) with TonIndex::UNDEF
+    void init_empty(const PST& tab);
+    
 };
 
 } // namespace pse

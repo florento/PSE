@@ -6,7 +6,9 @@
 //
 
 #include "Speller.hpp"
+#include "PSGridy.hpp"
 #include "PSGridr.hpp"
+#include "PSGride.hpp"
 
 
 
@@ -189,19 +191,19 @@ bool Speller::evalGrid()
     }
     
     assert(_index);
-    std::vector<bool> mask(_index->size(), true); // all true by default
+    //std::vector<bool> mask(_index->size(), true); // all true by default
 
-//    if (_global)
-//    {
-//        mask = _global->getMask(); // copy
-//    }
+    // if (_global)
+    // {
+    //     mask = _global->getMask(); // copy
+    // }
 
-    _grid = new PSGr(*_table);
+    _grid = new PSGe(*_table);
     return true;
 }
 
 
-bool Speller::selectGlobals(double d, bool refine)
+size_t Speller::selectGlobals(double d, bool refine)
 {
     assert(0 <= d);
     assert(d <= 100);
@@ -209,15 +211,14 @@ bool Speller::selectGlobals(double d, bool refine)
     if (_table == nullptr)
     {
         ERROR("Speller selectGlobals: eval table first");
-        return false;
+        return 0;
     }
     // if (_debug)
     // {
     //     _table->dump_table();
     // }
     assert(_index);
-    _index->selectGlobals(*_table, d, refine);
-    return true;
+    return _index->selectGlobals(*_table, d, refine);
 //    if (refine)
 //    {
 //        if (_global == nullptr)

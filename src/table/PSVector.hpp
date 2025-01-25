@@ -114,7 +114,13 @@ public: // constructors
     PSV(const Algo& a, const Cost& seed, const TonIndex& index,
         const PSEnum& e, size_t i0, size_t bar);
 
+    /// a vector cannot be copied.
+    PSV(const PSV& rhs) = delete;
+    
     ~PSV();
+    
+    /// a vector vector be copied.
+    PSV& operator=(const PSV& rhs) = delete;
     
 public: // access
   

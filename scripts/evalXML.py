@@ -4,7 +4,7 @@
 Created on Mon Feb  5 14:02:31 2024
 @author: jacquema
 
-Evaluation of the score of the Fake Real Book dataset
+Framework for the evaluation of a set of XML scores all in the same directory
 """
 
 #import sys
@@ -17,7 +17,6 @@ from operator import itemgetter, attrgetter
 import pandas
 import music21 as m21
 import PSeval as ps
-import evalXML
 
 
 ########################
@@ -26,18 +25,13 @@ import evalXML
 ##                    ##
 ########################
 
-# path to FRB dataset
-_dataset_root = '../../../Datasets/FakeRealBook'
-
  # default score file name
-_score_suffix = '.musicxml'
+_score_suffix = ['.musicxml', '.xml', '.mxml']
 
 # root of evaluation dir
 _eval_root = '../../PSeval'
 
 # name of dir for evaluation output
-# _output_dir = 'augASAP'
-
 timestamp = str(datetime.today().strftime('%Y%m%d-%H%M'))
 
 # MuseScore commandline executable
@@ -51,14 +45,12 @@ _mscore = '/Applications/MuseScore 4.app/Contents/MacOS/mscore'
 #################################
 
 # corpus can be 'leads' or 'piano'
-def FRB_corpus(corpus='leads'):
-    """build a list of scores in a subdirectory of the FRB"""
-    global _dataset_root
+def XML_corpus(dataset_path):
+    """build a dictionary of XML scores in a directory"""
     global _score_suffix
-    dataset_path = Path(_dataset_root) / corpus
     assert isinstance(dataset_path, PosixPath)
     if not os.path.exists(dataset_path):
-        print(dataset_path, 'not found')
+        print('Error: ', dataset_path, 'not found')
         return
     # map: opus_name -> path
     dataset = dict()
@@ -69,50 +61,12 @@ def FRB_corpus(corpus='leads'):
         if os.path.isdir(filepath):
             continue 
         # check the extension in the file name
-        if (os.path.splitext(file)[1] == _score_suffix):
+        if (os.path.splitext(file)[1] in _score_suffix):
             # map score name to file path
             dataset[os.path.splitext(file)[0]] = filepath
     # sort the list alphabetically
     dataset = dict(sorted(dataset.items()))
     return dataset
-
-def accids(ks, notes):
-    c = 0
-    for note in notes:
-        if note.pitch.accidental != ks.accidentalByStep(note.name):
-            c += 1            
-    return c
-    
-def FRB_table(corpus='leads'):
-    assert(corpus == 'leads' or corpus == 'piano')
-    table = []
-    dataset = FRB_corpus(corpus)
-    names = sorted(list(dataset)) # list of index in dataset   
-    for name in names:
-        if (dataset.get(name) == None):
-            print(name, "not found in dataset", corpus)
-            continue        
-        file = dataset[name]
-        score = m21.converter.parse(file.as_posix())
-        assert(len(score.parts) > 0)
-        part = score.parts[0]
-        fpart = part.flatten()
-        keys = fpart.getElementsByClass([m21.key.Key, m21.key.KeySignature])
-        notes = fpart.getElementsByClass(m21.note.Note)
-        row = []
-        row.append(name)
-        row.append(keys[0].sharps if len(keys) > 0 else None)            
-        row.append(len(part.getElementsByClass(m21.stream.Measure)))
-        row.append(len(notes))
-        row.append(accids(keys[0], notes) if len(keys) > 0 else None)
-        row.append(len(score.parts))
-        row.append(len(keys))
-        table.append(row)
-    df = pandas.DataFrame(table)
-    df.columns = ['name', 'KS','# bars', '# notes', '# accids', '# parts', '# keys']
-    df['KS'] = df['KS'].map('{:n}'.format)
-    return df  
-
 
         
 #####################################
@@ -129,15 +83,19 @@ skip = ['Autumn in New York']
 # PSE:  tons=135, 
 # PSE table1:  costtype1 = ps.CTYPE_ACCID | CTYPE_ACCIDlead | CTYPE_ADplus | CTYPE_ADlex
 # PSE table2:  costtype2 = ps.CTYPE_ACCID | CTYPE_ACCIDlead | CTYPE_ADplus | CTYPE_ADlex
-def eval_FRB(corpus='leads', 
+def eval_XML(dataset, skip=[],
+             eval_root='.', output_dir='', tablename='',
              kpre=0, kpost=0, tons=0, 
              costtype1=ps.pse.CTYPE_UNDEF, tonal1=True, det1=True, 
              global1=100, 
              costtype2=ps.pse.CTYPE_UNDEF, tonal2=True, det2=True,
-             output_dir='', tablename='',
              dflag=True, mflag=True, csflag=False):
-    """eval the whole FRB corpus with given algo and parameters"""
-    """corpus: leads or piano (obsolete)"""
+    """eval a whole corpus with given algo and parameters"""
+    """dataset: a dictionary as produced by XML_corpus"""
+    """skip: list of names in corpus to avoid during evaluation"""
+    """eval_root: directory where the evaluation directory will lie"""
+    """output_dir: name of directory where the evaluation files will be written"""
+    """tablename: file name of evaluation table. will be written in the output_dir"""
     """kpre: parameter specific to PS13"""
     """kpost: parameter specific to PS13"""
     """tons: nb of Tons in TonIndex (PSE)"""
@@ -152,11 +110,7 @@ def eval_FRB(corpus='leads',
     """tablename: filename of csv table"""
     """dflag: debug flag"""
     """mflag: mark flag"""
-    """csflag: spell also chord symbols"""
-    global _eval_root
-    global skip
-    assert(corpus == 'leads' or corpus == 'piano')
-    timestamp = datetime.today().strftime('%Y%m%d-%H%M')
+    """csflag: spell also the notes of the chord symbols"""
     # initialize a speller
     sp = ps.Spellew(ps13_kpre=kpre, ps13_kpost=kpost, 
                     nbtons=tons,
@@ -164,20 +118,24 @@ def eval_FRB(corpus='leads',
                     global1=global1,
                     t2_costtype=costtype2, t2_tonal=tonal2, t2_det=det2,
                     debug=dflag)
-    algoname = sp.algoname()
-    # default output dir name
+    algoname = sp.algoname()    
+
+    # prepare the output dir
+    timestamp = datetime.today().strftime('%Y%m%d-%H%M')
     if output_dir == '':
        output_dir = algoname+'_'+timestamp
-    output_path = Path(_eval_root)/'evalFRB'/output_dir
+    output_path = Path(eval_root)
+    if not os.path.exists(output_path):
+        print('ERROR output dir: ', output_path, 'not found')
+        return
+    output_path = output_path/output_dir
     if not os.path.isdir(output_path):
-        if not os.path.isdir(Path(_eval_root)/'evalFRB'):
-            os.mkdir(Path(_eval_root)/'evalFRB')
         os.mkdir(output_path)
     else:
-        print('WARNING: dir', output_path, 'exists')
+        print('WARNING: output dir', output_path, 'exists')
+
     # input data and processing   
     stat = ps.Stats()   
-    dataset = FRB_corpus(corpus)
     names = sorted(list(dataset)) # list of index in dataset   
     print('\n', 'starting evaluation of FRB dataset -', len(names), 'entries\n')
     i = 0 # score id
@@ -186,21 +144,22 @@ def eval_FRB(corpus='leads',
             print('\n', name, 'SKIP\n', flush=True)
             continue
         if (not dataset.get(name)):
-            print('\n', name, "not found in dataset, skip", corpus)
+            print('\n', name, "not found in dataset, skip")
             continue
         file = dataset[name]
         print('\n', name, '\n')
         s = m21.converter.parse(file.as_posix())
         (ls, lld) = sp.eval_score(score=s, stats=stat, score_id=i, 
                                   title=name, composer='', 
-                                  output_path=output_path, chord_sym=csflag)
+                                  output_path=output_path, 
+                                  chord_sym=csflag)
         i += 1
         if mflag and not ps.empty_difflist(lld):
             write_score(s, output_path, name)
     # display and save evaluation table
     # default table file name
     if not tablename:
-       tablename =  'FRBeval'+'_'+corpus+str(tons)+'_'+timestamp
+       tablename =  'eval_'+algoname+'_'+timestamp
     stat.show()    
     df = stat.get_dataframe() # create pandas dataframe
     df.pop('part') # del column part number (always 0)
@@ -210,7 +169,7 @@ def eval_FRB(corpus='leads',
 # PSE:  tons=135, 
 # PSE table1:  costtype1 = ps.CTYPE_ACCID | CTYPE_ACCIDlead | CTYPE_ADplus | CTYPE_ADlex
 # PSE table2:  costtype2 = ps.CTYPE_ACCID | CTYPE_ACCIDlead | CTYPE_ADplus | CTYPE_ADlex
-def eval_FRBitem(name, corpus='leads', 
+def eval_XMLitem(dataset, name, 
                  kpre=0, kpost=0, tons=0,          
                  costtype1=ps.pse.CTYPE_UNDEF, tonal1=True, det1=True,       
                  global1=100,     
@@ -236,7 +195,6 @@ def eval_FRBitem(name, corpus='leads',
     """mflag: mark flag"""
     """csflag: spell also chord symbols"""
     assert(len(name) > 0)
-    assert(corpus == 'leads' or corpus == 'piano')
     # initialize a speller
     sp = ps.Spellew(ps13_kpre=kpre, ps13_kpost=kpost, 
                     nbtons=tons,
@@ -245,9 +203,8 @@ def eval_FRBitem(name, corpus='leads',
                     t2_costtype=costtype2, t2_tonal=tonal2, t2_det=det2,
                     debug=dflag)
     # input data
-    dataset = FRB_corpus(corpus)
     if (dataset.get(name) == None):
-        print(name, "not found in dataset", corpus)
+        print(name, "not found in dataset")
         return
     file = dataset[name]
     score = m21.converter.parse(file.as_posix())
@@ -283,53 +240,3 @@ def write_score2(score, output_path, outname):
     # pdffile = dirname+'/'+outname+'.pdf'
     # os.system(_mscore + ' -o ' + pdffile + ' ' + xmlfile)
 
-# compute C++ add instructions for given score, for debugging with gdb
-def debug(name, corpus='leads'):    
-    assert(len(name) > 0)
-    dataset = FRB_corpus(corpus)
-    if (dataset.get(name) == None):
-        print(name, "not found in dataset", corpus)
-        return
-    file = dataset[name]
-    score = m21.converter.parse(file)
-    lp = score.getElementsByClass(m21.stream.Part)
-    ln = ps.extract_part(lp[0]) # first and unique part
-    for (n, b, s) in ln:   
-        a = 'sp.add('
-        a += str(n.pitch.midi)
-        a += ', '
-        a += str(b)
-        a += ', '
-        a += 'true' if s else 'false'
-        a += ');'
-        print(a)        
-    #sp = ps.Speller()
-    #sp.debug(True)
-    #ps.add_tons(0, sp)
-    #sp.add_notes(ln1[:61], sp)
-    #sp.spell()
-
-def atonals(file=''):
-    """list of opus of FRB without KS"""
-    dataset = FRB_corpus('leads')
-    names = sorted(list(dataset)) # list of index in dataset   
-    keys = []
-    for name in names:
-        if (not dataset.get(name)):
-            print('\n', name, "not found in dataset, skip")
-            continue
-        file = dataset[name]
-        score = m21.converter.parse(file.as_posix())
-        lp = score.getElementsByClass(m21.stream.Part)
-        ks = ps.get_key(lp[0])
-        if (ks):            
-            print(name, ks.sharps)
-            keys.append({'name': name, 'key': ks.sharps})
-        else:
-            print(name, 'NONE')           
-            keys.append({'name': name, 'key': None})
-    if file:
-        df_raw = pandas.DataFrame(keys)
-        df = df_raw.convert_dtypes() # convert to int even when there are NaN (which is float)
-        df.to_csv(file, header=True, index=True)
-    return keys

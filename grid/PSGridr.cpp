@@ -358,6 +358,5 @@ size_t PSGr::breakTieRank(const PSV& vec, const std::vector<size_t>& cands,
          //return estimateLocal(ig, iprev, ties);
      }
  }
-
  
  */

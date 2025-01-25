@@ -30,7 +30,7 @@ namespace pse {
 /// computation of configurations (PSC0) reached from other configurations
 /// by transition, when when reading one pitch or several simultaneous pitchs,
 /// according to the different pitch spelling algorithms implemented.
-/// @todo TBR OBSOLETE
+/// @todo TBR OBSOLETE. succ is computed in PSBag.
 class Transition
 {
 public:
@@ -43,7 +43,6 @@ public:
     /// when reading one pitch or several simultaneous pitchs,
     /// and push it to the given queue.
     /// @param c source configuration.
-    /// this config.
     /// @param gton conjectured main (global) tonality (key signature).
     /// @param lton conjectured local tonality. ignored if algo is not PSE1.
     /// @param q queue receiving the target configs.

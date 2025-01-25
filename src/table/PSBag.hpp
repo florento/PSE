@@ -45,7 +45,8 @@ typedef std::vector<std::shared_ptr<const PSC0>> PSCHeap;
 /// - all the configs in the bag have the same number of accidentals (best nb).
 class PSB
 {
-public:
+
+public: // construction
     
     // bag of best target configs configs for a conjectured global tonality
     // (key sig) and a measure of notes.
@@ -70,8 +71,17 @@ public:
     PSB(const Algo& a, const Cost& seed, PSEnum& e, bool tonal,
         const Ton& ton, const Ton& lton = Ton());
     
+    /// a bag cannot be copied.
+    PSB(const PSB& rhs) = delete;
+
+    /// destructor.
     ~PSB();
     
+    /// a bag vector be copied.
+    PSB& operator=(const PSB& rhs) = delete;
+
+public: // access
+
     /// whether this bag is empty.
     bool empty() const;
     

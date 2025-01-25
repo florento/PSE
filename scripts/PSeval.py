@@ -916,8 +916,7 @@ def algoname(ps13_kpre=0, ps13_kpost=0, # parameters specific to PS13
              global1=100,
              t2_costtype=pse.CTYPE_UNDEF, 
              t2_tonal=True, 
-             t2_det=True, 
-             global2=0):
+             t2_det=True):
     """summary of algo name and parameters"""
     """"PS13 or PSE nbtons _tablenb costtype1 Tonal or Modal Deterministic of Exhaustive"""
     if ps13_kpre > 0:
@@ -958,7 +957,6 @@ class Spellew:
                               # after building the 1st table, 
                               # for optimizing the computation of the grid (mask) and 2d table
                               # if = 100, do not compute this list of canditate globals.
-                 global2=0,   # percentagle of error for computing the final list candidate globals
                  debug=False):      # mark flag ?    
         if (ps13_kpre > 0 and ps13_kpost > 0):
             # algo name
@@ -981,6 +979,11 @@ class Spellew:
             self._algo_params += ctype_tostring(t1_costtype)
             self._algo_params += '_T' if t1_tonal  else '_M'
             self._algo_params += 'D' if t1_det  else 'E'            
+            assert(global1 >= 0)
+            assert(global1 <= 100)
+            if global1 < 100:
+                self._algo_params += '_'
+                self._algo_params += str(global1)              
             if t2_costtype != pse.CTYPE_UNDEF:
                 self._algo_params += '_'
                 self._algo_params += ctype_tostring(t2_costtype)
@@ -1005,27 +1008,19 @@ class Spellew:
         self._ct2     = t2_costtype
         self._tonal2  = t2_tonal
         self._det2    = t2_det
-        assert(global1 >= 0)
-        assert(global1 <= 100)
         self._global1 = global1
-        assert(global2 >= 0)
-        assert(global2 <= 100)
-        self._global2 = global2        
-        # self._spelled = False
         
     def mask(self):
        """an intermediate list candidate global is computed"""
        """after building the 1st table, for optimizing the computation of the grid (mask) and 2d table"""
        return self._global1 < 100 
        
-    def set_global(self, step, percent):
+    def set_global(self, percent):
         """PSE: set the percentage of approximation for computing"""
         """the intermediate list of candidate globals (before second step) if step = 1"""
-        """the final list of candidate globals if step = 2"""
-        if (step == 1):
-            self._global1 = percent
-        elif (step == 2):
-            self._global2 = percent
+        assert(0 <= percent)
+        assert(percent <= 100)       
+        self._global1 = percent
 
     def set_costtype(self, step, ct):
         """PSE: set the cost type for the given step"""
@@ -1204,10 +1199,11 @@ class Spellew:
         self.spell(ln, stats)   #print('spell finished', end='\n', flush=True)   
         
         # extract the estimated global ton from speller
-        print('PSE: evaluation final list of Global tonalities', 
-              self._global2, '% approx.', flush=True)
-        self._speller.select_globals(0, True)  # select the best global (can be tiesa)
-        nbg = self._speller.globals()
+        print('PSE: evaluation final list of Global tonalities', flush=True)
+        # select the best global (can be ties)
+        # with refine = true, it returns the number of remaining globals
+        nbg = self._speller.select_globals(0, True)  
+        # nbg = self._speller.globals()
         print('PSE:', nbg, 'global(s) in final selection:', flush=True)
         if nbg > 1:
             for j in range(nbg):
