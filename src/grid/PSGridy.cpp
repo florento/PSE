@@ -158,6 +158,8 @@ size_t PSGy::breakTieBest(const PSV& vec, const std::vector<size_t>& cands,
                     // a config in bag for the current tonality j
                     else if (rankg == bestrankg)
                     {
+                        /// @todo replace by ordering on Tons
+                        /// ton < best ton
                         const Ton& ton = _index.ton(j);
                         int fifths = std::abs(ton.fifths());
                         const Ton& bestton = _index.ton(ibest);

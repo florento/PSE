@@ -273,9 +273,20 @@ void TonIndex::add(int ks, const ModeName& mode, bool global)
 }
 
 
+// static
+bool TonIndex::ordering(const std::pair<const Ton, bool>& lhs,
+                        const std::pair<const Ton, bool>& rhs)
+{
+    // compare tons
+    return (lhs.first < rhs.first);
+}
+
+
+
 void TonIndex::close()
 {
     _closed = true;
+    std::sort(_tons.begin(), _tons.end(), TonIndex::ordering);
     initRankWeber();
 }
 
@@ -338,7 +349,7 @@ void TonIndex::init(size_t n)
             init(-6, 6, ModeName::Phrygian, false);
             init(-6, 6, ModeName::Lydian, false);
             init(-6, 6, ModeName::Mixolydian, false);
-            init(-6, 6, ModeName::Aeolian, false);
+            init(-6, 6, ModeName::Aeolian, false); // Minor nat
             init(-6, 6, ModeName::Locrian, false);
             close(); // modal Weber
             assert(_WeberModal);
@@ -356,7 +367,7 @@ void TonIndex::init(size_t n)
             init(-6, 6, ModeName::Phrygian, false);
             init(-6, 6, ModeName::Lydian, false);
             init(-6, 6, ModeName::Mixolydian, false);
-            init(-6, 6, ModeName::Aeolian, false);
+            init(-6, 6, ModeName::Aeolian, false); // Minor nat
             init(-6, 6, ModeName::Locrian, false);
             close(); // modal Weber
             assert(_WeberModal);
@@ -365,14 +376,14 @@ void TonIndex::init(size_t n)
             
         case 135:
             // _WeberTonal = false;
-            init(-7, 7, ModeName::Major, true); // Ionian
+            init(-7, 7, ModeName::Major, true);   // Ionian
             init(-7, 7, ModeName::Minor, true);
             init(-7, 7, ModeName::MinorMel, false);
             init(-7, 7, ModeName::Dorian, false);
             init(-7, 7, ModeName::Phrygian, false);
             init(-7, 7, ModeName::Lydian, false);
             init(-7, 7, ModeName::Mixolydian, false);
-            init(-7, 7, ModeName::Aeolian, false);
+            init(-7, 7, ModeName::Aeolian, false); // Minor nat
             init(-7, 7, ModeName::Locrian, false);
             close(); // modal Weber
             assert(_WeberModal);
@@ -388,7 +399,7 @@ void TonIndex::init(size_t n)
             init(-7, 7, ModeName::Phrygian, false);
             init(-7, 7, ModeName::Lydian, false);
             init(-7, 7, ModeName::Mixolydian, false);
-            init(-7, 7, ModeName::Aeolian, false);
+            init(-7, 7, ModeName::Aeolian, false); // Minor nat
             init(-7, 7, ModeName::Locrian, false);
             init(-7, 7, ModeName::MajorBlues, false);
             init(-7, 7, ModeName::MinorBlues, false);
@@ -413,16 +424,18 @@ void TonIndex::init(int ksmin, int ksmax, const ModeName& mode, bool f_global)
     assert(ksmax <= 7); // chromatic Ton uses -7 to 10
     assert(ksmin <= ksmax);
     assert(mode != ModeName::Undef);
-    
-    if (ksmin <= 0 and 0 <= ksmax)
-        add(0, mode, f_global);
-    for (int ks = 1; ks <= 7; ++ks)
-    {
-        if (ksmin <= ks and ks <= ksmax)
-            add(ks, mode, f_global);
-        if (ksmin <= -ks and -ks <= ksmax)
-            add(-ks, mode, f_global);
-    }
+
+    for (int ks = ksmin; ks <= ksmax; ++ks)
+        add(ks, mode, f_global);
+    // if (ksmin <= 0 and 0 <= ksmax)
+    //     add(0, mode, f_global);
+    // for (int ks = 1; ks <= 7; ++ks)
+    // {
+    //     if (ksmin <= ks and ks <= ksmax)
+    //         add(ks, mode, f_global);
+    //     if (ksmin <= -ks and -ks <= ksmax)
+    //         add(-ks, mode, f_global);
+    // }
 }
 
 

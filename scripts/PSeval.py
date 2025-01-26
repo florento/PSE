@@ -977,10 +977,6 @@ class Spellew:
             self._algo_name = 'PSE'
             self._algo_params = str(nbtons)
             assert(t1_costtype != pse.CTYPE_UNDEF)
-            if t2_costtype == pse.CTYPE_UNDEF:                
-                self._algo_params += '_1_'
-            else:
-                self._algo_params += '_2_'
             self._algo_params += ctype_tostring(t1_costtype)
             self._algo_params += '_T' if t1_tonal  else '_M'
             self._algo_params += 'D' if t1_det  else 'E'            
@@ -988,7 +984,13 @@ class Spellew:
             assert(global1 <= 100)
             if global1 < 100:
                 self._algo_params += '_'
-                self._algo_params += str(global1)              
+                self._algo_params += str(global1)
+            if grid == pse.Grid_Best:
+                self._algo_params += '_Gridy'     
+            elif grid == pse.Grid_Rank:
+                self._algo_params += '_Gridr'                
+            elif grid == pse.Grid_Exhaustive:
+                self._algo_params += '_Gridx'                
             if t2_costtype != pse.CTYPE_UNDEF:
                 self._algo_params += '_'
                 self._algo_params += ctype_tostring(t2_costtype)

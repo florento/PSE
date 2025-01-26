@@ -15,9 +15,6 @@ std::string tostring(const ModeName& m)
 {
     switch (m)
     {
-        case ModeName::Undef:
-            return "undef";
-
         case ModeName::Major:
             return "major";
 
@@ -77,6 +74,9 @@ std::string tostring(const ModeName& m)
 
         case ModeName::Chromatic:
             return "harmonic chromatic";
+            
+        case ModeName::Undef:
+            return "undef";
 
         default:
         {
@@ -86,6 +86,29 @@ std::string tostring(const ModeName& m)
     }
 }
 
+
+bool operator<(const ModeName& lhs, const ModeName& rhs)
+{
+    return (static_cast<int>(lhs) < static_cast<int>(rhs));
+}
+
+
+bool operator<=(const ModeName& lhs, const ModeName& rhs)
+{
+    return !operator>(lhs, rhs);
+}
+
+
+bool operator>(const ModeName& lhs, const ModeName& rhs)
+{
+    return operator<(rhs, lhs);
+}
+
+
+bool operator>=(const ModeName& lhs, const ModeName& rhs)
+{
+    return !operator<(lhs, rhs);
+}
 
 std::ostream& operator<<(std::ostream& o, const ModeName& mode)
 {

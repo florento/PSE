@@ -57,7 +57,7 @@ class Ton : public KeyFifth
 
     friend class PSState;
     
-public:
+public: // construction
     
     /// undefined tonality.
     Ton();
@@ -101,8 +101,27 @@ public:
     /// assignement operator
     Ton& operator=(const Ton& rhs);
 
+public: // relationship
+    
+    /// ton equality.
     bool operator==(const Ton& rhs) const;
+
+    /// ton disequality.
     bool operator!=(const Ton& rhs) const;
+    
+    /// arbitrary total ordering on tons.
+    bool operator<(const Ton& rhs) const;
+
+    /// negation of >.
+    bool operator<=(const Ton& rhs) const;
+
+    /// inverse (commutation) of <.
+    bool operator>(const Ton& rhs) const;
+
+    /// negation of <.
+    bool operator>=(const Ton& rhs) const;
+    
+public: // accessors
     
     /// mode of this tonality.
     inline ModeName getMode() const { return _mode; }

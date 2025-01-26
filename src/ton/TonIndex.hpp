@@ -237,7 +237,7 @@ private: // data
     /// vector of tonalities.
     /// every tonality is associated a flag saying whether
     /// it can be considered as global.
-    std::vector<std::pair<const Ton, bool>> _tons;
+    std::vector<std::pair<Ton, bool>> _tons;
 
     /// one undef ton.
     Ton _undef;
@@ -316,6 +316,11 @@ private: // construction and convenience
     /// for automatically constructed arrays.
     /// @todo not used
     static bool global(const ModeName& mode);
+
+    /// for initial sorting of this ton index.
+    /// compare tons, ignore global flag.
+    static bool ordering(const std::pair<const Ton, bool>& lhs,
+                         const std::pair<const Ton, bool>& rhs);
     
     // static bool pcompare(const std::pair <size_t, unsigned int>& a,
     //                      const std::pair <size_t, unsigned int>& b);

@@ -24,24 +24,24 @@ namespace pse {
 /// @see https://muted.io/scale-formulas-intervals/
 enum class ModeName
 {
-    /// Unknown
-    Undef,
-    
     /// Major = Ionian
     Major,
     
+    /// Mode of C = Major
+    Ionian,
+
     /// Harmonic Minor
     Minor,
     
-    /// natural Minor (melodic descending) = Aeolian
-    MinorNat,
-    
     /// Melodic Minor (melodic ascending)
     MinorMel,
-    
-    /// Mode of C = Major
-    Ionian,
-    
+
+    /// Major Blues = Major5 + flat 3d blue note
+    MajorBlues,
+
+    /// Minor Blues = Minor5 + flat 5th blue note
+    MinorBlues,
+        
     /// Mode of D
     Dorian,
     
@@ -56,10 +56,13 @@ enum class ModeName
     
     /// Mode of A = Minor Natural
     Aeolian,
-    
+
+    /// natural Minor (melodic descending) = Aeolian
+    MinorNat,
+   
     /// Mode of B
     Locrian,
-
+    
     /// Major Pentatonic
     /// = 4 fifths sarting from tonic
     /// = Major - 4th and 7th degrees
@@ -68,12 +71,6 @@ enum class ModeName
     /// Minor Pentatonic = Natural Minor - 2nd and 6th degrees
     Minor5,
 
-    /// Major Blues = Major5 + flat 3d blue note
-    MajorBlues,
-
-    /// Minor Blues = Minor5 + flat 5th blue note
-    MinorBlues,
-    
     /// Augmented Scale = symmetrical augmented scale = two augmented triads
     Augmented,
 
@@ -88,18 +85,29 @@ enum class ModeName
     
     /// Harmonic Chromatic. all notes are repeated except tonic and dominant.
     /// @see https://www.dolmetsch.com/musictheory11.htm
-    Chromatic
+    Chromatic,
+    
+    /// Unknown
+    Undef
     
 };
 
-
 /// the given mode name is one of Ionian, Dorian, Phrygian, Lydian,
 /// Mixolydian, Aeolian, Locrian
 bool greek(const ModeName& m);
 
-/// the given mode name is one of Ionian, Dorian, Phrygian, Lydian,
-/// Mixolydian, Aeolian, Locrian
-bool greek(const ModeName& m);
+/// arbitrary total ordering on mode names,
+/// induced by the order of definition.
+bool operator<(const ModeName& lhs, const ModeName& rhs);
+
+/// negation of >.
+bool operator<=(const ModeName& lhs, const ModeName& rhs);
+
+/// inverse (commutation) of <.
+bool operator>(const ModeName& lhs, const ModeName& rhs);
+
+/// negation of <.
+bool operator>=(const ModeName& lhs, const ModeName& rhs);
 
 /// string of mode name.
 std::string tostring(const ModeName& m);

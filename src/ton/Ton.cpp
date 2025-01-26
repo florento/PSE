@@ -167,6 +167,7 @@ Ton::~Ton()
 Ton& Ton::operator=(const Ton& rhs)
 {
     if (this != &rhs)
+        
     {
         KeyFifth::operator=(rhs);
         _mode = rhs._mode;
@@ -184,6 +185,65 @@ bool Ton::operator==(const Ton& rhs) const
 bool Ton::operator!=(const Ton& rhs) const
 {
     return (! operator==(rhs));
+}
+
+bool Ton::operator<(const Ton& rhs) const
+{
+    int lfifths = std::abs(this->fifths());
+    int rfifths = std::abs(rhs.fifths());
+    int lmode = static_cast<int>(this->_mode);
+    int rmode = static_cast<int>(rhs._mode);
+
+    if (lfifths < rfifths)
+    {
+        return true;
+    }
+    else if (lfifths > rfifths)
+    {
+        return false;
+    }
+    else if (lmode < rmode)
+    {
+        assert(lfifths == rfifths);
+        return true;
+    }
+    else if (lmode > rmode)
+    {
+        assert(lfifths == rfifths);
+        return false;
+    }
+    else if (this->fifths() < rhs.fifths())
+    {
+        assert(lfifths == rfifths);
+        assert(_mode == rhs._mode);
+        return true;
+    }
+    else if (this->fifths() > rhs.fifths())
+    {
+        assert(lfifths == rfifths);
+        assert(_mode == rhs._mode);
+        return false;
+    }
+    else
+    {
+        assert(*this == rhs);
+        return false;
+    }
+}
+
+bool Ton::operator<=(const Ton& rhs) const
+{
+    return !operator>(rhs);
+}
+
+bool Ton::operator>(const Ton& rhs) const
+{
+    return rhs.operator<(*this);
+}
+
+bool Ton::operator>=(const Ton& rhs) const
+{
+    return !operator<(rhs);
 }
 
 
