@@ -143,7 +143,7 @@ void PSGx::init(const PST& tab, size_t ig)
         WARN("Gridx: failure in computation of best path");
         return;
     }
-    size_t i = bestCost(costs.back());
+    size_t i = bestCost(costs.back(), ig);
     
     for (size_t jm = 1; jm <= tab.size(); ++jm)
     {
@@ -297,6 +297,7 @@ size_t PSGx::column(size_t j, const PST& tab,
         {
             if (pcosts.at(ip) != COST_INFINITE)
             {
+                /// @todo distWeber or rankWeber
                 size_t cost = pcosts.at(ip) + _index.rankWeber(ip, i) + ri;
                 
                 // in case of tie, we keep the smaller best_pred
@@ -321,7 +322,7 @@ size_t PSGx::column(size_t j, const PST& tab,
 }
 
 
-size_t PSGx::bestCost(const std::vector<size_t>& col)
+size_t PSGx::bestCost(const std::vector<size_t>& col, size_t ig)
 {
     size_t best_cost = COST_INFINITE;
     size_t ibest = PRED_UNDEF;
@@ -345,7 +346,14 @@ size_t PSGx::bestCost(const std::vector<size_t>& col)
     assert(ties > 0);
     if (ties > 1)
     {
-        WARN("Gridx: {} best cost ties in best path search", ties);
+        if (ig == TonIndex::UNDEF)
+            WARN("Gridx: {} best path ties (cost {})", ties, best_cost);
+        else
+        {
+            assert(ig < _index.size());
+            WARN("Gridx {}: {} best path ties (cost {})",
+                 _index.ton(ig), ties, best_cost);
+        }
     }
         
     return ibest;

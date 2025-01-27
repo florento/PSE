@@ -189,7 +189,7 @@ void TonIndex::add(const Ton& ton, bool global)
     if (_tons.size() < MAXTONS)
     {
         _tons.push_back(std::make_pair(ton, global)); // copy
-        _backup_globals.push_back(global);
+        // _backup_globals.push_back(global); // not yet, _tons will be sorted
     }
     else
     {
@@ -312,9 +312,18 @@ bool TonIndex::ordering(const std::pair<const Ton, bool>& lhs,
 void TonIndex::close()
 {
     _closed = true;
+    
     // sort this ton index
     // based on arbitrary ordering on tons // NOT based on Weber distance to ut
     std::sort(_tons.begin(), _tons.end(), TonIndex::ordering);
+
+    // make a backup of global flags (for rest)
+    assert(_backup_globals.empty());
+    for (size_t i = 0; i < _tons.size(); ++i)
+    {
+        _backup_globals.push_back(isGlobal(i));
+    }
+    
     // build Weber tables
     initRankWeber();
 }

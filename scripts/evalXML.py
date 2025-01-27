@@ -12,9 +12,6 @@ Framework for the evaluation of a set of XML scores all in the same directory
 import os
 from pathlib import Path, PosixPath
 from datetime import datetime
-import re
-from operator import itemgetter, attrgetter
-import pandas
 import music21 as m21
 import PSeval as ps
 
@@ -25,14 +22,9 @@ import PSeval as ps
 ##                    ##
 ########################
 
- # default score file name
-_score_suffix = ['.musicxml', '.xml', '.mxml']
 
 # root of evaluation dir
 _eval_root = '../../PSeval'
-
-# name of dir for evaluation output
-timestamp = str(datetime.today().strftime('%Y%m%d-%H%M'))
 
 # MuseScore commandline executable
 _mscore = '/Applications/MuseScore 4.app/Contents/MacOS/mscore'
@@ -45,9 +37,10 @@ _mscore = '/Applications/MuseScore 4.app/Contents/MacOS/mscore'
 #################################
 
 # corpus can be 'leads' or 'piano'
-def XML_corpus(dataset_path):
-    """build a dictionary of XML scores in a directory"""
-    global _score_suffix
+def get_corpus(dataset_path):
+    """build a dictionary of XML scores with their embedding directories"""
+    # default score file name
+    score_suffix = ['.musicxml', '.xml', '.mxml']
     assert isinstance(dataset_path, PosixPath)
     if not os.path.exists(dataset_path):
         print('Error: ', dataset_path, 'not found')
@@ -61,7 +54,7 @@ def XML_corpus(dataset_path):
         if os.path.isdir(filepath):
             continue 
         # check the extension in the file name
-        if (os.path.splitext(file)[1] in _score_suffix):
+        if (os.path.splitext(file)[1] in score_suffix):
             # map score name to file path
             dataset[os.path.splitext(file)[0]] = filepath
     # sort the list alphabetically
@@ -75,21 +68,17 @@ def XML_corpus(dataset_path):
 ##                                 ##
 #####################################
 
-# list of opus names with issues 
-skip = ['Autumn in New York']
-       
-
 # PS13: kpre=33, kpost=23
 # PSE:  tons=135, 
 # PSE table1:  costtype1 = ps.CTYPE_ACCID | CTYPE_ACCIDlead | CTYPE_ADplus | CTYPE_ADlex
 # PSE table2:  costtype2 = ps.CTYPE_ACCID | CTYPE_ACCIDlead | CTYPE_ADplus | CTYPE_ADlex
-def eval_XML(dataset, skip=[],
-             eval_root='.', output_dir='', tablename='',
-             kpre=0, kpost=0, tons=0, 
-             costtype1=ps.pse.CTYPE_UNDEF, tonal1=True, det1=True, 
-             global1=100, 
-             costtype2=ps.pse.CTYPE_UNDEF, tonal2=True, det2=True,
-             dflag=True, mflag=True, csflag=False):
+def eval_corpus(dataset, skip=[],
+                eval_root='.', output_dir='', tablename='',
+                kpre=0, kpost=0, tons=0, 
+                costtype1=ps.pse.CTYPE_UNDEF, tonal1=True, det1=True, 
+                global1=100, grid=ps.pse.Grid_Rank, 
+                costtype2=ps.pse.CTYPE_UNDEF, tonal2=True, det2=True,
+                dflag=True, mflag=True, csflag=False):
     """eval a whole corpus with given algo and parameters"""
     """dataset: a dictionary as produced by XML_corpus"""
     """skip: list of names in corpus to avoid during evaluation"""
@@ -103,11 +92,10 @@ def eval_XML(dataset, skip=[],
     """tonal1: table1, tonal/modal flag for initial state (PSE)"""
     """det1: table1, deterministic/exhaustive flag for transitions (PSE)"""
     """global1: percentage approx for intermediate list of global candidate"""
+    """grid: name of algorithm for the computation of the grid"""
     """costtype2: table2, cost type. if unset, skip table2 (PSE)"""
     """tonal2: table2, tonal/modal flag for initial state (PSE)"""
     """det2: table2, deterministic/exhaustive flag for transitions (PSE)"""
-    """output_dir: where files will be written"""
-    """tablename: filename of csv table"""
     """dflag: debug flag"""
     """mflag: mark flag"""
     """csflag: spell also the notes of the chord symbols"""
@@ -115,7 +103,7 @@ def eval_XML(dataset, skip=[],
     sp = ps.Spellew(ps13_kpre=kpre, ps13_kpost=kpost, 
                     nbtons=tons,
                     t1_costtype=costtype1, t1_tonal=tonal1, t1_det=det1, 
-                    global1=global1,
+                    global1=global1, grid=grid,
                     t2_costtype=costtype2, t2_tonal=tonal2, t2_det=det2,
                     debug=dflag)
     algoname = sp.algoname()    
@@ -169,16 +157,16 @@ def eval_XML(dataset, skip=[],
 # PSE:  tons=135, 
 # PSE table1:  costtype1 = ps.CTYPE_ACCID | CTYPE_ACCIDlead | CTYPE_ADplus | CTYPE_ADlex
 # PSE table2:  costtype2 = ps.CTYPE_ACCID | CTYPE_ACCIDlead | CTYPE_ADplus | CTYPE_ADlex
-def eval_XMLitem(dataset, name, 
-                 kpre=0, kpost=0, tons=0,          
-                 costtype1=ps.pse.CTYPE_UNDEF, tonal1=True, det1=True,       
-                 global1=100,     
-                 costtype2=ps.pse.CTYPE_UNDEF, tonal2=True, det2=True,      
-                 output_dir='', filename='',             
-                 dflag=True, mflag=False, csflag=False):   
+def eval_item(dataset, name, output_dir='', 
+              kpre=0, kpost=0, tons=0,          
+              costtype1=ps.pse.CTYPE_UNDEF, tonal1=True, det1=True,       
+              global1=100, grid=ps.pse.Grid_Rank,   
+              costtype2=ps.pse.CTYPE_UNDEF, tonal2=True, det2=True,      
+              dflag=True, mflag=False, csflag=False):   
     """eval one item of the FRB corpus with given algo and parameters"""
+    """dataset: a dictionary as produced by XML_corpus"""
     """name: filename of item (prefix) in the dataset"""
-    """corpus: leads or piano (obsolete)"""
+    """output_dir: where files will be written"""
     """kpre: parameter specific to PS13"""
     """kpost: parameter specific to PS13"""
     """tons: nb of Tons in TonIndex (PSE)"""
@@ -186,11 +174,10 @@ def eval_XMLitem(dataset, name,
     """tonal1: table1, tonal/modal flag for initial state (PSE)"""
     """det1: table1, deterministic/exhaustive flag for transitions (PSE)"""
     """global1: percentage approx for intermediate list of global candidate"""
+    """grid: name of algorithm for the computation of the grid"""
     """costtype2: table2, cost type. if unset, skip table2 (PSE)"""
     """tonal2: table2, tonal/modal flag for initial state (PSE)"""
     """det2: table2, deterministic/exhaustive flag for transitions (PSE)"""
-    """output_dir: where files will be written"""
-    """tablename: filename of csv table"""
     """dflag: debug flag"""
     """mflag: mark flag"""
     """csflag: spell also chord symbols"""
@@ -199,7 +186,7 @@ def eval_XMLitem(dataset, name,
     sp = ps.Spellew(ps13_kpre=kpre, ps13_kpost=kpost, 
                     nbtons=tons,
                     t1_costtype=costtype1, t1_tonal=tonal1, t1_det=det1, 
-                    global1=global1,
+                    global1=global1, grid=grid,
                     t2_costtype=costtype2, t2_tonal=tonal2, t2_det=det2,
                     debug=dflag)
     # input data
@@ -220,7 +207,7 @@ def eval_XMLitem(dataset, name,
     assert(len(lld) == 1) # always 1 unique part in LG dataset
     if mflag and len(lld[0]) > 0:
         score.show()
-        write_score(score, Path(os.getcwd()), name)
+        write_score(score, opath, name)
         
 def write_score(score, output_path, outname):
     if not os.path.isdir(output_path):
@@ -240,3 +227,30 @@ def write_score2(score, output_path, outname):
     # pdffile = dirname+'/'+outname+'.pdf'
     # os.system(_mscore + ' -o ' + pdffile + ' ' + xmlfile)
 
+def debug(dataset, name, part=0):    
+    """compute the C++ add instructions for given part, for debugging with gdb"""
+    """dataset: a dictionary as produced by XML_corpus"""
+    """name: filename of item (prefix) in the dataset"""
+    """part: number of part in the score file"""
+    assert(len(name) > 0)
+    if (dataset.get(name) == None):
+        print(name, "not found in dataset")
+        return
+    file = dataset[name]
+    score = m21.converter.parse(file)
+    lp = score.getElementsByClass(m21.stream.Part)
+    ln = ps.extract_part(lp[part]) 
+    for (n, b, s) in ln:   
+        a = 'sp.add('
+        a += str(n.pitch.midi)
+        a += ', '
+        a += str(b)
+        a += ', '
+        a += 'true' if s else 'false'
+        a += ');'
+        print(a)        
+    #sp = ps.Speller()
+    #sp.debug(True)
+    #ps.add_tons(0, sp)
+    #sp.add_notes(ln1[:61], sp)
+    #sp.spell()

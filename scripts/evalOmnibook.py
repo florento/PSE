@@ -27,7 +27,7 @@ import evalXML
 ########################
 
 # path to FRB dataset
-_dataset_root = '../../../Datasets/FakeRealBook'
+_dataset_root = '../../../Datasets/CharlieParkerOmnibook'
 
 # root of evaluation dir
 _eval_root = '../../PSeval'
@@ -42,49 +42,10 @@ _mscore = '/Applications/MuseScore 4.app/Contents/MacOS/mscore'
 ##                             ##
 #################################
 
-# corpus can be 'leads' or 'piano'
-def FRB_corpus(corpus='leads'):
-    """build a list of scores in a subdirectory of the FRB"""
+def omnibook_corpus():
+    """build a list of scores in a subdirectory of the Omninook"""
     global _dataset_root
-    assert(corpus == 'leads' or corpus == 'piano')
-    return evalXML.get_corpus(Path(_dataset_root)/corpus)
-
-def accids(ks, notes):
-    c = 0
-    for note in notes:
-        if note.pitch.accidental != ks.accidentalByStep(note.name):
-            c += 1            
-    return c
-    
-def FRB_table(corpus='leads'):
-    assert(corpus == 'leads' or corpus == 'piano')
-    table = []
-    dataset = FRB_corpus(corpus)
-    names = sorted(list(dataset)) # list of index in dataset   
-    for name in names:
-        if (dataset.get(name) == None):
-            print(name, "not found in dataset", corpus)
-            continue        
-        file = dataset[name]
-        score = m21.converter.parse(file.as_posix())
-        assert(len(score.parts) > 0)
-        part = score.parts[0]
-        fpart = part.flatten()
-        keys = fpart.getElementsByClass([m21.key.Key, m21.key.KeySignature])
-        notes = fpart.getElementsByClass(m21.note.Note)
-        row = []
-        row.append(name)
-        row.append(keys[0].sharps if len(keys) > 0 else None)            
-        row.append(len(part.getElementsByClass(m21.stream.Measure)))
-        row.append(len(notes))
-        row.append(accids(keys[0], notes) if len(keys) > 0 else None)
-        row.append(len(score.parts))
-        row.append(len(keys))
-        table.append(row)
-    df = pandas.DataFrame(table)
-    df.columns = ['name', 'KS','# bars', '# notes', '# accids', '# parts', '# keys']
-    df['KS'] = df['KS'].map('{:n}'.format)
-    return df  
+    return evalXML.get_corpus(Path(_dataset_root)/'musicxml')
 
 #####################################
 ##                                 ##
@@ -93,7 +54,7 @@ def FRB_table(corpus='leads'):
 #####################################
 
 # list of opus names with issues 
-skip = ['Autumn in New York']
+skip = []
        
 
 # PS13: kpre=33, kpost=23
@@ -101,15 +62,13 @@ skip = ['Autumn in New York']
 # PSE: costtype1, costtype2 = CTYPE_ACCID | CTYPE_ACCIDlead | CTYPE_ADplus | CTYPE_ADlex
 # PSE: grid = Grid_Best | Grid_Rank | Grid_Exhaustive
 # PSE: global1 = 0..100 (%)
-def eval_FRB(corpus='leads', 
-             output_dir='', tablename='',            
-             kpre=0, kpost=0, tons=0, 
-             costtype1=ps.pse.CTYPE_UNDEF, tonal1=True, det1=True, 
-             global1=100, grid=ps.pse.Grid_Rank, 
-             costtype2=ps.pse.CTYPE_UNDEF, tonal2=True, det2=True,
-             dflag=True, mflag=True, csflag=False):
+def eval_Omnibook(output_dir='', tablename='',            
+                  kpre=0, kpost=0, tons=0, 
+                  costtype1=ps.pse.CTYPE_UNDEF, tonal1=True, det1=True, 
+                  global1=100, grid=ps.pse.Grid_Rank, 
+                  costtype2=ps.pse.CTYPE_UNDEF, tonal2=True, det2=True,
+                  dflag=True, mflag=True, csflag=False):
     """eval the whole FRB corpus with given algo and parameters"""
-    """corpus: leads or piano (obsolete)"""
     """output_dir: where files will be written"""
     """tablename: filename of csv table"""
     """kpre: parameter specific to PS13"""
@@ -128,11 +87,10 @@ def eval_FRB(corpus='leads',
     """csflag: spell also chord symbols"""
     global _eval_root
     global skip
-    assert(corpus == 'leads' or corpus == 'piano')
-    root = Path(_eval_root)/'evalFRB'
+    root = Path(_eval_root)/'evalOmnibook'
     if not os.path.isdir(root):
         os.mkdir(root)
-    evalXML.eval_corpus(dataset=FRB_corpus(corpus), skip=skip, 
+    evalXML.eval_corpus(dataset=omnibook_corpus(), skip=skip, 
                         eval_root=root, output_dir=output_dir, tablename=tablename,
                         kpre=kpre, kpost=kpost, tons=tons, 
                         costtype1=costtype1, tonal1=tonal1, det1=det1, 
@@ -145,7 +103,7 @@ def eval_FRB(corpus='leads',
 # PSE: costtype1, costtype2 = CTYPE_ACCID | CTYPE_ACCIDlead | CTYPE_ADplus | CTYPE_ADlex
 # PSE: grid = Grid_Best | Grid_Rank | Grid_Exhaustive
 # PSE: global1 = 0..100 (%)
-def eval_FRBitem(name, corpus='leads', output_dir='',         
+def eval_Omnibookitem(name, output_dir='',         
                  kpre=0, kpost=0, tons=0,          
                  costtype1=ps.pse.CTYPE_UNDEF, tonal1=True, det1=True,       
                  global1=100, grid=ps.pse.Grid_Rank,
@@ -153,7 +111,6 @@ def eval_FRBitem(name, corpus='leads', output_dir='',
                  dflag=True, mflag=False, csflag=False):   
     """eval one item of the FRB corpus with given algo and parameters"""
     """name: filename of item (prefix) in the dataset"""
-    """corpus: leads or piano (obsolete)"""
     """output_dir: where files will be written"""
     """kpre: parameter specific to PS13"""
     """kpost: parameter specific to PS13"""
@@ -170,8 +127,8 @@ def eval_FRBitem(name, corpus='leads', output_dir='',
     """mflag: mark flag"""
     """csflag: spell also chord symbols"""
     assert(len(name) > 0)
-    assert(corpus == 'leads' or corpus == 'piano')
-    evalXML.eval_item(dataset=FRB_corpus(corpus), name=name, output_dir=output_dir,
+    evalXML.eval_item(dataset=omnibook_corpus(), name=name, 
+                      output_dir=output_dir,
                       kpre=kpre, kpost=kpost, tons=tons, 
                       costtype1=costtype1, tonal1=tonal1, det1=det1, 
                       global1=global1, grid=grid, 
@@ -181,30 +138,5 @@ def eval_FRBitem(name, corpus='leads', output_dir='',
 # compute C++ add instructions for given score, for debugging with gdb
 def debug(name, corpus='leads'):    
     assert(len(name) > 0)
-    dataset = FRB_corpus(corpus)
+    dataset = omnibook_corpus()
     evalXML.debug(dataset, name)
-
-def atonals(file=''):
-    """list of opus of FRB without KS"""
-    dataset = FRB_corpus('leads')
-    names = sorted(list(dataset)) # list of index in dataset   
-    keys = []
-    for name in names:
-        if (not dataset.get(name)):
-            print('\n', name, "not found in dataset, skip")
-            continue
-        file = dataset[name]
-        score = m21.converter.parse(file.as_posix())
-        lp = score.getElementsByClass(m21.stream.Part)
-        ks = ps.get_key(lp[0])
-        if (ks):            
-            print(name, ks.sharps)
-            keys.append({'name': name, 'key': ks.sharps})
-        else:
-            print(name, 'NONE')           
-            keys.append({'name': name, 'key': None})
-    if file:
-        df_raw = pandas.DataFrame(keys)
-        df = df_raw.convert_dtypes() # convert to int even when there are NaN (which is float)
-        df.to_csv(file, header=True, index=True)
-    return keys

@@ -112,9 +112,10 @@ private: // construction
 
     /// index of best cost in a column.
     /// @param col on column in the table of best-path costs.
+    /// @para ig current assumed global ton, for feedback.
     /// @return the index of the best cost in col,
     /// with priority to smaller index in case of tie.
-    size_t bestCost(const std::vector<size_t>& col);
+    size_t bestCost(const std::vector<size_t>& col, size_t ig);
     
     
 private: // static constants
