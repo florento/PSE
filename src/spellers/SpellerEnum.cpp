@@ -34,7 +34,7 @@ size_t SpellerEnum::size() const
 }
 
 
-void SpellerEnum::reset(size_t i0, size_t i1)
+void SpellerEnum::resetEnum(size_t i0, size_t i1)
 {
     rawenum().reset(i0, i1);
 }

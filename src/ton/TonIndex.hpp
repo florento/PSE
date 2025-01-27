@@ -64,9 +64,15 @@ public: // construction
     /// @warning the empty array of tonalities (case nb=0) is not closed
     /// (close() must be called aterwards). All the others are closed.
     TonIndex(size_t nb=0);
+
+    /// a ton index cannot be copied.
+    TonIndex(const TonIndex& rhs) = delete;
     
     /// destructor.
     virtual ~TonIndex();
+    
+    /// a ton index cannot be copied.
+    TonIndex& operator=(const TonIndex& rhs) = delete;
 
 public: // incremental construction
     
@@ -162,15 +168,6 @@ public: // sub array of tonalities that can be global.
     /// candidates estimated global.
     size_t globals() const;
 
-    /// declare that the tonality at the given index can be global.
-    /// @param i an index in this array of tonalities.
-    /// must be smaller than size().
-    void setGlobal(size_t i);
-
-    /// declare that the tonality at the given index cannot be global.
-    /// @param i an index in this array of tonalities.
-    /// must be smaller than size().
-    void unsetGlobal(size_t i);
     
     /// index of the n-best candidate global tonality.
     /// @param n number of candidate global tonality,
@@ -206,6 +203,9 @@ public: // sub array of tonalities that can be global.
     /// TonIndex::UNDEF if tie break failed.
     size_t bestGlobal() const;
     
+    /// restore the initial list of global tons (before selection of globals).
+    void resetGlobals();
+    
     // switch to tonal mode for the conmputation of Weber distance.
     // @warning this array must not be closed.
     // @todo TBR
@@ -215,14 +215,26 @@ public: // sub array of tonalities that can be global.
     // @warning this array must not be closed.
     // @todo TBR
     // void setModal();
+    
+private: // convenience for sub array of tonalities that can be global.
+    
+    /// declare that the tonality at the given index can be global.
+    /// @param i an index in this array of tonalities.
+    /// must be smaller than size().
+    void setGlobal(size_t i);
+
+    /// declare that the tonality at the given index cannot be global.
+    /// @param i an index in this array of tonalities.
+    /// must be smaller than size().
+    void unsetGlobal(size_t i);
 
 public: // Weber distances
     
-    /// distance between the two tons of given indices,
+    /// distance between the two tons at given indices,
     /// in the table of Weber, or WeberModal, or WeberBluesModal,
-    /// avvording to the content of this array of tonalities.
+    /// according to the content of this array of tonalities.
     unsigned int distWeber(size_t i, size_t j) const;
-    
+
     /// ranks of second given ton wrt Weber distance to first given ton.
     /// @param i index of ton in this array of tonalities.
     /// @param j index of ton in this array of tonalities.
@@ -241,7 +253,7 @@ private: // data
 
     /// one undef ton.
     Ton _undef;
-
+    
     /// this ton index has been closed:
     bool _closed;
 
@@ -269,6 +281,22 @@ private: // data
     /// to the distance to ton i in this index.
     /// tabulation for speedup
     std::vector<std::vector<size_t>> _rankWeber;
+    
+    /// for initial sorting of this ton index.
+    /// compare tons, ignore global flag.
+    struct Ordering_operator
+    {
+        TonIndex* container;
+        Ton base;
+        Ordering_operator(TonIndex* id, int ks, ModeName mode);
+        bool operator() (const std::pair<const Ton, bool>& lhs,
+                         const std::pair<const Ton, bool>& rhs);
+    };
+    
+    Ordering_operator _ordering;
+
+    /// used to restore globals in initial state (before selection of globals)
+    std::vector<bool> _backup_globals;
     
 private: // construction and convenience
     
@@ -317,10 +345,17 @@ private: // construction and convenience
     /// @todo not used
     static bool global(const ModeName& mode);
 
-    /// for initial sorting of this ton index.
-    /// compare tons, ignore global flag.
+
+    /// distance between two tons, using the Weber distance corresponding
+    /// to this ton index
+    /// (table of Weber, or WeberModal, or WeberBluesModal).
+    unsigned int distWeber(const Ton& lhs, const Ton& rhs) const;
+    
+    
+    /// arbitrary ordering between tons, for sorting the ton index.
     static bool ordering(const std::pair<const Ton, bool>& lhs,
                          const std::pair<const Ton, bool>& rhs);
+    
     
     // static bool pcompare(const std::pair <size_t, unsigned int>& a,
     //                      const std::pair <size_t, unsigned int>& b);

@@ -54,7 +54,7 @@ PSG(tab)
         {
             if (_index.isGlobal(ig))
             {
-                DEBUG("PSGridx: computing grid row {} ({})", ig, _index.ton(ig));
+                TRACE("PSGridx: computing grid row {} ({})", ig, _index.ton(ig));
                 init(tab, ig);
             }
         }

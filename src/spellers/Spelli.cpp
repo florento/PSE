@@ -92,6 +92,13 @@ void Spelli::resetTons(size_t n)
 }
 
 
+void Spelli::resetGlobals()
+{
+    assert(_index);
+    _index->resetGlobals();
+}
+
+
 void Spelli::addTon(const Ton& ton, bool global)
 {
     TRACE("Speller: add tonality {}", ton);

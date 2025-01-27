@@ -977,7 +977,7 @@ class Spellew:
             self._algo_name = 'PSE'
             self._algo_params = str(nbtons)
             assert(t1_costtype != pse.CTYPE_UNDEF)
-            self._algo_params += ctype_tostring(t1_costtype)
+            self._algo_params += '_'+ctype_tostring(t1_costtype)
             self._algo_params += '_T' if t1_tonal  else '_M'
             self._algo_params += 'D' if t1_det  else 'E'            
             assert(global1 >= 0)
@@ -1100,7 +1100,7 @@ class Spellew:
             assert(self._global1 < 100)
             print('PSE: evaluation first list of Global candidates', 
                   self._global1, '%', flush=True)
-            self._speller.select_globals(self._global1, False)
+            self._speller.select_globals(self._global1, True)
             nbg = self._speller.globals()
             print('PSE:', nbg, 'candidate global from 1st table', flush=True)                
         if self._ct2 != pse.CTYPE_UNDEF:
@@ -1122,7 +1122,11 @@ class Spellew:
             
     def spell(self, notes, stat):
         """run spell checking algo"""
-        self._speller.reset(0, 0)
+        # reset the global flags but not the whole list of tons
+        self._speller.reset_globals() 
+        self._speller.reset_table() 
+        self._speller.reset_grid() 
+        self._speller.reset_enum(0, 0)
         # feed speller with input notes
         for (n, b, s) in notes:   # note, bar number, simultaneous flag
             self._speller.add(midi=n.pitch.midi, bar=b, simultaneous=s)

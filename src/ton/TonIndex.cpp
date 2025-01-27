@@ -29,7 +29,9 @@ _repr_modal(),
 // _WeberTonal(true)
 _WeberModal(false),
 _WeberBluesModal(false),
-_rankWeber()
+_rankWeber(),
+_ordering(this, 0, ModeName::Major),
+_backup_globals() // initially empty
 {
     init(n);
 }
@@ -165,6 +167,7 @@ void TonIndex::reset(size_t n)
 {
     TRACE("TonIndex: empty the list of tonalities (row headers)");
     _tons.clear();
+    _backup_globals.clear();
     _closed = false;
     _WeberModal = false;
     _WeberBluesModal = false;
@@ -186,6 +189,7 @@ void TonIndex::add(const Ton& ton, bool global)
     if (_tons.size() < MAXTONS)
     {
         _tons.push_back(std::make_pair(ton, global)); // copy
+        _backup_globals.push_back(global);
     }
     else
     {
@@ -273,20 +277,45 @@ void TonIndex::add(int ks, const ModeName& mode, bool global)
 }
 
 
+TonIndex::Ordering_operator::Ordering_operator(TonIndex* id,
+                                               int ks, ModeName mode):
+container(id),
+base(ks, mode)
+{
+    assert(id);
+}
+
+
+bool
+TonIndex::Ordering_operator::operator()(const std::pair<const Ton, bool>& lhs,
+                                        const std::pair<const Ton, bool>& rhs)
+{
+    return (container->distWeber(base, lhs.first) <
+            container->distWeber(base, rhs.first));
+}
+
+
 // static
 bool TonIndex::ordering(const std::pair<const Ton, bool>& lhs,
                         const std::pair<const Ton, bool>& rhs)
 {
-    // compare tons
+    // compare tons using the arbitrary ordering
     return (lhs.first < rhs.first);
-}
 
+    // compare tons using the relative Weber distances to Cmaj
+    // IMPOSSIBLE: function must be static
+    // Ton ut(0, ModeName::Major);
+    // return (this->distWeber(_ut, lhs.first) < this->distWeber(_ut, rhs.first));
+}
 
 
 void TonIndex::close()
 {
     _closed = true;
+    // sort this ton index
+    // based on arbitrary ordering on tons // NOT based on Weber distance to ut
     std::sort(_tons.begin(), _tons.end(), TonIndex::ordering);
+    // build Weber tables
     initRankWeber();
 }
 
@@ -553,7 +582,10 @@ size_t TonIndex::selectGlobals(const PST& tab, double d, bool refine)
     if (d == 100)
     {
         if (refine)
+        {
+            // nothing to do
             return 0;
+        }
         // select all tons as global
         else
         {
@@ -596,10 +628,11 @@ size_t TonIndex::selectGlobals(const PST& tab, double d, bool refine)
     }
     
     assert(ibest < _tons.size());
+    assert(isGlobal(ibest));
     const Cost& bestCost = tab.rowCost(ibest);
     
-    // mark as global (candidates) all tonality
-    // at distance to ibest smaller than d
+    // mark as global (candidates) all tonalities
+    // at a distance to ibest smaller than d
     for (size_t i = 0; i < _tons.size(); ++i)
     {
         assert(i != TonIndex::FAILED);
@@ -744,6 +777,19 @@ size_t TonIndex::bestGlobal() const
 }
 
 
+void TonIndex::resetGlobals()
+{
+    assert(_backup_globals.size() == _tons.size());
+    for (size_t i = 0; i < _tons.size(); ++i)
+    {
+        if (_backup_globals.at(i))
+            setGlobal(i);
+        else
+            unsetGlobal(i);
+    }
+}
+
+
 // static
 /// @todo not used
 bool TonIndex::global(const ModeName& m)
@@ -786,15 +832,21 @@ bool TonIndex::global(const ModeName& m)
 }
 
 
-unsigned int TonIndex::distWeber(size_t i, size_t j) const
+unsigned int TonIndex::distWeber(const Ton& lhs, const Ton& rhs) const
 {
     assert(_closed);
     if (_WeberBluesModal)
-        return ton(i).distWeberBluesModal(ton(j));
+        return lhs.distWeberBluesModal(rhs);
     else if (_WeberModal)
-        return ton(i).distWeberModal(ton(j));
+        return lhs.distWeberModal(rhs);
     else
-        return ton(i).distWeber(ton(j));
+        return lhs.distWeber(rhs);
+}
+
+
+unsigned int TonIndex::distWeber(size_t i, size_t j) const
+{
+    return this->distWeber(ton(i), ton(j));
 }
 
 

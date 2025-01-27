@@ -317,25 +317,25 @@ TEST(TonIndex, 30_equiv)
     }
 }
 
-TEST(TonIndex, 30_selectGlobal)
-{
-    pse::TonIndex id(30);
-    
-    // unset all
-    for (size_t i = 0; i < id.size(); ++i)
-        id.unsetGlobal(i);
-    
-    id.setGlobal(6);  // B- major (-2)
-    id.setGlobal(10); // E- major (-3)
-    
-    EXPECT_FALSE(id.isGlobal(0));
-    EXPECT_TRUE(id.isGlobal(6));
-    EXPECT_TRUE(id.isGlobal(10));
-    EXPECT_EQ(id.globals(), 2);
-    EXPECT_EQ(id.bestGlobal(), 6);
-    
-    EXPECT_TRUE(id.selectGlobal());
-    EXPECT_EQ(id.globals(), 1);
-    EXPECT_TRUE(id.isGlobal(6));
-    EXPECT_FALSE(id.isGlobal(10));
-}
+//TEST(TonIndex, 30_selectGlobal)
+//{
+//    pse::TonIndex id(30);
+//    
+//    // unset all
+//    for (size_t i = 0; i < id.size(); ++i)
+//        id.unsetGlobal(i);
+//    
+//    id.setGlobal(6);  // B- major (-2)
+//    id.setGlobal(10); // E- major (-3)
+//    
+//    EXPECT_FALSE(id.isGlobal(0));
+//    EXPECT_TRUE(id.isGlobal(6));
+//    EXPECT_TRUE(id.isGlobal(10));
+//    EXPECT_EQ(id.globals(), 2);
+//    EXPECT_EQ(id.bestGlobal(), 6);
+//    
+//    EXPECT_TRUE(id.selectGlobal());
+//    EXPECT_EQ(id.globals(), 1);
+//    EXPECT_TRUE(id.isGlobal(6));
+//    EXPECT_FALSE(id.isGlobal(10));
+//}

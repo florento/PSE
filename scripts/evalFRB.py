@@ -201,7 +201,7 @@ def eval_FRB(corpus='leads',
     # display and save evaluation table
     # default table file name
     if not tablename:
-       tablename =  'FRBeval'+'_'+corpus+str(tons)+'_'+timestamp
+       tablename =  'FRB'+'_'+sp.algoname()+'_'+timestamp
     stat.show()    
     df = stat.get_dataframe() # create pandas dataframe
     df.pop('part') # del column part number (always 0)

@@ -77,10 +77,17 @@ Speller::~Speller()
 {
     TRACE("delete Speller of type {}", _algo);
     
-    if (_grid)
-        delete _grid;
     if (_table)
+    {
         delete _table;
+        _table = nullptr;
+    }
+
+    if (_grid)
+    {
+        delete _grid;
+        _grid = nullptr;
+    }
 }
 
 
@@ -112,7 +119,7 @@ bool Speller::evalTable(CostType ctype, bool tonal, bool chromatic)
 {
     if (_table)
     {
-        TRACE("deleting current pitch spelling table");
+        WARN("Speller evalTable: deleting current pitch spelling table");
         delete _table;
         _table = nullptr;
     }
@@ -181,6 +188,7 @@ bool Speller::evalGrid(const GridAlgo& algo)
 {
     if (_grid)
     {
+        WARN("Speller evalGrid: deleting current grid");
         delete _grid;
         _grid = nullptr;
     }
@@ -300,6 +308,28 @@ bool Speller::spell()
 {
     ERROR("Speller spell should not be called");
     return false;
+}
+
+
+void Speller::resetTable()
+{
+    if (_table)
+    {
+        TRACE("Speller: deleting current pitch spelling table");
+        delete _table;
+        _table = nullptr;
+    }
+}
+
+
+void Speller::resetGrid()
+{
+    if (_grid)
+    {
+        TRACE("Speller evalGrid: deleting current grid");
+        delete _grid;
+        _grid = nullptr;
+    }
 }
 
 

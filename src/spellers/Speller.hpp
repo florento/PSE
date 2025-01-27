@@ -179,6 +179,12 @@ public: // spelling : computation of tables and grid
     /// @warning must be called after rename.
     /// @see class RewritePassing
     size_t rewritePassing();
+
+    /// clear the current spelling table.
+    void resetTable();
+
+    /// clear the current grid.
+    void resetGrid();
     
 public: // results feedback : notes
     

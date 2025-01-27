@@ -52,21 +52,25 @@ public: // construction
     // (key sig) and a measure of notes.
     // @param ton conjectured global tonality (key sig),
     // used to define the initial config.
-    // @param e an enumerator of notes for computing transitions between configs.
+    // @param e an enumerator of notes for computing transitions
+    // between configs.
     // @todo TBR
     // PSB(const Ton& ton, PSEnum& e, const Algo& a);
     
     /// bag of best target configs configs for a conjectured global tonality
-    /// (key sig), a conjectured local tonality (tie break) and a measure of notes.
+    /// (key sig), a conjectured local tonality (tie break)
+    /// and a measure of notes.
     /// @param a name of pitch-spelling algorithm implemented.
     /// @param seed cost value of specialized type (to create a cost of
     /// the same type).
-    /// @param e an enumerator of notes for computing transitions between configs.
+    /// @param e an enumerator of notes for computing transitions
+    /// between configs.
     /// @param ton conjectured global tonality (key sig),
     /// used to define the initial config.
     /// @param lton conjectured local tonality, to compute the cumulated
     /// distance value used for tie break.
-    /// @param tonal mode: tonal or modal, for the construction of initial state.
+    /// @param tonal mode: tonal or modal, for the construction of
+    /// initial state.
     /// @see State constructor for tonal/modal mode
     PSB(const Algo& a, const Cost& seed, PSEnum& e, bool tonal,
         const Ton& ton, const Ton& lton = Ton());

@@ -70,11 +70,17 @@ public: // construction
     /// @todo flak atonal
     PSG(const PST& tab);
     
+    /// a grid cannot be copied
+    PSG(const PSG& rhs) = delete;
+    
     // constructor without mask.
     // @param tab pitch spelling table used to estimated the locals.
     // PSG(const PST& tab);
     
     virtual ~PSG();
+    
+    /// a grid cannot be copied
+    PSG& operator=(const PSG& rhs) = delete;
 
 public: // access
     

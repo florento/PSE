@@ -83,7 +83,11 @@ public: // construct array of tonalities (Ton index)
     /// @see constructor TonIndex
     /// @see addTon
     void resetTons(size_t n = 0);
-    
+
+    /// restore the initial list of global tons
+    /// (to its state before selection of globals).
+    void resetGlobals();
+
     /// add one tonality to the array of tonalities considered for
     /// pitch-spelling vectors.
     /// @param ks number of flats if negative int,

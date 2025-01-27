@@ -158,15 +158,16 @@ int main(int argc, const char* argv[])
     // godfried.dump();
     // return 0;
 
-    pse::SpellerEnum sp(165, pse::Algo::Undef, true); // debug flag
+    pse::SpellerEnum sp(30, pse::Algo::Undef, true); // debug flag
     //pse::PS13 sp;
 
     for (size_t i = 0; i < sp.index().size(); ++i)
     {
         const Ton& ton(sp.index().ton(i));
-        DEBUG("ton {}: {} (mode cast: {}={}) {}",
-              i, ton, ton.getMode(), static_cast<int>(ton.getMode()),
-              (sp.index().isGlobal(i)?"global":""));
+        DEBUG("ton {}: {} {}", // (mode cast: {}={})
+              i, ton,
+              //ton.getMode(), static_cast<int>(ton.getMode()),
+              (sp.index().isGlobal(i)?"(global)":""));
     }
     
     // feed the speller sp with notes in sample.cpp
@@ -178,7 +179,7 @@ int main(int argc, const char* argv[])
     // LG461(sp);
     // Waldstein(sp);
     Airegin(sp);
-    //Afternoon(sp);
+    // Afternoon(sp);
 
     std::cout << "spelling " << sp.size() << " notes" << std::endl;
     int ks = spellKE(sp,
@@ -187,7 +188,7 @@ int main(int argc, const char* argv[])
                   // cost                   tonal  deterministic
                      pse::CostType::ADplus, true, true,
                   // global1 grid algo
-                     5,      GridAlgo::Exhaustive);
+                     100 ,      GridAlgo::Exhaustive);
 
     if (ks == KeyFifth::UNDEF)
     {

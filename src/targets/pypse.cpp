@@ -115,7 +115,17 @@ PYBIND11_MODULE(pse, m)
              "set debug mode", py::arg("on"))
         .def("size", &pse::SpellerEnum::size,
              "number of notes to spell")
-        .def("reset", &pse::SpellerEnum::reset,
+        // .def("reset", &pse::SpellerEnum::reset,
+        //     "reset this speller to its initial state, except the list of notes to spell")
+        .def("reset_tons", &pse::SpellerEnum::resetTons,
+             "clear the array of tonalities for pitch spelling")
+        .def("reset_globals", &pse::SpellerEnum::resetGlobals,
+             "restore the initial list of global tons (to its state before selection of globals)")
+        .def("reset_table", &pse::SpellerEnum::resetTable,
+             "clear the current spelling table")
+        .def("reset_grid", &pse::SpellerEnum::resetGrid,
+             "clear the current grid")
+        .def("reset_enum", &pse::SpellerEnum::resetEnum,
              "clear the list of notes to spell")
         .def("add", &pse::SpellerEnum::add0,
              "add a new note to spell",
@@ -127,8 +137,6 @@ PYBIND11_MODULE(pse, m)
              py::arg("dur_num"), py::arg("dur_den"))
         .def("nb_tons", &pse::SpellerEnum::nbTons,
              "number of tonalities considered for pitch spelling")
-        .def("reset_tons", &pse::SpellerEnum::resetTons,
-             "clear the array of tonalities for pitch spelling")
     // disambiguate overloaded method
         .def("add_ton",
              static_cast<void (pse::Speller::*)(int, pse::ModeName, bool)>(&pse::Speller::addTon3),
@@ -138,6 +146,7 @@ PYBIND11_MODULE(pse, m)
          py::arg("f_global"))
 //        .def("Weber_tonal", &pse::SpellerEnum::WeberTonal,
 //             "switch the array of tonalities to tonal mode for Weber dist.")
+//        .def("Weber_modal", &pse::SpellerEnum::WeberModal,
 //        .def("Weber_modal", &pse::SpellerEnum::WeberModal,
 //             "switch the array of tonalities to modal mode for Weber dist.")
         .def("close_tons", &pse::SpellerEnum::closeTons,
@@ -251,7 +260,7 @@ PYBIND11_MODULE(pse, m)
         .def("algo", &pse::PS13::algo, "name of spelling algorithm")
         .def("debug", &pse::PS13::debug, "set debug mode", py::arg("on"))
         .def("size", &pse::PS13::size, "number notes to spell")
-        .def("reset", &pse::PS13::reset, "clear the list of notes to spell")
+        .def("reset", &pse::PS13::resetEnum, "clear the list of notes to spell")
         .def("set_Kpre", &pse::PS13::setKpre, "set the Kpre parameter of PS13")
         .def("set_Kpost", &pse::PS13::setKpost, "set the Kpost parameter of PS13")
         .def("add", &pse::PS13::add0, "add a new note to spell",
