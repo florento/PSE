@@ -124,7 +124,7 @@ void PSGx::init(const PST& tab, size_t ig)
     // fill the whole table with best-path costs and preds
     for (; j < tab.size();)
     {
-        j = column(j, tab, ranks, costs, preds);
+        j = column(j, tab, ranks, costs, preds, ig);
     }
     
     // tonal: fill the row ig
@@ -154,7 +154,7 @@ void PSGx::init(const PST& tab, size_t ig)
         assert(ig < _content.at(j).size());
         _content[j][ig] = i;
         if (preds.at(j).empty())
-            break;
+            continue;
         else
         {
             assert(i < preds.at(j).size());
@@ -261,7 +261,8 @@ size_t PSGx::first(const PST& tab,
 size_t PSGx::column(size_t j, const PST& tab,
                     const std::vector<std::vector<size_t>>& ranks,
                     std::vector<std::vector<size_t>>& costs,
-                    std::vector<std::vector<size_t>>& preds)
+                    std::vector<std::vector<size_t>>& preds,
+                    size_t ig)
 {
     assert(tab.size() > 0);
     assert(ranks.size() == tab.size());
@@ -271,6 +272,7 @@ size_t PSGx::column(size_t j, const PST& tab,
     assert(j < tab.size());
     assert(j-1 < costs.size());
     assert(j-1 < preds.size());
+    assert(ig == TonIndex::UNDEF or ig < _index.size());
 
     // best path costs so far
     const std::vector<size_t>& pcosts = costs.at(j-1);
@@ -292,13 +294,20 @@ size_t PSGx::column(size_t j, const PST& tab,
     {
         size_t best_cost = COST_INFINITE;
         size_t best_pred = PRED_UNDEF;
+        size_t best_predcost = COST_INFINITE;
+        // rank of spelling cost for ton i at bar j
+        /// @todo rank or cost value?
         size_t ri = empty_bar?0:rankj.at(i);
+        // rank of i for distance to global
+        if (ig != TonIndex::UNDEF) ri += _index.rankWeber(ig, i);
+        // select a best predecessor for i
         for (size_t ip = 0; ip < _index.size(); ++ip)
         {
             if (pcosts.at(ip) != COST_INFINITE)
             {
+                size_t predcost = pcosts.at(ip);
                 /// @todo distWeber or rankWeber
-                size_t cost = pcosts.at(ip) + _index.rankWeber(ip, i) + ri;
+                size_t cost = predcost + _index.rankWeber(ip, i) + ri;
                 
                 // in case of tie, we keep the smaller best_pred
                 // hence we need a wise ordering of tons in the ton index.
@@ -306,6 +315,14 @@ size_t PSGx::column(size_t j, const PST& tab,
                 {
                     best_cost = cost;
                     best_pred = ip;
+                    best_predcost = predcost;
+                }
+                // tie break
+                else if (cost == best_cost and
+                (best_predcost == COST_INFINITE or predcost < best_predcost))
+                {
+                    best_pred = ip;
+                    best_predcost = predcost;
                 }
             }
             // otherwise ignore

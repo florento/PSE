@@ -104,11 +104,13 @@ private: // construction
     /// must have a column j-1.
     /// @param preds table of of predecessors in best paths.
     /// must have a column j-1.
+    /// @param ig global ton of current index of tab, or TonIndex::UNDEF.
     /// @return the number of the next column to proceed.
     size_t column(size_t j, const PST& tab,
                   const std::vector<std::vector<size_t>>& ranks,
                   std::vector<std::vector<size_t>>& costs,
-                  std::vector<std::vector<size_t>>& preds);
+                  std::vector<std::vector<size_t>>& preds,
+                  size_t ig);
 
     /// index of best cost in a column.
     /// @param col on column in the table of best-path costs.

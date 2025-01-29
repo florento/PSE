@@ -245,9 +245,14 @@ public: // debug
     /// debug: print the array of row costs.
     void dump_rowcost() const;
     
-    /// debug: print the content of the table.
-    void dump_table() const;
-    
+    /// debug: print the content of the table in cvs format
+    /// in the output stream.
+    void print(std::ostream& o) const;
+
+    /// print the content of the table as debug messages
+    /// in the output stream.
+    void dump_table(std::ostream& o) const;
+
 private: // data
 
     /// name  of the pitch spelling algorithm implemented with this table.

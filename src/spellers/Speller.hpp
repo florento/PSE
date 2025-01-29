@@ -245,7 +245,21 @@ public: // results feedback : grid
     /// @param j index of note in the enumerator of input notes.
     /// @warning evalGrid() must have been called.
     virtual const Ton& localNote(size_t i, size_t j) const;
+
+public: // debug
     
+    void printGrid(std::ostream& o) const;
+
+    void printGrid_pybind() const;
+
+    void writeGrid(const std::string& filename) const;
+
+    void printTable(std::ostream& o) const;
+
+    void printTable_pybind() const;
+
+    void writeTable(const std::string& filename) const;
+
 protected: // data
     
     /// name of the algorithm implemented.

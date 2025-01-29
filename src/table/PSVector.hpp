@@ -146,9 +146,16 @@ public: // access
     /// it is the row-index of the embedding table.
     inline const TonIndex& index() const { return _index; }
 
+    /// the bag for the ton of given index is not defined.
+    /// @param i index in array of tonalities.
+    /// must be smaller than index.size().
+    /// @return whether there is a bag of configs at position i in this vector.
+    bool undef(size_t i) const;
+
     /// bag of target configs for best paths for the ton of given index.
     /// @param i index in array of tonalities.
     /// must be smaller than index.size().
+    /// undef(i) must be false.
     /// @return the bag of configs at position i in this vector.
     const PSB& bag(size_t i) const;
     

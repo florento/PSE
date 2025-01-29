@@ -80,6 +80,48 @@ void PSG::init_empty(const PST& tab)
 }
 
 
+void PSG::print(std::ostream& o) const
+{
+    std::string SEP(", ");
+    std::string SPACE(" ");
+    std::string LINE("\n");
+
+    // header : bar numbers
+    o << SPACE;
+    for (size_t j = 0; j < _content.size(); ++j)
+    {
+        o << SEP;
+        o << j;
+    }
+    o << LINE;
+
+    // rows
+    for (size_t i = 0; i < _index.size(); ++i)
+    {
+        o << _index.ton(i);
+        // columns
+        // every column of the table corresponds to a measure
+        // for (std::unique_ptr<const PSV> psv : _psvs)
+        for (size_t j = 0; j < _content.size(); ++j)
+        {
+            o << SEP;
+            assert(i < _content.at(j).size());
+            size_t it = _content[j][i];
+            if (it == TonIndex::UNDEF)
+            {
+                o << SPACE;
+            }
+            else
+            {
+                assert(it < _index.size());
+                o << _index.ton(it);
+            }
+        }
+        o << LINE;
+    }
+}
+
+
 // static
 std::string tostring(const GridAlgo& m)
 {

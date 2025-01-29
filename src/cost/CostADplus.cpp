@@ -34,7 +34,9 @@ bool CostADplus::operator==(const CostADplus& rhs) const
 {
     assert(_sum == _accid + _dist);
     assert(rhs._sum == rhs._accid + rhs._dist);
-    return (_sum == rhs._sum && _chromharm == rhs._chromharm && _color+_cflat == rhs._cflat+rhs._color);
+    return (_sum == rhs._sum &&
+            _chromharm == rhs._chromharm &&
+            _color+_cflat == rhs._cflat+rhs._color);
     //        _color == rhs._color &&
     //        _cflat == rhs._cflat);
 }
@@ -123,8 +125,11 @@ CostType CostADplus::type() const
 
 void CostADplus::print(std::ostream& o) const
 {
-    CostAD::print(o);
-    o << " a+d=" << _sum;
+    // CostAD::print(o);
+    // o << _sum;
+    o << _accid;
+    o << "/";
+    o << _dist;
 }
 
 

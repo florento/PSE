@@ -110,12 +110,12 @@ def eval_corpus(dataset, skip=[],
 
     # prepare the output dir
     timestamp = datetime.today().strftime('%Y%m%d-%H%M')
-    if output_dir == '':
-       output_dir = algoname+'_'+timestamp
     output_path = Path(eval_root)
     if not os.path.exists(output_path):
         print('ERROR output dir: ', output_path, 'not found')
         return
+    if output_dir == '':
+       output_dir = algoname+'_'+timestamp
     output_path = output_path/output_dir
     if not os.path.isdir(output_path):
         os.mkdir(output_path)
@@ -134,16 +134,19 @@ def eval_corpus(dataset, skip=[],
         if (not dataset.get(name)):
             print('\n', name, "not found in dataset, skip")
             continue
+        output_path2 = output_path/name
+        if not os.path.isdir(output_path2):  
+            os.mkdir(output_path2)
         file = dataset[name]
         print('\n', name, '\n')
         s = m21.converter.parse(file.as_posix())
         (ls, lld) = sp.eval_score(score=s, stats=stat, score_id=i, 
                                   title=name, composer='', 
-                                  output_path=output_path, 
+                                  output_path=output_path2, 
                                   chord_sym=csflag)
         i += 1
-        if mflag and not ps.empty_difflist(lld):
-            write_score(s, output_path, name)
+        #if mflag and not ps.empty_difflist(lld): # done in eval_score
+        #    write_score(s, output_path2, name)
     # display and save evaluation table
     # default table file name
     if not tablename:

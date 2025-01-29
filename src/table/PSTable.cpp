@@ -826,6 +826,53 @@ bool PST::rename(size_t ig)
 //}
 
 
+void PST::print(std::ostream& o) const
+{
+    assert(_rowcost.size() == _index.size());
+    std::string SEP(", ");
+    std::string SPACE(" ");
+    std::string LINE("\n");
+
+    // header : bar numbers
+    o << SPACE;
+    for (size_t j = 0; j < _psvs.size(); ++j)
+    {
+        o << SEP;
+        o << j;
+    }
+    o << SEP;
+    o << "rowcost";
+    o << LINE;
+
+    // rows
+    for (size_t i = 0; i < _index.size(); ++i)
+    {
+        o << _index.ton(i);
+        // columns
+        // every column of the table corresponds to a measure
+        // for (std::unique_ptr<const PSV> psv : _psvs)
+        for (size_t j = 0; j < _psvs.size(); ++j)
+        {
+            o << SEP;
+            assert(_psvs[j]);
+            PSV& psv = *(_psvs[j]);
+            if (psv.undef(i) or psv.bag(i).empty())
+            {
+                o << SPACE;
+            }
+            else
+            {
+                o << psv.bag(i).cost(); // psb.cost().print(o);
+            }
+        }
+        o << SEP;
+        assert(_rowcost.at(i));
+        o << rowCost(i);
+        o << LINE;
+    }
+}
+
+
 void PST::dump_rowcost() const
 {
     DEBUGU("PST: Row Costs:");
@@ -838,7 +885,7 @@ void PST::dump_rowcost() const
 }
 
 
-void PST::dump_table() const
+void PST::dump_table(std::ostream& o) const
 {
     DEBUGU("PS Table:");
     assert(_rowcost.size() == _index.size());
@@ -876,7 +923,6 @@ void PST::dump_table() const
         DEBUGU("{} {} {}: {}", i, _index.ton(i), rowCost(i), srow);
     }
 }
-
 
 
 } // end namespace pse

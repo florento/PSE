@@ -243,7 +243,7 @@ size_t Speller::selectGlobals(double d, bool refine)
     }
     // if (_debug)
     // {
-    //     _table->dump_table();
+    //     _table->print(std::cout);
     // }
     assert(_index);
     return _index->selectGlobals(*_table, d, refine);
@@ -446,6 +446,62 @@ const Ton& Speller::localNote(size_t i, size_t j) const
 double Speller::duration(clock_t start)
 {
     return ((double)(clock() - start)/CLOCKS_PER_SEC * 1000);
+}
+
+void Speller::printGrid(std::ostream& o) const
+{
+    if (_grid)
+        _grid->print(o);
+}
+
+void Speller::printGrid_pybind() const
+{
+    if (_grid)
+        _grid->print(std::cout);
+}
+
+void Speller::writeGrid(const std::string& filename) const
+{
+    if (_grid)
+    {
+        std::ofstream file;
+        file.open(filename);
+        if (file.is_open())
+        {
+            _grid->print(file);
+            file.close();
+        }
+        else
+            ERROR("Speller: Unable to open file {}", filename);
+    }
+}
+
+void Speller::printTable(std::ostream& o) const
+{
+    if (_table)
+        _table->print(o);
+}
+
+void Speller::printTable_pybind() const
+{
+    if (_table)
+        _table->print(std::cout);
+}
+
+void Speller::writeTable(const std::string& filename) const
+{
+    if (_table)
+    {
+        std::ofstream file;
+        file.open(filename);
+        if (file.is_open())
+        {
+            _table->print(file);
+            file.close();
+        }
+        else
+            ERROR("Speller: Unable to open file {}", filename);
+    }
 }
 
 

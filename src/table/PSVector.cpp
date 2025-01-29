@@ -128,6 +128,13 @@ size_t PSV::size() const
 }
 
 
+bool PSV::undef(size_t i) const
+{
+    assert(i < _psbs.size());
+    return (_psbs.at(i) == nullptr);
+}
+
+
 const PSB& PSV::bag(size_t i) const
 {
     assert(i < _psbs.size());

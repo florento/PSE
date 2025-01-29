@@ -602,7 +602,7 @@ def anote_global_part(part, sp, ton_est):
             text += ' '
         text += ')'            
     e = m21.expressions.TextExpression(text)    
-    e.style.fontWeight = 'bold'
+    #e.style.fontWeight = 'bold'
     e.placement = 'above'
     e.style.color = 'gray'   
     ml = part.getElementsByClass(m21.stream.Measure)    
@@ -619,6 +619,7 @@ def anote_local_part(part, sp, i):
             k = m21_key(ton)
             e = m21.expressions.TextExpression(strk(k))
             e.style.fontStyle = 'italic'
+            e.style.color = 'gray'              
             ml[j].insert(0, e)
         
 def anote_part(part, ld):
@@ -978,7 +979,7 @@ class Spellew:
             self._algo_params = str(nbtons)
             assert(t1_costtype != pse.CTYPE_UNDEF)
             self._algo_params += '_'+ctype_tostring(t1_costtype)
-            self._algo_params += '_T' if t1_tonal  else '_M'
+            self._algo_params += 'T' if t1_tonal  else 'M'
             self._algo_params += 'D' if t1_det  else 'E'            
             assert(global1 >= 0)
             assert(global1 <= 100)
@@ -994,7 +995,7 @@ class Spellew:
             if t2_costtype != pse.CTYPE_UNDEF:
                 self._algo_params += '_'
                 self._algo_params += ctype_tostring(t2_costtype)
-                self._algo_params += '_T' if t2_tonal  else '_M'
+                self._algo_params += 'T' if t2_tonal  else 'M'
                 self._algo_params += 'D' if t2_det  else 'E'  
             # create a speller object    
             if (nbtons in [0, 24, 25, 26, 30, 104, 117, 135, 165]):
@@ -1073,16 +1074,17 @@ class Spellew:
         # assert(self._spelled)
         return diff(notes, self._speller) 
                         
-    def spell_PS13(self, stat):
+    def spell_PS13(self, stat, output_path=None):
         """spell with algo PS13"""
         assert(self._algo_name == 'PS13')
         stat.start_timer(1) # single timer
         self._speller.spell()
         stat.stop_timer(1)
 
-    def spell_PSE(self, stat):
+    def spell_PSE(self, stat, output_path=None):
         """spell with algo PSE"""
         assert(self._algo_name == 'PSE')
+        
         # modal step: compute the first spelling table 
         assert(self._ct1 != pse.CTYPE_UNDEF)
         print('PSE: computing Table 1', 
@@ -1093,6 +1095,9 @@ class Spellew:
         self._speller.eval_table(self._ct1, self._tonal1, self._det1)
         stat.stop_timer(1)
         print("{0:0.2f}".format(stat.get_timer(1)), 'ms', end='\n', flush=True)
+        if output_path is not None:
+            self._speller.write_table((output_path/'table1.csv').absolute().as_posix())
+
         # compute the subarray of tons selected as candidate global tonality
         # with a tolerance distance 
         if self.mask():
@@ -1103,13 +1108,18 @@ class Spellew:
             self._speller.select_globals(self._global1, True)
             nbg = self._speller.globals()
             print('PSE:', nbg, 'candidate global from 1st table', flush=True)                
+
         if self._ct2 != pse.CTYPE_UNDEF:
+
         # construct the grid of local tonalities
             print('PSE: computing Grid with algo:', self._gridalgo, end=' ', flush=True)
             stat.start_timer(2)
             self._speller.eval_grid(self._gridalgo)
             stat.stop_timer(2)                
             print("{0:0.2f}".format(stat.get_timer(2)), 'ms', end='\n', flush=True)
+            if output_path is not None:
+                self._speller.write_grid((output_path/'grid.csv').absolute().as_posix())
+
         # tonal step: compute the second spelling table 
             print('PSE: computing Table 2', 
                   'cost type2:', self._ct2,
@@ -1119,8 +1129,10 @@ class Spellew:
             self._speller.reval_table(self._ct2, self._tonal2, self._det2)
             stat.stop_timer(3)
             print("{0:0.2f}".format(stat.get_timer(3)), 'ms', end='\n', flush=True)
+            if output_path is not None:
+                self._speller.write_table((output_path/'table2.csv').absolute().as_posix())
             
-    def spell(self, notes, stat):
+    def spell(self, notes, stat, output_path=None):
         """run spell checking algo"""
         # reset the global flags but not the whole list of tons
         self._speller.reset_globals() 
@@ -1132,11 +1144,10 @@ class Spellew:
             self._speller.add(midi=n.pitch.midi, bar=b, simultaneous=s)
         # spell with algo specified
         if self._algo_name == 'PS13':
-            self.spell_PS13(stat)
+            self.spell_PS13(stat, output_path)
         else:
             assert(self._algo_name == 'PSE')
-            self.spell_PSE(stat)
-        #self._spelled = True
+            self.spell_PSE(stat, output_path)
 
     def get_global(self, k0):
         """extract estimated global tonality from speller"""
@@ -1195,7 +1206,7 @@ class Spellew:
         # assert(self._spelled)
         anote_global_part(part, self._speller, gt)              
     
-    def eval_part(self, part, stats, mark=False, chord_sym = False):
+    def eval_part(self, part, stats, output_path=None, chord_sym = False):
         """evaluate spelling for one part in a score and mark errors"""     
         """part: the M21 part to process"""
         """chord_symb: whether we spell the notes of chord symbols or not"""   
@@ -1208,14 +1219,11 @@ class Spellew:
         
         # spell with algo
         print('PSE: spelling with', self._algo_name+self._algo_params, flush=True)
-        self.spell(ln, stats)   #print('spell finished', end='\n', flush=True)   
+        self.spell(ln, stats, output_path) #print('spell finished', end='\n', flush=True)   
         
-        # extract the estimated global ton from speller
-        print('PSE: evaluation final list of Global tonalities', flush=True)
-        # select the best global (can be ties)
+        # select the best global ton from speller (can be ties)
         # with refine = true, it returns the number of remaining globals
-        nbg = self._speller.select_globals(0, True)  
-        # nbg = self._speller.globals()
+        nbg = self._speller.select_globals(0, True) # nbg = self._speller.globals()
         print('PSE:', nbg, 'global(s) in final selection:', flush=True)
         if nbg > 1:
             for j in range(nbg):
@@ -1244,7 +1252,7 @@ class Spellew:
                       '), has the same signature as', k0)
             else:
                 print('global ton: NO:', '(', m21_key(gt), 'was', k0, '),')
-                if mark:
+                if output_path is not None:
                     self.anote_global_part(part, gt) 
         else:
             print('PSE: ERROR eval_part: gt undef')
@@ -1267,7 +1275,7 @@ class Spellew:
         print('PSE: diff after rewriting:', len(ld1), end='\n', flush=True)
 
         # annotations
-        if mark:
+        if output_path is not None:
             anote_rediff(ln, ld0, ld1) # anote_diff(ln, ld0, 'red')
             if (self._speller.locals()):
                 anote_local_part(part, self._speller, i)    
@@ -1287,7 +1295,6 @@ class Spellew:
             title='unknown title'
         if (not composer) and (score.metadata.composer is not None):
             composer=score.metadata.composer       
-        mark = (output_path is not None)    
         lp = score.getElementsByClass(m21.stream.Part)
         nbparts = len(lp)
         ls = []
@@ -1299,7 +1306,9 @@ class Spellew:
             if (nbparts > 1):
                 print('part', i+1, '/', nbparts, end=' ', flush=True)
             if (spellable(part)):
-                (k_gt, ton_est, nn, ld) = self.eval_part(part, stats, mark, chord_sym)
+                (k_gt, ton_est, nn, ld) = self.eval_part(part, stats, 
+                                                         output_path, 
+                                                         chord_sym)
                 # add one row in stat table for each part
                 stats.record_part(i, k_gt, ton_est, nn, len(ld))
                 ls.append(ton_est)
@@ -1307,8 +1316,9 @@ class Spellew:
             else:
                 print('cannot spell, skip', flush=True)
         stats.close_score()
-        if mark and not empty_difflist(lld):
+        if output_path is not None and not empty_difflist(lld):
             write_score(score, output_path, title)
+            mk_pdf(output_path, title+'.musicxml')
         return (ls, lld)
         
     

@@ -191,7 +191,15 @@ PYBIND11_MODULE(pse, m)
              "estimated local tonality for a bar")
              // py::arg("ton"), py::arg("bar"))
         .def("local_note", &pse::SpellerEnum::localNote,
-             "estimated local tonality for a note");
+             "estimated local tonality for a note")
+        .def("print_grid", &pse::SpellerEnum::printGrid_pybind,
+             "print the current grid to standard output")
+        .def("print_table", &pse::SpellerEnum::printTable_pybind,
+             "print the current table to standard output")
+        .def("write_grid", &pse::SpellerEnum::writeGrid,
+             "print the current grid to a file")
+        .def("write_table", &pse::SpellerEnum::writeTable,
+             "print the current table to a file");
    
     // OBSOLETE. replaced by Speller
     py::class_<pse::PSE>(m, "PSE")

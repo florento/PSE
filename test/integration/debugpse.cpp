@@ -52,6 +52,7 @@ int spellKE(SpellerEnum& sp,
         ERROR("spellKE: failed to compute Table1");
         return KeyFifth::UNDEF;
     }
+    sp.printTable(std::cout);
     
     // compute the subarray of tons selected as candidate global tonality
     // tolerance distance 5%
@@ -81,7 +82,8 @@ int spellKE(SpellerEnum& sp,
             ERROR("spellKE: failed to evaluate Grid of local tonalities");
             return KeyFifth::UNDEF;
         }
-    
+        sp.printGrid(std::cout);
+
     // step2: reconstruct the spelling table using the grid of local tonalities
         DEBUG("spellKE: reval Table2 {} {} {}", c2, tonal2, det2);
         fstatus = sp.revalTable(c2, tonal2, det2);
@@ -90,6 +92,8 @@ int spellKE(SpellerEnum& sp,
             ERROR("spellKE: failed to build Table2");
             return KeyFifth::UNDEF;
         }
+        sp.printTable(std::cout);
+
     }
     
     // extract the estimated global ton from speller
@@ -158,7 +162,7 @@ int main(int argc, const char* argv[])
     // godfried.dump();
     // return 0;
 
-    pse::SpellerEnum sp(30, pse::Algo::Undef, true); // debug flag
+    pse::SpellerEnum sp(165, pse::Algo::Undef, true); // debug flag
     //pse::PS13 sp;
 
     for (size_t i = 0; i < sp.index().size(); ++i)

@@ -126,6 +126,11 @@ public: // access
     /// - an integer value between 0 and index.size() otherwise.
     const Ton& local(size_t i, size_t j) const;
     
+public: // debug
+    
+    /// dump the grid in cvs format in the output stream.
+    void print(std::ostream& o) const;
+    
 protected: // data
     
     /// header of rows: array of tonalities (1 per row).
