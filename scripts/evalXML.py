@@ -96,8 +96,8 @@ def eval_corpus(dataset, skip=[],
     """costtype2: table2, cost type. if unset, skip table2 (PSE)"""
     """tonal2: table2, tonal/modal flag for initial state (PSE)"""
     """det2: table2, deterministic/exhaustive flag for transitions (PSE)"""
-    """dflag: debug flag"""
-    """mflag: mark flag"""
+    """dflag: debug flag: print debug messages on terminal"""
+    """mflag: mark flag: write anotation files in a dedicaced dir for each opus"""
     """csflag: spell also the notes of the chord symbols"""
     # initialize a speller
     sp = ps.Spellew(ps13_kpre=kpre, ps13_kpost=kpost, 
@@ -134,9 +134,12 @@ def eval_corpus(dataset, skip=[],
         if (not dataset.get(name)):
             print('\n', name, "not found in dataset, skip")
             continue
-        output_path2 = output_path/name
-        if not os.path.isdir(output_path2):  
-            os.mkdir(output_path2)
+        if mflag:
+            output_path2 = output_path/name
+            if not os.path.isdir(output_path2):  
+                os.mkdir(output_path2)
+        else:
+            output_path2 = None
         file = dataset[name]
         print('\n', name, '\n')
         s = m21.converter.parse(file.as_posix())
@@ -170,9 +173,9 @@ def eval_item(dataset, name, output_dir='',
     """dataset: a dictionary as produced by XML_corpus"""
     """name: filename of item (prefix) in the dataset"""
     """output_dir: where files will be written"""
-    """kpre: parameter specific to PS13"""
-    """kpost: parameter specific to PS13"""
-    """tons: nb of Tons in TonIndex (PSE)"""
+    """pas13_kpre: parameter specific to PS13"""
+    """pas13_kpost: parameter specific to PS13"""
+    """nbtons: nb of Tons in TonIndex (PSE)"""
     """costtype1: table1, cost type. if set, PSE is used, otherwise, PS13 is used"""
     """tonal1: table1, tonal/modal flag for initial state (PSE)"""
     """det1: table1, deterministic/exhaustive flag for transitions (PSE)"""
@@ -181,8 +184,7 @@ def eval_item(dataset, name, output_dir='',
     """costtype2: table2, cost type. if unset, skip table2 (PSE)"""
     """tonal2: table2, tonal/modal flag for initial state (PSE)"""
     """det2: table2, deterministic/exhaustive flag for transitions (PSE)"""
-    """dflag: debug flag"""
-    """mflag: mark flag"""
+    """dflag: debug flag: print debug messages on terminal"""
     """csflag: spell also chord symbols"""
     assert(len(name) > 0)
     # initialize a speller

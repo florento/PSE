@@ -123,8 +123,8 @@ def eval_FRB(corpus='leads',
     """costtype2: table2, cost type. if unset, skip table2 (PSE)"""
     """tonal2: table2, tonal/modal flag for initial state (PSE)"""
     """det2: table2, deterministic/exhaustive flag for transitions (PSE)"""
-    """dflag: debug flag"""
-    """mflag: mark flag"""
+    """dflag: debug flag: print debug messages on terminal"""
+    """mflag: mark flag: write anotation files in a dedicaced dir for each opus"""
     """csflag: spell also chord symbols"""
     global _eval_root
     global skip
@@ -166,8 +166,8 @@ def eval_FRBitem(name, corpus='leads', output_dir='',
     """costtype2: table2, cost type. if unset, skip table2 (PSE)"""
     """tonal2: table2, tonal/modal flag for initial state (PSE)"""
     """det2: table2, deterministic/exhaustive flag for transitions (PSE)"""
-    """dflag: debug flag"""
-    """mflag: mark flag"""
+    """dflag: debug flag: print debug messages on terminal"""
+    """mflag: mark flag: write anotation files in a dedicaced dir for each opus"""
     """csflag: spell also chord symbols"""
     assert(len(name) > 0)
     assert(corpus == 'leads' or corpus == 'piano')

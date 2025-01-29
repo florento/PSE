@@ -1283,7 +1283,8 @@ class Spellew:
 
 
     def eval_score(self, score, stats=Stats(),
-                   score_id=0, title:str='', composer:str='', output_path=None, 
+                   score_id=0, title:str='', composer:str='', 
+                   output_path=None, 
                    chord_sym = False):        
         """evaluate spelling for all parts in a score"""
         """score: the M21 part to process"""
