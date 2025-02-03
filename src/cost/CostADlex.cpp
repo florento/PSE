@@ -26,62 +26,6 @@ CostADlex::~CostADlex()
 }
 
 
-bool CostADlex::operator==(const CostADlex& rhs) const
-{
-    return (_accid == rhs._accid &&
-            _dist == rhs._dist &&
-            _color == rhs._color &&
-            _cflat == rhs._cflat);
-}
-
-
-double CostADlex::dist(const CostADlex& rhs) const
-{
-    if (_accid == rhs._accid)
-    {
-        if (_dist == rhs._dist)
-        {
-            if (_color == rhs._color)
-                return distCost((double) _cflat, (double) rhs._cflat);
-            else
-                return distCost((double) _color, (double) rhs._color);
-        }
-        else
-        {
-            return distCost((double) _dist, (double) rhs._dist);
-        }
-    }
-    else
-        return distCost((double) _accid, (double) rhs._accid);
-}
-
-
-bool CostADlex::operator<(const CostADlex& rhs) const
-{
-    if (_accid == rhs._accid)
-    {
-        if (_dist == rhs._dist)
-        {
-            if (_color == rhs._color)
-                return (_cflat < rhs._cflat);
-            else
-                return (_color < rhs._color);
-        }
-        else
-            return (_dist < rhs._dist);
-    }
-    else
-        return (_accid < rhs._accid);
-}
-
-
-CostADlex& CostADlex::operator+=(const CostADlex& rhs)
-{
-    CostAD::operator+=(rhs);
-    return *this;
-}
-
-
 std::shared_ptr<Cost> CostADlex::shared_zero() const
 {
     return std::shared_ptr<Cost>(new CostADlex());
@@ -98,6 +42,68 @@ std::shared_ptr<Cost> CostADlex::shared_clone() const
 //{
 //    return std::unique_ptr<Cost>(new CostADlex(*this));
 //}
+
+
+bool CostADlex::operator==(const CostADlex& rhs) const
+{
+    return CostAD::operator==(rhs);
+}
+
+
+double CostADlex::dist(const CostADlex& rhs) const
+{
+    if (_accid == rhs._accid)
+    {
+        if (_dist == rhs._dist)
+        {
+            if (_chromharm == rhs._chromharm)
+            {
+                
+                if (_color == rhs._color)
+                    return distCost((double) _cflat, (double) rhs._cflat);
+                else
+                    return distCost((double) _color, (double) rhs._color);
+            }
+            else
+                return distCost((double)_chromharm , (double) rhs._chromharm);
+        }
+        else
+            return distCost((double) _dist, (double) rhs._dist);
+    }
+    else
+        return distCost((double) _accid, (double) rhs._accid);
+}
+
+
+bool CostADlex::operator<(const CostADlex& rhs) const
+{
+    if (_accid == rhs._accid)
+    {
+        if (_dist == rhs._dist)
+        {
+            if (_chromharm == rhs._chromharm)
+            {
+                if (_color == rhs._color)
+                    return (_cflat < rhs._cflat);
+                else
+                    return (_color < rhs._color);
+            }
+            else
+                return (_chromharm < rhs._chromharm);
+        }
+        else
+            return (_dist < rhs._dist);
+    }
+    else
+        return (_accid < rhs._accid);
+}
+
+
+CostADlex& CostADlex::operator+=(const CostADlex& rhs)
+{
+    CostAD::operator+=(rhs);
+    return *this;
+}
 
 
 void CostADlex::update(const enum NoteName& name, const enum Accid& accid,

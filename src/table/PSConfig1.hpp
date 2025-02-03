@@ -20,7 +20,7 @@
 #include "pstrace.hpp"
 #include "PSEnum.hpp"
 #include "NoteName.hpp"
-#include "Accidental.hpp"
+#include "Accid.hpp"
 #include "Ton.hpp"
 #include "PSConfig0.hpp"
 #include "PSConfig.hpp"
@@ -114,7 +114,7 @@ public:
     
     /// accidental of the note read for the transition
     /// from this config's predecessor. in -2..2
-    /// @see Accidental.hpp
+    /// @see Accid.hpp
     /// @warning not formatted for a Pitch object.
     enum Accid accidental() const;
     

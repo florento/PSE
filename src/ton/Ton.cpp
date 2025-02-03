@@ -10,7 +10,7 @@
 #include <algorithm>    // std::max
   
 #include "Ton.hpp"
-#include "Accidental.hpp"
+#include "Accid.hpp"
 //#include "Pitch.hpp"
 #include "Fifths.hpp"
 //#include "PSState.hpp"

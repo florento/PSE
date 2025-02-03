@@ -23,7 +23,7 @@
 
 #include "pstrace.hpp"
 #include "NoteName.hpp"
-#include "Accidental.hpp"
+#include "Accid.hpp"
 #include "PSEnum.hpp"
 //#include "Stream.hpp"
 

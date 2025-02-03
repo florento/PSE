@@ -30,66 +30,6 @@ CostADplus::~CostADplus()
 }
 
 
-bool CostADplus::operator==(const CostADplus& rhs) const
-{
-    assert(_sum == _accid + _dist);
-    assert(rhs._sum == rhs._accid + rhs._dist);
-    return (_sum == rhs._sum &&
-            _chromharm == rhs._chromharm &&
-            _color+_cflat == rhs._cflat+rhs._color);
-    //        _color == rhs._color &&
-    //        _cflat == rhs._cflat);
-}
-
-
-double CostADplus::dist(const CostADplus& rhs) const
-{
-    assert(_sum == _accid + _dist);
-    assert(rhs._sum == rhs._accid + rhs._dist);
-    if (_sum == rhs._sum)
-    {
-        if (_chromharm == rhs._chromharm) return distCost((double)(_color+_cflat), (double)(rhs._cflat+rhs._color));
-        else return distCost((double)_chromharm , (double) rhs._chromharm);
-        /*
-        if (_color == rhs._color)
-            return distCost((double) _cflat, (double) rhs._cflat);
-        else
-            return distCost((double) _color, (double) rhs._color);
-        */
-    }
-    else
-        return distCost((double) _sum, (double) rhs._sum);
-}
-
-
-bool CostADplus::operator<(const CostADplus& rhs) const
-{
-    assert(_sum == _accid + _dist);
-    assert(rhs._sum == rhs._accid + rhs._dist);
-    if (_sum == rhs._sum)
-    {
-        if (_chromharm == rhs._chromharm) return (_color+_cflat < rhs._cflat+rhs._color);
-        else return (_chromharm < rhs._chromharm);
-        /*
-        if (_color == rhs._color)
-            return (_cflat < rhs._cflat);
-        else
-            return (_color < rhs._color);
-        */
-    }
-    else
-        return (_sum < rhs._sum);
-}
-
-
-CostADplus& CostADplus::operator+=(const CostADplus& rhs)
-{
-    CostAD::operator+=(rhs);
-    _sum = _accid + _dist;
-    return *this;
-}
-
-
 std::shared_ptr<Cost> CostADplus::shared_zero() const
 {
     return std::shared_ptr<Cost>(new CostADplus());
@@ -106,6 +46,72 @@ std::shared_ptr<Cost> CostADplus::shared_clone() const
 //{
 //    return std::unique_ptr<Cost>(new CostADplus(*this));
 //}
+
+
+bool CostADplus::operator==(const CostADplus& rhs) const
+{
+    assert(_sum == _accid + _dist);
+    assert(rhs._sum == rhs._accid + rhs._dist);
+    return CostAD::operator==(rhs);
+    // return (_sum == rhs._sum &&
+    //         _chromharm == rhs._chromharm &&
+    //         _color+_cflat == rhs._cflat+rhs._color);
+    // //        _color == rhs._color &&
+    // //        _cflat == rhs._cflat);
+}
+
+
+double CostADplus::dist(const CostADplus& rhs) const
+{
+    assert(_sum == _accid + _dist);
+    assert(rhs._sum == rhs._accid + rhs._dist);
+    if (_sum == rhs._sum)
+    {
+        if (_chromharm == rhs._chromharm)
+        {
+            if (_color == rhs._color)
+                return distCost((double) _cflat, (double) rhs._cflat);
+            else
+                return distCost((double) _color, (double) rhs._color);
+        }
+        else
+        {
+            return distCost((double)_chromharm , (double) rhs._chromharm);
+        }
+    }
+    else
+        return distCost((double) _sum, (double) rhs._sum);
+}
+
+
+bool CostADplus::operator<(const CostADplus& rhs) const
+{
+    assert(_sum == _accid + _dist);
+    assert(rhs._sum == rhs._accid + rhs._dist);
+    if (_sum == rhs._sum)
+    {
+        if (_chromharm == rhs._chromharm)
+        {
+            if (_color == rhs._color)
+                return (_cflat < rhs._cflat);
+            else
+                return (_color < rhs._color);
+            // return (_color+_cflat < rhs._cflat+rhs._color);
+        }
+        else
+            return (_chromharm < rhs._chromharm);
+    }
+    else
+        return (_sum < rhs._sum);
+}
+
+
+CostADplus& CostADplus::operator+=(const CostADplus& rhs)
+{
+    CostAD::operator+=(rhs);
+    _sum = _accid + _dist;
+    return *this;
+}
 
 
 void CostADplus::update(const enum NoteName& name, const enum Accid& accid,

@@ -18,7 +18,7 @@
 #include "pstrace.hpp"
 #include "PSRational.hpp"
 #include "NoteName.hpp"
-#include "Accidental.hpp"
+#include "Accid.hpp"
 #include "MidiNum.hpp"
 
 

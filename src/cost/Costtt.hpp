@@ -16,7 +16,7 @@
 #include "pstrace.hpp"
 #include "PSEnum.hpp"
 #include "NoteName.hpp"
-#include "Accidental.hpp"
+#include "Accid.hpp"
 #include "Ton.hpp"
 #include "Cost.hpp"
 

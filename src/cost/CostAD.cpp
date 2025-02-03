@@ -48,10 +48,36 @@ CostAD::~CostAD()
 //}
 
 
+//std::shared_ptr<Cost> CostAD::shared_zero() const
+//{
+//    return std::shared_ptr<Cost>(new CostAD());
+//}
+
+
+//std::shared_ptr<Cost> CostAD::shared_clone() const
+//{
+//    return std::shared_ptr<Cost>(new CostAD(*this));
+//}
+
+//std::unique_ptr<Cost> CostAD::unique_clone() const
+//{
+//    return std::unique_ptr<Cost>(new CostAD(*this));
+//}
+
+
 //bool CostAD::operator==(const CostAD& rhs) const
 //{
 //    return (_accid == rhs._accid && _dist == rhs._dist);
 //}
+
+bool CostAD::operator==(const CostAD& rhs) const
+{
+    return (_accid == rhs._accid and
+            _dist == rhs._dist and
+            _chromharm == rhs._chromharm and
+            _color == rhs._color and
+            _cflat == rhs._cflat);
+}
 
 
 CostAD& CostAD::operator+=(const CostAD& rhs)
@@ -70,28 +96,12 @@ CostAD& CostAD::operator+=(const CostAD& rhs)
 //    return c1.operator+(c2);
 //}
 
-
-//std::shared_ptr<Cost> CostAD::shared_zero() const
-//{
-//    return std::shared_ptr<Cost>(new CostAD());
-//}
-
-
-//std::shared_ptr<Cost> CostAD::shared_clone() const
-//{
-//    return std::shared_ptr<Cost>(new CostAD(*this));
-//}
-
-//std::unique_ptr<Cost> CostAD::unique_clone() const
-//{
-//    return std::unique_ptr<Cost>(new CostAD(*this));
-//}
-
 void CostAD::update(const enum NoteName& name,
                     const enum Accid& accid,
                     bool print,
                     const Ton& gton, const Ton& lton)
 {
+    // same as CostA
     if (print)
     {
         switch (accid)
@@ -115,6 +125,7 @@ void CostAD::update(const enum NoteName& name,
         }
     }
     
+    // count accidental different from lton
     if (lton.defined() && (!Accids::contained(accid, lton.accidScale(name))))
     {
         switch (accid)
@@ -138,12 +149,22 @@ void CostAD::update(const enum NoteName& name,
         }
     }
 
+    // count accid not in the chromatic harmonic scale
     //    if (print && !(lton.chromatic().contains(name,accid)))
     if (print && !Accids::contained(accid, lton.chromaton().accidScale(name)))
     {
         _chromharm += 1;
     }
     
+    // color of accident differs from color of global ton
+    int ks = gton.fifths();
+    // const enum Accid& a = c.accidental();
+    if (((ks >= 0) && (flat(accid))) || ((ks <=  0) && (sharp(accid))))
+    {
+        _color += 1;
+    }
+
+    // count  Cb B# E# Fb.
     if (print && (!Accids::contained(accid, gton.accidScale(name))) &&
             (((name == NoteName::C) && (accid == Accid::Flat)) ||
              ((name == NoteName::B) && (accid == Accid::Sharp)) ||
@@ -153,13 +174,6 @@ void CostAD::update(const enum NoteName& name,
         ++_cflat;
     }
     
-    // color of accident and color of global ton
-    int ks = gton.fifths();
-    // const enum Accid& a = c.accidental();
-    if (((ks >= 0) && (flat(accid))) || ((ks <=  0) && (sharp(accid))))
-    {
-        _color += 1;
-    }
 }
 
 // version (TENOR paper)

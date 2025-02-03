@@ -15,7 +15,7 @@
 #include <string>
 
 #include "pstrace.hpp"
-#include "Accidental.hpp"
+#include "Accid.hpp"
 
 
 namespace pse {

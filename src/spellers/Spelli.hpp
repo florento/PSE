@@ -19,7 +19,7 @@
 #include "pstrace.hpp"
 #include "PSRational.hpp"
 #include "NoteName.hpp"
-#include "Accidental.hpp"
+#include "Accid.hpp"
 #include "ModeName.hpp"
 #include "Ton.hpp"
 #include "TonIndex.hpp"
@@ -166,7 +166,7 @@ protected: // data
     // CostA _seedAdiscount;
 
     /// sample cost (zero) for the construction of tables.
-    CostA _seedAnodiscount;
+    CostA _seedA;
 
     /// sample cost (zero) for the construction of tables.
     CostADplus _seedADplus;

@@ -16,13 +16,14 @@
 #include <string>
 
 #include "pstrace.hpp"
-#include "Accidental.hpp"
+#include "Accid.hpp"
 
 
 namespace pse {
 
 /// type for encoding zero or one or two alternative of accidentals.
-/// for the representation of zero or two options for one name in non-diatonic scales.
+/// for the representation of zero or two options for one name
+/// in non-diatonic scales.
 typedef std::uint8_t accids_t;
 
 

@@ -1,5 +1,5 @@
 //
-//  Accidental.hpp
+//  Accid.hpp
 //  qparse
 //
 //  Created by Florent Jacquemard on 21/10/2022.

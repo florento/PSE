@@ -25,7 +25,8 @@ namespace pse {
 class CostADplus : public CostAD, // update
                    public PolymorphicComparable<Cost, CostADplus>
 {
-public:
+    
+public: // construction
     
     /// null cost.
     CostADplus();
@@ -35,7 +36,18 @@ public:
     
     /// distructor
     virtual ~CostADplus();
+
+    /// create a new null cost value.
+    std::shared_ptr<Cost> shared_zero() const override;
     
+    /// create a shared clone of this cost.
+    std::shared_ptr<Cost> shared_clone() const override;
+    
+    // create a smart clone of this cost.
+    // virtual std::unique_ptr<Cost> unique_clone() const override;
+
+public: // operators, update
+
     /// cost equality.
     /// @param rhs a cost to compare to.
     bool operator==(const CostADplus& rhs) const;
@@ -51,15 +63,6 @@ public:
     /// cumulated sum operator. update this cost by adding rhs.
     /// @param rhs a cost to add.
     CostADplus& operator+=(const CostADplus& rhs);
-
-    /// create a new null cost value.
-    virtual std::shared_ptr<Cost> shared_zero() const override;
-    
-    /// create a shared clone of this cost.
-    virtual std::shared_ptr<Cost> shared_clone() const override;
-    
-    // create a smart clone of this cost.
-    // virtual std::unique_ptr<Cost> unique_clone() const override;
     
     /// update this cost for doing a transition renaming one note (single
     /// or in chord) with the given parameters and in a given hypothetic global
@@ -74,6 +77,8 @@ public:
                 const enum Accid& accid,
                 bool print,
                 const Ton& gton, const Ton& lton = Ton()) override;
+
+public: // access, debug
     
     /// Cost type of this const value.
     virtual CostType type() const override;

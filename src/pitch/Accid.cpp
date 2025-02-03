@@ -1,5 +1,5 @@
 //
-//  Accidental.cpp
+//  Accid.cpp
 //  qparse
 //
 //  Created by Florent Jacquemard on 21/10/2022.
@@ -10,7 +10,7 @@
 #include <cmath>        // std::abs
 #include <algorithm>    // std::max
 
-#include "Accidental.hpp"
+#include "Accid.hpp"
 
 namespace pse {
 

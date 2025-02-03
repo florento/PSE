@@ -109,7 +109,7 @@
 		435081F229D6D76500465943 /* PWO.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43C2BA182999529E0084AB3B /* PWO.cpp */; };
 		435081F329D6D76800465943 /* Enharmonic.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43ABA507292423E8002AC1D4 /* Enharmonic.cpp */; };
 		435081F429D6D76C00465943 /* MidiNum.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4342FD1129267895004E914F /* MidiNum.cpp */; };
-		435081F529D6D76F00465943 /* Accidental.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43ABA505292423E8002AC1D4 /* Accidental.cpp */; };
+		435081F529D6D76F00465943 /* Accid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43ABA505292423E8002AC1D4 /* Accid.cpp */; };
 		435081F629D6D77200465943 /* NoteName.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43ABA4FD292423C5002AC1D4 /* NoteName.cpp */; };
 		435081F729D6D78000465943 /* PSEnum.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4315862B2983E89B00918B1B /* PSEnum.cpp */; };
 		435081F829D6D78200465943 /* PSChord.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 434B1DFF298FD4FE001CE41C /* PSChord.cpp */; };
@@ -172,10 +172,10 @@
 		43ABA4FE292423C5002AC1D4 /* NoteName.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43ABA4FD292423C5002AC1D4 /* NoteName.cpp */; };
 		43ABA509292423E8002AC1D4 /* Ton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43ABA4FF292423E8002AC1D4 /* Ton.cpp */; };
 		43ABA50A292423E8002AC1D4 /* Fifths.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 43ABA500292423E8002AC1D4 /* Fifths.hpp */; };
-		43ABA50B292423E8002AC1D4 /* Accidental.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 43ABA501292423E8002AC1D4 /* Accidental.hpp */; };
+		43ABA50B292423E8002AC1D4 /* Accid.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 43ABA501292423E8002AC1D4 /* Accid.hpp */; };
 		43ABA50C292423E8002AC1D4 /* Fifths.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43ABA502292423E8002AC1D4 /* Fifths.cpp */; };
 		43ABA50D292423E8002AC1D4 /* Enharmonic.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 43ABA503292423E8002AC1D4 /* Enharmonic.hpp */; };
-		43ABA50F292423E8002AC1D4 /* Accidental.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43ABA505292423E8002AC1D4 /* Accidental.cpp */; };
+		43ABA50F292423E8002AC1D4 /* Accid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43ABA505292423E8002AC1D4 /* Accid.cpp */; };
 		43ABA510292423E8002AC1D4 /* Ton.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 43ABA506292423E8002AC1D4 /* Ton.hpp */; };
 		43ABA511292423E8002AC1D4 /* Enharmonic.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43ABA507292423E8002AC1D4 /* Enharmonic.cpp */; };
 		43ABA52329242418002AC1D4 /* PSBag.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43ABA51329242417002AC1D4 /* PSBag.cpp */; };
@@ -253,7 +253,7 @@
 		43F9BE7029CC7DB000B0A7F8 /* ModeFactory.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 43F9BE6D29CC7DB000B0A7F8 /* ModeFactory.hpp */; };
 		43FBEAC42930CEDD008FC486 /* debugpse.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43FBEAB52930CB16008FC486 /* debugpse.cpp */; };
 		43FBEAC72930CEDD008FC486 /* NoteName.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43ABA4FD292423C5002AC1D4 /* NoteName.cpp */; };
-		43FBEAC82930CEDD008FC486 /* Accidental.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43ABA505292423E8002AC1D4 /* Accidental.cpp */; };
+		43FBEAC82930CEDD008FC486 /* Accid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43ABA505292423E8002AC1D4 /* Accid.cpp */; };
 		43FBEAC92930CEDD008FC486 /* MidiNum.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4342FD1129267895004E914F /* MidiNum.cpp */; };
 		43FBEACA2930CEDD008FC486 /* Enharmonic.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43ABA507292423E8002AC1D4 /* Enharmonic.cpp */; };
 		43FBEACB2930CEDD008FC486 /* Fifths.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43ABA502292423E8002AC1D4 /* Fifths.cpp */; };
@@ -426,10 +426,10 @@
 		43ABA4FD292423C5002AC1D4 /* NoteName.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = NoteName.cpp; path = src/pitch/NoteName.cpp; sourceTree = "<group>"; };
 		43ABA4FF292423E8002AC1D4 /* Ton.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Ton.cpp; path = src/ton/Ton.cpp; sourceTree = "<group>"; };
 		43ABA500292423E8002AC1D4 /* Fifths.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Fifths.hpp; path = src/ton/Fifths.hpp; sourceTree = "<group>"; };
-		43ABA501292423E8002AC1D4 /* Accidental.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Accidental.hpp; path = src/pitch/Accidental.hpp; sourceTree = "<group>"; };
+		43ABA501292423E8002AC1D4 /* Accid.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Accid.hpp; path = src/pitch/Accid.hpp; sourceTree = "<group>"; };
 		43ABA502292423E8002AC1D4 /* Fifths.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Fifths.cpp; path = src/ton/Fifths.cpp; sourceTree = "<group>"; };
 		43ABA503292423E8002AC1D4 /* Enharmonic.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Enharmonic.hpp; path = src/pitch/Enharmonic.hpp; sourceTree = "<group>"; };
-		43ABA505292423E8002AC1D4 /* Accidental.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Accidental.cpp; path = src/pitch/Accidental.cpp; sourceTree = "<group>"; };
+		43ABA505292423E8002AC1D4 /* Accid.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Accid.cpp; path = src/pitch/Accid.cpp; sourceTree = "<group>"; };
 		43ABA506292423E8002AC1D4 /* Ton.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Ton.hpp; path = src/ton/Ton.hpp; sourceTree = "<group>"; };
 		43ABA507292423E8002AC1D4 /* Enharmonic.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Enharmonic.cpp; path = src/pitch/Enharmonic.cpp; sourceTree = "<group>"; };
 		43ABA51329242417002AC1D4 /* PSBag.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PSBag.cpp; sourceTree = "<group>"; };
@@ -884,8 +884,8 @@
 			children = (
 				436C6C4D2924023100152D8C /* NoteName.hpp */,
 				43ABA4FD292423C5002AC1D4 /* NoteName.cpp */,
-				43ABA501292423E8002AC1D4 /* Accidental.hpp */,
-				43ABA505292423E8002AC1D4 /* Accidental.cpp */,
+				43ABA501292423E8002AC1D4 /* Accid.hpp */,
+				43ABA505292423E8002AC1D4 /* Accid.cpp */,
 				437C73712BADD6D000E9478C /* Accids.hpp */,
 				437C73702BADD6D000E9478C /* Accids.cpp */,
 				432865412BA983CA00761737 /* AccidPair.hpp */,
@@ -941,7 +941,7 @@
 				43F9BE6B29CC696C00B0A7F8 /* Mode.hpp in Headers */,
 				430627BB2A44D33A0046FD99 /* CostADplus.hpp in Headers */,
 				43EFF3662B8E526C000CA4B2 /* WeberModal.hpp in Headers */,
-				43ABA50B292423E8002AC1D4 /* Accidental.hpp in Headers */,
+				43ABA50B292423E8002AC1D4 /* Accid.hpp in Headers */,
 				43F9BE6629CC423E00B0A7F8 /* ModeName.hpp in Headers */,
 				4342FD142926789C004E914F /* MidiNum.hpp in Headers */,
 				43723E932C47ABC2004DD860 /* pstrace.hpp in Headers */,
@@ -1159,7 +1159,7 @@
 				437790EB2D45552800FC7278 /* PSGridx.cpp in Sources */,
 				438EFD812A0D4C8600FF3733 /* PSOrder.cpp in Sources */,
 				4317D83C2D4123C6007C71C7 /* PSGridy.cpp in Sources */,
-				435081F529D6D76F00465943 /* Accidental.cpp in Sources */,
+				435081F529D6D76F00465943 /* Accid.cpp in Sources */,
 				439DBF302A4FFF6800565CC4 /* TestRankWeber.cpp in Sources */,
 				438A581429E049190073A32C /* PSVector.cpp in Sources */,
 				4308A7082A28DF0F007F7A55 /* TestState.cpp in Sources */,
@@ -1183,7 +1183,7 @@
 				43D9DB4C2B964412005F0A13 /* Weber_static.cpp in Sources */,
 				437790ED2D45552800FC7278 /* PSGridx.cpp in Sources */,
 				43ABA4FE292423C5002AC1D4 /* NoteName.cpp in Sources */,
-				43ABA50F292423E8002AC1D4 /* Accidental.cpp in Sources */,
+				43ABA50F292423E8002AC1D4 /* Accid.cpp in Sources */,
 				432865422BA983CA00761737 /* AccidPair.cpp in Sources */,
 				43F9BE6429CC423E00B0A7F8 /* ModeName.cpp in Sources */,
 				4342FD1229267895004E914F /* MidiNum.cpp in Sources */,
@@ -1251,7 +1251,7 @@
 				43FBEAC72930CEDD008FC486 /* NoteName.cpp in Sources */,
 				43F9BE6529CC423E00B0A7F8 /* ModeName.cpp in Sources */,
 				432586A72A40EBB30069D796 /* PSRational.cpp in Sources */,
-				43FBEAC82930CEDD008FC486 /* Accidental.cpp in Sources */,
+				43FBEAC82930CEDD008FC486 /* Accid.cpp in Sources */,
 				4346CB372A1FF62100756DE3 /* PSGlobal.cpp in Sources */,
 				430960602A0D03C10097487A /* AlgoName.cpp in Sources */,
 				43D7BAC02A27E31600570C47 /* PSD.cpp in Sources */,

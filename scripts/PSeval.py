@@ -952,11 +952,11 @@ class Spellew:
                  ps13_kpre=0, ps13_kpost=0, # parameters specific to PS13
                  nbtons=0,                  # nb of Tons in TonIndex
                  t1_costtype=pse.CTYPE_UNDEF, # 1st table
-                 t1_tonal=True, 
-                 t1_det=True, 
+                 t1_tonal=False, 
+                 t1_det=False, 
                  t2_costtype=pse.CTYPE_UNDEF, # 2d table 
                  t2_tonal=True, 
-                 t2_det=True, 
+                 t2_det=False, 
                  grid=pse.Grid_Rank,
                  global1=100, # if < 100, compute an intermediate list candidate globals,
                               # with the given percentagle of error,

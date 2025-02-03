@@ -32,7 +32,7 @@ template<typename Base, typename Derived>
 double PolymorphicComparable<Base, Derived>::dist(const Base& rhs) const
 {
     // check if the dynamic types match
-    assert(typeid(rhs) == typeid(Derived));   //   return 0;
+    assert(typeid(rhs) == typeid(Derived));   // or return 0;
 
     // cast to the concrete types; thanks to the check above this is safe
     const Derived& a = static_cast<const Derived&>(*this);

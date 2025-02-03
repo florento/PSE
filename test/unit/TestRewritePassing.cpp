@@ -8,7 +8,7 @@
 #include "gtest/gtest.h"
 
 #include "NoteName.hpp"
-#include "Accidental.hpp"
+#include "Accid.hpp"
 #include "ModeName.hpp"
 #include "Scale.hpp"
 #include "Ton.hpp"

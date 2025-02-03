@@ -15,7 +15,7 @@
 
 #include "pstrace.hpp"
 #include "NoteName.hpp"
-#include "Accidental.hpp"
+#include "Accid.hpp"
 #include "PWO.hpp"  // pitch without octave
 
 namespace pse {

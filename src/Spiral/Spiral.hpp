@@ -16,7 +16,7 @@
 #include <cmath> // = <math.h>
 
 #include "NoteName.hpp"
-#include "Accidental.hpp"
+#include "Accid.hpp"
 #include "Pitch.hpp"
 
 namespace pse {

@@ -13,18 +13,17 @@
 namespace pse {
 
 
-CostA::CostA(bool discount):
-_accid(0),
-_discount(discount)
+CostA::CostA(): // bool discount
+_accid(0)
+// _discount(discount)
 {
-    if (discount)
-        WARN("CostA: discount obsolete");
+//    if (discount) WARN("CostA: discount obsolete");
 }
 
 
 CostA::CostA(const CostA& rhs):
-_accid(rhs._accid),
-_discount(rhs._discount)
+_accid(rhs._accid)
+//_discount(rhs._discount)
 { }
 
 
@@ -34,10 +33,9 @@ CostA::~CostA()
 }
 
 
-
 std::shared_ptr<Cost> CostA::shared_zero() const
 {
-    return std::shared_ptr<Cost>(new CostA(_discount));
+    return std::shared_ptr<Cost>(new CostA()); // _discount
 }
 
 
@@ -116,6 +114,7 @@ bool CostA::updateAccid(const enum Accid& accid)
     }
 }
 
+
 // update cost when accident for the name was updated
 void CostA::update(const enum NoteName& name, const enum Accid& accid,
                    bool print, const Ton& gton, const Ton& lton)
@@ -124,40 +123,67 @@ void CostA::update(const enum NoteName& name, const enum Accid& accid,
         updateAccid(accid);
 }
 
-/*
-// update cost when accident for the name was updated
-void CostA::update(const enum NoteName& name, const enum Accid& accid,
-                   bool print, const Ton& gton, const Ton& lton)
+
+CostType CostA::type() const
 {
-    // second pass
-    // @todo revise this case
-    if (lton.defined())
-    {
-        //_dist += c.state().dist(lton);
-        //if (print && !(lton.accidDia(name) == accid))
-        // si l'on veut juger purement d'un point de vue tonal
-        // afin de déduire la meilleure tonalité locale,
-        // il vaut mieux ne plus se poser la question du print :
-        // !(gton.lead()  &&  gton.accidDia(name) == accid)
-        // (lton.accidDia(name) != accid)
-        if (!Accids::contained(accid, lton.accidScale(name)))
-        {
-            updateAccid(accid);
-        }
-    }
-    // first pass
-    // @todo suppr. optional discount for lead degree
-    else if (print)
-    {
-        // !(gton.lead()  &&  gton.accidDia(name) == accid)
-        // ((! _discount)  || (gton.accidDia(name) != accid))
-        if ((! _discount)  || !Accids::contained(accid, gton.accidScale(name)))
-        {
-            updateAccid(accid);
-        }
-    }
+//    if (_discount)
+//        return CostType::ACCIDlead;
+//    else
+        return CostType::ACCID;
 }
-*/
+
+
+void CostA::print(std::ostream& o) const
+{
+    o << _accid;
+}
+
+
+std::ostream& operator<<(std::ostream& o, const CostA& c)
+{
+    c.print(o);
+    return o;
+}
+
+
+} // end namespace pse
+
+
+
+
+// update cost when accident for the name was updated
+//void CostA::update(const enum NoteName& name, const enum Accid& accid,
+//                   bool print, const Ton& gton, const Ton& lton)
+//{
+//    // second pass
+//    // @todo revise this case
+//    if (lton.defined())
+//    {
+//        //_dist += c.state().dist(lton);
+//        //if (print && !(lton.accidDia(name) == accid))
+//        // si l'on veut juger purement d'un point de vue tonal
+//        // afin de déduire la meilleure tonalité locale,
+//        // il vaut mieux ne plus se poser la question du print :
+//        // !(gton.lead()  &&  gton.accidDia(name) == accid)
+//        // (lton.accidDia(name) != accid)
+//        if (!Accids::contained(accid, lton.accidScale(name)))
+//        {
+//            updateAccid(accid);
+//        }
+//    }
+//    // first pass
+//    // @todo suppr. optional discount for lead degree
+//    else if (print)
+//    {
+//        // !(gton.lead()  &&  gton.accidDia(name) == accid)
+//        // ((! _discount)  || (gton.accidDia(name) != accid))
+//        if ((! _discount)  || !Accids::contained(accid, gton.accidScale(name)))
+//        {
+//            updateAccid(accid);
+//        }
+//    }
+//}
+
 
 //void CostA::update(const PSC1& c, const PSEnum& e, const Ton& gton)
 //{
@@ -169,7 +195,8 @@ void CostA::update(const enum NoteName& name, const enum Accid& accid,
 //
 //    // update cost when accident for the name was updated
 //    // discount for lead degree
-//    if (c.printed() && !(gton.accidDia(name) == accid)) //!(gton.lead()  &&  gton.accidDia(name) == accid)
+//    if (c.printed() && !(gton.accidDia(name) == accid)) //!(gton.lead()
+//                    &&  gton.accidDia(name) == accid)
 //    {
 //        switch (accid)
 //        {
@@ -246,30 +273,3 @@ void CostA::update(const enum NoteName& name, const enum Accid& accid,
 //
 //    // complete the update
 //}
-
-
-CostType CostA::type() const
-{
-    if (_discount)
-        return CostType::ACCIDlead;
-    else
-        return CostType::ACCID;
-}
-
-
-void CostA::print(std::ostream& o) const
-{
-    o << _accid;
-}
-
-
-std::ostream& operator<<(std::ostream& o, const CostA& c)
-{
-    c.print(o);
-    return o;
-}
-
-
-} // end namespace pse
-
-

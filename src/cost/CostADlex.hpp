@@ -27,7 +27,8 @@ namespace pse {
 class CostADlex : public CostAD, // update
                   public PolymorphicComparable<Cost, CostADlex>
 {
-public:
+    
+public: // construction
     
     /// null cost.
     CostADlex();
@@ -37,9 +38,21 @@ public:
     
     /// distructor
     virtual ~CostADlex();
+
+    /// create a new null cost value.
+    virtual std::shared_ptr<Cost> shared_zero() const override;
+    
+    /// create a shared clone of this cost.
+    virtual std::shared_ptr<Cost> shared_clone() const override;
+    
+    // create a smart clone of this cost.
+    // virtual std::unique_ptr<Cost> unique_clone() const override;
+    
+public: // operators, update
     
     /// cost equality.
     /// @param rhs a cost to compare to.
+    /// @warning same as CostAD
     bool operator==(const CostADlex& rhs) const;
     
     /// a distance value, in percent of the bigger cost.
@@ -54,15 +67,6 @@ public:
     /// @param rhs a cost to add.
     CostADlex& operator+=(const CostADlex& rhs);
 
-    /// create a new null cost value.
-    virtual std::shared_ptr<Cost> shared_zero() const override;
-    
-    /// create a shared clone of this cost.
-    virtual std::shared_ptr<Cost> shared_clone() const override;
-    
-    // create a smart clone of this cost.
-    // virtual std::unique_ptr<Cost> unique_clone() const override;
-    
     /// update this cost for doing a transition renaming one note (single
     /// or in chord) with the given parameters and in a given hypothetic global
     /// local tonalities.
@@ -76,6 +80,8 @@ public:
                         const enum Accid& accid,
                         bool print,
                         const Ton& gton, const Ton& lton = Ton()) override;
+
+public: // access, debug
     
     /// Cost type of this const value.
     virtual CostType type() const override;

@@ -18,7 +18,7 @@
 #include <vector>
 
 #include "pstrace.hpp"
-#include "Accidental.hpp"
+#include "Accid.hpp"
 #include "PSConfig0.hpp"
 #include "PSEnum.hpp"
 

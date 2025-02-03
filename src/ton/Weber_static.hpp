@@ -20,7 +20,7 @@
 
 #include "pstrace.hpp"
 #include "NoteName.hpp"
-//#include "Accidental.hpp"
+//#include "Accid.hpp"
 //#include "Fifthspse::Weber
 //#include "KeyFifth.hpp"
 #include "Ton.hpp"

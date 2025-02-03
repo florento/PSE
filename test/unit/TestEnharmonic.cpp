@@ -8,7 +8,7 @@
 #include "gtest/gtest.h"
 
 #include "NoteName.hpp"
-#include "Accidental.hpp"
+#include "Accid.hpp"
 #include "MidiNum.hpp"
 #include "Enharmonic.hpp"
 

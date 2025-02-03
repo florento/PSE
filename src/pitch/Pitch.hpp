@@ -17,7 +17,7 @@
 
 #include "pstrace.hpp"
 #include "NoteName.hpp"    // in PSE
-#include "Accidental.hpp"  // in PSE
+#include "Accid.hpp"  // in PSE
 #include "MidiNum.hpp"     // in PSE (for def midi_to_octave)
 #include "PWO.hpp"         // in PSE (pitch without octave)
 

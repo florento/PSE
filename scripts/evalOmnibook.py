@@ -64,11 +64,11 @@ skip = []
 # PSE: global1 = 0..100 (%)
 def eval_Omnibook(output_dir='', tablename='',            
                   kpre=0, kpost=0, tons=0, 
-                  costtype1=ps.pse.CTYPE_UNDEF, tonal1=True, det1=True, 
+                  costtype1=ps.pse.CTYPE_UNDEF, tonal1=True, det1=False, 
                   global1=100, grid=ps.pse.Grid_Rank, 
-                  costtype2=ps.pse.CTYPE_UNDEF, tonal2=True, det2=True,
+                  costtype2=ps.pse.CTYPE_UNDEF, tonal2=True, det2=False,
                   dflag=True, mflag=True, csflag=False):
-    """eval the whole FRB corpus with given algo and parameters"""
+    """eval the whole corpus with given algo and parameters"""
     """output_dir: where files will be written"""
     """tablename: filename of csv table"""
     """kpre: parameter specific to PS13"""
@@ -109,7 +109,7 @@ def eval_Omnibookitem(name, output_dir='',
                  global1=100, grid=ps.pse.Grid_Rank,
                  costtype2=ps.pse.CTYPE_UNDEF, tonal2=True, det2=True,      
                  dflag=True, mflag=False, csflag=False):   
-    """eval one item of the FRB corpus with given algo and parameters"""
+    """eval one item of the corpus with given algo and parameters"""
     """name: filename of item (prefix) in the dataset"""
     """output_dir: where files will be written"""
     """kpre: parameter specific to PS13"""

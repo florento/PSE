@@ -17,7 +17,7 @@
 
 #include "pstrace.hpp"
 #include "NoteName.hpp"
-#include "Accidental.hpp"
+#include "Accid.hpp"
 #include "Accids.hpp"
 //#include "Pitch.hpp"
 #include "KeyFifth.hpp"

@@ -15,7 +15,7 @@ Spelli::Spelli(size_t nbton, bool dflag):
 _index(new TonIndex(nbton)),
 //_seed(nullptr),
 //_seedAdiscount(true), // discount obsolete for CostA
-_seedAnodiscount(false),
+_seedA(),
 _seedADplus(),
 _seedADlex(),
 _debug(dflag),
@@ -29,7 +29,7 @@ _uton(new Ton()) // undef
 
 Spelli::Spelli(std::shared_ptr<TonIndex> id, bool dflag):
 _index(id), // copy
-_seedAnodiscount(false),
+_seedA(),
 _seedADplus(),
 _seedADlex(),
 _debug(dflag),
@@ -217,10 +217,10 @@ Cost& Spelli::sampleCost(CostType ct)
     {
         case CostType::ACCIDlead:
             WARN("Speller: discount obsolete for CostA (ignored)");
-            return _seedAnodiscount;
+            return _seedA;
             
         case CostType::ACCID:
-            return _seedAnodiscount;
+            return _seedA;
             
         case CostType::ADplus:
             return _seedADplus;
@@ -230,7 +230,7 @@ Cost& Spelli::sampleCost(CostType ct)
             
         default:
             ERROR("Speller sampleCost unexpected code {}", ct);
-            return _seedAnodiscount;
+            return _seedA;
     }
 }
 

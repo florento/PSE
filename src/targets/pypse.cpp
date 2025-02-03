@@ -12,7 +12,7 @@
 #include "pybind11/stl.h"
 
 #include "NoteName.hpp"
-#include "Accidental.hpp"
+#include "Accid.hpp"
 #include "ModeName.hpp"
 #include "Ton.hpp"
 #include "Speller.hpp"
@@ -95,7 +95,7 @@ PYBIND11_MODULE(pse, m)
     py::enum_<enum pse::GridAlgo>(m, "GridAlgo", "Algo for Grid Construction")
         .value("Grid_Best",  pse::GridAlgo::Best, "Greedy algo with best costs")
         .value("Grid_Rank",  pse::GridAlgo::Rank, "Greedy algo with ranks")
-        .value("Grid_Exhaustive",  pse::GridAlgo::Exhaustive, "est path search")
+        .value("Grid_Exhaustive",  pse::GridAlgo::Exhaustive, "best path search")
         .value("Grid_Undef", pse::GridAlgo::Undef, "Undef")
         .export_values();
     
