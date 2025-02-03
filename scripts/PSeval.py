@@ -1175,7 +1175,7 @@ class Spellew:
                 gt = sp.global_ton(i)
                 if compare_key(k0, gt):
                     goodgtindex = i
-                    present = True
+                    trueTonePresent = True
                 elif not(compare_key_pitches(k0, gt)):
                     onlyEnharm = False
                     return (sp.global_ton(0), sp.iglobal_ton(0))
