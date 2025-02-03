@@ -92,7 +92,7 @@ void PSB::init(const Cost& seed, const Ton& ton, const Ton& lton, bool tonal)
         assert(c);
         assert(_enum.first() <= c->id());
         assert(c->id() <= _enum.stop());
-        q.pop(); // remove c
+        q.pop(); // remove cg
         
         // the path c is complete
         if (c->id() == _enum.stop())

@@ -44,73 +44,59 @@ std::shared_ptr<Cost> CostADlex::shared_clone() const
 //}
 
 
-bool CostADlex::operator==(const CostADlex& rhs) const
-{
-    return CostAD::operator==(rhs);
-}
+//bool CostADlex::equal(const CostADlex& rhs) const
+//{
+//    return CostAD::equal(rhs);
+//}
 
 
-double CostADlex::dist(const CostADlex& rhs) const
+bool CostADlex::smaller(const Cost& rhs) const
 {
-    if (_accid == rhs._accid)
+    const CostADlex& rhs_ADlex = dynamic_cast<const CostADlex&>(rhs);
+    if (_accid == rhs_ADlex._accid)
     {
-        if (_dist == rhs._dist)
+        if (_dist == rhs_ADlex._dist)
         {
-            if (_chromharm == rhs._chromharm)
-            {
-                
-                if (_color == rhs._color)
-                    return distCost((double) _cflat, (double) rhs._cflat);
-                else
-                    return distCost((double) _color, (double) rhs._color);
-            }
-            else
-                return distCost((double)_chromharm , (double) rhs._chromharm);
+            return tiebreak_smaller(rhs_ADlex);
         }
         else
-            return distCost((double) _dist, (double) rhs._dist);
+            return (_dist < rhs_ADlex._dist);
     }
     else
-        return distCost((double) _accid, (double) rhs._accid);
+        return (_accid < rhs_ADlex._accid);
 }
 
 
-bool CostADlex::operator<(const CostADlex& rhs) const
+Cost& CostADlex::add(const Cost& rhs)
 {
-    if (_accid == rhs._accid)
-    {
-        if (_dist == rhs._dist)
-        {
-            if (_chromharm == rhs._chromharm)
-            {
-                if (_color == rhs._color)
-                    return (_cflat < rhs._cflat);
-                else
-                    return (_color < rhs._color);
-            }
-            else
-                return (_chromharm < rhs._chromharm);
-        }
-        else
-            return (_dist < rhs._dist);
-    }
-    else
-        return (_accid < rhs._accid);
-}
-
-
-CostADlex& CostADlex::operator+=(const CostADlex& rhs)
-{
-    CostAD::operator+=(rhs);
+    // const CostADlex& rhs_ADlex = dynamic_cast<const CostADlex&>(rhs);
+    CostAD::add(rhs);
     return *this;
 }
 
 
-void CostADlex::update(const enum NoteName& name, const enum Accid& accid,
-                       bool print,
-                       const Ton& gton, const Ton& lton)
+/// @todo TBR sum of dists ?
+double CostADlex::pdist(const Cost& rhs) const
 {
-    CostAD::update(name, accid, print, gton, lton);
+    const CostADlex& rhs_ADlex = dynamic_cast<const CostADlex&>(rhs);
+    if (_accid == rhs_ADlex._accid)
+    {
+        if (_dist == rhs_ADlex._dist)
+        {
+            return tiebreak_pdist(rhs_ADlex);
+        }
+        else
+            return Cost::dist((double) _dist, (double) rhs_ADlex._dist);
+    }
+    else
+        return Cost::dist((double) _accid, (double) rhs_ADlex._accid);
+}
+
+
+bool CostADlex::update(const enum NoteName& name, const enum Accid& accid,
+                       bool print, const Ton& gton, const Ton& lton)
+{
+    return CostAD::update(name, accid, print, gton, lton);
 }
 
 
@@ -128,7 +114,7 @@ void CostADlex::print(std::ostream& o) const
 
 std::ostream& operator<<(std::ostream& o, const CostADlex& c)
 {
-    c.CostAD::print(o);
+    c.print(o);
     return o;
 }
 

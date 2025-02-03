@@ -1,6 +1,5 @@
 //
 //  PSConfig0.hpp
-//  squant2
 //
 //  Created by Florent Jacquemard on 15/02/2021.
 //  Copyright © 2021 Florent Jacquemard. All rights reserved.
@@ -237,11 +236,6 @@ private:
     // void succ2(PSEnum& e, const Ton& ton, const Ton& lton, PSCQueue& q) const;
 
 };
-
-
-
-
-
 
 } // namespace pse
 

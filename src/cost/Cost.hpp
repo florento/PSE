@@ -49,35 +49,61 @@ public: // operators, update
 
     /// equality (mandatory).
     /// @param rhs another cost to compare to.
-    virtual bool operator==(const Cost& rhs) const = 0;
+    bool operator==(const Cost& rhs) const;
     
     /// negation of equality.
     /// @param rhs another cost to compare to.
-    virtual bool operator!=(const Cost& rhs) const;
+    bool operator!=(const Cost& rhs) const;
     
     /// a distance value, in percent of the bigger cost.
     /// used for approximate equality.
-    virtual double dist(const Cost& rhs) const = 0;
+    double dist(const Cost& rhs) const;
     
     /// strictly less (mandatory).
     /// @param rhs another cost to compare to.
-    virtual bool operator<(const Cost& rhs) const = 0;
+    bool operator<(const Cost& rhs) const;
     
     /// negation of >.
     /// @param rhs another cost to compare to.
-    virtual bool operator<=(const Cost& rhs) const;
+    bool operator<=(const Cost& rhs) const;
     
     /// inverse (commutation) of <.
     /// @param rhs another cost to compare to.
-    virtual bool operator>(const Cost& rhs) const;
+    bool operator>(const Cost& rhs) const;
     
     /// negation of <.
     /// @param rhs another cost to compare to.
-    virtual bool operator>=(const Cost& rhs) const;
+    bool operator>=(const Cost& rhs) const;
     
     /// cumulated sum operator. update this cost by adding rhs.
     /// @param rhs a cost to add.
-    virtual Cost& operator+=(const Cost& rhs) = 0;
+    Cost& operator+=(const Cost& rhs);
+
+protected: // operators to be defined in derived classes
+    
+    /// cost equality.
+    /// @param rhs another cost to compare to.
+    virtual bool equal(const Cost& rhs) const = 0;
+
+    /// a distance value, in percent of the bigger cost.
+    /// used for approximate equality.
+    virtual double pdist(const Cost& rhs) const = 0;
+    
+    /// strict inequality of costs.
+    /// @param rhs another cost to compare to.
+    virtual bool smaller(const Cost& rhs) const = 0;
+
+    /// cumulated sum of costs. update this cost by adding rhs.
+    /// @param rhs a cost to add.
+    virtual Cost& add(const Cost& rhs) = 0;
+    
+    /// convenience function.
+    /// @param lhs first value. must be positive or null.
+    /// @param rhs second value. must be positive or null.
+    /// @return the difference between lhs amd rhs, in percent of the biggest one.
+    static double dist(const double lhs, const double rhs);
+    
+public: // operators, update
     
     /// update this cost for doing a transition renaming one note (single
     /// or in chord) with the given parameters and in a given hypothetic global
@@ -89,7 +115,7 @@ public: // operators, update
     /// @param gton conjectured main (global) tonality (key signature).
     /// @param lton conjectured local tonality or undef tonality by default.
     /// not known.
-    virtual void update(const enum NoteName& name,
+    virtual bool update(const enum NoteName& name,
                         const enum Accid& accid,
                         bool print,
                         const Ton& gton, const Ton& lton = Ton()) = 0;
@@ -99,16 +125,11 @@ public: // access and debug
     /// Cost type of this const value.
     virtual CostType type() const = 0;
     
-    virtual void print(std::ostream& o) const = 0;
+    virtual void print(std::ostream& o) const;
     
 };
 
 
-/// convenience function.
-/// @param lhs first value. must be positive or null.
-/// @param rhs second value. must be positive or null.
-/// @return the difference between lhs amd rhs, in percent of the biggest one.
-double distCost(const double lhs, const double rhs);
 
 std::ostream& operator<<(std::ostream& o, const Cost& c);
 

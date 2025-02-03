@@ -25,23 +25,27 @@
 namespace pse {
 
 
-/// helper class for redirecting the 2 needed binary comparison operators
-/// to the dynamic type class (descendant).
+/// helper class for redirecting the needed operators
+/// to the dynamic type class (descendant),
+/// following the Curiously Recurring Template.
 /// @see https://stackoverflow.com/questions/24249327/how-to-see-if-two-polymorphic-objects-are-equal
-template<typename Base, typename Derived>
-struct PolymorphicComparable : public Base
+template<typename Derived>
+struct PolymorphicCost
 {
-public:
     
-    bool operator==(const Base& rhs) const override;
+protected:
     
-    double dist(const Base& rhs) const override;
+    /// override Cost::equal
+    bool equal(const Cost& rhs) const;
+    
+    /// override Cost::smaller
+    bool smaller(const Cost& rhs) const;
 
-    bool operator<(const Base& rhs) const override;
+    /// override Cost::add
+    Cost& add(const Cost& rhs);
 
-    Base& operator+=(const Base& rhs) override;
-    
-    void print(std::ostream& o) const override;
+    /// override Cost::pdist
+    double pdist(const Cost& rhs) const;
     
 };
 

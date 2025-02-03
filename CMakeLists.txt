@@ -137,7 +137,7 @@ set(SOURCES
   src/general/Rational.cpp
   src/general/utils.cpp
   src/pitch/NoteName.cpp
-  src/pitch/Accidental.cpp
+  src/pitch/Accid.cpp
   src/pitch/MidiNum.cpp
   src/pitch/Enharmonic.cpp
   src/pitch/PWO.cpp

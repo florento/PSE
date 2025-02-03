@@ -15,20 +15,14 @@ namespace pse {
 
 
 CostAD::CostAD():
-_accid(0),
-_dist(0),
-_chromharm(0),
-_color(0),
-_cflat(0)
+CostA(),
+_dist(0)
 { }
 
 
 CostAD::CostAD(const CostAD& rhs):
-_accid(rhs._accid),
-_dist(rhs._dist),
-_chromharm(rhs._chromharm),
-_color(rhs._color),
-_cflat(rhs._cflat)
+CostA(rhs),
+_dist(rhs._dist)
 { }
 
 
@@ -65,68 +59,27 @@ CostAD::~CostAD()
 //}
 
 
-//bool CostAD::operator==(const CostAD& rhs) const
-//{
-//    return (_accid == rhs._accid && _dist == rhs._dist);
-//}
-
-bool CostAD::operator==(const CostAD& rhs) const
+bool CostAD::equal(const Cost& rhs) const
 {
-    return (_accid == rhs._accid and
-            _dist == rhs._dist and
-            _chromharm == rhs._chromharm and
-            _color == rhs._color and
-            _cflat == rhs._cflat);
+    const CostAD& rhs_AD = dynamic_cast<const CostAD&>(rhs);
+    return (CostA::equal(rhs_AD) and _dist == rhs_AD._dist);
 }
 
 
-CostAD& CostAD::operator+=(const CostAD& rhs)
+Cost& CostAD::add(const Cost& rhs)
 {
-    _accid += rhs._accid;
-    _dist += rhs._dist;
-    _chromharm += rhs._chromharm;
-    _color += rhs._color;
-    _cflat += rhs._cflat;
+    const CostAD& rhs_AD = dynamic_cast<const CostAD&>(rhs);
+    CostA::add(rhs_AD);
+    _dist += rhs_AD._dist;
     return *this;
 }
 
 
-//CostAD operator+(const CostAD& c1, const CostAD& c2)
-//{
-//    return c1.operator+(c2);
-//}
-
-void CostAD::update(const enum NoteName& name,
-                    const enum Accid& accid,
-                    bool print,
-                    const Ton& gton, const Ton& lton)
+bool CostAD::updateDist(const enum NoteName& name, const enum Accid& accid,
+                        bool print, const Ton& gton, const Ton& lton)
 {
-    // same as CostA
-    if (print)
-    {
-        switch (accid)
-        {
-            case Accid::DoubleSharp:
-            case Accid::DoubleFlat:
-                _accid += 2;
-                break;
-                
-            case Accid::Sharp:
-            case Accid::Flat:
-            case Accid::Natural:
-                _accid += 1;
-                break;
-                    
-            default:
-            {
-                ERROR("PSC: unexpected accidental"); // accid
-                break;
-            }
-        }
-    }
-    
     // count accidental different from lton
-    if (lton.defined() && (!Accids::contained(accid, lton.accidScale(name))))
+    if (lton.defined() and (!Accids::contained(accid, lton.accidScale(name))))
     {
         switch (accid)
         {
@@ -143,38 +96,70 @@ void CostAD::update(const enum NoteName& name,
 
             default:
             {
-                ERROR("PSC: unexpected accidental"); // accid
+                ERROR("updateDist: unexpected accidental"); // accid
                 break;
             }
         }
+        return true;
     }
+    else
+    {
+        return false;
+    }
+}
 
+
+bool CostAD::updateChroma(const enum NoteName& name, const enum Accid& accid,
+                        bool print, const Ton& gton, const Ton& lton)
+{
     // count accid not in the chromatic harmonic scale
     //    if (print && !(lton.chromatic().contains(name,accid)))
-    if (print && !Accids::contained(accid, lton.chromaton().accidScale(name)))
+    if (lton.undef())
+    {
+        return CostA::updateChroma(name, accid, print, gton, lton);
+    }
+    else if (print and
+             !Accids::contained(accid, lton.chromaton().accidScale(name)))
     {
         _chromharm += 1;
+        return true;
     }
-    
-    // color of accident differs from color of global ton
-    int ks = gton.fifths();
-    // const enum Accid& a = c.accidental();
-    if (((ks >= 0) && (flat(accid))) || ((ks <=  0) && (sharp(accid))))
+    else
     {
-        _color += 1;
+        return false;
     }
-
-    // count  Cb B# E# Fb.
-    if (print && (!Accids::contained(accid, gton.accidScale(name))) &&
-            (((name == NoteName::C) && (accid == Accid::Flat)) ||
-             ((name == NoteName::B) && (accid == Accid::Sharp)) ||
-             ((name == NoteName::F) && (accid == Accid::Flat)) ||
-             ((name == NoteName::E) && (accid == Accid::Sharp))))
-    {
-        ++_cflat;
-    }
-    
 }
+
+
+bool CostAD::update(const enum NoteName& name,
+                    const enum Accid& accid,
+                    bool print,
+                    const Ton& gton, const Ton& lton)
+{
+    bool reta = CostA::update(name, accid, print, gton, lton); // updateAccid
+    bool retd = updateDist(name, accid, print, gton, lton);
+
+    return reta or retd;
+}
+
+
+
+void CostAD::print(std::ostream& o) const
+{
+    o << "acc=" << _accid;
+    o << " dst=" << _dist;
+    o << "chr=" << _chromharm;
+    o << " col=" << _color;
+    o << " cf=" << _cflat;
+}
+
+
+std::ostream& operator<<(std::ostream& o, const CostAD& c)
+{
+    c.print(o);
+    return o;
+}
+
 
 // version (TENOR paper)
 void CostAD::update_tonale(const enum NoteName& name,
@@ -415,6 +400,9 @@ void CostAD::update99(const enum NoteName& name,
 }
 
 
+} // end namespace pse
+
+
 
 //void CostAD::update(const PSC1& c, const PSEnum& e, const Ton& gton)
 //{
@@ -511,25 +499,3 @@ void CostAD::update99(const enum NoteName& name,
 //    // distance to conjectured local ton.
 //    _dist += c.state().dist(lton);
 //}
-
-
-void CostAD::print(std::ostream& o) const
-{
-    o << "accid=" << _accid;
-    o << " dist=" << _dist;
-    o << "chromarm=" << _chromharm;
-    o << " color=" << _color;
-    o << " cflat=" << _cflat;
-}
-
-
-std::ostream& operator<<(std::ostream& o, const CostAD& c)
-{
-    c.print(o);
-    return o;
-}
-
-
-} // end namespace pse
-
-

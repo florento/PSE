@@ -165,8 +165,7 @@ private:
     /// allocate every config reached by one transition from the given config,
     /// when reading one pitch or several simultaneous pitchs,
     /// and push it to the given queue.
-    /// @param c source configuration.
-    /// this config.
+    /// @param c source configuration. this config.
     /// @param gton conjectured main (global) tonality (key signature).
     /// @param lton conjectured local tonality. ignored if algo is not PSE1.
     /// @param q priority queue receiving the target configs.

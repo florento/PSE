@@ -7,7 +7,7 @@
 
 #include <iostream>
 
-#include "pstrace.hpp"`
+#include "pstrace.hpp"
 #include "PSE.hpp"
 #include "PS13.hpp"
 #include "PS14.hpp"
@@ -187,12 +187,12 @@ int main(int argc, const char* argv[])
 
     std::cout << "spelling " << sp.size() << " notes" << std::endl;
     int ks = spellKE(sp,
-                  // cost                   modal  deterministic
-                     pse::CostType::ACCID,  false, true,
-                  // cost                   tonal  deterministic
-                     pse::CostType::ADplus, true, true,
+                  // cost                   modal  exhaustive
+                     pse::CostType::ACCID,  false, false,
+                  // cost                   tonal  exhaustive
+                     pse::CostType::ADplus, true,  false,
                   // global1 grid algo
-                     100 ,      GridAlgo::Exhaustive);
+                     100,      GridAlgo::Exhaustive);
 
     if (ks == KeyFifth::UNDEF)
     {

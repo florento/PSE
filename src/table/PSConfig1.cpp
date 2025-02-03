@@ -30,7 +30,8 @@ _print(false)
     _id = c->id()+1; // next note in enum
     // assert(_id <= e.stop());
     assert(defined(accid));
-    // the given accidental corresponds to the chroma of input note and given name.
+    // the given accidental corresponds to the chroma of input note
+    // and given name.
     assert(accid == MidiNum::accid(_midi%12, name));
 
     // update cost

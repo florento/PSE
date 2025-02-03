@@ -16,7 +16,7 @@
 
 #include "pstrace.hpp"
 #include "Cost.hpp"
-#include "Costt.hpp"
+// #include "Costt.hpp"
 
 
 namespace pse {
@@ -27,7 +27,7 @@ class PSC2;
 
 
 /// measure of cost defined by the cumulated number of printed accidentals.
-class CostA : public PolymorphicComparable<Cost, CostA>
+class CostA : public Cost // public PolymorphicCost<CostA>
 {
     
 public: // construction
@@ -35,7 +35,6 @@ public: // construction
     /// null cost.
     // @param discount apply or not a discount (during update) for accidentals
     // in the assumed  scale (lead degrees).
-    // @warning discount is obsolete (ignored).
     CostA(); // bool discount=false
     
     /// copy constructor.
@@ -57,27 +56,46 @@ public: // construction
     /// create a smart clone of this cost.
     std::unique_ptr<Cost> unique_clone() const;
     
-public: // operators, update
+protected: // operators
 
     /// cost equality.
     /// @param rhs a cost to compare to.
-    bool operator==(const CostA& rhs) const;
-    
-    /// a distance value, in percent of the smaller cost.
-    /// used for approximate equality.
-    double dist(const CostA& rhs) const;
-    
+    bool equal(const CostA& rhs) const;
+
+    /// cost equality.
+    /// @param rhs a cost to compare to.
+    bool equal(const Cost& rhs) const override;
+        
+    // equality for tie-breaking members.
+    // @param rhs a cost to compare to.
+    bool tiebreak_equal(const CostA& rhs) const;
+
     /// cost inequality.
     /// @param rhs a cost to compare to.
-    bool operator<(const CostA& rhs) const;
+    bool smaller(const Cost& rhs) const override;
     
+    // inequality for tie-breaking members.
+    // @param rhs a cost to compare to.
+    bool tiebreak_smaller(const CostA& rhs) const;
+
     /// cumulated sum operator. update this cost by adding rhs.
     /// @param rhs a cost to add.
-    virtual CostA& operator+=(const CostA& rhs);
+    virtual CostA& add(const CostA& rhs);
+
+    /// cumulated sum operator. update this cost by adding rhs.
+    /// @param rhs a cost to add.
+    virtual Cost& add(const Cost& rhs) override;
+
+    /// a distance value, in percent of the smaller cost.
+    /// used for approximate equality.
+    double pdist(const Cost& rhs) const override;
     
-    // null cost value.
-    // CostA zero() const override { return CostA(); }
-    
+    // distance for tie-breaking members.
+    // @param rhs a cost to compare to.
+    double tiebreak_pdist(const CostA& rhs) const;
+
+public: // update
+
     /// update this cost for doing a transition renaming one note (single
     /// or in chord) with the given parameters and in a given hypothetic global
     /// local tonalities.
@@ -89,16 +107,81 @@ public: // operators, update
     /// ignored for CostA.
     /// @param lton conjectured local tonality or undef tonlity if it is
     /// unknown. ignored for CostA.
-    void update(const enum NoteName& name,
+    /// @return wether an update was effectively performed.
+    bool update(const enum NoteName& name,
                 const enum Accid& accid,
                 bool print,
                 const Ton& gton, const Ton& lton = Ton()) override;
 
+protected: // update member
+
+    /// update the member accid of this cost with the given values.
+    /// @param name chosen name for the received pitch.
+    /// @param accid chosen alteration for the received pitch.
+    /// @param print whether the accidental must be printed in score.
+    /// @param gton conjectured main (global) tonality (key signature).
+    /// ignored for CostA.
+    /// @param lton conjectured local tonality or undef tonlity if it is
+    /// unknown. ignored for CostA.
+    virtual bool updateAccid(const enum NoteName& name,
+                             const enum Accid& accid,
+                             bool print,
+                             const Ton& gton, const Ton& lton = Ton());
+    
+    /// update the member chromharm of this cost with the given values.
+    /// @param name chosen name for the received pitch.
+    /// @param accid chosen alteration for the received pitch.
+    /// @param print whether the accidental must be printed in score.
+    /// @param gton conjectured main (global) tonality (key signature).
+    /// ignored for CostA.
+    /// @param lton conjectured local tonality or undef tonlity if it is
+    /// unknown. ignored for CostA.
+    /// @return wether an update was effectively performed.
+    virtual bool updateChroma(const enum NoteName& name,
+                              const enum Accid& accid,
+                              bool print,
+                              const Ton& gton, const Ton& lton = Ton());
+
+    /// update the member color of this cost with the given values.
+    /// @param name chosen name for the received pitch.
+    /// @param accid chosen alteration for the received pitch.
+    /// @param print whether the accidental must be printed in score.
+    /// @param gton conjectured main (global) tonality (key signature).
+    /// ignored for CostA.
+    /// @param lton conjectured local tonality or undef tonlity if it is
+    /// unknown. ignored for CostA.
+    /// @return wether an update was effectively performed.
+    virtual bool updateColor(const enum NoteName& name,
+                             const enum Accid& accid,
+                             bool print,
+                             const Ton& gton, const Ton& lton = Ton());
+
+    /// update the member cflat for the received pitch.
+    /// @param accid chosen alteration for the received pitch.
+    /// @param print whether the accidental must be printed in score.
+    /// @param gton conjectured main (global) tonality (key signature).
+    /// ignored for CostA.
+    /// @param lton conjectured local tonality or undef tonlity if it is
+    /// unknown. ignored for CostA.
+    /// @return wether an update was effectively performed.
+    virtual bool updateCflat(const enum NoteName& name,
+                             const enum Accid& accid,
+                             bool print,
+                             const Ton& gton, const Ton& lton = Ton());
+        
 public: // access and debug
 
     /// accessor for debug.
     inline size_t get_accid() const { return _accid; }
 
+    inline size_t get_chromharm() const { return _chromharm; }
+
+    /// accessor for debug.
+    inline size_t get_color() const { return _color; }
+
+    /// accessor for debug.
+    inline size_t get_cflat() const { return _cflat; }
+    
     /// Cost type of this const value.
     virtual CostType type() const override;
     
@@ -110,15 +193,17 @@ protected: // data
     /// cumulated number of printed accidentals.
     size_t _accid; // unsigned int
     
-    // apply or not a discount (during update)
-    // for accidentals in the assumed scale (lead degrees)
-    // @todo RM obsolete (replaced by option deterministic / exhaustive)
-    // bool _discount;
-        
-protected: // convenience function
+    /// is the accid present in the chromatic harmonic scale?
+    /// for tie-breaking.
+    size_t _chromharm;
+    
+    /// cumulated number of accidentals with color different from global ton.
+    /// for tie-breaking.
+    size_t _color;
 
-    /// @return wether update went correctly.
-    bool updateAccid(const enum Accid& accid);
+    /// cumulated number of printed and non lead Cb B# E# Fb.
+    /// for tie-breaking.
+    size_t _cflat;
     
 };
 

@@ -448,17 +448,20 @@ double Speller::duration(clock_t start)
     return ((double)(clock() - start)/CLOCKS_PER_SEC * 1000);
 }
 
+
 void Speller::printGrid(std::ostream& o) const
 {
     if (_grid)
         _grid->print(o);
 }
 
+
 void Speller::printGrid_pybind() const
 {
     if (_grid)
         _grid->print(std::cout);
 }
+
 
 void Speller::writeGrid(const std::string& filename) const
 {

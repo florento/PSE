@@ -15,8 +15,8 @@
 #include <memory>
 
 #include "pstrace.hpp"
-#include "Cost.hpp"
-#include "Costt.hpp"
+#include "CostA.hpp"
+// #include "Costt.hpp"
 
 
 namespace pse {
@@ -36,7 +36,7 @@ class PSC2;
 /// - class CostADplus : public PolymorphicComparable<CostAD, CostADplus>
 /// - class CostADlex : public PolymorphicComparable<CostAD, CostADlex>
 /// @todo inherit from CostA ?
-class CostAD // public PolymorphicComparable<Cost, CostAD>
+class CostAD : public CostA // public PolymorphicCost<CostAD>
 {
     
 public: // construction
@@ -63,45 +63,38 @@ public: // construction
     // create a smart clone of this cost.
     // virtual std::unique_ptr<Cost> unique_clone() const override;
     
-public: // operators, update
+protected: // operators, update
     
     // cost equality.
     // @param rhs a cost to compare to.
-    /// @warning shadowing == of Cost.
-    virtual bool operator==(const CostAD& rhs) const;
+    bool equal(const Cost& rhs) const override;
+    
+    /// cumulated sum operator. update this cost by adding rhs.
+    /// @param rhs a cost to add.
+    Cost& add(const Cost& rhs) override;
     
     // a distance value, in percent of the bigger cost.
     // used for approximate equality.
     // @todo RM already defined in Cost
-    // virtual double dist(const CostAD& rhs) const = 0;
-    
-    // cost inequality.
-    // @param rhs a cost to compare to.
-    // @todo RM already defined in Cost
-    // virtual bool operator<(const CostAD& rhs) const = 0;
-    
-    /// cumulated sum operator. update this cost by adding rhs.
-    /// @param rhs a cost to add.
-    /// @warning shadowing += of Cost.
-    virtual CostAD& operator+=(const CostAD& rhs);
-    
-    // null cost value.
-    // CostAD zero() const override { return CostAD(); }
+    // virtual double pdist(const CostAD& rhs) const = 0;
+       
+public: // update
     
     /// update this cost for doing a transition renaming one note (single
     /// or in chord) with the given parameters and in a given hypothetic global
     /// local tonalities.
-    /// @param name chosen name for the received pitch, in 0..6 (0 is 'C', 6 is 'B').
+    /// @param name chosen name for the received pitch,
+    /// in 0..6 (0 is 'C', 6 is 'B').
     /// @param accid chosen alteration for the received pitch, in -2..2.
     /// @param print whether the accidental must be printed in score.
     /// @param gton conjectured main (global) tonality (key signature).
     /// @param lton conjectured local tonality or undef tonlity if it is
     /// not known.
-    virtual void update(const enum NoteName& name,
-                        const enum Accid& accid,
-                        bool print,
-                        const Ton& gton, const Ton& lton = Ton());
-    
+    /// @return wether an update was effectively performed.
+    bool update(const enum NoteName& name,
+                const enum Accid& accid,
+                bool print,
+                const Ton& gton, const Ton& lton = Ton()) override;
     
     /// version of the TENOR article
     virtual void update_tonale(const enum NoteName& name,
@@ -115,41 +108,51 @@ public: // operators, update
                           bool print,
                           const Ton& gton, const Ton& lton = Ton());
 
+protected: // update
+    
+    /// update the member color of this cost with the given values.
+    /// @param name chosen name for the received pitch.
+    /// @param accid chosen alteration for the received pitch.
+    /// @param print whether the accidental must be printed in score.
+    /// @param gton conjectured main (global) tonality (key signature).
+    /// ignored for CostA.
+    /// @param lton conjectured local tonality or undef tonlity if it is
+    /// unknown. ignored for CostA.
+    /// @return wether an update was effectively performed.
+    virtual bool updateDist(const enum NoteName& name,
+                            const enum Accid& accid,
+                            bool print,
+                            const Ton& gton, const Ton& lton = Ton());
+    
+    /// update the member chromharm of this cost with the given values.
+    /// @param name chosen name for the received pitch.
+    /// @param accid chosen alteration for the received pitch.
+    /// @param print whether the accidental must be printed in score.
+    /// @param gton conjectured main (global) tonality (key signature).
+    /// ignored for CostA.
+    /// @param lton conjectured local tonality or undef tonlity if it is
+    /// unknown. ignored for CostA.
+    /// @return wether an update was effectively performed.
+    bool updateChroma(const enum NoteName& name,
+                      const enum Accid& accid,
+                      bool print,
+                      const Ton& gton, const Ton& lton = Ton());
+    
 public: // access, debug
-
-    /// accessor for debug.
-    inline size_t get_accid() const { return _accid; }
 
     /// accessor for debug.
     inline size_t get_dist() const { return _dist; }
     
-    inline size_t get_chromharm() const { return _chromharm; }
-
-    /// accessor for debug.
-    inline size_t get_color() const { return _color; }
-
-    /// accessor for debug.
-    inline size_t get_cflat() const { return _cflat; }
-    
     /// @param o output stream where to print this cost.
-    void print(std::ostream& o) const;
+    void print(std::ostream& o) const override;
     
 protected: // data
     
-    /// cumulated number of printed accidentals.
-    size_t _accid; // unsigned int
+    // cumulated number of printed accidentals.
+    // size_t _accid; // unsigned int
     
     /// cumulated distance to a conjectured local tonality.
     size_t _dist;
-    
-    /// is the accid present in the chromatic harmonic scale?
-    size_t _chromharm;
-    
-    /// cumulated number of accidentals with color different from global ton.
-    size_t _color;
-
-    /// cumulated number of printed and non lead Cb B# E# Fb.
-    size_t _cflat;
     
     // degree of approximation.
     // percent under which 2 costs componnents are considered equal.

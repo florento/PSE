@@ -116,11 +116,13 @@ public:
     /// pointwise distance between this state of accidentals and another one.
     /// It is the number of accidentals that differ between the two states.
     /// @param rhs one state of accidentals.
+    /// @todo TBR not used
     unsigned int dist(const PSState& rhs) const;
 
     /// distance distance between this state of accidentals and a tonality.
     /// It is the number of accidentals that differ.
     /// @param ton a tonality.
+    /// @todo TBR not used
     unsigned int dist(const Ton& ton) const;
 
     /// pointwise distance between this state of accidentals and

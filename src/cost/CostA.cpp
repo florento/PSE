@@ -14,16 +14,18 @@ namespace pse {
 
 
 CostA::CostA(): // bool discount
-_accid(0)
-// _discount(discount)
-{
-//    if (discount) WARN("CostA: discount obsolete");
-}
+_accid(0),
+_chromharm(0),
+_color(0),
+_cflat(0)
+{ }
 
 
 CostA::CostA(const CostA& rhs):
-_accid(rhs._accid)
-//_discount(rhs._discount)
+_accid(rhs._accid),
+_chromharm(rhs._chromharm),
+_color(rhs._color),
+_cflat(rhs._cflat)
 { }
 
 
@@ -35,7 +37,7 @@ CostA::~CostA()
 
 std::shared_ptr<Cost> CostA::shared_zero() const
 {
-    return std::shared_ptr<Cost>(new CostA()); // _discount
+    return std::shared_ptr<Cost>(new CostA());
 }
 
 
@@ -61,66 +63,196 @@ std::unique_ptr<Cost> CostA::unique_clone() const
 //}
 
 
-bool CostA::operator==(const CostA& rhs) const
+bool CostA::equal(const CostA& rhs) const
 {
-    return (_accid == rhs._accid);
+    return (_accid == rhs._accid and tiebreak_equal(rhs));
 }
 
 
-double CostA::dist(const CostA& rhs) const
+bool CostA::equal(const Cost& rhs) const
 {
-    return distCost((double) _accid, (double) rhs._accid);
+    return equal(dynamic_cast<const CostA&>(rhs));
 }
 
 
-bool CostA::operator<(const CostA& rhs) const
+bool CostA::tiebreak_equal(const CostA& rhs) const
 {
-    return (_accid < rhs._accid);
+    return (_chromharm == rhs._chromharm and
+            _color == rhs._color and
+            _cflat == rhs._cflat);
 }
 
 
-CostA& CostA::operator+=(const CostA& rhs)
+bool CostA::smaller(const Cost& rhs) const
+{
+    const CostA& rhs_A = dynamic_cast<const CostA&>(rhs);
+    if (_accid == rhs_A._accid)
+    {
+        return tiebreak_smaller(rhs_A);
+    }
+    else
+        return (_accid < rhs_A._accid);    
+}
+
+
+bool CostA::tiebreak_smaller(const CostA& rhs) const
+{
+    if (_chromharm == rhs._chromharm)
+    {
+        if (_color == rhs._color)
+            return (_cflat < rhs._cflat);
+        else
+            return (_color < rhs._color);
+        // return (_color+_cflat < rhs._cflat+rhs._color);
+    }
+    else
+        return (_chromharm < rhs._chromharm);
+}
+
+
+CostA& CostA::add(const CostA& rhs)
 {
     _accid += rhs._accid;
+    _chromharm += rhs._chromharm;
+    _color += rhs._color;
+    _cflat += rhs._cflat;
     return *this;
 }
 
 
-//CostA operator+(const CostA& c1, const CostA& c2)
-//{
-//    return c1.operator+(c2);
-//}
-
-bool CostA::updateAccid(const enum Accid& accid)
+Cost& CostA::add(const Cost& rhs)
 {
-    switch (accid)
+    return add(dynamic_cast<const CostA&>(rhs));
+}
+
+
+double CostA::pdist(const Cost& rhs) const
+{
+    const CostA& rhs_A = dynamic_cast<const CostA&>(rhs);
+    if (_accid == rhs_A._accid)
+        return tiebreak_pdist(rhs_A);
+    else
+        return Cost::dist((double) _accid, (double) rhs_A._accid);
+    
+}
+
+
+/// @todo TBR. sum of differences?
+double CostA::tiebreak_pdist(const CostA& rhs) const
+{
+    if (_chromharm == rhs._chromharm)
     {
-        case Accid::DoubleSharp:
-        case Accid::DoubleFlat:
-            _accid += 2;
-            return true;
+        if (_color == rhs._color)
+            return Cost::dist((double) _cflat, (double) rhs._cflat);
+        else
+            return Cost::dist((double) _color, (double) rhs._color);
+    }
+    else
+    {
+        return Cost::dist((double)_chromharm , (double) rhs._chromharm);
+    }
+}
 
-        case Accid::Sharp:
-        case Accid::Flat:
-        case Accid::Natural:
-            _accid += 1;
-            return true;
 
-        default:
+bool CostA::updateAccid(const enum NoteName& name,
+                        const enum Accid& accid,
+                        bool print,
+                        const Ton& gton, const Ton& lton)
+{
+    if (print)
+    {
+        switch (accid)
         {
-            ERROR("Cost updateAccid: unexpected accidental {}", accid);
-            return false;
+            case Accid::DoubleSharp:
+            case Accid::DoubleFlat:
+                _accid += 2;
+                return true;
+
+            case Accid::Sharp:
+            case Accid::Flat:
+            case Accid::Natural:
+                _accid += 1;
+                return true;
+
+            default:
+            {
+                ERROR("updateAccid: unexpected accidental"); // accid
+                return false;
+            }
         }
+    }
+    else
+    {
+        return false;
+    }
+}
+
+bool CostA::updateChroma(const enum NoteName& name, const enum Accid& accid,
+                         bool print, const Ton& gton, const Ton& lton)
+{
+    // count accid not in the chromatic harmonic scale
+    assert(gton.defined());
+    if (print && !Accids::contained(accid, gton.chromaton().accidScale(name)))
+    {
+        _chromharm += 1;
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+
+bool CostA::updateColor(const enum NoteName& name, const enum Accid& accid,
+                        bool print, const Ton& gton, const Ton& lton)
+{
+    // color of accident differs from color of global ton
+    assert(gton.defined());
+    int ks = gton.fifths();
+    // const enum Accid& a = c.accidental();
+    if (((ks >= 0) && (flat(accid))) || ((ks <=  0) && (sharp(accid))))
+    {
+        _color += 1;
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+
+bool CostA::updateCflat(const enum NoteName& name, const enum Accid& accid,
+                        bool print, const Ton& gton, const Ton& lton)
+{
+    // count  Cb B# E# Fb.
+    assert(gton.defined());
+    if (print && (!Accids::contained(accid, gton.accidScale(name))) &&
+            (((name == NoteName::C) && (accid == Accid::Flat)) ||
+             ((name == NoteName::B) && (accid == Accid::Sharp)) ||
+             ((name == NoteName::F) && (accid == Accid::Flat)) ||
+             ((name == NoteName::E) && (accid == Accid::Sharp))))
+    {
+        ++_cflat;
+        return true;
+    }
+    else
+    {
+        return false;
     }
 }
 
 
 // update cost when accident for the name was updated
-void CostA::update(const enum NoteName& name, const enum Accid& accid,
+bool CostA::update(const enum NoteName& name, const enum Accid& accid,
                    bool print, const Ton& gton, const Ton& lton)
 {
-    if (print)
-        updateAccid(accid);
+    bool reta = CostA::updateAccid(name, accid, print, gton, lton);
+    bool retc = updateChroma(name, accid, print, gton, lton);
+    bool reto = updateColor(name, accid, print, gton, lton);
+    bool retf = updateCflat(name, accid, print, gton, lton);
+    return reta or retc or reto or retf;
 }
 
 
@@ -136,6 +268,10 @@ CostType CostA::type() const
 void CostA::print(std::ostream& o) const
 {
     o << _accid;
+    // o << "acc=" << _accid;
+    // o << "chr=" << _chromharm;
+    // o << " col=" << _color;
+    // o << " cf=" << _cflat;
 }
 
 
