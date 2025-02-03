@@ -1166,27 +1166,23 @@ class Spellew:
             assert(not sp.global_ton(0).undef())
             return (sp.global_ton(0), sp.iglobal_ton(0))
         # ambigous evaluation of global ton
-        elif nbg > 1: 
+        elif nbg > 1:
             print('pse get_global:', nbg, 'candidates global.', end=' ')
             print("real global tone:", k0)
-            c = 0
-            enharm = False
-            present = False
+            onlyEnharm = True
+            trueTonePresent = False
             for i in range(nbg):
                 gt = sp.global_ton(i)
                 if compare_key(k0, gt):
                     goodgtindex = i
                     present = True
-                elif compare_key_pitches(k0, gt):
-                    enharm = True
-                else:
-                    c += 1
-            if c > 0:
-                enharm = False
-            if present and enharm: 
+                elif not(compare_key_pitches(k0, gt)):
+                    onlyEnharm = False
+                    return (sp.global_ton(0), sp.iglobal_ton(0))
+            if trueTonePresent and onlyEnharm:
                 return (sp.global_ton(goodgtindex), sp.iglobal_ton(goodgtindex))
             else:
-                return (sp.global_ton(0), sp.iglobal_ton(0))        
+                return (sp.global_ton(0), sp.iglobal_ton(0))
 
     def rename(self, i):
         # assert(self._spelled)
