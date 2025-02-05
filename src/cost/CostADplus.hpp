@@ -60,6 +60,7 @@ protected: // operators
 
     /// a distance value, in percent of the bigger cost.
     /// used for approximate equality.
+    /// @warning only used for selection of global (rowcost comparison).
     double pdist(const Cost& rhs) const override;
     
 public: // update

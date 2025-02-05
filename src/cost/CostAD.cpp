@@ -15,13 +15,13 @@ namespace pse {
 
 
 CostAD::CostAD():
-CostA(),
+CostAT(),
 _dist(0)
 { }
 
 
 CostAD::CostAD(const CostAD& rhs):
-CostA(rhs),
+CostAT(rhs),
 _dist(rhs._dist)
 { }
 
@@ -62,14 +62,14 @@ CostAD::~CostAD()
 bool CostAD::equal(const Cost& rhs) const
 {
     const CostAD& rhs_AD = dynamic_cast<const CostAD&>(rhs);
-    return (CostA::equal(rhs_AD) and _dist == rhs_AD._dist);
+    return (CostAT::equal(rhs_AD) and _dist == rhs_AD._dist);
 }
 
 
 Cost& CostAD::add(const Cost& rhs)
 {
     const CostAD& rhs_AD = dynamic_cast<const CostAD&>(rhs);
-    CostA::add(rhs_AD);
+    CostAT::add(rhs_AD);
     _dist += rhs_AD._dist;
     return *this;
 }
@@ -79,7 +79,8 @@ bool CostAD::updateDist(const enum NoteName& name, const enum Accid& accid,
                         bool print, const Ton& gton, const Ton& lton)
 {
     // count accidental different from lton
-    if (lton.defined() and (!Accids::contained(accid, lton.accidScale(name))))
+    if (lton.defined() and
+        (!Accids::contained(accid, lton.accidScale(name))))
     {
         switch (accid)
         {
@@ -116,7 +117,7 @@ bool CostAD::updateChroma(const enum NoteName& name, const enum Accid& accid,
     //    if (print && !(lton.chromatic().contains(name,accid)))
     if (lton.undef())
     {
-        return CostA::updateChroma(name, accid, print, gton, lton);
+        return CostAT::updateChroma(name, accid, print, gton, lton);
     }
     else if (print and
              !Accids::contained(accid, lton.chromaton().accidScale(name)))
@@ -136,7 +137,7 @@ bool CostAD::update(const enum NoteName& name,
                     bool print,
                     const Ton& gton, const Ton& lton)
 {
-    bool reta = CostA::update(name, accid, print, gton, lton); // updateAccid
+    bool reta = CostAT::update(name, accid, print, gton, lton);
     bool retd = updateDist(name, accid, print, gton, lton);
 
     return reta or retd;
@@ -146,11 +147,11 @@ bool CostAD::update(const enum NoteName& name,
 
 void CostAD::print(std::ostream& o) const
 {
-    o << "acc=" << _accid;
-    o << " dst=" << _dist;
-    o << "chr=" << _chromharm;
-    o << " col=" << _color;
-    o << " cf=" << _cflat;
+    o << _accid << ':';
+    o << _dist << ':';
+    o << _chromharm << ':';
+    o << _color << ':';
+    o << _cflat;
 }
 
 

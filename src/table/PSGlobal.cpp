@@ -18,6 +18,7 @@ _index(tab.index()),
 _globals(), // empty
 _debug(dflag)
 {
+    ERROR("class PSGlobal is obsolete");
     assert(0 <= d);
     assert(d <= 100);
     // same index for globals and tab
@@ -48,6 +49,7 @@ PSO::PSO(const PST& tab, double d, bool dflag):
 // first argument (full PSO) is the former set of global candidates
 PSO(PSO(tab.index(), dflag, true), tab, d, dflag)
 {
+    ERROR("class PSGlobal is obsolete");
     assert(d >= 0);
 }
 
@@ -57,6 +59,7 @@ _index(id),
 _globals(), // empty
 _debug(dflag)
 {
+    ERROR("class PSGlobal is obsolete");
     if (full) // full list of candidate global ton
     {
         for (size_t i = 0; i < _index.size(); ++i)

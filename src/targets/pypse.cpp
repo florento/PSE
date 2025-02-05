@@ -84,6 +84,8 @@ PYBIND11_MODULE(pse, m)
         .value("CTYPE_UNDEF", pse::CostType::UNDEF, "Undef type")
         .value("CTYPE_ACCID", pse::CostType::ACCID,
                "number of accidentals without discount for lead tons")
+        .value("CTYPE_ACCIDtb", pse::CostType::ACCIDtb,
+               "number of accidentals and tiw breaking measures")
         .value("CTYPE_ACCIDlead", pse::CostType::ACCIDlead,
                "number of accidentals with discount for lead tons")
         .value("CTYPE_ADplus", pse::CostType::ADplus,
@@ -162,6 +164,8 @@ PYBIND11_MODULE(pse, m)
              py::arg("d") = 0, py::arg("refine") = false)
         .def("select_global", &pse::SpellerEnum::selectGlobal,
              "select a unique ton amongst candidate globals")
+        .def("force_global", &pse::SpellerEnum::forceGlobal,
+             "reduce the list of global tons to the single given ton")
         .def("rename", &pse::SpellerEnum::rename,
              "rename input notes")
         .def("rewrite_passing", &pse::SpellerEnum::rewritePassing,

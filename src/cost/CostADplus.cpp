@@ -87,12 +87,14 @@ double CostADplus::pdist(const Cost& rhs) const
     const CostADplus& rhs_ADplus = dynamic_cast<const CostADplus&>(rhs);
     assert(_sum == _accid + _dist);
     assert(rhs_ADplus._sum == rhs_ADplus._accid + rhs_ADplus._dist);
-    if (_sum == rhs_ADplus._sum)
-    {
-        return tiebreak_pdist(rhs_ADplus);
-    }
-    else
-        return Cost::dist((double) _sum, (double) rhs_ADplus._sum);
+    // ignore the tiebreaking measures (only counts accids + dist)
+    return Cost::dist((double) _sum, (double) rhs_ADplus._sum);
+    // if (_sum == rhs_ADplus._sum)
+    // {
+    //     return tiebreak_pdist(rhs_ADplus);
+    // }
+    // else
+    //     return Cost::dist((double) _sum, (double) rhs_ADplus._sum);
 }
 
 

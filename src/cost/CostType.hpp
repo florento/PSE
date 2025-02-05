@@ -26,8 +26,14 @@ enum class CostType
     /// Unknown
     UNDEF,
     
-    /// number of accidentals without discount for lead tons
+    /// number of accidentals, without discount for lead tons
     ACCID,
+
+    /// number of accidentals and tie breaking measures
+    /// - number of accidentals not present in the chromatic harmonic scale
+    /// - cumulated number of accidentals with color different from global ton
+    /// - cumulated number of printed and non lead Cb B# E# Fb.
+    ACCIDtb,
 
     /// number of accidentals with discount for lead tons
     ACCIDlead,
@@ -35,7 +41,8 @@ enum class CostType
     /// number of accidentals and distance to local ton, sum of values.
     ADplus,
 
-    /// number of accidentals and distance to local ton, lexicographic comparison values.
+    /// number of accidentals and distance to local ton,
+    /// lexicographic comparison values.
     ADlex
 
 };

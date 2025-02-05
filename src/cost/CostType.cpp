@@ -21,6 +21,9 @@ std::string tostring(const CostType& t)
         case CostType::ACCID:
             return "CostA";
 
+        case CostType::ACCIDtb:
+            return "CostAtiebreak";
+
         case CostType::ACCIDlead:
             return "CostAdiscount";
 

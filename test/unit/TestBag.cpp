@@ -16,7 +16,7 @@ TEST(PSBag, Eb_maj0)
 {
     pse::Ton t(-3, pse::ModeName::Major);
     pse::PSRawEnum e(0, 4);
-    pse::CostA c0(false); // no discount in updates
+    pse::CostA c0; // no discount in updates
     
     e.add(55, 0); // G3
     e.add(56, 0); // Ab3
@@ -35,7 +35,7 @@ TEST(PSBag, Eb_maj1)
     
     pse::Ton t(-3, pse::ModeName::Major);
     pse::PSRawEnum e(0, 4);
-    pse::CostA c0(false); // no discount in updates
+    pse::CostA c0; // no discount in updates
     
     pse::CostA c1(c0);    // copy
     // print, gton=t, lton-UNDEF
@@ -60,7 +60,7 @@ TEST(PSBag, Eb_maj2)
     
     pse::Ton t(-3, pse::ModeName::Major);
     pse::PSRawEnum e(0, 5);
-    pse::CostA c0(false); // no discount in updates
+    pse::CostA c0; // no discount in updates
     
     pse::CostA c1(c0);    // copy
     // print, gton=t, lton-UNDEF
@@ -85,7 +85,7 @@ TEST(PSBag, Eb_maj3)
     
     pse::Ton t(-3, pse::ModeName::Major);
     pse::PSRawEnum e(0, 5);
-    pse::CostA c0(false); // no discount in updates
+    pse::CostA c0; // no discount in updates
     
     e.add(55, 0); // G3
     e.add(51, 0); // Eb3
@@ -105,7 +105,7 @@ TEST(PSBag, Cmin3)
     
     pse::Ton t(-3, pse::ModeName::Minor); // harmonic
     pse::PSRawEnum e(0, 5);
-    pse::CostA c0(false); // no discount in updates
+    pse::CostA c0; // no discount in updates
     
     e.add(55, 0); // G3
     e.add(51, 0); // Eb3
@@ -125,7 +125,7 @@ TEST(PSBag, Cmin3d)
     
     pse::Ton t(-3, pse::ModeName::Minor); // harmonic
     pse::PSRawEnum e(0, 5);
-    pse::CostA c0(false); // no discount in updates
+    pse::CostA c0; // no discount in updates
     pse::CostA c1(c0);    // copy
     // print, gton=t, lton-UNDEF
     c1.update(pse::NoteName::F, pse::Accid::Sharp, true, t, pse::Ton());

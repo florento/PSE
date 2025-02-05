@@ -72,43 +72,20 @@ def get_corpus(dataset_path):
 # PSE:  tons=135, 
 # PSE table1:  costtype1 = ps.CTYPE_ACCID | CTYPE_ACCIDlead | CTYPE_ADplus | CTYPE_ADlex
 # PSE table2:  costtype2 = ps.CTYPE_ACCID | CTYPE_ACCIDlead | CTYPE_ADplus | CTYPE_ADlex
-def eval_corpus(dataset, skip=[],
+def eval_corpus(speller, dataset, skip=[],
                 eval_root='.', output_dir='', tablename='',
-                kpre=0, kpost=0, tons=0, 
-                costtype1=ps.pse.CTYPE_UNDEF, tonal1=True, det1=True, 
-                global1=100, grid=ps.pse.Grid_Rank, 
-                costtype2=ps.pse.CTYPE_UNDEF, tonal2=True, det2=True,
-                dflag=True, mflag=True, csflag=False):
-    """eval a whole corpus with given algo and parameters"""
+                mflag=True, csflag=False):
+    """eval a whole corpus with a given speller"""
+    """speller: instance of speller for the evaluation"""
     """dataset: a dictionary as produced by XML_corpus"""
     """skip: list of names in corpus to avoid during evaluation"""
     """eval_root: directory where the evaluation directory will lie"""
     """output_dir: name of directory where the evaluation files will be written"""
     """tablename: file name of evaluation table. will be written in the output_dir"""
-    """kpre: parameter specific to PS13"""
-    """kpost: parameter specific to PS13"""
-    """tons: nb of Tons in TonIndex (PSE)"""
-    """costtype1: table1, cost type. if set, PSE is used, otherwise, PS13 is used"""
-    """tonal1: table1, tonal/modal flag for initial state (PSE)"""
-    """det1: table1, deterministic/exhaustive flag for transitions (PSE)"""
-    """global1: percentage approx for intermediate list of global candidate"""
-    """grid: name of algorithm for the computation of the grid"""
-    """costtype2: table2, cost type. if unset, skip table2 (PSE)"""
-    """tonal2: table2, tonal/modal flag for initial state (PSE)"""
-    """det2: table2, deterministic/exhaustive flag for transitions (PSE)"""
-    """dflag: debug flag: print debug messages on terminal"""
     """mflag: mark flag: write anotation files in a dedicaced dir for each opus"""
     """csflag: spell also the notes of the chord symbols"""
-    # initialize a speller
-    sp = ps.Spellew(ps13_kpre=kpre, ps13_kpost=kpost, 
-                    nbtons=tons,
-                    t1_costtype=costtype1, t1_tonal=tonal1, t1_det=det1, 
-                    global1=global1, grid=grid,
-                    t2_costtype=costtype2, t2_tonal=tonal2, t2_det=det2,
-                    debug=dflag)
-    algoname = sp.algoname()    
-
     # prepare the output dir
+    algoname = speller.algoname()    
     timestamp = datetime.today().strftime('%Y%m%d-%H%M')
     output_path = Path(eval_root)
     if not os.path.exists(output_path):
@@ -143,10 +120,11 @@ def eval_corpus(dataset, skip=[],
         file = dataset[name]
         print('\n', name, '\n')
         s = m21.converter.parse(file.as_posix())
-        (ls, lld) = sp.eval_score(score=s, stats=stat, score_id=i, 
+        (ls, lld) = speller.eval_score(score=s, stats=stat, score_id=i, 
                                   title=name, composer='', 
                                   output_path=output_path2, 
-                                  chord_sym=csflag)
+                                  chord_sym=csflag, 
+                                  reset_globals = True)
         i += 1
         #if mflag and not ps.empty_difflist(lld): # done in eval_score
         #    write_score(s, output_path2, name)
@@ -163,38 +141,21 @@ def eval_corpus(dataset, skip=[],
 # PSE:  tons=135, 
 # PSE table1:  costtype1 = ps.CTYPE_ACCID | CTYPE_ACCIDlead | CTYPE_ADplus | CTYPE_ADlex
 # PSE table2:  costtype2 = ps.CTYPE_ACCID | CTYPE_ACCIDlead | CTYPE_ADplus | CTYPE_ADlex
-def eval_item(dataset, name, output_dir='', 
+def eval_item(speller, dataset, name, output_dir='', 
               kpre=0, kpost=0, tons=0,          
               costtype1=ps.pse.CTYPE_UNDEF, tonal1=True, det1=True,       
               global1=100, grid=ps.pse.Grid_Rank,   
               costtype2=ps.pse.CTYPE_UNDEF, tonal2=True, det2=True,      
-              dflag=True, mflag=False, csflag=False):   
+              mflag=False, csflag=False):   
     """eval one item of the FRB corpus with given algo and parameters"""
+    """speller: speller instance for the evaluation"""
     """dataset: a dictionary as produced by XML_corpus"""
     """name: filename of item (prefix) in the dataset"""
     """output_dir: where files will be written"""
-    """pas13_kpre: parameter specific to PS13"""
-    """pas13_kpost: parameter specific to PS13"""
-    """nbtons: nb of Tons in TonIndex (PSE)"""
-    """costtype1: table1, cost type. if set, PSE is used, otherwise, PS13 is used"""
-    """tonal1: table1, tonal/modal flag for initial state (PSE)"""
-    """det1: table1, deterministic/exhaustive flag for transitions (PSE)"""
-    """global1: percentage approx for intermediate list of global candidate"""
-    """grid: name of algorithm for the computation of the grid"""
-    """costtype2: table2, cost type. if unset, skip table2 (PSE)"""
-    """tonal2: table2, tonal/modal flag for initial state (PSE)"""
-    """det2: table2, deterministic/exhaustive flag for transitions (PSE)"""
-    """dflag: debug flag: print debug messages on terminal"""
-    """csflag: spell also chord symbols"""
-    assert(len(name) > 0)
-    # initialize a speller
-    sp = ps.Spellew(ps13_kpre=kpre, ps13_kpost=kpost, 
-                    nbtons=tons,
-                    t1_costtype=costtype1, t1_tonal=tonal1, t1_det=det1, 
-                    global1=global1, grid=grid,
-                    t2_costtype=costtype2, t2_tonal=tonal2, t2_det=det2,
-                    debug=dflag)
+    """mflag: mark flag: write anotation files in a dedicaced dir for each opus"""
+    """csflag: spell also the notes of the chord symbols"""
     # input data
+    assert(len(name) > 0)
     if (dataset.get(name) == None):
         print(name, "not found in dataset")
         return
@@ -205,9 +166,10 @@ def eval_item(dataset, name, output_dir='',
     # ground truth ks, estimated ks, nnb of nontes and list of diff notes
     #(k_gt, gt_est, nn, ld) = ps.eval_part(part=part, stat=stat, nbtons=tons, 
     #                                      debug=dflag, mark=mflag)
-    (ls, lld) = sp.eval_score(score=score, stats=stat, score_id=0, 
-                              title=name, composer='', output_path=opath, 
-                              chord_sym = csflag)    
+    (ls, lld) = speller.eval_score(score=score, stats=stat, score_id=0, 
+                                   title=name, composer='', output_path=opath, 
+                                   chord_sym = csflag, 
+                                   reset_globals = False)    
     stat.show()   
     assert(len(lld) == 1) # always 1 unique part in LG dataset
     if mflag and len(lld[0]) > 0:

@@ -15,7 +15,7 @@
 #include <memory>
 
 #include "pstrace.hpp"
-#include "CostA.hpp"
+#include "CostAT.hpp"
 // #include "Costt.hpp"
 
 
@@ -36,7 +36,7 @@ class PSC2;
 /// - class CostADplus : public PolymorphicComparable<CostAD, CostADplus>
 /// - class CostADlex : public PolymorphicComparable<CostAD, CostADlex>
 /// @todo inherit from CostA ?
-class CostAD : public CostA // public PolymorphicCost<CostAD>
+class CostAD : public CostAT // public PolymorphicCost<CostAD>
 {
     
 public: // construction
@@ -136,7 +136,7 @@ protected: // update
     bool updateChroma(const enum NoteName& name,
                       const enum Accid& accid,
                       bool print,
-                      const Ton& gton, const Ton& lton = Ton());
+                      const Ton& gton, const Ton& lton = Ton()) override;
     
 public: // access, debug
 

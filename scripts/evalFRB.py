@@ -10,10 +10,7 @@ Evaluation of the score of the Fake Real Book dataset
 #import sys
 #import logging
 import os
-from pathlib import Path, PosixPath
-from datetime import datetime
-import re
-from operator import itemgetter, attrgetter
+from pathlib import Path
 import pandas
 import music21 as m21
 import PSeval as ps
@@ -102,7 +99,7 @@ skip = ['Autumn in New York']
 # PSE: grid = Grid_Best | Grid_Rank | Grid_Exhaustive
 # PSE: global1 = 0..100 (%)
 def eval_FRB(corpus='leads', 
-             output_dir='', tablename='',            
+             output='', tablename='',            
              kpre=0, kpost=0, tons=0, 
              costtype1=ps.pse.CTYPE_UNDEF, tonal1=True, det1=True, 
              global1=100, grid=ps.pse.Grid_Rank, 
@@ -110,7 +107,7 @@ def eval_FRB(corpus='leads',
              dflag=True, mflag=True, csflag=False):
     """eval the whole FRB corpus with given algo and parameters"""
     """corpus: leads or piano (obsolete)"""
-    """output_dir: where files will be written"""
+    """output: dir where files will be written"""
     """tablename: filename of csv table"""
     """kpre: parameter specific to PS13"""
     """kpost: parameter specific to PS13"""
@@ -132,20 +129,23 @@ def eval_FRB(corpus='leads',
     root = Path(_eval_root)/'evalFRB'
     if not os.path.isdir(root):
         os.mkdir(root)
-    evalXML.eval_corpus(dataset=FRB_corpus(corpus), skip=skip, 
-                        eval_root=root, output_dir=output_dir, tablename=tablename,
-                        kpre=kpre, kpost=kpost, tons=tons, 
-                        costtype1=costtype1, tonal1=tonal1, det1=det1, 
-                        global1=global1, grid=grid, 
-                        costtype2=costtype2, tonal2=tonal2, det2=det2, 
-                        dflag=dflag, mflag=mflag, csflag=csflag)
+    # initialize a speller
+    sp = ps.Spellew(ps13_kpre=kpre, ps13_kpost=kpost, 
+                    nbtons=tons,
+                    t1_costtype=costtype1, t1_tonal=tonal1, t1_det=det1, 
+                    global1=global1, grid=grid,
+                    t2_costtype=costtype2, t2_tonal=tonal2, t2_det=det2,
+                    debug=dflag)        
+    evalXML.eval_corpus(speller=sp, mflag=mflag, csflag=csflag, 
+                        dataset=FRB_corpus(corpus), skip=skip, 
+                        eval_root=root, output_dir=output, tablename=tablename)
         
 # PS13: kpre=33, kpost=23
 # PSE: tons = 30 | 135 | 165, 
 # PSE: costtype1, costtype2 = CTYPE_ACCID | CTYPE_ACCIDlead | CTYPE_ADplus | CTYPE_ADlex
 # PSE: grid = Grid_Best | Grid_Rank | Grid_Exhaustive
 # PSE: global1 = 0..100 (%)
-def eval_FRBitem(name, corpus='leads', output_dir='',         
+def eval_FRBitem(name, corpus='leads', output='',         
                  kpre=0, kpost=0, tons=0,          
                  costtype1=ps.pse.CTYPE_UNDEF, tonal1=True, det1=True,       
                  global1=100, grid=ps.pse.Grid_Rank,
@@ -154,7 +154,7 @@ def eval_FRBitem(name, corpus='leads', output_dir='',
     """eval one item of the FRB corpus with given algo and parameters"""
     """name: filename of item (prefix) in the dataset"""
     """corpus: leads or piano (obsolete)"""
-    """output_dir: where files will be written"""
+    """output: dir where files will be written"""
     """kpre: parameter specific to PS13"""
     """kpost: parameter specific to PS13"""
     """tons: nb of Tons in TonIndex (PSE)"""
@@ -171,12 +171,15 @@ def eval_FRBitem(name, corpus='leads', output_dir='',
     """csflag: spell also chord symbols"""
     assert(len(name) > 0)
     assert(corpus == 'leads' or corpus == 'piano')
-    evalXML.eval_item(dataset=FRB_corpus(corpus), name=name, output_dir=output_dir,
-                      kpre=kpre, kpost=kpost, tons=tons, 
-                      costtype1=costtype1, tonal1=tonal1, det1=det1, 
-                      global1=global1, grid=grid, 
-                      costtype2=costtype2, tonal2=tonal2, det2=det2, 
-                      dflag=dflag, mflag=mflag, csflag=csflag)
+    # initialize a speller
+    sp = ps.Spellew(ps13_kpre=kpre, ps13_kpost=kpost, 
+                    nbtons=tons,
+                    t1_costtype=costtype1, t1_tonal=tonal1, t1_det=det1, 
+                    global1=global1, grid=grid,
+                    t2_costtype=costtype2, t2_tonal=tonal2, t2_det=det2,
+                    debug=dflag)
+    evalXML.eval_item(speller=sp, mflag=mflag, csflag=csflag,
+                      dataset=FRB_corpus(corpus), name=name, output_dir=output)
         
 # compute C++ add instructions for given score, for debugging with gdb
 def debug(name, corpus='leads'):    

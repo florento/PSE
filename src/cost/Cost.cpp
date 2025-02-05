@@ -94,12 +94,12 @@ double Cost::dist(const double lhs, const double rhs)
     if (d < 0)
     {
         assert(rhs > 0);
-        return (-d/rhs)*100;
+        return (d*100/lhs); // negative when lhs smaller than rhs
     }
     else if (d > 0)
     {
         assert(lhs > 0);
-        return (d/lhs)*100;
+        return (d*100/rhs); // positive when lhs larger than rhs
     }
     else
         return 0;

@@ -335,10 +335,11 @@ void PSV::bests(std::vector<size_t>& ties, double d) const
             break;
         
         const Cost& cost = psb->cost(); // shared_clone();
-        assert(ibest == TonIndex::UNDEF || _psbs.at(ibest) != nullptr);
-        assert(ibest == TonIndex::UNDEF || !_psbs.at(ibest)->empty());
+        assert(ibest == TonIndex::UNDEF or _psbs.at(ibest) != nullptr);
+        assert(ibest == TonIndex::UNDEF or !_psbs.at(ibest)->empty());
 
-        if ((ibest == TonIndex::UNDEF) || (cost < bag(ibest).cost()))
+        // the 2d cond. replaces (cost < bag(ibest).cost()))
+        if ((ibest == TonIndex::UNDEF) or cost.dist(bag(ibest).cost()) < 0)
             ibest = i;
         // otherwise keep the current best
     }
@@ -357,8 +358,11 @@ void PSV::bests(std::vector<size_t>& ties, double d) const
         if (psb == nullptr || psb->empty())
             break;
         
-        if (bestCost.dist(psb->cost()) <= d)
+        if (psb->cost().dist(bestCost) <= d)
+        {
+            assert(psb->cost().dist(bestCost) >= 0);
             ties.push_back(i);
+        }
     }
 }
 

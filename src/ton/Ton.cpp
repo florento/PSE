@@ -187,6 +187,7 @@ bool Ton::operator!=(const Ton& rhs) const
     return (! operator==(rhs));
 }
 
+
 bool Ton::operator<(const Ton& rhs) const
 {
     int lfifths = std::abs(this->fifths());
@@ -202,6 +203,8 @@ bool Ton::operator<(const Ton& rhs) const
     {
         return false;
     }
+    // lfifths == rfifths
+    // the ordering between modes is total but arbitrary in some cases
     else if (lmode < rmode)
     {
         assert(lfifths == rfifths);
@@ -212,6 +215,7 @@ bool Ton::operator<(const Ton& rhs) const
         assert(lfifths == rfifths);
         return false;
     }
+    // lmode == rmode
     else if (this->fifths() < rhs.fifths())
     {
         assert(lfifths == rfifths);

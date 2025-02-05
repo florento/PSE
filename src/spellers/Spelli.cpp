@@ -16,6 +16,7 @@ _index(new TonIndex(nbton)),
 //_seed(nullptr),
 //_seedAdiscount(true), // discount obsolete for CostA
 _seedA(),
+_seedAtb(),
 _seedADplus(),
 _seedADlex(),
 _debug(dflag),
@@ -30,6 +31,7 @@ _uton(new Ton()) // undef
 Spelli::Spelli(std::shared_ptr<TonIndex> id, bool dflag):
 _index(id), // copy
 _seedA(),
+_seedAtb(),
 _seedADplus(),
 _seedADlex(),
 _debug(dflag),
@@ -179,6 +181,13 @@ size_t Spelli::iglobal(size_t n) const
 }
 
 
+bool Spelli::forceGlobal(int ks, const ModeName& mode)
+{
+    assert(_index);
+    return _index->forceGlobal(ks, mode);
+}
+
+
 const Ton& Spelli::global(size_t n) const
 {
     assert(_index);
@@ -221,7 +230,10 @@ Cost& Spelli::sampleCost(CostType ct)
             
         case CostType::ACCID:
             return _seedA;
-            
+
+        case CostType::ACCIDtb:
+            return _seedAtb;
+
         case CostType::ADplus:
             return _seedADplus;
             

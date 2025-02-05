@@ -96,8 +96,8 @@ enum class ModeName
 /// Mixolydian, Aeolian, Locrian
 bool greek(const ModeName& m);
 
-/// arbitrary total ordering on mode names,
-/// induced by the order of definition.
+/// total ordering on mode names, induced by the order of definition.
+/// can be irrelevant in some cases.
 bool operator<(const ModeName& lhs, const ModeName& rhs);
 
 /// negation of >.

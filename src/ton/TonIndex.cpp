@@ -552,6 +552,7 @@ size_t TonIndex::globals() const
 
 void TonIndex::setGlobal(size_t i)
 {
+    // assert(_closed);
     assert(i < _tons.size());
     _tons.at(i).second = true;
 }
@@ -622,7 +623,9 @@ size_t TonIndex::selectGlobals(const PST& tab, double d, bool refine)
         assert(i != TonIndex::UNDEF);
                                 
         // new best ton
-        if (ibest == TonIndex::UNDEF or tab.rowCost(i) < tab.rowCost(ibest))
+        if (ibest == TonIndex::UNDEF or
+            tab.rowCost(i).dist(tab.rowCost(ibest)) < 0)
+            // replacing tab.rowCost(i) < tab.rowCost(ibest))
         {
             ibest = i;
         }
@@ -654,7 +657,7 @@ size_t TonIndex::selectGlobals(const PST& tab, double d, bool refine)
         const Cost& rc = tab.rowCost(i);
 
         // real tie
-        if (rc == bestCost)
+        if (rc.dist(bestCost) == 0) // rc == bestCost
         {
             setGlobal(i);
             cpt++;
@@ -662,8 +665,9 @@ size_t TonIndex::selectGlobals(const PST& tab, double d, bool refine)
         // approx tie
         // we keep this case apart from real tie because of floating approx.
         // (dist is double)
-        else if ((d > 0) && (rc.dist(bestCost) <= d))
+        else if ((d > 0) && (rc.dist(bestCost) < d))
         {
+            assert(rc.dist(bestCost) > 0);
             setGlobal(i);
             cpt++;
         }
@@ -708,7 +712,48 @@ bool TonIndex::selectGlobal()
 }
 
 
+// use the ordering between tons
+// it is irrelevant for comparison between church modes (with same KS)
+// @todo alternative: dist Weber to C major ?
+// anyway these modes are not global candidates
 size_t TonIndex::bestGlobal() const
+{
+    // index of the selected best ton.
+    size_t ibest = TonIndex::UNDEF; // out of range.
+    
+    for (size_t i = 0; i < _tons.size(); ++i)
+    {
+        // not a global candidate, ignore
+        if (!isGlobal(i))
+            continue;
+        // first i
+        else if (ibest == TonIndex::UNDEF)
+        {
+            assert(isGlobal(i));
+            ibest = i;
+        }
+        else
+        {
+            assert(isGlobal(i));
+            const Ton& toni = ton(i);
+            assert(ibest != TonIndex::UNDEF);
+            assert(isGlobal(ibest));
+            const Ton& tonbest = ton(ibest);
+            if (toni < tonbest)
+            {
+                ibest = i; // new best
+            }
+        }
+    }
+    if (ibest == TonIndex::UNDEF)
+        ERROR("TonIndex bestGlobal: not found");
+
+    return ibest;
+}
+
+
+
+size_t TonIndex::bestGlobal_old() const
 {
     // index of the selected best ton.
     size_t ibest = TonIndex::UNDEF; // out of range.
@@ -796,6 +841,29 @@ void TonIndex::resetGlobals()
         else
             unsetGlobal(i);
     }
+}
+
+
+bool TonIndex::forceGlobal(int ks, const ModeName& mode)
+{
+    if (!_closed)
+    {
+        ERROR("TonIndex forceGlobal: array of tons must be closed");
+        return false;
+    }
+    
+    size_t ig = find(ks, mode);
+    if (ig == UNDEF)
+    {
+        ERROR("TonIndex forceGlobal: ton {}, {} not found in this index",
+              ks, mode);
+        return false;
+    }
+    for (size_t i = 0; i < _tons.size(); ++i)
+            unsetGlobal(i);
+    assert(ig < _tons.size());
+    setGlobal(ig);
+    return true;
 }
 
 

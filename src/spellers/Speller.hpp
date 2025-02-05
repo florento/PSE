@@ -154,11 +154,11 @@ public: // spelling : computation of tables and grid
     /// if true, one global subarray must have been computed.
     /// @return the number of tonalities selected by this function.
     /// @warning a table must have been evaluated.
-    size_t selectGlobals(double d=0, bool refine=false);
+    size_t selectGlobals(double d=0, bool refine=true);
 
     /// select a unique index on ton in the global tons,
     /// mark all others as non global.
-    /// @return whether the opration was successful.
+    /// @return whether the operation was successful.
     /// if it was, there is exactly one global ton,
     /// otherwise there is zero.
     bool selectGlobal();

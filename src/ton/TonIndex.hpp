@@ -168,7 +168,6 @@ public: // sub array of tonalities that can be global.
     /// candidates estimated global.
     size_t globals() const;
 
-    
     /// index of the n-best candidate global tonality.
     /// @param n number of candidate global tonality,
     /// must be in 0..globals().
@@ -192,19 +191,28 @@ public: // sub array of tonalities that can be global.
     // and operator< on cost.
     size_t selectGlobals(const PST& tab, double d=0, bool refine=true);
     
-    /// select in the global tons a unique index on ton,
-    /// according to the following criteria, and unselect the others.
+    /// select in the global tons the unique ton defined by bestGlobal()
+    /// and unselect the others.
     /// @return whether the operation was succesful.
+    /// @see bestGlobal()
     bool selectGlobal();
 
     /// select in the global tons a unique index on ton,
-    /// according to the following criteria.
+    /// according to the ordering defined in compare().
     /// @return the selected best global tonality in tie or
     /// TonIndex::UNDEF if tie break failed.
     size_t bestGlobal() const;
-    
+    size_t bestGlobal_old() const;
+
     /// restore the initial list of global tons (before selection of globals).
     void resetGlobals();
+    
+    /// set the given ton as the only possible global ton (unselect all others).
+    /// @param ks number of flats if negative int,
+    /// or number of sharps if positive int. must be in -7..7.
+    /// @param mode a mode name.
+    /// @return whether the operation was successful.
+    bool forceGlobal(int ks, const ModeName& mode);
     
     // switch to tonal mode for the conmputation of Weber distance.
     // @warning this array must not be closed.

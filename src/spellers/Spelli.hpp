@@ -27,6 +27,7 @@
 #include "AlgoName.hpp"
 #include "CostType.hpp"
 #include "CostA.hpp"
+#include "CostAT.hpp"
 #include "CostADplus.hpp"
 #include "CostADlex.hpp"
 
@@ -113,6 +114,13 @@ public: // construct array of tonalities (Ton index)
     
     /// the array of tonalities is closed.
     bool closedTons() const;
+    
+    /// reduce the list of global tons to the single given ton.
+    /// @param ks number of flats if negative int,
+    /// or number of sharps if positive int. must be in -7..7.
+    /// @param mode a mode name.
+    /// @return whether the operation was successful.
+    bool forceGlobal(int ks, const ModeName& mode);
 
     // switch the array of tonalities to tonal mode
     // for the conmputation of Weber distance at closing.
@@ -167,6 +175,9 @@ protected: // data
 
     /// sample cost (zero) for the construction of tables.
     CostA _seedA;
+
+    /// sample cost (zero) for the construction of tables.
+    CostAT _seedAtb;
 
     /// sample cost (zero) for the construction of tables.
     CostADplus _seedADplus;

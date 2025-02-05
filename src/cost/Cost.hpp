@@ -85,8 +85,12 @@ protected: // operators to be defined in derived classes
     /// @param rhs another cost to compare to.
     virtual bool equal(const Cost& rhs) const = 0;
 
-    /// a distance value, in percent of the bigger cost.
-    /// used for approximate equality.
+    /// a distance value, in percent of the smallest cost between this and rhs.
+    /// @return 0 if this and rhs are not comparable for this measure,
+    /// a negative value (percent) is this is larger to rhs,
+    /// a positive value (percent) is this is smaller to rhs.
+    /// @warning only used for selection of global
+    /// in TonIndex (rowcost comparison) and Gridy computation.
     virtual double pdist(const Cost& rhs) const = 0;
     
     /// strict inequality of costs.
@@ -97,10 +101,13 @@ protected: // operators to be defined in derived classes
     /// @param rhs a cost to add.
     virtual Cost& add(const Cost& rhs) = 0;
     
-    /// convenience function.
+    /// the difference between lhs amd rhs, in percent of the smaller one.
     /// @param lhs first value. must be positive or null.
     /// @param rhs second value. must be positive or null.
-    /// @return the difference between lhs amd rhs, in percent of the biggest one.
+    /// @return the difference between lhs amd rhs, in percent of the smaller one.
+    /// @return 0 if lhs and rhs are equal.
+    /// a negative value (percent of diff) if lhs is smaller than rhs,
+    /// a positive value (percent of diff) if lhs is larger than rhs.
     static double dist(const double lhs, const double rhs);
     
 public: // operators, update

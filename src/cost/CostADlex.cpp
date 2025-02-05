@@ -79,25 +79,30 @@ Cost& CostADlex::add(const Cost& rhs)
 double CostADlex::pdist(const Cost& rhs) const
 {
     const CostADlex& rhs_ADlex = dynamic_cast<const CostADlex&>(rhs);
-    if (_accid == rhs_ADlex._accid)
-    {
-        if (_dist == rhs_ADlex._dist)
-        {
-            return tiebreak_pdist(rhs_ADlex);
-        }
-        else
-            return Cost::dist((double) _dist, (double) rhs_ADlex._dist);
-    }
-    else
-        return Cost::dist((double) _accid, (double) rhs_ADlex._accid);
+
+    // ignore the tiebreaking measures (only counts accids + dist)
+    return Cost::dist((double) _accid + _dist,
+                      (double) rhs_ADlex._accid + rhs_ADlex._dist);
+
+    // if (_accid == rhs_ADlex._accid)
+    // {
+    //     if (_dist == rhs_ADlex._dist)
+    //     {
+    //         return tiebreak_pdist(rhs_ADlex);
+    //     }
+    //     else
+    //         return Cost::dist((double) _dist, (double) rhs_ADlex._dist);
+    // }
+    // else
+    //     return Cost::dist((double) _accid, (double) rhs_ADlex._accid);
 }
 
 
-bool CostADlex::update(const enum NoteName& name, const enum Accid& accid,
-                       bool print, const Ton& gton, const Ton& lton)
-{
-    return CostAD::update(name, accid, print, gton, lton);
-}
+//bool CostADlex::update(const enum NoteName& name, const enum Accid& accid,
+//                       bool print, const Ton& gton, const Ton& lton)
+//{
+//    return CostAD::update(name, accid, print, gton, lton);
+//}
 
 
 CostType CostADlex::type() const

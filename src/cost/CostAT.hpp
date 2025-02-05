@@ -1,5 +1,5 @@
 //
-//  CostA.hpp
+//  CostAT.hpp
 //  pse
 //
 //  Created by Florent on 16/05/2023.
@@ -7,15 +7,15 @@
 /// @addtogroup pitch
 /// @{
 
-#ifndef CostA_hpp
-#define CostA_hpp
+#ifndef CostAT_hpp
+#define CostAT_hpp
 
 #include <iostream>
 #include <assert.h>
 #include <memory>
 
 #include "pstrace.hpp"
-#include "Cost.hpp"
+#include "CostA.hpp"
 // #include "Costt.hpp"
 
 
@@ -26,8 +26,8 @@ class PSC1;
 class PSC2;
 
 
-/// measure of cost defined by the cumulated number of printed accidentals.
-class CostA : public Cost // public PolymorphicCost<CostA>
+/// measure of cost extending CostA with 3 members for tie breaking.
+class CostAT : public CostA // public PolymorphicCost<CostA>
 {
     
 public: // construction
@@ -35,13 +35,13 @@ public: // construction
     /// null cost.
     // @param discount apply or not a discount (during update) for accidentals
     // in the assumed  scale (lead degrees).
-    CostA(); // bool discount=false
+    CostAT(); // bool discount=false
     
     /// copy constructor.
-    CostA(const CostA& rhs);
+    CostAT(const CostAT& rhs);
     
-    /// distructor
-    virtual ~CostA();
+    /// destructor
+    virtual ~CostAT();
     
     // assignement operator.
     // @param rhs a cost to copy.
@@ -60,7 +60,7 @@ protected: // operators
 
     /// cost equality.
     /// @param rhs a cost to compare to.
-    bool equal(const CostA& rhs) const;
+    bool equal(const CostAT& rhs) const;
 
     /// cost equality.
     /// @param rhs a cost to compare to.
@@ -68,32 +68,23 @@ protected: // operators
         
     // equality for tie-breaking members.
     // @param rhs a cost to compare to.
-    bool tiebreak_equal(const CostA& rhs) const;
+    bool tiebreak_equal(const CostAT& rhs) const;
 
     /// cost inequality.
     /// @param rhs a cost to compare to.
     bool smaller(const Cost& rhs) const override;
-
-    /// cost inequality.
-    /// @param rhs a cost to compare to.
-    bool smaller(const CostA& rhs) const;
-
+    
     // inequality for tie-breaking members.
     // @param rhs a cost to compare to.
-    bool tiebreak_smaller(const CostA& rhs) const;
+    bool tiebreak_smaller(const CostAT& rhs) const;
 
     /// cumulated sum operator. update this cost by adding rhs.
     /// @param rhs a cost to add.
-    virtual CostA& add(const CostA& rhs);
+    virtual CostAT& add(const CostAT& rhs);
 
     /// cumulated sum operator. update this cost by adding rhs.
     /// @param rhs a cost to add.
-    Cost& add(const Cost& rhs) override;
-
-    /// a distance value, in percent of the smaller cost.
-    /// used for approximate equality.
-    /// @warning only used for selection of global (rowcost comparison).
-    double pdist(const CostA& rhs) const;
+    virtual Cost& add(const Cost& rhs) override;
 
     /// a distance value, in percent of the smaller cost.
     /// used for approximate equality.
@@ -102,7 +93,7 @@ protected: // operators
     
     // distance for tie-breaking members.
     // @param rhs a cost to compare to.
-    double tiebreak_pdist(const CostA& rhs) const;
+    double tiebreak_pdist(const CostAT& rhs) const;
 
 public: // update
 
@@ -125,7 +116,7 @@ public: // update
 
 protected: // update member
 
-    /// update the member accid of this cost with the given values.
+    /// update the measure chromharm for this cost, with the given values.
     /// @param name chosen name for the received pitch.
     /// @param accid chosen alteration for the received pitch.
     /// @param print whether the accidental must be printed in score.
@@ -133,16 +124,62 @@ protected: // update member
     /// ignored for CostA.
     /// @param lton conjectured local tonality or undef tonlity if it is
     /// unknown. ignored for CostA.
-    virtual bool updateAccid(const enum NoteName& name,
+    /// @return wether an update was effectively performed.
+    virtual bool updateChroma(const enum NoteName& name,
+                              const enum Accid& accid,
+                              bool print,
+                              const Ton& gton, const Ton& lton = Ton());
+
+    /// update the count of wrong color for this cost with the given values.
+    /// @param name chosen name for the received pitch.
+    /// @param accid chosen alteration for the received pitch.
+    /// @param print whether the accidental must be printed in score.
+    /// @param gton conjectured main (global) tonality (key signature).
+    /// ignored for CostA.
+    /// @param lton conjectured local tonality or undef tonlity if it is
+    /// unknown. ignored for CostA.
+    /// @return wether an update was effectively performed.
+    virtual bool updateColor(const enum NoteName& name,
                              const enum Accid& accid,
                              bool print,
                              const Ton& gton, const Ton& lton = Ton());
-            
+
+    /// update the count of Cb B# E# Fb for this cost, with the given values.
+    /// @param accid chosen alteration for the received pitch.
+    /// @param print whether the accidental must be printed in score.
+    /// @param gton conjectured main (global) tonality (key signature).
+    /// ignored for CostA.
+    /// @param lton conjectured local tonality or undef tonlity if it is
+    /// unknown. ignored for CostA.
+    /// @return wether an update was effectively performed.
+    virtual bool updateCflat(const enum NoteName& name,
+                             const enum Accid& accid,
+                             bool print,
+                             const Ton& gton, const Ton& lton = Ton());
+
+    /// update the count of double sharp and double flats for this cost,
+    /// with the given values.
+    /// @param accid chosen alteration for the received pitch.
+    /// @param print whether the accidental must be printed in score.
+    /// @param gton conjectured main (global) tonality (key signature).
+    /// ignored for CostA.
+    /// @param lton conjectured local tonality or undef tonlity if it is
+    /// unknown. ignored for CostA.
+    /// @return wether an update was effectively performed.
+    virtual bool updateDouble(const enum NoteName& name,
+                              const enum Accid& accid,
+                              bool print,
+                              const Ton& gton, const Ton& lton = Ton());
 public: // access and debug
 
-    /// accessor for debug.
-    inline size_t get_accid() const { return _accid; }
+    inline size_t get_chromharm() const { return _chromharm; }
 
+    /// accessor for debug.
+    inline size_t get_color() const { return _color; }
+
+    /// accessor for debug.
+    inline size_t get_cflat() const { return _cflat; }
+    
     /// Cost type of this const value.
     virtual CostType type() const override;
     
@@ -151,21 +188,35 @@ public: // access and debug
     
 protected: // data
     
-    /// cumulated number of printed accidentals.
-    size_t _accid; // unsigned int    
+    /// number of accidental not present in the chromatic harmonic scale.
+    /// for tie-breaking.
+    size_t _chromharm;
+    
+    /// cumulated number of accidentals with color different from global ton.
+    /// for tie-breaking.
+    size_t _color;
+
+    /// cumulated number of printed and non lead Cb B# E# Fb.
+    /// for tie-breaking.
+    size_t _cflat;
+
+    /// cumulated number of double sharp or double flat.
+    /// for tie-breaking.
+    size_t _double;
+
 };
 
 // CostA operator+(const CostA& c1, const CostA& c2);
 
-std::ostream& operator<<(std::ostream& o, const CostA& c);
+std::ostream& operator<<(std::ostream& o, const CostAT& c);
 
 } // namespace pse
 
 /// fmt v10 and above requires `fmt::formatter<T>` extends `fmt::ostream_formatter`.
 /// @see: https://github.com/fmtlib/fmt/issues/3318
-template<> struct fmt::formatter<pse::CostA> : fmt::ostream_formatter {};
+template<> struct fmt::formatter<pse::CostAT> : fmt::ostream_formatter {};
 
-#endif /* CostA_hpp */
+#endif /* CostAT_hpp */
 
 /// @}
 

@@ -403,17 +403,18 @@ def ctype_tostring(ct):
     """cast a PSE Cost Type to a string"""
     if (ct == pse.CTYPE_ACCID):
         return 'A'
+    elif (ct == pse.CTYPE_ACCIDtb):
+        return 'Atb'        
     elif (ct == pse.CTYPE_ACCIDlead):
         return 'Ad'
     elif (ct == pse.CTYPE_ADplus):
-        return 'AD+'   # not found
+        return 'Ad+'   # not found
     elif (ct == pse.CTYPE_ADlex):
-        return 'ADlex'   # not found
+        return 'Adlex'   # not found
     elif (ct == pse.CTYPE_UNDEF):
         return 'UNDEF'
     else: 
         print('Invalid Cost Type')
-
 
 
 ####################
@@ -981,18 +982,18 @@ class Spellew:
             self._algo_params += '_'+ctype_tostring(t1_costtype)
             self._algo_params += 'T' if t1_tonal  else 'M'
             self._algo_params += 'D' if t1_det  else 'E'            
-            assert(global1 >= 0)
-            assert(global1 <= 100)
-            if global1 < 100:
-                self._algo_params += '_'
-                self._algo_params += str(global1)
-            if grid == pse.Grid_Best:
-                self._algo_params += '_Gridy'     
-            elif grid == pse.Grid_Rank:
-                self._algo_params += '_Gridr'                
-            elif grid == pse.Grid_Exhaustive:
-                self._algo_params += '_Gridx'                
             if t2_costtype != pse.CTYPE_UNDEF:
+                assert(global1 >= 0)
+                assert(global1 <= 100)
+                if global1 < 100:
+                    self._algo_params += '_'
+                    self._algo_params += str(global1)
+                if grid == pse.Grid_Best:
+                    self._algo_params += '_Gridy'     
+                elif grid == pse.Grid_Rank:
+                    self._algo_params += '_Gridr'                
+                elif grid == pse.Grid_Exhaustive:
+                    self._algo_params += '_Gridx'                
                 self._algo_params += '_'
                 self._algo_params += ctype_tostring(t2_costtype)
                 self._algo_params += 'T' if t2_tonal  else 'M'
@@ -1135,7 +1136,7 @@ class Spellew:
     def spell(self, notes, stat, output_path=None):
         """run spell checking algo"""
         # reset the global flags but not the whole list of tons
-        self._speller.reset_globals() 
+        #self._speller.reset_globals() 
         self._speller.reset_table() 
         self._speller.reset_grid() 
         self._speller.reset_enum(0, 0)
@@ -1202,10 +1203,12 @@ class Spellew:
         # assert(self._spelled)
         anote_global_part(part, self._speller, gt)              
     
-    def eval_part(self, part, stats, output_path=None, chord_sym = False):
+    def eval_part(self, part, stats, output_path=None, 
+                  chord_sym = False, reset_globals = True):
         """evaluate spelling for one part in a score and mark errors"""     
         """part: the M21 part to process"""
         """chord_symb: whether we spell the notes of chord symbols or not"""   
+        """reset_globals: whether the global flags in the list of tons are reset before spelling"""
         assert(stats is not None)
         # extract real key and notes from part
         k0 = get_key(part)
@@ -1215,6 +1218,10 @@ class Spellew:
         
         # spell with algo
         print('PSE: spelling with', self._algo_name+self._algo_params, flush=True)
+        
+        if reset_globals:
+            # reset the global flags but not the whole list of tons
+            self._speller.reset_globals() 
         self.spell(ln, stats, output_path) #print('spell finished', end='\n', flush=True)   
         
         # select the best global ton from speller (can be ties)
@@ -1238,8 +1245,8 @@ class Spellew:
         (gt, i) = (self._speller.global_ton(0), self._speller.iglobal_ton(0))       
         assert(nbg == 0 or nbg == 1)
         assert(nbg == 0 or not gt.undef()) 
-        print('PSE: global selected:', i, m21_key(gt), 
-              '(', gt.fifths(), ')', flush=True)
+        print('PSE: global selected:', m21_key(gt), '(', gt.fifths(), ')', 
+              'index:', i, flush=True)
         
         # eval the estimation of global key
         if not gt.undef():
@@ -1279,12 +1286,12 @@ class Spellew:
 
 
     def eval_score(self, score, stats=Stats(),
-                   score_id=0, title:str='', composer:str='', 
-                   output_path=None, 
-                   chord_sym = False):        
+                   score_id=0, title:str='', composer:str='', output_path=None, 
+                   chord_sym = False, reset_globals = True):        
         """evaluate spelling for all parts in a score"""
         """score: the M21 part to process"""
         """chord_symb: whether we spell the notes of chord symbols or not"""   
+        """reset_globals: whether the global flags in the list of tons are reset before spelling"""
         # DO IN CALLER
         if not title: 
             title=score.metadata.title
@@ -1305,7 +1312,8 @@ class Spellew:
             if (spellable(part)):
                 (k_gt, ton_est, nn, ld) = self.eval_part(part, stats, 
                                                          output_path, 
-                                                         chord_sym)
+                                                         chord_sym, 
+                                                         reset_globals)
                 # add one row in stat table for each part
                 stats.record_part(i, k_gt, ton_est, nn, len(ld))
                 ls.append(ton_est)
