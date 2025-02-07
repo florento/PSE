@@ -70,6 +70,16 @@ protected: // operators
     // @param rhs a cost to compare to.
     bool tiebreak_equal(const CostAT& rhs) const;
 
+    /// variant of equality for tie-breaking members
+    /// with a member by member comparison.
+    // @param rhs a cost to compare to.
+    bool tiebreak_equal_lex(const CostAT& rhs) const;
+
+    /// variant of equality for tie-breaking members
+    /// with a sum of some members.
+    // @param rhs a cost to compare to.
+    bool tiebreak_equal_sum(const CostAT& rhs) const;
+
     /// cost inequality.
     /// @param rhs a cost to compare to.
     bool smaller(const Cost& rhs) const override;
@@ -77,6 +87,26 @@ protected: // operators
     // inequality for tie-breaking members.
     // @param rhs a cost to compare to.
     bool tiebreak_smaller(const CostAT& rhs) const;
+
+    /// variant of inequality for tie-breaking members
+    /// with a lexicographic member by member comparison.
+    // @param rhs a cost to compare to.
+    bool tiebreak_smaller_lex1(const CostAT& rhs) const;
+
+    /// variant of inequality for tie-breaking members
+    /// with a lexicographic member by member comparison.
+    // @param rhs a cost to compare to.
+    bool tiebreak_smaller_lex2(const CostAT& rhs) const;
+
+    /// variant of inequality for tie-breaking members
+    /// with a lexicographic member by member comparison.
+    // @param rhs a cost to compare to.
+    bool tiebreak_smaller_lex3(const CostAT& rhs) const;
+
+    /// variant of inequality for tie-breaking members
+    /// with a sum of some members.
+    // @param rhs a cost to compare to.
+    bool tiebreak_smaller_sum(const CostAT& rhs) const;
 
     /// cumulated sum operator. update this cost by adding rhs.
     /// @param rhs a cost to add.
@@ -192,18 +222,22 @@ protected: // data
     /// for tie-breaking.
     size_t _chromharm;
     
-    /// cumulated number of accidentals with color different from global ton.
+    /// number of printed and non-lead accidentals
+    /// with a color different from global ton.
     /// for tie-breaking.
     size_t _color;
 
-    /// cumulated number of printed and non lead Cb B# E# Fb.
+    /// number of printed and non lead Cb B# E# Fb.
     /// for tie-breaking.
     size_t _cflat;
 
-    /// cumulated number of double sharp or double flat.
+    /// number of printed non-lead double sharp or double flat.
     /// for tie-breaking.
     size_t _double;
 
+    /// sum of the thre last tie-bereaking measures.
+    size_t _sum_tb;
+    
 };
 
 // CostA operator+(const CostA& c1, const CostA& c2);

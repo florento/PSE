@@ -24,8 +24,7 @@
 
 namespace pse {
 
-/// Construction of a grid from a table with an exhaustive
-/// Viterbi algorithm.
+/// Construction of a grid from a table with an exhaustive Viterbi algorithm.
 class PSGx : public PSG
 {
     
@@ -33,10 +32,10 @@ public: // construction
     
     /// construction of grid from a table.
     /// @param tab pitch spelling table used to estimated the locals.
-    /// @param modal compute only one row of the grid, of index 0,
+    /// @param singleton compute only one row of the grid, of index 0,
     /// without assumed global topnality. Otherwise, compute all rows
     /// associated to global tonalities in the tone index.
-    PSGx(const PST& tab, bool modal=false);
+    PSGx(const PST& tab, bool singleton=false);
 
     /// a grid cannot be copied
     PSGx(const PSGx& rhs) = delete;
@@ -49,6 +48,12 @@ public: // construction
 
 private: // construction
     
+    /// coefficients for the compution of best baths.
+    /// 0. rank in column of spelling table.
+    /// 1. rank for distance to previous in row.
+    /// 2. rank for distance to global in row.
+    static const std::array<size_t, 3> COEFF;
+    
     /// compute one row of this grid of local tons, corresponding to
     /// the given global ton, using the given spelling table.
     /// @param tab spelling table filled with spelling costs.
@@ -59,7 +64,7 @@ private: // construction
 
     /// compute one unique row of index 0 of this grid of local tons,
     /// for modal case (no global tonality).
-    void init_modal(const PST& tab);
+    void init_singleton(const PST& tab);
 
     // use the default ordering > (and ==) on Grid States
     // PSGQueue q = PSGQueue(PSGlex());
@@ -88,10 +93,10 @@ private: // construction
     /// @param preds table of of predecessors in best paths.
     /// @return the number of the next column to proceed.
     size_t first(const PST& tab,
-               const std::vector<std::vector<size_t>>& ranks,
-               std::vector<std::vector<size_t>>& costs,
-               std::vector<std::vector<size_t>>& preds,
-               size_t ig);
+                 const std::vector<std::vector<size_t>>& ranks,
+                 std::vector<std::vector<size_t>>& costs,
+                 std::vector<std::vector<size_t>>& preds,
+                 size_t ig);
 
     /// compute one columb of best path nodes.
     /// @param j column number.

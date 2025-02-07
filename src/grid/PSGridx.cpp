@@ -17,13 +17,17 @@ size_t PSGx::COST_INFINITE = -1;
 // static
 size_t PSGx::PRED_UNDEF = -1;
 
+// static
+const std::array<size_t, 3> PSGx::COEFF = {2, 1, 1};
+
+
 //PSGx::Cell::Cell(size_t c, size_t p):
 //cost(c),
 //previous(p)
 //{ }
 
 
-PSGx::PSGx(const PST& tab, bool modal):
+PSGx::PSGx(const PST& tab, bool singleton):
 PSG(tab)
 {
     init_empty(tab);
@@ -42,10 +46,10 @@ PSG(tab)
         return;
     }
         
-    if (modal)
+    if (singleton)
     {
         TRACE("PSGride: compute 1-row modal grid");
-        init_modal(tab);
+        init_singleton(tab);
     }
     else
     {
@@ -66,7 +70,7 @@ PSGx::~PSGx()
 { }
 
 
-void PSGx::init_modal(const PST& tab)
+void PSGx::init_singleton(const PST& tab)
 {
     init(tab, TonIndex::UNDEF);
 }
@@ -143,6 +147,7 @@ void PSGx::init(const PST& tab, size_t ig)
         WARN("Gridx: failure in computation of best path");
         return;
     }
+    // index of row (ton) with best (cumulated) cost in last column
     size_t i = bestCost(costs.back(), ig);
     
     for (size_t jm = 1; jm <= tab.size(); ++jm)
@@ -165,11 +170,11 @@ void PSGx::init(const PST& tab, size_t ig)
 
 
 
-// modal case
+// modal (singleton) case
 size_t PSGx::first(const PST& tab,
-                 const std::vector<std::vector<size_t>>& ranks,
-                 std::vector<std::vector<size_t>>& costs,
-                 std::vector<std::vector<size_t>>& preds)
+                   const std::vector<std::vector<size_t>>& ranks,
+                   std::vector<std::vector<size_t>>& costs,
+                   std::vector<std::vector<size_t>>& preds)
 
 {
     assert(tab.size() > 0);
@@ -215,9 +220,9 @@ size_t PSGx::first(const PST& tab,
 
 // tonal case: start from global ton gton
 size_t PSGx::first(const PST& tab,
-                 const std::vector<std::vector<size_t>>& ranks,
-                 std::vector<std::vector<size_t>>& costs,
-                 std::vector<std::vector<size_t>>& preds, size_t ig)
+                   const std::vector<std::vector<size_t>>& ranks,
+                   std::vector<std::vector<size_t>>& costs,
+                   std::vector<std::vector<size_t>>& preds, size_t ig)
 {
     assert(tab.size() > 0);
     assert(ranks.size() == tab.size());
@@ -249,7 +254,8 @@ size_t PSGx::first(const PST& tab,
         for (size_t i = 0; i < _index.size(); ++i)
         {
             // initial cost = rank + dist to ig
-            costj.push_back(_index.rankWeber(ig, i)+ rankj.at(i));
+            costj.push_back((COEFF[1]+COEFF[2]) * _index.rankWeber(ig, i) +
+                             COEFF[0] * rankj.at(i));
         }
         // column in preds remains empty
         assert(preds.at(0).empty());
@@ -268,13 +274,12 @@ size_t PSGx::column(size_t j, const PST& tab,
     assert(ranks.size() == tab.size());
     assert(costs.size() == tab.size());
     assert(preds.size() == tab.size());
-    assert(j > 0);
-    assert(j < tab.size());
+    assert(0 < j and j < tab.size());
     assert(j-1 < costs.size());
     assert(j-1 < preds.size());
     assert(ig == TonIndex::UNDEF or ig < _index.size());
 
-    // best path costs so far
+    // best path costs so far (until the measure preceeding j)
     const std::vector<size_t>& pcosts = costs.at(j-1);
     assert(pcosts.size() == _index.size());
     assert(costs.at(j).empty());
@@ -290,40 +295,52 @@ size_t PSGx::column(size_t j, const PST& tab,
     assert(empty_bar or rankj.size() == _index.size());
     assert(!empty_bar or rankj.empty());
 
+    // process column j
     for (size_t i = 0; i < _index.size(); ++i)
     {
+        // continue in the same local tonality
+        if (empty_bar)
+        {
+            size_t predcost = pcosts.at(i);
+            if (ig != TonIndex::UNDEF) predcost += _index.rankWeber(ig, i);
+            assert(_index.rankWeber(i, i) == 0);
+            costs.at(j).push_back(predcost);
+            preds.at(j).push_back(i);
+            continue;
+        }
+
+        // search best predecessor
         size_t best_cost = COST_INFINITE;
         size_t best_pred = PRED_UNDEF;
         size_t best_predcost = COST_INFINITE;
         // rank of spelling cost for ton i at bar j
         /// @todo rank or cost value?
-        size_t ri = empty_bar?0:rankj.at(i);
+        size_t ri = empty_bar?0:(COEFF[0] * rankj.at(i));
         // rank of i for distance to global
-        if (ig != TonIndex::UNDEF) ri += _index.rankWeber(ig, i);
+        if (ig != TonIndex::UNDEF) ri += COEFF[2] * _index.rankWeber(ig, i);
         // select a best predecessor for i
         for (size_t ip = 0; ip < _index.size(); ++ip)
         {
-            if (pcosts.at(ip) != COST_INFINITE)
+            if (pcosts.at(ip) == COST_INFINITE)
+                continue;
+            size_t predcost = pcosts.at(ip);
+            /// @todo distWeber or rankWeber
+            size_t cost = predcost + COEFF[1] * _index.rankWeber(ip, i) + ri;
+            
+            // in case of tie, we keep the smaller best_pred
+            // hence we need a wise ordering of tons in the ton index.
+            if (best_cost == COST_INFINITE or cost < best_cost)
             {
-                size_t predcost = pcosts.at(ip);
-                /// @todo distWeber or rankWeber
-                size_t cost = predcost + _index.rankWeber(ip, i) + ri;
-                
-                // in case of tie, we keep the smaller best_pred
-                // hence we need a wise ordering of tons in the ton index.
-                if (best_cost == COST_INFINITE or cost < best_cost)
-                {
-                    best_cost = cost;
-                    best_pred = ip;
-                    best_predcost = predcost;
-                }
-                // tie break
-                else if (cost == best_cost and
-                (best_predcost == COST_INFINITE or predcost < best_predcost))
-                {
-                    best_pred = ip;
-                    best_predcost = predcost;
-                }
+                best_cost = cost;
+                best_pred = ip;
+                best_predcost = predcost;
+            }
+            // tie break
+            else if (cost == best_cost and
+            (best_predcost == COST_INFINITE or predcost < best_predcost))
+            {
+                best_pred = ip;
+                best_predcost = predcost;
             }
             // otherwise ignore
         }

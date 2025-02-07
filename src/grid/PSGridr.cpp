@@ -10,6 +10,10 @@
 
 namespace pse {
 
+// static
+const std::array<size_t, 3> PSGr::COEFF = {1, 1, 1};
+
+
 PSGr::PSGr(const PST& tab): // std::vector<bool> mask
 PSGy(tab, false) // do not compute table (yet empty)
 {
@@ -90,12 +94,6 @@ void PSGr::extractRank(const PSV& vec, std::vector<size_t>& ties,
         ties.push_back(iprev); // singleton
         return;
     }
-    
-    // coefficients for the compution of means of ranks.
-    // 0. rank in column of spelling table.
-    // 1. rank for distance to previous in row.
-    // 2. rank for distance to global in row.
-    const std::array<size_t, 3> COEFF{1, 1, 1};
     
     assert(vec.size() == _index.size());
     assert(ig != TonIndex::UNDEF);

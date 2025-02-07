@@ -38,6 +38,12 @@ public: // construction
     
 private: // construction
     
+    /// coefficients for the compution of means of ranks.
+    /// 0. rank in column of spelling table.
+    /// 1. rank for distance to previous in row.
+    /// 2. rank for distance to global in row.
+    static const std::array<size_t, 3> COEFF;
+    
     /// fill this table of local tons.
     // @param flag whether the local estimation is done with rank means.
     void init(const PST& tab); 

@@ -119,8 +119,7 @@ bool CostAD::updateChroma(const enum NoteName& name, const enum Accid& accid,
     {
         return CostAT::updateChroma(name, accid, print, gton, lton);
     }
-    else if (print and
-             !Accids::contained(accid, lton.chromaton().accidScale(name)))
+    else if (!Accids::contained(accid, lton.chromaton().accidScale(name)))
     {
         _chromharm += 1;
         return true;

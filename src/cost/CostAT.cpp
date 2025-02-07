@@ -18,7 +18,8 @@ CostA(),
 _chromharm(0),
 _color(0),
 _cflat(0),
-_double(0)
+_double(0),
+_sum_tb(0)
 { }
 
 
@@ -27,7 +28,8 @@ CostA(rhs),
 _chromharm(rhs._chromharm),
 _color(rhs._color),
 _cflat(rhs._cflat),
-_double(rhs._double)
+_double(rhs._double),
+_sum_tb(rhs._sum_tb)
 { }
 
 
@@ -80,10 +82,24 @@ bool CostAT::equal(const Cost& rhs) const
 
 bool CostAT::tiebreak_equal(const CostAT& rhs) const
 {
+    return tiebreak_equal_sum(rhs);
+}
+
+
+bool CostAT::tiebreak_equal_lex(const CostAT& rhs) const
+{
     return (_chromharm == rhs._chromharm and
             _color == rhs._color and
             _cflat == rhs._cflat and
             _double == rhs._double);
+}
+
+
+bool CostAT::tiebreak_equal_sum(const CostAT& rhs) const
+{
+    assert(_sum_tb == _color + _cflat + _double);
+    assert(rhs._sum_tb == rhs._color + rhs._cflat + rhs._double);
+    return (_chromharm == rhs._chromharm and _sum_tb == rhs._sum_tb);
 }
 
 
@@ -96,13 +112,28 @@ bool CostAT::smaller(const Cost& rhs) const
         return CostA::smaller(rhs_AT);
 }
 
-
 bool CostAT::tiebreak_smaller(const CostAT& rhs) const
 {
-    // - color
-    // - cflat
-    // - double
-    // - chromharm
+    return tiebreak_smaller_sum(rhs);
+}
+
+bool CostAT::tiebreak_smaller_sum(const CostAT& rhs) const
+{
+    assert(_sum_tb == _color + _cflat + _double);
+    assert(rhs._sum_tb == rhs._color + rhs._cflat + rhs._double);
+    if (_sum_tb == rhs._sum_tb)
+                return (_chromharm < rhs._chromharm);
+    else
+        return (_sum_tb < rhs._sum_tb);
+}
+    
+
+// - color
+// - cflat
+// - double
+// - chromharm
+bool CostAT::tiebreak_smaller_lex1(const CostAT& rhs) const
+{
     if (_color == rhs._color)
     {
         if (_cflat == rhs._cflat)
@@ -117,42 +148,49 @@ bool CostAT::tiebreak_smaller(const CostAT& rhs) const
     }
     else
         return (_color < rhs._color);
-    
-    // - _chromharm
-    // - _color
-    // - _cflat
-    // if (_chromharm == rhs._chromharm)
-    // {
-    //     if (_color == rhs._color)
-    //         return (_cflat < rhs._cflat);
-    //     else
-    //         return (_color < rhs._color);
-    // }
-    // else
-    //     return (_chromharm < rhs._chromharm);
-    
-    // - _color
-    // - _chromharm
-    // - _cflat
-    // if (_color == rhs._color)
-    // {
-    //     if (_chromharm == rhs._chromharm) // _chromharm
-    //         return (_cflat < rhs._cflat);
-    //     else
-    //         return (_chromharm < rhs._chromharm);
-    // }
-    // else
-    //     return (_color < rhs._color);
 }
+
+
+// - _chromharm
+// - _color
+// - _cflat
+// - double
+bool CostAT::tiebreak_smaller_lex2(const CostAT& rhs) const
+{
+    
+    if (_chromharm == rhs._chromharm)
+    {
+        if (_color == rhs._color)
+        {
+            if (_cflat == rhs._cflat)
+            {
+                if (_double == rhs._double)
+                    return (_chromharm < rhs._chromharm);
+                else
+                    return (_double < rhs._double);
+            }
+            else
+                return (_cflat < rhs._cflat);
+        }
+        else
+            return (_color < rhs._color);
+    }
+    else
+        return (_chromharm < rhs._chromharm);
+}
+
 
 
 CostAT& CostAT::add(const CostAT& rhs)
 {
+    assert(_sum_tb == _color + _cflat + _double);
+    assert(rhs._sum_tb == rhs._color + rhs._cflat + rhs._double);
     CostA::add(rhs);
     _chromharm += rhs._chromharm;
     _color += rhs._color;
     _cflat += rhs._cflat;
     _double += rhs._double;
+    _sum_tb += rhs._sum_tb;
     return *this;
 }
 
@@ -178,6 +216,7 @@ double CostAT::pdist(const Cost& rhs) const
 
 
 /// @todo TBR. sum of differences?
+/// @todo not used. see pdist
 double CostAT::tiebreak_pdist(const CostAT& rhs) const
 {
     if (_chromharm == rhs._chromharm)
@@ -199,8 +238,7 @@ bool CostAT::updateChroma(const enum NoteName& name, const enum Accid& accid,
 {
     // count accid not in the chromatic harmonic scale
     assert(gton.defined());
-    if (print and
-        not Accids::contained(accid, gton.chromaton().accidScale(name)))
+    if (not Accids::contained(accid, gton.chromaton().accidScale(name)))
     {
         _chromharm += 1;
         return true;
@@ -282,6 +320,7 @@ bool CostAT::update(const enum NoteName& name, const enum Accid& accid,
     bool reto = updateColor(name, accid, print, gton, lton);
     bool retf = updateCflat(name, accid, print, gton, lton);
     bool retd = updateDouble(name, accid, print, gton, lton);
+    _sum_tb = _color + _cflat + _double;
     return reta or retc or reto or retf or retd;
 }
 
