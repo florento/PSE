@@ -117,6 +117,12 @@ Speller::~Speller()
 
 bool Speller::evalTable(CostType ctype, bool tonal, bool chromatic)
 {
+    if (ctype == CostType::UNDEF)
+    {
+        ERROR("Speller eval Table: undefined cost type, ignored.");
+        return false;
+    }
+
     if (_table)
     {
         WARN("Speller evalTable: deleting current pitch spelling table");
@@ -133,7 +139,9 @@ bool Speller::evalTable(CostType ctype, bool tonal, bool chromatic)
     /// @todo remplacer algo par flag chromatic
     const Algo algo(chromatic?Algo::PSD:Algo::PSE);
     assert(_enum);
-    _table = new PST(algo, sampleCost(ctype), index(), *_enum, tonal, _debug);
+    std::unique_ptr<Cost> seed = unique_zero(ctype); // was sampleCost(ctype)
+    assert(seed);
+    _table = new PST(algo, *seed, index(), *_enum, tonal, _debug);
 
     return true;
 }
@@ -141,6 +149,12 @@ bool Speller::evalTable(CostType ctype, bool tonal, bool chromatic)
 
 bool Speller::revalTable(CostType ctype, bool tonal, bool chromatic)
 {
+    if (ctype == CostType::UNDEF)
+    {
+        ERROR("Speller reval Table: undefined cost type, ignored.");
+        return false;
+    }
+
     if (_table == nullptr)
     {
         ERROR("Speller revalTable: call evalTable first");
@@ -168,8 +182,9 @@ bool Speller::revalTable(CostType ctype, bool tonal, bool chromatic)
     // global is ignored
     //    if (_global)
     //    {
-    _table = new PST(algo, *table_pre, sampleCost(ctype), *_global, *_grid,
-                     tonal, _debug);
+    std::unique_ptr<Cost> seed = unique_zero(ctype); // was sampleCost(ctype)
+    assert(seed);
+    _table = new PST(algo, *table_pre, *seed, *_global, *_grid, tonal, _debug);
     //    }
 //    else
 //    {

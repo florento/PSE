@@ -117,9 +117,11 @@ void CostADplus::print(std::ostream& o) const
 {
     // CostAD::print(o);
     // o << _sum;
-    o << _accid;
-    o << "/";
-    o << _dist;
+    o << _accid << "+" << _dist << ':';
+    o << _color << ':';
+    o << _cflat << ':';
+    o << _double << ':';
+    o << _chromharm;
 }
 
 

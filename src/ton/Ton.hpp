@@ -150,10 +150,10 @@ public: // accessors
     /// this ton has the same accidents, in Key Signature or Scale,
     /// as the given ton.
     /// @param rhs other ton to be compered to.
-    /// @param ks consider the accidents in Key Signature for equivalence,
+    /// @param tonal consider the accidents in Key Signature for equivalence,
     /// otherwise consider the accidents in scale.
     /// @see PSState
-    bool equivalent(const Ton& rhs, bool ks) const;
+    bool equivalent(const Ton& rhs, bool tonal) const;
 
     /// accidental in the key signature of this ton for a given pitch name.
     /// @param n an encapsulated note name

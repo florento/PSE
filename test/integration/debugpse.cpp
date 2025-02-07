@@ -18,6 +18,92 @@
 
 using namespace pse;
 
+int spellKE(SpellerEnum& sp,
+            enum CostType c1, bool tonal1, bool det1,
+            enum CostType c2, bool tonal2, bool det2,
+            int global1,
+            const GridAlgo& grid);
+
+
+int main(int argc, const char* argv[])
+{
+    std::cout << "Debug PS" << std::endl;
+    
+    setVerbosityLevel(5);
+    spdlog_setPattern();
+
+    // pse::WeberModal godfried;
+    // godfried.dump();
+    // return 0;
+
+    pse::SpellerEnum sp(30, pse::Algo::Undef, true); // debug flag
+    //pse::PS13 sp;
+
+    for (size_t i = 0; i < sp.index().size(); ++i)
+    {
+        const Ton& ton(sp.index().ton(i));
+        DEBUG("ton {}: {} {}", // (mode cast: {}={})
+              i, ton,
+              //ton.getMode(), static_cast<int>(ton.getMode()),
+              (sp.index().isGlobal(i)?"(global)":""));
+    }
+    
+    // feed the speller sp with notes in sample.cpp
+    // issue7(sp);
+    // BWV_858prelude(sp);
+    // BWV_857fugue(sp);
+    // BWV_864fugue(sp);
+    // LG101(sp);
+    // LG461(sp);
+    // Waldstein(sp);
+    // Airegin(sp);
+    // Afternoon(sp);
+    vRfYc(sp);
+
+    std::cout << "spelling " << sp.size() << " notes" << std::endl;
+    int ks = spellKE(sp,
+                  // cost                   modal  exhaustive
+                     pse::CostType::ACCID,  false, false,
+                  // cost                   tonal  exhaustive
+                     pse::CostType::UNDEF,  true,  false,       // ADplus
+                  // global1 grid algo
+                     100, GridAlgo::Exhaustive);
+
+    if (ks == KeyFifth::UNDEF)
+    {
+        ERROR("spell failure");
+        return 1;
+    }
+
+    // std::cout << "renaming " << sp.size() << " notes" << std::endl;
+    // status = status && sp.rename();
+//    if (status)
+//    {
+//        std::cout << sp.size() << " spelled notes" << std::endl;
+//        for (size_t i = 0; i < sp.size(); ++i)
+//        {
+//            std::cout << i << ' ';
+//            std::cout << sp.name(i);
+//            std::cout << sp.octave(i);
+//            std::cout << sp.accidental(i);
+//            std::cout << std::endl;
+//        }
+//    }
+//    else 
+//    {
+//        ERROR("renaming failure");
+//        return 2;
+//    }
+
+//    std::cout << "rewriting" << sp.size() << " notes" << std::endl;
+//    size_t rew = sp.rewritePassing();
+//    std::cout << "(" << rew << " notes rewritten)" << std::endl;
+    
+    return 0;
+}
+
+
+
 
 // dump the matric of Weber distance between tonalities
 //void WeberTable()
@@ -52,7 +138,7 @@ int spellKE(SpellerEnum& sp,
         ERROR("spellKE: failed to compute Table1");
         return KeyFifth::UNDEF;
     }
-    sp.printTable(std::cout);
+    // sp.printTable(std::cout);
     
     // compute the subarray of tons selected as candidate global tonality
     // tolerance distance 5%
@@ -121,6 +207,7 @@ int spellKE(SpellerEnum& sp,
             WARN("         global ton {}/{}: {} ({})",
                  j, nbg, sp.global(j), sp.iglobal(j));
         DEBUG("spellKE: selecting unique Global");
+        fstatus = sp.selectGlobal();
         if (fstatus == false)
         {
             ERROR("spellKE: failed to break ties for {} Global tonalities",
@@ -147,82 +234,4 @@ int spellKE(SpellerEnum& sp,
     sp.rewritePassing();
       
     return sp.ton(ig).fifths();
-}
-
-
-
-int main(int argc, const char* argv[])
-{
-    std::cout << "Debug PS" << std::endl;
-    
-    setVerbosityLevel(5);
-    spdlog_setPattern();
-
-    // pse::WeberModal godfried;
-    // godfried.dump();
-    // return 0;
-
-    pse::SpellerEnum sp(165, pse::Algo::Undef, true); // debug flag
-    //pse::PS13 sp;
-
-    for (size_t i = 0; i < sp.index().size(); ++i)
-    {
-        const Ton& ton(sp.index().ton(i));
-        DEBUG("ton {}: {} {}", // (mode cast: {}={})
-              i, ton,
-              //ton.getMode(), static_cast<int>(ton.getMode()),
-              (sp.index().isGlobal(i)?"(global)":""));
-    }
-    
-    // feed the speller sp with notes in sample.cpp
-    // issue7(sp);
-    // BWV_858prelude(sp);
-    // BWV_857fugue(sp);
-    // BWV_864fugue(sp);
-    // LG101(sp);
-    // LG461(sp);
-    // Waldstein(sp);
-    Airegin(sp);
-    // Afternoon(sp);
-
-    std::cout << "spelling " << sp.size() << " notes" << std::endl;
-    int ks = spellKE(sp,
-                  // cost                   modal  exhaustive
-                     pse::CostType::ACCID,  false, false,
-                  // cost                   tonal  exhaustive
-                     pse::CostType::ADplus, true,  false,
-                  // global1 grid algo
-                     100,      GridAlgo::Exhaustive);
-
-    if (ks == KeyFifth::UNDEF)
-    {
-        ERROR("spell failure");
-        return 1;
-    }
-
-    // std::cout << "renaming " << sp.size() << " notes" << std::endl;
-    // status = status && sp.rename();
-//    if (status)
-//    {
-//        std::cout << sp.size() << " spelled notes" << std::endl;
-//        for (size_t i = 0; i < sp.size(); ++i)
-//        {
-//            std::cout << i << ' ';
-//            std::cout << sp.name(i);
-//            std::cout << sp.octave(i);
-//            std::cout << sp.accidental(i);
-//            std::cout << std::endl;
-//        }
-//    }
-//    else 
-//    {
-//        ERROR("renaming failure");
-//        return 2;
-//    }
-
-//    std::cout << "rewriting" << sp.size() << " notes" << std::endl;
-//    size_t rew = sp.rewritePassing();
-//    std::cout << "(" << rew << " notes rewritten)" << std::endl;
-    
-    return 0;
 }

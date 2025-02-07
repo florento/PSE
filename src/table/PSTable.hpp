@@ -64,7 +64,7 @@ public: // construction
     /// @param dflag debug mode (display table during construction).
     /// @warning the enumerator cannot be changed once the object created.
     PST(const Algo& a, const Cost& seed, const TonIndex& i, PSEnum& e,
-        bool tonal=false, bool dflag=false);
+        bool tonal, bool dflag=false);
 
     // main constructor.
     // @param e an enumerator of notes for transitions of configs.
@@ -98,7 +98,7 @@ public: // construction
     /// @param dflag debug mode (display table during construction).
     PST(const Algo& a, const PST& tab, const Cost& seed,
         const PSO& globals, const PSG& locals,
-        bool tonal=true, bool dflag=false);
+        bool tonal, bool dflag=false);
 
     /// rebuid a table with the same algo, index, and enumerator as the given
     /// table, and the new given seed and given grid of local tonalities.
@@ -115,7 +115,7 @@ public: // construction
     /// @param dflag debug mode (display table during construction).
     PST(const PST& tab, const Cost& seed,
         const PSO& globals, const PSG& locals, 
-        bool tonal=true, bool dflag=false);
+        bool tonal, bool dflag=false);
     
     /// a table cannot be copied
     PST(const PST& rhs) = delete;

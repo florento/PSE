@@ -177,8 +177,8 @@ void TonIndex::reset(size_t n)
 
 void TonIndex::add(const Ton& ton, bool global)
 {
-    assert(_tons.size() == _repr_modal.size());
-    assert(_tons.size() == _repr_tonal.size());
+    // assert(_tons.size() == _repr_modal.size());
+    // assert(_tons.size() == _repr_tonal.size());
     if (_closed)
     {
         ERROR("TonIndex add: array of tons is closed");
@@ -232,42 +232,46 @@ void TonIndex::add(const Ton& ton, bool global)
     // search and store earlier equivalent tons
     assert( _tons.size() > 0);
     
+    // init tables of representatives
     // it is the first ton added
-    if ( _tons.size() == 1)
-    {
-        _repr_modal.push_back(0);
-        _repr_tonal.push_back(0);
-    }
-    else
-    {
-        size_t current = _tons.size() - 1; // index of last ton added to this index
-        assert(_tons[current].first == ton);
-        assert(_tons[current].second == global);
-        bool found_tonal = false;
-        bool found_modal = false;
-        
-        for (size_t i = 0; i < current && (!found_tonal || !found_modal); ++i)
-        {
-            const Ton& toni = _tons.at(i).first;
-            assert(toni != ton); // no duplicates in TonIndex
-            if (!found_tonal && ton.equivalent(toni, true))  // tonal equiv
-            {
-                _repr_tonal.push_back(i);
-                found_tonal = true;
-            }
-            if (!found_modal && ton.equivalent(toni, false)) // modal equiv
-            {
-                _repr_modal.push_back(i);
-                found_modal = true;
-            }
-        }
-        
-        if (!found_tonal)
-            _repr_tonal.push_back(current); // tonal equivalent is self
-        
-        if (!found_modal)
-            _repr_modal.push_back(current); // modal equivalent is self
-    }
+    //if ( _tons.size() == 1)
+    //{
+    //    _repr_modal.push_back(0);
+    //    _repr_tonal.push_back(0);
+    //}
+    //else
+    //{
+    //    size_t current = _tons.size() - 1; // index of last ton added to this index
+    //    assert(_tons[current].first == ton);
+    //    assert(_tons[current].second == global);
+    //    bool found_tonal = false;
+    //    bool found_modal = false;
+    //
+    //    // search for an equivalent in previous tons
+    //    for (size_t i = 0; i < current and (!found_tonal or !found_modal); ++i)
+    //    {
+    //        const Ton& toni = _tons.at(i).first;
+    //        assert(toni != ton); // no duplicates in TonIndex
+    //        if (!found_tonal && ton.equivalent(toni, true))  // tonal equiv
+    //        {
+    //            DEBUG("{}:{} tonal equiv {}:{}", current, ton, i, toni);
+    //            _repr_tonal.push_back(i);
+    //            found_tonal = true;
+    //        }
+    //        if (!found_modal && ton.equivalent(toni, false)) // modal equiv
+    //        {
+    //            DEBUG("{}:{} modal equiv {}:{}", current, ton, i, toni);
+    //            _repr_modal.push_back(i);
+    //            found_modal = true;
+    //        }
+    //    }
+    //
+    //    if (!found_tonal)
+    //        _repr_tonal.push_back(current); // tonal equivalent is self
+    //
+    //    if (!found_modal)
+    //        _repr_modal.push_back(current); // modal equivalent is self
+    //}
 }
 
 
@@ -323,6 +327,9 @@ void TonIndex::close()
     {
         _backup_globals.push_back(isGlobal(i));
     }
+
+    // build the tables of representatives of equivalent tons
+    initRepr();
     
     // build Weber tables
     initRankWeber();
@@ -508,12 +515,12 @@ void TonIndex::initmodal()
     init(-7, 7, ModeName::Major, true);
     init(-7, 7, ModeName::Minor, true);
     init(-7, 7, ModeName::MinorMel, true);
-    init(-7, 7, ModeName::Dorian, true);
-    init(-7, 7, ModeName::Phrygian, true);
-    init(-7, 7, ModeName::Lydian, true);
-    init(-7, 7, ModeName::Mixolydian, true);
-    init(-7, 7, ModeName::Aeolian, true);
-    init(-7, 7, ModeName::Locrian, true);
+    init(-7, 7, ModeName::Dorian, false);
+    init(-7, 7, ModeName::Phrygian, false);
+    init(-7, 7, ModeName::Lydian, false);
+    init(-7, 7, ModeName::Mixolydian, false);
+    init(-7, 7, ModeName::Aeolian, false);
+    init(-7, 7, ModeName::Locrian, false);
 }
 
 
@@ -904,6 +911,53 @@ bool TonIndex::global(const ModeName& m)
         {
             ERROR("unknown mode name");
             return false;
+        }
+    }
+}
+
+
+void TonIndex::initRepr()
+{
+    assert(_closed);
+    
+    for (size_t i = 0; i < _tons.size() ; ++i)
+    {
+        assert(_repr_tonal.size() == _repr_modal.size());
+        const Ton& toni(_tons.at(i).first);
+        bool found_tonal = false;
+        bool found_modal = false;
+        
+        // search for an equivalent in previous tons
+        for (size_t j = 0; j < i and (!found_tonal or !found_modal); ++j)
+        {
+            const Ton& tonj(_tons.at(j).first);
+            assert(tonj != toni); // no duplicates in TonIndex
+            if (!found_tonal && toni.equivalent(tonj, true))  // tonal equiv
+            {
+                // DEBUG("{}:{} tonal equiv {}:{}", i, toni, j, tonj);
+                assert(i == _repr_tonal.size());
+                _repr_tonal.push_back(j);
+                found_tonal = true;
+            }
+            if (!found_modal && toni.equivalent(tonj, false)) // modal equiv
+            {
+                // DEBUG("{}:{} modal equiv {}:{}", i, toni, j, tonj);
+                assert(i == _repr_modal.size());
+                _repr_modal.push_back(j);
+                found_modal = true;
+            }
+        }
+        
+        if (!found_tonal)
+        {
+            assert(i == _repr_tonal.size());
+            _repr_tonal.push_back(i); // tonal equivalent is self
+        }
+        
+        if (!found_modal)
+        {
+            assert(i == _repr_modal.size());
+            _repr_modal.push_back(i); // modal equivalent is self
         }
     }
 }

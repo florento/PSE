@@ -532,6 +532,7 @@ def colorizeo(ln, i, color):
 def colorize(ln, i, n, a, o, p, color):
     assert(i < len(ln))
     ln[i][0].style.color = color
+    ln[i][0].addLyric(f'({ln[i][0].pitch.name})')
     ln[i][0].pitch.step = m21_step(n)
     if ((a != pse.Accid.Natural) or (p == True)):
         ln[i][0].pitch.accidental = m21_accid(a)
@@ -1383,7 +1384,8 @@ def mk_pdf(p, filename):
     xml = Path(p, filename)
     stem = os.path.splitext(filename)[0]
     pdf = Path(p, stem+'.pdf')
-    subprocess.run([_musescore, str(xml), "-o", str(pdf)]) 
+    subprocess.run([_musescore, str(xml), "-o", str(pdf)], 
+                   stderr=subprocess.DEVNULL) 
 
 def mk_pdfs(p):
     ''' make a pdf from every musicxml file found under directory of path p'''

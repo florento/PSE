@@ -171,10 +171,6 @@ def eval_item(speller, dataset, name, output_dir='',
                                    chord_sym = csflag, 
                                    reset_globals = False)    
     stat.show()   
-    assert(len(lld) == 1) # always 1 unique part in LG dataset
-    if mflag and len(lld[0]) > 0:
-        score.show()
-        write_score(score, opath, name)
         
 def write_score(score, output_path, outname):
     if not os.path.isdir(output_path):

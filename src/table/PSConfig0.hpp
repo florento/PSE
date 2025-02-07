@@ -62,7 +62,7 @@ public:
     /// (to create a cost of the same type).
     /// @param tonal mode: tonal or modal, for the construction of initial state.
     /// @see State constructor for tonal/modal mode
-    PSC0(const Ton& ton, size_t id, const Cost& seed, bool tonal = true);
+    PSC0(const Ton& ton, size_t id, const Cost& seed, bool tonal);
 
     // initial config for a given key signature.
     // @param init index of last note read to reach this configuration.

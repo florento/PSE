@@ -68,7 +68,7 @@ public: // constructors
     /// @param tonal mode: tonal or modal, for the construction
     /// of initial state. default = modal.
     PSV(const Algo& a, const Cost& seed, const TonIndex& index,
-        const PSEnum& e, size_t i0, size_t i1, size_t bar, bool tonal=false);
+        const PSEnum& e, size_t i0, size_t i1, size_t bar, bool tonal);
     
     /// rebuid a column with the same algo, index, and enumerator as the given
     /// column, and the new given seed and given column of local tonalities.
@@ -84,7 +84,7 @@ public: // constructors
     /// of initial state. default = tonal.
     PSV(const PSV& col, const Cost& seed,
         const PSO& globals, const std::vector<size_t>& locals,
-        bool tonal=true);
+        bool tonal);
     
     /// main constructor.
     /// @param a name of pitch-spelling algorithm implemented.
@@ -284,7 +284,7 @@ private: // convenience functions
     /// of the same type.
     /// @param tonal mode: tonal or modal, for the construction
     /// of initial state.
-    void init_psbs(const Cost& seed, bool tonal=false);
+    void init_psbs(const Cost& seed, bool tonal);
     
     /// fill the vector _psbs with PS Bags constructed with the notes
     /// enumerated and the given local tons.
@@ -296,7 +296,7 @@ private: // convenience functions
     /// of initial state.
     void init_psbs(const Cost& seed,
                    const PSO& globals, const std::vector<size_t>& locals,
-                   bool tonal=true);
+                   bool tonal);
 
     // initialize the vector _locals of local tonalities
     // bool init_locals();

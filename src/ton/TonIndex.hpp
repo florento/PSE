@@ -278,7 +278,7 @@ private: // data
     // @todo TBR not used, replaced by _WeberModal and _WeberBlues
     // bool _WeberTonal;
 
-    /// this array of tonalities contains at least one ton with greek mode.
+    /// this array of tonalities contains at least one ton with chruch mode.
     bool _WeberModal;
 
     /// this array of tonalities contains at least one ton with a blues mode.
@@ -343,8 +343,12 @@ private: // construction and convenience
     /// minor harmonic KS -6 to 6 : C, C#, D, Eb, D#, E, F, F#, G, G#, A, Bb, B
     void init25();
     
+    /// not used
     void initmodal();
     
+    /// initialize the structs storing representative of equivalent tons.
+    void initRepr();
+
     /// initialize the table _rankWeber of rank wrt Weber distance.
     void initRankWeber();
     

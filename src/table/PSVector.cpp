@@ -63,12 +63,12 @@ _psbs(i.size(), nullptr),
 //_local_cands(), // emptyset
 _tiebfail(0)
 {
-    ERROR("this PSV constructor should not be called");
+    ERROR("deprecated PSV constructor should not be called");
     // give the vector their definitive size (to use as arrays)
     //_psbs.assign(_index.size(), nullptr);
     //_psb_total.assign(_index.size(), nullptr);
     //_local.assign(_index.size(), TonIndex::UNDEF);
-    init_psbs(seed);
+    init_psbs(seed, true);
 }
 
 
@@ -85,11 +85,11 @@ _psbs(i.size(), nullptr),
 //_local_cands(), // emptyset
 _tiebfail(0)
 {
-    ERROR("this PSV constructor should not be called");
+    ERROR("deprecated PSV constructor should not be called");
     //_psbs.assign(_index.size(), nullptr);
     //_psb_total.assign(_index.size(), nullptr);
     //_local.assign(_index.size(), TonIndex::UNDEF);
-    init_psbs(seed);
+    init_psbs(seed, true);
 }
 
 
@@ -209,6 +209,7 @@ const PSB& PSV::bag(size_t i) const
 // compute _psbs without local tons
 void PSV::init_psbs(const Cost& seed, bool tonal)
 {
+    // for all tons in the ton index
     for (size_t i = 0; i < _index.size(); ++i)
     {
         // PS Bag is empty if first() = last()
@@ -236,8 +237,10 @@ void PSV::init_psbs(const Cost& seed, bool tonal)
             {
                 assert(j < _psbs.size());
                 assert(_psbs.at(j) != nullptr);
-                // DEBUGU("init_psbs OPTIM {}={}", i, j);
-                _psbs[i] = _psbs[j]; // shared_ptr copy
+                // DEBUG("init_psbs Optim Equiv Tons ({}) {}:{}<-{}:{}",
+                //       (tonal?"tonal":"modal"),
+                //       i, _index.ton(i), j, _index.ton(j));
+                _psbs[i] = _psbs.at(j); // shared_ptr copy
             }
         }
         else

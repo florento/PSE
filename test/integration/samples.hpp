@@ -42,5 +42,9 @@ void Waldstein(pse::SpellerEnum& sp);
 void Airegin(pse::SpellerEnum& sp);
 void Afternoon(pse::SpellerEnum& sp);
 
+// Omnibook
+void vRfYc(pse::SpellerEnum& sp);
+
+
 
 #endif /* samples_hpp */

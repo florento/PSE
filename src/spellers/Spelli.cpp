@@ -15,10 +15,10 @@ Spelli::Spelli(size_t nbton, bool dflag):
 _index(new TonIndex(nbton)),
 //_seed(nullptr),
 //_seedAdiscount(true), // discount obsolete for CostA
-_seedA(),
-_seedAtb(),
-_seedADplus(),
-_seedADlex(),
+//_seedA(),
+//_seedAtb(),
+//_seedADplus(),
+//_seedADlex(),
 _debug(dflag),
 _uton(new Ton()) // undef
 {
@@ -30,10 +30,10 @@ _uton(new Ton()) // undef
 
 Spelli::Spelli(std::shared_ptr<TonIndex> id, bool dflag):
 _index(id), // copy
-_seedA(),
-_seedAtb(),
-_seedADplus(),
-_seedADlex(),
+//_seedA(),
+//_seedAtb(),
+//_seedADplus(),
+//_seedADlex(),
 _debug(dflag),
 _uton(new Ton()) // undef
 {
@@ -220,31 +220,31 @@ const Ton& Spelli::global(size_t n) const
 // prepare spelling
 //
 
-Cost& Spelli::sampleCost(CostType ct)
-{
-    switch (ct)
-    {
-        case CostType::ACCIDlead:
-            WARN("Speller: discount obsolete for CostA (ignored)");
-            return _seedA;
-            
-        case CostType::ACCID:
-            return _seedA;
-
-        case CostType::ACCIDtb:
-            return _seedAtb;
-
-        case CostType::ADplus:
-            return _seedADplus;
-            
-        case CostType::ADlex:
-            return _seedADlex;
-            
-        default:
-            ERROR("Speller sampleCost unexpected code {}", ct);
-            return _seedA;
-    }
-}
+//Cost& Spelli::sampleCost(CostType ct)
+//{
+//    switch (ct)
+//    {
+//        case CostType::ACCIDlead:
+//            WARN("Speller: discount obsolete for CostA (ignored)");
+//            return _seedA;
+//            
+//        case CostType::ACCID:
+//            return _seedA;
+//
+//        case CostType::ACCIDtb:
+//            return _seedAtb;
+//
+//        case CostType::ADplus:
+//            return _seedADplus;
+//            
+//        case CostType::ADlex:
+//            return _seedADlex;
+//            
+//        default:
+//            ERROR("Speller sampleCost unexpected code {}", ct);
+//            return _seedA;
+//    }
+//}
 
 
 } // namespace pse

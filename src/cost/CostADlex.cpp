@@ -113,7 +113,12 @@ CostType CostADlex::type() const
 
 void CostADlex::print(std::ostream& o) const
 {
-    CostAD::print(o);
+    o << _accid << ":";
+    o << _dist << ':';
+    o << _color << ':';
+    o << _cflat << ':';
+    o << _double << ':';
+    o << _chromharm;
 }
 
 

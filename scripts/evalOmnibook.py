@@ -141,7 +141,7 @@ def eval_Omnibookitem(name, output='',
                       output_dir=output)
         
 # compute C++ add instructions for given score, for debugging with gdb
-def debug(name, corpus='leads'):    
+def debug(name):    
     assert(len(name) > 0)
     dataset = omnibook_corpus()
     evalXML.debug(dataset, name)

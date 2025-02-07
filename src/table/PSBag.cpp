@@ -83,8 +83,9 @@ void PSB::init(const Cost& seed, const Ton& ton, const Ton& lton, bool tonal)
 //    else
 //        q = PSCQueue(PSCad()); // empty
     
-    // initial configuration
-    q.push(std::make_shared<const PSC0>(ton, _enum.first(), seed, tonal)); // n0
+    // initial configuration. n0
+    q.push(std::shared_ptr<const PSC0>(new
+                               PSC0(ton, _enum.first(), seed, tonal)));
     
     while (! q.empty())
     {

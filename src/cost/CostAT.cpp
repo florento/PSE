@@ -295,9 +295,10 @@ CostType CostAT::type() const
 void CostAT::print(std::ostream& o) const
 {
     o << _accid << ':';
-    o << _chromharm << ':';
     o << _color << ':';
-    o << _cflat;
+    o << _cflat << ':';
+    o << _double << ':';
+    o << _chromharm;
 }
 
 

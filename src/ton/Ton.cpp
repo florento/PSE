@@ -296,9 +296,9 @@ int Ton::getRealKS() const
 
 
 // @todo more clever case analysis
-bool Ton::equivalent(const Ton& rhs, bool ks) const
+bool Ton::equivalent(const Ton& rhs, bool tonal) const
 {
-    if (ks) // tonal mode
+    if (tonal) // tonal mode
     {
         for (int n = 0; n < 7; ++n)
         {

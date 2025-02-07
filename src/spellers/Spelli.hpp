@@ -173,17 +173,17 @@ protected: // data
     // @warning discount Obsolete for CostA
     // CostA _seedAdiscount;
 
-    /// sample cost (zero) for the construction of tables.
-    CostA _seedA;
+    // sample cost (zero) for the construction of tables.
+    // CostA _seedA;
 
-    /// sample cost (zero) for the construction of tables.
-    CostAT _seedAtb;
+    // sample cost (zero) for the construction of tables.
+    // CostAT _seedAtb;
 
-    /// sample cost (zero) for the construction of tables.
-    CostADplus _seedADplus;
+    // sample cost (zero) for the construction of tables.
+    // CostADplus _seedADplus;
 
-    /// sample cost (zero) for the construction of tables.
-    CostADlex _seedADlex;
+    // sample cost (zero) for the construction of tables.
+    // CostADlex _seedADlex;
 
     /// debug mode activated.
     bool _debug;
@@ -193,10 +193,10 @@ protected: // data
         
 protected:
     
-    /// construct a sample cost value (zero) for the construction of tables.
-    /// @param ct type of cost domain.
-    /// @return the cost value constructed.
-    Cost& sampleCost(CostType ct);
+    // construct a sample cost value (zero) for the construction of tables.
+    // @param ct type of cost domain.
+    // @return the cost value constructed.
+    // Cost& sampleCost(CostType ct);
 
     /// @param c code for cost type:
     /// - 00 costA with discount for lead tons

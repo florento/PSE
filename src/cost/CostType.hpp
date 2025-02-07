@@ -47,8 +47,13 @@ enum class CostType
 
 };
 
+class Cost;
+
+/// zero cost of given type.
+std::unique_ptr<Cost> unique_zero(const CostType& ct);
+
 /// string of cost type.
-std::string tostring(const CostType& m);
+std::string tostring(const CostType& ct);
 
 std::ostream& operator<<(std::ostream& o, const CostType& m);
 
