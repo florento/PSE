@@ -233,15 +233,96 @@ double CostAT::tiebreak_pdist(const CostAT& rhs) const
 }
 
 
-bool CostAT::updateChroma(const enum NoteName& name, const enum Accid& accid,
-                          bool print, const Ton& gton, const Ton& lton)
+bool CostAT::updateChroma1(const enum NoteName& name, const enum Accid& accid,
+                           bool print, const Ton& ton)
 {
-    // count accid not in the chromatic harmonic scale
-    assert(gton.defined());
-    if (not Accids::contained(accid, gton.chromaton().accidScale(name)))
+    // count accid not in the chromatic harmonic scale of given ton
+    assert(ton.defined());
+    if (not Accids::contained(accid, ton.chromaton().accidScale(name)))
     {
         _chromharm += 1;
         return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+    
+    
+bool CostAT::updateChroma(const enum NoteName& name, const enum Accid& accid,
+                          bool print, const Ton& gton, const Ton& lton)
+{
+    // count accid not in the chromatic harmonic scale of global ton
+    if (lton.undef())
+    {
+        assert(gton.defined());
+        return updateChroma1(name, accid, print, gton);
+    }
+    // count accid not in the chromatic harmonic scale of local ton
+    else
+    {
+        return updateChroma1(name, accid, print, lton);
+    }
+}
+
+
+bool CostAT::updateColor1(const enum NoteName& name, const enum Accid& accid,
+                          bool print, const Ton& ton)
+{
+    // color of accident differs from color of given ton
+    assert(ton.defined());
+    int ks = ton.fifths();
+    // discount for lead
+    if (not Accids::contained(accid, ton.accidScale(name)))
+    {
+        switch (accid)
+        {
+            case Accid::DoubleSharp:
+                if (ks < 0)
+                {
+                    _color += 2;
+                    return true;
+                }
+                else
+                    return false;
+                
+            case Accid::DoubleFlat:
+                if (ks > 0)
+                {
+                    _color += 2;
+                    return true;
+                }
+                else
+                    return false;
+
+            case Accid::Sharp:
+                if (ks < 0)
+                {
+                    _color += 1;
+                    return true;
+                }
+                else
+                    return false;
+
+            case Accid::Flat:
+                if (ks > 0)
+                {
+                    _color += 1;
+                    return true;
+                }
+                else
+                    return false;
+
+            case Accid::Natural:
+                return false;
+
+            default:
+            {
+                ERROR("updateAccid: unexpected accidental"); // accid
+                return false;
+            }
+        }
     }
     else
     {
@@ -253,31 +334,26 @@ bool CostAT::updateChroma(const enum NoteName& name, const enum Accid& accid,
 bool CostAT::updateColor(const enum NoteName& name, const enum Accid& accid,
                         bool print, const Ton& gton, const Ton& lton)
 {
-    // color of accident differs from color of global ton
-    assert(gton.defined());
-    int ks = gton.fifths();
-    // const enum Accid& a = c.accidental();
-    if (print and
-        (not Accids::contained(accid, gton.accidScale(name))) and
-        (((ks >= 0) and flat(accid)) or ((ks <= 0) and sharp(accid))))
+    // count accid with different color than global ton
+    if (lton.undef())
     {
-        _color += 1;
-        return true;
+        assert(gton.defined());
+        return updateColor1(name, accid, print, gton);
     }
+    // count accid with different color than local ton
     else
     {
-        return false;
+        return updateColor1(name, accid, print, lton);
     }
 }
 
 
-bool CostAT::updateCflat(const enum NoteName& name, const enum Accid& accid,
-                        bool print, const Ton& gton, const Ton& lton)
+bool CostAT::updateCflat1(const enum NoteName& name, const enum Accid& accid,
+                          bool print, const Ton& ton)
 {
-    // count  Cb B# E# Fb.
-    assert(gton.defined());
-    if (print and
-        (not Accids::contained(accid, gton.accidScale(name))) and
+    // count  Cb B# E# Fb not in given ton
+    assert(ton.defined());
+    if ((not Accids::contained(accid, ton.accidScale(name))) and
         (((name == NoteName::C) && (accid == Accid::Flat)) or
          ((name == NoteName::B) && (accid == Accid::Sharp)) or
          ((name == NoteName::F) && (accid == Accid::Flat)) or
@@ -293,12 +369,28 @@ bool CostAT::updateCflat(const enum NoteName& name, const enum Accid& accid,
 }
 
 
-bool CostAT::updateDouble(const enum NoteName& name, const enum Accid& accid,
-                          bool print, const Ton& gton, const Ton& lton)
+bool CostAT::updateCflat(const enum NoteName& name, const enum Accid& accid,
+                        bool print, const Ton& gton, const Ton& lton)
 {
-    assert(gton.defined());
-    if (print and
-        (not Accids::contained(accid, gton.accidScale(name))) and
+    // count Cb B# E# Fb not in global ton
+    if (lton.undef())
+    {
+        assert(gton.defined());
+        return updateCflat1(name, accid, print, gton);
+    }
+    // count Cb B# E# Fb not in local ton
+    else
+    {
+        return updateCflat1(name, accid, print, lton);
+    }
+}
+
+
+bool CostAT::updateDouble1(const enum NoteName& name, const enum Accid& accid,
+                          bool print, const Ton& ton)
+{
+    assert(ton.defined());
+    if ((not Accids::contained(accid, ton.accidScale(name))) and
         ((accid == Accid::DoubleFlat) or (accid == Accid::DoubleSharp)))
     {
         ++_double;
@@ -307,6 +399,23 @@ bool CostAT::updateDouble(const enum NoteName& name, const enum Accid& accid,
     else
     {
         return false;
+    }
+}
+
+
+bool CostAT::updateDouble(const enum NoteName& name, const enum Accid& accid,
+                          bool print, const Ton& gton, const Ton& lton)
+{
+    // count double alteration not in global ton
+    if (lton.undef())
+    {
+        assert(gton.defined());
+        return updateDouble1(name, accid, print, gton);
+    }
+    // count double alteration not in glocal ton
+    else
+    {
+        return updateDouble1(name, accid, print, lton);
     }
 }
 

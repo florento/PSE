@@ -200,6 +200,55 @@ protected: // update member
                               const enum Accid& accid,
                               bool print,
                               const Ton& gton, const Ton& lton = Ton());
+    
+private: // update convenience
+    
+    /// update the measure chromharm for this cost, with the given values.
+    /// @param name chosen name for the received pitch.
+    /// @param accid chosen alteration for the received pitch.
+    /// @param print whether the accidental must be printed in score.
+    /// @param ton a ton for comparing accid to chromatic harmonic scale.
+    /// must not be undef.
+    /// @return wether an update was effectively performed.
+    virtual bool updateChroma1(const enum NoteName& name,
+                               const enum Accid& accid,
+                               bool print,
+                               const Ton& ton);
+    
+    /// update the count of wrong color for this cost with the given values.
+    /// @param name chosen name for the received pitch.
+    /// @param accid chosen alteration for the received pitch.
+    /// @param print whether the accidental must be printed in score.
+    /// @param ton a ton for comparing color of accid. must not be undef.
+    /// @return wether an update was effectively performed.
+    virtual bool updateColor1(const enum NoteName& name,
+                              const enum Accid& accid,
+                              bool print,
+                              const Ton& ton);
+
+    /// update the count of Cb B# E# Fb for this cost, with the given values.
+    /// @param accid chosen alteration for the received pitch.
+    /// @param print whether the accidental must be printed in score.
+    /// @param ton a ton for checking presence of cflat in scale.
+    /// must not be undef.
+    /// @return wether an update was effectively performed.
+    virtual bool updateCflat1(const enum NoteName& name,
+                              const enum Accid& accid,
+                              bool print,
+                              const Ton& ton);
+
+    /// update the count of double sharp and double flats for this cost,
+    /// with the given values.
+    /// @param accid chosen alteration for the received pitch.
+    /// @param print whether the accidental must be printed in score.
+    /// @param ton a ton for checking presence of double accid in scale.
+    /// must not be undef.
+    /// @return wether an update was effectively performed.
+    virtual bool updateDouble1(const enum NoteName& name,
+                               const enum Accid& accid,
+                               bool print,
+                               const Ton& ton);
+    
 public: // access and debug
 
     inline size_t get_chromharm() const { return _chromharm; }

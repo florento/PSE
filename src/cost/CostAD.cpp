@@ -110,27 +110,6 @@ bool CostAD::updateDist(const enum NoteName& name, const enum Accid& accid,
 }
 
 
-bool CostAD::updateChroma(const enum NoteName& name, const enum Accid& accid,
-                        bool print, const Ton& gton, const Ton& lton)
-{
-    // count accid not in the chromatic harmonic scale
-    // if (print && !(lton.chromatic().contains(name,accid)))
-    if (lton.undef())
-    {
-        return CostAT::updateChroma(name, accid, print, gton, lton);
-    }
-    else if (!Accids::contained(accid, lton.chromaton().accidScale(name)))
-    {
-        _chromharm += 1;
-        return true;
-    }
-    else
-    {
-        return false;
-    }
-}
-
-
 bool CostAD::update(const enum NoteName& name,
                     const enum Accid& accid,
                     bool print,

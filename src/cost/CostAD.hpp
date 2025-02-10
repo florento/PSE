@@ -124,19 +124,6 @@ protected: // update
                             bool print,
                             const Ton& gton, const Ton& lton = Ton());
     
-    /// update the member chromharm of this cost with the given values.
-    /// @param name chosen name for the received pitch.
-    /// @param accid chosen alteration for the received pitch.
-    /// @param print whether the accidental must be printed in score.
-    /// @param gton conjectured main (global) tonality (key signature).
-    /// ignored for CostA.
-    /// @param lton conjectured local tonality or undef tonlity if it is
-    /// unknown. ignored for CostA.
-    /// @return wether an update was effectively performed.
-    bool updateChroma(const enum NoteName& name,
-                      const enum Accid& accid,
-                      bool print,
-                      const Ton& gton, const Ton& lton = Ton()) override;
     
 public: // access, debug
 
