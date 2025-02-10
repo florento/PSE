@@ -27,8 +27,6 @@ see also: https://www.dolmetsch.com/musictheory11.htm
 
 
 
-
-
 REF: classical textbook on music theory: 
 
 - [Claude Abromont](https://www.fayard.fr/musique/guide-de-la-theorie-de-la-musique-9782213609775)
@@ -49,6 +47,5 @@ other open refs:
 > An algorithm for spelling the pitches of any musical scale
 > Information Sciences, vol. 472, 2019
 > https://doi.org/10.1016/j.ins.2018.09.015
-
 
 
