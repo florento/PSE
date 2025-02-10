@@ -9,6 +9,7 @@
 #include "PSBag.hpp"
 #include "Enharmonic.hpp"
 #include "PSOrder.hpp"
+#include "PSRawEnum.hpp" // OCTAVE_UNDEF
 // #include "PSTransit.hpp" // obsolete
 
 
@@ -244,9 +245,22 @@ void PSB::get_names(size_t id, const Ton& gton,
     // chroma in 0..11
     int m = pm % 12;
 
+    // constrained spelling: the name and accid are known (forced)
+    // only one potential successor
+    if (_enum.name(id) != NoteName::Undef)
+    {
+        assert(_enum.accidental(id) != Accid::Undef);
+        assert(_enum.octave(id) != PSRawEnum::OCTAVE_UNDEF);
+        assert(_enum.octave(id) >= -10);
+        assert(_enum.octave(id) <= 10);
+        assert(MidiNum::to_midi(_enum.name(id), _enum.accidental(id),
+                                _enum.octave(id)) == pm);
+        names.push(_enum.name(id));
+        accids.push(_enum.accidental(id));
+    }
     // 3 potential successors in exhaustive search algo PSE
     // if ((_algo == Algo::PSE0) || (_algo == Algo::PSE1))
-    if (_algo == Algo::PSE)
+    else if (_algo == Algo::PSE)
     {
         for (int j = 0; j < 3; ++j)
         {

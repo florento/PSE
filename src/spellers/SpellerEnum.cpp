@@ -40,25 +40,56 @@ void SpellerEnum::resetEnum(size_t i0, size_t i1)
 }
 
 
-void SpellerEnum::add(int note, int bar, bool simult, const PSRatio& dur)
+void SpellerEnum::add(int midi, int bar, bool simult, const PSRatio& dur)
 {
-    TRACE("Speller: add {} {} {}", note, bar, dur);
-    rawenum().add(note, bar, simult, dur);
+    TRACE("Speller: add {} {} {}", midi, bar, dur);
+    rawenum().add(midi, bar, simult, dur);
+}
+
+void SpellerEnum::add(int midi, int bar,
+                      const enum NoteName& name, const enum Accid& accid,
+                      int octave, bool printed,
+                      bool simult, const PSRatio& dur)
+{
+    TRACE("Speller: add {} {} {}", midi, bar, dur);
+    rawenum().add(midi, bar, name, accid, octave, printed, simult, dur);
+}
+
+// for pybind
+void SpellerEnum::add0(int midi, int bar, bool simult)
+{
+    TRACE("Speller: add {} {}", midi, bar);
+    rawenum().add(midi, bar, simult);
 }
 
 
-void SpellerEnum::add2(int note, int bar, bool simult,
-                             long dur_num, long dur_den)
+// for pybind
+void SpellerEnum::add2(int midi, int bar, bool simult,
+                       long dur_num, long dur_den)
 {
-    TRACE("Speller: add {} {} {}", note, bar, PSRatio(dur_num, dur_den));
-    rawenum().add(note, bar, simult, PSRatio(dur_num, dur_den));
+    TRACE("Speller: add {} {} {}", midi, bar, PSRatio(dur_num, dur_den));
+    rawenum().add(midi, bar, simult, PSRatio(dur_num, dur_den));
+}
+
+// for pybind
+void SpellerEnum::add4(int midi, int bar, bool simult,
+                       const enum NoteName& name, const enum Accid& accid,
+                       int octave, bool printed)
+{
+    TRACE("Speller: add {} {}", midi, bar);
+    rawenum().add(midi, bar, name, accid, octave, printed, simult);
 }
 
 
-void SpellerEnum::add0(int note, int bar, bool simult)
+// for pybind
+void SpellerEnum::add6(int midi, int bar, bool simult,
+                       long dur_num, long dur_den,
+                       const enum NoteName& name, const enum Accid& accid,
+                       int octave, bool printed)
 {
-    TRACE("Speller: add {} {}", note, bar);
-    rawenum().add(note, bar, simult);
+    TRACE("Speller: add {} {} {}", midi, bar, PSRatio(dur_num, dur_den));
+    rawenum().add(midi, bar, name, accid, octave, printed, simult,
+                  PSRatio(dur_num, dur_den));
 }
 
 

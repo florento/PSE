@@ -45,7 +45,8 @@ namespace pse {
 /// right bounded or right unbounded (open PS Enumerator).
 class PSEnum
 {
-public:
+    
+public: // construction
     
     /// value of right bound when this enumerator is open.
     static const size_t ID_INF;
@@ -86,6 +87,8 @@ public:
     /// to read in e.
     virtual std::unique_ptr<PSEnum> clone(size_t i0) const = 0;
 
+public: // access
+    
     /// whether this PS Enumerator is open: the interval of index of
     /// accessible notes is unbounded on right.
     bool open() const;
@@ -159,6 +162,15 @@ public:
     /// @param i index of note in the list of input notes.
     virtual bool printed(size_t i) const = 0;
     
+public: // modification : rename and rewrite passing notes
+    
+    /// set the bounds of interval of accessible indexes to new values.
+    /// @param i0 new index of the first note accessible by this enumerator.
+    /// @param i1 new index of the note after the last note accessible by this
+    /// enumerator. optional (can be ommited for open PS Enum).
+    /// if given it must be larger than or equal to first.
+    virtual void reset(size_t i0, size_t i1 = PSEnum::ID_INF);
+    
     /// rename the note at the given index
     /// @param i index of a note in this enumerator.
     /// @param name note name in 'A'..'G'.
@@ -208,13 +220,6 @@ public:
     ///   ex. `A` `Cb` `C` $\to$ `A` `B` `C`
     /// @return how many rewriting wer performed.
     size_t rewritePassing();
-    
-    /// set the bounds of interval of accessible indexes to new values.
-    /// @param i0 new index of the first note accessible by this enumerator.
-    /// @param i1 new index of the note after the last note accessible by this
-    /// enumerator. optional (can be ommited for open PS Enum).
-    /// if given it must be larger than or equal to first.
-    virtual void reset(size_t i0, size_t i1 = PSEnum::ID_INF);
     
 protected:
 

@@ -104,7 +104,7 @@ def eval_FRB(corpus='leads',
              costtype1=ps.pse.CTYPE_UNDEF, tonal1=True, det1=True, 
              global1=100, grid=ps.pse.Grid_Rank, 
              costtype2=ps.pse.CTYPE_UNDEF, tonal2=True, det2=True,
-             dflag=True, mflag=True, csflag=False):
+             dflag=True, mflag=True, csflag=0):
     """eval the whole FRB corpus with given algo and parameters"""
     """corpus: leads or piano (obsolete)"""
     """output: dir where files will be written"""
@@ -122,10 +122,13 @@ def eval_FRB(corpus='leads',
     """det2: table2, deterministic/exhaustive flag for transitions (PSE)"""
     """dflag: debug flag: print debug messages on terminal"""
     """mflag: mark flag: write anotation files in a dedicaced dir for each opus"""
-    """csflag: spell also chord symbols"""
+    """csflag: 0 if we do not spell the notes of chord symbols"""
+    """        1 if we spell them"""   
+    """        2 if we force their names in spelling"""   
     global _eval_root
     global skip
     assert(corpus == 'leads' or corpus == 'piano')
+    assert(csflag in [0, 1, 2])
     root = Path(_eval_root)/'evalFRB'
     if not os.path.isdir(root):
         os.mkdir(root)
@@ -150,7 +153,7 @@ def eval_FRBitem(name, corpus='leads', output='',
                  costtype1=ps.pse.CTYPE_UNDEF, tonal1=True, det1=True,       
                  global1=100, grid=ps.pse.Grid_Rank,
                  costtype2=ps.pse.CTYPE_UNDEF, tonal2=True, det2=True,      
-                 dflag=True, mflag=False, csflag=False):   
+                 dflag=True, mflag=False, csflag=0):   
     """eval one item of the FRB corpus with given algo and parameters"""
     """name: filename of item (prefix) in the dataset"""
     """corpus: leads or piano (obsolete)"""
@@ -168,9 +171,12 @@ def eval_FRBitem(name, corpus='leads', output='',
     """det2: table2, deterministic/exhaustive flag for transitions (PSE)"""
     """dflag: debug flag: print debug messages on terminal"""
     """mflag: mark flag: write anotation files in a dedicaced dir for each opus"""
-    """csflag: spell also chord symbols"""
+    """csflag: 0 if we do not spell the notes of chord symbols"""
+    """        1 if we spell them"""   
+    """        2 if we force their names in spelling"""   
     assert(len(name) > 0)
     assert(corpus == 'leads' or corpus == 'piano')
+    assert(csflag in [0, 1, 2])
     # initialize a speller
     sp = ps.Spellew(ps13_kpre=kpre, ps13_kpost=kpost, 
                     nbtons=tons,

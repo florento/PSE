@@ -57,35 +57,84 @@ public: // note enumerator
     void resetEnum(size_t i0, size_t i1 = PSEnum::ID_INF);
     
     /// add a new input note to the enumerator of notes to spell.
-    /// @param note MIDI key of the new input note.
+    /// @param midi MIDI key of the new input note.
     /// @param bar bar number of the new input note.
     /// @param simult whether the new input note is simultaneous with the
     /// next note.
     /// @param dur note duration, in fraction of bars.
-    void add(int note, int bar, bool simult=false,
+    void add(int midi, int bar, bool simult=false,
+             const PSRatio& dur = PSRatio(0));
+
+    /// add a new input note to the enumerator of notes to spell.
+    /// @param midi MIDI key of the new input note.
+    /// @param bar bar number of the new input note.
+    /// @param simult whether the new input note is simultaneous with the
+    /// next note.
+    /// @param dur note duration, in fraction of bars.
+    void add(int midi, int bar,
+             const enum NoteName& name, const enum Accid& accid, int octave,
+             bool printed=false,
+             bool simult=false,
              const PSRatio& dur = PSRatio(0));
 
     /// for pybind: add a new input note to the enumerator of notes to spell
+    /// without duration.
+    /// @param midi MIDI key of the new input note.
+    /// @param bar bar number of the new input note.
+    /// @param simult whether the new input note is simultaneous with the
+    /// next note.
+    /// @warning for Phython binding
+    void add0(int midi, int bar, bool simult=false);
+
+    /// for pybind: add a new input note to the enumerator of notes to spell
     /// with duration.
-    /// @param note MIDI key of the new input note.
+    /// @param midi MIDI key of the new input note.
     /// @param bar bar number of the new input note.
     /// @param simult whether the new input note is simultaneous with the
     /// next note.
     /// @param dur_num numerator of note duration, in fraction of bars.
     /// @param dur_den denominator of note duration, in fraction of bars.
     /// @warning for Phython binding
-    void add2(int note, int bar, bool simult=false,
-                      long dur_num=0, long dur_den=1);
+    void add2(int midi, int bar, bool simult=false,
+              long dur_num=0, long dur_den=1);
 
     /// for pybind: add a new input note to the enumerator of notes to spell
     /// without duration.
-    /// @param note MIDI key of the new input note.
+    /// @param midi MIDI key of the new input note.
     /// @param bar bar number of the new input note.
     /// @param simult whether the new input note is simultaneous with the
     /// next note.
+    /// @param name note name in 'A'..'G', if it is known.
+    /// @param accid accidental, if it is known.
+    /// @param octave octave number in -10..10, if it is known.
+    /// @param printed whether the accidental must be printed, if it is known.
     /// @warning for Phython binding
-    void add0(int note, int bar, bool simult=false);
-
+    void add4(int midi, int bar, bool simult=false,
+              const enum NoteName& name=NoteName::Undef,
+              const enum Accid& accid=Accid::Undef,
+              int octave=PSRawEnum::OCTAVE_UNDEF,
+              bool printed=false);
+    
+    /// for pybind: add a new input note to the enumerator of notes to spell
+    /// with duration.
+    /// @param midi MIDI key of the new input note.
+    /// @param bar bar number of the new input note.
+    /// @param simult whether the new input note is simultaneous with the
+    /// next note.
+    /// @param dur_num numerator of note duration, in fraction of bars.
+    /// @param dur_den denominator of note duration, in fraction of bars.
+    /// @param name note name in 'A'..'G', if it is known.
+    /// @param accid accidental, if it is known.
+    /// @param octave octave number in -10..10, if it is known.
+    /// @param printed whether the accidental must be printed, if it is known.
+    /// @warning for Phython binding
+    void add6(int midi, int bar, bool simult=false,
+              long dur_num=0, long dur_den=1,
+              const enum NoteName& name=NoteName::Undef,
+              const enum Accid& accid=Accid::Undef,
+              int octave=PSRawEnum::OCTAVE_UNDEF,
+              bool printed=false);
+    
 private:
     
     PSRawEnum& rawenum() const;

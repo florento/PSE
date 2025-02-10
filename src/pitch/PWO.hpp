@@ -54,7 +54,6 @@ public: // data
     
     /// @brief note name betwen 'A' and 'G'.
     /// @see MusicXML step https://usermanuals.musicxml.com/MusicXML/Content/EL-MusicXML-step.htm
-    /// @todo revise with NoteName
     enum NoteName name;
 
     /// @brief alteration in [-2, 2] where 1.0 is half tone.

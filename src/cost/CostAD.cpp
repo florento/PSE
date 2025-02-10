@@ -78,7 +78,7 @@ Cost& CostAD::add(const Cost& rhs)
 bool CostAD::updateDist(const enum NoteName& name, const enum Accid& accid,
                         bool print, const Ton& gton, const Ton& lton)
 {
-    // count accidental different from lton
+    // count an accidental different from lton (printed or not)
     if (lton.defined() and
         (!Accids::contained(accid, lton.accidScale(name))))
     {
@@ -114,7 +114,7 @@ bool CostAD::updateChroma(const enum NoteName& name, const enum Accid& accid,
                         bool print, const Ton& gton, const Ton& lton)
 {
     // count accid not in the chromatic harmonic scale
-    //    if (print && !(lton.chromatic().contains(name,accid)))
+    // if (print && !(lton.chromatic().contains(name,accid)))
     if (lton.undef())
     {
         return CostAT::updateChroma(name, accid, print, gton, lton);

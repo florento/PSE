@@ -40,11 +40,12 @@ print(pse.excuseme)
 ##           ##
 ###############
 
-
-# a barred note is a triplet made of 
+# a barred note is a tuplet made of 
 # - a note and 
 # - the number of the  bar it belongs to
-# - a flag saying whether the onset of the note is the same as the onset of the next note
+# - a flag saying whether the onset of the note   
+#   is the same as the onset of the next note
+# - a flag saying whether the note name shall be forced in spelling
 
 # Key object is the more expressive (tonic, mode...)
 # KeySignature object is just the number of sharps (> 0) or flats, < 0)
@@ -66,22 +67,28 @@ def get_key(part):
 def count_notes(part, chord_symb = False):
     """return the number of notes in a music21 part"""    
     """part: the M21 part to process"""
-    """chord_symb: whether we count the notes of chord symbols or not"""   
+    """chord_symb: 0 if we do not add the notes of chord symbols"""
+    """            1 if we add them"""   
+    """            2 if we add them and force their names"""   
+    assert(chord_symb in [0, 1, 2])
     fpart = part.flatten()
     nn = len(fpart.getElementsByClass(m21.note.Note))
     for c in fpart.getElementsByClass(m21.chord.Chord):
-        if (chord_symb or not isinstance(c, m21.harmony.ChordSymbol)):
+        if (chord_symb > 0 or not isinstance(c, m21.harmony.ChordSymbol)):
             nn += len(c)
     return nn    
 
 def count_chords(part, chord_symb = False):
     """return the number of chords in a music21 part"""    
     """part: the M21 part to process"""
-    """chord_symb: whether we count the chord symbols or not"""   
+    """chord_symb: 0 if we do not add the notes of chord symbols"""
+    """            1 if we add them"""   
+    """            2 if we add them and force their names"""   
+    assert(chord_symb in [0, 1, 2])
     fpart = part.flatten()
     nc = 0
     for c in fpart.getElementsByClass(m21.chord.Chord):
-        if (chord_symb or not isinstance(c, m21.harmony.ChordSymbol)):
+        if (chord_symb > 0 or not isinstance(c, m21.harmony.ChordSymbol)):
             nc += 1   
     # cl = part.getElementsByClass(m21.chord.Chord)
     return nc 
@@ -116,7 +123,7 @@ def count_measures(part):
 #     #print('max notes per bar = ', max_notes, 'in bar: ', max_bar)
 #     return ln
 
-def insert_note(note, date, next_note, next_date, bar, note_list):
+def insert_note(note, date, next_note, next_date, bar, note_list, force):
     """insert note as a barred note at the end of note_list"""
     if (note == None):
         return
@@ -124,45 +131,57 @@ def insert_note(note, date, next_note, next_date, bar, note_list):
         assert(isinstance(note, m21.note.Note))
 
     if (next_note == None):   
-        note_list.append((note, bar, False))  # add a triplet
+        note_list.append((note, bar, False, force))  # add a triplet
     else:        
         assert(isinstance(next_note, m21.note.Note))
         # grace notes are spelled separatly
         if note.duration.isGrace:
-            note_list.append((note, bar, False)) 
+            note_list.append((note, bar, False, force)) 
         # other simultaneous notes (notes in chords) are spelled simultaneously
         else:            
-            note_list.append((note, bar, (date == next_date))) #(note.offset == next_note.offset)))
+            note_list.append((note, bar, (date == next_date), force)) 
+            #(note.offset == next_note.offset)))
 
-def extract_measure(m, b, chord_symb = False):
+def extract_measure(m, b, chord_symb = 0):
     """extract the list of barred notes occurring in a music21 part"""    
     """m: the M21 measure to process"""
     """b: measure number of m"""
-    """chord_symb: whether we add the notes of chord symbols or not"""   
+    """chord_symb: 0 if we do not add the notes of chord symbols"""
+    """            1 if we add them"""   
+    """            2 if we add them and force their names"""   
     assert(isinstance(m, m21.stream.Measure))
+    assert(chord_symb in [0, 1, 2])
     ln = []
-    prev_n = None        
+    prev_n = None              # prev note in measure     
     prev_offset = 0            # onset of prev note in measure       
+    prev_force = False         # the name of prev note shall be forced
     for e in m.flatten():      # merge voices in measure
         # case of single note
         if isinstance(e, m21.note.Note):
-            insert_note(prev_n, prev_offset, e, e.offset, b, ln)
+            insert_note(prev_n, prev_offset, e, e.offset, b, ln, prev_force)
             prev_n = e
             prev_offset = e.offset
+            prev_force = False
         # case of chord symbol in jazz harmony (descendant of Chord)
-        elif isinstance(e, m21.chord.Chord) and (chord_symb or not isinstance(e, m21.harmony.ChordSymbol)):
+        elif isinstance(e, m21.chord.Chord) and \
+             (chord_symb > 0 or not isinstance(e, m21.harmony.ChordSymbol)):
             for cn in e:
                 assert(isinstance(cn, m21.note.Note))
-                insert_note(prev_n, prev_offset, cn, e.offset, b, ln)
+                insert_note(prev_n, prev_offset, cn, e.offset, b, ln, prev_force)
                 prev_n = cn
                 prev_offset = e.offset
-    insert_note(prev_n, prev_offset, None, 0, b, ln)      # insert last note
+                prev_force = (chord_symb == 2)
+    # insert last note
+    insert_note(prev_n, prev_offset, None, 0, b, ln, prev_force) 
     return ln
     
-def extract_part(part, chord_symb = False):
+def extract_part(part, chord_symb = 0):
     """extract the list of barred notes occurring in a music21 part"""    
     """part: the M21 part to process"""
-    """chord_symb: whether we add the notes of chord symbols or not"""   
+    """chord_symb: 0 if we do not add the notes of chord symbols"""
+    """            1 if we add them"""   
+    """            2 if we add them and force their names"""   
+    assert(chord_symb in [0, 1, 2])
     mes = part.getElementsByClass(m21.stream.Measure)
     ln = []
     b = 0
@@ -184,10 +203,11 @@ def extract_onlynotes(part):
         b  += 1
     return ln
     
+# not used ?
 def add_notes(ln, sp):
     """feed a speller with a list of (MIDI) notes with bar number"""
     i = 0    
-    for (n, b) in ln:
+    for (n, b, simult, force) in ln:
         #print('add', i, ':', n.pitch.midi, b, flush=True)
         sp.add(midi=n.pitch.midi, bar=b)
         i = i+1
@@ -295,13 +315,61 @@ def add_tons(tons, sp):
         print('ERROR: unsupported number of tons', tons, flush=True)
         sp.close_tons()    
     
+def ps_step(nn):
+    """cast a a music21.pitch.step value into a PSE NoteName"""
+    assert(len(nn) == 1) # single caracter (step), not a name
+    if nn == 'A':
+        return pse.NoteName.A
+    elif nn == 'B':
+        return pse.NoteName.B
+    elif nn == 'C':
+        return pse.NoteName.C
+    elif nn == 'D':
+        return pse.NoteName.D
+    elif nn == 'E':
+        return pse.NoteName.E
+    elif nn == 'F':
+        return pse.NoteName.F
+    elif nn == 'G':
+        return pse.NoteName.G
+    else:
+        print('ps_step: Invalid argument')
+        return pse.NoteName.Undef
+
+def ps_accidental(a):
+    """cast a music21.pitch.Accidental value into a PSE Accidental"""
+    if a == m21.pitch.Accidental('triple-sharp'):
+        return pse.Accid.TripleSharp
+    elif a == m21.pitch.Accidental('double-sharp'):
+        return pse.Accid.DoubleSharp
+    elif a == m21.pitch.Accidental('one-and-a-half-sharp'):
+        return pse.Accid.ThreeQuartersSharp
+    elif a == m21.pitch.Accidental('sharp'):
+        return pse.Accid.Sharp
+    elif a == m21.pitch.Accidental('half-sharp'):
+        return pse.Accid.QuarterSharp
+    elif a == m21.pitch.Accidental('natural'):
+        return pse.Accid.Natural
+    elif a == m21.pitch.Accidental('half-flat'):
+        return pse.Accid.QuarterFlat
+    elif a == m21.pitch.Accidental('flat'):
+        return pse.Accid.Flat
+    elif a == m21.pitch.Accidental('one-and-a-half-flat'):
+        return pse.Accid.ThreeQuartersFlat
+    elif a == m21.pitch.Accidental('double-flat'):
+        return pse.Accid.DoubleFlat
+    elif a == m21.pitch.Accidental('triple-flat'):
+        return pse.Accid.TripleFlat
+    elif a is None:
+        return pse.Accid.Natural
+    else: 
+        print('ps_accidental: Invalid argument')
         
 ###############
 ##           ##
 ## PS to M21 ##
 ##           ##
 ###############
-
 
 def get_pitches(sp):
     """extract the list of music21 pitches from a speller"""    
@@ -423,7 +491,6 @@ def ctype_tostring(ct):
 ##                ##
 ####################
 
-
 def compare_name(n, pse_name):
     """compare the name of a music21 note and a PSE note name"""    
     return (n.step == m21_step(pse_name))
@@ -476,7 +543,7 @@ def diff(ln, sp):
         return []
     i = 0
     ld = []
-    for (n, m, simult) in ln:
+    for (n, m, simult, force) in ln:
         # print(i, m, n, sp.name(i), sp.accidental(i), sp.printed(i))
         if (compare_name(n, sp.name(i)) and
             compare_accid(n, sp.accidental(i), sp.printed(i)) and 
@@ -496,7 +563,7 @@ def diffrec(ln, sp, i, ld):
     if (len(ln) == 0):
         return ld
     else:
-        (n, m, simult) = ln[0]
+        (n, m, simult, force) = ln[0]
         if (compare_name(n, sp.name(i)) and
             compare_accid(n, sp.accidental(i), sp.printed(i)) and 
             n.octave == sp.octave(i)):
@@ -507,6 +574,7 @@ def diffrec(ln, sp, i, ld):
             d = (i, sp.name(i), sp.accidental(i), sp.octave(i), sp.printed(i))
             return diffrec(ln[1:], sp, i+1, ld+[d])
 
+# not used
 def diff_notes(ln, lp):
     """compare a list of barred notes and a list of pitches"""    
     if (len(ln) == len(lp)):
@@ -515,11 +583,12 @@ def diff_notes(ln, lp):
         print('ERROR (diff_notes)')
         return []
 
+# not used
 def diff_notes1(ln, lp, i, ld):
     if (len(ln) == 0):
         return ld
     else:
-        n = ln[0][0]  # first element of pair (n, m)
+        n = ln[0][0] # first component is a note
         if (n.pitch  == lp[0]):
             return diff_notes1(ln[1:], lp[1:], i+1, ld)
         else:
@@ -1136,14 +1205,27 @@ class Spellew:
             
     def spell(self, notes, stat, output_path=None):
         """run spell checking algo"""
+        """notes: list of barred notes = tuplets made of""" 
+        """ - a note""" 
+        """ - the number of the  bar it belongs to"""
+        """ - a flag saying whether the onset of the note"""   
+        """   is the same as the onset of the next note"""
+        """ - a flag saying whether the note name shall be forced in spelling"""
         # reset the global flags but not the whole list of tons
         #self._speller.reset_globals() 
         self._speller.reset_table() 
         self._speller.reset_grid() 
         self._speller.reset_enum(0, 0)
         # feed speller with input notes
-        for (n, b, s) in notes:   # note, bar number, simultaneous flag
-            self._speller.add(midi=n.pitch.midi, bar=b, simultaneous=s)
+        for (n, b, sf, ff) in notes:   # note, bar number, simultaneous, force
+            if ff: # force note name
+                self._speller.add_name(midi=n.pitch.midi, bar=b, simult=sf,
+                                       name=ps_step(n.pitch.step), 
+                                       accid=ps_accidental(n.pitch.accidental),
+                                       octave=n.pitch.octave,
+                                       printed=False)
+            else:
+                self._speller.add(midi=n.pitch.midi, bar=b, simultaneous=sf)
         # spell with algo specified
         if self._algo_name == 'PS13':
             self.spell_PS13(stat, output_path)
@@ -1205,16 +1287,20 @@ class Spellew:
         anote_global_part(part, self._speller, gt)              
     
     def eval_part(self, part, stats, output_path=None, 
-                  chord_sym = False, reset_globals = True):
+                  chord_symb = 0, reset_globals = True):
         """evaluate spelling for one part in a score and mark errors"""     
         """part: the M21 part to process"""
-        """chord_symb: whether we spell the notes of chord symbols or not"""   
+        """output_path: dir where the output files shall be written"""
+        """chord_symb: 0 if we do not add the notes of chord symbols"""
+        """            1 if we add them"""   
+        """            2 if we add them and force their names"""   
         """reset_globals: whether the global flags in the list of tons are reset before spelling"""
         assert(stats is not None)
+        assert(chord_symb in [0, 1, 2])
         # extract real key and notes from part
         k0 = get_key(part)
-        ln = extract_part(part, chord_sym)  # input note list
-        assert(count_notes(part, chord_sym) == len(ln)) 
+        ln = extract_part(part, chord_symb)  # input note list
+        assert(count_notes(part, chord_symb) == len(ln)) 
         print(len(ln), 'notes,', count_measures(part), 'bars,', end=' ')
         
         # spell with algo
@@ -1288,10 +1374,12 @@ class Spellew:
 
     def eval_score(self, score, stats=Stats(),
                    score_id=0, title:str='', composer:str='', output_path=None, 
-                   chord_sym = False, reset_globals = True):        
+                   chord_symb = False, reset_globals = True):        
         """evaluate spelling for all parts in a score"""
         """score: the M21 part to process"""
-        """chord_symb: whether we spell the notes of chord symbols or not"""   
+        """chord_symb: 0 if we do not add the notes of chord symbols"""
+        """            1 if we add them"""   
+        """            2 if we add them and force their names"""   
         """reset_globals: whether the global flags in the list of tons are reset before spelling"""
         # DO IN CALLER
         if not title: 
@@ -1313,7 +1401,7 @@ class Spellew:
             if (spellable(part)):
                 (k_gt, ton_est, nn, ld) = self.eval_part(part, stats, 
                                                          output_path, 
-                                                         chord_sym, 
+                                                         chord_symb, 
                                                          reset_globals)
                 # add one row in stat table for each part
                 stats.record_part(i, k_gt, ton_est, nn, len(ld))

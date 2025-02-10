@@ -52,13 +52,15 @@ PYBIND11_MODULE(pse, m)
     py::enum_<enum pse::Accid>(m, "Accid", "Note Names")
         .value("TripleSharp", pse::Accid::TripleSharp, "Triple Sharp")
         .value("DoubleSharp", pse::Accid::DoubleSharp, "Double Sharp")
-        .value("ThreeQuartersSharp", pse::Accid::ThreeQuartersSharp, "Three Quarters Sharp")
+        .value("ThreeQuartersSharp", pse::Accid::ThreeQuartersSharp,
+               "Three Quarters Sharp")
         .value("Sharp", pse::Accid::Sharp, "Sharp")
         .value("QuarterSharp", pse::Accid::QuarterSharp, "QuarterSharp")
         .value("Natural", pse::Accid::Natural, "Natural")
         .value("QuarterFlat", pse::Accid::QuarterFlat, "Quarter Flat")
         .value("Flat", pse::Accid::Flat, "Flat")
-        .value("ThreeQuartersFlat", pse::Accid::ThreeQuartersFlat, "Three Quarters Flat")
+        .value("ThreeQuartersFlat", pse::Accid::ThreeQuartersFlat,
+               "Three Quarters Flat")
         .value("DoubleFlat", pse::Accid::DoubleFlat, "Double Flat")
         .value("TripleFlat", pse::Accid::TripleFlat, "Triple Flat")
         .value("Accid_Undef", pse::Accid::Undef, "Unkown")
@@ -132,11 +134,21 @@ PYBIND11_MODULE(pse, m)
         .def("add", &pse::SpellerEnum::add0,
              "add a new note to spell",
              py::arg("midi"), py::arg("bar"), py::arg("simultaneous"))
-        .def("addlong", &pse::SpellerEnum::add2,
-             "add a new note to spell",
-             py::arg("midi"), py::arg("bar"),
-             py::arg("simultaneous"),
+        .def("add_dur", &pse::SpellerEnum::add2,
+             "add a new note to spell with duration",
+             py::arg("midi"), py::arg("bar"), py::arg("simult"),
              py::arg("dur_num"), py::arg("dur_den"))
+        .def("add_name", &pse::SpellerEnum::add4,
+             "add a new note to speller with forced note name",
+             py::arg("midi"), py::arg("bar"), py::arg("simult"),
+             py::arg("name"), py::arg("accid"), py::arg("octave"),
+             py::arg("printed"))
+        .def("add_namedur", &pse::SpellerEnum::add6,
+             "add a new note to speller with forced note name and duration",
+             py::arg("midi"), py::arg("bar"), py::arg("simult"),
+             py::arg("dur_num"), py::arg("dur_den"),
+             py::arg("name"), py::arg("accid"), py::arg("octave"),
+             py::arg("printed"))
         .def("nb_tons", &pse::SpellerEnum::nbTons,
              "number of tonalities considered for pitch spelling")
     // disambiguate overloaded method
@@ -211,11 +223,24 @@ PYBIND11_MODULE(pse, m)
         .def("algo", &pse::PSE::algo, "name of spelling algorithm")
         .def("debug", &pse::PSE::debug, "set debug mode", py::arg("on"))
         .def("size", &pse::PSE::size, "number of notes to spell")
-        .def("add", &pse::PSE::add0, "add a new note to spell",
+        .def("add", &pse::SpellerEnum::add0,
+             "add a new note to spell",
              py::arg("midi"), py::arg("bar"), py::arg("simultaneous"))
-        .def("addlong", &pse::PSE::add2, "add a new note to spell",
-             py::arg("midi"), py::arg("bar"), py::arg("simultaneous"),
+        .def("add_dur", &pse::SpellerEnum::add2,
+             "add a new note to spell with duration",
+             py::arg("midi"), py::arg("bar"), py::arg("simult"),
              py::arg("dur_num"), py::arg("dur_den"))
+        .def("add_name", &pse::SpellerEnum::add4,
+             "add a new note to speller with forced note name",
+             py::arg("midi"), py::arg("bar"), py::arg("simult"),
+             py::arg("name"), py::arg("accid"), py::arg("octave"),
+             py::arg("printed"))
+        .def("add_namedur", &pse::SpellerEnum::add6,
+             "add a new note to speller with forced note name and duration",
+             py::arg("midi"), py::arg("bar"), py::arg("simult"),
+             py::arg("dur_num"), py::arg("dur_den"),
+             py::arg("name"), py::arg("accid"), py::arg("octave"),
+             py::arg("printed"))
         .def("nb_tons", &pse::PSE::nbTons,
              "number of tonalities considered for pitch spelling")
         .def("reset_tons", &pse::PSE::resetTons,
@@ -275,11 +300,24 @@ PYBIND11_MODULE(pse, m)
         .def("reset", &pse::PS13::resetEnum, "clear the list of notes to spell")
         .def("set_Kpre", &pse::PS13::setKpre, "set the Kpre parameter of PS13")
         .def("set_Kpost", &pse::PS13::setKpost, "set the Kpost parameter of PS13")
-        .def("add", &pse::PS13::add0, "add a new note to spell",
+        .def("add", &pse::SpellerEnum::add0,
+             "add a new note to spell",
              py::arg("midi"), py::arg("bar"), py::arg("simultaneous"))
-        .def("addlong", &pse::PS13::add2, "add a new note to spell",
-             py::arg("midi"), py::arg("bar"), py::arg("simultaneous"),
+        .def("add_dur", &pse::SpellerEnum::add2,
+             "add a new note to spell with duration",
+             py::arg("midi"), py::arg("bar"), py::arg("simult"),
              py::arg("dur_num"), py::arg("dur_den"))
+        .def("add_name", &pse::SpellerEnum::add4,
+             "add a new note to speller with forced note name",
+             py::arg("midi"), py::arg("bar"), py::arg("simult"),
+             py::arg("name"), py::arg("accid"), py::arg("octave"),
+             py::arg("printed"))
+        .def("add_namedur", &pse::SpellerEnum::add6,
+             "add a new note to speller with forced note name and duration",
+             py::arg("midi"), py::arg("bar"), py::arg("simult"),
+             py::arg("dur_num"), py::arg("dur_den"),
+             py::arg("name"), py::arg("accid"), py::arg("octave"),
+             py::arg("printed"))
         .def("spell", &pse::PS13::spell, "spell notes")
         .def("rewrite_passing", &pse::PS13::rewritePassing, "rewrite passing notes")
         .def("name",  &pse::PS13::name, "estimated name of note",
@@ -300,11 +338,24 @@ PYBIND11_MODULE(pse, m)
         .def("algo", &pse::PS14::algo, "name of spelling algorithm")
         .def("debug", &pse::PS14::debug, "set debug mode", py::arg("on"))
         .def("size", &pse::PS14::size, "number notes to spell")
-        .def("add", &pse::PS14::add0, "add a new note to spell",
+        .def("add", &pse::SpellerEnum::add0,
+             "add a new note to spell",
              py::arg("midi"), py::arg("bar"), py::arg("simultaneous"))
-        .def("addlong", &pse::PSE::add2, "add a new note to spell",
-             py::arg("midi"), py::arg("bar"), py::arg("simultaneous"),
+        .def("add_dur", &pse::SpellerEnum::add2,
+             "add a new note to spell with duration",
+             py::arg("midi"), py::arg("bar"), py::arg("simult"),
              py::arg("dur_num"), py::arg("dur_den"))
+        .def("add_name", &pse::SpellerEnum::add4,
+             "add a new note to speller with forced note name",
+             py::arg("midi"), py::arg("bar"), py::arg("simult"),
+             py::arg("name"), py::arg("accid"), py::arg("octave"),
+             py::arg("printed"))
+        .def("add_namedur", &pse::SpellerEnum::add6,
+             "add a new note to speller with forced note name and duration",
+             py::arg("midi"), py::arg("bar"), py::arg("simult"),
+             py::arg("dur_num"), py::arg("dur_den"),
+             py::arg("name"), py::arg("accid"), py::arg("octave"),
+             py::arg("printed"))
         .def("nb_tons", &pse::PS14::nbTons,
              "number of tonalities considered for pitch spelling")
         .def("reset_tons", &pse::PS14::resetTons,

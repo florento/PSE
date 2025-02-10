@@ -34,6 +34,7 @@ namespace pse {
 /// @todo extend conversions to MIDIcent (import OM)
 class Pitch : public PWO
 {
+    
 public:
 
     /// MIDI is a MIDI key value in 0..127
@@ -126,19 +127,8 @@ public:
     friend std::ostream& operator<<(std::ostream& o, const Pitch& p);
 
 public: // data
-    
-    // @brief note name betwen 'A' and 'G'.
-    // @see MusicXML step
-    // https://usermanuals.musicxml.com/MusicXML/Content/EL-MusicXML-step.htm
-    // NoteName name;
 
-    // @brief alteration in [-2, 2] where 1.0 is half tone.
-    // e.g. -1 for flat, 1 for sharp
-    // decimal values are used for microtones
-    // e.g. 0.5 for quarter tone sharp
-    // @see MusicXML alter https://usermanuals.musicxml.com/MusicXML/Content/EL-MusicXML-alter.htm
-    // revision: @see https://www.w3.org/2021/06/musicxml40/musicxml-reference/data-types/accidental-value/
-    // Accid alteration;
+    // name and alteration are in PWO
     
     /// @brief octave in -10..10.
     int octave;

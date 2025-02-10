@@ -74,7 +74,7 @@ def get_corpus(dataset_path):
 # PSE table2:  costtype2 = ps.CTYPE_ACCID | CTYPE_ACCIDlead | CTYPE_ADplus | CTYPE_ADlex
 def eval_corpus(speller, dataset, skip=[],
                 eval_root='.', output_dir='', tablename='',
-                mflag=True, csflag=False):
+                mflag=True, csflag=0):
     """eval a whole corpus with a given speller"""
     """speller: instance of speller for the evaluation"""
     """dataset: a dictionary as produced by XML_corpus"""
@@ -83,7 +83,10 @@ def eval_corpus(speller, dataset, skip=[],
     """output_dir: name of directory where the evaluation files will be written"""
     """tablename: file name of evaluation table. will be written in the output_dir"""
     """mflag: mark flag: write anotation files in a dedicaced dir for each opus"""
-    """csflag: spell also the notes of the chord symbols"""
+    """csflag: 0 if we do not spell the notes of chord symbols"""
+    """        1 if we spell them"""   
+    """        2 if we force their names in spelling"""   
+    assert(csflag in [0, 1, 2])
     # prepare the output dir
     algoname = speller.algoname()    
     timestamp = datetime.today().strftime('%Y%m%d-%H%M')
@@ -123,7 +126,7 @@ def eval_corpus(speller, dataset, skip=[],
         (ls, lld) = speller.eval_score(score=s, stats=stat, score_id=i, 
                                   title=name, composer='', 
                                   output_path=output_path2, 
-                                  chord_sym=csflag, 
+                                  chord_symb=csflag, 
                                   reset_globals = True)
         i += 1
         #if mflag and not ps.empty_difflist(lld): # done in eval_score
@@ -146,14 +149,17 @@ def eval_item(speller, dataset, name, output_dir='',
               costtype1=ps.pse.CTYPE_UNDEF, tonal1=True, det1=True,       
               global1=100, grid=ps.pse.Grid_Rank,   
               costtype2=ps.pse.CTYPE_UNDEF, tonal2=True, det2=True,      
-              mflag=False, csflag=False):   
+              mflag=False, csflag=0):   
     """eval one item of the FRB corpus with given algo and parameters"""
     """speller: speller instance for the evaluation"""
     """dataset: a dictionary as produced by XML_corpus"""
     """name: filename of item (prefix) in the dataset"""
     """output_dir: where files will be written"""
     """mflag: mark flag: write anotation files in a dedicaced dir for each opus"""
-    """csflag: spell also the notes of the chord symbols"""
+    """csflag: 0 if we do not spell the notes of chord symbols"""
+    """        1 if we spell them"""   
+    """        2 if we force their names in spelling"""   
+    assert(csflag in [0, 1, 2])
     # input data
     assert(len(name) > 0)
     if (dataset.get(name) == None):
@@ -168,7 +174,7 @@ def eval_item(speller, dataset, name, output_dir='',
     #                                      debug=dflag, mark=mflag)
     (ls, lld) = speller.eval_score(score=score, stats=stat, score_id=0, 
                                    title=name, composer='', output_path=opath, 
-                                   chord_sym = csflag, 
+                                   chord_symb = csflag, 
                                    reset_globals = False)    
     stat.show()   
         

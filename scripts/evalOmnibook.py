@@ -62,7 +62,7 @@ def eval_Omnibook(output='', tablename='',
                   costtype1=ps.pse.CTYPE_UNDEF, tonal1=True, det1=False, 
                   global1=100, grid=ps.pse.Grid_Rank, 
                   costtype2=ps.pse.CTYPE_UNDEF, tonal2=True, det2=False,
-                  dflag=True, mflag=True, csflag=False):
+                  dflag=True, mflag=True, csflag=0):
     """eval the whole corpus with given algo and parameters"""
     """output: dir where files will be written"""
     """tablename: filename of csv table"""
@@ -79,7 +79,9 @@ def eval_Omnibook(output='', tablename='',
     """det2: table2, deterministic/exhaustive flag for transitions (PSE)"""
     """dflag: debug flag"""
     """mflag: mark flag"""
-    """csflag: spell also chord symbols"""
+    """csflag: 0 if we do not spell the notes of chord symbols"""
+    """        1 if we spell them"""   
+    """        2 if we force their names in spelling"""   
     # initialize a speller
     sp = ps.Spellew(ps13_kpre=kpre, ps13_kpost=kpost, 
                     nbtons=tons,
@@ -89,6 +91,7 @@ def eval_Omnibook(output='', tablename='',
                     debug=dflag)
     global _eval_root
     global skip
+    assert(csflag in [0, 1, 2])
     root = Path(_eval_root)/'evalOmnibook'
     if not os.path.isdir(root):
         os.mkdir(root)
@@ -106,7 +109,7 @@ def eval_Omnibookitem(name, output='',
                       costtype1=ps.pse.CTYPE_UNDEF, tonal1=True, det1=True,       
                       global1=100, grid=ps.pse.Grid_Rank,
                       costtype2=ps.pse.CTYPE_UNDEF, tonal2=True, det2=True,      
-                      dflag=True, mflag=False, csflag=False):   
+                      dflag=True, mflag=False, csflag=0):   
     """eval one item of the corpus with given algo and parameters"""
     """name: filename of item (prefix) in the dataset"""
     """output: dir where files will be written"""
@@ -123,8 +126,11 @@ def eval_Omnibookitem(name, output='',
     """det2: table2, deterministic/exhaustive flag for transitions (PSE)"""
     """dflag: debug flag"""
     """mflag: mark flag"""
-    """csflag: spell also chord symbols"""
+    """csflag: 0 if we do not spell the notes of chord symbols"""
+    """        1 if we spell them"""   
+    """        2 if we force their names in spelling"""   
     assert(len(name) > 0)
+    assert(csflag in [0, 1, 2])
     # initialize a speller
     sp = ps.Spellew(ps13_kpre=kpre, ps13_kpost=kpost, 
                     nbtons=tons,
