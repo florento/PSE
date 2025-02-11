@@ -40,7 +40,7 @@ _mscore = '/Applications/MuseScore 4.app/Contents/MacOS/mscore'
 def omnibook_corpus():
     """build a list of scores in a subdirectory of the Omninook"""
     global _dataset_root
-    return evalXML.get_corpus(Path(_dataset_root)/'musicxml')
+    return evalXML.get_corpus(Path(_dataset_root)/'musicxml', True)  # flat corpus
 
 #####################################
 ##                                 ##

@@ -24,7 +24,7 @@ import evalXML
 ########################
 
 # path to FRB dataset
-_dataset_root = '../../../Datasets/FiloBass'
+_dataset_root = '../../../Datasets/FiloSax-xml'
 
 # root of evaluation dir
 _eval_root = '../../PSeval'
@@ -40,10 +40,10 @@ _mscore = '/Applications/MuseScore 4.app/Contents/MacOS/mscore'
 #################################
 
 # corpus can be 'leads' or 'piano'
-def FiloBass_corpus():
-    """build a list of scores in a subdirectory of FiloBass"""
+def FiloSax_corpus():
+    """build a list of scores in a subdirectory of FiloSax"""
     global _dataset_root
-    return evalXML.get_corpus(Path(_dataset_root), False) # not flat
+    return evalXML.get_corpus(Path(_dataset_root)) # flat
 
 def accids(ks, notes):
     c = 0
@@ -52,9 +52,9 @@ def accids(ks, notes):
             c += 1            
     return c
     
-def FiloBass_table():
+def FiloSax_table():
     table = []
-    dataset = FiloBass_corpus()
+    dataset = FiloSax_corpus()
     names = sorted(list(dataset)) # list of index in dataset   
     for name in names:
         if (dataset.get(name) == None):
@@ -96,7 +96,7 @@ skip = []
 # PSE: costtype1, costtype2 = CTYPE_ACCID | CTYPE_ACCIDlead | CTYPE_ADplus | CTYPE_ADlex
 # PSE: grid = Grid_Best | Grid_Rank | Grid_Exhaustive
 # PSE: global1 = 0..100 (%)
-def eval_FiloBass(output='', tablename='',            
+def eval_FiloSax(output='', tablename='',            
              kpre=0, kpost=0, tons=0, 
              costtype1=ps.pse.CTYPE_UNDEF, tonal1=True, det1=True, 
              global1=100, grid=ps.pse.Grid_Rank, 
@@ -124,7 +124,7 @@ def eval_FiloBass(output='', tablename='',
     global _eval_root
     global skip
     assert(csflag in [0, 1, 2])
-    root = Path(_eval_root)/'evalFiloBass'
+    root = Path(_eval_root)/'evalFiloSax'
     if not os.path.isdir(root):
         os.mkdir(root)
     # initialize a speller
@@ -135,7 +135,7 @@ def eval_FiloBass(output='', tablename='',
                     t2_costtype=costtype2, t2_tonal=tonal2, t2_det=det2,
                     debug=dflag)        
     evalXML.eval_corpus(speller=sp, mflag=mflag, csflag=csflag, 
-                        dataset=FiloBass_corpus(), skip=skip, 
+                        dataset=FiloSax_corpus(), skip=skip, 
                         eval_root=root, output_dir=output, tablename=tablename)
         
 # PS13: kpre=33, kpost=23
@@ -143,7 +143,7 @@ def eval_FiloBass(output='', tablename='',
 # PSE: costtype1, costtype2 = CTYPE_ACCID | CTYPE_ACCIDlead | CTYPE_ADplus | CTYPE_ADlex
 # PSE: grid = Grid_Best | Grid_Rank | Grid_Exhaustive
 # PSE: global1 = 0..100 (%)
-def eval_FiloBassitem(name, output='',         
+def eval_FiloSaxitem(name, output='',         
                       kpre=0, kpost=0, tons=0,          
                       costtype1=ps.pse.CTYPE_UNDEF, tonal1=True, det1=True,       
                       global1=100, grid=ps.pse.Grid_Rank,
@@ -179,17 +179,17 @@ def eval_FiloBassitem(name, output='',
                     debug=dflag)
     
     evalXML.eval_item(speller=sp, mflag=mflag, csflag=csflag,
-                      dataset=FiloBass_corpus(), name=name, output_dir=output)
+                      dataset=FiloSax_corpus(), name=name, output_dir=output)
         
 # compute C++ add instructions for given score, for debugging with gdb
 def debug(name):    
     assert(len(name) > 0)
-    dataset = FiloBass_corpus()
+    dataset = FiloSax_corpus()
     evalXML.debug(dataset, name)
 
 def atonals(file=''):
     """list of opus of FRB without KS"""
-    dataset = FiloBass_corpus()
+    dataset = FiloSax_corpus()
     names = sorted(list(dataset)) # list of index in dataset   
     keys = []
     for name in names:

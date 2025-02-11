@@ -36,9 +36,19 @@ _mscore = '/Applications/MuseScore 4.app/Contents/MacOS/mscore'
 ##                             ##
 #################################
 
+def extract1(directory_path, score_suffix):
+    """return the first file with given suffix found in the given directory path"""
+    files = os.listdir(directory_path)
+    for file in files:    
+        file_ext = os.path.splitext(file)[1]   # get the extension in the file name
+        if (file_ext in score_suffix):
+            return directory_path/file
+    return # not found
+    
 # corpus can be 'leads' or 'piano'
-def get_corpus(dataset_path):
-    """build a dictionary of XML scores with their embedding directories"""
+def get_corpus(dataset_path, flat=True):
+    """build a dictionary of XML scores with corresponding paths"""
+    """flat: all XML files are contained in the given path or in subdirs"""
     # default score file name
     score_suffix = ['.musicxml', '.xml', '.mxml']
     assert isinstance(dataset_path, PosixPath)
@@ -51,10 +61,12 @@ def get_corpus(dataset_path):
     for file in files:    
         filepath = dataset_path/file
         # skip directories
-        if os.path.isdir(filepath):
-            continue 
+        if not flat and os.path.isdir(filepath):
+            target = extract1(filepath, score_suffix)
+            if target is not None:
+                dataset[file] = target
         # check the extension in the file name
-        if (os.path.splitext(file)[1] in score_suffix):
+        elif flat and (os.path.splitext(file)[1] in score_suffix):
             # map score name to file path
             dataset[os.path.splitext(file)[0]] = filepath
     # sort the list alphabetically

@@ -44,7 +44,7 @@ def FRB_corpus(corpus='leads'):
     """build a list of scores in a subdirectory of the FRB"""
     global _dataset_root
     assert(corpus == 'leads' or corpus == 'piano')
-    return evalXML.get_corpus(Path(_dataset_root)/corpus)
+    return evalXML.get_corpus(Path(_dataset_root)/corpus, True) # flat corpus
 
 def accids(ks, notes):
     c = 0
