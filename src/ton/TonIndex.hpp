@@ -28,10 +28,26 @@ namespace pse {
 
 class PST;
 
-/// index (list of row headers) for PSTable and PSVector (column in table).
-/// The array of tonalities for PS is encapsulated,
+/// array of tonalities used for spelling
 /// and every tonality is indexed in 0..TonIndex::size()
 /// and can be accessed with TonIndex::ton(i).
+/// some tonalities are possible candidates global
+/// @see TonIndex::isGlobal(i)
+///
+/// **Life cycle of Ton Index**
+/// - after creation, the ton index is open.
+/// - tons can be added with add() and a global flag.
+/// - at closure with TonIndex::close(),
+///   the tons in the array are reordered.
+/// - after closure, no ton can be added.
+/// - global flags can be changed with TonIndex::selectGlobals()
+///   and TonIndex::selectGlobal().
+/// - TonIndex::resetGlobals() will restore global flags
+///   to their state at closure.
+/// - TonIndex::reset() clear the whole array of tonalities.
+///
+/// @see PSTable and PSVector: used as an index (list of row headers)
+/// for these classes (column in table).
 class TonIndex
 {
     

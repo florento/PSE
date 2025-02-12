@@ -132,5 +132,3 @@ std::ostream& operator<<(std::ostream& o, const CostADplus& c)
 }
 
 } // end namespace pse
-
-
