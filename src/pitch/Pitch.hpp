@@ -35,23 +35,25 @@ namespace pse {
 class Pitch : public PWO
 {
     
-public:
+public: // constants
 
     /// MIDI is a MIDI key value in 0..127
     /// MIDICENT is a value in 0..12700 for mico-tonality
     enum class PitchUnit { MIDI, MIDICENT };
     
     /// code for undefuned MIDI value
-    static const unsigned int UNDEF_MIDICENT;
+    static const unsigned int  UNDEF_MIDICENT;
     
     /// @todo TBR (mv to NoteName.hpp)
-    static const enum NoteName     UNDEF_NOTE_NAME;
+    static const enum NoteName UNDEF_NOTE_NAME;
 
     /// @todo TBR (mv to Accid.hpp)
-    static const enum Accid        UNDEF_NOTE_ALTERATION;
+    static const enum Accid    UNDEF_ALTERATION;
 
     /// code for undefuned octave value
-    static const int          UNDEF_NOTE_OCTAVE;
+    static const int           UNDEF_OCTAVE;
+
+public: // construction
 
     /// @brief undef pitch value.
     Pitch();

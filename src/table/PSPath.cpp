@@ -191,6 +191,8 @@ void PSP::rename()
     {
         const enum NoteName& name = _names[i - _enum.first()];
         const enum Accid& accid = _accids[i - _enum.first()];
+        assert(name != NoteName::Undef);
+        assert(accid != Accid::Undef);
         unsigned int mp = _enum.midipitch(i);
         int oct = MidiNum::midi_to_octave(mp, name, accid);
         assert(-2 <= oct);
@@ -198,7 +200,7 @@ void PSP::rename()
         bool altprint = _prints[i - _enum.first()];
         //std::cout << "enum: rename" << i << std::endl;
         _enum.rename(i, name, accid, oct, altprint);
-        TRACE("PSP.rename: note {} : {}{}{} {}", i, name, oct, accid, altprint);
+        DEBUG("PSP.rename: note {} : {}{}{} {}", i, name, oct, accid, altprint);
     }
 }
 

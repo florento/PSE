@@ -7,9 +7,10 @@
 //
 
 #include "PSBag.hpp"
+#include "Pitch.hpp"
 #include "Enharmonic.hpp"
 #include "PSOrder.hpp"
-#include "PSRawEnum.hpp" // OCTAVE_UNDEF
+// #include "PSRawEnum.hpp" // OCTAVE_UNDEF
 // #include "PSTransit.hpp" // obsolete
 
 
@@ -24,8 +25,10 @@ _bests(),   // empty
 _cost(seed.shared_zero())     // zero
 //_visited()  // empty
 {
-    if (! e.empty())
+    if (not e.empty())
+    {
         init(seed, gton, lton, tonal);
+    }
     // otherwise n0 == n1, no note, leave _best empty
     else
     {
@@ -62,7 +65,7 @@ void PSB::init(const Cost& seed, const Ton& ton, const Ton& lton, bool tonal)
     // at least one note, the bag cannot be empty.
     assert(_enum.first() < _enum.stop());
 
-    assert((_algo == Algo::PSE) || (_algo == Algo::PSD));
+    assert((_algo == Algo::PSE) or (_algo == Algo::PSD));
     //Transition transition(a, _enum);
     
     // backup of configurations during construction
@@ -250,7 +253,7 @@ void PSB::get_names(size_t id, const Ton& gton,
     if (_enum.name(id) != NoteName::Undef)
     {
         assert(_enum.accidental(id) != Accid::Undef);
-        assert(_enum.octave(id) != PSRawEnum::OCTAVE_UNDEF);
+        assert(_enum.octave(id) != Pitch::UNDEF_OCTAVE);
         assert(_enum.octave(id) >= -10);
         assert(_enum.octave(id) <= 10);
         assert(MidiNum::to_midi(_enum.name(id), _enum.accidental(id),

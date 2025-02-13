@@ -27,6 +27,7 @@ int MidiNum::midi_to_octave(unsigned int m,
 {
     assert(0 <= m);
     assert(m <= 128);
+    assert(!debug || n != NoteName::Undef);
     int oct = int(floor(m/12)) - 1;
     assert(-1 <= oct);
     assert(oct <= 9);

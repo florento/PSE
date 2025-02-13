@@ -82,16 +82,17 @@ def eval_Omnibook(output='', tablename='',
     """csflag: 0 if we do not spell the notes of chord symbols"""
     """        1 if we spell them"""   
     """        2 if we force their names in spelling"""   
+    global _eval_root
+    global skip
+    assert(csflag in [0, 1, 2])
     # initialize a speller
     sp = ps.Spellew(ps13_kpre=kpre, ps13_kpost=kpost, 
                     nbtons=tons,
                     t1_costtype=costtype1, t1_tonal=tonal1, t1_det=det1, 
                     global1=global1, grid=grid,
                     t2_costtype=costtype2, t2_tonal=tonal2, t2_det=det2,
-                    debug=dflag)
-    global _eval_root
-    global skip
-    assert(csflag in [0, 1, 2])
+                    debug=dflag, aux_enum=(csflag == 2))
+    # start evaluating the corpus with the speller
     root = Path(_eval_root)/'evalOmnibook'
     if not os.path.isdir(root):
         os.mkdir(root)
@@ -137,10 +138,11 @@ def eval_Omnibookitem(name, output='',
                     t1_costtype=costtype1, t1_tonal=tonal1, t1_det=det1, 
                     global1=global1, grid=grid,
                     t2_costtype=costtype2, t2_tonal=tonal2, t2_det=det2,
-                    debug=dflag)
+                    debug=dflag, aux_enum=(csflag == 2))
     #print('force global', -2, ps.pse.Mode.Major, flush=True)
     #sp.get_speller().force_global(-2, ps.pse.Mode.Major)
     #print('nb globals:', sp.get_speller().globals(), flush=True)
+    # start evaluating one opus with the speller
     print('spelling', name, flush=True)
     evalXML.eval_item(speller=sp, mflag=mflag, csflag=csflag,
                       dataset=omnibook_corpus(), name=name, 

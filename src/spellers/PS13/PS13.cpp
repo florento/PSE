@@ -12,7 +12,7 @@ namespace pse {
 
 
 PS13::PS13(size_t kpre, size_t kpost, bool dflag):
-SpellerEnum(0, Algo::PS13, dflag),
+SpellerEnum(0, false, Algo::PS13, dflag),
 _scales(),       // empty vector
 _Kpre(kpre),
 _Kpost(kpost),

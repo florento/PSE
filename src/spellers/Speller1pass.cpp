@@ -11,7 +11,7 @@
 namespace pse {
 
 Speller1Pass::Speller1Pass(size_t nbTons, const Algo& algo, bool dflag):
-SpellerEnum(nbTons, algo, dflag),
+SpellerEnum(nbTons, false, algo, dflag), // no aux enum
 _table0(nullptr),
 _global0(nullptr),
 _time_table0(0),

@@ -61,6 +61,8 @@ class PSG
 public: // construction
         
     /// main constructor.
+    /// empty grid with the ton index and enumerator of the given
+    /// spelling table.
     /// @param tab pitch spelling table used to estimated the locals.
     // @param mask bitvector of global tonalities for which locals must
     // be estimated. must be of the same length as the Ton index of tab.
@@ -86,15 +88,21 @@ public: // access
     
     /// number of columns in this grid, i.e. nb of measures spelled.
     size_t size() const;
+
+    /// zero measures in this grid.
+    bool empty() const;
     
     /// number of columns (PS Vectors) in this grid, i.e. nb of measures
     /// spelled.
     /// @see same as PSG::size()
     inline size_t measures() const { return size(); }
-
+    
     /// vector of tonalities (row-index) associated to this grid.
     inline const TonIndex& index() const { return _index; }
-    
+
+    /// enumerator of input notes used to build this grid.
+    inline PSEnum& enumerator() const { return _enum; }
+
     /// number of rows in this grid, i.e. nb of tons considered for spelling.
     inline size_t nbTons() const { return _index.size(); }
         
@@ -136,6 +144,9 @@ protected: // data
     /// header of rows: array of tonalities (1 per row).
     const TonIndex& _index;
     
+    /// enumerator of notes used to build this grid.
+    PSEnum& _enum;
+
     /// columnns: one vector of index of local tons per measure.
     /// - the dimension of inner vectors (columns) is the size of TonIndex.
     ///   @see rowNb()
@@ -145,7 +156,7 @@ protected: // data
     
     // add one column
     // void init(const PSV& vec, std::vector<bool> mask);
-             
+                 
 protected: // construction
 
     // fill a grid (with the size of tab) with TonIndex::UNDEF

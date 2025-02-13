@@ -20,6 +20,7 @@
 
 #include "pstrace.hpp"
 #include "PSRational.hpp"
+#include "Pitch.hpp"
 #include "NoteName.hpp"
 #include "Accid.hpp"
 #include "MidiNum.hpp"
@@ -46,8 +47,9 @@ struct PSRawEnum : public PSEnum
     
 public: // constants
 
-    /// undefined octave number.
-    static int OCTAVE_UNDEF;
+    // undefined octave number.
+    // #todo use Pitch::UNDEF_OCTAVE
+    // static int OCTAVE_UNDEF;
 
 public: // construction
 
@@ -169,34 +171,45 @@ public: // modification : add, rename and rewrite passing notes
     /// empty the list of notes in this enumerator.
     void reset(size_t i0, size_t i1 = PSEnum::ID_INF) override;
         
-
+    // void add(int midi, int bar, bool simult=false,
+    //          const PSRatio& dur = PSRatio(0));
+    
     /// add a new input note to the list of enumerated notes.
     /// @param midi MIDI key of the new input note. must be in 0..128.
     /// @param bar bar number of the new input note. must be positive.
     /// @param simult whether the new input note is simultaneous with the
     /// next note.
     /// @param dur note duration, in fraction of bars.
-    /// @warning for Phython binding
-    void add(int midi, int bar, bool simult=false,
-             const PSRatio& dur = PSRatio(0));
-    
-    /// add a new input note to the list of enumerated notes,
-    /// with constrained name, accidental and octave.
-    /// @param midi MIDI key of the new input note. must be in 0..128.
-    /// @param bar bar number of the new input note. must be positive.
-    /// @param name note name in 'A'..'G'. must not be NoteName::Undef.
-    /// @param accid accidental. must not be NoteName::Undef.
+    /// @param name note name in 'A'..'G'.
+    /// @param accid accidental.
     /// @param oct octave number in -10..10.
-    /// @param altprint whether the accidental must be printed.
-    /// @param simult whether the new input note is simultaneous with the
-    /// next note.
-    /// @param dur note duration, in fraction of bars.
-    /// @warning name, accid, oct must be all set or all unset
-    void add(int midi, int bar,
-             const enum NoteName& name, const enum Accid& accid, int oct,
-             bool altprint=false,
-             bool simult=false,
-             const PSRatio& dur = PSRatio(0));
+    /// @param printed whether the accidental must be printed.
+    /// @warning if one of name, accid, oct is UNDEF, all three must be UNDEF.
+    void add(int midi, int bar, bool simult=false,
+             const PSRatio& dur = PSRatio(0),
+             const enum NoteName& name=NoteName::Undef,
+             const enum Accid& accid=Accid::Undef,
+             int oct=Pitch::UNDEF_OCTAVE,
+             bool printed=false);
+      
+    // add a new input note to the list of enumerated notes,
+    // with constrained name, accidental and octave.
+    // @param midi MIDI key of the new input note. must be in 0..128.
+    // @param bar bar number of the new input note. must be positive.
+    // @param name note name in 'A'..'G'. must not be NoteName::Undef.
+    // @param accid accidental. must not be NoteName::Undef.
+    // @param oct octave number in -10..10.
+    // @param altprint whether the accidental must be printed.
+    // @param simult whether the new input note is simultaneous with the
+    // next note.
+    // @param dur note duration, in fraction of bars.
+    // @warning name, accid, oct must be all set or all unset
+    // void add(int midi, int bar,
+    //          const enum NoteName& name, const enum Accid& accid, int oct,
+    //          bool altprint=false,
+    //          bool simult=false,
+    //          const PSRatio& dur = PSRatio(0));
+    
     /// add a new input note to the list of enumerated notes.
     /// @param note MIDI key of the new input note.
     /// @param bar bar number of the new input note.
@@ -205,6 +218,7 @@ public: // modification : add, rename and rewrite passing notes
     /// @param dur_num numerator of note duration, in fraction of bars.
     /// @param dur_den denominator of note duration, in fraction of bars.
     /// @warning for Phython binding
+    /// @todo delete, not used.
     void addlong(int note, int bar, bool simult=false,
                  long dur_num=0, long dur_den=1);
 
@@ -220,6 +234,7 @@ public: // modification : add, rename and rewrite passing notes
     /// @param oct octave number in -10..10.
     /// @param altprint whether the accidental must be printed.
     /// @warning for Phython binding
+    /// @todo delete, not used.
     void addlong(int note, int bar,
                  const enum NoteName& name, const enum Accid& accid, int oct,
                  bool altprint=false,

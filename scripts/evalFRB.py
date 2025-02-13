@@ -138,7 +138,8 @@ def eval_FRB(corpus='leads',
                     t1_costtype=costtype1, t1_tonal=tonal1, t1_det=det1, 
                     global1=global1, grid=grid,
                     t2_costtype=costtype2, t2_tonal=tonal2, t2_det=det2,
-                    debug=dflag)        
+                    debug=dflag, aux_enum=(csflag == 2))        
+    # start evaluating the corpus with the speller
     evalXML.eval_corpus(speller=sp, mflag=mflag, csflag=csflag, 
                         dataset=FRB_corpus(corpus), skip=skip, 
                         eval_root=root, output_dir=output, tablename=tablename)
@@ -183,7 +184,8 @@ def eval_FRBitem(name, corpus='leads', output='',
                     t1_costtype=costtype1, t1_tonal=tonal1, t1_det=det1, 
                     global1=global1, grid=grid,
                     t2_costtype=costtype2, t2_tonal=tonal2, t2_det=det2,
-                    debug=dflag)
+                    debug=dflag, aux_enum=(csflag == 2))
+    # start evaluating one opus with the speller
     evalXML.eval_item(speller=sp, mflag=mflag, csflag=csflag,
                       dataset=FRB_corpus(corpus), name=name, output_dir=output)
         

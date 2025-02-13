@@ -1,9 +1,5 @@
 # Evaluation scripts for PSE
 
-
-
-
-
 arguments common in script functions 
 
 dir and files

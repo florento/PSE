@@ -15,8 +15,8 @@ namespace pse {
 
 const unsigned int  pse::Pitch::UNDEF_MIDICENT        = 12800;
 const enum NoteName pse::Pitch::UNDEF_NOTE_NAME       = NoteName::Undef;
-const int           pse::Pitch::UNDEF_NOTE_OCTAVE     = 128;
-const enum Accid    pse::Pitch::UNDEF_NOTE_ALTERATION = Accid::Undef;
+const int           pse::Pitch::UNDEF_OCTAVE          = 128;
+const enum Accid    pse::Pitch::UNDEF_ALTERATION      = Accid::Undef;
 
 // note name for each index
 const char pse::Pitch::NAME[7] =
@@ -43,7 +43,7 @@ Pitch::Pitch():
 PWO(),
 //name(), // UNDEF_NOTE_NAME
 //alteration(), // UNDEF_NOTE_ALTERATION
-octave(UNDEF_NOTE_OCTAVE),
+octave(UNDEF_OCTAVE),
 altprint(false),
 _midi(UNDEF_MIDICENT)
 { };
@@ -93,8 +93,8 @@ altprint(false)
     else
     {
         name       = UNDEF_NOTE_NAME;
-        alteration = UNDEF_NOTE_ALTERATION;
-        octave     = UNDEF_NOTE_OCTAVE;
+        alteration = UNDEF_ALTERATION;
+        octave     = UNDEF_OCTAVE;
     }
 }
 
@@ -149,8 +149,8 @@ bool pse::Pitch::undef() const
 bool pse::Pitch::named() const
 {
     return ((name != UNDEF_NOTE_NAME) &&
-            (alteration != UNDEF_NOTE_ALTERATION) &&
-            (octave != UNDEF_NOTE_OCTAVE));
+            (alteration != UNDEF_ALTERATION) &&
+            (octave != UNDEF_OCTAVE));
 }
 
 
@@ -337,7 +337,7 @@ void pse::Pitch::print(std::ostream& o) const
     {
         o << name;
         o << alteration;
-        if ( octave == pse::Pitch::UNDEF_NOTE_OCTAVE)
+        if ( octave == pse::Pitch::UNDEF_OCTAVE)
             o << "?";
         else
             o << octave;

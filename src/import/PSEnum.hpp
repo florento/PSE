@@ -46,11 +46,13 @@ namespace pse {
 class PSEnum
 {
     
-public: // construction
+public: // constants
     
     /// value of right bound when this enumerator is open.
     static const size_t ID_INF;
     
+public: // construction
+
     /// Pitch Spelling enumerator with starting note and (optional) ending note.
     /// @param i0 index of the first note accessible by this enumerator.
     /// @param i1 index of the note after the last note accessible by this
@@ -108,7 +110,7 @@ public: // access
     virtual size_t size() const;
 
     /// no note is accessible by this PS Enumerator.
-    bool empty() const;
+    virtual bool empty() const;
 
     /// the note at the given index is within the interval of notes accessible
     /// to this enumerator.
@@ -176,20 +178,20 @@ public: // modification : rename and rewrite passing notes
     /// @param name note name in 'A'..'G'.
     /// @param accid accidental in [-2, 2] where 1 is a half tone
     /// @param oct octave number in -10..10
-    /// @param altprint whether the accidental must be printed.
+    /// @param printed whether the accidental must be printed.
     /// @see pse::Pitch::rename()
     virtual void rename(size_t i,
                         const enum NoteName& name, const enum Accid& accid,
-                        int oct, bool altprint) = 0;
+                        int oct, bool printed) = 0;
     
     /// rename the note at the given index, given a name.
     /// The accidental and octave number are deduced from the other parameters
     /// (MIDI key and the name).
     /// @param i index of a note in this enumerator.
     /// @param name note name in 'A'..'G'.
-    /// @param altprint whether the accidental must be printed.
+    /// @param printed whether the accidental must be printed.
     virtual void rename(size_t i, const enum NoteName& name,
-                        bool altprint=true);
+                        bool printed=true);
 
     /// count the number of occurrence of a pitch class in a window around
     /// a given note.
@@ -237,7 +239,6 @@ private:
     /// @see rewritePassing()
     bool rewritePassing(size_t i);
 
-    
 }; // class PSEnum
 
 } // namespace pse

@@ -31,8 +31,9 @@
 #include "Ton.hpp"
 #include "TonIndex.hpp"
 #include "PSEnum.hpp"
+#include "PSWindow.hpp"
 #include "PSBag.hpp"
-#include "PSGlobal.hpp"
+// #include "PSGlobal.hpp"
 #include "PSPath.hpp"
 
 
@@ -68,7 +69,27 @@ public: // constructors
     /// @param tonal mode: tonal or modal, for the construction
     /// of initial state. default = modal.
     PSV(const Algo& a, const Cost& seed, const TonIndex& index,
-        const PSEnum& e, size_t i0, size_t i1, size_t bar, bool tonal);
+        PSEnum& e, size_t i0, size_t i1, size_t bar, bool tonal);
+    
+    /// main constructor.
+    /// @param a name of pitch-spelling algorithm implemented.
+    /// @param seed cost value of specialized type used to create a null cost
+    /// of the same type.
+    /// @param index array of tonalities. dimension of this vector.
+    /// @param e an enumerator of notes for transitions of configs.
+    /// @param i0 index of the first note to read in enumerator.
+    /// @param i1 index of the note after the last note to read in enumerator.
+    /// must be superior of equal to i0.
+    /// the sequence is empty iff if i0 == i1.
+    /// @param bar number of bar corresp.  to this vector
+    /// (column number in table).
+    /// @param locals column of local tonalities for tab. Its dimension must be
+    /// the same as col.
+    /// @param tonal mode: tonal or modal, for the construction
+    /// of initial state. default = modal.
+    PSV(const Algo& a, const Cost& seed, const TonIndex& index,
+        PSEnum& e, size_t i0, size_t i1, size_t bar,
+        const std::vector<size_t>& locals, bool tonal);
     
     /// rebuid a column with the same algo, index, and enumerator as the given
     /// column, and the new given seed and given column of local tonalities.
@@ -76,15 +97,12 @@ public: // constructors
     /// will be copied.
     /// @param seed cost value of specialized type used to create a null cost
     /// of the same type.
-    /// @param globals candidate global tonalities. They must refer to the same
-    /// TonIndex as col and locals.
     /// @param locals column of local tonalities for tab. Its dimension must be
     /// the same as col.
     /// @param tonal mode: tonal or modal, for the construction
     /// of initial state. default = tonal.
-    PSV(const PSV& col, const Cost& seed,
-        const PSO& globals, const std::vector<size_t>& locals,
-        bool tonal);
+    // PSV(const PSV& col, const Cost& seed,
+    //     const std::vector<size_t>& locals, bool tonal);
     
     /// main constructor.
     /// @param a name of pitch-spelling algorithm implemented.
@@ -95,9 +113,9 @@ public: // constructors
     /// @param bar number of bar corresp.  to this vector
     /// (column number in table).
     /// @warning the enumerator cannot be changed once the object created.
-    /// @todo not used
-    PSV(const Algo& a, const Cost& seed, const TonIndex& index,
-        const PSEnum& e, size_t bar);
+    /// @todo TBR not used
+    // PSV(const Algo& a, const Cost& seed, const TonIndex& index,
+    //     const PSEnum& e, size_t bar);
     
     /// main constructor.
     /// @param a name of pitch-spelling algorithm implemented.
@@ -110,9 +128,9 @@ public: // constructors
     /// when there are no more notes to read in e.
     /// @param bar number of bar corresponding to this vector
     /// (column number in table).
-    /// @todo not used
-    PSV(const Algo& a, const Cost& seed, const TonIndex& index,
-        const PSEnum& e, size_t i0, size_t bar);
+    /// @todo TBR not used
+    // PSV(const Algo& a, const Cost& seed, const TonIndex& index,
+    //     const PSEnum& e, size_t i0, size_t bar);
 
     /// a vector cannot be copied.
     PSV(const PSV& rhs) = delete;
@@ -128,16 +146,16 @@ public: // access
     size_t size() const;
 
     /// enumerator of input notes used to build this vector.
-    PSEnum& enumerator() const;
+    inline PSEnum& enumerator() { return _enum; }
     
     /// number of bar corresponding to this vector (column number in table).
     size_t bar() const;
     
     /// first id of the enumerator of input notes.
-    inline size_t first() const { return enumerator().first(); }
+    inline size_t first() const { return _enum.first(); }
 
     /// one after last id of the enumerator of input notes.
-    inline size_t stop()  const { return enumerator().stop(); }
+    inline size_t stop()  const { return _enum.stop(); }
     
     /// algorithm used to compute this vector.
     inline const Algo& algo() const { return _algo; }
@@ -240,8 +258,10 @@ private: // data
     // const std::vector<const Ton>& _tons;
     // @todo replace by TonIndex ref
 
-    /// enumerator of notes transmitted to embedded PSB's.
-    const std::unique_ptr<PSEnum> _enum;
+    /// enumerator of notes transmitted to embedded PSB's,
+    /// defined as a window inside the enumerator of embedding table.
+    // const std::unique_ptr<PSEnum> _enum;
+    PSWindow _enum;
     
     /// number of bar corresponding to this vector.
     /// info for debugging / tracing.
@@ -290,12 +310,10 @@ private: // convenience functions
     /// enumerated and the given local tons.
     /// @param seed cost value of specialized type used to create a null cost
     /// of the same type.
-    /// @param globals candidate global tonalities.
     /// @param locals column of local tonalities for tab.
     /// @param tonal mode: tonal or modal, for the construction
     /// of initial state.
-    void init_psbs(const Cost& seed,
-                   const PSO& globals, const std::vector<size_t>& locals,
+    void init_psbs(const Cost& seed, const std::vector<size_t>& locals,
                    bool tonal);
 
     // initialize the vector _locals of local tonalities

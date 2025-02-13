@@ -133,7 +133,8 @@ def eval_FiloSax(output='', tablename='',
                     t1_costtype=costtype1, t1_tonal=tonal1, t1_det=det1, 
                     global1=global1, grid=grid,
                     t2_costtype=costtype2, t2_tonal=tonal2, t2_det=det2,
-                    debug=dflag)        
+                    debug=dflag, aux_enum=(csflag == 2))        
+    # start evaluating the corpus with the speller   
     evalXML.eval_corpus(speller=sp, mflag=mflag, csflag=csflag, 
                         dataset=FiloSax_corpus(), skip=skip, 
                         eval_root=root, output_dir=output, tablename=tablename)
@@ -176,8 +177,8 @@ def eval_FiloSaxitem(name, output='',
                     t1_costtype=costtype1, t1_tonal=tonal1, t1_det=det1, 
                     global1=global1, grid=grid,
                     t2_costtype=costtype2, t2_tonal=tonal2, t2_det=det2,
-                    debug=dflag)
-    
+                    debug=dflag, aux_enum=(csflag == 2))
+    # start evaluating the opus with the speller      
     evalXML.eval_item(speller=sp, mflag=mflag, csflag=csflag,
                       dataset=FiloSax_corpus(), name=name, output_dir=output)
         
@@ -211,3 +212,4 @@ def atonals(file=''):
         df = df_raw.convert_dtypes() # convert to int even when there are NaN (which is float)
         df.to_csv(file, header=True, index=True)
     return keys
+

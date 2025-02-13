@@ -92,7 +92,8 @@ bool Speller2Pass::spell(const Cost& seed0, const Cost& seed1,
     assert(_grid);
     
     clock_t time_start = clock();
-    _table1 = new PST(*_table0, seed1, *_global0, *_grid, true, _debug); // tonal mode
+    assert(_enum);                                                         // tonal mode
+    _table1 = new PST(_algo, seed1, index(), *_enum, *_grid, true, _debug);
     _time_table1 = duration(time_start);
     if (_debug)
     {

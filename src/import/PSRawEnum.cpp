@@ -11,7 +11,7 @@
 namespace pse {
 
 // static
-int PSRawEnum::OCTAVE_UNDEF = 100;
+// int PSRawEnum::OCTAVE_UNDEF = 100;
 
 PSRawEnum::PSRawEnum(size_t i0, size_t i1):
 PSEnum(i0, i1), // empty
@@ -280,23 +280,23 @@ void PSRawEnum::reset(size_t i0, size_t i1)
 }
 
 
-void PSRawEnum::add(int midi, int bar, bool simult, const PSRatio& dur)
-{
-    add(midi, bar,
-        NoteName::Undef, Accid::Undef, OCTAVE_UNDEF, false, simult, dur);
-}
+//void PSRawEnum::add(int midi, int bar, bool simult, const PSRatio& dur)
+//{
+//    add(midi, bar,
+//        NoteName::Undef, Accid::Undef, Pitch::UNDEF_OCTAVE, false,
+//        simult, dur);
+//}
 
 
-void PSRawEnum::add(int midi, int bar,
+void PSRawEnum::add(int midi, int bar, bool simult, const PSRatio& dur,
                     const enum NoteName& name, const enum Accid& accid,
-                    int oct, bool altprint,
-                    bool simult, const PSRatio& dur)
+                    int oct, bool printed)
 {
     assert(sanity_check());
-    // name, accid, oct all defined or all undef
+    // name, accid, oct are all defined or all undef
     assert((accid == Accid::Undef) == (name == NoteName::Undef));
-    assert((oct == OCTAVE_UNDEF) == (name == NoteName::Undef));
-    assert((oct == OCTAVE_UNDEF) or (-10 <= oct and oct <= 10));
+    assert((oct == Pitch::UNDEF_OCTAVE) == (name == NoteName::Undef));
+    assert((oct == Pitch::UNDEF_OCTAVE) or (-10 <= oct and oct <= 10));
 
     // note is a MIDI key
     assert(0 <= midi);
@@ -323,23 +323,23 @@ void PSRawEnum::add(int midi, int bar,
     assert(_octs);
     if (name != NoteName::Undef and
         accid != Accid::Undef and
-        oct != OCTAVE_UNDEF and
+        oct != Pitch::UNDEF_OCTAVE and
         MidiNum::to_midi(name, accid, oct) != midi)
     {
         ERROR("PSRawEnum add: MIDI pitch {} cannot be named by {}{} {}",
               midi, name, accid, oct);
         _names->push_back(NoteName::Undef);
         _accids->push_back(Accid::Undef);
-        _octs->push_back(OCTAVE_UNDEF);
+        _octs->push_back(Pitch::UNDEF_OCTAVE);
     }
     else
     {
         _names->push_back(name); // NoteName::Undef
         _accids->push_back(accid); // Accid::Undef
-        _octs->push_back(oct); // OCTAVE_UNDEF
+        _octs->push_back(oct); // Pitch::UNDEF_OCTAVE
     }
     assert(_prints);
-    _prints->push_back(altprint); // false
+    _prints->push_back(printed); // false
 
     if (! open() && (_notes->size() > _stop))
         _stop = _notes->size();
@@ -349,8 +349,8 @@ void PSRawEnum::add(int midi, int bar,
 void PSRawEnum::addlong(int midi, int bar, bool simult,
                         long dur_num, long dur_den)
 {
-    add(midi, bar, NoteName::Undef, Accid::Undef, OCTAVE_UNDEF, false,
-        simult, PSRatio(dur_num, dur_den));
+    add(midi, bar, simult, PSRatio(dur_num, dur_den),
+        NoteName::Undef, Accid::Undef, Pitch::UNDEF_OCTAVE, false);
 }
 
 void PSRawEnum::addlong(int midi, int bar,
@@ -358,7 +358,7 @@ void PSRawEnum::addlong(int midi, int bar,
                         int oct, bool altprint,
                         bool simult, long dur_num, long dur_den)
 {
-    add(midi, bar, name, accid, oct, false, simult, PSRatio(dur_num, dur_den));
+    add(midi, bar, simult, PSRatio(dur_num, dur_den), name, accid, oct, false);
 }
 
 void PSRawEnum::rename(size_t i,
@@ -392,10 +392,10 @@ void PSRawEnum::rename(size_t i,
 //        WARN("PSRawEnum overwriting {} with {} (was {})", i, a, _accids->at(i));
     _accids->at(i) = a;
     
-    assert(o != OCTAVE_UNDEF);
+    assert(o != Pitch::UNDEF_OCTAVE);
     assert(_octs);
     assert(i < _octs->size());
-//    if (_octs->at(i) != OCTAVE_UNDEF)
+//    if (_octs->at(i) != Pitch::UNDEF_OCTAVE)
 //        WARN("PSRawEnum overwriting {} with {} (was {})", i, o, _octs->at(i));
 //        WARN("PSRawEnum overwriting {} with {} (was {})", i, o, _octs->at(i));
     _octs->at(i) = o;

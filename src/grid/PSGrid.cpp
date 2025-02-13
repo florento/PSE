@@ -14,8 +14,10 @@
 
 namespace pse {
 
+
 PSG::PSG(const PST& tab): // std::vector<bool> mask
 _index(tab.index()),
+_enum(tab.enumerator()),
 _content()
 {
     // assert(mask.size() == _index.size());
@@ -36,6 +38,12 @@ PSG::~PSG()
 size_t PSG::size() const
 {
     return _content.size();
+}
+
+
+bool PSG::empty() const
+{
+    return _content.empty();
 }
 
 

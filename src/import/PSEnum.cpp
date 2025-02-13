@@ -8,8 +8,11 @@
 /// @addtogroup pitch
 /// @{
 
-#include "PSEnum.hpp"
+
 #include <stdlib.h>     /* abs */
+
+#include "PSEnum.hpp"
+
 
 namespace pse {
 

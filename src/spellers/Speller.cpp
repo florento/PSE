@@ -13,6 +13,7 @@
 
 namespace pse {
 
+
 //Algo Speller::algo() const
 //{
 //    return Algo::Undef;
@@ -37,10 +38,12 @@ namespace pse {
 //}
 
 
-Speller::Speller(PSEnum* e, size_t nbton, const Algo& algo, bool dflag):
+Speller::Speller(PSEnum* e, PSEnum* e_aux,
+                 size_t nbton, const Algo& algo, bool dflag):
 Spelli(nbton, dflag),
 _algo(algo),
 _enum(e),
+_enum_aux(e_aux),
 _table(nullptr),
 _grid(nullptr),
 _global(nullptr)
@@ -49,11 +52,12 @@ _global(nullptr)
 }
 
 
-Speller::Speller(PSEnum* e, std::shared_ptr<TonIndex> id,
-        const Algo& algo, bool dflag):
+Speller::Speller(PSEnum* e, std::shared_ptr<TonIndex> id,  PSEnum* e_aux,
+                 const Algo& algo, bool dflag):
 Spelli(id, dflag),
 _algo(algo),
 _enum(e),
+_enum_aux(e_aux),
 _table(nullptr),
 _grid(nullptr),
 _global(nullptr)
@@ -112,11 +116,48 @@ Speller::~Speller()
 
 
 //
+// parameters
+//
+
+
+size_t Speller::size(bool aux) const
+{
+    assert(not aux or hasAuxEnumerator());
+    return enumerator(aux).size();
+}
+
+
+bool Speller::hasAuxEnumerator() const
+{
+    return (_enum_aux != nullptr);
+}
+
+
+bool Speller::setAuxEnumerator(PSEnum* aux)
+{
+    assert(aux);
+    if (_enum_aux != nullptr)
+    {
+        ERROR("Speller addAuxEnumerator: there is already an auxiliary enumerator.");
+        return false;
+    }
+    else
+    {
+        _enum_aux = aux;
+        return true;
+    }
+}
+
+
+//
 // spelling
 //
 
-bool Speller::evalTable(CostType ctype, bool tonal, bool chromatic)
+bool Speller::evalTable(CostType ctype, bool tonal, bool chromatic, bool aux)
 {
+    DEBUG("Speller: eval table with {}, unlead={}, det={}, {} enumerator",
+          ctype, tonal, chromatic, (aux?"auxiliary":"main"));
+
     if (ctype == CostType::UNDEF)
     {
         ERROR("Speller eval Table: undefined cost type, ignored.");
@@ -138,17 +179,17 @@ bool Speller::evalTable(CostType ctype, bool tonal, bool chromatic)
     
     /// @todo remplacer algo par flag chromatic
     const Algo algo(chromatic?Algo::PSD:Algo::PSE);
-    assert(_enum);
     std::unique_ptr<Cost> seed = unique_zero(ctype); // was sampleCost(ctype)
     assert(seed);
-    _table = new PST(algo, *seed, index(), *_enum, tonal, _debug);
-
+    _table = new PST(algo, *seed, index(), enumerator(aux), tonal, _debug);
     return true;
 }
 
 
-bool Speller::revalTable(CostType ctype, bool tonal, bool chromatic)
+bool Speller::revalTable(CostType ctype, bool tonal, bool chromatic, bool aux)
 {
+    DEBUG("Speller: reval table with {}, unlead={}, det={}, {} enumerator",
+          ctype, tonal, chromatic, (aux?"auxiliary":"main"));
     if (ctype == CostType::UNDEF)
     {
         ERROR("Speller reval Table: undefined cost type, ignored.");
@@ -174,7 +215,7 @@ bool Speller::revalTable(CostType ctype, bool tonal, bool chromatic)
 //  }
     
     assert(_table);
-    PST* table_pre = _table;
+    // PST* table_pre = _table;
     const Algo algo(chromatic?Algo::PSD:Algo::PSE);
     
     /// @todo suppr. _global et full, remplacé par index de table_pre (flag global)
@@ -182,19 +223,14 @@ bool Speller::revalTable(CostType ctype, bool tonal, bool chromatic)
     // global is ignored
     //    if (_global)
     //    {
+    assert(_enum);
     std::unique_ptr<Cost> seed = unique_zero(ctype); // was sampleCost(ctype)
     assert(seed);
-    _table = new PST(algo, *table_pre, *seed, *_global, *_grid, tonal, _debug);
-    //    }
-//    else
-//    {
-//        PSO full(index(), _debug, true);
-//        _table = new PST(algo, *table_pre, sampleCost(ctype), full, *_grid,
-//                         tonal, _debug);
-//    }
-
-    assert(table_pre);
-    delete table_pre;
+    _table = new PST(algo, // *table_pre,
+                     *seed, index(), enumerator(aux),
+                     *_grid, tonal, _debug);
+    //assert(table_pre);
+    //delete table_pre;
     return true;
 }
 
@@ -300,22 +336,24 @@ bool Speller::rename(size_t i)
     assert(i != TonIndex::UNDEF);
     assert(_index);
     assert(i < _index->size());
-
+    
     if (_table == nullptr)
     {
         ERROR("Speller rename: eval table first");
         return false;
     }
-    
+
+    DEBUG("rename with ton={} in enumerator of size={}",
+          i, _table->enumerator().size());
+
     return _table->rename(i);
 }
 
 
-size_t Speller::rewritePassing()
+size_t Speller::rewritePassing(bool aux)
 {
     TRACE("Rewriting passing notes");
-    assert(_enum);
-    return _enum->rewritePassing();
+    return enumerator(aux).rewritePassing();
 }
 
 
@@ -353,16 +391,18 @@ void Speller::resetGrid()
 //
 
 
-size_t Speller::measures() const
+size_t Speller::measures(bool aux) const
 {
-    assert(_enum);
+    const PSEnum& psenum(enumerator(aux));
     size_t m;
-    if (_enum->empty())
+    if (psenum.empty())
+    {
         m = 0;
+    }
     else
     {
-        size_t last =  _enum->stop()-1;
-        m = _enum->measure(last)+1;
+        size_t last = psenum.stop()-1;
+        m = psenum.measure(last)+1;
     }
     
     
@@ -372,31 +412,27 @@ size_t Speller::measures() const
 }
 
 
-enum NoteName Speller::name(size_t i) const
+enum NoteName Speller::name(size_t i, bool aux) const
 {
-    assert(_enum);
-    return _enum->name(i);
+    return enumerator(aux).name(i);
 }
 
 
-enum Accid Speller::accidental(size_t i) const
+enum Accid Speller::accidental(size_t i, bool aux) const
 {
-    assert(_enum);
-    return _enum->accidental(i);
+    return enumerator(aux).accidental(i);
 }
 
 
-int Speller::octave(size_t i) const
+int Speller::octave(size_t i, bool aux) const
 {
-    assert(_enum);
-    return _enum->octave(i);
+    return enumerator(aux).octave(i);
 }
 
 
-bool Speller::printed(size_t i) const
+bool Speller::printed(size_t i, bool aux) const
 {
-    assert(_enum);
-    return _enum->printed(i);
+    return enumerator(aux).printed(i);
 }
 
 
@@ -425,7 +461,7 @@ size_t Speller::ilocal(size_t i, size_t j) const
         return _grid->ilocal(i, j);
     }
     
-    // in case or error return undefined tonality index
+    // in case of error return undefined tonality index
     return TonIndex::UNDEF;
 }
 
@@ -450,10 +486,26 @@ const Ton& Speller::local(size_t i, size_t j) const
 
 const Ton& Speller::localNote(size_t i, size_t j) const
 {
-    assert(_enum);
-    assert(_enum->inside(j));
-    size_t bar = _enum->measure(j);
+    assert(_grid);
+    const PSEnum& psenum(_grid->enumerator());
+    assert(psenum.inside(j));
+    size_t bar = psenum.measure(j);
     return local(i, bar);
+}
+
+
+PSEnum& Speller::enumerator(bool aux) const
+{
+    if (aux)
+    {
+        assert(_enum_aux);
+        return *_enum_aux;
+    }
+    else
+    {
+        assert(_enum);
+        return *_enum;
+    }
 }
 
 

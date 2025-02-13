@@ -5,7 +5,6 @@
 //  Created by Florent Jacquemard on 17/11/2022.
 //
 
-
 #include <iostream>
 
 #include "pybind11/pybind11.h"
@@ -113,12 +112,15 @@ PYBIND11_MODULE(pse, m)
   
     // main spelling interface
     py::class_<pse::SpellerEnum>(m, "Speller")
-        .def(py::init<size_t>(),
-             "Modular Spell Checker, initialized with nb of tons")
+        .def(py::init<size_t, bool>(),
+             "Modular Spell Checker, initialized with nb of tons",
+             py::arg("tons"), py::arg("aux_enum")=false)
+             //py::arg("algo")=pse::Algo::Undef, py::arg("dflag")=false)
         .def("debug", &pse::SpellerEnum::debug,
              "set debug mode", py::arg("on"))
         .def("size", &pse::SpellerEnum::size,
-             "number of notes to spell")
+             "number of notes to spell",
+             py::arg("aux")=false) // not the auxiliary enumerator
         // .def("reset", &pse::SpellerEnum::reset,
         //     "reset this speller to its initial state, except the list of notes to spell")
         .def("reset_tons", &pse::SpellerEnum::resetTons,
@@ -131,24 +133,29 @@ PYBIND11_MODULE(pse, m)
              "clear the current grid")
         .def("reset_enum", &pse::SpellerEnum::resetEnum,
              "clear the list of notes to spell")
+        .def("has_auxenum", &pse::SpellerEnum::hasAuxEnumerator,
+             "the speller has an auxilliary enumerator")
+        .def("add_auxenum", &pse::SpellerEnum::addAuxEnumerator,
+             "add a new auxilliary enumerator")
         .def("add", &pse::SpellerEnum::add0,
              "add a new note to spell",
-             py::arg("midi"), py::arg("bar"), py::arg("simultaneous"))
+             py::arg("midi"), py::arg("bar"), py::arg("simultaneous"),
+             py::arg("aux"))
         .def("add_dur", &pse::SpellerEnum::add2,
              "add a new note to spell with duration",
-             py::arg("midi"), py::arg("bar"), py::arg("simult"),
-             py::arg("dur_num"), py::arg("dur_den"))
+             py::arg("midi"), py::arg("bar"), py::arg("simultaneous"),
+             py::arg("dur_num"), py::arg("dur_den"), py::arg("aux"))
         .def("add_name", &pse::SpellerEnum::add4,
              "add a new note to speller with forced note name",
-             py::arg("midi"), py::arg("bar"), py::arg("simult"),
+             py::arg("midi"), py::arg("bar"), py::arg("simultaneous"),
              py::arg("name"), py::arg("accid"), py::arg("octave"),
-             py::arg("printed"))
+             py::arg("printed"), py::arg("aux"))
         .def("add_namedur", &pse::SpellerEnum::add6,
              "add a new note to speller with forced note name and duration",
-             py::arg("midi"), py::arg("bar"), py::arg("simult"),
+             py::arg("midi"), py::arg("bar"), py::arg("simultaneous"),
              py::arg("dur_num"), py::arg("dur_den"),
              py::arg("name"), py::arg("accid"), py::arg("octave"),
-             py::arg("printed"))
+             py::arg("printed"), py::arg("aux"))
         .def("nb_tons", &pse::SpellerEnum::nbTons,
              "number of tonalities considered for pitch spelling")
     // disambiguate overloaded method
@@ -186,15 +193,16 @@ PYBIND11_MODULE(pse, m)
              "nb of measures processed by this speller")
         .def("name",  &pse::SpellerEnum::name,
              "estimated name of note",
-             py::arg("i"))
+             py::arg("i"), py::arg("aux")=false)
         .def("accidental", &pse::SpellerEnum::accidental,
-             "estimated accidental of note", py::arg("i"))
+             "estimated accidental of note",
+             py::arg("i"), py::arg("aux")=false)
         .def("octave", &pse::SpellerEnum::octave,
              "estimated octave of note",
-             py::arg("i"))
+             py::arg("i"), py::arg("aux")=false)
         .def("printed", &pse::SpellerEnum::printed,
              "estimated print flag of note",
-             py::arg("i"))
+             py::arg("i"), py::arg("aux")=false)
         .def("globals", &pse::SpellerEnum::globals,
              "get number of candidates (ties) for the estimatation of the global tonality")
         .def("global_ton", &pse::SpellerEnum::global,
@@ -220,27 +228,31 @@ PYBIND11_MODULE(pse, m)
     // OBSOLETE. replaced by Speller
     py::class_<pse::PSE>(m, "PSE")
         .def(py::init<>(), "Spell Checker PSE")
-        .def("algo", &pse::PSE::algo, "name of spelling algorithm")
-        .def("debug", &pse::PSE::debug, "set debug mode", py::arg("on"))
-        .def("size", &pse::PSE::size, "number of notes to spell")
+        .def("algo", &pse::PSE::algo,
+             "name of spelling algorithm")
+        .def("debug", &pse::PSE::debug,
+             "set debug mode", py::arg("on"))
+        .def("size", &pse::PSE::size,
+             "number of notes to spell")
         .def("add", &pse::SpellerEnum::add0,
              "add a new note to spell",
-             py::arg("midi"), py::arg("bar"), py::arg("simultaneous"))
+             py::arg("midi"), py::arg("bar"), py::arg("simultaneous"),
+             py::arg("aux"))
         .def("add_dur", &pse::SpellerEnum::add2,
              "add a new note to spell with duration",
-             py::arg("midi"), py::arg("bar"), py::arg("simult"),
-             py::arg("dur_num"), py::arg("dur_den"))
+             py::arg("midi"), py::arg("bar"), py::arg("simultaneous"),
+             py::arg("dur_num"), py::arg("dur_den"), py::arg("aux"))
         .def("add_name", &pse::SpellerEnum::add4,
              "add a new note to speller with forced note name",
-             py::arg("midi"), py::arg("bar"), py::arg("simult"),
+             py::arg("midi"), py::arg("bar"), py::arg("simultaneous"),
              py::arg("name"), py::arg("accid"), py::arg("octave"),
-             py::arg("printed"))
+             py::arg("printed"), py::arg("aux"))
         .def("add_namedur", &pse::SpellerEnum::add6,
              "add a new note to speller with forced note name and duration",
-             py::arg("midi"), py::arg("bar"), py::arg("simult"),
+             py::arg("midi"), py::arg("bar"), py::arg("simultaneous"),
              py::arg("dur_num"), py::arg("dur_den"),
              py::arg("name"), py::arg("accid"), py::arg("octave"),
-             py::arg("printed"))
+             py::arg("printed"), py::arg("aux"))
         .def("nb_tons", &pse::PSE::nbTons,
              "number of tonalities considered for pitch spelling")
         .def("reset_tons", &pse::PSE::resetTons,
@@ -256,18 +268,28 @@ PYBIND11_MODULE(pse, m)
 //             "switch the array of tonalities to tonal mode for Weber dist.")
 //        .def("set_modal", &pse::PSE::WeberModal,
 //             "switch the array of tonalities to modal mode for Weber dist.")
-        .def("close_tons", &pse::PSE::closeTons, "close the array of tonalities")
-        .def("set_global", &pse::PSE::setGlobal, "force global tonality")
-        .def("spell", &pse::PSE::spell, "compute spelling")
-        .def("rename", &pse::PSE::rename, "rename input notes")
-        .def("rename0", &pse::PSE::rename0, "rename input notes (wrt global candidate first pass)")
-        .def("rewrite_passing", &pse::PSE::rewritePassing, "rewrite passing notes")
-        .def("global_ton", &pse::PSE::global, "get estimated global tonality")
+        .def("close_tons", &pse::PSE::closeTons,
+             "close the array of tonalities")
+        .def("set_global", &pse::PSE::setGlobal,
+             "force global tonality")
+        .def("spell", &pse::PSE::spell,
+             "compute spelling")
+        .def("rename", &pse::PSE::rename,
+             "rename input notes")
+        .def("rename0", &pse::PSE::rename0,
+             "rename input notes (wrt global candidate first pass)")
+        .def("rewrite_passing", &pse::PSE::rewritePassing,
+             "rewrite passing notes")
+        .def("global_ton", &pse::PSE::global,
+             "get estimated global tonality")
         .def("iglobal_ton", &pse::PSE::iglobal,
              "get index of estimated global tonality")
-        .def("keysig", &pse::PSE::fifths, "get estimated global key signature")
-        .def("locals", &pse::PSE::locals, "the local tonality grid has been estimated")
-        .def("local_bar", &pse::PSE::local, "estimated local tonality for a bar")
+        .def("keysig", &pse::PSE::fifths,
+             "get estimated global key signature")
+        .def("locals", &pse::PSE::locals,
+             "the local tonality grid has been estimated")
+        .def("local_bar", &pse::PSE::local,
+             "estimated local tonality for a bar")
              // py::arg("ton"), py::arg("bar"))
         .def("local_note", &pse::PSE::localNote,
              "estimated local tonality for a note")
@@ -283,79 +305,103 @@ PYBIND11_MODULE(pse, m)
              "get index of candidate global tonality ")
         .def("iglobal_ton0", &pse::PSE::iglobal0,
              "get index of candidate global tonality (after first pass)")
-        .def("name",  &pse::PSE::name, "estimated name of note",
-             py::arg("i"))
+        .def("name",  &pse::PSE::name,
+             "estimated name of note",
+             py::arg("i"), py::arg("aux")=false)
         .def("accidental", &pse::PSE::accidental,
-             "estimated accidental of note", py::arg("i"))
-        .def("octave", &pse::PSE::octave, "estimated octave of note",
-             py::arg("i"))
-        .def("printed", &pse::PSE::printed, "estimated print flag of note",
-             py::arg("i"));
+             "estimated accidental of note",
+             py::arg("i"), py::arg("aux")=false)
+        .def("octave", &pse::PSE::octave,
+             "estimated octave of note",
+             py::arg("i"), py::arg("aux")=false)
+        .def("printed", &pse::PSE::printed,
+             "estimated print flag of note",
+             py::arg("i"), py::arg("aux")=false);
     
     py::class_<pse::PS13>(m, "PS13")
         .def(py::init<>(), "Spell Checker PS13")
-        .def("algo", &pse::PS13::algo, "name of spelling algorithm")
-        .def("debug", &pse::PS13::debug, "set debug mode", py::arg("on"))
-        .def("size", &pse::PS13::size, "number notes to spell")
-        .def("reset", &pse::PS13::resetEnum, "clear the list of notes to spell")
-        .def("set_Kpre", &pse::PS13::setKpre, "set the Kpre parameter of PS13")
-        .def("set_Kpost", &pse::PS13::setKpost, "set the Kpost parameter of PS13")
+        .def("algo", &pse::PS13::algo,
+             "name of spelling algorithm")
+        .def("debug", &pse::PS13::debug,
+             "set debug mode", py::arg("on"))
+        .def("size", &pse::PS13::size,
+             "number notes to spell")
+        .def("reset", &pse::PS13::resetEnum,
+             "clear the list of notes to spell")
+        .def("set_Kpre", &pse::PS13::setKpre,
+             "set the Kpre parameter of PS13")
+        .def("set_Kpost", &pse::PS13::setKpost,
+             "set the Kpost parameter of PS13")
         .def("add", &pse::SpellerEnum::add0,
              "add a new note to spell",
-             py::arg("midi"), py::arg("bar"), py::arg("simultaneous"))
+             py::arg("midi"), py::arg("bar"), py::arg("simultaneous"),
+             py::arg("aux"))
         .def("add_dur", &pse::SpellerEnum::add2,
              "add a new note to spell with duration",
-             py::arg("midi"), py::arg("bar"), py::arg("simult"),
-             py::arg("dur_num"), py::arg("dur_den"))
+             py::arg("midi"), py::arg("bar"), py::arg("simultaneous"),
+             py::arg("dur_num"), py::arg("dur_den"), py::arg("aux"))
         .def("add_name", &pse::SpellerEnum::add4,
              "add a new note to speller with forced note name",
-             py::arg("midi"), py::arg("bar"), py::arg("simult"),
+             py::arg("midi"), py::arg("bar"), py::arg("simultaneous"),
              py::arg("name"), py::arg("accid"), py::arg("octave"),
-             py::arg("printed"))
+             py::arg("printed"), py::arg("aux"))
         .def("add_namedur", &pse::SpellerEnum::add6,
              "add a new note to speller with forced note name and duration",
-             py::arg("midi"), py::arg("bar"), py::arg("simult"),
+             py::arg("midi"), py::arg("bar"), py::arg("simultaneous"),
              py::arg("dur_num"), py::arg("dur_den"),
              py::arg("name"), py::arg("accid"), py::arg("octave"),
-             py::arg("printed"))
-        .def("spell", &pse::PS13::spell, "spell notes")
-        .def("rewrite_passing", &pse::PS13::rewritePassing, "rewrite passing notes")
-        .def("name",  &pse::PS13::name, "estimated name of note",
-             py::arg("i"))
+             py::arg("printed"), py::arg("aux"))
+        .def("spell", &pse::PS13::spell,
+             "spell notes")
+        .def("rewrite_passing", &pse::PS13::rewritePassing,
+             "rewrite passing notes")
+        .def("name",  &pse::PS13::name,
+             "estimated name of note",
+             py::arg("i"), py::arg("aux")=false)
         .def("accidental", &pse::PS13::accidental,
-             "estimated accidental of note", py::arg("i"))
-        .def("octave", &pse::PS13::octave, "estimated octave of note",
-             py::arg("i"))
-        .def("printed", &pse::PS13::printed, "estimated print flag of note",
-             py::arg("i"))
-        .def("locals", &pse::PS13::locals, "the local tonality grid has been estimated")
-        .def("globals", &pse::PS13::globals, "the glocal tonality candidates have been estimated")
-        .def("global_ton", &pse::PS13::global, "estimated global tonality (undef)");
+             "estimated accidental of note",
+             py::arg("i"), py::arg("aux")=false)
+        .def("octave", &pse::PS13::octave,
+             "estimated octave of note",
+             py::arg("i"), py::arg("aux")=false)
+        .def("printed", &pse::PS13::printed,
+             "estimated print flag of note",
+             py::arg("i"), py::arg("aux")=false)
+        .def("locals", &pse::PS13::locals,
+             "the local tonality grid has been estimated")
+        .def("globals", &pse::PS13::globals,
+             "the glocal tonality candidates have been estimated")
+        .def("global_ton", &pse::PS13::global,
+             "estimated global tonality (undef)");
     
     // OBSOLETE. replaced by Speller
     py::class_<pse::PS14>(m, "PS14")
         .def(py::init<>(), "Spell Checker PS14")
-        .def("algo", &pse::PS14::algo, "name of spelling algorithm")
-        .def("debug", &pse::PS14::debug, "set debug mode", py::arg("on"))
-        .def("size", &pse::PS14::size, "number notes to spell")
+        .def("algo", &pse::PS14::algo,
+             "name of spelling algorithm")
+        .def("debug", &pse::PS14::debug,
+             "set debug mode", py::arg("on"))
+        .def("size", &pse::PS14::size,
+             "number notes to spell")
         .def("add", &pse::SpellerEnum::add0,
              "add a new note to spell",
-             py::arg("midi"), py::arg("bar"), py::arg("simultaneous"))
+             py::arg("midi"), py::arg("bar"), py::arg("simultaneous"),
+             py::arg("aux"))
         .def("add_dur", &pse::SpellerEnum::add2,
              "add a new note to spell with duration",
-             py::arg("midi"), py::arg("bar"), py::arg("simult"),
-             py::arg("dur_num"), py::arg("dur_den"))
+             py::arg("midi"), py::arg("bar"), py::arg("simultaneous"),
+             py::arg("dur_num"), py::arg("dur_den"), py::arg("aux"))
         .def("add_name", &pse::SpellerEnum::add4,
              "add a new note to speller with forced note name",
-             py::arg("midi"), py::arg("bar"), py::arg("simult"),
+             py::arg("midi"), py::arg("bar"), py::arg("simultaneous"),
              py::arg("name"), py::arg("accid"), py::arg("octave"),
-             py::arg("printed"))
+             py::arg("printed"), py::arg("aux"))
         .def("add_namedur", &pse::SpellerEnum::add6,
              "add a new note to speller with forced note name and duration",
-             py::arg("midi"), py::arg("bar"), py::arg("simult"),
+             py::arg("midi"), py::arg("bar"), py::arg("simultaneous"),
              py::arg("dur_num"), py::arg("dur_den"),
              py::arg("name"), py::arg("accid"), py::arg("octave"),
-             py::arg("printed"))
+             py::arg("printed"), py::arg("aux"))
         .def("nb_tons", &pse::PS14::nbTons,
              "number of tonalities considered for pitch spelling")
         .def("reset_tons", &pse::PS14::resetTons,
@@ -371,17 +417,24 @@ PYBIND11_MODULE(pse, m)
 //             "switch the array of tonalities to tonal mode for Weber dist.")
 //        .def("set_modal", &pse::PS14::WeberModal,
 //             "switch the array of tonalities to modal mode for Weber dist.")
-        .def("close_tons", &pse::PS14::closeTons, "close the array of tonalities")
-        .def("set_global", &pse::PS14::setGlobal, "force global tonality")
-        .def("spell", &pse::PS14::spell, "compute spelling")
-        .def("rename", &pse::PS14::rename, "rename input notes")
-        .def("rename0", &pse::PS14::rename0, "rename input notes (wrt global candidate first pass)")
-        .def("rewrite_passing", &pse::PS14::rewritePassing, "rewrite passing notes")
+        .def("close_tons", &pse::PS14::closeTons,
+             "close the array of tonalities")
+        .def("set_global", &pse::PS14::setGlobal,
+             "force global tonality")
+        .def("spell", &pse::PS14::spell,
+             "compute spelling")
+        .def("rename", &pse::PS14::rename,
+             "rename input notes")
+        .def("rename0", &pse::PS14::rename0,
+             "rename input notes (wrt global candidate first pass)")
+        .def("rewrite_passing", &pse::PS14::rewritePassing,
+             "rewrite passing notes")
         .def("globals", &pse::PS14::globals,
              "get number of candidates (ties) for the estimatation of the global tonality")
         .def("globals0", &pse::PS14::globals0,
              "get number of candidates (ties) for the estimatation of the global tonality  (after first pass)")
-        .def("global_ton", &pse::PS14::global, "get candidate global tonality ")
+        .def("global_ton", &pse::PS14::global,
+             "get candidate global tonality ")
         .def("global_ton0", &pse::PS14::global0,
              "get candidate global tonality (after first pass)")
         .def("iglobal_ton", &pse::PS14::iglobal,
@@ -390,17 +443,25 @@ PYBIND11_MODULE(pse, m)
              "get index of candidate global tonality (after first pass)")
 //        .def("iglobal_ton", &pse::PS14::iglobal,
 //             "get index of estimated global tonality")
-        .def("keysig", &pse::PS14::fifths, "get estimated global key signature")
-        .def("locals", &pse::PS14::locals, "the local tonality grid has been estimated")
-        .def("local_bar", &pse::PS14::local, "estimated local tonality for a bar")
+        .def("keysig", &pse::PS14::fifths,
+             "get estimated global key signature")
+        .def("locals", &pse::PS14::locals,
+             "the local tonality grid has been estimated")
+        .def("local_bar", &pse::PS14::local,
+             "estimated local tonality for a bar")
              // py::arg("ton"), py::arg("bar"))
-        .def("local_note", &pse::PS14::localNote, "estimated local tonality for a note")
-        .def("name",  &pse::PS14::name, "estimated name of note",
-             py::arg("i"))
+        .def("local_note", &pse::PS14::localNote,
+             "estimated local tonality for a note")
+        .def("name",  &pse::PS14::name,
+             "estimated name of note",
+             py::arg("i"), py::arg("aux")=false)
         .def("accidental", &pse::PS14::accidental,
-             "estimated accidental of note", py::arg("i"))
-        .def("octave", &pse::PS14::octave, "estimated octave of note",
-             py::arg("i"))
-        .def("printed", &pse::PS14::printed, "estimated print flag of note",
-             py::arg("i"));
+             "estimated accidental of note",
+             py::arg("i"), py::arg("aux")=false)
+        .def("octave", &pse::PS14::octave,
+             "estimated octave of note",
+             py::arg("i"), py::arg("aux")=false)
+        .def("printed", &pse::PS14::printed,
+             "estimated print flag of note",
+             py::arg("i"), py::arg("aux")=false);
 }

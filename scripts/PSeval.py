@@ -73,10 +73,15 @@ def count_notes(part, chord_symb = False):
     assert(chord_symb in [0, 1, 2])
     fpart = part.flatten()
     nn = len(fpart.getElementsByClass(m21.note.Note))
+    n1 = nn
+    n2 = nn
     for c in fpart.getElementsByClass(m21.chord.Chord):
-        if (chord_symb > 0 or not isinstance(c, m21.harmony.ChordSymbol)):
-            nn += len(c)
-    return nn    
+        if chord_symb == 1 or not isinstance(c, m21.harmony.ChordSymbol):
+            n1 += len(c)
+            n2 += len(c)             
+        elif chord_symb == 2:
+            n1 += len(c)
+    return (n1, n2)
 
 def count_chords(part, chord_symb = False):
     """return the number of chords in a music21 part"""    
@@ -123,27 +128,34 @@ def count_measures(part):
 #     #print('max notes per bar = ', max_notes, 'in bar: ', max_bar)
 #     return ln
 
-def insert_note(note, date, next_note, next_date, bar, note_list, force):
-    """insert note as a barred note at the end of note_list"""
+def lnpair_append(ln1, ln2, note, bar, simult, force):
+    if force: # only for first pass
+        ln1.append((note, bar, simult, force)) # add a 4-uplet
+    else:     # for both passes
+        ln1.append((note, bar, simult, force))  
+        ln2.append((note, bar, simult, force))  
+        
+def insert_note(note, date, next_note, next_date, bar, ln1, ln2, force):
+    """insert note as a barred note at the end of ln1 or ln2 or both"""
     if (note == None):
         return
     else:
         assert(isinstance(note, m21.note.Note))
 
     if (next_note == None):   
-        note_list.append((note, bar, False, force))  # add a triplet
+        lnpair_append(ln1, ln2, note, bar, False, force) 
     else:        
         assert(isinstance(next_note, m21.note.Note))
         # grace notes are spelled separatly
         if note.duration.isGrace:
-            note_list.append((note, bar, False, force)) 
+            lnpair_append(ln1, ln2, note, bar, False, force)
         # other simultaneous notes (notes in chords) are spelled simultaneously
         else:            
-            note_list.append((note, bar, (date == next_date), force)) 
+            lnpair_append(ln1, ln2, note, bar, (date == next_date), force)
             #(note.offset == next_note.offset)))
 
 def extract_measure(m, b, chord_symb = 0):
-    """extract the list of barred notes occurring in a music21 part"""    
+    """extract a pair of lists of barred notes occurring in a music21 part"""    
     """m: the M21 measure to process"""
     """b: measure number of m"""
     """chord_symb: 0 if we do not add the notes of chord symbols"""
@@ -151,14 +163,15 @@ def extract_measure(m, b, chord_symb = 0):
     """            2 if we add them and force their names"""   
     assert(isinstance(m, m21.stream.Measure))
     assert(chord_symb in [0, 1, 2])
-    ln = []
+    ln1, ln2 = [], []
     prev_n = None              # prev note in measure     
     prev_offset = 0            # onset of prev note in measure       
     prev_force = False         # the name of prev note shall be forced
     for e in m.flatten():      # merge voices in measure
         # case of single note
         if isinstance(e, m21.note.Note):
-            insert_note(prev_n, prev_offset, e, e.offset, b, ln, prev_force)
+            insert_note(prev_n, prev_offset, e, e.offset, b, 
+                        ln1, ln2, prev_force)
             prev_n = e
             prev_offset = e.offset
             prev_force = False
@@ -167,28 +180,33 @@ def extract_measure(m, b, chord_symb = 0):
              (chord_symb > 0 or not isinstance(e, m21.harmony.ChordSymbol)):
             for cn in e:
                 assert(isinstance(cn, m21.note.Note))
-                insert_note(prev_n, prev_offset, cn, e.offset, b, ln, prev_force)
+                insert_note(prev_n, prev_offset, cn, e.offset, b, 
+                            ln1, ln2, prev_force)
                 prev_n = cn
                 prev_offset = e.offset
                 prev_force = (chord_symb == 2)
     # insert last note
-    insert_note(prev_n, prev_offset, None, 0, b, ln, prev_force) 
-    return ln
+    insert_note(prev_n, prev_offset, None, 0, b, ln1, ln2, prev_force) 
+    return (ln1, ln2)
     
 def extract_part(part, chord_symb = 0):
-    """extract the list of barred notes occurring in a music21 part"""    
+    """extract a pair of lists of barred notes occurring in a music21 part"""
+    """one list for a first pass of spelling, another for the second pass"""
+    """if the seone list is empty, both passes use the first list"""
     """part: the M21 part to process"""
     """chord_symb: 0 if we do not add the notes of chord symbols"""
     """            1 if we add them"""   
     """            2 if we add them and force their names"""   
     assert(chord_symb in [0, 1, 2])
     mes = part.getElementsByClass(m21.stream.Measure)
-    ln = []
+    (ln1, ln2) = ([], [])
     b = 0
     for m in mes:
-        ln += extract_measure(m, b, chord_symb)
+        (d1, d2) = extract_measure(m, b, chord_symb)        
+        ln1 += d1
+        ln2 += d2
         b  += 1
-    return ln
+    return (ln1, ln2)
 
 def extract_onlynotes(part):
     """extract the list of barred notes occurring in a music21 part"""    
@@ -202,7 +220,7 @@ def extract_onlynotes(part):
             ln.append(p)
         b  += 1
     return ln
-    
+
 # not used ?
 def add_notes(ln, sp):
     """feed a speller with a list of (MIDI) notes with bar number"""
@@ -404,7 +422,7 @@ def m21_step(nn):
     elif (nn == pse.NoteName.G):
         return 'G'
     else:
-        print('Invalid argument')
+        print('UNDEF note name')
         return 'X'
 
 def m21_accid(a):
@@ -432,7 +450,7 @@ def m21_accid(a):
     elif (a == pse.Accid.TripleFlat):
         return m21.pitch.Accidental('triple-flat')
     else: 
-        print('Invalid argument')
+        print('UNDEF accidental')
 
 def m21_mode(m):
     """cast a PSE Ton::Mode into a music21 mode name"""
@@ -492,11 +510,13 @@ def ctype_tostring(ct):
 ####################
 
 def compare_name(n, pse_name):
-    """compare the name of a music21 note and a PSE note name"""    
+    """compare the name of a music21 note and a PSE note name"""
+    assert(pse_name != pse.NoteName.NN_Undef)
     return (n.step == m21_step(pse_name))
 
 def compare_accid(n, pse_accid, print_flag):
     """compare the accidental of a music21 note and a PSE accidental"""    
+    assert(pse_accid != pse.Accid.Accid_Undef)
     if (pse_accid == pse.Accid.Natural):
         # (print_flag == True): mandatory (print_flag == False) courtesy 
         if (n.pitch.accidental == m21.pitch.Accidental('natural')):
@@ -508,6 +528,10 @@ def compare_accid(n, pse_accid, print_flag):
     else:
         return (n.pitch.accidental == m21_accid(pse_accid))
 
+def compare_octave(n, oct):
+    assert(-2 < oct and oct < 10) # octave range for midi in 0..127 
+    return (n.octave == oct)
+    
 # k can be a Key or a KeySignature
 def compare_key(k, ton):
     """compare a music21 key PSE ton"""  
@@ -520,7 +544,7 @@ def compare_key(k, ton):
     else:
         print('ERROR"', k, 'of unexpected type')
         return False
-    
+
 def compare_key_pitches(k0, ton):
     if ton.undef():
         return False
@@ -536,24 +560,33 @@ def compare_key_pitches(k0, ton):
         print('ERROR"', k0, 'of unexpected type')
         return False
 
-def diff(ln, sp):
+def diff(ln, sp, aux=False):
     """compare a list of barred notes and the list of notes of a speller"""    
-    assert(len(ln) == sp.size())
+    assert(len(ln) == sp.size(aux)) # main enumerator
     if (len(ln) == 0):
         return []
     i = 0
     ld = []
     for (n, m, simult, force) in ln:
-        # print(i, m, n, sp.name(i), sp.accidental(i), sp.printed(i))
-        if (compare_name(n, sp.name(i)) and
-            compare_accid(n, sp.accidental(i), sp.printed(i)) and 
-            n.octave == sp.octave(i)):
+        # print(i, m, n, sp.name(i), sp.accidental(i), sp.printed(i))    
+        assert(i < sp.size(aux))
+        if (sp.name(i, aux) == pse.NoteName.NN_Undef):
+            print('ERROR speller note', i, 'is undef (enumerator=', aux, ')')
+        assert(sp.name(i, aux) != pse.NoteName.NN_Undef)
+        assert(sp.accidental(i, aux) != pse.Accid.Accid_Undef)
+        if force:
+            print('WARNING diff: forced note', i)
+            i = i+1
+        elif (compare_name(n, sp.name(i, aux)) and
+              compare_accid(n, sp.accidental(i, aux), sp.printed(i, aux)) and 
+              n.octave == sp.octave(i, aux)):
             i = i+1
         elif n.tie != None and n.tie.type != 'start' :
             i = i+1
         else:
-            d = (i, sp.name(i), sp.accidental(i), sp.octave(i), sp.printed(i))
-            print('diff at note', i, 'mes', m, d[1], d[2], 'vs', n)
+            d = (i, sp.name(i, aux), sp.accidental(i, aux), 
+                 sp.octave(i, aux), sp.printed(i, aux))
+            # print('diff at note', i, 'mes', m, d[1], d[2], 'vs', n)
             ld.append(d)
             i = i+1
     return ld
@@ -683,7 +716,7 @@ def anote_local_part(part, sp, i):
     # i = sp.iglobal_ton0(goodgtindex)
     ml = part.getElementsByClass(m21.stream.Measure)    
     #for j in range(len(ml)):
-    for j in range(sp.measures()):       
+    for j in range(sp.measures(False)):       
         assert(j < len(ml))
         ton = sp.local_bar(i, j)
         if not ton.undef():
@@ -1034,6 +1067,7 @@ class Spellew:
                               # after building the 1st table, 
                               # for optimizing the computation of the grid (mask) and 2d table
                               # if = 100, do not compute this list of canditate globals.
+                 aux_enum=False, # whether we create an auxilliary enuerator
                  debug=False):      # mark flag ?    
         if (ps13_kpre > 0 and ps13_kpost > 0):
             # algo name
@@ -1070,10 +1104,10 @@ class Spellew:
                 self._algo_params += 'D' if t2_det  else 'E'  
             # create a speller object    
             if (nbtons in [0, 24, 25, 26, 30, 104, 117, 135, 165]):
-                self._speller = pse.Speller(nbtons) # is a spellerenum nbtons = 0
+                self._speller = pse.Speller(tons=nbtons, aux_enum=aux_enum) 
             else:
                 print('speller: unsupported default number of tons', nbtons);
-                self._speller = pse.Speller(0) # is a spellerenum nbtons = 0
+                self._speller = pse.Speller(tons=0, aux_enum=aux_enum) 
         # construction of the ton index for speller (not default)
         if (self._speller.nb_tons() == 0):
             print('speller: addition of an ad hoc list of', nbtons, 'tons');           
@@ -1140,10 +1174,10 @@ class Spellew:
     def get_speller(self):
         return self._speller
     
-    def diff(self, notes):
+    def diff(self, notes, aux=False):
         """compute the diff list between original and spelled notes"""
         # assert(self._spelled)
-        return diff(notes, self._speller) 
+        return diff(notes, self._speller, aux) 
                         
     def spell_PS13(self, stat, output_path=None):
         """spell with algo PS13"""
@@ -1157,13 +1191,15 @@ class Spellew:
         assert(self._algo_name == 'PSE')
         
         # modal step: compute the first spelling table 
+        # use the auxilliary enumerator if there is one
         assert(self._ct1 != pse.CTYPE_UNDEF)
         print('PSE: computing Table 1', 
               'cost type1:', self._ct1,
               'tonal1:', self._tonal1,
               'deterministic1:', self._det1, end=' ', flush=True)
         stat.start_timer(1)
-        self._speller.eval_table(self._ct1, self._tonal1, self._det1)
+        self._speller.eval_table(self._ct1, self._tonal1, self._det1, 
+                                 self._speller.has_auxenum()) 
         stat.stop_timer(1)
         print("{0:0.2f}".format(stat.get_timer(1)), 'ms', end='\n', flush=True)
         if output_path is not None:
@@ -1176,7 +1212,7 @@ class Spellew:
             assert(self._global1 < 100)
             print('PSE: evaluation first list of Global candidates', 
                   self._global1, '%', flush=True)
-            self._speller.select_globals(self._global1, True)
+            self._speller.select_globals(self._global1, True) #refine current global subarray
             nbg = self._speller.globals()
             print('PSE:', nbg, 'candidate global from 1st table', flush=True)                
 
@@ -1191,21 +1227,40 @@ class Spellew:
             if output_path is not None:
                 self._speller.write_grid((output_path/'grid.csv').absolute().as_posix())
 
-        # tonal step: compute the second spelling table 
+        # tonal step: compute the second spelling table (with main enumerator)
+        # use the main enumerator
             print('PSE: computing Table 2', 
                   'cost type2:', self._ct2,
                   'tonal2:', self._tonal2,
                   'deterministic2:', self._det2, end=' ', flush=True)
             stat.start_timer(3)
-            self._speller.reval_table(self._ct2, self._tonal2, self._det2)
+            self._speller.reval_table(self._ct2, self._tonal2, self._det2, 
+                                      False)
             stat.stop_timer(3)
             print("{0:0.2f}".format(stat.get_timer(3)), 'ms', end='\n', flush=True)
             if output_path is not None:
                 self._speller.write_table((output_path/'table2.csv').absolute().as_posix())
+
+    def feed(self, ln, ae):
+        assert(not ae or self._speller.has_auxenum())
+        for (n, b, sf, ff) in ln:   # note, bar number, simultaneous, force
+            if ff: # force note name
+                self._speller.add_name(midi=n.pitch.midi, bar=b, simultaneous=sf,
+                                       name=ps_step(n.pitch.step), 
+                                       accid=ps_accidental(n.pitch.accidental),
+                                       octave=n.pitch.octave,
+                                       printed=False, # not significant
+                                       aux=ae) # auxiliary enumerator
+            else:
+                self._speller.add(midi=n.pitch.midi, bar=b, 
+                                  simultaneous=sf, aux=ae)
+        assert(self._speller.size(ae) == len(ln))
             
-    def spell(self, notes, stat, output_path=None):
+    def spell(self, ln1, ln2, stat, output_path=None):
         """run spell checking algo"""
-        """notes: list of barred notes = tuplets made of""" 
+        """ln1: list of barred notes for first pass of spelling"""
+        """ln2: list of barred notes for second pass of spelling"""
+        """"barred notes = tuplets made of""" 
         """ - a note""" 
         """ - the number of the  bar it belongs to"""
         """ - a flag saying whether the onset of the note"""   
@@ -1216,16 +1271,19 @@ class Spellew:
         self._speller.reset_table() 
         self._speller.reset_grid() 
         self._speller.reset_enum(0, 0)
+
         # feed speller with input notes
-        for (n, b, sf, ff) in notes:   # note, bar number, simultaneous, force
-            if ff: # force note name
-                self._speller.add_name(midi=n.pitch.midi, bar=b, simult=sf,
-                                       name=ps_step(n.pitch.step), 
-                                       accid=ps_accidental(n.pitch.accidental),
-                                       octave=n.pitch.octave,
-                                       printed=False)
-            else:
-                self._speller.add(midi=n.pitch.midi, bar=b, simultaneous=sf)
+        if self._speller.has_auxenum():
+            #print('main enumerator:', self._speller.size(False))
+            #print('auxiliary enumerator:', self._speller.size(True))
+            self.feed(ln1, True)  # feed auxiliary enumerator
+            self.feed(ln2, False) # feed main enumerator
+        else:                       
+            assert(len(ln1) == len(ln2)) # same notes for both passes
+            self.feed(ln1, False) # feed main enumerator only
+
+        #print(self._speller.size(False), '/', len(notes), 'notes in main enumerator')
+        #print(self._speller.size(True), '/', len(notes), 'notes in auxiliary enumerator')
         # spell with algo specified
         if self._algo_name == 'PS13':
             self.spell_PS13(stat, output_path)
@@ -1271,7 +1329,7 @@ class Spellew:
     def rename(self, i):
         # assert(self._spelled)
         assert(i < self._speller.nb_tons())
-        self._speller.rename(i)
+        return self._speller.rename(i)
 
     def rewrite_passing(self):
         # assert(self._spelled)
@@ -1298,18 +1356,25 @@ class Spellew:
         assert(stats is not None)
         assert(chord_symb in [0, 1, 2])
         # extract real key and notes from part
-        k0 = get_key(part)
-        ln = extract_part(part, chord_symb)  # input note list
-        assert(count_notes(part, chord_symb) == len(ln)) 
-        print(len(ln), 'notes,', count_measures(part), 'bars,', end=' ')
-        
+        k0 = get_key(part)        
+        # (notes for first pass, notes for second pass)
+        (ln1, ln2) = extract_part(part, chord_symb)  # input note list
+        assert((len(ln1), len(ln2)) ==  count_notes(part, chord_symb))
+        if chord_symb == 2:
+            print('pass 1:', len(ln1), 'notes,', count_measures(part), 'bars,')
+            print('pass 2:', len(ln2), 'notes,', count_measures(part), 'bars,')
+        else:
+            assert(len(ln1) == len(ln2))
+            print(len(ln1), 'notes,', count_measures(part), 'bars,')
+                    
         # spell with algo
         print('PSE: spelling with', self._algo_name+self._algo_params, flush=True)
         
         if reset_globals:
             # reset the global flags but not the whole list of tons
             self._speller.reset_globals() 
-        self.spell(ln, stats, output_path) #print('spell finished', end='\n', flush=True)   
+        self.spell(ln1, ln2, stats, output_path) 
+        #print('spell finished', end='\n', flush=True)   
         
         # select the best global ton from speller (can be ties)
         # with refine = true, it returns the number of remaining globals
@@ -1349,32 +1414,34 @@ class Spellew:
 
         # apply the spelling in the row of the estimated global
         if not gt.undef():
-            print('PSE: renaming with the spelling computed', i, m21_key(gt))
-            self.rename(i)
+            print('PSE: renaming with the spelling computed', i, m21_key(gt), flush=True)
+            status = self.rename(i)
+            assert(status) # renaming successful for all measure
         
         # compute diff list between reference score and respell
-        ld0 = diff(ln, self._speller) 
+        #print('PSE: computing diff before rewriting:', len(ln2), 'notes', end='\n', flush=True)
+        ld0 = diff(ln2, self._speller, False) 
         print('PSE: diff before rewriting:', len(ld0), end='\n', flush=True)
 
         # rewrite the passing notes
         print('PSE: rewrite passing notes', end='\n', flush=True)
-        self._speller.rewrite_passing()
+        self._speller.rewrite_passing(False)
 
         # compute diff list between reference score and rewritten
-        ld1 = diff(ln, self._speller) 
+        ld1 = diff(ln2, self._speller, False) 
         print('PSE: diff after rewriting:', len(ld1), end='\n', flush=True)
 
         # annotations
         if output_path is not None:
-            anote_rediff(ln, ld0, ld1) # anote_diff(ln, ld0, 'red')
+            anote_rediff(ln2, ld0, ld1) # anote_diff(ln, ld0, 'red')
             if (self._speller.locals()):
                 anote_local_part(part, self._speller, i)    
-        return (k0, gt, len(ln), ld1)
+        return (k0, gt, len(ln2), ld1)
 
 
     def eval_score(self, score, stats=Stats(),
                    score_id=0, title:str='', composer:str='', output_path=None, 
-                   chord_symb = False, reset_globals = True):        
+                   chord_symb = 0, reset_globals = True):        
         """evaluate spelling for all parts in a score"""
         """score: the M21 part to process"""
         """chord_symb: 0 if we do not add the notes of chord symbols"""

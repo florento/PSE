@@ -22,7 +22,8 @@ namespace pse {
 /// Pitch without octave
 class PWO
 {
-public:
+
+public: // construction
     
     PWO();
     
@@ -40,6 +41,8 @@ public:
 
     /// equality
     virtual bool equal(const PWO&) const;
+
+public: // access
 
     /// unpitched
     virtual bool undef() const;

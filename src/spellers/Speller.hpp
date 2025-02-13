@@ -42,6 +42,8 @@ public: // construction
     /// speller with given (fixed) enumerator of notes to spell.
     /// @param e external exnumerator of the notes to spell.
     /// must not be null.
+    /// @param e_aux optional auxiliary enumerator of alternative input notes,
+    /// for the construction of the first table only.
     /// @param algo name of the algorithm implemented in speller class.
     /// obsolete. not used anymore.
     /// @param nbtons use default list of tonalities (default: empty).
@@ -49,7 +51,7 @@ public: // construction
     /// @see TonIndex for supported values for nbTons.
     /// @warning this speller cannot be reused for other notes than those
     /// in the given enumerator.
-    Speller(PSEnum* e,
+    Speller(PSEnum* e, PSEnum* e_aux = nullptr,
             size_t nbtons=0,
             const Algo& algo=Algo::Undef, // TBR
             bool dflag=false);
@@ -58,15 +60,18 @@ public: // construction
     /// and given TonIndex.
     /// @param e external exnumerator of the notes to spell.
     /// must not be null.
+    /// @param id a Ton Index. must be closed.
+    /// @param e_aux optional auxiliary enumerator of alternative input notes,
+    /// for the construction of the first table only.
     /// @param algo name of the algorithm implemented in speller class.
     /// obsolete. not used anymore.
-    /// @param id a Ton Index. must be closed.
     /// @param dflag debug mode.
     /// @see TonIndex for supported values for nbTons.
     /// @warning this speller cannot be reused for other notes than those
     /// in the given enumerator.
     Speller(PSEnum* e,
             std::shared_ptr<TonIndex> id,
+            PSEnum* e_aux = nullptr,
             const Algo& algo=Algo::Undef,  // TBR
             bool dflag=false);
     
@@ -86,12 +91,16 @@ public: // construction
     /// destructor
     virtual ~Speller();
     
+public: // access
+    
     /// name of algorithm implemented.
     /// @return Algo::Undef by default.
     const Algo& algo() const { return _algo; }
-    
-    // prepare spelling
-    //
+
+    /// size of the enumerator.
+    /// @param aux wether we consider the auxilliary enumerator.
+    /// in that case it must be set.
+    virtual size_t size(bool aux=false) const;
     
     // the initial state for construction of tables will be tonal.
     // @see PSState
@@ -103,6 +112,17 @@ public: // construction
     
     // wether the transitions for construction of tables shall be deterministic.
     // void setChromatic(bool flag);
+
+    /// this speller has an optional auxiliary enumerator.
+    bool hasAuxEnumerator() const;
+
+protected: // parameters and auxiliary enumerator
+    
+    /// add the given speller an optional auxiliary enumerator.
+    /// @param aux an enumerator. must not be NULL.
+    /// @return whether the operation was succesful.
+    /// @warning fors nothing if there is alreay an auxiliary enumerator.
+    bool setAuxEnumerator(PSEnum* aux);
     
 public: // spelling : computation of tables and grid
     
@@ -112,12 +132,15 @@ public: // spelling : computation of tables and grid
     /// in each cell.
     /// @param chromatic whether transitions for best-path computation
     /// are deterministic or exhaustive.
+    /// @param aux wether we use the auxilliary enumerator for the evaluation.
+    /// in that case it must be set.
     /// @return whether computation was succesfull.
     /// @warning if the table exists it is overwritten.
     /// @see sampleCost
     /// @see PSState for the construction of the initial state
     /// and tonal/modal flag.
-    bool evalTable(CostType ctype, bool tonal=true, bool chromatic=false);
+    bool evalTable(CostType ctype, bool tonal=true, bool chromatic=false,
+                   bool aux=false);
     
     /// construct a second spelling table, using
     /// - a first spelling table (use the same index)
@@ -128,12 +151,15 @@ public: // spelling : computation of tables and grid
     /// @param tonal tonal or modal construction of initial state in each cell.
     /// @param chromatic whether transitions for best-path computation
     /// are deterministic.
+    /// @param aux wether we use the auxilliary enumerator for the evaluation.
+    /// in that case it must be set.
     /// @return whether computation was succesfull.
     /// @warning the first spelling table must have been constructed.
     /// @warning the first spelling table is deleted.
     /// @see PSState for the construction of the initial state
     /// and tonal/modal flag
-    bool revalTable(CostType ctype, bool tonal=true, bool chromatic=false);
+    bool revalTable(CostType ctype, bool tonal=true, bool chromatic=false,
+                    bool aux=false);
     
     /// construct the grid of local tons (1 ton for each initial ton and measure) using
     /// - a spelling table.
@@ -168,17 +194,19 @@ public: // spelling : computation of tables and grid
     /// @return whether computation was succesfull.
     virtual bool spell();
     
-    /// rename all notes read by this speller,
-    /// according to a given global tonality.
+    /// rename the notes of the enumerator of the current spell table,
+    /// according to this table, for a given tonality.
     /// @param i index of tonality in the index.
     /// @return whether renaming succeded for all measures.
     virtual bool rename(size_t i);
     
     /// rewrite the passing notes in enumerator.
+    /// @param aux wether we consider the auxilliary enumerator.
+    /// in that case it must be set.
     /// @return how many notes have been rewritten.
     /// @warning must be called after rename.
     /// @see class RewritePassing
-    size_t rewritePassing();
+    size_t rewritePassing(bool aux=false);
 
     /// clear the current spelling table.
     void resetTable();
@@ -190,30 +218,40 @@ public: // results feedback : notes
     
     /// nb of measures processed by this speller.
     /// it is the number of measure in the enumarator.
-    size_t measures() const;
+    /// @param aux wether we consider the auxilliary enumerator.
+    /// in that case it must be set.
+    size_t measures(bool aux=false) const;
     
     /// estimated name for the note of given index,
     /// in 0..6 (0 is 'C', 6 is 'B').
     /// @param i index of note in the enumerator of input notes.
-    enum NoteName name(size_t i) const;
+    /// @param aux wether we consider the auxilliary enumerator.
+    /// in that case it must be set.
+    enum NoteName name(size_t i, bool aux=false) const;
     
     /// estimated name for the note of given index, in -2..2.
     /// @param i index of note in the enumerator of input notes.
-    enum Accid accidental(size_t i) const;
+    /// @param aux wether we consider the auxilliary enumerator.
+    /// in that case it must be set.
+    enum Accid accidental(size_t i, bool aux=false) const;
     
     /// estimated octave for the note of given index in the best path, in -2..9.
     /// @param i index of note in the enumerator of input notes.
-    int octave(size_t i) const;
+    /// @param aux wether we consider the auxilliary enumerator.
+    /// in that case it must be set.
+    int octave(size_t i, bool aux=false) const;
     
     /// estimated print flag for the note of given index in the best path.
     /// This flags says wether the accidental of the note must be printed
     /// or not.
     /// @param i index of note in the enumerator of input notes.
-    bool printed(size_t i) const;
+    /// @param aux wether we consider the auxilliary enumerator.
+    /// in that case it must be set.
+    bool printed(size_t i, bool aux=false) const;
 
 public: // results feedback : grid
 
-    /// the grid of local tonalities has been computaed.
+    /// the grid of local tonalities has been computed.
     /// i.e. evalGrid() has been called.
     virtual bool locals() const;
     
@@ -242,7 +280,9 @@ public: // results feedback : grid
     /// estimated local tonality at note of given index, for one given
     /// assumed global tonality.
     /// @param i index in the TonIndex of an assumed global tonality.
-    /// @param j index of note in the enumerator of input notes.
+    /// @param j index of note in the enumerator of input notes
+    /// used for the computation of the grid.
+    ///
     /// @warning evalGrid() must have been called.
     virtual const Ton& localNote(size_t i, size_t j) const;
 
@@ -272,7 +312,10 @@ protected: // data
     
     /// enumerator of the input notes.
     PSEnum* _enum;
-    // PSRawEnum _enum;
+
+    /// auxiliary enumerator of alternative input notes,
+    /// for the construction of the first table only.
+    PSEnum* _enum_aux;
     
     // tonal or modal construction of initial state for construction of tables.
     // - 0 for constructor default (unset in this speller).
@@ -303,6 +346,11 @@ protected: // debug
     
     /// time lapsed, in milli seconds, since the given start date.
     static double duration(clock_t start);
+
+    /// access the internal note enumerator.
+    /// @param aux whether we want the auxiliary enumerator.
+    /// in this case it must be set.
+    PSEnum& enumerator(bool aux=false) const;
     
 };
 
