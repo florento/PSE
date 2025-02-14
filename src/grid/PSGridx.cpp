@@ -381,11 +381,13 @@ size_t PSGx::bestCost(const std::vector<size_t>& col, size_t ig)
     if (ties > 1)
     {
         if (ig == TonIndex::UNDEF)
-            WARN("Gridx: {} best path ties (cost {})", ties, best_cost);
+        {
+            TRACE("Gridx: {} best path ties (cost {})", ties, best_cost);
+        }
         else
         {
             assert(ig < _index.size());
-            WARN("Gridx {}: {} best path ties (cost {})",
+            TRACE("Gridx {}: {} best path ties (cost {})",
                  _index.ton(ig), ties, best_cost);
         }
     }

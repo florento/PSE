@@ -256,7 +256,7 @@ bool PST::init_psvs(const Cost& seed, const PSG& grid, bool tonal)
         ++b;
     }
     
-    assert(grid.empty() or grid.size() == this->size()); // nb of columns
+    // assert(grid.empty() or grid.size() == this->size()); // nb of columns
     return true;
 }
 

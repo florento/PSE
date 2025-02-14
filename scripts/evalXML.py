@@ -95,10 +95,8 @@ def eval_corpus(speller, dataset, skip=[],
     """output_dir: name of directory where the evaluation files will be written"""
     """tablename: file name of evaluation table. will be written in the output_dir"""
     """mflag: mark flag: write anotation files in a dedicaced dir for each opus"""
-    """csflag: 0 if we do not spell the notes of chord symbols"""
-    """        1 if we spell them"""   
-    """        2 if we force their names in spelling"""   
-    assert(csflag in [0, 1, 2])
+    """csflag: see pse.eval_score"""   
+    assert(csflag in [0, 1, 2, 3])
     # prepare the output dir
     algoname = speller.algoname()    
     timestamp = datetime.today().strftime('%Y%m%d-%H%M')
@@ -168,10 +166,8 @@ def eval_item(speller, dataset, name, output_dir='',
     """name: filename of item (prefix) in the dataset"""
     """output_dir: where files will be written"""
     """mflag: mark flag: write anotation files in a dedicaced dir for each opus"""
-    """csflag: 0 if we do not spell the notes of chord symbols"""
-    """        1 if we spell them"""   
-    """        2 if we force their names in spelling"""   
-    assert(csflag in [0, 1, 2])
+    """csflag: see pse.eval_score"""   
+    assert(csflag in [0, 1, 2, 3])
     # input data
     assert(len(name) > 0)
     if (dataset.get(name) == None):

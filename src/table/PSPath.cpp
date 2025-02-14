@@ -200,7 +200,7 @@ void PSP::rename()
         bool altprint = _prints[i - _enum.first()];
         //std::cout << "enum: rename" << i << std::endl;
         _enum.rename(i, name, accid, oct, altprint);
-        DEBUG("PSP.rename: note {} : {}{}{} {}", i, name, oct, accid, altprint);
+        TRACE("PSP.rename: note {} : {}{}{} {}", i, name, oct, accid, altprint);
     }
 }
 

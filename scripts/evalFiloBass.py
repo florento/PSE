@@ -118,12 +118,10 @@ def eval_FiloBass(output='', tablename='',
     """det2: table2, deterministic/exhaustive flag for transitions (PSE)"""
     """dflag: debug flag: print debug messages on terminal"""
     """mflag: mark flag: write anotation files in a dedicaced dir for each opus"""
-    """csflag: 0 if we do not spell the notes of chord symbols"""
-    """        1 if we spell them"""   
-    """        2 if we force their names in spelling"""   
+    """csflag: see pse.eval_score"""   
     global _eval_root
     global skip
-    assert(csflag in [0, 1, 2])
+    assert(csflag in [0, 1, 2, 3])
     # initialize a speller
     sp = ps.Spellew(ps13_kpre=kpre, ps13_kpost=kpost, 
                     nbtons=tons,
@@ -166,11 +164,9 @@ def eval_FiloBassitem(name, output='',
     """det2: table2, deterministic/exhaustive flag for transitions (PSE)"""
     """dflag: debug flag: print debug messages on terminal"""
     """mflag: mark flag: write anotation files in a dedicaced dir for each opus"""
-    """csflag: 0 if we do not spell the notes of chord symbols"""
-    """        1 if we spell them"""   
-    """        2 if we force their names in spelling"""   
+    """csflag: see pse.eval_score"""   
     assert(len(name) > 0)
-    assert(csflag in [0, 1, 2])
+    assert(csflag in [0, 1, 2, 3])
     # initialize a speller
     sp = ps.Spellew(ps13_kpre=kpre, ps13_kpost=kpost, 
                     nbtons=tons,

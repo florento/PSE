@@ -10,6 +10,7 @@ Evaluation of the score of the Fake Real Book dataset
 #import sys
 #import logging
 import os
+import subprocess
 from pathlib import Path
 import pandas
 import music21 as m21
@@ -39,11 +40,13 @@ _mscore = '/Applications/MuseScore 4.app/Contents/MacOS/mscore'
 ##                             ##
 #################################
 
-# corpus can be 'leads' or 'piano'
-def FiloSax_corpus():
+def FiloSax_corpus(transposed=False):
     """build a list of scores in a subdirectory of FiloSax"""
     global _dataset_root
-    return evalXML.get_corpus(Path(_dataset_root)) # flat
+    root = Path(_dataset_root)
+    if transposed:
+        root = root/'transpose_ms'
+    return evalXML.get_corpus(root) # flat
 
 def accids(ks, notes):
     c = 0
@@ -96,12 +99,12 @@ skip = []
 # PSE: costtype1, costtype2 = CTYPE_ACCID | CTYPE_ACCIDlead | CTYPE_ADplus | CTYPE_ADlex
 # PSE: grid = Grid_Best | Grid_Rank | Grid_Exhaustive
 # PSE: global1 = 0..100 (%)
-def eval_FiloSax(output='', tablename='',            
-             kpre=0, kpost=0, tons=0, 
-             costtype1=ps.pse.CTYPE_UNDEF, tonal1=True, det1=True, 
-             global1=100, grid=ps.pse.Grid_Rank, 
-             costtype2=ps.pse.CTYPE_UNDEF, tonal2=True, det2=True,
-             dflag=True, mflag=True, csflag=0):
+def eval_FiloSax(output='', tablename='', transposed=False,            
+                 kpre=0, kpost=0, tons=0, 
+                 costtype1=ps.pse.CTYPE_UNDEF, tonal1=True, det1=True, 
+                 global1=100, grid=ps.pse.Grid_Rank, 
+                 costtype2=ps.pse.CTYPE_UNDEF, tonal2=True, det2=True,
+                 dflag=True, mflag=True, csflag=0):
     """eval the whole FRB corpus with given algo and parameters"""
     """output: dir where files will be written"""
     """tablename: filename of csv table in output"""
@@ -118,12 +121,10 @@ def eval_FiloSax(output='', tablename='',
     """det2: table2, deterministic/exhaustive flag for transitions (PSE)"""
     """dflag: debug flag: print debug messages on terminal"""
     """mflag: mark flag: write anotation files in a dedicaced dir for each opus"""
-    """csflag: 0 if we do not spell the notes of chord symbols"""
-    """        1 if we spell them"""   
-    """        2 if we force their names in spelling"""   
+    """csflag: see pse.eval_score"""   
     global _eval_root
     global skip
-    assert(csflag in [0, 1, 2])
+    assert(csflag in [0, 1, 2, 3])
     root = Path(_eval_root)/'evalFiloSax'
     if not os.path.isdir(root):
         os.mkdir(root)
@@ -136,7 +137,7 @@ def eval_FiloSax(output='', tablename='',
                     debug=dflag, aux_enum=(csflag == 2))        
     # start evaluating the corpus with the speller   
     evalXML.eval_corpus(speller=sp, mflag=mflag, csflag=csflag, 
-                        dataset=FiloSax_corpus(), skip=skip, 
+                        dataset=FiloSax_corpus(transposed), skip=skip, 
                         eval_root=root, output_dir=output, tablename=tablename)
         
 # PS13: kpre=33, kpost=23
@@ -144,7 +145,7 @@ def eval_FiloSax(output='', tablename='',
 # PSE: costtype1, costtype2 = CTYPE_ACCID | CTYPE_ACCIDlead | CTYPE_ADplus | CTYPE_ADlex
 # PSE: grid = Grid_Best | Grid_Rank | Grid_Exhaustive
 # PSE: global1 = 0..100 (%)
-def eval_FiloSaxitem(name, output='',         
+def eval_FiloSaxitem(name, output='', transposed=False,         
                       kpre=0, kpost=0, tons=0,          
                       costtype1=ps.pse.CTYPE_UNDEF, tonal1=True, det1=True,       
                       global1=100, grid=ps.pse.Grid_Rank,
@@ -166,11 +167,9 @@ def eval_FiloSaxitem(name, output='',
     """det2: table2, deterministic/exhaustive flag for transitions (PSE)"""
     """dflag: debug flag: print debug messages on terminal"""
     """mflag: mark flag: write anotation files in a dedicaced dir for each opus"""
-    """csflag: 0 if we do not spell the notes of chord symbols"""
-    """        1 if we spell them"""   
-    """        2 if we force their names in spelling"""   
+    """csflag: see pse.eval_score"""   
     assert(len(name) > 0)
-    assert(csflag in [0, 1, 2])
+    assert(csflag in [0, 1, 2, 3])
     # initialize a speller
     sp = ps.Spellew(ps13_kpre=kpre, ps13_kpost=kpost, 
                     nbtons=tons,
@@ -180,7 +179,47 @@ def eval_FiloSaxitem(name, output='',
                     debug=dflag, aux_enum=(csflag == 2))
     # start evaluating the opus with the speller      
     evalXML.eval_item(speller=sp, mflag=mflag, csflag=csflag,
-                      dataset=FiloSax_corpus(), name=name, output_dir=output)
+                      dataset=FiloSax_corpus(transposed), 
+                      name=name, output_dir=output)
+
+
+
+
+#####################################
+##                                 ##
+##  transpose for instrument in C  ##
+##                                 ##
+#####################################
+
+def transpose_all(odir):
+    dataset = FiloSax_corpus()
+    names = sorted(list(dataset)) # list of index in dataset   
+    for name in names:
+        print(name)
+        original = dataset[name]
+        transpose(name, original, odir)        
+                
+def transpose(name, original, odir):
+    """name: original filename in FiloSax (without suffix)"""
+    """odir: output dir"""
+    score = m21.converter.parse(original.as_posix())
+    # it is M-9 for tenor sax, we just do M-2
+    # score2 = score.transpose(lp[0].getInstrument().transposition) 
+    score2 = score.transpose(m21.interval.Interval('M-2'))    
+    lp = score2.getElementsByClass(m21.stream.Part)
+    assert(len(lp) == 1)
+    part = lp[0]
+    part.replace(part.getInstrument(), m21.instrument.Piano())
+    part.partName = 'Piano'
+    part.partAbbreviation = 'Pno.'
+    # score2.show()
+    path = Path(os.path.dirname(original))/odir
+    xmlfile = path/(name+'_C.musicxml')
+    score2.write('musicxml', fp=xmlfile)
+    
+    
+    
+    
         
 # compute C++ add instructions for given score, for debugging with gdb
 def debug(name):    
@@ -188,9 +227,9 @@ def debug(name):
     dataset = FiloSax_corpus()
     evalXML.debug(dataset, name)
 
-def atonals(file=''):
-    """list of opus of FRB without KS"""
-    dataset = FiloSax_corpus()
+def tons(file=''):
+    """list of opus without KS"""
+    dataset = FiloSax_corpus(True)
     names = sorted(list(dataset)) # list of index in dataset   
     keys = []
     for name in names:
@@ -200,16 +239,46 @@ def atonals(file=''):
         file = dataset[name]
         score = m21.converter.parse(file.as_posix())
         lp = score.getElementsByClass(m21.stream.Part)
-        ks = ps.get_key(lp[0])
-        if (ks):            
-            print(name, ks.sharps)
-            keys.append({'name': name, 'key': ks.sharps})
+        if (len(lp) > 1):
+            print(name, len(lp), 'parts, take only 1st')
+
+        keyl = lp[0].flatten().getElementsByClass([m21.key.Key])
+        if (len(keyl) > 1):
+            print(len(keyl), 'keys, take only 1st')
+        key = None if len(keyl) == 0 else keyl[0]
+        keyname = key.name if key is not None else None
+
+        ksl = lp[0].flatten().getElementsByClass([m21.key.KeySignature])
+        if (len(ksl) > 1):
+            print(len(ksl), 'keys, take only 1st')
+        ks = None if len(ksl) == 0 else ksl[0]
+        if key is not None:
+            sks = key.sharps 
+        elif ks is not None:
+            sks = ks.sharps 
         else:
-            print(name, 'NONE')           
-            keys.append({'name': name, 'key': None})
+            sks = None
+        print(name, keyname, sks)
+        keys.append({'name': name, 'key': keyname, 'ks':sks})
     if file:
         df_raw = pandas.DataFrame(keys)
         df = df_raw.convert_dtypes() # convert to int even when there are NaN (which is float)
         df.to_csv(file, header=True, index=True)
     return keys
 
+def ms2xml(dir):
+    global _mscore
+    dataset = FiloSax_corpus()
+    names = sorted(list(dataset))
+    path = Path(dir)
+    for name in names:
+        ms_file = path/(name+'_C.mscz')
+        xml_file = path/(name+'_C.musicxml')
+        if not xml_file.is_file(): # file does not exist
+            print(name)
+            #print(ms_file.as_posix())
+            subprocess.run([_mscore, ms_file.as_posix(), '-o', xml_file.as_posix()], 
+                           stderr=subprocess.DEVNULL)
+    
+    
+    

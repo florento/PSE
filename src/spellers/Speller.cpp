@@ -45,9 +45,8 @@ _algo(algo),
 _enum(e),
 _enum_aux(e_aux),
 _table(nullptr),
-_grid(nullptr),
-_global(nullptr)
-{ 
+_grid(nullptr)
+{
     assert(e);
 }
 
@@ -59,8 +58,7 @@ _algo(algo),
 _enum(e),
 _enum_aux(e_aux),
 _table(nullptr),
-_grid(nullptr),
-_global(nullptr)
+_grid(nullptr)
 {
     assert(e);
 }
@@ -155,7 +153,7 @@ bool Speller::setAuxEnumerator(PSEnum* aux)
 
 bool Speller::evalTable(CostType ctype, bool tonal, bool chromatic, bool aux)
 {
-    DEBUG("Speller: eval table with {}, unlead={}, det={}, {} enumerator",
+    TRACE("Speller: eval table with {}, unlead={}, det={}, {} enumerator",
           ctype, tonal, chromatic, (aux?"auxiliary":"main"));
 
     if (ctype == CostType::UNDEF)
@@ -188,7 +186,7 @@ bool Speller::evalTable(CostType ctype, bool tonal, bool chromatic, bool aux)
 
 bool Speller::revalTable(CostType ctype, bool tonal, bool chromatic, bool aux)
 {
-    DEBUG("Speller: reval table with {}, unlead={}, det={}, {} enumerator",
+    TRACE("Speller: reval table with {}, unlead={}, det={}, {} enumerator",
           ctype, tonal, chromatic, (aux?"auxiliary":"main"));
     if (ctype == CostType::UNDEF)
     {
@@ -218,11 +216,6 @@ bool Speller::revalTable(CostType ctype, bool tonal, bool chromatic, bool aux)
     // PST* table_pre = _table;
     const Algo algo(chromatic?Algo::PSD:Algo::PSE);
     
-    /// @todo suppr. _global et full, remplacé par index de table_pre (flag global)
-    /// @todo remplacer algo par flag chromatic
-    // global is ignored
-    //    if (_global)
-    //    {
     assert(_enum);
     std::unique_ptr<Cost> seed = unique_zero(ctype); // was sampleCost(ctype)
     assert(seed);
@@ -251,11 +244,6 @@ bool Speller::evalGrid(const GridAlgo& algo)
     
     assert(_index);
     //std::vector<bool> mask(_index->size(), true); // all true by default
-
-    // if (_global)
-    // {
-    //     mask = _global->getMask(); // copy
-    // }
 
     switch (algo)
     {
@@ -298,29 +286,6 @@ size_t Speller::selectGlobals(double d, bool refine)
     // }
     assert(_index);
     return _index->selectGlobals(*_table, d, refine);
-//    if (refine)
-//    {
-//        if (_global == nullptr)
-//        {
-//            ERROR("Speller evalGlobal by refinement: no previous global");
-//            return false;
-//        }
-//        PSO* global_pre = _global;
-//        _global = new PSO(*global_pre, *_table, d, _debug);
-//        assert(global_pre);
-//        delete global_pre;
-//        return true;
-//    }
-//    else
-//    {
-//        if (_global)
-//        {
-//            delete _global;
-//            _global = nullptr;
-//        }
-//        _global = new PSO(*_table, d, _debug);
-//        return true;
-//    }
 }
 
 
@@ -343,7 +308,7 @@ bool Speller::rename(size_t i)
         return false;
     }
 
-    DEBUG("rename with ton={} in enumerator of size={}",
+    TRACE("rename with ton={} in enumerator of size={}",
           i, _table->enumerator().size());
 
     return _table->rename(i);
@@ -401,13 +366,20 @@ size_t Speller::measures(bool aux) const
     }
     else
     {
-        size_t last = psenum.stop()-1;
-        m = psenum.measure(last)+1;
+        size_t last = psenum.stop();
+        if (last == 0)
+        {
+            m = 0;
+        }
+        else
+        {
+            m = psenum.measure(last-1)+1;
+        }
     }
-    
-    
+        
     assert(_table == nullptr or _table->size() == m);
-    assert(_grid == nullptr or _grid->measures() == m);
+    // not true if the last measure is empty!
+    // assert(_grid == nullptr or _grid->size() == m);
     return m;
 }
 

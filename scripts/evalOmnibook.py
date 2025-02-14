@@ -79,12 +79,10 @@ def eval_Omnibook(output='', tablename='',
     """det2: table2, deterministic/exhaustive flag for transitions (PSE)"""
     """dflag: debug flag"""
     """mflag: mark flag"""
-    """csflag: 0 if we do not spell the notes of chord symbols"""
-    """        1 if we spell them"""   
-    """        2 if we force their names in spelling"""   
+    """csflag: see pse.eval_score"""   
     global _eval_root
     global skip
-    assert(csflag in [0, 1, 2])
+    assert(csflag in [0, 1, 2, 3])
     # initialize a speller
     sp = ps.Spellew(ps13_kpre=kpre, ps13_kpost=kpost, 
                     nbtons=tons,
@@ -127,18 +125,17 @@ def eval_Omnibookitem(name, output='',
     """det2: table2, deterministic/exhaustive flag for transitions (PSE)"""
     """dflag: debug flag"""
     """mflag: mark flag"""
-    """csflag: 0 if we do not spell the notes of chord symbols"""
-    """        1 if we spell them"""   
-    """        2 if we force their names in spelling"""   
+    """csflag: see pse.eval_score"""   
     assert(len(name) > 0)
-    assert(csflag in [0, 1, 2])
+    assert(csflag in [0, 1, 2, 3])
     # initialize a speller
+    aux = (csflag == 2) # when an auxiliary enumerator is needed
     sp = ps.Spellew(ps13_kpre=kpre, ps13_kpost=kpost, 
                     nbtons=tons,
                     t1_costtype=costtype1, t1_tonal=tonal1, t1_det=det1, 
                     global1=global1, grid=grid,
                     t2_costtype=costtype2, t2_tonal=tonal2, t2_det=det2,
-                    debug=dflag, aux_enum=(csflag == 2))
+                    debug=dflag, aux_enum=aux)
     #print('force global', -2, ps.pse.Mode.Major, flush=True)
     #sp.get_speller().force_global(-2, ps.pse.Mode.Major)
     #print('nb globals:', sp.get_speller().globals(), flush=True)
