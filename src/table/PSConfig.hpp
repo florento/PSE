@@ -32,12 +32,12 @@ namespace pse {
 class PSC : public PSC0
 {
     
-public:
+public: // construction
 
-    /// target PS config for a transition from given (previous) config.
-    /// @param c previous config (origin), the transition will be an update of which.
+    /// target PS config for a transition from a given (previous) config.
+    /// @param c previous config (origin),
+    /// the transition will be an update of c.
     PSC(std::shared_ptr<const PSC0> c);
-    // PSC(const PSC0& c);
 
     /// copy constructor
     PSC(const PSC& c);
@@ -47,19 +47,23 @@ public:
     /// assignement operator
     PSC& operator=(const PSC& rhs);
 
+public: // comparison
+
     /// configs have the same list of accidentals
     bool operator==(const PSC& rhs) const;
     
     /// configs have different list of accidentals
     bool operator!=(const PSC& rhs) const;
     
+public: // access
+
     /// always false: PSC are non-initial configurations in a best path.
-    virtual bool initial() const;
+    bool initial() const override;
     
     /// previous config in shortest path to this config,
     /// or null if there are none.
     /// every config has at most one predecessor.
-    virtual const PSC0* previous() const;
+    const PSC0* previous() const override;
     
     // update the cumulated distance for this Config,
     // with the distance (in the array of fifths) to the given tonality.
@@ -73,8 +77,7 @@ public:
 protected:
         
     /// previous config in shortest path to this config.
-    std::shared_ptr<const PSC0> _pred;
-    //const PSC0* _pred;
+    std::shared_ptr<const PSC0> _pred; //const PSC0* _pred;
     
 };
 

@@ -38,20 +38,17 @@ class PSC0;
 using PSCCompare = std::function<bool(std::shared_ptr<const PSC0>&,
                                       std::shared_ptr<const PSC0>&)>;
 
-
 /// priority queue of PS Configs
 typedef std::priority_queue<std::shared_ptr<const PSC0>,
                             std::vector<std::shared_ptr<const PSC0>>,
                             PSCCompare> PSCQueue;
-
 
 /// Configuration for a pitch spelling algorithm of scope 1 bar.
 /// Configurations of this class are always initial in a best path solution
 /// for pitch spelling.
 class PSC0
 {
-    
-public:
+public: // construction
 
     /// initial configuration for a given tonality.
     /// predecessor configuration will be null.
@@ -80,12 +77,16 @@ public:
     /// assignement operator
     PSC0& operator=(const PSC0& rhs);
 
+public: // comparison
+
     /// configs have  the same list of accidentals
     bool operator==(const PSC0& rhs) const;
     
     /// configs have different list of accidentals
     bool operator!=(const PSC0& rhs) const;
-    
+
+public: // access
+
     /// this configuration is initial in a best path.
     /// always true for this class.
     virtual bool initial() const;
@@ -117,6 +118,7 @@ public:
     /// this config to its successors.
     size_t id() const;
     
+    /// state associated to this configuration.
     inline const PSState& state() const { return _state; }
 
     /// cost of the minimal path to this config.
@@ -184,6 +186,7 @@ protected: // data
     size_t _id;
     
     /// cumulated cost in the minimal path to this config.
+    /// @warning pointer for polymorphism (cloning is needed)
     std::shared_ptr<Cost> _cost;
     
     // cumulated number of accidents in the minimal path to this config.

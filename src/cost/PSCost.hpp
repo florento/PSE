@@ -30,6 +30,7 @@ class PSC2;
 
 /// Cost model for the ordering of configuration of the PS algorithm.
 /// see Note Spelling Conventions in Behind Bars (page 85)
+/// @todo obsolete. replaced bu Cost.
 struct PSCost
 {
 public:

@@ -48,6 +48,7 @@ _cost(seed.shared_zero()) // zero
 //{ }
 
 
+// deep copy
 PSC0::PSC0(const PSC0& rhs):
 _state(rhs._state),
 _id(rhs._id),

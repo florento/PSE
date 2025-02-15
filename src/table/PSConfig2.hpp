@@ -25,10 +25,7 @@
 #include "PSChord.hpp"
 #include "PSConfig1c.hpp"
 
-
-
 namespace pse {
-
 
 /// target config of transition,
 /// reached from its predecessor by spelling several simultaneous notes
@@ -43,15 +40,16 @@ namespace pse {
 class PSC2 : public PSC
 {
     
-public:
+public: // construction
 
     /// target PS config for a transition from given (previous) config,
     /// when reading a chord.
     /// @param c0 previous config, to be updated with the received chord.
-    /// @param c1 last config reached after processing the chord.
+    /// @param c1 last config reached when processing the chord.
     /// @param chord note enumerator containing the notes of the read chord.
     PSC2(std::shared_ptr<const PSC0> c0,
-         std::shared_ptr<const PSC1c> c1, PSChord& chord);
+         std::shared_ptr<const PSC1c> c1,
+         PSChord& chord);
 
     /// copy constructor
     PSC2(const PSC2& c);
@@ -61,12 +59,16 @@ public:
     /// assignement operator
     PSC2& operator=(const PSC2& rhs);
 
+public: // comparison
+    
     /// configs have the same list of accidentals
     bool operator==(const PSC2& rhs) const;
     
     /// configs have different list of accidentals
     bool operator!=(const PSC2& rhs) const;
-    
+
+public: // access
+
     // bool acceptable(const enum NoteName& name, const enum Accid& accid) const;
     
     /// number of simultaneous note in chord read to reach this config.
@@ -110,12 +112,12 @@ public:
 
     /// this configuration was reached by reading a single note.
     /// Always false for this class.
-    virtual bool fromNote() const;
+    bool fromNote() const override;
 
     /// this configuration was reached by reading
     /// several simultaneous notes (a "chord").
     /// Always true for this class.
-    virtual bool fromChord() const;
+    bool fromChord() const override;
     
 private: // data
         

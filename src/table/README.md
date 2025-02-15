@@ -57,8 +57,50 @@ all the configs in the bag have the same source
         collecte ensemble des index de TON de cout min dans la colonne  
         si plusieurs, choisit celle la plus proche de prev._local  
         second tie break ?
-        
+    
 - `PST` table = vector of `PSV`s
 
 -   `PSP` (path of PS Configs)  
     idem actuel
+
+
+
+## classes of configurations
+
+```mermaid
+classDiagram
+
+class PSC0
+PSC0: state
+PSC0: index in enum
+PSC0: cost 
+PSC0 <|-- PSC
+
+class PSC
+PSC: previous
+PSC <|-- PSC1
+PSC <|-- PSC2
+
+class PSC1
+PSC1: midi
+PSC1: name
+PSC1: printed
+PSC1 <|-- PSC1c
+
+class PSC1c
+PSC1c: chord
+PSC1c: PC_name
+PSC1c: PC_printed
+PSC1c: flag_complete
+
+class PSC2
+PSC2: midis
+PSC2: names
+PSC2: accids
+PSC2: prints
+
+
+
+
+```
+

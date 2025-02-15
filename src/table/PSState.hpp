@@ -40,7 +40,8 @@ namespace pse {
 /// @see current diatonic scale in https://hal.archives-ouvertes.fr/hal-02162936v2
 class PSState
 {
-public:
+    
+public: // construction
     
     /// initial state for a given tonality.
     /// @param ton a tonality.
@@ -77,6 +78,8 @@ public:
     /// assignement operator
     PSState& operator=(const PSState& rhs);
 
+public: // comparison
+
     /// states have  the same list of accidentals
     bool operator==(const PSState& rhs) const;
 
@@ -86,6 +89,8 @@ public:
     /// same list of accidentals
     bool equal(const PSState& rhs) const;
     
+public: // access
+
     /// accidental(s) in this state for a given pitch name.
     /// @param n a pitch name, in 0..6 (0 is 'C', 6 is 'B').
     /// @return the accidents, in state, for note n,
@@ -103,12 +108,16 @@ public:
     /// @param name a note name in 0..6 (0 is 'C', 6 is 'B').
     /// @param accid accidental in -2..2 (-2 = double flats, 2 = double sharps).
     bool member(const enum NoteName& name, const enum Accid& accid) const;
-    
+
+public: // modification
+
     /// update this state, setting the given accident for the given name.
     /// @param n a pitch name, in 0..6 (0 is 'C', 6 is 'B').
     /// @param a a number of accidentals, for n, in -2..2.
     /// @return whether this state was effectively modified.
     bool update(const enum NoteName& n, const enum Accid& a);
+
+public: // distances (obsolete)
     
     // distance from other state of accidentals
     // unsigned int dist(const PSState& rhs) const;
@@ -155,7 +164,7 @@ private: // data
     /// of zero or one or two accidentals.
     std::array<accids_t, 7> _state; // _state[7]
 
-private:
+private: // convenience
     
     /// accidental(s) in this state for a given pitch name.
     /// @param n a pitch name, in 0..6 (0 is 'C', 6 is 'B').
@@ -163,7 +172,6 @@ private:
     /// can be a single accidental value, a pair of accidents or UNDEF.
     const accids_t accids(int n) const;
     // accids_t accid(int n) const;
-
     
 private: // static tables OBSOLETE
 
@@ -208,7 +216,6 @@ private: // static tables OBSOLETE
     /// accidental in -2..2 or 9 = no accidental.
     /// @todo rm OBSOLETE. we use the tables of Ton.
     static const std::array<std::array<enum Accid, 7>, 15> MIN_MEL;
-
 
 };
 

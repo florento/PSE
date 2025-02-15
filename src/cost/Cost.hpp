@@ -30,7 +30,9 @@ class PSC1;
 class PSC2;
 
 
-/// abstract class defining the cost update interface.
+/// Cost model for the ordering of configuration of the PS algorithm.
+/// @see Note Spelling Conventions in Behind Bars (page 85).
+/// this abstract class defines the cost update interface.
 class Cost
 {
     

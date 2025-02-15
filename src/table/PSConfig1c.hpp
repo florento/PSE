@@ -34,7 +34,8 @@ namespace pse {
 /// - pitch classes already met and name associated.
 class PSC1c : public PSC1
 {
-public:
+    
+public: // construction
     
     // initial PSC1c for the processing of the given chord.
     // PSC1c(std::shared_ptr<const PSC0> c, PSChord& chord);
@@ -96,11 +97,15 @@ public:
     /// assignement operator
     PSC1c& operator=(const PSC1c& rhs);
 
+public: // comparison
+
     /// configs have the same list of accidentals
     bool operator==(const PSC1c& rhs) const;
     
     /// configs have different list of accidentals
     bool operator!=(const PSC1c& rhs) const;
+
+public: // access
 
     /// @param pc a pitch class in 0..11.
     /// @return if the pitch class pc was already met in chord,
@@ -115,13 +120,13 @@ public:
     /// the processing of the chord is terminated.
     bool complete() const;
     
-    /// we are currently processing a chord.
-    virtual bool inChord() const;
-    
     /// the chord currently processed.
     const PSChord& chord() const;
-    
-private:
+
+    /// we are currently processing a chord.
+    bool inChord() const override;
+        
+private: // data
 
     /// chord currently processed.
     std::shared_ptr<const PSChord> _chord;
@@ -138,7 +143,7 @@ private:
     /// index of the note after the last note of the chord processed.
     bool _complete;
     
-private:
+private: // construction
     
     /// internal constructor.
     PSC1c(const PSC& c, PSChord& chord);

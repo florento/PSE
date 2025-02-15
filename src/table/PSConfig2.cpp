@@ -16,8 +16,9 @@ namespace pse {
 // first step for processing chord
 //PSC2::PSC2(const PSC0& c, const PSChord& e):
 PSC2::PSC2(std::shared_ptr<const PSC0> c0,
-           std::shared_ptr<const PSC1c> c1, PSChord& chord):
-PSC(c0),
+           std::shared_ptr<const PSC1c> c1,
+           PSChord& chord):
+PSC(c0), // copy the initial state
 _midis(chord.size(), 0),    // fix the size
 _names(chord.size(), NoteName::Undef),
 _accids(chord.size(), Accid::Undef),
@@ -35,6 +36,7 @@ _prints(chord.size(), false)
     *_cost += c1->cost();
     // _pred is c0
 
+    /// rollback the process chords in configs PC1
     const PSC1c* pc1 = c1.get();;
     for (long i = chord.size()-1; i >= 0; --i)
     {

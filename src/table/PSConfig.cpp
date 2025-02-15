@@ -19,7 +19,7 @@ namespace pse {
 // copy and update
 /// @todo TBR
 PSC::PSC(std::shared_ptr<const PSC0> c):
-PSC0(*c),
+PSC0(*c), // copy the state
 _pred(c)
 {
     assert(_pred);
@@ -35,6 +35,7 @@ _pred(c)
 //}
 
 
+// copy constructor
 PSC::PSC(const PSC& c):
 PSC0(c),
 _pred(c._pred)

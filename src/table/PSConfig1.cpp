@@ -20,7 +20,7 @@ namespace pse {
 PSC1::PSC1(std::shared_ptr<const PSC0> c, const PSEnum& e,
            const enum NoteName& name, const enum Accid& accid, bool cprint,
            const Ton& gton, const Ton& lton):
-PSC(c),
+PSC(c), // copy the state
 _name(name),
 _print(false)
 {
