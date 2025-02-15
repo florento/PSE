@@ -109,7 +109,7 @@ public:
     /// record new NoteName, Accid, Octave, print_flag for the note of given index.
     /// @param name note name in 'A'..'G'.
     /// @param accid accidetal in [-2, 2] where 1 is a half tone
-    /// @param oct octave number in -10..10
+    /// @param oct octave number in Pitch::OCTAVE_MIN and Pitch::OCTAVE_MAX.
     /// @param altprint whether the accidental must be printed.
     /// @see pse::Pitch::rename()
     /// @warning the notes cannot be renamed in place because the Python

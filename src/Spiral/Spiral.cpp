@@ -282,8 +282,7 @@ const SpiralName& SpiralName::ofkey(int k)
 
 const SpiralName& SpiralName::closest(unsigned int m, const SpiralPoint& p)
 {
-    assert(0 <= m);
-    assert(m < 128);
+    assert(MidiNum::check_midi(m)); // assert(0 <= m); assert(m < 128);
     assert(p.isnormal());
 
     unsigned int k = m % 12;

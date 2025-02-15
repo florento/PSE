@@ -88,7 +88,8 @@ public: // note enumerator
     /// @param dur note duration, in fraction of bars.
     /// @param name note name in 'A'..'G'. NoteName::Undef id unknown.
     /// @param accid accidental. Accid::Undef is unknown.
-    /// @param octave number in -10..10. Pitch::UNDEF_OCTAVE if unknown.
+    /// @param octave number in Pitch::OCTAVE_MIN, Pitch::OCTAVE_MAX
+    /// of Pitch::UNDEF_OCTAVE if unknown.
     /// @param printed whether the accidental must be printed.
     /// @warning if one of name, accid, oct is UNDEF, all three must be UNDEF.
     void add(int midi, int bar, bool simult=false,
@@ -130,7 +131,8 @@ public: // note enumerator
     /// with the next note.
     /// @param name note name in 'A'..'G', if it is known.
     /// @param accid accidental, if it is known.
-    /// @param octave octave number in -10..10, if it is known.
+    /// @param octave octave number in Pitch::OCTAVE_MIN and Pitch::OCTAVE_MAX,
+    /// or Pitch::UNDEF_OCTAVE if it is unknown.
     /// @param printed whether the accidental must be printed, if it is known.
     /// @param aux whether the note shall be added to the auxiliary enumerator.
     /// @warning for Phython binding
@@ -150,7 +152,8 @@ public: // note enumerator
     /// @param dur_den denominator of note duration, in fraction of bars.
     /// @param name note name in 'A'..'G', if it is known.
     /// @param accid accidental, if it is known.
-    /// @param octave octave number in -10..10, if it is known.
+    /// @param octave octave number in Pitch::OCTAVE_MIN and Pitch::OCTAVE_MAX,
+    /// or Pitch::UNDEF_OCTAVE if it is unknown.
     /// @param printed whether the accidental must be printed, if it is known.
     /// @param aux whether the note shall be added to the auxiliary enumerator.
     /// @warning for Phython binding

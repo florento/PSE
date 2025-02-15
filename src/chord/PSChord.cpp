@@ -44,8 +44,8 @@ void PSChord::init()
     for (size_t i = first(); i < stop(); ++i)
     {
         unsigned int pm = _enum.midipitch(i);
-        assert(0 <= pm);
-        assert(pm <= 127);
+        assert(MidiNum::check_midi(pm));
+        // assert(0 <= pm); assert(pm <= 127);
         if (pm < _enum.midipitch(bass))
             bass = i;
         int c = pm % 12; // chroma (pitch class) of note, in 0..11

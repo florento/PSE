@@ -182,7 +182,7 @@ public: // modification : add, rename and rewrite passing notes
     /// @param dur note duration, in fraction of bars.
     /// @param name note name in 'A'..'G'.
     /// @param accid accidental.
-    /// @param oct octave number in -10..10.
+    /// @param oct octave number in Pitch::OCTAVE_MIN and Pitch::OCTAVE_MAX.
     /// @param printed whether the accidental must be printed.
     /// @warning if one of name, accid, oct is UNDEF, all three must be UNDEF.
     void add(int midi, int bar, bool simult=false,
@@ -198,7 +198,7 @@ public: // modification : add, rename and rewrite passing notes
     // @param bar bar number of the new input note. must be positive.
     // @param name note name in 'A'..'G'. must not be NoteName::Undef.
     // @param accid accidental. must not be NoteName::Undef.
-    // @param oct octave number in -10..10.
+    // @param oct octave number in Pitch::OCTAVE_MIN and Pitch::OCTAVE_MAX.
     // @param altprint whether the accidental must be printed.
     // @param simult whether the new input note is simultaneous with the
     // next note.
@@ -231,7 +231,7 @@ public: // modification : add, rename and rewrite passing notes
     /// @param dur_den denominator of note duration, in fraction of bars.
     /// @param name note name in 'A'..'G'. must not be NoteName::Undef.
     /// @param accid accidental. must not be NoteName::Undef.
-    /// @param oct octave number in -10..10.
+    /// @param oct octave number in Pitch::OCTAVE_MIN and Pitch::OCTAVE_MAX.
     /// @param altprint whether the accidental must be printed.
     /// @warning for Phython binding
     /// @todo delete, not used.
@@ -245,7 +245,7 @@ public: // modification : add, rename and rewrite passing notes
     /// @param i index of a note. must be inside the interval of this enumerator.
     /// @param n note name in 'A'..'G'.
     /// @param a accidental in [-2, 2] where 1 is a half tone
-    /// @param o octave number in -10..10
+    /// @param o octave number in Pitch::OCTAVE_MIN and Pitch::OCTAVE_MAX.
     /// @param altprint whether the accidental must be printed.
     /// @see pse::Pitch::rename()
     /// @warning the triplet n, a, o must correspond to the midi value

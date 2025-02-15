@@ -144,8 +144,7 @@ size_t PSEnum::count(int c, size_t i, size_t pre, size_t post) const
         assert(efirst <= j);
         assert(j < estop);
         unsigned int mp = midipitch(j);
-        assert(0 <= mp);
-        assert(mp <= 128);
+        assert(MidiNum::check_midi(mp)); // assert(0 <= mp); assert(mp <= 128);
         if (mp%12 == c) ++cpt;
     }
     

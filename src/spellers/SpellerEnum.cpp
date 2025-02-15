@@ -88,7 +88,7 @@ void SpellerEnum::add(int midi, int bar, bool simultaneous,
     // name, accid, oct are all defined or all undef
     assert((accid == Accid::Undef) == (name == NoteName::Undef));
     assert((octave == Pitch::UNDEF_OCTAVE) == (name == NoteName::Undef));
-    assert((octave == Pitch::UNDEF_OCTAVE) or (-10 <= octave and octave <= 10));
+    assert(Pitch::check_octave(octave));
     rawenum(aux).add(midi, bar, simultaneous, dur,
                      name, accid, octave, printed);
 }

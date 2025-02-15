@@ -75,8 +75,7 @@ bool PS13::spell()
     {
         // pitch class of n
         int nm = _enum->midipitch(n);
-        assert(0 <= nm);
-        assert(nm <= 128);
+        assert(MidiNum::check_midi(nm)); // assert(0 <= nm); assert(nm <= 128);
         unsigned int nc = nm % 12;
 
         // counter for each candidate name for note n

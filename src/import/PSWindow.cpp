@@ -123,6 +123,7 @@ void PSWindow::reset(size_t i0, size_t i1)
 void PSWindow::rename(size_t i, const enum NoteName& name,
                       const enum Accid& accid, int oct, bool printed)
 {
+    assert(Pitch::check_octave(oct));
     _container.rename(i, name, accid, oct, printed);
 }
 

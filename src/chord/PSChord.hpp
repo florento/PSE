@@ -133,7 +133,7 @@ public:
     /// of this enumerator.
     /// @param name note name in 'A'..'G'.
     /// @param accid accidental in [-2, 2] where 1 is a half tone
-    /// @param oct octave number in -10..10
+    /// @param oct octave number in Pitch::OCTAVE_MIN and Pitch::OCTAVE_MAX.
     /// @param altprint whether the accidental must be printed.
     /// @warning should not be called for this enumerator.
     virtual void rename(size_t i,

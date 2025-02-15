@@ -243,8 +243,7 @@ void PSB::get_names(size_t id, const Ton& gton,
                     //std::stack<bool>& prints) const
 {
     unsigned int pm = _enum.midipitch(id);
-    assert(0 <= pm);
-    assert(pm <= 128);
+    assert(MidiNum::check_midi(pm)); // assert(0 <= pm); assert(pm <= 128);
     // chroma in 0..11
     int m = pm % 12;
 
@@ -253,9 +252,8 @@ void PSB::get_names(size_t id, const Ton& gton,
     if (_enum.name(id) != NoteName::Undef)
     {
         assert(_enum.accidental(id) != Accid::Undef);
+        assert(Pitch::check_octave(_enum.octave(id)));
         assert(_enum.octave(id) != Pitch::UNDEF_OCTAVE);
-        assert(_enum.octave(id) >= -10);
-        assert(_enum.octave(id) <= 10);
         assert(MidiNum::to_midi(_enum.name(id), _enum.accidental(id),
                                 _enum.octave(id)) == pm);
         names.push(_enum.name(id));

@@ -177,7 +177,7 @@ public: // modification : rename and rewrite passing notes
     /// @param i index of a note in this enumerator.
     /// @param name note name in 'A'..'G'.
     /// @param accid accidental in [-2, 2] where 1 is a half tone
-    /// @param oct octave number in -10..10
+    /// @param oct octave number in Pitch::OCTAVE_MIN and Pitch::OCTAVE_MAX.
     /// @param printed whether the accidental must be printed.
     /// @see pse::Pitch::rename()
     virtual void rename(size_t i,

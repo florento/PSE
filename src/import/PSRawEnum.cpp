@@ -296,11 +296,11 @@ void PSRawEnum::add(int midi, int bar, bool simult, const PSRatio& dur,
     // name, accid, oct are all defined or all undef
     assert((accid == Accid::Undef) == (name == NoteName::Undef));
     assert((oct == Pitch::UNDEF_OCTAVE) == (name == NoteName::Undef));
-    assert((oct == Pitch::UNDEF_OCTAVE) or (-10 <= oct and oct <= 10));
+    assert(Pitch::check_octave(oct));
 
     // note is a MIDI key
-    assert(0 <= midi);
-    assert(midi <= 128);
+    assert(MidiNum::check_midi(midi));
+    // assert(0 <= midi); assert(midi <= 128);
     assert(_notes);
     _notes->push_back(midi);
 
@@ -392,6 +392,7 @@ void PSRawEnum::rename(size_t i,
 //        WARN("PSRawEnum overwriting {} with {} (was {})", i, a, _accids->at(i));
     _accids->at(i) = a;
     
+    assert(Pitch::check_octave(o));
     assert(o != Pitch::UNDEF_OCTAVE);
     assert(_octs);
     assert(i < _octs->size());

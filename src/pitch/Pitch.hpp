@@ -53,6 +53,23 @@ public: // constants
     /// code for undefuned octave value
     static const int           UNDEF_OCTAVE;
 
+    /// minimum octave value considered for spelling
+    static const int           OCTAVE_MIN;
+
+    /// maximum octave value considered for spelling
+    static const int           OCTAVE_MAX;
+    
+    /// associated a unique unsigned int to an octave number.
+    /// @param oct an octave number between OCTAVE_MIN and OCTAVE_MAX.
+    /// must not be UNDEF_OCTAVE.
+    static size_t octave_index(int oct);
+
+    /// verify that an octave number is within the bounds.
+    /// @param oct an octave number.
+    /// @return whether oct is between OCTAVE_MIN and OCTAVE_MAX
+    /// ot is UNDEF_OCTAVE.
+    static bool check_octave(int oct);
+
 public: // construction
 
     /// @brief undef pitch value.
@@ -61,7 +78,7 @@ public: // construction
     /// @brief construct pitch from name+alteration+octave.
     /// @param name note name in 'A'..'G'.
     /// @param accid in [-2, 2] where 1.0 is half tone
-    /// @param oct in -10..10
+    /// @param oct octave number in OCTAVE_MIN, OCTAVE_MAX.
     /// @see table pse::Pitch::NAME
     Pitch(const enum NoteName& name,
           const enum Accid& accid,
@@ -83,23 +100,41 @@ public: // construction
     
     /// assignment operator
     Pitch& operator=(const Pitch& rhs);
+
+public: // comparison
     
     /// equality
     virtual bool equal(const Pitch& rhs) const;
 
     bool less(const Pitch& rhs) const;
 
+public: // access
+   
     /// the MIDI value is undefined.
     virtual bool undef() const;
+
+    /// the MIDI value is undefined.
     virtual bool unpitched() const { return undef(); }
 
     /// the name/alteration/octave values are set.
     bool named() const;
     
+    /// @brief value in MIDIcent.
+    unsigned int midicent() const { return _midi; };
+    
+    /// @brief value in MIDI.
+    unsigned int midi() const { return (_midi/100); };
+
+    /// @param a alteration in -2..2
+    /// @todo TBR replaced by with Accid
+    static std::string alt_to_string(float a);
+
+public: // modification
+    
     /// set the given name/alteration/octave values.
     /// @param n note name in 'A'..'G'.
     /// @param a accidental in [-2, 2] where 1 is one half tone
-    /// @param o octave number, in -10..10
+    /// @param o octave number in OCTAVE_MIN, OCTAVE_MAX.
     /// @param altprint whether the accidental must be printed.
     /// @warning the triplet n, a, o must correspond to the midi value
     /// of this pitch.
@@ -113,16 +148,8 @@ public: // construction
     /// of this pitch.
     /// @warning the alt-print flag is set arbitrarily to true.
     void rename(const enum NoteName& n);
-    
-    /// @brief value in MIDIcent.
-    unsigned int midicent() const { return _midi; };
-    
-    /// @brief value in MIDI.
-    unsigned int midi() const { return (_midi/100); };
-    
-    /// @param a alteration in -2..2
-    /// @todo TBR replaced by with Accid
-    static std::string alt_to_string(float a);
+        
+public: // debug
     
     virtual void print(std::ostream& o) const;
 
@@ -132,7 +159,7 @@ public: // data
 
     // name and alteration are in PWO
     
-    /// @brief octave in -10..10.
+    /// @brief octave number in OCTAVE_MIN, OCTAVE_MAX.
     int octave;
 
     /// @brief whether the alteration must be printed or not (engraving info).

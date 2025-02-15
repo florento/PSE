@@ -161,7 +161,7 @@ namespace pse {
 class MidiNum
 {
     
-public:
+public: // static convenience
        
     /// accidental for the given pitch class and given name.
     /// @param c a pitch class in 0..11.
@@ -172,7 +172,8 @@ public:
     /// octave number for a given MIDI key and note name.
     /// @param m midi number.
     /// @param n note name in 'A'..'G'.
-    /// @return octave number, in -2..9, for the note of given midi key and name.
+    /// @return octave number, between Pitch::OCTAVE_MIN and Pitch::OCTAVE_MAX,
+    /// for the note of given midi key and name.
     static int midi_to_octave(unsigned int m, const enum NoteName& n);
 
     /// octave number for a given MIDI key and note name,
@@ -182,8 +183,8 @@ public:
     /// @param a accidental in [-2, 2], where 1.0 is a half tone.
     /// given only for debugging (asserts).
     /// @param debug debug mode: the accidental is controlled. other it is ignored.
-    /// @return octave number, in -2..9, for the note of given midi key, name
-    /// and accidental.
+    /// @return octave number,  between Pitch::OCTAVE_MIN and Pitch::OCTAVE_MAX,
+    /// for the note of given midi key, name and accidental.
     static int midi_to_octave(unsigned int m,
                               const enum NoteName& n,
                               const enum Accid& a,
@@ -207,15 +208,21 @@ public:
     /// @param a accidental in [-2, 2], where 1 is a half tone.
     /// @return the pitch class corresponding to the note name and accid,
     /// or 12 in case of error.
-    static unsigned int pitchClass(const enum NoteName& n, const enum Accid& a);
+    static unsigned int pitchClass(const enum NoteName& n,
+                                   const enum Accid& a);
     
     /// midi value corresponding to the given note name.
     /// @param n a note name in A..G. must not be Undef.
     /// @param a accidental in [-2, 2], where 1 is a half tone.
-    /// @param o octave number, in -2..9.
+    /// @param o octave number, between Pitch::OCTAVE_MIN
+    /// and Pitch::OCTAVE_MAX.
     static unsigned int to_midi(const enum NoteName& n,
                                 const enum Accid& a,
                                 int o);
+    
+    /// the given number is a MIDI number in 0..128.
+    /// @param m midi number.
+    static bool check_midi(unsigned int m);
     
 private:
     

@@ -158,7 +158,7 @@ public: // modification
     /// @param i index of a note in this window.
     /// @param name note name in 'A'..'G'.
     /// @param accid accidental in [-2, 2] where 1 is a half tone
-    /// @param oct octave number in -10..10
+    /// @param oct octave number in Pitch::OCTAVE_MIN and Pitch::OCTAVE_MAX.
     /// @param printed whether the accidental must be printed.
     /// @see pse::Pitch::rename()
     /// @todo call analguous of embedding enum,

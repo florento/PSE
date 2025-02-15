@@ -13,10 +13,31 @@
 
 namespace pse {
 
+// static
 const unsigned int  pse::Pitch::UNDEF_MIDICENT        = 12800;
 const enum NoteName pse::Pitch::UNDEF_NOTE_NAME       = NoteName::Undef;
 const int           pse::Pitch::UNDEF_OCTAVE          = 128;
+const int           pse::Pitch::OCTAVE_MIN            = -2;
+const int           pse::Pitch::OCTAVE_MAX            = 9;
 const enum Accid    pse::Pitch::UNDEF_ALTERATION      = Accid::Undef;
+
+
+// static
+size_t Pitch::octave_index(int oct)
+{
+    assert(OCTAVE_MIN <= oct and oct <= Pitch::OCTAVE_MAX);
+    assert(oct != UNDEF_OCTAVE);
+    return oct - OCTAVE_MIN;
+}
+
+
+// static
+bool Pitch::check_octave(int oct)
+{
+    return (OCTAVE_MIN <= oct and oct <= Pitch::OCTAVE_MAX)
+        or (oct == UNDEF_OCTAVE);
+}
+
 
 // note name for each index
 const char pse::Pitch::NAME[7] =
@@ -58,8 +79,8 @@ altprint(false)
 {
     //assert('A' <= n);
     //assert(n <= 'G');
-    assert(-10 <= oct);
-    assert(oct <= 10);
+    assert(check_octave(oct));
+    assert(oct != UNDEF_OCTAVE);
     //assert(-2.0 <= alt);
     //assert(alt <= 2.0);
     assert(named());
@@ -87,7 +108,8 @@ altprint(false)
         assert(-2 <= toint(alteration));
         assert(toint(alteration) <= 2);
         octave = midicent_to_octave(_midi);
-        assert((-1 <= octave) && (octave <= 9));
+        assert(check_octave(octave));
+        assert(octave != UNDEF_OCTAVE);
     }
     // do not name before pitchspelling : set to undef name/alt/octave
     else
@@ -175,8 +197,8 @@ void pse::Pitch::rename(const enum NoteName& n, const enum Accid& a, int o,
     //assert(alt <= 2.0);
     assert(defined(a));
     alteration = a;
-    assert(-10 <= o);
-    assert(o <= 10);
+    assert(check_octave(o));
+    assert(o != UNDEF_OCTAVE);
     octave = o;
     altprint = altpr;
     TRACE("Pitch rename: (MIDI {}%{}): {}", midi(), midi()%12,  *this);
@@ -203,7 +225,7 @@ void pse::Pitch::rename(const enum NoteName& n)
 enum NoteName pse::Pitch::midi_to_name(unsigned int k)
 {
     unsigned int p = int(floor(k / 100));
-    assert ((0 <= p) && (p <= 127));
+    assert(MidiNum::check_midi(p)); // assert ((0 <= p) && (p <= 127));
     char n = NAMESHARP[p % 12];
     return NoteName(n);
 }
@@ -213,8 +235,7 @@ enum NoteName pse::Pitch::midi_to_name(unsigned int k)
 enum Accid pse::Pitch::midi_to_alt(unsigned int k)
 {
     unsigned int p = int(floor(k / 100));
-    assert(0 <= p);
-    assert(p <= 127);
+    assert(MidiNum::check_midi(p)); // assert(0 <= p); assert(p <= 127);
     int a = SHARP[p%12] +  (k - (p*100))/100;
     return Accid(a);
 }
@@ -224,8 +245,8 @@ enum Accid pse::Pitch::midi_to_alt(unsigned int k)
 int pse::Pitch::midicent_to_octave(unsigned int k)
 {
     int oct = int(floor(k/1200)) - 1;
-    assert(-1 <= oct);
-    assert(oct <= 9);
+    assert(check_octave(oct) and oct != UNDEF_OCTAVE);
+    // assert(-1 <= oct); assert(oct <= 9);
     return oct;
 }
 
@@ -267,8 +288,7 @@ unsigned int pse::Pitch::to_midi(const enum NoteName& name, const enum Accid& ac
     int alt = toint(accid);
     assert(-2 <= alt);
     assert(alt <= 2);
-    assert(-1 <= oct);
-    assert(oct <= 9);
+    assert(check_octave(oct) and oct != UNDEF_OCTAVE);
     
     unsigned int i = pitchClass(name);
     int falt = int(floor(alt)); // useless ?
@@ -276,8 +296,7 @@ unsigned int pse::Pitch::to_midi(const enum NoteName& name, const enum Accid& ac
     assert(0 <= r);
     assert(r <= 11);
     unsigned int p = ((oct+1) * 12) + r;
-    assert(0 <= p);
-    assert(p <= 127);
+    assert(MidiNum::check_midi(p)); // assert(0 <= p); assert(p <= 127);
     
     return ((p*100)+ int((alt-falt)*100));
 }
