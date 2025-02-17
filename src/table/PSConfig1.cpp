@@ -26,7 +26,7 @@ _print(false)
 {
     assert(c);
     _midi = e.midipitch(c->id());
-    _print = _state.update(name, accid);
+    _print = _state.update(accid, name);
     _id = c->id()+1; // next note in enum
     // assert(_id <= e.stop());
     assert(defined(accid));

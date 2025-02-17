@@ -35,9 +35,10 @@ namespace pse {
 /// - accident number  0 is a neutral 
 /// - accident number  1 is a sharp
 /// - accident number  2 is a double sharp
-/// - pitch names correspond to  chars 'A'..'G', where 0 is 'C' and 6 is 'B'.
+/// - pitch names correspond to chars 'A'..'G', where 0 is 'C' and 6 is 'B'.
 /// @see current diatonic pitch set in https://hal.archives-ouvertes.fr/hal-02886399v2
 /// @see current diatonic scale in https://hal.archives-ouvertes.fr/hal-02162936v2
+/// @todo replace by State1 (name -> accid) and State2 (name, octave -> accid)
 class PSState
 {
     
@@ -73,6 +74,7 @@ public: // construction
     PSState(const PSState& as,
             const enum NoteName& name, const enum Accid& accid);
 
+    /// destructor.
     ~PSState();
     
     /// assignement operator
@@ -115,7 +117,7 @@ public: // modification
     /// @param n a pitch name, in 0..6 (0 is 'C', 6 is 'B').
     /// @param a a number of accidentals, for n, in -2..2.
     /// @return whether this state was effectively modified.
-    bool update(const enum NoteName& n, const enum Accid& a);
+    bool update(const enum Accid& a, const enum NoteName& n);
 
 public: // distances (obsolete)
     
@@ -219,10 +221,8 @@ private: // static tables OBSOLETE
 
 };
 
-
 } // namespace pse
 
 #endif /* PsState_hpp */
 
 /// @}
-

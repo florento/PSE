@@ -153,7 +153,7 @@ bool PSState::member(const enum NoteName& name, const enum Accid& accid) const
 }
 
 
-bool PSState::update(const enum NoteName& name, const enum Accid& accid)
+bool PSState::update(const enum Accid& accid, const enum NoteName& name)
 {
     int n = toint(name);
     assert(0 <= n);
@@ -383,11 +383,6 @@ const std::array<std::array<enum Accid, 7>, 15> PSState::MIN_MEL =
     { _2S, __U, __U, __U, __U, __U, _1S }, //  6  D# min harm
     { __U, __U, __U, _2S, _2S, __U, __U },  // 7  A# min harm
 }};
-
-
-
-
-
 
 
 } // end namespace pse

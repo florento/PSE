@@ -38,36 +38,31 @@ class Pitch : public PWO
 public: // constants
 
     /// MIDI is a MIDI key value in 0..127
-    /// MIDICENT is a value in 0..12700 for mico-tonality
+    /// MIDICENT is a value in 0..12700 for mico-tonality.
     enum class PitchUnit { MIDI, MIDICENT };
     
-    /// code for undefuned MIDI value
+    /// code for undefuned MIDI value.
     static const unsigned int  UNDEF_MIDICENT;
     
-    /// @todo TBR (mv to NoteName.hpp)
+    /// @todo TBR (mv to NoteName.hpp).
     static const enum NoteName UNDEF_NOTE_NAME;
 
-    /// @todo TBR (mv to Accid.hpp)
+    /// @todo TBR (mv to Accid.hpp).
     static const enum Accid    UNDEF_ALTERATION;
 
-    /// code for undefuned octave value
+    /// code for undefuned octave value.
     static const int           UNDEF_OCTAVE;
 
-    /// minimum octave value considered for spelling
-    static const int           OCTAVE_MIN;
+    /// minimum octave value considered for spelling.
+    static const int           OCTAVE_MIN = -1;
 
-    /// maximum octave value considered for spelling
-    static const int           OCTAVE_MAX;
+    /// maximum octave value considered for spelling.
+    static const int           OCTAVE_MAX = 9;
     
-    /// associated a unique unsigned int to an octave number.
-    /// @param oct an octave number between OCTAVE_MIN and OCTAVE_MAX.
-    /// must not be UNDEF_OCTAVE.
-    static size_t octave_index(int oct);
-
     /// verify that an octave number is within the bounds.
     /// @param oct an octave number.
     /// @return whether oct is between OCTAVE_MIN and OCTAVE_MAX
-    /// ot is UNDEF_OCTAVE.
+    /// or it is UNDEF_OCTAVE.
     static bool check_octave(int oct);
 
 public: // construction

@@ -17,18 +17,9 @@ namespace pse {
 const unsigned int  pse::Pitch::UNDEF_MIDICENT        = 12800;
 const enum NoteName pse::Pitch::UNDEF_NOTE_NAME       = NoteName::Undef;
 const int           pse::Pitch::UNDEF_OCTAVE          = 128;
-const int           pse::Pitch::OCTAVE_MIN            = -2;
-const int           pse::Pitch::OCTAVE_MAX            = 9;
+//const int           pse::Pitch::OCTAVE_MIN            = -2;
+//const int           pse::Pitch::OCTAVE_MAX            = 9;
 const enum Accid    pse::Pitch::UNDEF_ALTERATION      = Accid::Undef;
-
-
-// static
-size_t Pitch::octave_index(int oct)
-{
-    assert(OCTAVE_MIN <= oct and oct <= Pitch::OCTAVE_MAX);
-    assert(oct != UNDEF_OCTAVE);
-    return oct - OCTAVE_MIN;
-}
 
 
 // static

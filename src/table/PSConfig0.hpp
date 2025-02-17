@@ -171,6 +171,8 @@ public: // access
 protected: // data
 
     /// description of accidents for each note name.
+    /// @todo 1. replace by std::shared_ptr<PSState>
+    /// @todo 2. replace by std::shared_ptr<PSState0> (polymorphic)
     PSState _state;
 
     // description of discounted accident for each note name.
