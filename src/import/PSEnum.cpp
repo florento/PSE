@@ -155,7 +155,7 @@ void PSEnum::rename(size_t i, const enum NoteName& n, bool altprint)
 {
     const unsigned int m = midipitch(i);
     int o = MidiNum::midi_to_octave(m, n);
-    enum Accid a = MidiNum::accid(m % 12, n);
+    enum Accid a = MidiNum::class_to_accid(m % 12, n);
     rename(i, n, a, o, altprint);
 }
 

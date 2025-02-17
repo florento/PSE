@@ -166,9 +166,17 @@ public: // static convenience
     /// accidental for the given pitch class and given name.
     /// @param c a pitch class in 0..11.
     /// @param n a note name, must not be Undef.
-    /// @return the accidental corresponding to c and n, or Undef if there is none.
-    static enum Accid accid(int c, const enum NoteName& n);
-    
+    /// @return the accidental corresponding to c and n,
+    /// or Undef if there is none.
+    static enum Accid class_to_accid(int c, const enum NoteName& n);
+
+    /// accidental for the given MIDI pitch and given name.
+    /// @param m midi number.
+    /// @param n a note name, must not be Undef.
+    /// @return the accidental corresponding to c and n,
+    /// or Undef if there is none.
+    static enum Accid midi_to_accid(unsigned int m, const enum NoteName& n);
+
     /// octave number for a given MIDI key and note name.
     /// @param m midi number.
     /// @param n note name in 'A'..'G'.
@@ -178,11 +186,12 @@ public: // static convenience
 
     /// octave number for a given MIDI key and note name,
     /// and debug check accidental.
-    /// @param m midi number
+    /// @param m midi number.
     /// @param n note name in 'A'..'G'.
     /// @param a accidental in [-2, 2], where 1.0 is a half tone.
     /// given only for debugging (asserts).
-    /// @param debug debug mode: the accidental is controlled. other it is ignored.
+    /// @param debug debug mode: the accidental is controlled.
+    /// otherwise it is ignored.
     /// @return octave number,  between Pitch::OCTAVE_MIN and Pitch::OCTAVE_MAX,
     /// for the note of given midi key, name and accidental.
     static int midi_to_octave(unsigned int m,

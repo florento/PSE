@@ -19,8 +19,8 @@ namespace pse {
 // copy and update
 /// @todo TBR
 PSC::PSC(std::shared_ptr<const PSC0> c):
-PSC0(*c), // copy the state
-_pred(c)
+PSC0(*c), // clone the state
+_pred(c)  // shared ptr copy
 {
     assert(_pred);
     assert(_pred->initial() || _pred->fromNote() || _pred->fromChord());
@@ -37,8 +37,8 @@ _pred(c)
 
 // copy constructor
 PSC::PSC(const PSC& c):
-PSC0(c),
-_pred(c._pred)
+PSC0(c),        // clone the state
+_pred(c._pred)  // shared ptr copy
 { }
 
 
@@ -63,6 +63,7 @@ PSC& PSC::operator=(const PSC& rhs)
 bool PSC::operator==(const PSC& rhs) const
 {
     return (PSC0::operator==(rhs));
+    // do not compare pred.
 }
 
 

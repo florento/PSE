@@ -35,9 +35,8 @@ int main(int argc, const char* argv[])
     // pse::WeberModal godfried;
     // godfried.dump();
     // return 0;
-
-    pse::SpellerEnum sp(30, pse::Algo::Undef, true); // debug flag
-    //pse::PS13 sp;
+    // no aux enum, debug     //pse::PS13 sp;
+    pse::SpellerEnum sp(30, false, pse::Algo::Undef, true);
 
     for (size_t i = 0; i < sp.index().size(); ++i)
     {

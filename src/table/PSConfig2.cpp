@@ -21,14 +21,14 @@ PSC2::PSC2(std::shared_ptr<const PSC0> c0,
 PSC(c0), // copy the initial state
 _midis(chord.size(), 0),    // fix the size
 _names(chord.size(), NoteName::Undef),
-_accids(chord.size(), Accid::Undef),
+//_accids(chord.size(), Accid::Undef),
 _prints(chord.size(), false)
 {
     assert(c0);
     assert(chord.size() > 1);
     assert(_midis.size() == chord.size());
     assert(_names.size() == chord.size());
-    assert(_accids.size() == chord.size());
+    // assert(_accids.size() == chord.size());
     assert(_prints.size() == chord.size());
 
     _id = chord.stop();          // first note after chord
@@ -46,9 +46,10 @@ _prints(chord.size(), false)
         assert(i < _names.size());
         assert(defined(pc1->name()));
         _names[i] = pc1->name();
-        assert(i < _accids.size());
-        assert(defined(pc1->accidental()));
-        _accids[i] = pc1->accidental();
+        // @todo TBR _accids
+        // assert(i < _accids.size());
+        // assert(defined(pc1->accidental()));
+        // _accids[i] = pc1->accidental();
         assert(i < _prints.size());
         _prints[i] = pc1->printed();
 
@@ -61,9 +62,9 @@ _prints(chord.size(), false)
 // copy
 PSC2::PSC2(const PSC2& rhs):
 PSC(rhs),
-_midis(rhs._midis),     // vector copy
+_midis(rhs._midis),   // vector copy
 _names(rhs._names),   // vector copy
-_accids(rhs._accids), // vector copy
+// _accids(rhs._accids), // vector copy  /// @todo TBR _accids
 _prints(rhs._prints)  // vector copy
 { }
 
@@ -81,7 +82,7 @@ PSC2& PSC2::operator=(const PSC2& rhs)
         PSC::operator=(rhs);
         _midis   = rhs._midis;
         _names  = rhs._names;
-        _accids = rhs._accids;
+        // _accids = rhs._accids;     /// @todo TBR _accids
         _prints = rhs._prints;
     }
     return *this;
@@ -138,11 +139,23 @@ std::vector<enum NoteName>::const_iterator PSC2::cendName() const
 
 enum Accid PSC2::accidental(size_t i) const
 {
-    assert(i < _accids.size());
-    return _accids.at(i);
-//    const enum NoteName& n = name(i);
-//    assert(n != NoteName::Undef);
-//    return _state.accid(n);
+    const enum NoteName& n(name(i));
+    assert(n != NoteName::Undef);
+    enum Accid accid = MidiNum::midi_to_accid(midi(i), n);
+    assert(_state);
+    assert(Accids::contained(accid, _state->accids(n)));
+    return accid; // cast to float format for Pitch ?
+    // @todo TBR _accids
+    // assert(i < _accids.size());
+    // return _accids.at(i);
+}
+
+
+int PSC2::octave(size_t i) const
+{
+    const enum NoteName& n(name(i));
+    assert(n != NoteName::Undef);
+    return MidiNum::midi_to_octave(midi(i), n);
 }
 
 
@@ -182,7 +195,6 @@ bool PSC2::fromChord() const
 //    assert(previous());
 //    return previous()->state();
 //}
-
 
 
 } // end namespace pse

@@ -22,7 +22,7 @@ namespace pse {
 
 
 PSC0::PSC0(const Ton& ton, size_t id, const Cost& seed, bool tonal):
-_state(ton, tonal),
+_state(new PSState(ton, tonal)),
 _id(id),
 _cost(seed.shared_zero()) // zero
 {
@@ -50,7 +50,7 @@ _cost(seed.shared_zero()) // zero
 
 // deep copy
 PSC0::PSC0(const PSC0& rhs):
-_state(rhs._state),
+_state(rhs._state->clone()),
 _id(rhs._id),
 _cost(rhs._cost->shared_clone())
 {
@@ -68,7 +68,8 @@ PSC0& PSC0::operator=(const PSC0& rhs)
 {
     if (this != &rhs)
     {
-        _state = rhs._state; // copy
+        assert(rhs._state);
+        _state = rhs._state->clone();
         _id    = rhs._id;
         _cost  = rhs._cost;  // copy
     }
@@ -78,7 +79,9 @@ PSC0& PSC0::operator=(const PSC0& rhs)
 
 bool PSC0::operator==(const PSC0& rhs) const
 {
-    return (_id == rhs._id) && (_state == rhs._state);
+    assert(_state);
+    assert(rhs._state);
+    return (_id == rhs._id) and _state->equal(*(rhs._state));
 }
 
 
@@ -115,6 +118,13 @@ bool PSC0::inChord() const
 const PSC0* PSC0::previous() const
 {
     return nullptr;
+}
+
+
+const PSState& PSC0::state() const
+{
+    assert(_state);
+    return *_state;
 }
 
 

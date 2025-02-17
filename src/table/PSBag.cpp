@@ -192,7 +192,7 @@ void PSB::succ(std::shared_ptr<const PSC0> c, PSCQueue& q,
             {
                 q.push(std::make_shared<PSC1c>(c1,
                                                dejaname,
-                                               MidiNum::accid(m, dejaname),
+                                               MidiNum::class_to_accid(m, dejaname),
                                                false,
                                                //c1->dejaprint(m), // force print
                                                gton, lton));
@@ -270,7 +270,7 @@ void PSB::get_names(size_t id, const Ton& gton,
             // case of 8 and (short list) 1, 3, 6, 10
             if (! defined(name) || !defined(accid))
                 continue;
-            assert(accid == MidiNum::accid(m, name));
+            assert(accid == MidiNum::class_to_accid(m, name));
             names.push(name);
             accids.push(accid);
             //prints.push(false); // no force print
@@ -288,10 +288,10 @@ void PSB::get_names(size_t id, const Ton& gton,
         // enum NoteName name = scale.name(deg);
         // enum Accid accid = scale.accid(deg);
         enum NoteName name = gton.chromaname(m);
-        enum Accid accid = MidiNum::accid(m, name);
+        enum Accid accid = MidiNum::class_to_accid(m, name);
         assert(defined(name));
         assert(defined(accid));
-        assert(accid == MidiNum::accid(m, name));
+        assert(accid == MidiNum::class_to_accid(m, name));
         names.push(name);
         accids.push(accid);
         //prints.push(false); // no force print

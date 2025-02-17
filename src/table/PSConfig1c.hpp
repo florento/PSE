@@ -132,12 +132,14 @@ private: // data
     std::shared_ptr<const PSChord> _chord;
     
     /// map associating to every pitch class in 0..12
-    /// a note name, if the pitch class was encountered while processing the chord
+    /// a note name, if the pitch class was encountered
+    /// while processing the chord
     /// or NoteName::Undef otherwise.
     std::array<enum NoteName, 12> _pcn;
 
     /// map associating to every pitch class in 0..12
-    /// a print flag, if the pitch class was encountered while processing the chord.
+    /// a print flag, if the pitch class was encountered
+    /// while processing the chord.
     std::array<bool, 12> _pcp;
 
     /// index of the note after the last note of the chord processed.

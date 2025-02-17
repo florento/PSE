@@ -20,19 +20,20 @@ namespace pse {
 PSC1::PSC1(std::shared_ptr<const PSC0> c, const PSEnum& e,
            const enum NoteName& name, const enum Accid& accid, bool cprint,
            const Ton& gton, const Ton& lton):
-PSC(c), // copy the state
+PSC(c),       // clone the state
 _name(name),
 _print(false)
 {
     assert(c);
     _midi = e.midipitch(c->id());
-    _print = _state.update(accid, name);
+    assert(_state);
+    _print = _state->update(accid, name);
     _id = c->id()+1; // next note in enum
     // assert(_id <= e.stop());
     assert(defined(accid));
     // the given accidental corresponds to the chroma of input note
     // and given name.
-    assert(accid == MidiNum::accid(_midi%12, name));
+    assert(accid == MidiNum::class_to_accid(_midi%12, name));
 
     // update cost
     assert(gton.defined());
@@ -41,7 +42,7 @@ _print(false)
     // _cost->update(*this, e, ton);
         
     // the given accidental corresponds to the chroma of input note and given name.
-    assert(accid == MidiNum::accid(e.midipitch(c->id())%12, name));
+    assert(accid == MidiNum::class_to_accid(e.midipitch(c->id())%12, name));
 }
 
 
@@ -124,7 +125,7 @@ PSC1& PSC1::operator=(const PSC1& rhs)
 
 bool PSC1::operator==(const PSC1& rhs) const
 {
-    return (PSC::operator==(rhs)); // &&
+    return (PSC::operator==(rhs));
             //(_midi == rhs._midi) &&
             //(_name == rhs._name) &&
             //(_print == rhs._print));
@@ -153,11 +154,17 @@ enum NoteName PSC1::name() const
 enum Accid PSC1::accidental() const
 {
     // ex: enum Accid accid(_state.accids(_name)); // copy
-    enum Accid accid = MidiNum::accid(MidiNum::pitchClass(_midi), _name);
-    assert(Accids::contained(accid, _state.accids(_name)));
-    //assert(-2 <= toint(accid));
-    //assert(toint(accid) <= 2);
+    enum Accid accid = MidiNum::midi_to_accid(_midi, _name);
+    assert(_state);
+    assert(Accids::contained(accid, _state->accids(_name)));
+    //assert(-2 <= toint(accid) and toint(accid) <= 2);
     return accid; // cast to float format for Pitch ?
+}
+
+
+int PSC1::octave() const
+{
+    return MidiNum::midi_to_octave(_midi, _name);
 }
 
 

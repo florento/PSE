@@ -41,7 +41,7 @@ int MidiNum::midi_to_octave(unsigned int m,
     // assert(oct <= 9);
     int chroma = m % 12;
     assert(!debug || a != Accid::Undef);
-    assert(!debug || a == accid(chroma, n));
+    assert(!debug || a == class_to_accid(chroma, n));
     
     // adjust octave for extreme notes
     if (chroma == 0 && n == pse::NoteName::B)
@@ -120,7 +120,7 @@ const enum Accid MidiNum::ACCID[12][7] =
 };
 
 
-enum Accid MidiNum::accid(int c, const enum NoteName& n)
+enum Accid MidiNum::class_to_accid(int c, const enum NoteName& n)
 {
     assert(0 <= c);
     assert(c < 12);
@@ -131,6 +131,12 @@ enum Accid MidiNum::accid(int c, const enum NoteName& n)
     return ACCID[c][i];
 }
 
+
+enum Accid MidiNum::midi_to_accid(unsigned int m, const enum NoteName& n)
+{
+    assert(check_midi(m));
+    return class_to_accid(m%12, n);
+}
 
 // FAUX!!
 //enum Accid MidiNum::accid(int c, const enum NoteName& n)

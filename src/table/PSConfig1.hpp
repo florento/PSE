@@ -49,7 +49,6 @@ public: // construction
     /// in given conjectured global tonality and local tonality.
     /// the cost (number of accidentals) and distance (to local ton) are updated.
     /// @param c previous config, to be updated with the received pitch.
-    // @param p pitch to be named, used to update the config.
     /// @param e an enumerator of notes read for transition to this configs.
     /// @param name chosen name for the received pitch, in 0..6 (0 is 'C', 6 is 'B').
     /// @param accid chosen alteration for the received pitch, in -2..2.
@@ -97,10 +96,14 @@ public: // access
     enum NoteName name() const;
     
     /// accidental of the note read for the transition
-    /// from this config's predecessor. in -2..2
+    /// from this config's predecessor.
     /// @see Accid.hpp
     /// @warning not formatted for a Pitch object.
     enum Accid accidental() const;
+
+    /// octave of the note read for the transition
+    /// from this config's predecessor.
+    int octave() const;
     
     /// whether the accidental of the note
     /// (read for the transition from predecessor)

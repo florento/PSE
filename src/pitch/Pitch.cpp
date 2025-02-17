@@ -200,7 +200,7 @@ void pse::Pitch::rename(const enum NoteName& n, const enum Accid& a, int o,
 void pse::Pitch::rename(const enum NoteName& n)
 {
     int m = midi();
-    enum Accid a = MidiNum::accid(m%12, n);
+    enum Accid a = MidiNum::class_to_accid(m%12, n);
     if (a == Accid::Undef)
     {
         ERROR("pitch {} cannot be named by {}", m, n);

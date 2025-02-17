@@ -25,11 +25,11 @@ PSState::PSState(const Ton& ton, bool tonal)
     {
         if (tonal)
         {
-            _state.at(n) = Accids::encode(ton.accidKey(n)); // singleton
+            _map.at(n) = Accids::encode(ton.accidKey(n)); // singleton
         }
         else
         {
-            _state.at(n) = ton.accidScale(n);
+            _map.at(n) = ton.accidScale(n);
         }
     }
 }
@@ -61,7 +61,7 @@ PSState::PSState(const Ton& ton, bool tonal)
 
 
 PSState::PSState(const PSState& rhs):
-_state(rhs._state) // array copy
+_map(rhs._map) // array copy
 {
 //    for (size_t i = 0; i < 7; ++i)
 //        _state[i] = rhs._state[i];
@@ -71,12 +71,12 @@ _state(rhs._state) // array copy
 /// @todo TBR obsolete. not used.
 PSState::PSState(const PSState& as,
                  const enum NoteName& name, const enum Accid& accid):
-_state(as._state)
+_map(as._map)
 {
     int n = toint(name);
     assert(0 <= n);
     assert(n <= 6);
-    _state[n] = Accids::encode(accid);
+    _map[n] = Accids::encode(accid);
 }
 
 
@@ -90,9 +90,15 @@ PSState& PSState::operator=(const PSState& rhs)
     {
         //_state = rhs._state;
         for (size_t i = 0; i < 7; ++i)
-            _state[i] = rhs._state[i];
+            _map[i] = rhs._map[i];
     }
     return *this;
+}
+
+
+std::shared_ptr<PSState> PSState::clone() const
+{
+    return std::shared_ptr<PSState>(new PSState(*this));
 }
 
 
@@ -112,7 +118,7 @@ bool PSState::equal(const PSState& rhs) const
 {
     for (size_t i = 0; i < 7; ++i)
     {
-        if (_state[i] != rhs._state[i])
+        if (_map[i] != rhs._map[i])
             return false;
     }
     return true;
@@ -123,7 +129,7 @@ const accids_t PSState::accids(int n) const
 {
     assert(0 <= n);
     assert(n <= 6);
-    return _state[n];
+    return _map.at(n);
 }
 
 
@@ -138,7 +144,7 @@ const enum Accid PSState::accid(const enum NoteName& name) const
     int n = toint(name);
     assert(0 <= n);
     assert(n <= 6);
-    accids_t a = _state[n];
+    accids_t a = _map[n];
     assert(Accids::single(a));
     return Accids::first(a);
 }
@@ -149,7 +155,7 @@ bool PSState::member(const enum NoteName& name, const enum Accid& accid) const
     int n = toint(name);
     assert(0 <= n);
     assert(n <= 6);
-    return Accids::contained(accid, _state[n]);
+    return Accids::contained(accid, _map[n]);
 }
 
 
@@ -159,14 +165,14 @@ bool PSState::update(const enum Accid& accid, const enum NoteName& name)
     assert(0 <= n);
     assert(n <= 6);
     // accidental of n is unchanged
-    if (Accids::single(_state[n]) && Accids::contained(accid, _state[n]))
+    if (Accids::single(_map[n]) && Accids::contained(accid, _map[n]))
     {
         return false;
     }
     // real update
     else
     {
-        _state[n] = Accids::encode(accid); // singleton
+        _map[n] = Accids::encode(accid); // singleton
         return true;
     }
 }
@@ -178,7 +184,7 @@ unsigned int PSState::dist(const PSState& rhs) const
     
     for (size_t i = 0; i < 7; ++i) // pitch names
     {
-        if (_state[i] != rhs._state[i])
+        if (_map[i] != rhs._map[i])
         {
             res += 1;
         }
@@ -195,7 +201,7 @@ unsigned int PSState::dist(const Ton& ton) const
     {
         enum NoteName n = NoteName(i); // encapsulation
         /// @todo revise (if used)
-        if (_state[i] != ton.accidScale(n))
+        if (_map[i] != ton.accidScale(n))
         {
             res += 1;
         }

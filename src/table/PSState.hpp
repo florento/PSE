@@ -80,6 +80,9 @@ public: // construction
     /// assignement operator
     PSState& operator=(const PSState& rhs);
 
+    /// allocate a new copy of this state.
+    std::shared_ptr<PSState> clone() const;
+
 public: // comparison
 
     /// states have  the same list of accidentals
@@ -164,7 +167,7 @@ private: // data
 
     /// association to each pitch name (in 0..6)
     /// of zero or one or two accidentals.
-    std::array<accids_t, 7> _state; // _state[7]
+    std::array<accids_t, 7> _map; // _state[7]
 
 private: // convenience
     

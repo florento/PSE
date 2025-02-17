@@ -410,7 +410,7 @@ void PSRawEnum::rename(size_t i,
 void PSRawEnum::rename(size_t i, const enum NoteName& n, bool altprint)
 {
     int m = _notes->at(i);
-    enum Accid a = MidiNum::accid(m%12, n);
+    enum Accid a = MidiNum::class_to_accid(m%12, n);
     if (a == Accid::Undef)
     {
         ERROR("PSRawEnum: pitch {} cannot be named by {}", m, n);

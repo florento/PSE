@@ -40,7 +40,7 @@ TEST(Enharmonic, completeness)
         for (int i = 0; i < 7; ++i)
         {
             enum pse::NoteName n = pse::NoteName(i);
-            enum pse::Accid a = pse::MidiNum::accid(c, n);
+            enum pse::Accid a = pse::MidiNum::class_to_accid(c, n);
             // n a is a possible spelling of c without triple sharp or flat
             if (a != pse::Accid::Undef &&
                 a != pse::Accid::TripleSharp &&

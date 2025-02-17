@@ -114,15 +114,15 @@ public: // access
     // enumerator this transition was built from
     // PSEnum& psenum() const;
     
+    /// state associated to this configuration.
+    const PSState& state() const;
+
     /// index (in enumerator) of note read for the transition from
     /// this config to its successors.
     size_t id() const;
     
-    /// state associated to this configuration.
-    inline const PSState& state() const { return _state; }
-
-    /// cost of the minimal path to this config.
-    const Cost& cost() const; //{ return _cost; }
+    /// cost of the minimal path reaching this config.
+    const Cost& cost() const;
     
     // cumulated number of accidents in the minimal path to this config.
     // @todo remove
@@ -173,7 +173,7 @@ protected: // data
     /// description of accidents for each note name.
     /// @todo 1. replace by std::shared_ptr<PSState>
     /// @todo 2. replace by std::shared_ptr<PSState0> (polymorphic)
-    PSState _state;
+    std::shared_ptr<PSState> _state;
 
     // description of discounted accident for each note name.
     // will not be updated.

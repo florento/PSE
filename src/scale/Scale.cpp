@@ -45,8 +45,8 @@ _ks(diatonic(mode)?pc:0) //  major(mode)  flag major is OBSOLETE
         _pcs.push_back(c);
         enum NoteName n = name + mode.nameDistance(d);
         _names.push_back(n);
-        assert(MidiNum::accid(c, n) != Accid::Undef);
-        _accids.push_back(MidiNum::accid(c, n));
+        assert(MidiNum::class_to_accid(c, n) != Accid::Undef);
+        _accids.push_back(MidiNum::class_to_accid(c, n));
     }
 }
 

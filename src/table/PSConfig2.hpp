@@ -89,18 +89,24 @@ public: // access
     /// const iterator pointig to the first name of note in this config.
     std::vector<enum NoteName>::const_iterator cbeginName() const;
 
-    /// const iterator pointig to the one after last name of note in this config.
+    /// const iterator pointig to the one after last name of note
+    /// in this config.
     std::vector<enum NoteName>::const_iterator cendName() const;
 
     /// accidental of the note read for the transition
-    /// from this config's predecessor. in -2..2
+    /// from this config's predecessor.
     /// @param i index of the note in the input chord in 0..size()-1.
     /// @see Accid.hpp
     /// @warning not formatted for a Pitch object.
     enum Accid accidental(size_t i) const;
+    
+    /// octave of the note read for the transition
+    /// from this config's predecessor.
+    /// @param i index of the note in the input chord in 0..size()-1.
+    int octave(size_t i) const;
 
-    /// whether the accidental of the note (read for the transition from predecessor)
-    /// must be printed or not.
+    /// whether the accidental of the note (read for the transition from
+    /// its predecessor) must be printed or not.
     /// @param i index of the note in the input chord in 0..size()-1.
     bool printed(size_t i) const;
 
@@ -135,9 +141,9 @@ private: // data
     /// for the chord read for the transition to this config.
     std::vector<enum NoteName> _names;
     
-    /// chosen number of accidents, in -2..2.
+    // chosen number of accidents, in -2..2.
     // @todo TBR: it is _state[_name] by construction
-    std::vector<enum Accid> _accids;
+    // std::vector<enum Accid> _accids;
    
     /// whether the accident must be printed
     /// for the note read for the transition to this config.
