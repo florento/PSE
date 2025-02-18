@@ -18,7 +18,8 @@ namespace pse {
 
 // copy and update
 PSC1::PSC1(std::shared_ptr<const PSC0> c, const PSEnum& e,
-           const enum NoteName& name, const enum Accid& accid, bool cprint,
+           const enum NoteName& name, const enum Accid& accid,
+           bool cprint,
            const Ton& gton, const Ton& lton):
 PSC(c),       // clone the state
 _name(name),
@@ -26,14 +27,15 @@ _print(false)
 {
     assert(c);
     _midi = e.midipitch(c->id());
+    // the given accidental corresponds to the input note and given name.
+    assert(defined(accid));
+    assert(accid == MidiNum::midi_to_accid(_midi, name));
+    int octave = MidiNum::midi_to_octave(_midi, name);
+    assert(Pitch::check_octave(octave));
     assert(_state);
-    _print = _state->update(accid, name);
+    _print = _state->update(accid, name, octave);
     _id = c->id()+1; // next note in enum
     // assert(_id <= e.stop());
-    assert(defined(accid));
-    // the given accidental corresponds to the chroma of input note
-    // and given name.
-    assert(accid == MidiNum::class_to_accid(_midi%12, name));
 
     // update cost
     assert(gton.defined());
@@ -41,7 +43,8 @@ _print(false)
     _cost->update(name, accid, (cprint?true:_print), gton, lton);
     // _cost->update(*this, e, ton);
         
-    // the given accidental corresponds to the chroma of input note and given name.
+    // the given accidental corresponds to the chroma of input note
+    // and given name.
     assert(accid == MidiNum::class_to_accid(e.midipitch(c->id())%12, name));
 }
 

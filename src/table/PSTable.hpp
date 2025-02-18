@@ -61,10 +61,12 @@ public: // construction
     /// @param i array of tonalities = header of rows of this table.
     /// @param tonal mode: tonal or modal, for the construction
     /// of initial state. default = modal.
+    /// @param octave mode for the state transitions: repeat accidents
+    /// at different octaves, or reason modulo 12.
     /// @param dflag debug mode (display table during construction).
     /// @warning the enumerator cannot be changed once the object created.
     PST(const Algo& a, const Cost& seed, const TonIndex& i, PSEnum& e,
-        bool tonal, bool dflag=false);
+        bool tonal, bool octave=false, bool dflag=false);
 
     // main constructor.
     // @param e an enumerator of notes for transitions of configs.
@@ -93,9 +95,11 @@ public: // construction
     /// Its dimensions must be the same as tab.
     /// @param tonal mode: tonal or modal, for the construction
     /// of initial state. default = tonal.
+    /// @param octave mode for the state transitions: repeat accidents
+    /// at different octaves, or reason modulo 12.
     /// @param dflag debug mode (display table during construction).
     PST(const Algo& a, const Cost& seed, const TonIndex& index, PSEnum& e,
-        const PSG& locals, bool tonal, bool dflag=false);
+        const PSG& locals, bool tonal, bool octave=false, bool dflag=false);
 
     /// rebuid a table with the same algo and index as the given table,
     /// and the new given seed and given grid of local tonalities.
@@ -247,10 +251,11 @@ private:
     /// @param locals table of local tonalities for tab.
     /// Ignored if empty, otherwise, its dimensions must be the same as the
     /// ton index and the columns of this table .
-    /// @param tonal mode: tonal or modal, for the construction
-    /// of initial state.
+    /// @param tonal mode: for the construction of initial state.
+    /// @param octave mode: for the state transitions.
     /// @return wether the computation was successful.
-    bool init_psvs(const Cost& seed, const PSG& locals, bool tonal=false);
+    bool init_psvs(const Cost& seed, const PSG& locals,
+                   bool tonal=false, bool octave=false);
 
     /// compute the columns (PS Vectors) of this table,
     /// filling cells with cost values.

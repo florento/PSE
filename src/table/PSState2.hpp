@@ -54,6 +54,9 @@ class PSState2: public PSState0
     /// destructor.
     ~PSState2();
     
+    /// allocate a new copy of this state.
+    std::shared_ptr<PSState0> clone() const override;
+       
     /// assignement operator
     PSState2& operator=(const PSState2& rhs);
     

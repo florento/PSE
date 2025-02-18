@@ -17,7 +17,8 @@
 namespace pse {
 
 
-PSB::PSB(const Algo& a, const Cost& seed, PSEnum& e, bool tonal,
+PSB::PSB(const Algo& a, const Cost& seed, PSEnum& e,
+         bool tonal, bool octave,
          const Ton& gton, const Ton& lton):
 _algo(a),
 _enum(e),
@@ -27,7 +28,7 @@ _cost(seed.shared_zero())     // zero
 {
     if (not e.empty())
     {
-        init(seed, gton, lton, tonal);
+        init(seed, gton, lton, tonal, octave);
     }
     // otherwise n0 == n1, no note, leave _best empty
     else
@@ -60,7 +61,8 @@ PSB::~PSB()
 
 
 // algo best path search
-void PSB::init(const Cost& seed, const Ton& ton, const Ton& lton, bool tonal)
+void PSB::init(const Cost& seed, const Ton& ton, const Ton& lton,
+               bool tonal, bool octave)
 {
     // at least one note, the bag cannot be empty.
     assert(_enum.first() < _enum.stop());
@@ -89,7 +91,7 @@ void PSB::init(const Cost& seed, const Ton& ton, const Ton& lton, bool tonal)
     
     // initial configuration. n0
     q.push(std::shared_ptr<const PSC0>(new
-                               PSC0(ton, _enum.first(), seed, tonal)));
+                            PSC0(ton, _enum.first(), seed, tonal, octave)));
     
     while (! q.empty())
     {
@@ -183,7 +185,8 @@ void PSB::succ(std::shared_ptr<const PSC0> c, PSCQueue& q,
             assert(c1);
             assert(c1->id() == id);
             const PSChord chord = c1->chord();
-            unsigned int m = chord.midipitch(id) % 12; // chroma in 0..11
+            unsigned int m = chord.midipitch(id);
+            assert(MidiNum::check_midi(m));
             const enum NoteName dejaname = c1->dejavu(m);
             
             // pitch class already processed in chord,
@@ -192,9 +195,8 @@ void PSB::succ(std::shared_ptr<const PSC0> c, PSCQueue& q,
             {
                 q.push(std::make_shared<PSC1c>(c1,
                                                dejaname,
-                                               MidiNum::class_to_accid(m, dejaname),
-                                               false,
-                                               //c1->dejaprint(m), // force print
+                                               MidiNum::midi_to_accid(m, dejaname),
+                                               false, //c1->dejaprint(m), // force print
                                                gton, lton));
             }
             else

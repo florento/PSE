@@ -52,6 +52,12 @@ PSState2::~PSState2()
 { }
 
 
+std::shared_ptr<PSState0> PSState2::clone() const
+{
+    return std::shared_ptr<PSState0>(new PSState2(*this));
+}
+
+
 PSState2& PSState2::operator=(const PSState2& rhs)
 {
     if (this != &rhs)

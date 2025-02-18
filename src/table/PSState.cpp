@@ -133,13 +133,15 @@ const accids_t PSState::accids(int n) const
 }
 
 
-const accids_t PSState::accids(const enum NoteName& name) const
+// octave is ignored
+const accids_t PSState::accids(const enum NoteName& name, int oct) const
 {
     return accids(toint(name));
 }
 
 
-const enum Accid PSState::accid(const enum NoteName& name) const
+// octave is ignored
+const enum Accid PSState::accid(const enum NoteName& name, int oct) const
 {
     int n = toint(name);
     assert(0 <= n);
@@ -150,7 +152,9 @@ const enum Accid PSState::accid(const enum NoteName& name) const
 }
 
 
-bool PSState::member(const enum NoteName& name, const enum Accid& accid) const
+// octave is ignored
+bool PSState::member(const enum NoteName& name, const enum Accid& accid,
+                     int oct) const
 {
     int n = toint(name);
     assert(0 <= n);
@@ -159,7 +163,9 @@ bool PSState::member(const enum NoteName& name, const enum Accid& accid) const
 }
 
 
-bool PSState::update(const enum Accid& accid, const enum NoteName& name)
+// octave is ignored
+bool PSState::update(const enum Accid& accid, const enum NoteName& name,
+                     int oct)
 {
     int n = toint(name);
     assert(0 <= n);

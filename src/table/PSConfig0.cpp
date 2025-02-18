@@ -15,17 +15,29 @@
 //#include "PSConfig1.hpp"
 //#include "PSConfig1c.hpp"
 //#include "PSConfig2.hpp"
+#include "PSState1.hpp"
+#include "PSState2.hpp"
 #include "Enharmonic.hpp"
 
 
 namespace pse {
 
 
-PSC0::PSC0(const Ton& ton, size_t id, const Cost& seed, bool tonal):
-_state(new PSState(ton, tonal)),
+PSC0::PSC0(const Ton& ton, size_t id, const Cost& seed,
+           bool tonal, bool octave):
+_state(nullptr),
 _id(id),
 _cost(seed.shared_zero()) // zero
 {
+    if (octave)
+    {
+        _state = std::shared_ptr<PSState0>(new PSState2(ton, tonal));
+    }
+    else
+    {
+        _state = std::shared_ptr<PSState0>(new PSState1(ton, tonal));
+    }
+    
     assert(ton.getMode() != ModeName::Undef);
 }
 
@@ -121,7 +133,7 @@ const PSC0* PSC0::previous() const
 }
 
 
-const PSState& PSC0::state() const
+const PSState0& PSC0::state() const
 {
     assert(_state);
     return *_state;
@@ -140,6 +152,12 @@ const Cost& PSC0::cost() const
     assert(_cost);
     return *(_cost);
 }
+
+
+} // end namespace pse
+
+/// @}
+
 
 
 //const enum Accid PSC0::accidental(const enum NoteName&  name) const
@@ -319,8 +337,3 @@ const Cost& PSC0::cost() const
 //    else
 //        return _pred->origin();
 //}
-
-
-} // end namespace pse
-
-/// @}

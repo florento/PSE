@@ -23,7 +23,7 @@
 //#include "Pitch.hpp"
 //#include "KeyFifth.hpp"
 #include "Ton.hpp"
-#include "PSState.hpp"
+#include "PSState0.hpp"
 #include "PSEnum.hpp"
 #include "Cost.hpp"
 #include "Costt.hpp"
@@ -52,14 +52,19 @@ public: // construction
 
     /// initial configuration for a given tonality.
     /// predecessor configuration will be null.
-    /// @param ton a tonality, used to defined the accident state of this initial config.
+    /// @param ton a tonality, used to defined the accident state
+    /// of this initial config.
     /// @param id index (in a note enumerator) of the note to read
     /// in order to reach the successor configs from this config.
     /// @param seed cost value of specialized type
     /// (to create a cost of the same type).
-    /// @param tonal mode: tonal or modal, for the construction of initial state.
+    /// @param tonal mode: tonal or modal, for the construction
+    /// of initial state.
+    /// @param octave mode for the state transitions: repeat accidents
+    /// at different octaves, or reason modulo 12.
     /// @see State constructor for tonal/modal mode
-    PSC0(const Ton& ton, size_t id, const Cost& seed, bool tonal);
+    PSC0(const Ton& ton, size_t id, const Cost& seed,
+         bool tonal, bool octave);
 
     // initial config for a given key signature.
     // @param init index of last note read to reach this configuration.
@@ -115,7 +120,7 @@ public: // access
     // PSEnum& psenum() const;
     
     /// state associated to this configuration.
-    const PSState& state() const;
+    const PSState0& state() const;
 
     /// index (in enumerator) of note read for the transition from
     /// this config to its successors.
@@ -173,7 +178,7 @@ protected: // data
     /// description of accidents for each note name.
     /// @todo 1. replace by std::shared_ptr<PSState>
     /// @todo 2. replace by std::shared_ptr<PSState0> (polymorphic)
-    std::shared_ptr<PSState> _state;
+    std::shared_ptr<PSState0> _state;
 
     // description of discounted accident for each note name.
     // will not be updated.

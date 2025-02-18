@@ -130,6 +130,8 @@ public: // spelling : computation of tables and grid
     /// @param ctype type of cost domain.
     /// @param tonal tonal or modal construction of the initial state
     /// in each cell.
+    /// @param octave mode for the state transitions: repeat accidents
+    /// at different octaves, or reason modulo 12.
     /// @param chromatic whether transitions for best-path computation
     /// are deterministic or exhaustive.
     /// @param aux wether we use the auxilliary enumerator for the evaluation.
@@ -139,8 +141,9 @@ public: // spelling : computation of tables and grid
     /// @see sampleCost
     /// @see PSState for the construction of the initial state
     /// and tonal/modal flag.
-    bool evalTable(CostType ctype, bool tonal=true, bool chromatic=false,
-                   bool aux=false);
+    bool evalTable(CostType ctype,
+                   bool tonal=true, bool octave=false,
+                   bool chromatic=false, bool aux=false);
     
     /// construct a second spelling table, using
     /// - a first spelling table (use the same index)
@@ -149,6 +152,8 @@ public: // spelling : computation of tables and grid
     /// - the grid of local tonalities
     /// @param ctype type of cost domain.
     /// @param tonal tonal or modal construction of initial state in each cell.
+    /// @param octave mode for the state transitions: repeat accidents
+    /// at different octaves, or reason modulo 12.
     /// @param chromatic whether transitions for best-path computation
     /// are deterministic.
     /// @param aux wether we use the auxilliary enumerator for the evaluation.
@@ -158,10 +163,12 @@ public: // spelling : computation of tables and grid
     /// @warning the first spelling table is deleted.
     /// @see PSState for the construction of the initial state
     /// and tonal/modal flag
-    bool revalTable(CostType ctype, bool tonal=true, bool chromatic=false,
-                    bool aux=false);
+    bool revalTable(CostType ctype,
+                    bool tonal=true, bool octave=false,
+                    bool chromatic=false, bool aux=false);
     
-    /// construct the grid of local tons (1 ton for each initial ton and measure) using
+    /// construct the grid of local tons
+    /// (1 ton for each initial ton and measure) using
     /// - a spelling table.
     /// - the array of global candidates if it exists
     ///   (otherwise, we consider all tonalities).
@@ -353,12 +360,6 @@ protected: // debug
     PSEnum& enumerator(bool aux=false) const;
     
 };
-
-
-
-
-
-
 
 } // namespace pse
 

@@ -31,6 +31,11 @@ namespace pse {
 class PSState0
 {
 
+public: // construction
+    
+    /// allocate a new copy of this state.
+    virtual std::shared_ptr<PSState0> clone() const = 0;
+    
 public: // comparison
 
     /// same accidentals

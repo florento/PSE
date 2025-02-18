@@ -21,11 +21,6 @@
 
 namespace pse {
 
-class PSC1;
-
-class PSC2;
-
-
 /// measure of cost extending CostA with 3 members for tie breaking.
 class CostAT : public CostA // public PolymorphicCost<CostA>
 {
@@ -302,6 +297,10 @@ template<> struct fmt::formatter<pse::CostAT> : fmt::ostream_formatter {};
 #endif /* CostAT_hpp */
 
 /// @}
+
+
+// class PSC1;
+// class PSC2;
 
 // update this cost for doing a transition into the given config,
 // from its previous config, in a given hypothetic global tonality.

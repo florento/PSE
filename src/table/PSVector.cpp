@@ -16,7 +16,8 @@ namespace pse {
 
 
 PSV::PSV(const Algo& algo, const Cost& seed, const TonIndex& index,
-         PSEnum& e, size_t i0, size_t i1, size_t bar, bool tonal):
+         PSEnum& e, size_t i0, size_t i1, size_t bar,
+         bool tonal, bool octave):
 _index(index),
 _algo(algo),
 _enum(e, i0, i1), // window in e
@@ -31,13 +32,14 @@ _tiebfail(0)
     //_psbs.assign(_index.size(), nullptr);
     //_psb_total.assign(_index.size(), nullptr);
     //_local.assign(_index.size(), TonIndex::UNDEF);
-    init_psbs(seed, tonal);
+    init_psbs(seed, tonal, octave);
 }
 
 
 PSV::PSV(const Algo& algo, const Cost& seed, const TonIndex& index,
          PSEnum& e, size_t i0, size_t i1, size_t bar,
-         const std::vector<size_t>& locals, bool tonal):
+         const std::vector<size_t>& locals,
+         bool tonal, bool octave):
 _index(index),
 _algo(algo),
 _enum(e, i0, i1), // window in e
@@ -45,7 +47,7 @@ _bar(bar),
 _psbs(index.size(), nullptr),
 _tiebfail(0)
 {
-    init_psbs(seed, locals, tonal);
+    init_psbs(seed, locals, tonal, octave);
 }
 
 
@@ -73,9 +75,9 @@ _tiebfail(0)
 //_enum(e.clone(i0)),
 //_bar(bar),
 //_psbs(i.size(), nullptr),
-////_psb_total(), // TBR
-////_locals(i.size(), TonIndex::UNDEF),
-////_local_cands(), // emptyset
+// //_psb_total(), // TBR
+// //_locals(i.size(), TonIndex::UNDEF),
+// //_local_cands(), // emptyset
 //_tiebfail(0)
 //{
 //    ERROR("deprecated PSV constructor should not be called");
@@ -95,9 +97,9 @@ _tiebfail(0)
 //_enum(e.clone()), // do not clone, ref
 //_bar(bar),
 //_psbs(i.size(), nullptr),
-////_psb_total(), // TBR
-////_locals(i.size(), TonIndex::UNDEF),
-////_local_cands(), // emptyset
+// //_psb_total(), // TBR
+// //_locals(i.size(), TonIndex::UNDEF),
+// //_local_cands(), // emptyset
 //_tiebfail(0)
 //{
 //    ERROR("deprecated PSV constructor should not be called");
@@ -159,7 +161,7 @@ const PSB& PSV::bag(size_t i) const
 
 
 // compute _psbs without local tons
-void PSV::init_psbs(const Cost& seed, bool tonal)
+void PSV::init_psbs(const Cost& seed, bool tonal, bool octave)
 {
     // for all tons in the ton index
     for (size_t i = 0; i < _index.size(); ++i)
@@ -180,7 +182,7 @@ void PSV::init_psbs(const Cost& seed, bool tonal)
             {
                 // arg local ton is ignored
                 _psbs[i] = std::shared_ptr<const PSB>(new
-                        PSB(_algo, seed, enumerator(), tonal, toni));
+                PSB(_algo, seed, enumerator(), tonal, octave, toni));
             }
             // optimization: do not rebuilt PSB
             // when it was computed for an equivalent ton
@@ -211,7 +213,7 @@ void PSV::init_psbs(const Cost& seed, bool tonal)
 // compute _psbs with given local tons
 void PSV::init_psbs(const Cost& seed,
                     const std::vector<size_t>& locals,
-                    bool tonal)
+                    bool tonal, bool octave)
 {
     assert(locals.size() == _index.size());
     
@@ -239,7 +241,7 @@ void PSV::init_psbs(const Cost& seed,
         {
             // no optimization for second table
             _psbs[i] = std::shared_ptr<const PSB>(new
-                       PSB(_algo, seed, enumerator(), tonal, toni, ltoni));
+            PSB(_algo, seed, enumerator(), tonal, octave, toni, ltoni));
         }
         else
         {

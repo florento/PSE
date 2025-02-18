@@ -1043,9 +1043,11 @@ class Spellew:
                  nbtons=0,                  # nb of Tons in TonIndex
                  t1_costtype=pse.CTYPE_UNDEF, # 1st table
                  t1_tonal=False, 
+                 t1_octave=False, 
                  t1_det=False, 
                  t2_costtype=pse.CTYPE_UNDEF, # 2d table 
                  t2_tonal=True, 
+                 t2_octave=True, 
                  t2_det=False, 
                  grid=pse.Grid_Rank,
                  global1=100, # if < 100, compute an intermediate list candidate globals,
@@ -1103,9 +1105,11 @@ class Spellew:
         # parameters for the spelling algo PSE
         self._ct1     = t1_costtype
         self._tonal1  = t1_tonal
+        self._octave1 = t1_octave
         self._det1    = t1_det
         self._ct2     = t2_costtype
         self._tonal2  = t2_tonal
+        self._octave2 = t2_octave
         self._det2    = t2_det
         self._gridalgo = grid
         self._global1 = global1
@@ -1184,8 +1188,8 @@ class Spellew:
               'tonal1:', self._tonal1,
               'det1:', self._det1, end=' ', flush=True)
         stat.start_timer(1)
-        self._speller.eval_table(self._ct1, self._tonal1, self._det1, 
-                                 self._speller.has_auxenum()) 
+        self._speller.eval_table(self._ct1, self._tonal1, self._octave1, 
+                                 self._det1, self._speller.has_auxenum()) 
         stat.stop_timer(1)
         print("{0:0.2f}".format(stat.get_timer(1)), 'ms', end='\n', flush=True)
         if output_path is not None:
@@ -1220,7 +1224,8 @@ class Spellew:
                   'tonal2:', self._tonal2,
                   'det2:', self._det2, end=' ', flush=True)
             stat.start_timer(3)
-            self._speller.reval_table(self._ct2, self._tonal2, self._det2, False)
+            self._speller.reval_table(self._ct2, self._tonal2, self._octave2,
+                                      self._det2, False)
             stat.stop_timer(3)
             print("{0:0.2f}".format(stat.get_timer(3)), 'ms', end='\n', flush=True)
             if output_path is not None:

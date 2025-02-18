@@ -21,11 +21,6 @@
 
 namespace pse {
 
-class PSC1;
-
-class PSC2;
-
-
 /// measure of cost defined by the cumulated number of printed accidentals.
 class CostA : public Cost // public PolymorphicCost<CostA>
 {
@@ -168,6 +163,9 @@ template<> struct fmt::formatter<pse::CostA> : fmt::ostream_formatter {};
 #endif /* CostA_hpp */
 
 /// @}
+
+// class PSC1;
+// class PSC2;
 
 // update this cost for doing a transition into the given config,
 // from its previous config, in a given hypothetic global tonality.

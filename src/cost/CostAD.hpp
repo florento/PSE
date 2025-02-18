@@ -21,11 +21,6 @@
 
 namespace pse {
 
-class PSC1;
-
-class PSC2;
-
-
 /// abstract cost class with the following cumulated measures:
 /// - number of printed accidentals.
 /// - distance to a conjectured local tonality.
@@ -161,6 +156,10 @@ template<> struct fmt::formatter<pse::CostAD> : fmt::ostream_formatter {};
 #endif /* CostAD_hpp */
 
 /// @}
+
+
+// class PSC1;
+// class PSC2;
 
 // update this cost for doing a transition into the given config,
 // from its previous config, in a given hypothetic global tonality.

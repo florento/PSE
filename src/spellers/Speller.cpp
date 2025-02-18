@@ -151,7 +151,8 @@ bool Speller::setAuxEnumerator(PSEnum* aux)
 // spelling
 //
 
-bool Speller::evalTable(CostType ctype, bool tonal, bool chromatic, bool aux)
+bool Speller::evalTable(CostType ctype, bool tonal, bool octave, 
+                        bool chromatic, bool aux)
 {
     TRACE("Speller: eval table with {}, unlead={}, det={}, {} enumerator",
           ctype, tonal, chromatic, (aux?"auxiliary":"main"));
@@ -179,12 +180,14 @@ bool Speller::evalTable(CostType ctype, bool tonal, bool chromatic, bool aux)
     const Algo algo(chromatic?Algo::PSD:Algo::PSE);
     std::unique_ptr<Cost> seed = unique_zero(ctype); // was sampleCost(ctype)
     assert(seed);
-    _table = new PST(algo, *seed, index(), enumerator(aux), tonal, _debug);
+    _table = new PST(algo, *seed, index(), enumerator(aux),
+                     tonal, octave, _debug);
     return true;
 }
 
 
-bool Speller::revalTable(CostType ctype, bool tonal, bool chromatic, bool aux)
+bool Speller::revalTable(CostType ctype, bool tonal, bool octave,
+                         bool chromatic, bool aux)
 {
     TRACE("Speller: reval table with {}, unlead={}, det={}, {} enumerator",
           ctype, tonal, chromatic, (aux?"auxiliary":"main"));
@@ -220,8 +223,8 @@ bool Speller::revalTable(CostType ctype, bool tonal, bool chromatic, bool aux)
     std::unique_ptr<Cost> seed = unique_zero(ctype); // was sampleCost(ctype)
     assert(seed);
     _table = new PST(algo, // *table_pre,
-                     *seed, index(), enumerator(aux),
-                     *_grid, tonal, _debug);
+                     *seed, index(), enumerator(aux), *_grid,
+                     tonal, octave, _debug);
     //assert(table_pre);
     //delete table_pre;
     return true;

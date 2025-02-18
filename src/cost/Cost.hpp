@@ -25,11 +25,6 @@
 
 namespace pse {
 
-class PSC1;
-
-class PSC2;
-
-
 /// Cost model for the ordering of configuration of the PS algorithm.
 /// @see Note Spelling Conventions in Behind Bars (page 85).
 /// this abstract class defines the cost update interface.
@@ -106,7 +101,8 @@ protected: // operators to be defined in derived classes
     /// the difference between lhs amd rhs, in percent of the smaller one.
     /// @param lhs first value. must be positive or null.
     /// @param rhs second value. must be positive or null.
-    /// @return the difference between lhs amd rhs, in percent of the smaller one.
+    /// @return the difference between lhs amd rhs,
+    /// in percent of the smaller one.
     /// @return 0 if lhs and rhs are equal.
     /// a negative value (percent of diff) if lhs is smaller than rhs,
     /// a positive value (percent of diff) if lhs is larger than rhs.
@@ -152,6 +148,10 @@ template<> struct fmt::formatter<pse::Cost> : fmt::ostream_formatter {};
 
 /// @}
 
+
+
+// class PSC1;
+// class PSC2;
 
 // update this cost for doing a transition into the given config,
 // from its previous config, in a given hypothetic global tonality.

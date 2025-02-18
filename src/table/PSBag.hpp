@@ -71,8 +71,11 @@ public: // construction
     /// distance value used for tie break.
     /// @param tonal mode: tonal or modal, for the construction of
     /// initial state.
+    /// @param octave mode for the state transitions: repeat accidents
+    /// at different octaves, or reason modulo 12.
     /// @see State constructor for tonal/modal mode
-    PSB(const Algo& a, const Cost& seed, PSEnum& e, bool tonal,
+    PSB(const Algo& a, const Cost& seed, PSEnum& e,
+        bool tonal, bool octave, 
         const Ton& ton, const Ton& lton = Ton());
     
     /// a bag cannot be copied.
@@ -155,12 +158,13 @@ private:
     /// used to define the initial config.
     /// @param lton conjectured local tonality, to compute the cumulated
     /// dist value used for tie break.
-    /// @param tonal mode: modal or tonal
+    /// @param tonal mode for initial state.
+    /// @param octave mode for the state transitions.
     /// @see State constructor
     // @param fsucc flag, whether the successor is computed with ton only
     // or ton and lton.
-    void init(const Cost& seed, const Ton& gton, const Ton& lton, bool tonal);
-           // bool fsucc);
+    void init(const Cost& seed, const Ton& gton, const Ton& lton,
+              bool tonal, bool octave);
 
     /// allocate every config reached by one transition from the given config,
     /// when reading one pitch or several simultaneous pitchs,

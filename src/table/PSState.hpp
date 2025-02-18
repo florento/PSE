@@ -19,7 +19,7 @@
 #include "NoteName.hpp"
 #include "Accid.hpp"
 #include "Accids.hpp"
-//#include "Pitch.hpp"
+#include "Pitch.hpp"
 #include "KeyFifth.hpp"
 #include "ModeName.hpp"
 #include "Ton.hpp"
@@ -100,19 +100,22 @@ public: // access
     /// @param n a pitch name, in 0..6 (0 is 'C', 6 is 'B').
     /// @return the accidents, in state, for note n,
     /// can be a single accidental value, a pair of accidents or UNDEF.
-    const accids_t accids(const enum NoteName& n) const;
+    const accids_t accids(const enum NoteName& n,
+                          int oct=Pitch::UNDEF_OCTAVE) const;
     
     /// accidental in this state for a given pitch name
     /// (when there is exactly one possibility).
     /// @param n a pitch name, in 0..6 (0 is 'C', 6 is 'B').
     /// @return the accidents, in state, for note n.
     /// @warning the value of state at n must be single.
-    const enum Accid accid(const enum NoteName& n) const;
+    const enum Accid accid(const enum NoteName& n,
+                           int oct=Pitch::UNDEF_OCTAVE) const;
     
     /// the given note (given by name and accidental) belongs to this state.
     /// @param name a note name in 0..6 (0 is 'C', 6 is 'B').
     /// @param accid accidental in -2..2 (-2 = double flats, 2 = double sharps).
-    bool member(const enum NoteName& name, const enum Accid& accid) const;
+    bool member(const enum NoteName& name, const enum Accid& accid,
+                int oct=Pitch::UNDEF_OCTAVE) const;
 
 public: // modification
 
@@ -120,7 +123,8 @@ public: // modification
     /// @param n a pitch name, in 0..6 (0 is 'C', 6 is 'B').
     /// @param a a number of accidentals, for n, in -2..2.
     /// @return whether this state was effectively modified.
-    bool update(const enum Accid& a, const enum NoteName& n);
+    bool update(const enum Accid& a, const enum NoteName& n,
+                int oct=Pitch::UNDEF_OCTAVE);
 
 public: // distances (obsolete)
     

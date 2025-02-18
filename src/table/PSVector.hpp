@@ -68,8 +68,11 @@ public: // constructors
     /// (column number in table).
     /// @param tonal mode: tonal or modal, for the construction
     /// of initial state. default = modal.
+    /// @param octave mode for the state transitions: repeat accidents
+    /// at different octaves, or reason modulo 12.
     PSV(const Algo& a, const Cost& seed, const TonIndex& index,
-        PSEnum& e, size_t i0, size_t i1, size_t bar, bool tonal);
+        PSEnum& e, size_t i0, size_t i1, size_t bar,
+        bool tonal, bool octave=false);
     
     /// main constructor.
     /// @param a name of pitch-spelling algorithm implemented.
@@ -87,48 +90,51 @@ public: // constructors
     /// the same as col.
     /// @param tonal mode: tonal or modal, for the construction
     /// of initial state. default = modal.
+    /// @param octave mode for the state transitions: repeat accidents
+    /// at different octaves, or reason modulo 12.
     PSV(const Algo& a, const Cost& seed, const TonIndex& index,
         PSEnum& e, size_t i0, size_t i1, size_t bar,
-        const std::vector<size_t>& locals, bool tonal);
+        const std::vector<size_t>& locals,
+        bool tonal, bool octave=false);
     
-    /// rebuid a column with the same algo, index, and enumerator as the given
-    /// column, and the new given seed and given column of local tonalities.
-    /// @param col PS vector whose algo, ton index, and enumerator
-    /// will be copied.
-    /// @param seed cost value of specialized type used to create a null cost
-    /// of the same type.
-    /// @param locals column of local tonalities for tab. Its dimension must be
-    /// the same as col.
-    /// @param tonal mode: tonal or modal, for the construction
-    /// of initial state. default = tonal.
+    // rebuid a column with the same algo, index, and enumerator as the given
+    // column, and the new given seed and given column of local tonalities.
+    // @param col PS vector whose algo, ton index, and enumerator
+    // will be copied.
+    // @param seed cost value of specialized type used to create a null cost
+    // of the same type.
+    // @param locals column of local tonalities for tab. Its dimension must be
+    // the same as col.
+    // @param tonal mode: tonal or modal, for the construction
+    // of initial state. default = tonal.
     // PSV(const PSV& col, const Cost& seed,
     //     const std::vector<size_t>& locals, bool tonal);
     
-    /// main constructor.
-    /// @param a name of pitch-spelling algorithm implemented.
-    /// @param seed cost value of specialized type used to create a null cost
-    /// of the same type.
-    /// @param index array of tonalities. dimension of this vector.
-    /// @param e an enumerator of notes for transitions of configs.
-    /// @param bar number of bar corresp.  to this vector
-    /// (column number in table).
-    /// @warning the enumerator cannot be changed once the object created.
-    /// @todo TBR not used
+    // main constructor.
+    // @param a name of pitch-spelling algorithm implemented.
+    // @param seed cost value of specialized type used to create a null cost
+    // of the same type.
+    // @param index array of tonalities. dimension of this vector.
+    // @param e an enumerator of notes for transitions of configs.
+    // @param bar number of bar corresp.  to this vector
+    // (column number in table).
+    // @warning the enumerator cannot be changed once the object created.
+    // @todo TBR not used
     // PSV(const Algo& a, const Cost& seed, const TonIndex& index,
     //     const PSEnum& e, size_t bar);
     
-    /// main constructor.
-    /// @param a name of pitch-spelling algorithm implemented.
-    /// @param seed cost value of specialized type used to create a null cost
-    /// of the same type.
-    /// @param index array of tonalities. dimension of this vector.
-    /// @param e an enumerator of notes for transitions of configs.
-    /// @param i0 index of the first note to read in enumerator.
-    /// The enumeration starts at i0 and stops
-    /// when there are no more notes to read in e.
-    /// @param bar number of bar corresponding to this vector
-    /// (column number in table).
-    /// @todo TBR not used
+    // main constructor.
+    // @param a name of pitch-spelling algorithm implemented.
+    // @param seed cost value of specialized type used to create a null cost
+    // of the same type.
+    // @param index array of tonalities. dimension of this vector.
+    // @param e an enumerator of notes for transitions of configs.
+    // @param i0 index of the first note to read in enumerator.
+    // The enumeration starts at i0 and stops
+    // when there are no more notes to read in e.
+    // @param bar number of bar corresponding to this vector
+    // (column number in table).
+    // @todo TBR not used
     // PSV(const Algo& a, const Cost& seed, const TonIndex& index,
     //     const PSEnum& e, size_t i0, size_t bar);
 
@@ -302,19 +308,19 @@ private: // convenience functions
     /// enumerated.
     /// @param seed cost value of specialized type used to create a null cost
     /// of the same type.
-    /// @param tonal mode: tonal or modal, for the construction
-    /// of initial state.
-    void init_psbs(const Cost& seed, bool tonal);
+    /// @param tonal mode: for the construction of initial state.
+    /// @param octave mode: for state transitions.
+    void init_psbs(const Cost& seed, bool tonal, bool octave);
     
     /// fill the vector _psbs with PS Bags constructed with the notes
     /// enumerated and the given local tons.
     /// @param seed cost value of specialized type used to create a null cost
     /// of the same type.
     /// @param locals column of local tonalities for tab.
-    /// @param tonal mode: tonal or modal, for the construction
-    /// of initial state.
+    /// @param tonal mode: for the construction of initial state.
+    /// @param octave mode: for state transitions.
     void init_psbs(const Cost& seed, const std::vector<size_t>& locals,
-                   bool tonal);
+                   bool tonal, bool octave);
 
     // initialize the vector _locals of local tonalities
     // bool init_locals();

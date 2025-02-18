@@ -17,7 +17,7 @@ namespace pse {
 
 
 PST::PST(const Algo& a, const Cost& seed, const TonIndex& index,
-         PSEnum& e, bool tonal, bool dflag):
+         PSEnum& e, bool tonal, bool octave, bool dflag):
 _algo(a),
 _enum(e),
 _index(index),
@@ -30,7 +30,7 @@ _debug(dflag)
     if (a == Algo::PSE || a == Algo::PSD)
     {
         PSG dummy(*this); // empty grid
-        bool status = init_psvs(seed, dummy, tonal);
+        bool status = init_psvs(seed, dummy, tonal, octave);
         if (status == false)
         {
             ERROR("PST: fail to compute spelling table {}-{} for {}",
@@ -50,7 +50,7 @@ _debug(dflag)
 
 // tab not used
 PST::PST(const Algo& a, const Cost& seed, const TonIndex& index,
-         PSEnum& e, const PSG& locals, bool tonal, bool dflag):
+         PSEnum& e, const PSG& locals, bool tonal, bool octave, bool dflag):
 _algo(a),
 _enum(e),
 _index(index),
@@ -63,7 +63,7 @@ _debug(dflag)
     assert(locals.nbTons() == _index.size());
     // assert(locals.measures() == tab.measures());
     assert(_algo == Algo::PSE || _algo == Algo::PSD);
-    bool status = init_psvs(seed, locals, tonal);
+    bool status = init_psvs(seed, locals, tonal, octave);
     if (status == false)
     {
         ERROR("PST: fail to compute spelling table {}-{} for {}",
@@ -76,10 +76,10 @@ _debug(dflag)
 }
 
 
-//PST::PST(const Cost& seed, const TonIndex& index, PSEnum& e,
-//         const PSG& locals, bool tonal, bool dflag):
-//PST(tab._algo, seed, index, e, locals, tonal, dflag)
-//{ }
+// PST::PST(const Cost& seed, const TonIndex& index, PSEnum& e,
+//          const PSG& locals, bool tonal, bool dflag):
+// PST(tab._algo, seed, index, e, locals, tonal, dflag)
+// { }
 
 
 PST::~PST()
@@ -170,7 +170,7 @@ void PST::compute_rowcosts(const Cost& seed, bool globals)
 
 
 // first construction if grid is empty
-bool PST::init_psvs(const Cost& seed, const PSG& grid, bool tonal)
+bool PST::init_psvs(const Cost& seed, const PSG& grid, bool tonal, bool octave)
 {
     TRACE("PST: computing spelling table {}-{}");
     assert(_psvs.empty()); // do not recompute
@@ -213,7 +213,7 @@ bool PST::init_psvs(const Cost& seed, const PSG& grid, bool tonal)
             if (grid.empty())
             {
                 _psvs.emplace_back(std::unique_ptr<PSV>(new
-                          PSV(_algo, seed, _index, _enum, i0, i0, b, tonal)));
+                PSV(_algo, seed, _index, _enum, i0, i0, b, tonal, octave)));
             }
             // construction with grid
             else
@@ -221,7 +221,8 @@ bool PST::init_psvs(const Cost& seed, const PSG& grid, bool tonal)
                 
                 const std::vector<size_t>& locals = grid.column(b);
                 _psvs.emplace_back(std::unique_ptr<PSV>(new
-                   PSV(_algo, seed, _index, _enum, i0, i0, b, locals, tonal)));
+                PSV(_algo, seed, _index, _enum, i0, i0, b, locals,
+                    tonal, octave)));
             }
                         
             ++b;
@@ -240,7 +241,7 @@ bool PST::init_psvs(const Cost& seed, const PSG& grid, bool tonal)
         if (grid.empty())
         {
             _psvs.push_back(std::unique_ptr<PSV>(new
-                           PSV(_algo, seed, _index, _enum, i0, i1, b, tonal)));
+            PSV(_algo, seed, _index, _enum, i0, i1, b, tonal, octave)));
         }
         // construction with grid
         else
@@ -248,7 +249,8 @@ bool PST::init_psvs(const Cost& seed, const PSG& grid, bool tonal)
             assert(b < grid.size()); // measure number
             const std::vector<size_t>& locals = grid.column(b);
             _psvs.emplace_back(std::unique_ptr<PSV>(new
-               PSV(_algo, seed, _index, _enum, i0, i1, b, locals, tonal)));
+            PSV(_algo, seed, _index, _enum, i0, i1, b, locals,
+                tonal, octave)));
         }
         assert(_psvs.size() == b+1);
         // then start next measure
