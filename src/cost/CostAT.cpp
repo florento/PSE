@@ -13,8 +13,8 @@
 namespace pse {
 
 
-CostAT::CostAT(bool approx, bool tb_sum):
-CostA(approx),
+CostAT::CostAT(bool tb_sum):
+CostA(),
 _chromharm(0),
 _color(0),
 _cflat(0),
@@ -43,7 +43,7 @@ CostAT::~CostAT()
 
 std::shared_ptr<Cost> CostAT::shared_zero() const
 {
-    return std::shared_ptr<Cost>(new CostAT(this->_approx, this->_tblex));
+    return std::shared_ptr<Cost>(new CostAT(this->_tblex));
 }
 
 
@@ -67,7 +67,6 @@ std::unique_ptr<Cost> CostAT::unique_clone() const
 //    }
 //    return *this;
 //}
-
 
 
 bool CostAT::equal(const CostAT& rhs) const
@@ -444,7 +443,10 @@ bool CostAT::update(const enum NoteName& name, const enum Accid& accid,
 
 CostType CostAT::type() const
 {
+    if (_tblex)
         return CostType::ACCIDtb;
+    else
+        return CostType::ACCIDtbs;
 }
 
 

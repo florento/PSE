@@ -85,33 +85,19 @@ PYBIND11_MODULE(pse, m)
         .value("CTYPE_UNDEF", pse::CostType::UNDEF, "Undef type")
         .value("CTYPE_ACCID", pse::CostType::ACCID,
                "number of accidentals without discount for lead tons")
-        .value("CTYPE_ACCIDa", pse::CostType::ACCIDa,
-               "number of accidentals with equality to one near")
         .value("CTYPE_ACCIDtb", pse::CostType::ACCIDtb,
-               "number of accidentals and tiw breaking measures")
-        .value("CTYPE_ACCIDtba", pse::CostType::ACCIDtba,
-               "number of accidentals and tiw breaking measures")
+               "number of accidentals and tie breaking measures")
         .value("CTYPE_ACCIDtbs", pse::CostType::ACCIDtbs,
-               "number of accidentals and tiw breaking measures")
-        .value("CTYPE_ACCIDtbas", pse::CostType::ACCIDtbas,
-               "number of accidentals and tiw breaking measures")
+               "number of accidentals and tie breaking measures with sum")
         .value("CTYPE_ACCIDlead", pse::CostType::ACCIDlead,
                "number of accidentals with discount for lead tons (obsolete)")
         .value("CTYPE_ADplus", pse::CostType::ADplus,
                "number of accidentals and distance to local ton, sum of values")
-        .value("CTYPE_ADplusa", pse::CostType::ADplusa,
-               "number of accidentals and distance to local ton, sum of values")
         .value("CTYPE_ADpluss", pse::CostType::ADpluss,
-               "number of accidentals and distance to local ton, sum of values")
-        .value("CTYPE_ADplusas", pse::CostType::ADplusas,
                "number of accidentals and distance to local ton, sum of values")
         .value("CTYPE_ADlex", pse::CostType::ADlex,
                "number of accidentals and distance to local ton, lexicographic comparison values")
-        .value("CTYPE_ADlexa", pse::CostType::ADlexa,
-               "number of accidentals and distance to local ton, lexicographic comparison values")
         .value("CTYPE_ADlexs", pse::CostType::ADlexs,
-               "number of accidentals and distance to local ton, lexicographic comparison values")
-        .value("CTYPE_ADlexas", pse::CostType::ADlexas,
                "number of accidentals and distance to local ton, lexicographic comparison values")
         .export_values();
     

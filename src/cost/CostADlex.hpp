@@ -33,10 +33,9 @@ class CostADlex : public CostAD // public PolymorphicCost<CostADlex>
 public: // construction
     
     /// null cost.
-    /// @param approx consider equality to one near.
     /// @param tb_sum make the sum of some tie-breaking components
     /// before comparison.
-    CostADlex(bool approx=false, bool tb_sum=false);
+    CostADlex(bool tb_sum=false);
     
     /// copy constructor.
     CostADlex(const CostADlex& rhs);
@@ -64,9 +63,10 @@ protected: // operators
     /// @param rhs a cost to compare to.
     bool smaller(const Cost& rhs) const override;
 
-    /// cumulated sum operator. update this cost by adding rhs.
-    /// @param rhs a cost to add.
-    Cost& add(const Cost& rhs) override;
+    // cumulated sum operator. update this cost by adding rhs.
+    // @param rhs a cost to add.
+    // same as CostAD::add
+    // Cost& add(const Cost& rhs) override;
 
     /// a distance value, in percent of the bigger cost.
     /// used for approximate equality.

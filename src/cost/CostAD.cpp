@@ -14,8 +14,8 @@
 namespace pse {
 
 
-CostAD::CostAD(bool approx, bool tb_sum):
-CostAT(approx, tb_sum),
+CostAD::CostAD(bool tb_sum):
+CostAT(tb_sum),
 _dist(0)
 { }
 
@@ -59,6 +59,7 @@ CostAD::~CostAD()
 //}
 
 
+// accids and tie-breaks and distance are equal
 bool CostAD::equal(const Cost& rhs) const
 {
     const CostAD& rhs_AD = dynamic_cast<const CostAD&>(rhs);

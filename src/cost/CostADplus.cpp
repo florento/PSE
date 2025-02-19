@@ -10,8 +10,8 @@
 namespace pse {
 
 
-CostADplus::CostADplus(bool approx, bool tb_sum):
-CostAD(approx, tb_sum)
+CostADplus::CostADplus(bool tb_sum):
+CostAD(tb_sum)
 // _sum(_accid + _dist)
 { }
 
@@ -32,7 +32,7 @@ CostADplus::~CostADplus()
 
 std::shared_ptr<Cost> CostADplus::shared_zero() const
 {
-    return std::shared_ptr<Cost>(new CostADplus(this->_approx, this->_tblex));
+    return std::shared_ptr<Cost>(new CostADplus(this->_tblex));
 }
 
 
@@ -48,6 +48,7 @@ std::shared_ptr<Cost> CostADplus::shared_clone() const
 //}
 
 
+// equality of (_accid = accids + dist) and TB
 bool CostADplus::equal(const Cost& rhs) const
 {
     // _accid is the sum of nb of accids and dist
@@ -82,6 +83,7 @@ size_t CostADplus::accids() const
 }
 
 
+// same as CostAD::add(
 //Cost& CostADplus::add(const Cost& rhs)
 //{
 //    CostAD::add(rhs);
@@ -116,7 +118,9 @@ bool CostADplus::update(const enum NoteName& name, const enum Accid& accid,
     size_t olddist(_dist);
     bool ret = CostAD::update(name, accid, print, gton, lton);
     // _sum = _accid + _dist;
-    assert(olddist <= _dist); // dist increased
+    // dist increased (by new dists)
+    assert(olddist <= _dist);
+    // _accid has increased only by new accids, add the new dists
     _accid += (_dist - olddist);
     
     return ret;
@@ -125,7 +129,10 @@ bool CostADplus::update(const enum NoteName& name, const enum Accid& accid,
 
 CostType CostADplus::type() const
 {
-    return CostType::ADplus;
+    if (_tblex)
+        return CostType::ADplus;
+    else
+        return CostType::ADpluss;
 }
 
 

@@ -10,8 +10,8 @@
 namespace pse {
 
 
-CostADlex::CostADlex(bool approx, bool tb_sum):
-CostAD(approx, tb_sum)
+CostADlex::CostADlex(bool tb_sum):
+CostAD(tb_sum)
 { }
 
 
@@ -28,7 +28,7 @@ CostADlex::~CostADlex()
 
 std::shared_ptr<Cost> CostADlex::shared_zero() const
 {
-    return std::shared_ptr<Cost>(new CostADlex(this->_approx, this->_tblex));
+    return std::shared_ptr<Cost>(new CostADlex(this->_tblex));
 }
 
 
@@ -44,6 +44,7 @@ std::shared_ptr<Cost> CostADlex::shared_clone() const
 //}
 
 
+// same as CostAD::equal
 //bool CostADlex::equal(const CostADlex& rhs) const
 //{
 //    return CostAD::equal(rhs);
@@ -67,12 +68,13 @@ bool CostADlex::smaller(const Cost& rhs) const
 }
 
 
-Cost& CostADlex::add(const Cost& rhs)
-{
-    // const CostADlex& rhs_ADlex = dynamic_cast<const CostADlex&>(rhs);
-    CostAD::add(rhs);
-    return *this;
-}
+// same as CostAD::add
+// Cost& CostADlex::add(const Cost& rhs)
+// {
+//     // const CostADlex& rhs_ADlex = dynamic_cast<const CostADlex&>(rhs);
+//     CostAD::add(rhs);
+//     return *this;
+// }
 
 
 /// @todo TBR sum of dists ?
@@ -107,7 +109,10 @@ double CostADlex::pdist(const Cost& rhs) const
 
 CostType CostADlex::type() const
 {
-    return CostType::ADlex;
+    if (_tblex)
+        return CostType::ADlex;
+    else
+        return CostType::ADlexs;
 }
 
 

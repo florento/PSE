@@ -18,16 +18,16 @@
 
 using namespace pse;
 
-/// @param costtype1: table1, cost type. if set, PSE is used, otherwise, PS13 is used
-/// @param tonal1: table1, tonal/modal flag for initial state 
-/// @param octave1: table1, octave flag for state transitions 
-/// @param det1: table1, deterministic/exhaustive flag for transitions 
-/// @param global1: percentage approx for intermediate list of global candidate
-/// @param grid: name of algorithm for the computation of the grid
-/// @param costtype2: table2, cost type. if unset, skip table2 (PSE)
-/// @param tonal2: table2, tonal/modal flag for initial state (PSE)
-/// @param octave2: table2, octave flag for state transitions (PSE)
-/// @param det2: table2, deterministic/exhaustive flag for transitions (PSE)
+/// @param c1 table1, cost type. if set, PSE is used, otherwise, PS13 is used
+/// @param tonal1 table1, tonal/modal flag for initial state
+/// @param octave1 table1, octave flag for state transitions
+/// @param det1 table1, deterministic/exhaustive flag for transitions
+/// @param global1 percentage approx for intermediate list of global candidate
+/// @param grid name of algorithm for the computation of the grid
+/// @param c2 table2, cost type. if unset, skip table2 (PSE)
+/// @param tonal2 table2, tonal/modal flag for initial state (PSE)
+/// @param octave2 table2, octave flag for state transitions (PSE)
+/// @param det2 table2, deterministic/exhaustive flag for transitions (PSE)
 int spellKE(SpellerEnum& sp,
             enum CostType c1, bool tonal1, bool octave1, bool det1,
             enum CostType c2, bool tonal2, bool octave2, bool det2,
@@ -60,10 +60,10 @@ int main(int argc, const char* argv[])
 
     std::cout << "spelling " << sp.size() << " notes" << std::endl;
     int ks = spellKE(sp,
-                  // cost                   modal  no oct. exhaustive
+                  // cost                    modal  no oct. exhaustive
                      pse::CostType::ACCID,  false, false,  false,
-                  // cost                   tonal  oct.    exhaustive
-                     pse::CostType::ADplus, true,  true,   false,
+                  // cost                    tonal  oct.    exhaustive
+                     pse::CostType::ADplus,  true,  true,   false,
                   // global1 grid algo
                      100, GridAlgo::Exhaustive);
 

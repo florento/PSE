@@ -37,10 +37,9 @@ class CostAD : public CostAT // public PolymorphicCost<CostAD>
 public: // construction
     
     /// null cost.
-    /// @param approx consider equality to one near.
     /// @param tb_sum make the sum of some tie-breaking components
     /// before comparison.
-    CostAD(bool approx=false, bool tb_sum=false);
+    CostAD(bool tb_sum=false);
 
     /// copy constructor.
     CostAD(const CostAD& rhs);
