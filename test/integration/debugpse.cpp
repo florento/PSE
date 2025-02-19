@@ -18,12 +18,20 @@
 
 using namespace pse;
 
+/// @param costtype1: table1, cost type. if set, PSE is used, otherwise, PS13 is used
+/// @param tonal1: table1, tonal/modal flag for initial state 
+/// @param octave1: table1, octave flag for state transitions 
+/// @param det1: table1, deterministic/exhaustive flag for transitions 
+/// @param global1: percentage approx for intermediate list of global candidate
+/// @param grid: name of algorithm for the computation of the grid
+/// @param costtype2: table2, cost type. if unset, skip table2 (PSE)
+/// @param tonal2: table2, tonal/modal flag for initial state (PSE)
+/// @param octave2: table2, octave flag for state transitions (PSE)
+/// @param det2: table2, deterministic/exhaustive flag for transitions (PSE)
 int spellKE(SpellerEnum& sp,
-            enum CostType c1, bool tonal1, bool det1,
-            enum CostType c2, bool tonal2, bool det2,
-            int global1,
-            const GridAlgo& grid);
-
+            enum CostType c1, bool tonal1, bool octave1, bool det1,
+            enum CostType c2, bool tonal2, bool octave2, bool det2,
+            int global1, const GridAlgo& grid);
 
 int main(int argc, const char* argv[])
 {
@@ -32,11 +40,11 @@ int main(int argc, const char* argv[])
     setVerbosityLevel(5);
     spdlog_setPattern();
 
-    // pse::WeberModal godfried;
-    // godfried.dump();
-    // return 0;
-    // no aux enum, debug     //pse::PS13 sp;
-    pse::SpellerEnum sp(30, false, pse::Algo::Undef, true);
+    // in 0..3. determines whether an auxiliary enumerator is needed
+    int csflag = 2;
+
+    // speller          tons  aux_enum                        debug
+    pse::SpellerEnum sp(165, (csflag == 2), pse::Algo::Undef, true);
 
     for (size_t i = 0; i < sp.index().size(); ++i)
     {
@@ -48,23 +56,14 @@ int main(int argc, const char* argv[])
     }
     
     // feed the speller sp with notes in sample.cpp
-    // issue7(sp);
-    // BWV_858prelude(sp);
-    // BWV_857fugue(sp);
-    // BWV_864fugue(sp);
-    // LG101(sp);
-    // LG461(sp);
-    // Waldstein(sp);
-    // Airegin(sp);
-    // Afternoon(sp);
-    vRfYc(sp);
+    FRfYc(sp);
 
     std::cout << "spelling " << sp.size() << " notes" << std::endl;
     int ks = spellKE(sp,
-                  // cost                   modal  exhaustive
-                     pse::CostType::ACCID,  false, false,
-                  // cost                   tonal  exhaustive
-                     pse::CostType::UNDEF,  true,  false,       // ADplus
+                  // cost                   modal  no oct. exhaustive
+                     pse::CostType::ACCID,  false, false,  false,
+                  // cost                   tonal  oct.    exhaustive
+                     pse::CostType::ADplus, true,  true,   false,
                   // global1 grid algo
                      100, GridAlgo::Exhaustive);
 
@@ -102,8 +101,6 @@ int main(int argc, const char* argv[])
 }
 
 
-
-
 // dump the matric of Weber distance between tonalities
 //void WeberTable()
 //{
@@ -113,10 +110,9 @@ int main(int argc, const char* argv[])
 
 
 int spellKE(SpellerEnum& sp,
-            enum CostType c1, bool tonal1, bool det1,
-            enum CostType c2, bool tonal2, bool det2,
-            int global1,
-            const GridAlgo& grid)
+            enum CostType c1, bool tonal1, bool octave1, bool det1,
+            enum CostType c2, bool tonal2, bool octave2, bool det2,
+            int global1, const GridAlgo& grid)
 {
     // construct the first spelling table
     if (c1 == CostType::UNDEF)
@@ -130,8 +126,10 @@ int spellKE(SpellerEnum& sp,
     // _speller.reset(0);
 
     // step1: construct the first spelling table
-    DEBUG("spellKE: eval Table1 {} {} {}", c1, tonal1, det1);
-    bool fstatus = sp.evalTable(c1, tonal1, det1);
+    DEBUG("spellKE: eval Table1 cost={} tonal={} oct={} det={} aux={}",
+          c1, tonal1, octave1, det1, sp.hasAuxEnumerator());
+    bool fstatus = sp.evalTable(c1, tonal1, octave1, det1,
+                                sp.hasAuxEnumerator());
     if (fstatus == false)
     {
         ERROR("spellKE: failed to compute Table1");
@@ -170,8 +168,9 @@ int spellKE(SpellerEnum& sp,
         sp.printGrid(std::cout);
 
     // step2: reconstruct the spelling table using the grid of local tonalities
-        DEBUG("spellKE: reval Table2 {} {} {}", c2, tonal2, det2);
-        fstatus = sp.revalTable(c2, tonal2, det2);
+        DEBUG("spellKE: reval Table2 cost={} tonal={} oct={} det={} aux=false",
+              c2, tonal2, octave2, det2);
+        fstatus = sp.revalTable(c2, tonal2, octave2, det2, false);
         if (fstatus == false)
         {
             ERROR("spellKE: failed to build Table2");

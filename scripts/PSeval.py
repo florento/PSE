@@ -1073,6 +1073,7 @@ class Spellew:
             assert(t1_costtype != pse.CTYPE_UNDEF)
             self._algo_params += '_'+ctype_tostring(t1_costtype)
             self._algo_params += 'T' if t1_tonal  else 'M'
+            self._algo_params += 'o' if t1_octave  else ''           
             self._algo_params += 'D' if t1_det  else 'E'            
             if t2_costtype != pse.CTYPE_UNDEF:
                 assert(global1 >= 0)
@@ -1089,6 +1090,7 @@ class Spellew:
                 self._algo_params += '_'
                 self._algo_params += ctype_tostring(t2_costtype)
                 self._algo_params += 'T' if t2_tonal  else 'M'
+                self._algo_params += 'o' if t2_octave  else ''                          
                 self._algo_params += 'D' if t2_det  else 'E'  
             # create a speller object    
             if (nbtons in [0, 24, 25, 26, 30, 104, 117, 135, 165]):
@@ -1359,7 +1361,7 @@ class Spellew:
             print(len(ln), 'notes,', count_measures(part), 'bars,')
             self.spell(ln, ln, stats, output_path) 
         elif chord_symb == 2:
-            ln1 = extract_part(part, 'force')   # notes for first step
+            ln1 = extract_part(part, 'force')  # notes for first step
             ln = extract_part(part, 'ignore')  # notes for second step
             print('pass 1:', len(ln1), 'notes,', count_measures(part), 'bars,')
             print('pass 2:', len(ln), 'notes,', count_measures(part), 'bars,')

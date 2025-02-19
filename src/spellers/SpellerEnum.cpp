@@ -79,8 +79,8 @@ bool SpellerEnum::addAuxEnumerator()
 //}
 
 
-void SpellerEnum::add(int midi, int bar, bool simultaneous,
-                      bool aux, const PSRatio& dur,
+void SpellerEnum::add(int midi, int bar, bool simultaneous, bool aux,
+                      const PSRatio& dur,
                       const enum NoteName& name, const enum Accid& accid,
                       int octave, bool printed)
 {

@@ -154,12 +154,7 @@ def eval_corpus(speller, dataset, skip=[],
 # PSE:  tons=135, 
 # PSE table1:  costtype1 = ps.CTYPE_ACCID | CTYPE_ACCIDlead | CTYPE_ADplus | CTYPE_ADlex
 # PSE table2:  costtype2 = ps.CTYPE_ACCID | CTYPE_ACCIDlead | CTYPE_ADplus | CTYPE_ADlex
-def eval_item(speller, dataset, name, output_dir='', 
-              kpre=0, kpost=0, tons=0,          
-              costtype1=ps.pse.CTYPE_UNDEF, tonal1=True, det1=True,       
-              global1=100, grid=ps.pse.Grid_Rank,   
-              costtype2=ps.pse.CTYPE_UNDEF, tonal2=True, det2=True,      
-              mflag=False, csflag=0):   
+def eval_item(speller, dataset, name, output_dir='', mflag=False, csflag=0):   
     """eval one item of the FRB corpus with given algo and parameters"""
     """speller: speller instance for the evaluation"""
     """dataset: a dictionary as produced by XML_corpus"""
@@ -204,30 +199,81 @@ def write_score2(score, output_path, outname):
     # pdffile = dirname+'/'+outname+'.pdf'
     # os.system(_mscore + ' -o ' + pdffile + ' ' + xmlfile)
 
-def debug(dataset, name, part=0):    
+def print_adds(ln, aux):
+    for (n, b, sf, ff) in ln:   
+        assert(isinstance(n, m21.note.Note))
+        a = 'sp.add4(' if ff else 'sp.add0('
+        a += str(n.pitch.midi)
+        a += ', '
+        a += str(b)
+        a += ', '
+        a += 'true' if sf else 'false'
+        a += ', '
+        if ff:
+            a += 'pse::NoteName::'+n.pitch.step
+            a += ', '
+            accid = n.pitch.accidental
+            if accid == m21.pitch.Accidental('triple-sharp'):
+                a += 'pse::Accid::TripleSharp'
+            elif accid == m21.pitch.Accidental('double-sharp'):
+                a += 'pse::Accid::DoubleSharp'
+            elif accid == m21.pitch.Accidental('one-and-a-half-sharp'):
+                a += 'pse::Accid::ThreeQuartersSharp'
+            elif accid == m21.pitch.Accidental('sharp'):
+                a += 'pse::Accid::Sharp'
+            elif accid == m21.pitch.Accidental('half-sharp'):
+                a += 'pse::Accid::QuarterSharp'
+            elif accid == m21.pitch.Accidental('natural') or accid is None:
+                a += 'pse::Accid::Natural'
+            elif accid == m21.pitch.Accidental('half-flat'):
+                a += 'pse::Accid::QuarterFlat'
+            elif accid == m21.pitch.Accidental('flat'):
+                a += 'pse::Accid::Flat'
+            elif accid == m21.pitch.Accidental('one-and-a-half-flat'):
+                a += 'pse::Accid::ThreeQuartersFlat'
+            elif accid == m21.pitch.Accidental('double-flat'):
+                a += 'pse::Accid::DoubleFlat'
+            elif accid == m21.pitch.Accidental('triple-flat'):
+                a += 'pse::Accid::TripleFlat'
+            else:
+                print('ERROR unexpected m21 accidental', accid )
+            a += ', '
+            assert(n.pitch.octave is not None)
+            a += str(n.pitch.octave)
+            a += ', '
+            a += 'false'  # printed: not significant                      
+            a += ', '
+        a += 'true' if aux else 'false'
+        a += ');'
+        print(a)        
+    
+
+def debug(dataset, name, csflag=0, part=0):    
     """compute the C++ add instructions for given part, for debugging with gdb"""
     """dataset: a dictionary as produced by XML_corpus"""
     """name: filename of item (prefix) in the dataset"""
     """part: number of part in the score file"""
+    """csflag: 'ignore' if we do not add the notes of chord symbols"""
+    """        'add'    if we add them"""   
+    """        'force'  if we add them and force their names"""   
     assert(len(name) > 0)
+    assert(csflag in [0, 1, 2, 3])
     if (dataset.get(name) == None):
         print(name, "not found in dataset")
         return
     file = dataset[name]
     score = m21.converter.parse(file)
     lp = score.getElementsByClass(m21.stream.Part)
-    ln = ps.extract_part(lp[part]) 
-    for (n, b, s) in ln:   
-        a = 'sp.add('
-        a += str(n.pitch.midi)
-        a += ', '
-        a += str(b)
-        a += ', '
-        a += 'true' if s else 'false'
-        a += ');'
-        print(a)        
-    #sp = ps.Speller()
-    #sp.debug(True)
-    #ps.add_tons(0, sp)
-    #sp.add_notes(ln1[:61], sp)
-    #sp.spell()
+    ln0 = [] # notes for main enumerator
+    ln1 = [] # notes for aux enumerator
+    if csflag == 0:
+        ln0 = ps.extract_part(lp[part], 'ignore')  # input note list
+    elif csflag == 1:
+        ln0 = ps.extract_part(lp[part], 'add') 
+    elif csflag == 2:
+        ln0 = ps.extract_part(lp[part], 'ignore')  # notes for second step
+        ln1 = ps.extract_part(lp[part], 'force')  # notes for first step
+    elif csflag == 3:
+        ln0 = ps.extract_part(lp[part], 'force')  # input note list        
+    print_adds(ln0, False)
+    print_adds(ln1, True)

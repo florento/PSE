@@ -187,7 +187,7 @@ void PSB::succ(std::shared_ptr<const PSC0> c, PSCQueue& q,
             const PSChord chord = c1->chord();
             unsigned int m = chord.midipitch(id);
             assert(MidiNum::check_midi(m));
-            const enum NoteName dejaname = c1->dejavu(m);
+            const enum NoteName dejaname = c1->dejavu(m%12);
             
             // pitch class already processed in chord,
             // we resuse the previous name chosen for the pitch class

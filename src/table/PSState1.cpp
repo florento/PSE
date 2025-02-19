@@ -75,7 +75,7 @@ bool PSState1::equal(const PSState1& rhs) const
 const accids_t PSState1::get(const enum NoteName& name, int oct) const
 {
     assert(name != Pitch::UNDEF_NOTE_NAME);
-    assert(oct == Pitch::UNDEF_OCTAVE);
+    //assert(oct == Pitch::UNDEF_OCTAVE);
     size_t n = toint(name);
     assert(0 <= n);
     assert(n <= 6);
@@ -86,7 +86,7 @@ const accids_t PSState1::get(const enum NoteName& name, int oct) const
 bool PSState1::set(const accids_t a, const enum NoteName& name, int oct)
 {
     assert(name != Pitch::UNDEF_NOTE_NAME);
-    assert(oct == Pitch::UNDEF_OCTAVE);
+    //assert(oct == Pitch::UNDEF_OCTAVE);
     size_t n = toint(name);
     assert(0 <= n);
     assert(n <= 6);

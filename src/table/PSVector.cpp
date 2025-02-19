@@ -451,7 +451,7 @@ bool PSV::rename(size_t i)
             std::shared_ptr<const PSC0> c = *it;
             assert(c);
             const PSP p(*c, _enum);
-            DEBUGU("bar {}, ton {}, spell {}: {} {}",
+            TRACE("bar {}, ton {}, spell {}: {} {}",
                    _bar, _index.ton(i), s, p, c->cost());
             ++s;
         }

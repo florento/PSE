@@ -85,12 +85,12 @@ public: // note enumerator
     /// @param simult whether the new input note is simultaneous with the
     /// next note.
     /// @param aux whether the note shall be added to the auxiliary enumerator.
-    /// @param dur note duration, in fraction of bars.
     /// @param name note name in 'A'..'G'. NoteName::Undef id unknown.
     /// @param accid accidental. Accid::Undef is unknown.
     /// @param octave number in Pitch::OCTAVE_MIN, Pitch::OCTAVE_MAX
     /// of Pitch::UNDEF_OCTAVE if unknown.
     /// @param printed whether the accidental must be printed.
+    /// @param dur note duration, in fraction of bars.
     /// @warning if one of name, accid, oct is UNDEF, all three must be UNDEF.
     void add(int midi, int bar, bool simult=false,
              bool aux=false,

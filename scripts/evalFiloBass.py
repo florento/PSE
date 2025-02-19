@@ -96,13 +96,16 @@ skip = []
 # PSE: costtype1, costtype2 = CTYPE_ACCID | CTYPE_ACCIDlead | CTYPE_ADplus | CTYPE_ADlex
 # PSE: grid = Grid_Best | Grid_Rank | Grid_Exhaustive
 # PSE: global1 = 0..100 (%)
+
 def eval_FiloBass(output='', tablename='',            
-             kpre=0, kpost=0, tons=0, 
-             costtype1=ps.pse.CTYPE_UNDEF, tonal1=True, det1=True, 
-             global1=100, grid=ps.pse.Grid_Rank, 
-             costtype2=ps.pse.CTYPE_UNDEF, tonal2=True, det2=True,
-             dflag=True, mflag=True, csflag=0):
-    """eval the whole FRB corpus with given algo and parameters"""
+                  kpre=0, kpost=0, tons=0, 
+                  costtype1=ps.pse.CTYPE_UNDEF, 
+                  tonal1=True, octave1=False, det1=False, 
+                  global1=100, grid=ps.pse.Grid_Rank, 
+                  costtype2=ps.pse.CTYPE_UNDEF, 
+                  tonal2=True, octave2=True, det2=False,
+                  dflag=True, mflag=True, csflag=0):
+    """eval the whole corpus with given algo and parameters"""
     """output: dir where files will be written"""
     """tablename: filename of csv table in output"""
     """kpre: parameter specific to PS13"""
@@ -110,11 +113,13 @@ def eval_FiloBass(output='', tablename='',
     """tons: nb of Tons in TonIndex (PSE)"""
     """costtype1: table1, cost type. if set, PSE is used, otherwise, PS13 is used"""
     """tonal1: table1, tonal/modal flag for initial state (PSE)"""
+    """octave1: table1, octave flag for state transitions (PSE)"""
     """det1: table1, deterministic/exhaustive flag for transitions (PSE)"""
     """grid: name of algorithm for the computation of the grid"""
     """global1: percentage approx for intermediate list of global candidate"""
     """costtype2: table2, cost type. if unset, skip table2 (PSE)"""
     """tonal2: table2, tonal/modal flag for initial state (PSE)"""
+    """octave2: table2, octave flag for state transitions (PSE)"""
     """det2: table2, deterministic/exhaustive flag for transitions (PSE)"""
     """dflag: debug flag: print debug messages on terminal"""
     """mflag: mark flag: write anotation files in a dedicaced dir for each opus"""
@@ -125,9 +130,11 @@ def eval_FiloBass(output='', tablename='',
     # initialize a speller
     sp = ps.Spellew(ps13_kpre=kpre, ps13_kpost=kpost, 
                     nbtons=tons,
-                    t1_costtype=costtype1, t1_tonal=tonal1, t1_det=det1, 
+                    t1_costtype=costtype1, 
+                    t1_tonal=tonal1, t1_octave=octave1, t1_det=det1, 
                     global1=global1, grid=grid,
-                    t2_costtype=costtype2, t2_tonal=tonal2, t2_det=det2,
+                    t2_costtype=costtype2, 
+                    t2_tonal=tonal2, t2_octave=octave2, t2_det=det2,
                     debug=dflag, aux_enum=(csflag == 2))        
     # start evaluating the corpus with the speller
     root = Path(_eval_root)/'evalFiloBass'
@@ -144,9 +151,11 @@ def eval_FiloBass(output='', tablename='',
 # PSE: global1 = 0..100 (%)
 def eval_FiloBassitem(name, output='',         
                       kpre=0, kpost=0, tons=0,          
-                      costtype1=ps.pse.CTYPE_UNDEF, tonal1=True, det1=True,       
+                      costtype1=ps.pse.CTYPE_UNDEF, 
+                      tonal1=True, octave1=False, det1=True,       
                       global1=100, grid=ps.pse.Grid_Rank,
-                      costtype2=ps.pse.CTYPE_UNDEF, tonal2=True, det2=True,      
+                      costtype2=ps.pse.CTYPE_UNDEF, 
+                      tonal2=True, octave2=True, det2=True,      
                       dflag=True, mflag=False, csflag=0):   
     """eval one item of the FRB corpus with given algo and parameters"""
     """name: filename of item (prefix) in the dataset"""
@@ -156,11 +165,13 @@ def eval_FiloBassitem(name, output='',
     """tons: nb of Tons in TonIndex (PSE)"""
     """costtype1: table1, cost type. if set, PSE is used, otherwise, PS13 is used"""
     """tonal1: table1, tonal/modal flag for initial state (PSE)"""
+    """octave1: table1, octave flag for state transitions (PSE)"""
     """det1: table1, deterministic/exhaustive flag for transitions (PSE)"""
     """global1: percentage approx for intermediate list of global candidate"""
     """grid: name of algorithm for the computation of the grid"""
     """costtype2: table2, cost type. if unset, skip table2 (PSE)"""
     """tonal2: table2, tonal/modal flag for initial state (PSE)"""
+    """octave2: table2, octave flag for state transitions (PSE)"""
     """det2: table2, deterministic/exhaustive flag for transitions (PSE)"""
     """dflag: debug flag: print debug messages on terminal"""
     """mflag: mark flag: write anotation files in a dedicaced dir for each opus"""
@@ -170,9 +181,11 @@ def eval_FiloBassitem(name, output='',
     # initialize a speller
     sp = ps.Spellew(ps13_kpre=kpre, ps13_kpost=kpost, 
                     nbtons=tons,
-                    t1_costtype=costtype1, t1_tonal=tonal1, t1_det=det1, 
+                    t1_costtype=costtype1, 
+                    t1_tonal=tonal1, t1_det=det1, 
                     global1=global1, grid=grid,
-                    t2_costtype=costtype2, t2_tonal=tonal2, t2_det=det2,
+                    t2_costtype=costtype2, 
+                    t2_tonal=tonal2, t2_det=det2,
                     debug=dflag, aux_enum=(csflag == 2))
     # start evaluating the opus with the speller   
     evalXML.eval_item(speller=sp, mflag=mflag, csflag=csflag,

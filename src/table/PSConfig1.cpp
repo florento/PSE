@@ -158,8 +158,9 @@ enum Accid PSC1::accidental() const
 {
     // ex: enum Accid accid(_state.accids(_name)); // copy
     enum Accid accid = MidiNum::midi_to_accid(_midi, _name);
+    assert(defined(accid));
     assert(_state);
-    assert(Accids::contained(accid, _state->accids(_name)));
+    assert(Accids::contained(accid, _state->accids(_name, octave())));
     //assert(-2 <= toint(accid) and toint(accid) <= 2);
     return accid; // cast to float format for Pitch ?
 }
@@ -167,7 +168,10 @@ enum Accid PSC1::accidental() const
 
 int PSC1::octave() const
 {
-    return MidiNum::midi_to_octave(_midi, _name);
+    int octave = MidiNum::midi_to_octave(_midi, _name);
+    assert(Pitch::check_octave(octave));
+    assert(octave != Pitch::UNDEF_OCTAVE);
+    return octave;
 }
 
 
