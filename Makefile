@@ -20,7 +20,7 @@ PY_INCLUDES += -Iextern/pybind11/include
 # sources
 SRC = src/general/trace.cpp
 SRC += src/pitch/NoteName.cpp
-SRC += src/pitch/Accidental.cpp
+SRC += src/pitch/Accid.cpp
 SRC += src/pitch/MidiNum.cpp
 SRC += src/pitch/Fifths.cpp
 SRC += src/pitch/Enharmonic.cpp

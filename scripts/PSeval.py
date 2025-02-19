@@ -477,12 +477,18 @@ def ctype_tostring(ct):
         return 'A'
     elif (ct == pse.CTYPE_ACCIDtb):
         return 'Atb'        
+    elif (ct == pse.CTYPE_ACCIDtbs):
+        return 'Atb+'        
     elif (ct == pse.CTYPE_ACCIDlead):
         return 'Ad'
     elif (ct == pse.CTYPE_ADplus):
         return 'Ad+'   # not found
+    elif (ct == pse.CTYPE_ADpluss):
+        return 'Ad++'   # not found
     elif (ct == pse.CTYPE_ADlex):
         return 'Adlex'   # not found
+    elif (ct == pse.CTYPE_ADlexs):
+        return 'Adlex+'   # not found
     elif (ct == pse.CTYPE_UNDEF):
         return 'UNDEF'
     else: 
