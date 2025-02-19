@@ -14,8 +14,8 @@
 namespace pse {
 
 
-CostAD::CostAD():
-CostAT(),
+CostAD::CostAD(bool approx, bool tb_sum):
+CostAT(approx, tb_sum),
 _dist(0)
 { }
 
@@ -140,7 +140,7 @@ std::ostream& operator<<(std::ostream& o, const CostAD& c)
 }
 
 
-// version (TENOR paper)
+// former version (TENOR paper)
 void CostAD::update_tonale(const enum NoteName& name,
                            const enum Accid& accid,
                            bool print,
@@ -267,7 +267,7 @@ void CostAD::update_tonale(const enum NoteName& name,
 }
 
 
-// previous version of update
+// former version of update
 void CostAD::update99(const enum NoteName& name,
                       const enum Accid& accid,
                       bool print,

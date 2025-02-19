@@ -10,8 +10,8 @@
 namespace pse {
 
 
-CostADlex::CostADlex():
-CostAD()
+CostADlex::CostADlex(bool approx, bool tb_sum):
+CostAD(approx, tb_sum)
 { }
 
 
@@ -28,7 +28,7 @@ CostADlex::~CostADlex()
 
 std::shared_ptr<Cost> CostADlex::shared_zero() const
 {
-    return std::shared_ptr<Cost>(new CostADlex());
+    return std::shared_ptr<Cost>(new CostADlex(this->_approx, this->_tblex));
 }
 
 

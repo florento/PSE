@@ -22,12 +22,19 @@
 
 namespace pse {
 
+
+/// variant of CostAD
+/// where the number of accidents and distance to local ton are summed
+/// before comparison.
 class CostADplus : public CostAD // public PolymorphicCost<CostADplus>
 {   
 public: // construction
     
     /// null cost.
-    CostADplus();
+    /// @param approx consider equality to one near.
+    /// @param tb_sum make the sum of some tie-breaking components
+    /// before comparison.
+    CostADplus(bool approx=false, bool tb_sum=false);
     
     /// copy constructor.
     CostADplus(const CostADplus& rhs);
@@ -44,6 +51,13 @@ public: // construction
     // create a smart clone of this cost.
     // virtual std::unique_ptr<Cost> unique_clone() const override;
 
+protected: // access
+    
+    /// real number of accids.
+    /// in this representation,
+    /// _accids is the sum of the number accids and dist.
+    size_t accids() const;
+    
 protected: // operators
 
     /// cost equality.
@@ -54,9 +68,9 @@ protected: // operators
     /// @param rhs a cost to compare to.
     bool smaller(const Cost& rhs) const override;
     
-    /// cumulated sum operator. update this cost by adding rhs.
-    /// @param rhs a cost to add.
-    Cost& add(const Cost& rhs) override;
+    // cumulated sum operator. update this cost by adding rhs.
+    // @param rhs a cost to add.
+    // Cost& add(const Cost& rhs) override;
 
     /// a distance value, in percent of the bigger cost.
     /// used for approximate equality.
@@ -91,9 +105,10 @@ public: // debug
     
 protected: // data
     
-    /// sum of number of printed accidentals and
-    /// distance to a conjectured local tonality.
-    size_t _sum;
+    // sum of number of printed accidentals and
+    // distance to a conjectured local tonality.
+    // update: the sum is stored in _accid
+    // size_t _sum;
     
 };
      

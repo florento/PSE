@@ -28,9 +28,8 @@ class CostA : public Cost // public PolymorphicCost<CostA>
 public: // construction
     
     /// null cost.
-    // @param discount apply or not a discount (during update) for accidentals
-    // in the assumed  scale (lead degrees).
-    CostA(); // bool discount=false
+    /// @param approx consider equality to one near.
+    CostA(bool approx=false);
     
     /// copy constructor.
     CostA(const CostA& rhs);
@@ -98,6 +97,12 @@ protected: // operators
     // distance for tie-breaking members.
     // @param rhs a cost to compare to.
     double tiebreak_pdist(const CostA& rhs) const;
+    
+private: // operators
+    
+    /// equality to one near.
+    /// @param rhs a cost to compare to.
+    bool equal_approx(const CostA& rhs) const;
 
 public: // update
 
@@ -147,7 +152,11 @@ public: // access and debug
 protected: // data
     
     /// cumulated number of printed accidentals.
-    size_t _accid; // unsigned int    
+    size_t _accid; // unsigned int
+
+    /// consider equality to one near.
+    bool _approx;
+    
 };
 
 // CostA operator+(const CostA& c1, const CostA& c2);

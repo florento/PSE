@@ -22,12 +22,60 @@ for an evaluation with PSE
 
   - `pse.CTYPE_ACCID`
     number of accidentals without discount for lead tons.
+
+  - `pse.CTYPE_ACCIDa`
+    number of accidentals, with equality to one near.
+
+  - `pse.CTYPE_ACCIDtb`
+
+    number of accidentals and tie breaking components:
+
+    - number of accidentals not present in the chromatic harmonic scale.
+    - number of accidentals with a color different from global ton.
+    - number of non lead Cb B# E# Fb.
+    - number of non-lead double sharps or double flats.
+
+  - `pse.CTYPE_ACCIDtba`
+    equality is number of accidentals to one near and component-wise TB equality.
+
+  - `pse.CTYPE_ACCIDtbs`
+
+    equality is equality of number of accidentals and TB equality where some TB components are summed.
+
+  - `pse.CTYPE_ACCIDtbas`
+
+    equality is number of accidentals to one near and TB equality where some TB components are summed.
+
   - `pse.CTYPE_ACCIDlead`
-    number of accidentals with discount for lead tons.
+    number of accidentals with discount for lead tons (obsolete).
+
   - `pse.CTYPE_ADplus`
-    number of accidentals plus distance to local ton.
+    number of accidentals plus distance to local ton, with tie-breaking components.
+
+  - `pse.CTYPE_ADplusa`
+    number of accidentals plus distance to local ton, with tie-breaking components.
+    equality is eq. of sum to one near and component-wise TB equality.
+
+  - `pse.CTYPE_ADpluss`
+    number of accidentals plus distance to local ton, with tie-breaking components.
+    equality is equality of sum and TB equality where some TB components are summed.
+
+  - `pse.CTYPE_ADplusas`
+    number of accidentals plus distance to local ton, with tie-breaking components.
+    equality is is eq. of sum to one near and TB equality where some TB components are summed.
+
   - `pse.CTYPE_ADlex`
     lexicographic composition of the number of accidentals and distance to local ton.
+
+  - `pse.CTYPE_ADlexa`
+    lexicographic composition of the number of accidentals and distance to local ton.
+
+  - `pse.CTYPE_ADlexs`
+    lexicographic composition of the number of accidentals and distance to local ton.
+
+  - `pse.CTYPE_ADlexas`
+    lexicographic composition of the number of accidentals and distance to local ton.
+
   - `pse.CTYPE_UNDEF` 
     unset (default),  PS13 will be used.
 
@@ -110,6 +158,25 @@ output files
 - `grid.csv`
 
 
+
+
+
+## Chord Symbols
+
+`cs_flag` for processing chord symbols or not.
+
+it determines which note are fed in the the note enumerators of the speller (main and aux enumerator):
+
+- ignore: chord symbols are ignored (not fed)
+- add: notes of chord symbols are added for spelling (as usual chord notes)
+- force: notes of chord symbols are added with forced name  (constrained spelling) 
+
+| `cs_flag` | main enumerator | aux. enumerator |
+| --------- | --------------- | --------------- |
+| 0         | ignore          | (none)          |
+| 1         | add             | (none)          |
+| 2         | ignore          | force           |
+| 3         | force           | (none)          |
 
 
 

@@ -28,9 +28,10 @@ class CostAT : public CostA // public PolymorphicCost<CostA>
 public: // construction
     
     /// null cost.
-    // @param discount apply or not a discount (during update) for accidentals
-    // in the assumed  scale (lead degrees).
-    CostAT(); // bool discount=false
+    /// @param approx consider equality to one near.
+    /// @param tb_sum make the sum of some tie-breaking components
+    /// before comparison.
+    CostAT(bool approx=false, bool tb_sum=false);
     
     /// copy constructor.
     CostAT(const CostAT& rhs);
@@ -266,21 +267,26 @@ protected: // data
     /// for tie-breaking.
     size_t _chromharm;
     
-    /// number of printed and non-lead accidentals
-    /// with a color different from global ton.
+    /// number of non-lead accidentals
+    /// with a color different from local ton or global ton (when local undef).
     /// for tie-breaking.
     size_t _color;
 
-    /// number of printed and non lead Cb B# E# Fb.
+    /// number of non lead Cb B# E# Fb.
     /// for tie-breaking.
     size_t _cflat;
 
-    /// number of printed non-lead double sharp or double flat.
+    /// number of non-lead double sharps or double flats.
     /// for tie-breaking.
     size_t _double;
 
-    /// sum of the thre last tie-bereaking measures.
-    size_t _sum_tb;
+    /// sum of the three last tie-breaking measures.
+    size_t _tbsum;
+
+    /// compare the tie-breaking components lexicographically,
+    /// otherwise, make the sum of the three last tie-breaking components
+    /// before comparison.
+    bool _tblex;
     
 };
 

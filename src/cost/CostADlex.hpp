@@ -24,13 +24,19 @@
 
 namespace pse {
 
+/// variant of CostAD
+/// where the number of accidents and distance to local ton are compared
+/// lexicographically.
 class CostADlex : public CostAD // public PolymorphicCost<CostADlex>
 {
     
 public: // construction
     
     /// null cost.
-    CostADlex();
+    /// @param approx consider equality to one near.
+    /// @param tb_sum make the sum of some tie-breaking components
+    /// before comparison.
+    CostADlex(bool approx=false, bool tb_sum=false);
     
     /// copy constructor.
     CostADlex(const CostADlex& rhs);

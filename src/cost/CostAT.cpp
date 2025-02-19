@@ -13,13 +13,14 @@
 namespace pse {
 
 
-CostAT::CostAT():
-CostA(),
+CostAT::CostAT(bool approx, bool tb_sum):
+CostA(approx),
 _chromharm(0),
 _color(0),
 _cflat(0),
 _double(0),
-_sum_tb(0)
+_tbsum(0),
+_tblex(!tb_sum)
 { }
 
 
@@ -29,7 +30,8 @@ _chromharm(rhs._chromharm),
 _color(rhs._color),
 _cflat(rhs._cflat),
 _double(rhs._double),
-_sum_tb(rhs._sum_tb)
+_tbsum(rhs._tbsum),
+_tblex(rhs._tblex)
 { }
 
 
@@ -41,7 +43,7 @@ CostAT::~CostAT()
 
 std::shared_ptr<Cost> CostAT::shared_zero() const
 {
-    return std::shared_ptr<Cost>(new CostAT());
+    return std::shared_ptr<Cost>(new CostAT(this->_approx, this->_tblex));
 }
 
 
@@ -82,7 +84,10 @@ bool CostAT::equal(const Cost& rhs) const
 
 bool CostAT::tiebreak_equal(const CostAT& rhs) const
 {
-    return tiebreak_equal_sum(rhs);
+    if (_tblex)
+        return tiebreak_equal_lex(rhs);
+    else
+        return tiebreak_equal_sum(rhs);
 }
 
 
@@ -97,9 +102,9 @@ bool CostAT::tiebreak_equal_lex(const CostAT& rhs) const
 
 bool CostAT::tiebreak_equal_sum(const CostAT& rhs) const
 {
-    assert(_sum_tb == _color + _cflat + _double);
-    assert(rhs._sum_tb == rhs._color + rhs._cflat + rhs._double);
-    return (_chromharm == rhs._chromharm and _sum_tb == rhs._sum_tb);
+    assert(_tbsum == _color + _cflat + _double);
+    assert(rhs._tbsum == rhs._color + rhs._cflat + rhs._double);
+    return (_chromharm == rhs._chromharm and _tbsum == rhs._tbsum);
 }
 
 
@@ -114,17 +119,20 @@ bool CostAT::smaller(const Cost& rhs) const
 
 bool CostAT::tiebreak_smaller(const CostAT& rhs) const
 {
-    return tiebreak_smaller_sum(rhs);
+    if (_tblex)
+        return tiebreak_smaller_lex1(rhs);
+    else
+        return tiebreak_smaller_sum(rhs);
 }
 
 bool CostAT::tiebreak_smaller_sum(const CostAT& rhs) const
 {
-    assert(_sum_tb == _color + _cflat + _double);
-    assert(rhs._sum_tb == rhs._color + rhs._cflat + rhs._double);
-    if (_sum_tb == rhs._sum_tb)
+    assert(_tbsum == _color + _cflat + _double);
+    assert(rhs._tbsum == rhs._color + rhs._cflat + rhs._double);
+    if (_tbsum == rhs._tbsum)
                 return (_chromharm < rhs._chromharm);
     else
-        return (_sum_tb < rhs._sum_tb);
+        return (_tbsum < rhs._tbsum);
 }
     
 
@@ -183,14 +191,14 @@ bool CostAT::tiebreak_smaller_lex2(const CostAT& rhs) const
 
 CostAT& CostAT::add(const CostAT& rhs)
 {
-    assert(_sum_tb == _color + _cflat + _double);
-    assert(rhs._sum_tb == rhs._color + rhs._cflat + rhs._double);
+    assert(_tbsum == _color + _cflat + _double);
+    assert(rhs._tbsum == rhs._color + rhs._cflat + rhs._double);
     CostA::add(rhs);
     _chromharm += rhs._chromharm;
     _color += rhs._color;
     _cflat += rhs._cflat;
     _double += rhs._double;
-    _sum_tb += rhs._sum_tb;
+    _tbsum += rhs._tbsum;
     return *this;
 }
 
@@ -429,7 +437,7 @@ bool CostAT::update(const enum NoteName& name, const enum Accid& accid,
     bool reto = updateColor(name, accid, print, gton, lton);
     bool retf = updateCflat(name, accid, print, gton, lton);
     bool retd = updateDouble(name, accid, print, gton, lton);
-    _sum_tb = _color + _cflat + _double;
+    _tbsum = _color + _cflat + _double;
     return reta or retc or reto or retf or retd;
 }
 

@@ -29,21 +29,63 @@ enum class CostType
     /// number of accidentals, without discount for lead tons
     ACCID,
 
-    /// number of accidentals and tie breaking measures
+    /// number of accidentals, with equality to one near.
+    ACCIDa,
+
+    /// number of accidentals and tie breaking measures:
     /// - number of accidentals not present in the chromatic harmonic scale
-    /// - cumulated number of accidentals with color different from global ton
-    /// - cumulated number of printed and non lead Cb B# E# Fb.
+    /// - number of accidentals with color different from global ton
+    /// - number of printed and non lead Cb B# E# Fb.
     ACCIDtb,
 
-    /// number of accidentals with discount for lead tons
+    /// number of accidentals and tie breaking measures,
+    /// equality is number of accidentals to one near
+    /// and component-wise TB equality.
+    ACCIDtba,
+
+    /// number of accidentals and tie breaking measures,
+    /// equality is equality of number of accidentals
+    /// and tb equality where some TB components are summed.
+    ACCIDtbs,
+
+    /// number of accidentals and tie breaking measures,
+    /// equality is number of accidentals to one near
+    /// and tb equality where some TB components are summed.
+    ACCIDtbas,
+
+    /// number of accidentals with discount for lead tons.
+    /// obsolete.
     ACCIDlead,
 
     /// number of accidentals and distance to local ton, sum of values.
     ADplus,
 
-    /// number of accidentals and distance to local ton,
-    /// lexicographic comparison values.
-    ADlex
+    /// number of accidentals and distance to local ton, sum of values.
+    /// equality is equality of sum to one near
+    /// and component-wise TB equality.
+    ADplusa,
+
+    /// number of accidentals and distance to local ton, sum of values.
+    /// equality is equality of sum
+    /// and tb equality where some TB components are summed.
+    ADpluss,
+
+    /// number of accidentals and distance to local ton, sum of values.
+    /// equality is equality of sum to one near
+    /// and tb equality where some TB components are summed.
+    ADplusas,
+
+    /// number of accidentals and distance to local ton compared lexicographicaly.
+    ADlex,
+
+    /// number of accidentals and distance to local ton compared lexicographicaly.
+    ADlexa,
+
+    /// number of accidentals and distance to local ton compared lexicographicaly.
+    ADlexs,
+
+    /// number of accidentals and distance to local ton compared lexicographicaly.
+    ADlexas
 
 };
 

@@ -5,6 +5,8 @@
 //  Created by Florent on 16/05/2023.
 //
 
+#include <cmath> // std::abs
+
 #include "CostA.hpp"
 #include "PSConfig1.hpp"
 #include "PSConfig1c.hpp"
@@ -13,13 +15,15 @@
 namespace pse {
 
 
-CostA::CostA(): // bool discount
-_accid(0)
+CostA::CostA(bool approx):
+_accid(0),
+_approx(approx)
 { }
 
 
 CostA::CostA(const CostA& rhs):
-_accid(rhs._accid)
+_accid(rhs._accid),
+_approx(rhs._approx)
 { }
 
 
@@ -31,7 +35,7 @@ CostA::~CostA()
 
 std::shared_ptr<Cost> CostA::shared_zero() const
 {
-    return std::shared_ptr<Cost>(new CostA());
+    return std::shared_ptr<Cost>(new CostA(this->_approx));
 }
 
 
@@ -56,10 +60,22 @@ std::unique_ptr<Cost> CostA::unique_clone() const
 //    return *this;
 //}
 
+bool CostA::equal_approx(const CostA& rhs) const
+{
+    return std::abs(long(_accid - rhs._accid)) <= 1;
+}
+
 
 bool CostA::equal(const CostA& rhs) const
 {
-    return (_accid == rhs._accid);
+    if (_approx)
+    {
+        return equal_approx(rhs);
+    }
+    else // strict equality
+    {
+        return (_accid == rhs._accid);
+    }
 }
 
 
@@ -72,7 +88,14 @@ bool CostA::equal(const Cost& rhs) const
 
 bool CostA::smaller(const CostA& rhs) const
 {
-    return (_accid < rhs._accid);
+    if (_approx)
+    {
+        return not equal_approx(rhs) and (_accid < rhs._accid);
+    }
+    else
+    {
+        return (_accid < rhs._accid);
+    }
 }
 
 
