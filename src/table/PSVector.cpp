@@ -171,6 +171,7 @@ void PSV::init_psbs(const Cost& seed, bool tonal, bool octave)
               enumerator().first(), enumerator().stop(), ton(i));
         assert(_psbs[i] == nullptr);
         const Ton& toni = ton(i);
+        
         if (_algo == Algo::PSE || _algo == Algo::PSD)
         {
             // compute PSB of i, optimization to reuse comp. åfor equivalent ton

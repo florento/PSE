@@ -80,7 +80,6 @@ void PSB::init(const Cost& seed, const Ton& ton, const Ton& lton,
     // other configurations are moved to _visited (except if the cost is
     // larger than cost of a best path)
     // @todo limtit _visited to non-final configurations in a best path
-
     // use the default ordering > (and ==) on PSCost
     PSCQueue q = PSCQueue(PSClex());
     
@@ -270,12 +269,14 @@ void PSB::get_names(size_t id, const Ton& gton,
             enum NoteName name = Enharmonics::name(m, j);
             enum Accid accid = Enharmonics::accid(m, j);
             // case of 8 and (short list) 1, 3, 6, 10
-            if (! defined(name) || !defined(accid))
-                continue;
-            assert(accid == MidiNum::class_to_accid(m, name));
-            names.push(name);
-            accids.push(accid);
-            //prints.push(false); // no force print
+            // ignore undef (empty cases)
+            if (defined(name) and defined(accid))
+            {
+                assert(accid == MidiNum::class_to_accid(m, name));
+                names.push(name);
+                accids.push(accid);
+                //prints.push(false); // no force print
+            }
         }
     }
     // only 1 potential successor in determonistic variant PSD

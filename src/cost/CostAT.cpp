@@ -13,14 +13,14 @@
 namespace pse {
 
 
-CostAT::CostAT(bool tb_sum):
+CostAT::CostAT(bool tb_lex):
 CostA(),
 _chromharm(0),
 _color(0),
 _cflat(0),
 _double(0),
 _tbsum(0),
-_tblex(!tb_sum)
+_tblex(tb_lex)
 { }
 
 
@@ -294,19 +294,19 @@ bool CostAT::updateColor1(const enum NoteName& name, const enum Accid& accid,
                 else
                     return false;
                 
-            case Accid::DoubleFlat:
-                if (ks > 0)
+            case Accid::Sharp:
+                if (ks < 0)
                 {
-                    _color += 2;
+                    _color += 1;
                     return true;
                 }
                 else
                     return false;
 
-            case Accid::Sharp:
-                if (ks < 0)
+            case Accid::DoubleFlat:
+                if (ks > 0)
                 {
-                    _color += 1;
+                    _color += 2;
                     return true;
                 }
                 else
@@ -429,15 +429,22 @@ bool CostAT::updateDouble(const enum NoteName& name, const enum Accid& accid,
 
 // update cost when accident for the name was updated
 bool CostAT::update(const enum NoteName& name, const enum Accid& accid,
-                   bool print, const Ton& gton, const Ton& lton)
+                    bool printed, const Ton& gton, const Ton& lton)
 {
-    bool reta = CostA::update(name, accid, print, gton, lton);
-    bool retc = updateChroma(name, accid, print, gton, lton);
-    bool reto = updateColor(name, accid, print, gton, lton);
-    bool retf = updateCflat(name, accid, print, gton, lton);
-    bool retd = updateDouble(name, accid, print, gton, lton);
-    _tbsum = _color + _cflat + _double;
-    return reta or retc or reto or retf or retd;
+    bool ret = CostA::update(name, accid, printed, gton, lton);
+
+    // update only for printed accidentals
+    if (printed)
+    {
+        ret = updateColor(name, accid, printed, gton, lton) or ret;
+        ret = updateCflat(name, accid, printed, gton, lton) or ret;
+        ret = updateDouble(name, accid, printed, gton, lton) or ret;
+        ret = updateChroma(name, accid, printed, gton, lton) or ret;
+    }
+    if (ret)
+        _tbsum = _color + _cflat + _double;
+
+    return ret;
 }
 
 

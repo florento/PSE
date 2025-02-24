@@ -120,7 +120,7 @@ bool CostADplus::update(const enum NoteName& name, const enum Accid& accid,
     // _sum = _accid + _dist;
     // dist increased (by new dists)
     assert(olddist <= _dist);
-    // _accid has increased only by new accids, add the new dists
+    // _accid was increased only by new accids, add the new dists
     _accid += (_dist - olddist);
     
     return ret;
@@ -139,8 +139,8 @@ CostType CostADplus::type() const
 void CostADplus::print(std::ostream& o) const
 {
     // CostAD::print(o);
-    // o << _sum;
-    o << _accid << '=' << accids() << "+" << _dist << ':';
+    // o << _accid << '=';
+    o << accids() << "+" << _dist << ':';
     o << _color << ':' << _cflat << ':' << _double << ':' << _chromharm;
 }
 

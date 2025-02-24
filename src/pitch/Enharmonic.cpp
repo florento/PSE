@@ -21,7 +21,7 @@ enum NoteName Enharmonics::name(int c, int i)
     assert(c <= 11);
     assert(0 <= i);
     assert(i <= 2);
-    return ENHARMONIC[c][i].name;
+    return ENHARMONICb[c][i].name;
 }
   
 
@@ -33,6 +33,7 @@ enum Accid Enharmonics::accid(int c, int i)
     assert(0 <= i);
     assert(i <= 2);
     return ENHARMONIC[c][i].alteration;
+    /// @todo option: consider short list ENHARMONICb or ENHARMONIC1
 }
 
 
@@ -60,37 +61,56 @@ const int Enharmonics::ENHARMONIC_UNDEF = 9;
 // static
 const PWO Enharmonics::ENHARMONIC[12][3] =
 {
-    { {_D, _2F}, {_C, _0N}, {_B,_1S} }, //  0
-    { {_D, _1F}, {_C, _1S}, {_B,_2S} }, //  1
-    { {_E, _2F}, {_D, _0N}, {_C,_2S} }, //  2
-    { {_F, _2F}, {_E, _1F}, {_D,_1S} }, //  3
-    { {_F, _1F}, {_E, _0N}, {_D,_2S} }, //  4
-    { {_G, _2F}, {_F, _0N}, {_E,_1S} }, //  5
-    { {_G, _1F}, {_F, _1S}, {_E,_2S} }, //  6
-    { {_A, _2F}, {_G, _0N}, {_F,_2S} }, //  7
-    { {_A, _1F}, {_G, _1S}, {_X,_UA} }, //  8
-    { {_B, _2F}, {_A, _0N}, {_G,_2S} }, //  9
-    { {_C, _2F}, {_B, _1F}, {_A,_1S} }, // 10
-    { {_C, _1F}, {_B, _0N}, {_A,_2S} }  // 11
+    { {_D, _2F}, {_C, _0N}, {_B, _1S} }, //  0
+    { {_D, _1F}, {_C, _1S}, {_B, _2S} }, //  1
+    { {_E, _2F}, {_D, _0N}, {_C, _2S} }, //  2
+    { {_F, _2F}, {_E, _1F}, {_D, _1S} }, //  3
+    { {_F, _1F}, {_E, _0N}, {_D, _2S} }, //  4
+    { {_G, _2F}, {_F, _0N}, {_E, _1S} }, //  5
+    { {_G, _1F}, {_F, _1S}, {_E, _2S} }, //  6
+    { {_A, _2F}, {_G, _0N}, {_F, _2S} }, //  7
+    { {_A, _1F}, {_G, _1S}, {_X, _UA} }, //  8
+    { {_B, _2F}, {_A, _0N}, {_G, _2S} }, //  9
+    { {_C, _2F}, {_B, _1F}, {_A, _1S} }, // 10
+    { {_C, _1F}, {_B, _0N}, {_A, _2S} }  // 11
 };
 
 
 // static
 // short list without B##, Fbb, E##, Cbb
-const PWO Enharmonics::ENHARMONICSHORT[12][3] =
+const PWO Enharmonics::ENHARMONIC1[12][3] =
 {
-    { {_D, _2F}, {_C, _0N}, {_B,_1S} }, //  0
-    { {_D, _1F}, {_C, _1S}, {_X,_UA} }, //  1
-    { {_E, _2F}, {_D, _0N}, {_C,_2S} }, //  2
-    { {_X, _UA}, {_E, _1F}, {_D,_1S} }, //  3
-    { {_F, _1F}, {_E, _0N}, {_D,_2S} }, //  4
-    { {_G, _2F}, {_F, _0N}, {_E,_1S} }, //  5
-    { {_G, _1F}, {_F, _1S}, {_X,_UA} }, //  6
-    { {_A, _2F}, {_G, _0N}, {_F,_2S} }, //  7
-    { {_A, _1F}, {_G, _1S}, {_X,_UA} }, //  8
-    { {_B, _2F}, {_A, _0N}, {_G,_2S} }, //  9
-    { {_C, _2F}, {_B, _1F}, {_A,_1S} }, // 10
-    { {_C, _1F}, {_B, _0N}, {_A,_2S} }  // 11
+    { {_D, _2F}, {_C, _0N}, {_B, _1S} }, //  0
+    { {_D, _1F}, {_C, _1S}, {_X, _UA} }, //  1
+    { {_E, _2F}, {_D, _0N}, {_C, _2S} }, //  2
+    { {_X, _UA}, {_E, _1F}, {_D, _1S} }, //  3
+    { {_F, _1F}, {_E, _0N}, {_D, _2S} }, //  4
+    { {_G, _2F}, {_F, _0N}, {_E, _1S} }, //  5
+    { {_G, _1F}, {_F, _1S}, {_X, _UA} }, //  6
+    { {_A, _2F}, {_G, _0N}, {_F, _2S} }, //  7
+    { {_A, _1F}, {_G, _1S}, {_X, _UA} }, //  8
+    { {_B, _2F}, {_A, _0N}, {_G, _2S} }, //  9
+    { {_C, _2F}, {_B, _1F}, {_A, _1S} }, // 10
+    { {_C, _1F}, {_B, _0N}, {_A, _2S} }  // 11
+};
+
+
+// static
+// short list without B#, Cb, E#, Fb
+const PWO Enharmonics::ENHARMONICb[12][3] =
+{
+    { {_D, _2F}, {_C, _0N}, {_X, _UA} }, //  0
+    { {_D, _1F}, {_C, _1S}, {_X, _UA} }, //  1
+    { {_E, _2F}, {_D, _0N}, {_C, _2S} }, //  2
+    { {_X, _UA}, {_E, _1F}, {_D, _1S} }, //  3
+    { {_X, _UA}, {_E, _0N}, {_D, _2S} }, //  4
+    { {_G, _2F}, {_F, _0N}, {_X, _UA} }, //  5
+    { {_G, _1F}, {_F, _1S}, {_X, _UA} }, //  6
+    { {_A, _2F}, {_G, _0N}, {_F, _2S} }, //  7
+    { {_A, _1F}, {_G, _1S}, {_X, _UA} }, //  8
+    { {_B, _2F}, {_A, _0N}, {_G, _2S} }, //  9
+    { {_C, _2F}, {_B, _1F}, {_A, _1S} }, // 10
+    { {_X, _UA}, {_B, _0N}, {_A, _2S} }  // 11
 };
 
 

@@ -104,6 +104,8 @@ public: // debug
     
 protected: // data
     
+    /// _accid contains the sum of printed accidentals and distance
+    
     // sum of number of printed accidentals and
     // distance to a conjectured local tonality.
     // update: the sum is stored in _accid

@@ -13,7 +13,7 @@ import os
 from pathlib import Path
 import PSeval as ps
 import evalXML
-
+import music21 as m21
 
 ########################
 ##                    ##
@@ -40,7 +40,8 @@ _mscore = '/Applications/MuseScore 4.app/Contents/MacOS/mscore'
 def omnibook_corpus():
     """build a list of scores in a subdirectory of the Omninook"""
     global _dataset_root
-    return evalXML.get_corpus(Path(_dataset_root)/'musicxml', True)  # flat corpus
+	# curated version, flat corpus
+    return evalXML.get_corpus(Path(_dataset_root)/'musescore', True)  
 
 #####################################
 ##                                 ##
@@ -156,9 +157,37 @@ def eval_Omnibookitem(name, output='',
     evalXML.eval_item(speller=sp, mflag=mflag, csflag=csflag,
                       dataset=omnibook_corpus(), name=name, 
                       output_dir=output)
-        
+
+#####################################
+##                                 ##
+##           utilities             ##
+##                                 ##
+#####################################
+
 # compute C++ add instructions for given score, for debugging with gdb
 def debug(name, csflag=0):    
     assert(len(name) > 0)
     dataset = omnibook_corpus()
     evalXML.debug(dataset=dataset, name=name, csflag=csflag)
+
+def cflat():
+	dataset = omnibook_corpus()
+	names = sorted(list(dataset))
+	for name in names:
+		file = dataset[name]
+		score = m21.converter.parse(file.as_posix())
+		lp = score.getElementsByClass(m21.stream.Part)
+		assert(len(lp) == 1)
+		part = lp[0]
+		ln = ps.extract_part(part, 'ignore')
+		for (n, b, simult, force) in ln:
+			assert(isinstance(n, m21.note.Note))
+			if (n.pitch.step == 'C')   and (n.pitch.accidental == m21.pitch.Accidental('flat')):
+				print(name, 'bar', b, 'Cb')
+			elif (n.pitch.step == 'B') and (n.pitch.accidental == m21.pitch.Accidental('sharp')):
+				print(name, 'bar', b, 'B#')
+			elif (n.pitch.step == 'F') and (n.pitch.accidental == m21.pitch.Accidental('flat')):
+				print(name, 'bar', b, 'Fb')
+			elif (n.pitch.step == 'E') and (n.pitch.accidental == m21.pitch.Accidental('sharp')):
+				print(name, 'bar', b, 'E#')
+

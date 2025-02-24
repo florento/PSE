@@ -8,15 +8,15 @@ Created on Wed Nov 23 13:18:18 2022
 
 #import sys
 import os
-import time
+import subprocess # run command line
 from pathlib import Path  #PosixPath
+import time
 from datetime import datetime
 import collections
 #from dataclasses import dataclass
 import numpy as np
 import pandas as pd
 import music21 as m21
-import subprocess # run command line
 import pse
 
 # import module with full path
@@ -997,7 +997,6 @@ def sp_errors(df):
 ##                                   ##
 #######################################
 
-
 def spellable(part):
     """the given part can be pitch spelled"""
     c = key_changes(part)
@@ -1061,8 +1060,8 @@ class Spellew:
                               # after building the 1st table, 
                               # for optimizing the computation of the grid (mask) and 2d table
                               # if = 100, do not compute this list of canditate globals.
-                 aux_enum=False, # whether we create an auxilliary enuerator
-                 debug=False):      # mark flag ?    
+                 aux_enum=False, # whether we create an auxilliary enumerator
+                 debug=False):   # debug messages    
         if (ps13_kpre > 0 and ps13_kpost > 0):
             # algo name
             self._algo_name = 'PS13'

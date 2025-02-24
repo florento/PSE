@@ -38,7 +38,7 @@ PSC1c::PSC1c(std::shared_ptr<const PSC0> c,
              const enum Accid& accid,
              const Ton& gton,
              const Ton& lton):
-PSC1(c, e, name, accid, false, gton, lton),
+PSC1(c, e, name, accid, false, gton, lton), // no force print
 _chord(new PSChord(e, c->id())),
 _pcn(), // empty
 _pcp(), // empty

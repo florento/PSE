@@ -41,10 +41,10 @@ int main(int argc, const char* argv[])
     spdlog_setPattern();
 
     // in 0..3. determines whether an auxiliary enumerator is needed
-    int csflag = 2;
+    int csflag = 0;
 
     // speller          tons  aux_enum                        debug
-    pse::SpellerEnum sp(165, (csflag == 2), pse::Algo::Undef, true);
+    pse::SpellerEnum sp(30, (csflag == 2), pse::Algo::Undef, true);
 
     for (size_t i = 0; i < sp.index().size(); ++i)
     {
@@ -56,12 +56,12 @@ int main(int argc, const char* argv[])
     }
     
     // feed the speller sp with notes in sample.cpp
-    FRfYc(sp);
+    FRfYc_cs0(sp);
 
     std::cout << "spelling " << sp.size() << " notes" << std::endl;
     int ks = spellKE(sp,
                   // cost                    modal  no oct. exhaustive
-                     pse::CostType::ACCID,  false, false,  false,
+                     pse::CostType::ACCIDtb, false, false,  false,
                   // cost                    tonal  oct.    exhaustive
                      pse::CostType::ADplus,  true,  true,   false,
                   // global1 grid algo

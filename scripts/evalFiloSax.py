@@ -225,10 +225,6 @@ def transpose(name, original, odir):
     xmlfile = path/(name+'_C.musicxml')
     score2.write('musicxml', fp=xmlfile)
     
-    
-    
-    
-        
 # compute C++ add instructions for given score, for debugging with gdb
 def debug(name):    
     assert(len(name) > 0)

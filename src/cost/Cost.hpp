@@ -42,6 +42,8 @@ public: // construction
     // create a unique clone of this cost.
     // virtual std::unique_ptr<Cost> unique_clone() const = 0;
     
+    virtual Cost& operator=(const Cost& rhs) = delete;
+    
 public: // operators, update
 
     /// equality (mandatory).
@@ -82,6 +84,15 @@ protected: // operators to be defined in derived classes
     /// @param rhs another cost to compare to.
     virtual bool equal(const Cost& rhs) const = 0;
 
+    /// strict inequality of costs.
+    /// @param rhs another cost to compare to.
+    virtual bool smaller(const Cost& rhs) const = 0;
+
+    /// cumulated sum of costs. update this cost by adding rhs.
+    /// @param rhs a cost to add.
+    /// @todo used ?
+    virtual Cost& add(const Cost& rhs) = 0;
+
     /// a distance value, in percent of the smallest cost between this and rhs.
     /// @return 0 if this and rhs are not comparable for this measure,
     /// a negative value (percent) is this is larger to rhs,
@@ -89,15 +100,7 @@ protected: // operators to be defined in derived classes
     /// @warning only used for selection of global
     /// in TonIndex (rowcost comparison) and Gridy computation.
     virtual double pdist(const Cost& rhs) const = 0;
-    
-    /// strict inequality of costs.
-    /// @param rhs another cost to compare to.
-    virtual bool smaller(const Cost& rhs) const = 0;
-
-    /// cumulated sum of costs. update this cost by adding rhs.
-    /// @param rhs a cost to add.
-    virtual Cost& add(const Cost& rhs) = 0;
-    
+        
     /// the difference between lhs amd rhs, in percent of the smaller one.
     /// @param lhs first value. must be positive or null.
     /// @param rhs second value. must be positive or null.
@@ -116,13 +119,13 @@ public: // operators, update
     /// @param name chosen name for the received pitch,
     /// in 0..6 (0 is 'C', 6 is 'B').
     /// @param accid chosen alteration for the received pitch, in -2..2.
-    /// @param print whether the accidental must be printed in score.
+    /// @param printed whether the accidental must be printed in score.
     /// @param gton conjectured main (global) tonality (key signature).
     /// @param lton conjectured local tonality or undef tonality by default.
     /// not known.
     virtual bool update(const enum NoteName& name,
                         const enum Accid& accid,
-                        bool print,
+                        bool printed,
                         const Ton& gton, const Ton& lton = Ton()) = 0;
 
 public: // access and debug

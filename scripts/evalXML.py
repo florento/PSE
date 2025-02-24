@@ -15,20 +15,17 @@ from datetime import datetime
 import music21 as m21
 import PSeval as ps
 
-
 ########################
 ##                    ##
 ##  global variables  ##
 ##                    ##
 ########################
 
-
 # root of evaluation dir
 _eval_root = '../../PSeval'
 
 # MuseScore commandline executable
 _mscore = '/Applications/MuseScore 4.app/Contents/MacOS/mscore'
-
 
 #################################
 ##                             ##
@@ -73,7 +70,6 @@ def get_corpus(dataset_path, flat=True):
     dataset = dict(sorted(dataset.items()))
     return dataset
 
-        
 #####################################
 ##                                 ##
 ## automatic evaluation of dataset ##
@@ -172,7 +168,7 @@ def eval_item(speller, dataset, name, output_dir='', mflag=False, csflag=0):
     score = m21.converter.parse(file.as_posix())
     stat = ps.Stats()   
     opath = Path(os.getcwd()) if output_dir=='' else Path(output_dir)
-    # ground truth ks, estimated ks, nnb of nontes and list of diff notes
+    # ground truth ks, estimated ks, nb of notes and list of diff notes
     #(k_gt, gt_est, nn, ld) = ps.eval_part(part=part, stat=stat, nbtons=tons, 
     #                                      debug=dflag, mark=mflag)
     (ls, lld) = speller.eval_score(score=score, stats=stat, score_id=0, 
@@ -247,7 +243,6 @@ def print_adds(ln, aux):
         a += ');'
         print(a)        
     
-
 def debug(dataset, name, csflag=0, part=0):    
     """compute the C++ add instructions for given part, for debugging with gdb"""
     """dataset: a dictionary as produced by XML_corpus"""

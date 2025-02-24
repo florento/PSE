@@ -40,6 +40,9 @@ _print(false)
     // update cost
     assert(gton.defined());
     assert(_cost);
+    //
+    // DEBUG("BOO");
+    if (cprint) DEBUG("PSC1 force print");
     _cost->update(name, accid, (cprint?true:_print), gton, lton);
     // _cost->update(*this, e, ton);
         

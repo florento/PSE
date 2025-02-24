@@ -88,9 +88,12 @@ private:
     /// both components are set to ENHARMONIC_UNDEF.
     static const PWO ENHARMONIC[12][3];
     
-    /// short list for ENHARMONIC
-    static const PWO ENHARMONICSHORT[12][3];
-    
+    /// short list without B##, Fbb, E##, Cbb
+    static const PWO ENHARMONIC1[12][3];
+
+    /// short list without B#, Cb, E#, Fb
+    static const PWO ENHARMONICb[12][3];
+
 };
     
 // same as ENHARMONIC with flats first

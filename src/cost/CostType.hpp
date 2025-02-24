@@ -26,17 +26,19 @@ enum class CostType
     /// Unknown
     UNDEF,
     
-    /// number of accidentals, without discount for lead tons
+    /// number of printed accidentals, without discount for lead tons
     ACCID,
 
-    /// number of accidentals and tie breaking measures:
+    /// number of printed accidentals and tie breaking measures:
     /// - number of accidentals not present in the chromatic harmonic scale
-    /// - number of accidentals with color different from global ton
-    /// - number of printed and non lead Cb B# E# Fb.
+    /// - number of accidentals with color different from the local ton,
+    ///   or from the global ton if the local ton is unknown.
+    /// - number of non-lead Cb B# E# Fb.
+    /// - number of non-lead double sharps or double flats.
     ACCIDtb,
 
-    /// number of accidentals and tie breaking measures,
-    /// some TB components are summed before comparison.
+    /// number of printed accidentals and tie breaking measures,
+    /// some TB measures are summed before comparison.
     ACCIDtbs,
 
     /// number of accidentals with discount for lead tons.

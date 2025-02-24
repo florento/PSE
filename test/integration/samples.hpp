@@ -44,7 +44,8 @@ void Afternoon(pse::SpellerEnum& sp);
 
 // Omnibook
 void vRfYc(pse::SpellerEnum& sp);
-void FRfYc(pse::SpellerEnum& sp);
+void FRfYc_cs0(pse::SpellerEnum& sp);
+void FRfYc_cs2(pse::SpellerEnum& sp);
 
 
 

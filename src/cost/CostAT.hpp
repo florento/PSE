@@ -28,9 +28,10 @@ class CostAT : public CostA // public PolymorphicCost<CostA>
 public: // construction
     
     /// null cost.
-    /// @param tb_sum make the sum of some tie-breaking components
-    /// before comparison.
-    CostAT(bool tb_sum=false);
+    /// @param tb_lex use lexicographic comparison for tie-breaking components.
+    /// Otherwise make the sum of some tie-breaking components before
+    /// comparison.
+    CostAT(bool tb_lex=true);
     
     /// copy constructor.
     CostAT(const CostAT& rhs);
@@ -279,7 +280,8 @@ protected: // data
     /// for tie-breaking.
     size_t _double;
 
-    /// sum of the three last tie-breaking measures.
+    /// sum of the three last tie-breaking measures
+    /// color, cflat and double
     size_t _tbsum;
 
     /// compare the tie-breaking components lexicographically,

@@ -121,10 +121,10 @@ double CostA::pdist(const Cost& rhs) const
 
 bool CostA::updateAccid(const enum NoteName& name,
                         const enum Accid& accid,
-                        bool print,
+                        bool printed,
                         const Ton& gton, const Ton& lton)
 {
-    if (print)
+    if (printed)
     {
         switch (accid)
         {
@@ -172,10 +172,6 @@ CostType CostA::type() const
 void CostA::print(std::ostream& o) const
 {
     o << _accid;
-    // o << "acc=" << _accid;
-    // o << "chr=" << _chromharm;
-    // o << " col=" << _color;
-    // o << " cf=" << _cflat;
 }
 
 
