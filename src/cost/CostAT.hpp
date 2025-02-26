@@ -21,8 +21,9 @@
 
 namespace pse {
 
+
 /// measure of cost extending CostA with 3 members for tie breaking.
-class CostAT : public CostA // public PolymorphicCost<CostA>
+class CostAT : public CostA
 {
     
 public: // construction
@@ -39,29 +40,60 @@ public: // construction
     /// destructor
     virtual ~CostAT();
     
-    // assignement operator.
-    // @param rhs a cost to copy.
-    // CostA& operator=(const CostA& rhs) override;
-
     /// create a new null cost value.
-    std::shared_ptr<Cost> shared_zero() const override;
+    std::shared_ptr<Cost> shared_zero() const override
+    { return Cost::shared_zero<CostAT>(this->_tblex); }
     
     /// create a shared clone of this cost.
-    std::shared_ptr<Cost> shared_clone() const override;
+    std::shared_ptr<Cost> shared_clone() const override
+    { return Cost::shared_clone<CostAT>(); }
     
     /// create a smart clone of this cost.
-    std::unique_ptr<Cost> unique_clone() const;
+    std::unique_ptr<Cost> unique_clone() const
+    { return Cost::unique_clone<CostAT>(); }
+    
+public: // operators called in Cost
+
+    /// cost equality.
+    /// @param rhs a cost to compare to.
+    bool equal(const CostAT& rhs) const;
+    
+    /// cost inequality.
+    /// @param rhs a cost to compare to.
+    bool smaller(const CostAT& rhs) const;
+    
+    /// cumulated sum operator. update this cost by adding rhs.
+    /// @param rhs a cost to add.
+    virtual CostAT& add(const CostAT& rhs);
+    
+    /// a distance value, in percent of the smaller cost.
+    /// used for approximate equality.
+    /// @warning only used for selection of global (rowcost comparison).
+    double pdist(const CostAT& rhs) const;
     
 protected: // operators
 
     /// cost equality.
     /// @param rhs a cost to compare to.
-    bool equal(const CostAT& rhs) const;
-
-    /// cost equality.
-    /// @param rhs a cost to compare to.
-    bool equal(const Cost& rhs) const override;
+    bool equal(const Cost& rhs) const override
+    { return Cost::equal<CostAT>(rhs); }
         
+    /// cost inequality.
+    /// @param rhs a cost to compare to.
+    bool smaller(const Cost& rhs) const override
+    { return Cost::smaller<CostAT>(rhs); }
+    
+    /// cumulated sum operator. update this cost by adding rhs.
+    /// @param rhs a cost to add.
+    Cost& add(const Cost& rhs) override
+    { return Cost::add<CostAT>(rhs); }
+    
+    /// a distance value, in percent of the smaller cost.
+    /// used for approximate equality.
+    /// @warning only used for selection of global (rowcost comparison).
+    double pdist(const Cost& rhs) const override
+    { return Cost::pdist<CostAT>(rhs); }
+    
     // equality for tie-breaking members.
     // @param rhs a cost to compare to.
     bool tiebreak_equal(const CostAT& rhs) const;
@@ -75,10 +107,6 @@ protected: // operators
     /// with a sum of some members.
     // @param rhs a cost to compare to.
     bool tiebreak_equal_sum(const CostAT& rhs) const;
-
-    /// cost inequality.
-    /// @param rhs a cost to compare to.
-    bool smaller(const Cost& rhs) const override;
     
     // inequality for tie-breaking members.
     // @param rhs a cost to compare to.
@@ -104,19 +132,6 @@ protected: // operators
     // @param rhs a cost to compare to.
     bool tiebreak_smaller_sum(const CostAT& rhs) const;
 
-    /// cumulated sum operator. update this cost by adding rhs.
-    /// @param rhs a cost to add.
-    virtual CostAT& add(const CostAT& rhs);
-
-    /// cumulated sum operator. update this cost by adding rhs.
-    /// @param rhs a cost to add.
-    virtual Cost& add(const Cost& rhs) override;
-
-    /// a distance value, in percent of the smaller cost.
-    /// used for approximate equality.
-    /// @warning only used for selection of global (rowcost comparison).
-    double pdist(const Cost& rhs) const override;
-    
     // distance for tie-breaking members.
     // @param rhs a cost to compare to.
     double tiebreak_pdist(const CostAT& rhs) const;
@@ -140,7 +155,7 @@ public: // update
                 bool print,
                 const Ton& gton, const Ton& lton = Ton()) override;
 
-protected: // update member
+protected: // update members
 
     /// update the measure chromharm for this cost, with the given values.
     /// @param name chosen name for the received pitch.
@@ -196,7 +211,7 @@ protected: // update member
                               const enum Accid& accid,
                               bool print,
                               const Ton& gton, const Ton& lton = Ton());
-    
+
 private: // update convenience
     
     /// update the measure chromharm for this cost, with the given values.
@@ -304,6 +319,15 @@ template<> struct fmt::formatter<pse::CostAT> : fmt::ostream_formatter {};
 #endif /* CostAT_hpp */
 
 /// @}
+
+
+
+
+
+
+
+
+
 
 
 // class PSC1;

@@ -30,30 +30,12 @@ CostADplus::~CostADplus()
 }
 
 
-std::shared_ptr<Cost> CostADplus::shared_zero() const
-{
-    return std::shared_ptr<Cost>(new CostADplus(this->_tblex));
-}
-
-
-std::shared_ptr<Cost> CostADplus::shared_clone() const
-{
-    return std::shared_ptr<Cost>(new CostADplus(*this));
-}
-
-
-//std::unique_ptr<Cost> CostADplus::unique_clone() const
-//{
-//    return std::unique_ptr<Cost>(new CostADplus(*this));
-//}
-
-
 // equality of (_accid = accids + dist) and TB
-bool CostADplus::equal(const Cost& rhs) const
+bool CostADplus::equal(const CostADplus& rhs) const
 {
-    // _accid is the sum of nb of accids and dist
-    const CostADplus& rhs_ADplus = dynamic_cast<const CostADplus&>(rhs);
-    return CostAT::equal(rhs_ADplus);
+    // compare _accid (which is the sum of nb of accids and dist) and TB.
+    // ignore the distance value.
+    return CostAT::equal(rhs);
 
     // assert(_sum == _accid + _dist);
     // assert(rhs_ADplus._sum == rhs_ADplus._accid + rhs_ADplus._dist);
@@ -61,11 +43,11 @@ bool CostADplus::equal(const Cost& rhs) const
 }
 
 
-bool CostADplus::smaller(const Cost& rhs) const
+bool CostADplus::smaller(const CostADplus& rhs) const
 {
-    // _accid is the sum of nb of accids and dist
-    const CostADplus& rhs_ADplus = dynamic_cast<const CostADplus&>(rhs);
-    return CostAT::smaller(rhs_ADplus);
+    // compare _accid (which is the sum of nb of accids and dist), then TB
+    // ignore the distance value.
+    return CostAT::smaller(rhs);
     
     // assert(_sum == _accid + _dist);
     // assert(rhs_ADplus._sum == rhs_ADplus._accid + rhs_ADplus._dist);
@@ -76,28 +58,21 @@ bool CostADplus::smaller(const Cost& rhs) const
 }
 
 
-size_t CostADplus::accids() const
+// same as CostAD::add
+Cost& CostADplus::add(const CostADplus& rhs)
 {
-    assert(_accid >= _dist);
-    return (_accid - _dist);
+    CostAD::add(rhs);
+    // _sum = _accid + _dist;
+    return *this;
 }
 
 
-// same as CostAD::add(
-//Cost& CostADplus::add(const Cost& rhs)
-//{
-//    CostAD::add(rhs);
-//    // _sum = _accid + _dist;
-//    return *this;
-//}
-
-
 // TBR
-double CostADplus::pdist(const Cost& rhs) const
+double CostADplus::pdist(const CostADplus& rhs) const
 {
     // _accid is the sum of nb of accids and dist
-    const CostADplus& rhs_ADplus = dynamic_cast<const CostADplus&>(rhs);
-    return Cost::dist((double) _accid, (double) rhs_ADplus._accid);
+    return Cost::dist((double) this->_accid, (double) rhs._accid);
+
     // assert(_sum == _accid + _dist);
     // assert(rhs_ADplus._sum == rhs_ADplus._accid + rhs_ADplus._dist);
     // ignore the tiebreaking measures (only counts accids + dist)
@@ -109,6 +84,14 @@ double CostADplus::pdist(const Cost& rhs) const
     // }
     // else
     //     return Cost::dist((double) _sum, (double) rhs_ADplus._sum);
+}
+
+
+
+size_t CostADplus::accids() const
+{
+    assert(_accid >= _dist);
+    return (_accid - _dist);
 }
 
 
@@ -138,8 +121,6 @@ CostType CostADplus::type() const
 
 void CostADplus::print(std::ostream& o) const
 {
-    // CostAD::print(o);
-    // o << _accid << '=';
     o << accids() << "+" << _dist << ':';
     o << _color << ':' << _cflat << ':' << _double << ':' << _chromharm;
 }
@@ -150,5 +131,6 @@ std::ostream& operator<<(std::ostream& o, const CostADplus& c)
     c.print(o);
     return o;
 }
+
 
 } // end namespace pse

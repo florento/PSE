@@ -26,65 +26,42 @@ CostADlex::~CostADlex()
 }
 
 
-std::shared_ptr<Cost> CostADlex::shared_zero() const
-{
-    return std::shared_ptr<Cost>(new CostADlex(this->_tblex));
-}
-
-
-std::shared_ptr<Cost> CostADlex::shared_clone() const
-{
-    return std::shared_ptr<Cost>(new CostADlex(*this));
-}
-
-
-//std::unique_ptr<Cost> CostADlex::unique_clone() const
-//{
-//    return std::unique_ptr<Cost>(new CostADlex(*this));
-//}
-
-
 // same as CostAD::equal
-//bool CostADlex::equal(const CostADlex& rhs) const
-//{
-//    return CostAD::equal(rhs);
-//}
-
-
-bool CostADlex::smaller(const Cost& rhs) const
+bool CostADlex::equal(const CostADlex& rhs) const
 {
-    const CostADlex& rhs_ADlex = dynamic_cast<const CostADlex&>(rhs);
-    if (_accid == rhs_ADlex._accid)
+    return CostAD::equal(rhs);
+}
+
+
+bool CostADlex::smaller(const CostADlex& rhs) const
+{
+    if (_accid == rhs._accid)
     {
-        if (_dist == rhs_ADlex._dist)
+        if (_dist == rhs._dist)
         {
-            return tiebreak_smaller(rhs_ADlex);
+            return tiebreak_smaller(rhs);
         }
         else
-            return (_dist < rhs_ADlex._dist);
+            return (_dist < rhs._dist);
     }
     else
-        return (_accid < rhs_ADlex._accid);
+        return (_accid < rhs._accid);
 }
 
 
 // same as CostAD::add
-// Cost& CostADlex::add(const Cost& rhs)
-// {
-//     // const CostADlex& rhs_ADlex = dynamic_cast<const CostADlex&>(rhs);
-//     CostAD::add(rhs);
-//     return *this;
-// }
+ Cost& CostADlex::add(const CostADlex& rhs)
+ {
+     CostAD::add(rhs);
+     return *this;
+ }
 
 
 /// @todo TBR sum of dists ?
-double CostADlex::pdist(const Cost& rhs) const
+double CostADlex::pdist(const CostADlex& rhs) const
 {
-    const CostADlex& rhs_ADlex = dynamic_cast<const CostADlex&>(rhs);
-
     // ignore the tiebreaking measures (only counts accids + dist)
-    return Cost::dist((double) _accid + _dist,
-                      (double) rhs_ADlex._accid + rhs_ADlex._dist);
+    return Cost::dist((double) _accid + _dist, (double) rhs._accid + rhs._dist);
 
     // if (_accid == rhs_ADlex._accid)
     // {

@@ -27,69 +27,20 @@ _accid(rhs._accid)
 
 CostA::~CostA()
 {
-    TRACE("delete CostAccid");
+    TRACE("delete CostA");
 }
 
 
-std::shared_ptr<Cost> CostA::shared_zero() const
-{
-    return std::shared_ptr<Cost>(new CostA());
-}
-
-
-std::shared_ptr<Cost> CostA::shared_clone() const
-{
-    return std::shared_ptr<Cost>(new CostA(*this));
-}
-
-
-std::unique_ptr<Cost> CostA::unique_clone() const
-{
-    return std::unique_ptr<Cost>(new CostA(*this));
-}
-
-
-//CostA& CostA::operator=(const CostA& rhs)
-//{
-//    if (this != &rhs)
-//    {
-//        _accid = rhs._accid;
-//    }
-//    return *this;
-//}
-
-
-// equality to one near.
-// bullshit: with transitivy (required by queues), everything becomes equal!
-// bool CostA::equal_approx(const CostA& rhs) const
-// {
-//    return std::abs(long(_accid - rhs._accid)) <= 1;
-// }
-
-
+//    const CostA& rhs_A = dynamic_cast<const CostA&>(rhs);
 bool CostA::equal(const CostA& rhs) const
 {
         return (_accid == rhs._accid);
 }
 
 
-bool CostA::equal(const Cost& rhs) const
-{
-    // const CostA& rhs_A = dynamic_cast<const CostA&>(rhs);
-    return equal(dynamic_cast<const CostA&>(rhs));
-}
-
-
 bool CostA::smaller(const CostA& rhs) const
 {
     return (_accid < rhs._accid);
-}
-
-
-bool CostA::smaller(const Cost& rhs) const
-{
-    // const CostA& rhs_A = dynamic_cast<const CostA&>(rhs);
-    return smaller(dynamic_cast<const CostA&>(rhs));
 }
 
 
@@ -100,22 +51,9 @@ CostA& CostA::add(const CostA& rhs)
 }
 
 
-Cost& CostA::add(const Cost& rhs)
-{
-    return add(dynamic_cast<const CostA&>(rhs));
-}
-
-
 double CostA::pdist(const CostA& rhs) const
 {
     return Cost::dist((double) _accid, (double) rhs._accid);
-}
-
-
-double CostA::pdist(const Cost& rhs) const
-{
-    // const CostA& rhs_A = dynamic_cast<const CostA&>(rhs);
-    return pdist(dynamic_cast<const CostA&>(rhs));
 }
 
 

@@ -11,6 +11,7 @@
 #include "CostAT.hpp"
 #include "CostADplus.hpp"
 #include "CostADlex.hpp"
+#include "CostADplex.hpp"
 
 
 namespace pse {
@@ -44,12 +45,18 @@ std::unique_ptr<Cost> unique_zero(const CostType& ct)
 
         case CostType::ADpluss:
             return std::unique_ptr<Cost>(new CostADplus(true));;
-
+            
         case CostType::ADlex:
             return std::unique_ptr<Cost>(new CostADlex(false));;
 
         case CostType::ADlexs:
             return std::unique_ptr<Cost>(new CostADlex(true));;
+
+        case CostType::ADplex:
+            return std::unique_ptr<Cost>(new CostADplex(false));;
+
+        case CostType::ADplexs:
+            return std::unique_ptr<Cost>(new CostADplex(true));;
 
         default:
         {
@@ -90,6 +97,12 @@ std::string tostring(const CostType& ct)
 
         case CostType::ADlexs:
             return "CostADlex_sum";
+
+        case CostType::ADplex:
+            return "CostADplex";
+
+        case CostType::ADplexs:
+            return "CostADplex_sum";
 
         default:
         {

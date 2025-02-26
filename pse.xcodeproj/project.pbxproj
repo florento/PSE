@@ -52,10 +52,10 @@
 		4310526829CDD15000694D5A /* Scale.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4310526529CDD15000694D5A /* Scale.cpp */; };
 		4310526929CDD15000694D5A /* Scale.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 4310526629CDD15000694D5A /* Scale.hpp */; };
 		43139F7C2A0D3D9D00A8E764 /* TestFifths.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43139F7B2A0D3D9D00A8E764 /* TestFifths.cpp */; };
-		4313BCB52D6CE3DD00599C15 /* CostADplud.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4313BCB42D6CE3DD00599C15 /* CostADplud.cpp */; };
-		4313BCB62D6CE3DD00599C15 /* CostADplud.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 4313BCB32D6CE3DD00599C15 /* CostADplud.hpp */; };
-		4313BCB72D6CE3DD00599C15 /* CostADplud.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4313BCB42D6CE3DD00599C15 /* CostADplud.cpp */; };
-		4313BCB82D6CE3DD00599C15 /* CostADplud.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4313BCB42D6CE3DD00599C15 /* CostADplud.cpp */; };
+		4313BCB52D6CE3DD00599C15 /* CostADplex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4313BCB42D6CE3DD00599C15 /* CostADplex.cpp */; };
+		4313BCB62D6CE3DD00599C15 /* CostADplex.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 4313BCB32D6CE3DD00599C15 /* CostADplex.hpp */; };
+		4313BCB72D6CE3DD00599C15 /* CostADplex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4313BCB42D6CE3DD00599C15 /* CostADplex.cpp */; };
+		4313BCB82D6CE3DD00599C15 /* CostADplex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4313BCB42D6CE3DD00599C15 /* CostADplex.cpp */; };
 		431586332983E89B00918B1B /* PSEnum.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4315862B2983E89B00918B1B /* PSEnum.cpp */; };
 		431586342983E89B00918B1B /* PSM21Enum.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 4315862C2983E89B00918B1B /* PSM21Enum.hpp */; };
 		431586352983E89B00918B1B /* PSRawEnum.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4315862D2983E89B00918B1B /* PSRawEnum.cpp */; };
@@ -345,8 +345,10 @@
 		4310526529CDD15000694D5A /* Scale.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Scale.cpp; sourceTree = "<group>"; };
 		4310526629CDD15000694D5A /* Scale.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Scale.hpp; sourceTree = "<group>"; };
 		43139F7B2A0D3D9D00A8E764 /* TestFifths.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TestFifths.cpp; sourceTree = "<group>"; };
-		4313BCB32D6CE3DD00599C15 /* CostADplud.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CostADplud.hpp; sourceTree = "<group>"; };
-		4313BCB42D6CE3DD00599C15 /* CostADplud.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CostADplud.cpp; sourceTree = "<group>"; };
+		4313BCB32D6CE3DD00599C15 /* CostADplex.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CostADplex.hpp; sourceTree = "<group>"; };
+		4313BCB42D6CE3DD00599C15 /* CostADplex.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CostADplex.cpp; sourceTree = "<group>"; };
+		4313BCBF2D6E279C00599C15 /* TCostA.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = TCostA.hpp; sourceTree = "<group>"; };
+		4313BCC52D6E5F2A00599C15 /* Cost.tpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; path = Cost.tpp; sourceTree = "<group>"; };
 		431586172983E57F00918B1B /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		4315861D2983E84D00918B1B /* KeyFind.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = KeyFind.hpp; path = src/KSKF/KeyFind.hpp; sourceTree = "<group>"; };
 		4315861E2983E84D00918B1B /* KeyFind.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = KeyFind.cpp; path = src/KSKF/KeyFind.cpp; sourceTree = "<group>"; };
@@ -424,8 +426,6 @@
 		435406A129A8D4050075B3B7 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = src/KSKF/README.md; sourceTree = "<group>"; };
 		435406A229A8D4BB0075B3B7 /* TonIndex.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = TonIndex.cpp; path = src/ton/TonIndex.cpp; sourceTree = "<group>"; };
 		435406A329A8D4BB0075B3B7 /* TonIndex.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = TonIndex.hpp; path = src/ton/TonIndex.hpp; sourceTree = "<group>"; };
-		43600D582A45CA3A002704E0 /* Costtt.tpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; path = Costtt.tpp; sourceTree = "<group>"; };
-		43600D592A45CA3A002704E0 /* Costtt.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Costtt.hpp; sourceTree = "<group>"; };
 		4363442C29D31D8700F5D628 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		436C6C3D2924016F00152D8C /* pse.cpython-312-darwin.so */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = "pse.cpython-312-darwin.so"; sourceTree = BUILT_PRODUCTS_DIR; };
 		436C6C4D2924023100152D8C /* NoteName.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = NoteName.hpp; path = src/pitch/NoteName.hpp; sourceTree = "<group>"; };
@@ -445,8 +445,8 @@
 		4380D1E82A4DB78700AC1164 /* TestCostADlex.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TestCostADlex.cpp; sourceTree = "<group>"; };
 		438587EB2A5C0631006FB312 /* PSChord.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = PSChord.cpp; path = chord/PSChord.cpp; sourceTree = "<group>"; };
 		438587EC2A5C0631006FB312 /* PSChord.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = PSChord.hpp; path = chord/PSChord.hpp; sourceTree = "<group>"; };
-		438EFD832A0E41DD00FF3733 /* Costt.tpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; path = Costt.tpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
-		438EFD842A0E41DD00FF3733 /* Costt.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Costt.hpp; sourceTree = "<group>"; };
+		438EFD832A0E41DD00FF3733 /* TCost.tpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; path = TCost.tpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		438EFD842A0E41DD00FF3733 /* TCost.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = TCost.hpp; sourceTree = "<group>"; };
 		43947D0029D972AF008EB20A /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = src/spellers/PS14/README.md; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.markdown; };
 		4397A5DC29A6CDB300C2CC9A /* PSOrder.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = PSOrder.hpp; sourceTree = "<group>"; };
 		439DBF2F2A4FFF6800565CC4 /* TestRankWeber.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TestRankWeber.cpp; sourceTree = "<group>"; };
@@ -895,10 +895,10 @@
 				43B35FB22BC940F2004F7691 /* CostType.cpp */,
 				43D31A112A1426A300234527 /* Cost.hpp */,
 				43D31A102A1426A300234527 /* Cost.cpp */,
-				438EFD842A0E41DD00FF3733 /* Costt.hpp */,
-				438EFD832A0E41DD00FF3733 /* Costt.tpp */,
-				43600D592A45CA3A002704E0 /* Costtt.hpp */,
-				43600D582A45CA3A002704E0 /* Costtt.tpp */,
+				4313BCC52D6E5F2A00599C15 /* Cost.tpp */,
+				438EFD842A0E41DD00FF3733 /* TCost.hpp */,
+				438EFD832A0E41DD00FF3733 /* TCost.tpp */,
+				4313BCBF2D6E279C00599C15 /* TCostA.hpp */,
 				43D31A0B2A13F28800234527 /* CostA.hpp */,
 				43D31A0A2A13F28800234527 /* CostA.cpp */,
 				430CE7B02D51610D00F3C88B /* CostAT.hpp */,
@@ -907,10 +907,10 @@
 				43DD54232A38FA4E0036EF07 /* CostAD.cpp */,
 				430627B72A44D33A0046FD99 /* CostADplus.hpp */,
 				430627B62A44D33A0046FD99 /* CostADplus.cpp */,
-				4313BCB32D6CE3DD00599C15 /* CostADplud.hpp */,
-				4313BCB42D6CE3DD00599C15 /* CostADplud.cpp */,
 				430627BD2A44D34D0046FD99 /* CostADlex.hpp */,
 				430627BC2A44D34D0046FD99 /* CostADlex.cpp */,
+				4313BCB32D6CE3DD00599C15 /* CostADplex.hpp */,
+				4313BCB42D6CE3DD00599C15 /* CostADplex.cpp */,
 			);
 			name = cost;
 			path = src/cost;
@@ -1029,7 +1029,7 @@
 				430CAA3A2D60E07700CA709F /* PSState0.hpp in Headers */,
 				43ABA52A29242418002AC1D4 /* PSBag.hpp in Headers */,
 				4317D83A2D4123C6007C71C7 /* PSGridy.hpp in Headers */,
-				4313BCB62D6CE3DD00599C15 /* CostADplud.hpp in Headers */,
+				4313BCB62D6CE3DD00599C15 /* CostADplex.hpp in Headers */,
 				437790EE2D45552800FC7278 /* PSGridx.hpp in Headers */,
 				4397A5DE29A6CDB300C2CC9A /* PSOrder.hpp in Headers */,
 				43D7BABC2A27CFBD00570C47 /* Speller2pass.hpp in Headers */,
@@ -1149,7 +1149,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				438A581229E03FC10073A32C /* PSE.cpp in Sources */,
-				4313BCB82D6CE3DD00599C15 /* CostADplud.cpp in Sources */,
+				4313BCB82D6CE3DD00599C15 /* CostADplex.cpp in Sources */,
 				4350820329D6E3AB00465943 /* TestNoteName.cpp in Sources */,
 				432586A82A40EBB30069D796 /* PSRational.cpp in Sources */,
 				437C8B0B2BD18E4F00440909 /* TestCostA.cpp in Sources */,
@@ -1270,7 +1270,7 @@
 				434B1DF8298ECCF1001CE41C /* PSConfig1.cpp in Sources */,
 				430627B52A44A4D90046FD99 /* PSConfig2.cpp in Sources */,
 				43ABA52E29242418002AC1D4 /* PSState.cpp in Sources */,
-				4313BCB72D6CE3DD00599C15 /* CostADplud.cpp in Sources */,
+				4313BCB72D6CE3DD00599C15 /* CostADplex.cpp in Sources */,
 				4317D8482D4246A5007C71C7 /* Spelli.cpp in Sources */,
 				43600D572A45C94F002704E0 /* CostAD.cpp in Sources */,
 				4310526729CDD15000694D5A /* Scale.cpp in Sources */,
@@ -1334,7 +1334,7 @@
 				43316F2229AA73D7000160EA /* TonIndex.cpp in Sources */,
 				43D31A132A1426A300234527 /* Cost.cpp in Sources */,
 				43D9DB4D2B964412005F0A13 /* Weber_static.cpp in Sources */,
-				4313BCB52D6CE3DD00599C15 /* CostADplud.cpp in Sources */,
+				4313BCB52D6CE3DD00599C15 /* CostADplex.cpp in Sources */,
 				43D5EC682A4C7D2100693E37 /* samples.cpp in Sources */,
 				4317D84B2D4246BC007C71C7 /* SpellerEnum.cpp in Sources */,
 				432E7A4F29D427FD000E2B72 /* PSE.cpp in Sources */,

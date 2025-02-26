@@ -16,13 +16,13 @@
 
 #include "pstrace.hpp"
 #include "Cost.hpp"
-// #include "Costt.hpp"
 
 
 namespace pse {
 
-/// measure of cost defined by the cumulated number of printed accidentals.
-class CostA : public Cost // public PolymorphicCost<CostA>
+
+/// concrete measure of cost defined by the number of printed accidentals.
+class CostA : public Cost
 {
     
 public: // construction
@@ -33,65 +33,70 @@ public: // construction
     /// copy constructor.
     CostA(const CostA& rhs);
     
-    /// distructor
+    /// destructor
     virtual ~CostA();
-    
-    // assignement operator.
-    // @param rhs a cost to copy.
-    // CostA& operator=(const CostA& rhs) override;
 
     /// create a new null cost value.
-    std::shared_ptr<Cost> shared_zero() const override;
+    std::shared_ptr<Cost> shared_zero() const override
+    { return Cost::shared_zero<CostA>(); }
     
     /// create a shared clone of this cost.
-    std::shared_ptr<Cost> shared_clone() const override;
-    
+    std::shared_ptr<Cost> shared_clone() const override
+    { return Cost::shared_clone<CostA>(); }
+
     /// create a smart clone of this cost.
-    std::unique_ptr<Cost> unique_clone() const;
-    
-protected: // operators
+    std::unique_ptr<Cost> unique_clone() const
+    { return Cost::unique_clone<CostA>(); }
+
+public: // operators called in Cost
 
     /// cost equality.
     /// @param rhs a cost to compare to.
     bool equal(const CostA& rhs) const;
 
-    /// cost equality.
-    /// @param rhs a cost to compare to.
-    bool equal(const Cost& rhs) const override;
-        
-    // equality for tie-breaking members.
-    // @param rhs a cost to compare to.
-    bool tiebreak_equal(const CostA& rhs) const;
-
-    /// cost inequality.
-    /// @param rhs a cost to compare to.
-    bool smaller(const Cost& rhs) const override;
-
     /// cost inequality.
     /// @param rhs a cost to compare to.
     bool smaller(const CostA& rhs) const;
 
-    // inequality for tie-breaking members.
-    // @param rhs a cost to compare to.
-    bool tiebreak_smaller(const CostA& rhs) const;
-
-    /// cumulated sum operator. update this cost by adding rhs.
+    /// update this cost by adding rhs.
     /// @param rhs a cost to add.
-    virtual CostA& add(const CostA& rhs);
-
-    /// cumulated sum operator. update this cost by adding rhs.
-    /// @param rhs a cost to add.
-    Cost& add(const Cost& rhs) override;
+    CostA& add(const CostA& rhs);
 
     /// a distance value, in percent of the smaller cost.
     /// used for approximate equality.
     /// @warning only used for selection of global (rowcost comparison).
     double pdist(const CostA& rhs) const;
 
+protected: // operators
+
+    /// cost equality.
+    /// @param rhs a cost to compare to.
+    bool equal(const Cost& rhs) const override
+    { return Cost::equal<CostA>(rhs); }
+
+    /// cost inequality.
+    /// @param rhs a cost to compare to.
+    bool smaller(const Cost& rhs) const override
+    { return Cost::smaller<CostA>(rhs); }
+
+    /// update this cost by adding rhs.
+    /// @param rhs a cost to add.
+    Cost& add(const Cost& rhs) override
+    { return Cost::add<CostA>(rhs); }
+
     /// a distance value, in percent of the smaller cost.
     /// used for approximate equality.
     /// @warning only used for selection of global (rowcost comparison).
-    double pdist(const Cost& rhs) const override;
+    double pdist(const Cost& rhs) const override
+    { return Cost::pdist<CostA>(rhs); }
+
+    // equality for tie-breaking members.
+    // @param rhs a cost to compare to.
+    bool tiebreak_equal(const CostA& rhs) const;
+
+    // inequality for tie-breaking members.
+    // @param rhs a cost to compare to.
+    bool tiebreak_smaller(const CostA& rhs) const;
     
     // distance for tie-breaking members.
     // @param rhs a cost to compare to.

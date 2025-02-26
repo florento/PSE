@@ -21,6 +21,7 @@
 
 namespace pse {
 
+
 /// abstract cost class with the following cumulated measures:
 /// - number of printed accidentals.
 /// - distance to a conjectured local tonality.
@@ -31,7 +32,7 @@ namespace pse {
 /// - class CostADplus : public PolymorphicComparable<CostAD, CostADplus>
 /// - class CostADlex : public PolymorphicComparable<CostAD, CostADlex>
 /// @todo inherit from CostA ?
-class CostAD : public CostAT // public PolymorphicCost<CostAD>
+class CostAD : public CostAT 
 {
     
 public: // construction
@@ -47,28 +48,15 @@ public: // construction
     /// distructor
     virtual ~CostAD();
     
-    // assignement operator.
-    // @param rhs a cost to copy.
-    // CostAD& operator=(const CostAD& rhs) override;
-
-    // create a new null cost value.
-    // virtual std::shared_ptr<Cost> shared_zero() const override;
+public: // operators called in Cost
     
-    // create a shared clone of this cost.
-    // virtual std::shared_ptr<Cost> shared_clone() const override;
+    /// componentwise cost equality.
+    /// @param rhs a cost to compare to.
+    bool equal(const CostAD& rhs) const;
     
-    // create a smart clone of this cost.
-    // virtual std::unique_ptr<Cost> unique_clone() const override;
-    
-protected: // operators, update
-    
-    // cost equality.
-    // @param rhs a cost to compare to.
-    bool equal(const Cost& rhs) const override;
-    
-    /// cumulated sum operator. update this cost by adding rhs.
+    /// update this cost by adding rhs componentwise.
     /// @param rhs a cost to add.
-    Cost& add(const Cost& rhs) override;
+    Cost& add(const CostAD& rhs);
     
     // a distance value, in percent of the bigger cost.
     // used for approximate equality.
@@ -138,12 +126,7 @@ protected: // data
     /// cumulated distance to a conjectured local tonality.
     size_t _dist;
     
-    // degree of approximation.
-    // percent under which 2 costs componnents are considered equal.
-    // static double approx_degree;
-    
 };
-
 
 // CostAD operator+(const CostAD& c1, const CostAD& c2);
 
@@ -157,7 +140,9 @@ template<> struct fmt::formatter<pse::CostAD> : fmt::ostream_formatter {};
 
 #endif /* CostAD_hpp */
 
+
 /// @}
+
 
 
 // class PSC1;

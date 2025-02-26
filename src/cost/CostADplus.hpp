@@ -25,8 +25,8 @@ namespace pse {
 
 /// variant of CostAD
 /// where the number of accidents and distance to local ton are summed
-/// before comparison.
-class CostADplus : public CostAD // public PolymorphicCost<CostADplus>
+/// (in accid field) before comparison.
+class CostADplus : public CostAD
 {   
 public: // construction
     
@@ -42,40 +42,62 @@ public: // construction
     virtual ~CostADplus();
 
     /// create a new null cost value.
-    std::shared_ptr<Cost> shared_zero() const override;
+    std::shared_ptr<Cost> shared_zero() const override
+    { return Cost::shared_zero<CostADplus>(this->_tblex); }
     
     /// create a shared clone of this cost.
-    std::shared_ptr<Cost> shared_clone() const override;
+    std::shared_ptr<Cost> shared_clone() const override
+    { return Cost::shared_clone<CostADplus>(); }
     
-    // create a smart clone of this cost.
-    // virtual std::unique_ptr<Cost> unique_clone() const override;
+    /// create a smart clone of this cost.
+    std::unique_ptr<Cost> unique_clone() const
+    { return Cost::unique_clone<CostADplus>(); }
 
-protected: // access
-    
-    /// real number of accids.
-    /// in this representation,
-    /// _accids is the sum of the number accids and dist.
-    size_t accids() const;
-    
-protected: // operators
+public: // operators called in Cost
 
     /// cost equality.
     /// @param rhs a cost to compare to.
-    bool equal(const Cost& rhs) const override;
+    /// @see same as CostAT: accid and dist summed in accid, dist ignored.
+    bool equal(const CostADplus& rhs) const;
     
     /// cost inequality.
     /// @param rhs a cost to compare to.
-    bool smaller(const Cost& rhs) const override;
+    /// @see same as CostAT: accid and dist summed in accid, dist ignored.
+    bool smaller(const CostADplus& rhs) const;
     
-    // cumulated sum operator. update this cost by adding rhs.
-    // @param rhs a cost to add.
-    // Cost& add(const Cost& rhs) override;
+    /// cumulated sum operator. update this cost by adding rhs.
+    /// @param rhs a cost to add.
+    /// @see same as CostAD
+    Cost& add(const CostADplus& rhs);
 
     /// a distance value, in percent of the bigger cost.
     /// used for approximate equality.
     /// @warning only used for selection of global (rowcost comparison).
-    double pdist(const Cost& rhs) const override;
+    double pdist(const CostADplus& rhs) const;
+
+protected: // operators
+
+    /// cost equality.
+    /// @param rhs a cost to compare to.
+    bool equal(const Cost& rhs) const override
+    { return Cost::equal<CostADplus>(rhs); }
+        
+    /// cost inequality.
+    /// @param rhs a cost to compare to.
+    bool smaller(const Cost& rhs) const override
+    { return Cost::smaller<CostADplus>(rhs); }
     
+    /// cumulated sum operator. update this cost by adding rhs.
+    /// @param rhs a cost to add.
+    Cost& add(const Cost& rhs) override
+    { return Cost::add<CostADplus>(rhs); }
+    
+    /// a distance value, in percent of the smaller cost.
+    /// used for approximate equality.
+    /// @warning only used for selection of global (rowcost comparison).
+    double pdist(const Cost& rhs) const override
+    { return Cost::pdist<CostADplus>(rhs); }
+        
 public: // update
     
     /// update this cost for doing a transition renaming one note (single
@@ -89,11 +111,19 @@ public: // update
     /// @param lton conjectured local tonality or undef tonlity if it is
     /// not known.
     /// @return wether an update was effectively performed.
+    /// @see perform the update of CostAD and add dist to accid.
     bool update(const enum NoteName& name,
                 const enum Accid& accid,
                 bool print,
                 const Ton& gton, const Ton& lton = Ton()) override;
 
+protected: // access
+    
+    /// real number of accids.
+    /// in this representation,
+    /// _accids is the sum of the number accids and dist.
+    size_t accids() const;
+        
 public: // debug
     
     /// Cost type of this const value.

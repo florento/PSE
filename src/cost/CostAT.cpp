@@ -1,5 +1,5 @@
 //
-//  CostA.cpp
+//  CostAT.cpp
 //  pse
 //
 //  Created by Florent on 16/05/2023.
@@ -41,43 +41,49 @@ CostAT::~CostAT()
 }
 
 
-std::shared_ptr<Cost> CostAT::shared_zero() const
-{
-    return std::shared_ptr<Cost>(new CostAT(this->_tblex));
-}
-
-
-std::shared_ptr<Cost> CostAT::shared_clone() const
-{
-    return std::shared_ptr<Cost>(new CostAT(*this));
-}
-
-
-std::unique_ptr<Cost> CostAT::unique_clone() const
-{
-    return std::unique_ptr<Cost>(new CostAT(*this));
-}
-
-
-//CostAT& CostAT::operator=(const CostAT& rhs)
-//{
-//    if (this != &rhs)
-//    {
-//        _accid = rhs._accid;
-//    }
-//    return *this;
-//}
-
-
+//    // return equal(dynamic_cast<const CostAT&>(rhs));
 bool CostAT::equal(const CostAT& rhs) const
 {
     return (CostA::equal(rhs) and tiebreak_equal(rhs));
 }
 
 
-bool CostAT::equal(const Cost& rhs) const
+bool CostAT::smaller(const CostAT& rhs) const
 {
-    return equal(dynamic_cast<const CostAT&>(rhs));
+    if (CostA::equal(rhs))
+        return tiebreak_smaller(rhs);
+    else
+        return CostA::smaller(rhs);
+}
+
+
+CostAT& CostAT::add(const CostAT& rhs)
+{
+    assert(_tbsum == _color + _cflat + _double);
+    assert(rhs._tbsum == rhs._color + rhs._cflat + rhs._double);
+    // add accids
+    CostA::add(rhs);
+    // add Tie Breaking components
+    _chromharm += rhs._chromharm;
+    _color += rhs._color;
+    _cflat += rhs._cflat;
+    _double += rhs._double;
+    _tbsum += rhs._tbsum;
+    return *this;
+}
+
+
+// is only used for selection of global (rowcost comparison)
+double CostAT::pdist(const CostAT& rhs) const
+{
+    // ignore the tiebreaking measures (only counts accids)
+    return CostA::pdist(rhs);
+    
+    // if (CostA::equal(rhs_AT)) // if (_accid == rhs_AT._accid)
+    //     return tiebreak_pdist(rhs_AT);
+    // else
+    //     return CostA::pdist(rhs_AT);
+    // return Cost::dist((double) _accid, (double) rhs_AT._accid);
 }
 
 
@@ -107,15 +113,6 @@ bool CostAT::tiebreak_equal_sum(const CostAT& rhs) const
 }
 
 
-bool CostAT::smaller(const Cost& rhs) const
-{
-    const CostAT& rhs_AT = dynamic_cast<const CostAT&>(rhs);
-    if (CostA::equal(rhs_AT))
-        return tiebreak_smaller(rhs_AT);
-    else
-        return CostA::smaller(rhs_AT);
-}
-
 bool CostAT::tiebreak_smaller(const CostAT& rhs) const
 {
     if (_tblex)
@@ -123,6 +120,7 @@ bool CostAT::tiebreak_smaller(const CostAT& rhs) const
     else
         return tiebreak_smaller_sum(rhs);
 }
+
 
 bool CostAT::tiebreak_smaller_sum(const CostAT& rhs) const
 {
@@ -184,41 +182,6 @@ bool CostAT::tiebreak_smaller_lex2(const CostAT& rhs) const
     }
     else
         return (_chromharm < rhs._chromharm);
-}
-
-
-
-CostAT& CostAT::add(const CostAT& rhs)
-{
-    assert(_tbsum == _color + _cflat + _double);
-    assert(rhs._tbsum == rhs._color + rhs._cflat + rhs._double);
-    CostA::add(rhs);
-    _chromharm += rhs._chromharm;
-    _color += rhs._color;
-    _cflat += rhs._cflat;
-    _double += rhs._double;
-    _tbsum += rhs._tbsum;
-    return *this;
-}
-
-
-Cost& CostAT::add(const Cost& rhs)
-{
-    return add(dynamic_cast<const CostAT&>(rhs));
-}
-
-
-// is only used for selection of global (rowcost comparison)
-double CostAT::pdist(const Cost& rhs) const
-{
-    const CostAT& rhs_AT = dynamic_cast<const CostAT&>(rhs);
-    // ignore the tiebreaking measures (only counts accids)
-    return CostA::pdist(rhs_AT);
-    // if (CostA::equal(rhs_AT)) // if (_accid == rhs_AT._accid)
-    //     return tiebreak_pdist(rhs_AT);
-    // else
-    //     return CostA::pdist(rhs_AT);
-    // return Cost::dist((double) _accid, (double) rhs_AT._accid);
 }
 
 

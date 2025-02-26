@@ -106,42 +106,10 @@ double Cost::dist(const double lhs, const double rhs)
 }
 
 
-// pure virtual
-//bool Cost::equal(const Cost& rhs) const
-//{
-//    ERROR("Cost equal: pure virtual");
-//    return false;
-//}
-
-
-// pure virtual
-//double Cost::pdist(const Cost& rhs) const
-//{
-//    ERROR("Cost pdist: pure virtual");
-//    return 0;
-//}
-
-
-// pure virtual
-//bool Cost::smaller(const Cost& rhs) const
-//{
-//    ERROR("Cost smaller: pure virtual");
-//    return false;
-//}
-
-
-// pure virtual
-//Cost& Cost::add(const Cost& rhs)
-//{
-//    ERROR("Cost add: pure virtual");
-//    assert(false);
-//}
-
-
 void Cost::print(std::ostream& o) const
 {
     // should not be called
-    ERROR("Cost: print abstract");
+    ERROR("Cost: print abstract Cost");
 }
 
 

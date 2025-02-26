@@ -32,46 +32,17 @@ CostAD::~CostAD()
 }
 
 
-//CostAD& CostAD::operator=(const CostAD& rhs)
-//{
-//    if (this != &rhs)
-//    {
-//        _accid = rhs._accid;
-//    }
-//    return *this;
-//}
-
-
-//std::shared_ptr<Cost> CostAD::shared_zero() const
-//{
-//    return std::shared_ptr<Cost>(new CostAD());
-//}
-
-
-//std::shared_ptr<Cost> CostAD::shared_clone() const
-//{
-//    return std::shared_ptr<Cost>(new CostAD(*this));
-//}
-
-//std::unique_ptr<Cost> CostAD::unique_clone() const
-//{
-//    return std::unique_ptr<Cost>(new CostAD(*this));
-//}
-
-
 // accids and tie-breaks and distance are equal
-bool CostAD::equal(const Cost& rhs) const
+bool CostAD::equal(const CostAD& rhs) const
 {
-    const CostAD& rhs_AD = dynamic_cast<const CostAD&>(rhs);
-    return (CostAT::equal(rhs_AD) and _dist == rhs_AD._dist);
+    return (CostAT::equal(rhs) and _dist == rhs._dist);
 }
 
 
-Cost& CostAD::add(const Cost& rhs)
+Cost& CostAD::add(const CostAD& rhs)
 {
-    const CostAD& rhs_AD = dynamic_cast<const CostAD&>(rhs);
-    CostAT::add(rhs_AD);
-    _dist += rhs_AD._dist;
+    CostAT::add(rhs);
+    _dist += rhs._dist;
     return *this;
 }
 
@@ -381,6 +352,8 @@ void CostAD::update99(const enum NoteName& name,
 
 
 } // end namespace pse
+
+
 
 
 

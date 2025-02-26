@@ -1,15 +1,15 @@
 //
-//  CostADlex.hpp
+//  CostADplex.hpp
 //  pse
 //
-//  Created by Florent Jacquemard on 22/06/2023.
+//  Created by Florent Jacquemard on 24/02/2025.
 //
 /// @addtogroup pitch
 /// @{
 
 
-#ifndef CostADlex_hpp
-#define CostADlex_hpp
+#ifndef CostADplex_hpp
+#define CostADplex_hpp
 
 #include <stdio.h>
 #include <assert.h>
@@ -17,106 +17,98 @@
 
 #include "pstrace.hpp"
 #include "Cost.hpp"
-// #include "Costt.hpp"
-#include "CostAD.hpp"
-
+#include "CostADplus.hpp"
 
 
 namespace pse {
 
 /// variant of CostAD
-/// where the number of accidents and distance to local ton are compared
-/// lexicographically.
-class CostADlex : public CostAD // public PolymorphicCost<CostADlex>
+/// where the number of accidents and distance to local ton are summed
+/// before comparison.
+class CostADplex : public CostADplus
 {
-    
 public: // construction
     
     /// null cost.
     /// @param tb_sum make the sum of some tie-breaking components
     /// before comparison.
-    CostADlex(bool tb_sum=false);
+    CostADplex(bool tb_sum=false);
     
     /// copy constructor.
-    CostADlex(const CostADlex& rhs);
+    CostADplex(const CostADplex& rhs);
     
     /// distructor
-    virtual ~CostADlex();
+    virtual ~CostADplex();
 
     /// create a new null cost value.
     std::shared_ptr<Cost> shared_zero() const override
-    { return Cost::shared_zero<CostADlex>(this->_tblex); }
-    
+    { return Cost::shared_zero<CostADplex>(this->_tblex); }
+       
     /// create a shared clone of this cost.
     std::shared_ptr<Cost> shared_clone() const override
-    { return Cost::shared_clone<CostADlex>(); }
+    { return Cost::shared_clone<CostADplex>(); }
     
     /// create a smart clone of this cost.
-    std::unique_ptr<Cost> unique_clone() const
-    { return Cost::unique_clone<CostADlex>(); }
+    virtual std::unique_ptr<Cost> unique_clone() const
+    { return Cost::unique_clone<CostADplex>(); }
     
 public: // operators called in Cost
-    
+
     /// cost equality.
     /// @param rhs a cost to compare to.
-    bool equal(const CostADlex& rhs) const;
-    
+    bool equal(const CostADplex& rhs) const;
+       
     /// cost inequality.
     /// @param rhs a cost to compare to.
-    bool smaller(const CostADlex& rhs) const;
+    bool smaller(const CostADplex& rhs) const;
     
     /// cumulated sum operator. update this cost by adding rhs.
     /// @param rhs a cost to add.
-    /// @see same as CostAD
-    Cost& add(const CostADlex& rhs);
+    Cost& add(const CostADplex& rhs);
 
     /// a distance value, in percent of the bigger cost.
     /// used for approximate equality.
     /// @warning only used for selection of global (rowcost comparison).
-    double pdist(const CostADlex& rhs) const;
-    
+    double pdist(const CostADplex& rhs) const;
+
 protected: // operators
 
     /// cost equality.
     /// @param rhs a cost to compare to.
     bool equal(const Cost& rhs) const override
-    { return Cost::equal<CostADlex>(rhs); }
+    { return Cost::equal<CostADplex>(rhs); }
         
     /// cost inequality.
     /// @param rhs a cost to compare to.
     bool smaller(const Cost& rhs) const override
-    { return Cost::smaller<CostADlex>(rhs); }
+    { return Cost::smaller<CostADplex>(rhs); }
     
     /// cumulated sum operator. update this cost by adding rhs.
     /// @param rhs a cost to add.
     Cost& add(const Cost& rhs) override
-    { return Cost::add<CostADlex>(rhs); }
+    { return Cost::add<CostADplex>(rhs); }
     
     /// a distance value, in percent of the smaller cost.
     /// used for approximate equality.
     /// @warning only used for selection of global (rowcost comparison).
     double pdist(const Cost& rhs) const override
-    { return Cost::pdist<CostADlex>(rhs); }
-
-public: // access, debug
+    { return Cost::pdist<CostADplex>(rhs); }
+           
+public: // debug
     
     /// Cost type of this const value.
     virtual CostType type() const override;
     
-    /// @param o output stream where to print this cost.
-    void print(std::ostream& o) const override;
-
 };
-        
-std::ostream& operator<<(std::ostream& o, const CostADlex& c);
+     
+std::ostream& operator<<(std::ostream& o, const CostADplex& c);
 
 } // namespace pse
 
 /// fmt v10 and above requires `fmt::formatter<T>` extends `fmt::ostream_formatter`.
 /// @see: https://github.com/fmtlib/fmt/issues/3318
-template<> struct fmt::formatter<pse::CostADlex> : fmt::ostream_formatter {};
+template<> struct fmt::formatter<pse::CostADplex> : fmt::ostream_formatter {};
 
-#endif /* CostADlex_hpp */
+#endif /* CostADplex_hpp */
 
 /// @}
-

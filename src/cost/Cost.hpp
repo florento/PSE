@@ -25,6 +25,7 @@
 
 namespace pse {
 
+
 /// Cost model for the ordering of configuration of the PS algorithm.
 /// @see Note Spelling Conventions in Behind Bars (page 85).
 /// this abstract class defines the cost update interface.
@@ -41,9 +42,27 @@ public: // construction
     
     // create a unique clone of this cost.
     // virtual std::unique_ptr<Cost> unique_clone() const = 0;
-    
+
     virtual Cost& operator=(const Cost& rhs) = delete;
     
+protected: // construction templates
+
+    /// create a new null cost value.
+    template<typename T>
+    std::shared_ptr<Cost> shared_zero() const;
+
+    /// create a new null cost value, with flag.
+    template<typename T>
+    std::shared_ptr<Cost> shared_zero(bool flag) const;
+
+    /// create a shared clone of this cost.
+    template<typename T>
+    std::shared_ptr<Cost> shared_clone() const;
+        
+    /// create a unique clone of this cost.
+    template<typename T>
+    std::unique_ptr<Cost> unique_clone() const;
+
 public: // operators, update
 
     /// equality (mandatory).
@@ -78,7 +97,7 @@ public: // operators, update
     /// @param rhs a cost to add.
     Cost& operator+=(const Cost& rhs);
 
-protected: // operators to be defined in derived classes
+protected: // comparison operators
     
     /// cost equality.
     /// @param rhs another cost to compare to.
@@ -90,7 +109,6 @@ protected: // operators to be defined in derived classes
 
     /// cumulated sum of costs. update this cost by adding rhs.
     /// @param rhs a cost to add.
-    /// @todo used ?
     virtual Cost& add(const Cost& rhs) = 0;
 
     /// a distance value, in percent of the smallest cost between this and rhs.
@@ -100,6 +118,35 @@ protected: // operators to be defined in derived classes
     /// @warning only used for selection of global
     /// in TonIndex (rowcost comparison) and Gridy computation.
     virtual double pdist(const Cost& rhs) const = 0;
+
+protected: // comparison operators templates and static
+
+    /// cost equality.
+    /// @param rhs another cost to compare to.
+    /// @see used by ==
+    template<typename T>
+    bool equal(const Cost& rhs) const;
+
+    /// strict inequality of costs.
+    /// @param rhs another cost to compare to.
+    /// @see used by <
+    template<typename T>
+    bool smaller(const Cost& rhs) const;
+
+    /// cumulated sum of costs. update this cost by adding rhs.
+    /// @param rhs a cost to add.
+    /// @see used by +=
+    template<typename T>
+    Cost& add(const Cost& rhs);
+
+    /// a distance value, in percent of the smallest cost between this and rhs.
+    /// @return 0 if this and rhs are not comparable for this measure,
+    /// a negative value (percent) is this is larger to rhs,
+    /// a positive value (percent) is this is smaller to rhs.
+    /// @warning only used for selection of global
+    /// in TonIndex (rowcost comparison) and Gridy computation.
+    template<typename T>
+    double pdist(const Cost& rhs) const;
         
     /// the difference between lhs amd rhs, in percent of the smaller one.
     /// @param lhs first value. must be positive or null.
@@ -130,18 +177,20 @@ public: // operators, update
 
 public: // access and debug
     
-    /// Cost type of this const value.
+    /// Cost type of this cost value.
     virtual CostType type() const = 0;
     
     virtual void print(std::ostream& o) const;
     
 };
 
-
-
 std::ostream& operator<<(std::ostream& o, const Cost& c);
 
 } // namespace pse
+
+// separated definition of template methods
+#include "Cost.tpp"
+
 
 /// fmt v10 and above requires `fmt::formatter<T>` extends `fmt::ostream_formatter`.
 /// @see: https://github.com/fmtlib/fmt/issues/3318

@@ -139,7 +139,6 @@ protected: // data
     /// for the note read for the transition to this config.
     bool _print;
     
-    
     // update the cumulated number of accidents for this Config,
     // with the number of printed alterations of this config.
     // void updateAccidents();

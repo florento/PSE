@@ -45,19 +45,33 @@ enum class CostType
     /// obsolete.
     ACCIDlead,
 
-    /// number of accidentals and distance to local ton, sum of values.
+    /// sum of number of accidentals and distance to local ton,
+    /// and tie breaking measures.
     ADplus,
 
-    /// sum of number of accidentals and distance to local ton.
-    /// some TB components are summed before comparison.
+    /// sum of number of accidentals and distance to local ton, and tie
+    /// breaking measures with some TB components summed before comparison.
     ADpluss,
 
-    /// number of accidentals and distance to local ton compared lexicographicaly.
+    /// number of accidentals and distance to local ton
+    /// compared lexicographicaly, and tie breaking measures.
     ADlex,
 
-    /// number of accidentals and distance to local ton compared lexicographicaly.
-    /// some TB components are summed before comparison.
+    /// number of accidentals and distance to local ton
+    /// compared lexicographicaly, and tie breaking measures, with some
+    /// TB components summed before comparison.
     ADlexs,
+
+    /// sum of number of accidentals and distance to local ton,
+    /// and then (lexicographically) the distance to local ton,
+    /// and then tie breaking measures.
+    ADplex,
+
+    /// sum of number of accidentals and distance to local ton,
+    /// and then (lexicographically) the distance to local ton,
+    /// and then tie breaking measures.
+    /// with some TB components summed before comparison.
+    ADplexs,
 
 };
 
