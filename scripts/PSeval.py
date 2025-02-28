@@ -821,13 +821,15 @@ class Stats:
         else:
             return self._timer[i]*1000
                  
-    def record_part(self, part_id, k_gt, ton_est, nb_notes, nb_err):
+    def record_part(self, part_id, k_gt, ton_est, nb_notes, nb_err0, nb_err1):
         """add a new row to the evaluation table"""
+        """nb_err0: nb of errors before rewriting"""
+        """nb_err1: nb of errors before rewriting"""
         self._global_parts += 1
         self._global_notes += nb_notes
-        self._global_nerr += nb_err
+        self._global_nerr += nb_err1
         if compare_key(k_gt, ton_est):
-            self._global_nerr_ks += nb_err
+            self._global_nerr_ks += nb_err1
         else:
             self._global_kserr += 1
         row = []
@@ -846,11 +848,19 @@ class Stats:
         else:
             row.append(strk(m21_key(ton_est))) # current key estimation
         row.append(nb_notes)               # nb notes in part 
-        row.append(nb_err)
+		# errors before rewriting
+        row.append(nb_err0)
         if nb_notes > 0:
-            row.append((nb_notes - nb_err) * 100 / nb_notes)       
+            row.append((nb_notes - nb_err0) * 100 / nb_notes)       
         else:
-            assert(nb_err == 0)
+            assert(nb_err0 == 0)
+            row.append(0)                  
+		# errors after rewriting
+        row.append(nb_err1)
+        if nb_notes > 0:
+            row.append((nb_notes - nb_err1) * 100 / nb_notes)       
+        else:
+            assert(nb_err1 == 0)
             row.append(0)                  
         # append ordered timer values
         self.sort_timers()
@@ -911,7 +921,7 @@ class Stats:
         for i in self._timer:
             timers.append('time_'+str(i))            
         df.columns = ['id', 'title','composer', 'part', 'KSgt', 'KSest', 
-                      'notes', 'err', 'success']+timers
+                      'notes', 'err', 'success', 'err_rw', 'succ_rw']+timers
         for t in timers:
             df[t] = df[t].map('{:,.3f}'.format)
         # every KSestimated identical to corresp. KSgt becomes NaN
@@ -921,13 +931,18 @@ class Stats:
         # last line
         df.at['total', 'notes'] = df['notes'].sum()
         df.at['total', 'err'] = df['err'].sum()
-        nb_n = df.at['total', 'notes']
-        nb_e = df.at['total', 'err']
-        if nb_n > 0:
-            df.at['total', 'success'] = (nb_n - nb_e)*100/nb_n
+        df.at['total', 'err_rw'] = df['err_rw'].sum()
+        nbn = df.at['total', 'notes']
+        nbe0 = df.at['total', 'err']
+        nbe1 = df.at['total', 'err_rw']
+        if nbn > 0:
+            df.at['total', 'success'] = (nbn - nbe0)*100/nbn
+            df.at['total', 'succ_rw'] = (nbn - nbe1)*100/nbn
         else:
-            df.at['total', 'success'] = 0
+            df.at['total', 'success'] = 100
+            df.at['total', 'succ_rw'] = 100
         df['success'] = df['success'].map('{:,.2f}'.format) 
+        df['succ_rw'] = df['succ_rw'].map('{:,.2f}'.format) 
         # nb of errors in KS estimation
         df.at['total', 'KSgt'] = size
         df.at['total', 'KSest'] = df['KSgt'].isna().sum() # correct extimations of KS
@@ -1121,11 +1136,6 @@ class Spellew:
         self._gridalgo = grid
         self._global1 = global1
         
-    def mask(self):
-       """an intermediate list candidate global is computed"""
-       """after building the 1st table, for optimizing the computation of the grid (mask) and 2d table"""
-       return self._global1 < 100 
-       
     def set_global(self, percent):
         """PSE: set the percentage of approximation for computing"""
         """the intermediate list of candidate globals (before second step) if step = 1"""
@@ -1163,9 +1173,9 @@ class Spellew:
         """with the algorithm specified"""
         """"PS13 or PSE nbtons _tablenb costtype1 Tonal or Modal Deterministic of Exhaustive"""
         timestamp = datetime.today().strftime('%Y%m%d-%H%M')
-        return self._algo_name + '_' + self._algo_params + '_' + timestamp
+        return timestamp + '_' + self.algo()
         
-    def algoname(self):
+    def algo(self):
         return self._algo_name + '_' + self._algo_params
     
     def get_speller(self):
@@ -1204,7 +1214,7 @@ class Spellew:
 
         # compute the subarray of tons selected as candidate global tonality
         # with a tolerance distance 
-        if self.mask():
+        if self._global1 < 100:
             assert(self._global1 >= 0)
             assert(self._global1 < 100)
             print('PSE: evaluation first list of Global candidates', 
@@ -1212,6 +1222,8 @@ class Spellew:
             self._speller.select_globals(self._global1, True) #refine current global subarray
             nbg = self._speller.globals()
             print('PSE:', nbg, 'candidate global from 1st table', flush=True)                
+
+        self._speller.force_global(0, pse.Mode.Major)
 
         if self._ct2 != pse.CTYPE_UNDEF:
 
@@ -1440,7 +1452,7 @@ class Spellew:
             anote_rediff(ln, ld0, ld1) # anote_diff(ln, ld0, 'red')
             if (self._speller.locals()):
                 anote_local_part(part, self._speller, i)    
-        return (k0, gt, len(ln), ld1)
+        return (k0, gt, len(ln), ld0, ld1)
 
     def eval_score(self, score, stats=Stats(),
                    score_id=0, title:str='', composer:str='', output_path=None, 
@@ -1471,14 +1483,14 @@ class Spellew:
             if (nbparts > 1):
                 print('part', i+1, '/', nbparts, end=' ', flush=True)
             if (spellable(part)):
-                (k_gt, ton_est, nn, ld) = self.eval_part(part, stats, 
-                                                         output_path, 
-                                                         chord_symb, 
-                                                         reset_globals)
+                (k_gt, ton_est, nn, ld0, ld1) = self.eval_part(part, stats, 
+                                            	               output_path, 
+                                                  	           chord_symb, 
+                                                               reset_globals)
                 # add one row in stat table for each part
-                stats.record_part(i, k_gt, ton_est, nn, len(ld))
+                stats.record_part(i, k_gt, ton_est, nn, len(ld0), len(ld1))
                 ls.append(ton_est)
-                lld.append(ld)
+                lld.append(ld1)
             else:
                 print('cannot spell, skip', flush=True)
         stats.close_score()

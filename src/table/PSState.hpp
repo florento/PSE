@@ -38,7 +38,7 @@ namespace pse {
 /// - pitch names correspond to chars 'A'..'G', where 0 is 'C' and 6 is 'B'.
 /// @see current diatonic pitch set in https://hal.archives-ouvertes.fr/hal-02886399v2
 /// @see current diatonic scale in https://hal.archives-ouvertes.fr/hal-02162936v2
-/// @todo replace by State1 (name -> accid) and State2 (name, octave -> accid)
+/// @todo replaced by State1 (name -> accid) and State2 (name, octave -> accid)
 class PSState
 {
     

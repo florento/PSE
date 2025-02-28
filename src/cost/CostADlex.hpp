@@ -103,8 +103,9 @@ public: // access, debug
     /// Cost type of this const value.
     virtual CostType type() const override;
     
-    /// @param o output stream where to print this cost.
-    void print(std::ostream& o) const override;
+    // @param o output stream where to print this cost.
+    // @see same as CostAD::print
+    // void print(std::ostream& o) const override;
 
 };
         

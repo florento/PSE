@@ -29,10 +29,10 @@ std::unique_ptr<Cost> unique_zero(const CostType& ct)
             return std::unique_ptr<Cost>(new CostA());;
 
         case CostType::ACCIDtb:
-            return std::unique_ptr<Cost>(new CostAT(false));;
+            return std::unique_ptr<Cost>(new CostAT(true)); // lexico ordering
 
         case CostType::ACCIDtbs:
-            return std::unique_ptr<Cost>(new CostAT(true));;
+            return std::unique_ptr<Cost>(new CostAT(false)); // partial sum TB
 
         case CostType::ACCIDlead:
         {
@@ -41,22 +41,22 @@ std::unique_ptr<Cost> unique_zero(const CostType& ct)
         }
 
         case CostType::ADplus:
-            return std::unique_ptr<Cost>(new CostADplus(false));;
+            return std::unique_ptr<Cost>(new CostADplus(true));;
 
         case CostType::ADpluss:
-            return std::unique_ptr<Cost>(new CostADplus(true));;
+            return std::unique_ptr<Cost>(new CostADplus(false));;
             
         case CostType::ADlex:
-            return std::unique_ptr<Cost>(new CostADlex(false));;
-
-        case CostType::ADlexs:
             return std::unique_ptr<Cost>(new CostADlex(true));;
 
+        case CostType::ADlexs:
+            return std::unique_ptr<Cost>(new CostADlex(false));;
+
         case CostType::ADplex:
-            return std::unique_ptr<Cost>(new CostADplex(false));;
+            return std::unique_ptr<Cost>(new CostADplex(true));;
 
         case CostType::ADplexs:
-            return std::unique_ptr<Cost>(new CostADplex(true));;
+            return std::unique_ptr<Cost>(new CostADplex(false));;
 
         default:
         {

@@ -94,14 +94,14 @@ def eval_corpus(speller, dataset, skip=[],
     """csflag: see pse.eval_score"""   
     assert(csflag in [0, 1, 2, 3])
     # prepare the output dir
-    algoname = speller.algoname()    
+    algoname = speller.algo()    
     timestamp = datetime.today().strftime('%Y%m%d-%H%M')
     output_path = Path(eval_root)
     if not os.path.exists(output_path):
         print('ERROR output dir: ', output_path, 'not found')
         return
     if output_dir == '':
-       output_dir = algoname+'_'+timestamp
+       output_dir = timestamp+'_'+algoname
     output_path = output_path/output_dir
     if not os.path.isdir(output_path):
         os.mkdir(output_path)
@@ -237,7 +237,7 @@ def print_adds(ln, aux):
             assert(n.pitch.octave is not None)
             a += str(n.pitch.octave)
             a += ', '
-            a += 'false'  # printed: not significant                      
+            a += 'false'  # printed: not significant                     
             a += ', '
         a += 'true' if aux else 'false'
         a += ');'

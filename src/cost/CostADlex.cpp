@@ -93,15 +93,10 @@ CostType CostADlex::type() const
 }
 
 
-void CostADlex::print(std::ostream& o) const
-{
-    o << _accid << ":";
-    o << _dist << ':';
-    o << _color << ':';
-    o << _cflat << ':';
-    o << _double << ':';
-    o << _chromharm;
-}
+//void CostADlex::print(std::ostream& o) const
+//{
+//    CostAD::print(o);
+//}
 
 
 std::ostream& operator<<(std::ostream& o, const CostADlex& c)

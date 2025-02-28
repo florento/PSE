@@ -30,25 +30,31 @@ namespace pse {
 /// every pitch names (in 0..6), and, optionaly, octave number.
 class PSState0
 {
-
+    
 public: // construction
+    
+    /// main constructor
+    PSState0();
+
+    /// copy constructor
+    PSState0(const PSState0& rhs);
     
     /// allocate a new copy of this state.
     virtual std::shared_ptr<PSState0> clone() const = 0;
     
-public: // comparison
-
+    public: // comparison
+    
     /// same accidentals
     virtual bool equal(const PSState0& rhs) const = 0;
     
     /// states have  the same list of accidentals
     bool operator==(const PSState0& rhs) const;
-
+    
     /// states have different list of accidentals
     bool operator!=(const PSState0& rhs) const;
-
+    
 public: // access
-
+    
     /// accidental(s) in this state for a given pitch name and octave.
     /// @param name a pitch name, between 'C' and 'B'.
     /// @param oct an optional octave number between OCTAVE_MIN and OCTAVE_MAX
@@ -77,9 +83,24 @@ public: // access
     bool member(const enum NoteName& name,
                 const enum Accid& accid,
                 int oct=Pitch::UNDEF_OCTAVE) const;
+    
+    /// name associated to the given pitchclass in this current state.
+    /// @param pc a pitch class in 0..11.
+    /// @return if pc is represented in this state,
+    /// return the associated name, otherwise, NoteName::Undef.
+    const enum NoteName currentName(unsigned int pc) const;
 
+    /// last name that has been associated to the given pitchclass
+    /// in the lifecycle of this state.
+    /// @param pc a pitch class in 0..11.
+    /// @return if pc has been represented in this state,
+    /// return the last associated name, otherwise, NoteName::Undef.
+    /// @warning it may differ from currentName if the pc was associated a
+    /// name but this name has changed accidental since.
+    const enum NoteName lastName(unsigned int pc) const;
+    
 public: // modification
-
+    
     /// update this state, setting the given accident for the given name
     /// and octave.
     /// @param a a number of accidentals, for n, in -2..2.
@@ -90,7 +111,7 @@ public: // modification
     bool update(const enum Accid& a,
                 const enum NoteName& name,
                 int oct=Pitch::UNDEF_OCTAVE);
-
+    
 protected: // low-level access and modification, implemented in descendants.
     
     /// get accidental(s) in this state for a given pitch name
@@ -103,7 +124,7 @@ protected: // low-level access and modification, implemented in descendants.
     /// can be a single accidental value, a pair of accidents or UNDEF.
     virtual const accids_t get(const enum NoteName& name,
                                int oct=Pitch::UNDEF_OCTAVE) const = 0;
-
+    
     /// set accidental(s) in this state for a given pitch name
     /// and (optionaly) octave.
     /// @param a the accidents for given note n and octave oct.
@@ -116,6 +137,13 @@ protected: // low-level access and modification, implemented in descendants.
     virtual bool set(const accids_t a,
                      const enum NoteName& name,
                      int oct=Pitch::UNDEF_OCTAVE) = 0;
+    
+protected: // data
+
+    /// last name associated to each pitch classes in this state.
+    /// NoteName::Undef for a pitch class that has never been associated
+    /// a name so far.
+    std::array<enum NoteName, 12> _names;
     
 };
 

@@ -170,11 +170,17 @@ public: // operators, update
     /// @param gton conjectured main (global) tonality (key signature).
     /// @param lton conjectured local tonality or undef tonality by default.
     /// not known.
+    /// @param prev_name previous name associated to has been associated to
+    /// the received pitch (before processing it). Notename::Undef if the pitch
+    /// was never assiated a name in the configuration's state.
+    /// @return wether an update was effectively performed.
     virtual bool update(const enum NoteName& name,
                         const enum Accid& accid,
                         bool printed,
-                        const Ton& gton, const Ton& lton = Ton()) = 0;
-
+                        const Ton& gton,
+                        const Ton& lton = Ton(),
+                        const enum NoteName& prev_name = NoteName::Undef) = 0;
+    
 public: // access and debug
     
     /// Cost type of this cost value.

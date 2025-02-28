@@ -96,10 +96,11 @@ size_t CostADplus::accids() const
 
 
 bool CostADplus::update(const enum NoteName& name, const enum Accid& accid,
-                        bool print, const Ton& gton, const Ton& lton)
+                        bool print, const Ton& gton, const Ton& lton,
+                        const enum NoteName& prev_name)
 {
     size_t olddist(_dist);
-    bool ret = CostAD::update(name, accid, print, gton, lton);
+    bool ret = CostAD::update(name, accid, print, gton, lton, prev_name);
     // _sum = _accid + _dist;
     // dist increased (by new dists)
     assert(olddist <= _dist);
@@ -121,8 +122,10 @@ CostType CostADplus::type() const
 
 void CostADplus::print(std::ostream& o) const
 {
-    o << accids() << "+" << _dist << ':';
-    o << _color << ':' << _cflat << ':' << _double << ':' << _chromharm;
+    assert(_accid >= _inconsist + _dist);
+    o << (_accid - _inconsist - _dist) << '+';
+    o <<  _inconsist << '+' << _dist << ':';
+    printTB(o);
 }
 
 

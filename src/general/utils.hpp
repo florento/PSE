@@ -22,7 +22,7 @@ namespace pse {
 
 namespace util {
 
-/// fill the given rank vector with ranks of the values in the given list.
+/// fill the given rank vector with the ranks of the values in the given list.
 /// @param v vector of values.
 /// @param equal equality predicate on the elements of E, for ties in ranking.
 /// @param smaller < relation on the elements of E, for ranking.

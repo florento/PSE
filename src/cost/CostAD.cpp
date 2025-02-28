@@ -85,9 +85,10 @@ bool CostAD::updateDist(const enum NoteName& name, const enum Accid& accid,
 bool CostAD::update(const enum NoteName& name,
                     const enum Accid& accid,
                     bool print,
-                    const Ton& gton, const Ton& lton)
+                    const Ton& gton, const Ton& lton,
+                    const enum NoteName& prev_name)
 {
-    bool reta = CostAT::update(name, accid, print, gton, lton);
+    bool reta = CostAT::update(name, accid, print, gton, lton, prev_name);
     bool retd = updateDist(name, accid, print, gton, lton);
 
     return reta or retd;
@@ -97,11 +98,9 @@ bool CostAD::update(const enum NoteName& name,
 
 void CostAD::print(std::ostream& o) const
 {
-    o << _accid << ':';
-    o << _dist << ':';
-    o << _chromharm << ':';
-    o << _color << ':';
-    o << _cflat;
+    CostAD::print(o);
+    o << ':' << _dist << ':';
+    printTB(o);
 }
 
 

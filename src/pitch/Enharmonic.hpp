@@ -47,16 +47,20 @@ public:
     /// name of the ith entry for pitch a class.
     /// @param c a pitch class in 0..11
     /// @param i an index of enharmonics in 0..2
+    /// @param cf whether Cb, B#, Fb, E# are forbidden.
+    /// @param da whether double flats ans sharps are forbidden.
     /// @return a note name in 'A' .. 'G'
     /// or Undef is there is no enharmonic of index i.
-    static enum NoteName name(int c, int i);
+    static enum NoteName name(int c, int i, bool cf=false, bool da=false);
       
     /// accidental of the ith entry for pitch a class.
     /// @param c a pitch class in 0..11
     /// @param i an index of enharmonics in 0..2
+    /// @param cf whether Cb, B#, Fb, E# are forbidden.
+    /// @param da whether double flats ans sharps are forbidden.
     /// @return an alteration number in -2..2
     /// or Undef is there is no enharmonic of index i.
-    static enum Accid accid(int c, int i);
+    static enum Accid accid(int c, int i, bool cf=false, bool da=false);
     
 private:
 
@@ -78,8 +82,15 @@ private:
     static const enum Accid _2S;
     static const enum Accid _UA;
 
-    static const int ENHARMONIC_UNDEF;
+    /// Cflat, Bsharp, Fflat, Esharp
+    static const PWO CFLAT[4];
 
+    /// double flat or double sharp
+    static bool doublaccid(const enum Accid& a);
+    
+    /// constant for the tables
+    static const int ENHARMONIC_UNDEF;
+    
     /// The table ENHARMONIC contains for each pitch class in 0..11
     /// three synonyms in 0..2 presented with 2 values :
     /// - name in 0..6 for C, D, E, F, G, A, B (see table NAME) and
@@ -88,11 +99,14 @@ private:
     /// both components are set to ENHARMONIC_UNDEF.
     static const PWO ENHARMONIC[12][3];
     
-    /// short list without B##, Fbb, E##, Cbb
+    /// short list without double #, double b
     static const PWO ENHARMONIC1[12][3];
 
     /// short list without B#, Cb, E#, Fb
     static const PWO ENHARMONICb[12][3];
+
+    /// very short list without double #, double b and without B#, Cb, E#, Fb
+    static const PWO ENHARMONIC1b[12][3];
 
 };
     

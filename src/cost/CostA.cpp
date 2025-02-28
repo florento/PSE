@@ -16,12 +16,14 @@ namespace pse {
 
 
 CostA::CostA():
-_accid(0)
+_accid(0),
+_inconsist(0)
 { }
 
 
 CostA::CostA(const CostA& rhs):
-_accid(rhs._accid)
+_accid(rhs._accid),
+_inconsist(rhs._inconsist)
 { }
 
 
@@ -47,6 +49,7 @@ bool CostA::smaller(const CostA& rhs) const
 CostA& CostA::add(const CostA& rhs)
 {
     _accid += rhs._accid;
+    _inconsist += rhs._inconsist;
     return *this;
 }
 
@@ -90,11 +93,30 @@ bool CostA::updateAccid(const enum NoteName& name,
     }
 }
 
+
+bool CostA::updateInconsistency(const enum NoteName& prev_name,
+                                const enum NoteName& name)
+{
+    if (prev_name != NoteName::Undef and prev_name != name)
+    {
+        _accid += 1; // cumulate with accids
+        _inconsist += 1;
+        return true;
+    }
+    else
+        return false;
+}
+
+
 // update cost when accident for the name was updated
 bool CostA::update(const enum NoteName& name, const enum Accid& accid,
-                   bool print, const Ton& gton, const Ton& lton)
+                   bool print, const Ton& gton, const Ton& lton,
+                   const enum NoteName& prev_name)
 {
-    return updateAccid(name, accid, print, gton, lton);
+    bool reti = updateInconsistency(prev_name, name);
+    bool reta = updateAccid(name, accid, print, gton, lton);
+    
+    return reti or reta;
 }
 
 
@@ -109,7 +131,10 @@ CostType CostA::type() const
 
 void CostA::print(std::ostream& o) const
 {
-    o << _accid;
+    assert(_accid >= _inconsist);
+    //    if (_inconsist > 0)
+    //        DEBUG("{} INCONSISTENCIES (CostA)", _inconsist);
+    o << (_accid - _inconsist) << '+' << _inconsist;
 }
 
 

@@ -33,19 +33,22 @@ _print(false)
     int octave = MidiNum::midi_to_octave(_midi, name);
     assert(Pitch::check_octave(octave));
     assert(_state);
+    // name of pitch class read in the _state before update
+    const enum NoteName prev_name = _state->lastName(midi()%12);
+    // change state
     _print = _state->update(accid, name, octave);
     _id = c->id()+1; // next note in enum
     // assert(_id <= e.stop());
-
+    // name of pitch class read in the _state after update
+    assert(name == _state->lastName(midi()%12));
+    
     // update cost
     assert(gton.defined());
     assert(_cost);
-    //
-    // DEBUG("BOO");
     if (cprint) DEBUG("PSC1 force print");
-    _cost->update(name, accid, (cprint?true:_print), gton, lton);
-    // _cost->update(*this, e, ton);
-        
+    // if name differs from prev_name, update Inconsistency in _cost
+    _cost->update(name, accid, (cprint?true:_print), gton, lton, prev_name);
+    
     // the given accidental corresponds to the chroma of input note
     // and given name.
     assert(accid == MidiNum::class_to_accid(e.midipitch(c->id())%12, name));

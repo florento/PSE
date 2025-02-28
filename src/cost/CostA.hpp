@@ -115,15 +115,19 @@ public: // update
     /// ignored for CostA.
     /// @param lton conjectured local tonality or undef tonlity if it is
     /// unknown. ignored for CostA.
+    /// @param prev_name previous name associated to has been associated to
+    /// the received pitch (before processing it). Notename::Undef if the pitch
+    /// was never assiated a name in the configuration's state.
     /// @return wether an update was effectively performed.
     bool update(const enum NoteName& name,
                 const enum Accid& accid,
                 bool print,
-                const Ton& gton, const Ton& lton = Ton()) override;
+                const Ton& gton, const Ton& lton = Ton(),
+                const enum NoteName& prev_name = NoteName::Undef) override;
 
 protected: // update member
 
-    /// update the member accid of this cost with the given values.
+    /// update the number accids of this cost with the given values.
     /// @param name chosen name for the received pitch.
     /// @param accid chosen alteration for the received pitch.
     /// @param print whether the accidental must be printed in score.
@@ -131,11 +135,21 @@ protected: // update member
     /// ignored for CostA.
     /// @param lton conjectured local tonality or undef tonlity if it is
     /// unknown. ignored for CostA.
+    /// @return wether an update was effectively performed.
     virtual bool updateAccid(const enum NoteName& name,
                              const enum Accid& accid,
                              bool print,
                              const Ton& gton, const Ton& lton = Ton());
-            
+   
+    /// update the number of naming inconsistencies for this cost
+    /// with the given values.
+    /// @param name chosen name for the received pitch.
+    /// @param prev_name name associated to the received pitch prior to
+    /// reception.
+    /// @return wether an update was effectively performed.
+    bool updateInconsistency(const enum NoteName& prev_name,
+                             const enum NoteName& name);
+
 public: // access and debug
 
     /// accessor for debug.
@@ -152,6 +166,9 @@ protected: // data
     /// cumulated number of printed accidentals.
     size_t _accid; // unsigned int
     
+    /// number of inconsist association of name to pitch class
+    /// durring processing of current bar.
+    size_t _inconsist;    
 };
 
 // CostA operator+(const CostA& c1, const CostA& c2);

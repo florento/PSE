@@ -94,8 +94,8 @@ protected: // operators
     double pdist(const Cost& rhs) const override
     { return Cost::pdist<CostAT>(rhs); }
     
-    // equality for tie-breaking members.
-    // @param rhs a cost to compare to.
+    /// equality for tie-breaking members.
+    /// @param rhs a cost to compare to.
     bool tiebreak_equal(const CostAT& rhs) const;
 
     /// variant of equality for tie-breaking members
@@ -104,36 +104,46 @@ protected: // operators
     bool tiebreak_equal_lex(const CostAT& rhs) const;
 
     /// variant of equality for tie-breaking members
+    /// with a sum of cflat and double.
+    /// @param rhs a cost to compare to.
+    bool tiebreak_equal_lex0(const CostAT& rhs) const;
+
+    /// variant of equality for tie-breaking members
     /// with a sum of some members.
-    // @param rhs a cost to compare to.
+    /// @param rhs a cost to compare to.
     bool tiebreak_equal_sum(const CostAT& rhs) const;
     
-    // inequality for tie-breaking members.
-    // @param rhs a cost to compare to.
+    /// inequality for tie-breaking members.
+    /// @param rhs a cost to compare to.
     bool tiebreak_smaller(const CostAT& rhs) const;
 
     /// variant of inequality for tie-breaking members
+    /// with a sum of cflat and double.
+    /// @param rhs a cost to compare to.
+    bool tiebreak_smaller_lex00(const CostAT& rhs) const;
+
+    /// variant of inequality for tie-breaking members
+    /// with a sum of cflat and double.
+    /// @param rhs a cost to compare to.
+    bool tiebreak_smaller_lex01(const CostAT& rhs) const;
+
+    /// variant of inequality for tie-breaking members
     /// with a lexicographic member by member comparison.
-    // @param rhs a cost to compare to.
+    /// @param rhs a cost to compare to.
     bool tiebreak_smaller_lex1(const CostAT& rhs) const;
 
     /// variant of inequality for tie-breaking members
     /// with a lexicographic member by member comparison.
-    // @param rhs a cost to compare to.
+    /// @param rhs a cost to compare to.
     bool tiebreak_smaller_lex2(const CostAT& rhs) const;
 
     /// variant of inequality for tie-breaking members
-    /// with a lexicographic member by member comparison.
-    // @param rhs a cost to compare to.
-    bool tiebreak_smaller_lex3(const CostAT& rhs) const;
-
-    /// variant of inequality for tie-breaking members
     /// with a sum of some members.
-    // @param rhs a cost to compare to.
+    /// @param rhs a cost to compare to.
     bool tiebreak_smaller_sum(const CostAT& rhs) const;
 
-    // distance for tie-breaking members.
-    // @param rhs a cost to compare to.
+    /// distance for tie-breaking members.
+    /// @param rhs a cost to compare to.
     double tiebreak_pdist(const CostAT& rhs) const;
 
 public: // update
@@ -149,11 +159,15 @@ public: // update
     /// ignored for CostA.
     /// @param lton conjectured local tonality or undef tonlity if it is
     /// unknown. ignored for CostA.
+    /// @param prev_name previous name associated to has been associated to
+    /// the received pitch (before processing it). Notename::Undef if the pitch
+    /// was never assiated a name in the configuration's state.
     /// @return wether an update was effectively performed.
     bool update(const enum NoteName& name,
                 const enum Accid& accid,
                 bool print,
-                const Ton& gton, const Ton& lton = Ton()) override;
+                const Ton& gton, const Ton& lton = Ton(),
+                const enum NoteName& prev_name = NoteName::Undef) override;
 
 protected: // update members
 
@@ -272,7 +286,7 @@ public: // access and debug
     
     /// Cost type of this const value.
     virtual CostType type() const override;
-    
+
     /// @param o output stream where to print this cost.
     void print(std::ostream& o) const override;
     
@@ -303,6 +317,12 @@ protected: // data
     /// otherwise, make the sum of the three last tie-breaking components
     /// before comparison.
     bool _tblex;
+    
+protected: // debug
+
+    /// print only the tie-breaking components
+    /// @param o output stream where to print this cost.
+    void printTB(std::ostream& o) const;
     
 };
 

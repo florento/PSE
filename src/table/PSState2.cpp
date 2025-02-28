@@ -12,7 +12,8 @@ namespace pse {
 // const size_t PSSTate2::OCTAVES = Pitch::OCTAVE_MAX - Pitch::OCTAVE_MIN;
 
 
-PSState2::PSState2(const Ton& ton, bool tonal)
+PSState2::PSState2(const Ton& ton, bool tonal):
+PSState0() // allocation initial _names (all undef)
 {
     // for each note name (0 is 'C', 6 is 'B').
     for (int n = 0; n < 7; ++n)
@@ -35,6 +36,7 @@ PSState2::PSState2(const Ton& ton, bool tonal)
 
 
 PSState2::PSState2(const PSState2& rhs):
+PSState0(rhs),
 _state(rhs._state) // array copy
 {
     // std::copy(rhs._state.begin(), rhs._state.end(), _state.begin());

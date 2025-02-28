@@ -90,12 +90,22 @@ double CostAT::pdist(const CostAT& rhs) const
 bool CostAT::tiebreak_equal(const CostAT& rhs) const
 {
     if (_tblex)
-        return tiebreak_equal_lex(rhs);
+        return tiebreak_equal_lex0(rhs);
     else
         return tiebreak_equal_sum(rhs);
 }
 
 
+bool CostAT::tiebreak_smaller(const CostAT& rhs) const
+{
+    if (_tblex)
+        return tiebreak_smaller_lex01(rhs);
+    else
+        return tiebreak_smaller_sum(rhs);
+}
+
+
+// truly lexico on all TB components
 bool CostAT::tiebreak_equal_lex(const CostAT& rhs) const
 {
     return (_chromharm == rhs._chromharm and
@@ -105,20 +115,20 @@ bool CostAT::tiebreak_equal_lex(const CostAT& rhs) const
 }
 
 
+// sum of Cb and doubles
+bool CostAT::tiebreak_equal_lex0(const CostAT& rhs) const
+{
+    return (_chromharm == rhs._chromharm and
+            _double + _cflat == rhs._double + rhs._cflat and
+            _color == rhs._color);
+}
+
+
 bool CostAT::tiebreak_equal_sum(const CostAT& rhs) const
 {
     assert(_tbsum == _color + _cflat + _double);
     assert(rhs._tbsum == rhs._color + rhs._cflat + rhs._double);
     return (_chromharm == rhs._chromharm and _tbsum == rhs._tbsum);
-}
-
-
-bool CostAT::tiebreak_smaller(const CostAT& rhs) const
-{
-    if (_tblex)
-        return tiebreak_smaller_lex1(rhs);
-    else
-        return tiebreak_smaller_sum(rhs);
 }
 
 
@@ -132,6 +142,44 @@ bool CostAT::tiebreak_smaller_sum(const CostAT& rhs) const
         return (_tbsum < rhs._tbsum);
 }
     
+
+// - cflat + double
+// - chromharm
+// - color
+bool CostAT::tiebreak_smaller_lex00(const CostAT& rhs) const
+{
+    if (_cflat + _double == rhs._cflat + rhs._double)
+    {
+        if (_chromharm == rhs._chromharm)
+        {
+            return (_color < rhs._color);
+        }
+        else
+            return (_chromharm < rhs._chromharm);
+    }
+    else
+        return (_cflat + _double < rhs._cflat + rhs._double);
+}
+
+
+// - cflat + double
+// - color
+// - chromharm
+bool CostAT::tiebreak_smaller_lex01(const CostAT& rhs) const
+{
+    if (_cflat + _double == rhs._cflat + rhs._double)
+    {
+        if (_color == rhs._color)
+        {
+            return (_chromharm < rhs._chromharm);
+        }
+        else
+            return (_color < rhs._color);
+    }
+    else
+        return (_cflat + _double < rhs._cflat + rhs._double);
+}
+
 
 // - color
 // - cflat
@@ -392,9 +440,10 @@ bool CostAT::updateDouble(const enum NoteName& name, const enum Accid& accid,
 
 // update cost when accident for the name was updated
 bool CostAT::update(const enum NoteName& name, const enum Accid& accid,
-                    bool printed, const Ton& gton, const Ton& lton)
+                    bool printed, const Ton& gton, const Ton& lton,
+                    const enum NoteName& prev_name)
 {
-    bool ret = CostA::update(name, accid, printed, gton, lton);
+    bool ret = CostA::update(name, accid, printed, gton, lton, prev_name);
 
     // update only for printed accidentals
     if (printed)
@@ -419,14 +468,30 @@ CostType CostAT::type() const
         return CostType::ACCIDtbs;
 }
 
+void CostAT::printTB(std::ostream& o) const
+{
+    if (_tblex)
+    {
+        o << _color << ':';
+        o << _cflat << ':';
+        o << _double << ':';
+        o << _chromharm;
+    }
+    else
+    {
+        o << _color << '+';
+        o << _cflat << '+';
+        o << _double << ':';
+        o << _chromharm;
+    }
+}
+
 
 void CostAT::print(std::ostream& o) const
 {
-    o << _accid << ':';
-    o << _color << ':';
-    o << _cflat << ':';
-    o << _double << ':';
-    o << _chromharm;
+    CostA::print(o);
+    o << ':';
+    printTB(o);
 }
 
 

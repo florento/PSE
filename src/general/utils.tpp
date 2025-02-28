@@ -23,14 +23,14 @@ void ranks(std::vector<E>& v,
     // list of ranks, initialy filled with zeros
     ranks.insert(ranks.begin(), v.size(), 0);
     
-    // list pf pairs index / value
+    // list pf pairs index / value in E
     std::vector<std::pair <size_t, E>> v1;
     for (size_t i = 0; i < v.size(); ++i)
     {
         v1.push_back(std::make_pair(i, v.at(i)));
     }
        
-    // sort v1 according to the distance value
+    // sort v1 according to the value
     std::sort(v1.begin(), v1.end(),
               [smaller](std::pair<size_t, E> x, std::pair<size_t, E> y)
               { return smaller(x.second, y.second); } );
@@ -45,7 +45,7 @@ void ranks(std::vector<E>& v,
     {
         size_t current = v1[i].first;
         assert(current < ranks.size());
-        E d = v1[i].second;
+        E d = v1.at(i).second;
         if (equal(d, dprec))
         {
             ranks[current] = rank;

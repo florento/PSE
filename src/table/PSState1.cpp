@@ -11,7 +11,8 @@
 namespace pse {
 
 
-PSState1::PSState1(const Ton& ton, bool tonal)
+PSState1::PSState1(const Ton& ton, bool tonal):
+PSState0() // allocation initial _names (all undef)
 {
     // for each note name (0 is 'C', 6 is 'B').
     for (int n = 0; n < 7; ++n)
@@ -29,6 +30,7 @@ PSState1::PSState1(const Ton& ton, bool tonal)
 
 
 PSState1::PSState1(const PSState1& rhs):
+PSState0(rhs),
 _state(rhs._state) // array copy
 { }
 

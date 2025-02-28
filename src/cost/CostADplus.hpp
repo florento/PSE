@@ -110,12 +110,16 @@ public: // update
     /// @param gton conjectured main (global) tonality (key signature).
     /// @param lton conjectured local tonality or undef tonlity if it is
     /// not known.
+    /// @param prev_name previous name associated to has been associated to
+    /// the received pitch (before processing it). Notename::Undef if the pitch
+    /// was never assiated a name in the configuration's state.
     /// @return wether an update was effectively performed.
     /// @see perform the update of CostAD and add dist to accid.
     bool update(const enum NoteName& name,
                 const enum Accid& accid,
                 bool print,
-                const Ton& gton, const Ton& lton = Ton()) override;
+                const Ton& gton, const Ton& lton = Ton(),
+                const enum NoteName& prev_name = NoteName::Undef) override;
 
 protected: // access
     
