@@ -30,9 +30,10 @@ class CostADplex : public CostADplus
 public: // construction
     
     /// null cost.
-    /// @param tb_sum make the sum of some tie-breaking components
-    /// before comparison.
-    CostADplex(bool tb_sum=false);
+    /// @param tb_lex use lexicographic comparison for tie-breaking components.
+    /// Otherwise make the sum of some tie-breaking components before
+    /// comparison.
+    CostADplex(bool tb_lex=true);
     
     /// copy constructor.
     CostADplex(const CostADplex& rhs);

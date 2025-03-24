@@ -266,8 +266,8 @@ void PSB::get_names(size_t id, const Ton& gton,
     {
         for (int j = 0; j < 3; ++j)
         {
-            enum NoteName name = Enharmonics::name(m, j, false, false);
-            enum Accid accid = Enharmonics::accid(m, j, false, false);
+            enum NoteName name = Enharmonics::name(m, j, true, false);
+            enum Accid accid = Enharmonics::accid(m, j, true, false);
             assert((name == NoteName::Undef) == (accid == Accid::Undef));
             // case of 8 and (short list) 1, 3, 6, 10
             // ignore undef (empty cases)

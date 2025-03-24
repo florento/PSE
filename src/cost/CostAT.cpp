@@ -99,28 +99,9 @@ bool CostAT::tiebreak_equal(const CostAT& rhs) const
 bool CostAT::tiebreak_smaller(const CostAT& rhs) const
 {
     if (_tblex)
-        return tiebreak_smaller_lex01(rhs);
+        return tiebreak_smaller_lex02(rhs);
     else
         return tiebreak_smaller_sum(rhs);
-}
-
-
-// truly lexico on all TB components
-bool CostAT::tiebreak_equal_lex(const CostAT& rhs) const
-{
-    return (_chromharm == rhs._chromharm and
-            _color == rhs._color and
-            _cflat == rhs._cflat and
-            _double == rhs._double);
-}
-
-
-// sum of Cb and doubles
-bool CostAT::tiebreak_equal_lex0(const CostAT& rhs) const
-{
-    return (_chromharm == rhs._chromharm and
-            _double + _cflat == rhs._double + rhs._cflat and
-            _color == rhs._color);
 }
 
 
@@ -140,6 +121,25 @@ bool CostAT::tiebreak_smaller_sum(const CostAT& rhs) const
                 return (_chromharm < rhs._chromharm);
     else
         return (_tbsum < rhs._tbsum);
+}
+
+
+// truly lexico on all TB components
+bool CostAT::tiebreak_equal_lex(const CostAT& rhs) const
+{
+    return (_chromharm == rhs._chromharm and
+            _color == rhs._color and
+            _cflat == rhs._cflat and
+            _double == rhs._double);
+}
+
+
+// sum of Cb and doubles
+bool CostAT::tiebreak_equal_lex0(const CostAT& rhs) const
+{
+    return (_chromharm == rhs._chromharm and
+            _double + _cflat == rhs._double + rhs._cflat and
+            _color == rhs._color);
 }
     
 
@@ -178,6 +178,25 @@ bool CostAT::tiebreak_smaller_lex01(const CostAT& rhs) const
     }
     else
         return (_cflat + _double < rhs._cflat + rhs._double);
+}
+
+
+// - color
+// - cflat + double
+// - chromharm
+bool CostAT::tiebreak_smaller_lex02(const CostAT& rhs) const
+{
+    if (_color == rhs._color)
+    {
+        if (_cflat + _double == rhs._cflat + rhs._double)
+        {
+            return (_chromharm < rhs._chromharm);
+        }
+        else
+            return (_cflat + _double < rhs._cflat + rhs._double);
+    }
+    else
+        return (_color < rhs._color);
 }
 
 

@@ -489,6 +489,10 @@ def ctype_tostring(ct):
         return 'Adlex'   # not found
     elif (ct == pse.CTYPE_ADlexs):
         return 'Adlex+'   # not found
+    elif (ct == pse.CTYPE_ADplex):
+        return 'Adplex'   # not found
+    elif (ct == pse.CTYPE_ADplexs):
+        return 'Adplex+'   # not found
     elif (ct == pse.CTYPE_UNDEF):
         return 'UNDEF'
     else: 
@@ -1223,7 +1227,7 @@ class Spellew:
             nbg = self._speller.globals()
             print('PSE:', nbg, 'candidate global from 1st table', flush=True)                
 
-        self._speller.force_global(0, pse.Mode.Major)
+        # self._speller.force_global(0, pse.Mode.Major)
 
         if self._ct2 != pse.CTYPE_UNDEF:
 

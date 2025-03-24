@@ -11,8 +11,8 @@
 namespace pse {
 
 
-CostADplex::CostADplex(bool tb_sum):
-CostADplus(tb_sum)
+CostADplex::CostADplex(bool tb_lex):
+CostADplus(tb_lex)
 { }
 
 

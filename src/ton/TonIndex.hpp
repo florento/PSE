@@ -76,7 +76,7 @@ public: // construction
     /// - 30 : major and harmonic minor, KS between -7 and 7.
     /// - 104: major, minor, greek modes, KS in -6..6
     /// - 135: major, minor, greek modes, KS in -7..7
-    /// - 165: modal: major, minor, greek modes, blues maojr and minor, KS in -7..7
+    /// - 165: modal: major, minor, church modes, blues major and minor, KS in -7..7
     /// @warning the empty array of tonalities (case nb=0) is not closed
     /// (close() must be called aterwards). All the others are closed.
     TonIndex(size_t nb=0);

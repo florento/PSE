@@ -92,13 +92,17 @@ PYBIND11_MODULE(pse, m)
         .value("CTYPE_ACCIDlead", pse::CostType::ACCIDlead,
                "number of accidentals with discount for lead tons (obsolete)")
         .value("CTYPE_ADplus", pse::CostType::ADplus,
-               "number of accidentals and distance to local ton, sum of values")
+               "number of accidentals + distance to local ton, TB")
         .value("CTYPE_ADpluss", pse::CostType::ADpluss,
-               "number of accidentals and distance to local ton, sum of values")
+               "number of accidentals + distance to local ton, TB summed")
         .value("CTYPE_ADlex", pse::CostType::ADlex,
-               "number of accidentals and distance to local ton, lexicographic comparison values")
+               "lexicographic: number of accidentals, distance to local ton, TB")
         .value("CTYPE_ADlexs", pse::CostType::ADlexs,
-               "number of accidentals and distance to local ton, lexicographic comparison values")
+               "lexicographic: number of accidentals, distance to local ton, TB summed")
+        .value("CTYPE_ADplex", pse::CostType::ADplex,
+               "number of accidentals + distance to local ton, distance, TB")
+        .value("CTYPE_ADplexs", pse::CostType::ADplexs,
+               "number of accidentals + distance to local ton, distance, TB summed")
         .export_values();
     
     py::enum_<enum pse::GridAlgo>(m, "GridAlgo", "Algo for Grid Construction")

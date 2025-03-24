@@ -10,8 +10,8 @@
 namespace pse {
 
 
-CostADplus::CostADplus(bool tb_sum):
-CostAD(tb_sum)
+CostADplus::CostADplus(bool tb_lex):
+CostAD(tb_lex)
 // _sum(_accid + _dist)
 { }
 
@@ -100,9 +100,9 @@ bool CostADplus::update(const enum NoteName& name, const enum Accid& accid,
                         const enum NoteName& prev_name)
 {
     size_t olddist(_dist);
+    // update accid and dist
     bool ret = CostAD::update(name, accid, print, gton, lton, prev_name);
-    // _sum = _accid + _dist;
-    // dist increased (by new dists)
+    // dist has been increased (by new dists)
     assert(olddist <= _dist);
     // _accid was increased only by new accids, add the new dists
     _accid += (_dist - olddist);

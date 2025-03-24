@@ -10,8 +10,8 @@
 namespace pse {
 
 
-CostADlex::CostADlex(bool tb_sum):
-CostAD(tb_sum)
+CostADlex::CostADlex(bool tb_lex):
+CostAD(tb_lex)
 { }
 
 

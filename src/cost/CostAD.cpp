@@ -14,8 +14,8 @@
 namespace pse {
 
 
-CostAD::CostAD(bool tb_sum):
-CostAT(tb_sum),
+CostAD::CostAD(bool tb_lex):
+CostAT(tb_lex),
 _dist(0)
 { }
 
@@ -95,10 +95,9 @@ bool CostAD::update(const enum NoteName& name,
 }
 
 
-
 void CostAD::print(std::ostream& o) const
 {
-    CostAD::print(o);
+    CostAT::print(o);
     o << ':' << _dist << ':';
     printTB(o);
 }

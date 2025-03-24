@@ -128,6 +128,11 @@ protected: // operators
     bool tiebreak_smaller_lex01(const CostAT& rhs) const;
 
     /// variant of inequality for tie-breaking members
+    /// with a sum of cflat and double.
+    /// @param rhs a cost to compare to.
+    bool tiebreak_smaller_lex02(const CostAT& rhs) const;
+
+    /// variant of inequality for tie-breaking members
     /// with a lexicographic member by member comparison.
     /// @param rhs a cost to compare to.
     bool tiebreak_smaller_lex1(const CostAT& rhs) const;

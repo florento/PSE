@@ -73,14 +73,10 @@ premiers résultats d'évaluation Pitch Spelling'
 
 ## Comments
 
-- [ ] `PSeval.py` `extract_notes` : ne pas ajouter les notes des accords écrits dans ln
+- [x] `PSeval.py` `extract_notes` : ne pas ajouter les notes des accords écrits dans ln
   ou en option
 
 
 
-- [ ] `PSeval.py` table: ajouter une ligne total (au lieu de table séparée)
-
-
-
-
+- [x] `PSeval.py` table: ajouter une ligne total (au lieu de table séparée)
 

@@ -38,9 +38,10 @@ class CostAD : public CostAT
 public: // construction
     
     /// null cost.
-    /// @param tb_sum make the sum of some tie-breaking components
-    /// before comparison.
-    CostAD(bool tb_sum=false);
+    /// @param tb_lex use lexicographic comparison for tie-breaking components.
+    /// Otherwise make the sum of some tie-breaking components before
+    /// comparison.
+    CostAD(bool tb_lex=true);
 
     /// copy constructor.
     CostAD(const CostAD& rhs);
