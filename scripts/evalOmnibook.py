@@ -22,7 +22,7 @@ import music21 as m21
 ########################
 
 # path to FRB dataset
-_dataset_root = '../../../Datasets/CharlieParkerOmnibook'
+_dataset_root = '../../Datasets/CharlieParkerOmnibook'
 
 # root of evaluation dir
 _eval_root = '../../PSeval'
@@ -41,7 +41,7 @@ def omnibook_corpus():
     """build a list of scores in a subdirectory of the Omnibook"""
     global _dataset_root
 	# curated version, flat corpus
-    return evalXML.get_corpus(Path(_dataset_root)/'musescore', True)  
+    return evalXML.get_corpus(Path(_dataset_root)/'musescore', True)
 
 #####################################
 ##                                 ##
@@ -49,21 +49,21 @@ def omnibook_corpus():
 ##                                 ##
 #####################################
 
-# list of opus names with issues 
+# list of opus names with issues
 skip = []
-       
+
 
 # PS13: kpre=33, kpost=23
-# PSE: tons = 30 | 135 | 165, 
+# PSE: tons = 30 | 135 | 165,
 # PSE: costtype1, costtype2 = CTYPE_ACCID | CTYPE_ACCIDlead | CTYPE_ADplus | CTYPE_ADlex
 # PSE: grid = Grid_Best | Grid_Rank | Grid_Exhaustive
 # PSE: global1 = 0..100 (%)
-def eval_Omnibook(output='', tablename='',            
-                  kpre=0, kpost=0, tons=0, 
-                  costtype1=ps.pse.CTYPE_UNDEF, 
-                  tonal1=True, octave1=False, det1=False, 
-                  global1=100, grid=ps.pse.Grid_Rank, 
-                  costtype2=ps.pse.CTYPE_UNDEF, 
+def eval_Omnibook(output='', tablename='',
+                  kpre=0, kpost=0, tons=0,
+                  costtype1=ps.pse.CTYPE_UNDEF,
+                  tonal1=True, octave1=False, det1=False,
+                  global1=100, grid=ps.pse.Grid_Rank,
+                  costtype2=ps.pse.CTYPE_UNDEF,
                   tonal2=True, octave2=True, det2=False,
                   dflag=True, mflag=True, csflag=0):
     """eval the whole corpus with given algo and parameters"""
@@ -84,17 +84,17 @@ def eval_Omnibook(output='', tablename='',
     """det2: table2, deterministic/exhaustive flag for transitions (PSE)"""
     """dflag: debug flag"""
     """mflag: mark flag"""
-    """csflag: see pse.eval_score"""   
+    """csflag: see pse.eval_score"""
     global _eval_root
     global skip
     assert(csflag in [0, 1, 2, 3])
     # initialize a speller
-    sp = ps.Spellew(ps13_kpre=kpre, ps13_kpost=kpost, 
+    sp = ps.Spellew(ps13_kpre=kpre, ps13_kpost=kpost,
                     nbtons=tons,
-                    t1_costtype=costtype1, 
-                    t1_tonal=tonal1, t1_octave=octave1, t1_det=det1, 
+                    t1_costtype=costtype1,
+                    t1_tonal=tonal1, t1_octave=octave1, t1_det=det1,
                     global1=global1, grid=grid,
-                    t2_costtype=costtype2, 
+                    t2_costtype=costtype2,
                     t2_tonal=tonal2, t2_octave=octave2, t2_det=det2,
                     debug=dflag, aux_enum=(csflag == 2))
     # start evaluating the corpus with the speller
@@ -102,22 +102,22 @@ def eval_Omnibook(output='', tablename='',
     if not os.path.isdir(root):
         os.mkdir(root)
     evalXML.eval_corpus(speller=sp, mflag=mflag, csflag=csflag,
-                        dataset=omnibook_corpus(), skip=skip, 
+                        dataset=omnibook_corpus(), skip=skip,
                         eval_root=root, output_dir=output, tablename=tablename)
-        
+
 # PS13: kpre=33, kpost=23
-# PSE: tons = 30 | 135 | 165, 
+# PSE: tons = 30 | 135 | 165,
 # PSE: costtype1, costtype2 = CTYPE_ACCID | CTYPE_ACCIDlead | CTYPE_ADplus | CTYPE_ADlex
 # PSE: grid = Grid_Best | Grid_Rank | Grid_Exhaustive
 # PSE: global1 = 0..100 (%)
-def eval_Omnibookitem(name, output='',         
-                      kpre=0, kpost=0, tons=0,          
-                      costtype1=ps.pse.CTYPE_UNDEF, 
-                      tonal1=True, octave1=False, det1=True,       
+def eval_Omnibookitem(name, output='',
+                      kpre=0, kpost=0, tons=0,
+                      costtype1=ps.pse.CTYPE_UNDEF,
+                      tonal1=True, octave1=False, det1=True,
                       global1=100, grid=ps.pse.Grid_Rank,
-                      costtype2=ps.pse.CTYPE_UNDEF, 
-                      tonal2=True, octave2=True, det2=True,      
-                      dflag=True, mflag=False, csflag=0):   
+                      costtype2=ps.pse.CTYPE_UNDEF,
+                      tonal2=True, octave2=True, det2=True,
+                      dflag=True, mflag=False, csflag=0):
     """eval one item of the corpus with given algo and parameters"""
     """name: filename of item (prefix) in the dataset"""
     """output: dir where files will be written"""
@@ -136,17 +136,17 @@ def eval_Omnibookitem(name, output='',
     """det2: table2, deterministic/exhaustive flag for transitions (PSE)"""
     """dflag: debug flag"""
     """mflag: mark flag"""
-    """csflag: see pse.eval_score"""   
+    """csflag: see pse.eval_score"""
     assert(len(name) > 0)
     assert(csflag in [0, 1, 2, 3])
     # initialize a speller
     aux = (csflag == 2) # when an auxiliary enumerator is needed
-    sp = ps.Spellew(ps13_kpre=kpre, ps13_kpost=kpost, 
+    sp = ps.Spellew(ps13_kpre=kpre, ps13_kpost=kpost,
                     nbtons=tons,
-                    t1_costtype=costtype1, 
-                    t1_tonal=tonal1, t1_octave=octave1, t1_det=det1, 
+                    t1_costtype=costtype1,
+                    t1_tonal=tonal1, t1_octave=octave1, t1_det=det1,
                     global1=global1, grid=grid,
-                    t2_costtype=costtype2, 
+                    t2_costtype=costtype2,
                     t2_tonal=tonal2, t2_octave=octave2, t2_det=det2,
                     debug=dflag, aux_enum=aux)
     #print('force global', -2, ps.pse.Mode.Major, flush=True)
@@ -155,7 +155,7 @@ def eval_Omnibookitem(name, output='',
     # start evaluating one opus with the speller
     print('spelling', name, flush=True)
     evalXML.eval_item(speller=sp, mflag=mflag, csflag=csflag,
-                      dataset=omnibook_corpus(), name=name, 
+                      dataset=omnibook_corpus(), name=name,
                       output_dir=output)
 
 #####################################
@@ -165,7 +165,7 @@ def eval_Omnibookitem(name, output='',
 #####################################
 
 # compute C++ add instructions for given score, for debugging with gdb
-def debug(name, csflag=0):    
+def debug(name, csflag=0):
     assert(len(name) > 0)
     dataset = omnibook_corpus()
     evalXML.debug(dataset=dataset, name=name, csflag=csflag)
@@ -207,3 +207,6 @@ def doublaccids():
 				print(name, 'bar', b, 'double flat')
 			elif (n.pitch.accidental is not None and n.pitch.accidental.alter > 1):
 				print(name, 'bar', b, 'double sharp')
+
+
+eval_Omnibook(tons=165, costtype1=ps.pse.CTYPE_ACCIDtb, tonal1=False, octave1=False, det1=False, global1=100, grid=ps.pse.Grid_Exhaustive, costtype2=ps.pse.CTYPE_ADplex, tonal2=True, octave2=True, det2=False, dflag=True, mflag=True, csflag=2)
