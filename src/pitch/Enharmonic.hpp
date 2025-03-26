@@ -64,6 +64,8 @@ public:
     
 private:
 
+    static const PWO get(int c, int i, bool cf, bool da);
+    
     /// abbreviations for note names
     static const enum NoteName _C;
     static const enum NoteName _D;

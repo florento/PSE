@@ -108,29 +108,50 @@ protected: // operators
     /// @param rhs a cost to compare to.
     bool tiebreak_equal_lex0(const CostAT& rhs) const;
 
-    /// variant of equality for tie-breaking members
-    /// with a sum of some members.
+    /// variant of equality for tie-breaking members with a sum of some members.
+    /// - color + cflat + double
+    /// - chromharm
     /// @param rhs a cost to compare to.
     bool tiebreak_equal_sum(const CostAT& rhs) const;
-    
+
     /// inequality for tie-breaking members.
     /// @param rhs a cost to compare to.
     bool tiebreak_smaller(const CostAT& rhs) const;
 
-    /// variant of inequality for tie-breaking members
-    /// with a sum of cflat and double.
+    /// variant of inequality for tie-breaking members:
+    /// - cflat + double
+    /// - chromharm
+    /// - color
     /// @param rhs a cost to compare to.
     bool tiebreak_smaller_lex00(const CostAT& rhs) const;
 
-    /// variant of inequality for tie-breaking members
-    /// with a sum of cflat and double.
+    /// variant of inequality for tie-breaking members:
+    /// - cflat + double
+    /// - color
+    /// - chromharm
     /// @param rhs a cost to compare to.
     bool tiebreak_smaller_lex01(const CostAT& rhs) const;
 
-    /// variant of inequality for tie-breaking members
-    /// with a sum of cflat and double.
+    /// variant of inequality for tie-breaking members:
+    /// - color
+    /// - cflat + double
+    /// - chromharm
     /// @param rhs a cost to compare to.
     bool tiebreak_smaller_lex02(const CostAT& rhs) const;
+
+    /// variant of inequality for tie-breaking members:
+    /// - chromharm
+    /// - color
+    /// - cflat + double
+    /// @param rhs a cost to compare to.
+    bool tiebreak_smaller_lex03(const CostAT& rhs) const;
+
+    /// variant of inequality for tie-breaking members:
+    /// - chromharm
+    /// - cflat + double
+    /// - color
+    /// @param rhs a cost to compare to.
+    bool tiebreak_smaller_lex04(const CostAT& rhs) const;
 
     /// variant of inequality for tie-breaking members
     /// with a lexicographic member by member comparison.
@@ -144,8 +165,17 @@ protected: // operators
 
     /// variant of inequality for tie-breaking members
     /// with a sum of some members.
+    /// - color + cflat + double
+    /// - chromharm
     /// @param rhs a cost to compare to.
     bool tiebreak_smaller_sum(const CostAT& rhs) const;
+
+    /// variant of inequality for tie-breaking members
+    /// with a sum of some members.
+    /// - chromharm
+    /// - color + cflat + double
+    /// @param rhs a cost to compare to.
+    bool tiebreak_smaller_sum2(const CostAT& rhs) const;
 
     /// distance for tie-breaking members.
     /// @param rhs a cost to compare to.

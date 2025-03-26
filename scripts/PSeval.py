@@ -51,13 +51,11 @@ print(pse.excuseme)
 # KeySignature object is just the number of sharps (> 0) or flats, < 0)
 def key_changes(part):
     """return the number of key signature change in the given music21 part"""
-    fpart = part.flatten()
-    kl = fpart.getElementsByClass([m21.key.Key, m21.key.KeySignature])
+    kl = part.flatten().getElementsByClass([m21.key.Key, m21.key.KeySignature])
     return (len(kl) - 1)
 
 def get_key(part):
     """return the key signature of a music21 part, if unique, otherwise None"""
-    #kl = part.flatten().getElementsByClass(m21.key.Key)
     kl = part.flatten().getElementsByClass([m21.key.Key, m21.key.KeySignature])
     if (len(kl) == 1):
         return kl[0]
@@ -81,12 +79,10 @@ def count_chords(part, csflag = 'ignore'):
     """part: the M21 part to process"""
     """csflag: see extract_part"""
     assert(csflag in ['ignore', 'add', 'force'])
-    fpart = part.flatten()
     nc = 0
-    for c in fpart.getElementsByClass(m21.chord.Chord):
+    for c in part.flatten().getElementsByClass(m21.chord.Chord):
         if not isinstance(c, m21.harmony.ChordSymbol) or csflag != 'ignore':
             nc += 1   
-    # cl = part.getElementsByClass(m21.chord.Chord)
     return nc 
 
 def count_measures(part):
@@ -724,8 +720,7 @@ def anote_local_part(part, sp, i):
         
 def anote_part(part, ld):
     """mark mispells in red in a part, based on a diff-list"""
-    fpart = part.flatten()
-    ln = fpart.getElementsByClass(m21.note.Note) 
+    ln = part.flatten().getElementsByClass(m21.note.Note) 
     anote_diff(ln, ld, 'red')    
 
 def anote_score(score, k, lld):

@@ -42,7 +42,7 @@ public: // construction
     /// allocate a new copy of this state.
     virtual std::shared_ptr<PSState0> clone() const = 0;
     
-    public: // comparison
+public: // comparison
     
     /// same accidentals
     virtual bool equal(const PSState0& rhs) const = 0;
@@ -94,6 +94,7 @@ public: // access
     /// in the lifecycle of this state.
     /// @param pc a pitch class in 0..11.
     /// @return if pc has been represented in this state,
+    /// return the last associated name, otherwise, NoteName::Undef.
     /// return the last associated name, otherwise, NoteName::Undef.
     /// @warning it may differ from currentName if the pc was associated a
     /// name but this name has changed accidental since.

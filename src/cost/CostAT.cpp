@@ -99,7 +99,7 @@ bool CostAT::tiebreak_equal(const CostAT& rhs) const
 bool CostAT::tiebreak_smaller(const CostAT& rhs) const
 {
     if (_tblex)
-        return tiebreak_smaller_lex02(rhs);
+        return tiebreak_smaller_lex00(rhs);
     else
         return tiebreak_smaller_sum(rhs);
 }
@@ -113,14 +113,29 @@ bool CostAT::tiebreak_equal_sum(const CostAT& rhs) const
 }
 
 
+// - color + cflat + double
+// - chromharm
 bool CostAT::tiebreak_smaller_sum(const CostAT& rhs) const
 {
     assert(_tbsum == _color + _cflat + _double);
     assert(rhs._tbsum == rhs._color + rhs._cflat + rhs._double);
     if (_tbsum == rhs._tbsum)
-                return (_chromharm < rhs._chromharm);
+        return (_chromharm < rhs._chromharm);
     else
         return (_tbsum < rhs._tbsum);
+}
+
+
+// - chromharm
+// - color + cflat + double
+bool CostAT::tiebreak_smaller_sum2(const CostAT& rhs) const
+{
+    assert(_tbsum == _color + _cflat + _double);
+    assert(rhs._tbsum == rhs._color + rhs._cflat + rhs._double);
+    if (_chromharm == rhs._chromharm)
+        return (_tbsum < rhs._tbsum);
+    else
+        return (_chromharm < rhs._chromharm);
 }
 
 
@@ -199,6 +214,41 @@ bool CostAT::tiebreak_smaller_lex02(const CostAT& rhs) const
         return (_color < rhs._color);
 }
 
+// - chromharm
+// - color
+// - cflat + double
+bool CostAT::tiebreak_smaller_lex03(const CostAT& rhs) const
+{
+    if (_chromharm == rhs._chromharm)
+    {
+        if (_color == rhs._color)
+        {
+            return (_cflat + _double < rhs._cflat + rhs._double);
+        }
+        else
+            return (_color < rhs._color);
+    }
+    else
+        return (_chromharm < rhs._chromharm);
+}
+
+// - chromharm
+// - cflat + double
+// - color
+bool CostAT::tiebreak_smaller_lex04(const CostAT& rhs) const
+{
+    if (_chromharm == rhs._chromharm)
+    {
+        if (_cflat + _double == rhs._cflat + rhs._double)
+        {
+            return (_color < rhs._color);
+        }
+        else
+            return (_cflat + _double < rhs._cflat + rhs._double);
+    }
+    else
+        return (_chromharm < rhs._chromharm);
+}
 
 // - color
 // - cflat

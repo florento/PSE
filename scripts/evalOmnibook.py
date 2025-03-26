@@ -191,3 +191,19 @@ def cflat():
 			elif (n.pitch.step == 'E') and (n.pitch.accidental == m21.pitch.Accidental('sharp')):
 				print(name, 'bar', b, 'E#')
 
+def doublaccids():
+	dataset = omnibook_corpus()
+	names = sorted(list(dataset))
+	for name in names:
+		file = dataset[name]
+		score = m21.converter.parse(file.as_posix())
+		lp = score.getElementsByClass(m21.stream.Part)
+		assert(len(lp) == 1)
+		part = lp[0]
+		ln = ps.extract_part(part, 'ignore')
+		for (n, b, simult, force) in ln:
+			assert(isinstance(n, m21.note.Note))
+			if (n.pitch.accidental is not None and n.pitch.accidental.alter < -1):
+				print(name, 'bar', b, 'double flat')
+			elif (n.pitch.accidental is not None and n.pitch.accidental.alter > 1):
+				print(name, 'bar', b, 'double sharp')

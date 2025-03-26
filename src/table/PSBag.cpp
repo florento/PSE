@@ -266,13 +266,17 @@ void PSB::get_names(size_t id, const Ton& gton,
     {
         for (int j = 0; j < 3; ++j)
         {
-            enum NoteName name = Enharmonics::name(m, j, true, false);
-            enum Accid accid = Enharmonics::accid(m, j, true, false);
+            enum NoteName name = Enharmonics::name(m, j, false, false);
+            enum Accid accid = Enharmonics::accid(m, j, false, false);
             assert((name == NoteName::Undef) == (accid == Accid::Undef));
             // case of 8 and (short list) 1, 3, 6, 10
             // ignore undef (empty cases)
             if (defined(name) and defined(accid))
             {
+                if (accid != MidiNum::class_to_accid(m, name))
+                {
+                    ERROR("CLASS {}: NAME={} ACCID={}", m, name, accid);
+                }
                 assert(accid == MidiNum::class_to_accid(m, name));
                 names.push(name);
                 accids.push(accid);
