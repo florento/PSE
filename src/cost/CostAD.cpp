@@ -14,21 +14,15 @@
 namespace pse {
 
 
-CostAD::CostAD():
-_accid(0),
-_dist(0),
-_chromharm(0),
-_color(0),
-_cflat(0)
+CostAD::CostAD(bool tb_lex):
+CostAT(tb_lex),
+_dist(0)
 { }
 
 
 CostAD::CostAD(const CostAD& rhs):
-_accid(rhs._accid),
-_dist(rhs._dist),
-_chromharm(rhs._chromharm),
-_color(rhs._color),
-_cflat(rhs._cflat)
+CostAT(rhs),
+_dist(rhs._dist)
 { }
 
 
@@ -38,60 +32,89 @@ CostAD::~CostAD()
 }
 
 
-//CostAD& CostAD::operator=(const CostAD& rhs)
-//{
-//    if (this != &rhs)
-//    {
-//        _accid = rhs._accid;
-//    }
-//    return *this;
-//}
-
-
-//bool CostAD::operator==(const CostAD& rhs) const
-//{
-//    return (_accid == rhs._accid && _dist == rhs._dist);
-//}
-
-
-CostAD& CostAD::operator+=(const CostAD& rhs)
+// accids and tie-breaks and distance are equal
+bool CostAD::equal(const CostAD& rhs) const
 {
-    _accid += rhs._accid;
+    return (CostAT::equal(rhs) and _dist == rhs._dist);
+}
+
+
+Cost& CostAD::add(const CostAD& rhs)
+{
+    CostAT::add(rhs);
     _dist += rhs._dist;
-    _chromharm += rhs._chromharm;
-    _color += rhs._color;
-    _cflat += rhs._cflat;
     return *this;
 }
 
 
-//CostAD operator+(const CostAD& c1, const CostAD& c2)
-//{
-//    return c1.operator+(c2);
-//}
+bool CostAD::updateDist(const enum NoteName& name, const enum Accid& accid,
+                        bool print, const Ton& gton, const Ton& lton)
+{
+    // count an accidental different from lton (printed or not)
+    if (lton.defined() and
+        (!Accids::contained(accid, lton.accidScale(name))))
+    {
+        switch (accid)
+        {
+            case Accid::DoubleSharp:
+            case Accid::DoubleFlat:
+                _dist += 2;
+                break;
+
+            case Accid::Sharp:
+            case Accid::Flat:
+            case Accid::Natural:
+                _dist += 1;
+                break;
+
+            default:
+            {
+                ERROR("updateDist: unexpected accidental"); // accid
+                break;
+            }
+        }
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
 
 
-//std::shared_ptr<Cost> CostAD::shared_zero() const
-//{
-//    return std::shared_ptr<Cost>(new CostAD());
-//}
-
-
-//std::shared_ptr<Cost> CostAD::shared_clone() const
-//{
-//    return std::shared_ptr<Cost>(new CostAD(*this));
-//}
-
-//std::unique_ptr<Cost> CostAD::unique_clone() const
-//{
-//    return std::unique_ptr<Cost>(new CostAD(*this));
-//}
-
-
-void CostAD::update(const enum NoteName& name,
+bool CostAD::update(const enum NoteName& name,
                     const enum Accid& accid,
                     bool print,
-                    const Ton& gton, const Ton& lton)
+                    const Ton& gton, const Ton& lton,
+                    const enum NoteName& prev_name)
+{
+    bool reta = CostAT::update(name, accid, print, gton, lton, prev_name);
+    bool retd = updateDist(name, accid, print, gton, lton);
+
+    return reta or retd;
+}
+
+
+void CostAD::print(std::ostream& o) const
+{
+    CostAT::print(o);
+    o << ':' << _dist << ':';
+    printTB(o);
+}
+
+
+std::ostream& operator<<(std::ostream& o, const CostAD& c)
+{
+    c.print(o);
+    return o;
+}
+
+
+// former version (TENOR paper)
+void CostAD::update_tonale(const enum NoteName& name,
+                           const enum Accid& accid,
+                           bool print,
+                           const Ton& gton, const Ton& lton)
 {
     bool boo = true;
     
@@ -110,7 +133,7 @@ void CostAD::update(const enum NoteName& name,
     //    }
     //}
     
-    if ((print) && (gton.accidDia(name,gton.getMode()) != accid)) //&& (boo))
+    if ((print) && (!Accids::contained(accid, gton.accidScale(name)))) //&& (boo))
     {
         switch (accid)
         {
@@ -154,7 +177,7 @@ void CostAD::update(const enum NoteName& name,
     // no print : print flag is related to gton, not for lton
     
     //boo=true
-    if (lton.defined() && (lton.accidDia(name,lton.getMode()) != accid))
+    if (lton.defined() && (!Accids::contained(accid, lton.accidScale(name))))
     {
         if (lton.getMode() == ModeName::Minor)
         {
@@ -172,14 +195,12 @@ void CostAD::update(const enum NoteName& name,
                 case Accid::DoubleSharp:
                 case Accid::DoubleFlat:
                     _dist += 2;
-                    //_dist += 3;
                     break;
 
                 case Accid::Sharp:
                 case Accid::Flat:
                 case Accid::Natural:
                     _dist += 1;
-                    //_dist += 2;
                     break;
 
                 default:
@@ -191,16 +212,17 @@ void CostAD::update(const enum NoteName& name,
         }
     }
     
-    if (print && !(lton.chromatic().contains(name,accid)))
+    // if (print && !(lton.chromatic().contains(name,accid)))
+    if (print && !Accids::contained(accid, lton.chromaton().accidScale(name)))
     {
-        _chromharm+=1;
+        _chromharm += 1;
     }
     
-    if (print && (gton.accidDia(name,gton.getMode()) != accid) &&
-        (((name == NoteName::C) && (accid == Accid::Flat)) ||
-         ((name == NoteName::B) && (accid == Accid::Sharp)) ||
-         ((name == NoteName::F) && (accid == Accid::Flat)) ||
-         ((name == NoteName::E) && (accid == Accid::Sharp))))
+    if (print && (!Accids::contained(accid, gton.accidScale(name))) &&
+            (((name == NoteName::C) && (accid == Accid::Flat))  ||
+             ((name == NoteName::B) && (accid == Accid::Sharp)) ||
+             ((name == NoteName::F) && (accid == Accid::Flat))  ||
+             ((name == NoteName::E) && (accid == Accid::Sharp))))
     {
         ++_cflat;
     }
@@ -215,7 +237,7 @@ void CostAD::update(const enum NoteName& name,
 }
 
 
-// previous version of update
+// former version of update
 void CostAD::update99(const enum NoteName& name,
                       const enum Accid& accid,
                       bool print,
@@ -226,7 +248,7 @@ void CostAD::update99(const enum NoteName& name,
     // update cost when accident for the name was updated
     // discount for lead degree
     // !(gton.lead()  &&  gton.accidDia(name) == accid)
-    if (gton.accidDia(name,gton.getMode()) != accid)
+    if (!Accids::contained(accid, gton.accidScale(name)))
     {
         
         // not used (_accid of type size_t is incremented of 0)
@@ -234,7 +256,7 @@ void CostAD::update99(const enum NoteName& name,
         {
             if (gton.getMode()==ModeName::Minor)
             {
-                if ((gton.accidDia(name,gton.getMode())==Accid::Sharp && accid==Accid::Natural) || (gton.accidDia(name,gton.getMode())==Accid::Natural && accid==Accid::Flat) || (gton.accidDia(name,gton.getMode())==Accid::DoubleSharp && accid==Accid::Sharp))
+                if ((gton.accidDia(name) == Accid::Sharp && accid==Accid::Natural) || (gton.accidDia(name) == Accid::Natural && accid==Accid::Flat) || (gton.accidDia(name) == Accid::DoubleSharp && accid==Accid::Sharp))
                 {
                     _accid += 1/2;//on pénalise un peu lorsque la sensible n'est pas augmentée, mais pas de 1 car il peut s'agir du mode mineur descendant
                 }
@@ -280,13 +302,13 @@ void CostAD::update99(const enum NoteName& name,
 
     // was : if (lton.defined() && print && (lton.accidDia(name) != accid))
     // no print : print flag is related to gton, not for lton
-    if (lton.defined() && print && (lton.accidDia(name,lton.getMode()) != accid))
+    if (lton.defined() && print && (!Accids::contained(accid, lton.accidScale(name))))
     {
         if (lton.lead(name) &&
             (lton.getMode() == ModeName::Minor) &&
-            ((lton.accidDia(name,lton.getMode())==Accid::Sharp && accid==Accid::Natural) ||
-             (lton.accidDia(name,lton.getMode())==Accid::Natural && accid==Accid::Flat) ||
-             (lton.accidDia(name,lton.getMode())==Accid::DoubleSharp && accid==Accid::Sharp)))
+            ((lton.accidDia(name) == Accid::Sharp && accid==Accid::Natural) ||
+             (lton.accidDia(name) == Accid::Natural && accid==Accid::Flat) ||
+             (lton.accidDia(name) == Accid::DoubleSharp && accid==Accid::Sharp)))
         {
             _dist += 1/2; //on pénalise un peu lorsque la sensible n'est pas augmentée,
                           // mais pas de 1 car il peut s'agir du mode mineur descendant
@@ -325,6 +347,11 @@ void CostAD::update99(const enum NoteName& name,
         _color += 1;
     }
 }
+
+
+} // end namespace pse
+
+
 
 
 
@@ -381,7 +408,7 @@ void CostAD::update99(const enum NoteName& name,
 //    // whether the cost has to be changed
 //    //    bool cc = false;
 //    //    if (gton.lead(name)) // sensible
-//    //        cc = print && (gton.accidDia(name) != accid);
+//    //        cc = print && (!Accids::contained(accid, gton.accidScale(name)));
 //    //    else
 //    //        cc = print;
 //
@@ -423,25 +450,3 @@ void CostAD::update99(const enum NoteName& name,
 //    // distance to conjectured local ton.
 //    _dist += c.state().dist(lton);
 //}
-
-
-void CostAD::print(std::ostream& o) const
-{
-    o << "accid=" << _accid;
-    o << " dist=" << _dist;
-    o << "chromarm=" << _chromharm;
-    o << " color=" << _color;
-    o << " cflat=" << _cflat;
-}
-
-
-std::ostream& operator<<(std::ostream& o, const CostAD& c)
-{
-    c.print(o);
-    return o;
-}
-
-
-} // end namespace pse
-
-

@@ -16,16 +16,11 @@
 #include "pybind11/pybind11.h"
 #include "pybind11/stl.h"
 
-#include "trace.hpp"
+#include "pstrace.hpp"
 
 namespace py = pybind11;
 
 #include "Speller.hpp"
-
-
-
-
-
 
 
 #endif /* pypse_hpp */

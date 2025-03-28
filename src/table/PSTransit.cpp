@@ -36,8 +36,7 @@ void Transition::succ1(std::shared_ptr<const PSC0> c,
     assert(c);
     // midi pitch of the note read for transition from this config
     unsigned int pm = _enum.midipitch(c->id());
-    assert(0 <= pm);
-    assert(pm <= 127);
+    assert(MidiNum::check_midi(pm)); // assert(0 <= pm); assert(pm <= 127);
     // chroma in 0..11
     int m = pm % 12;
     

@@ -16,21 +16,21 @@
 #include <array>
 #include <vector>
 
-#include "trace.hpp"
+#include "pstrace.hpp"
 #include "NoteName.hpp"
-#include "Accidental.hpp"
+#include "Accid.hpp"
 #include "ModeName.hpp"
 #include "Mode.hpp"
 #include "ModeFactory.hpp"
 #include "Scale.hpp"
 #include "PSRawEnum.hpp"
-#include "Speller.hpp"
+#include "SpellerEnum.hpp"
 
 namespace pse {
 
 /// wrapper on top of PSRawEnum implementing D. Meredith PS13 algorithm.
 /// interface to pybind.
-class PS13 : public Speller
+class PS13 : public SpellerEnum
 {
 public:
 

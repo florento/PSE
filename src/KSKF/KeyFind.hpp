@@ -22,7 +22,7 @@
 #include <vector>
 #include <array>
 
-#include "trace.hpp"
+#include "pstrace.hpp"
 #include "MTU.hpp"
 #include "Pitch.hpp"
 #include "Part.hpp"

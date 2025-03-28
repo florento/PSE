@@ -6,15 +6,16 @@
 //
 
 #include "Speller1pass.hpp"
+#include "PSGridr.hpp"
 
 namespace pse {
 
-Speller1Pass::Speller1Pass(const Algo& algo, size_t nbTons, bool dflag):
-Speller(algo, nbTons, dflag),
+Speller1Pass::Speller1Pass(size_t nbTons, const Algo& algo, bool dflag):
+SpellerEnum(nbTons, false, algo, dflag), // no aux enum
 _table0(nullptr),
 _global0(nullptr),
-_locals0(nullptr),
-_uton(new Ton()) // undef
+_time_table0(0),
+_time_grid(0)
 { }
 
 
@@ -24,30 +25,27 @@ Speller1Pass::~Speller1Pass()
         delete _table0;
     if (_global0)
         delete _global0;
-    if (_locals0)
-        delete _locals0;
-    assert(_uton);
-    delete _uton;
 }
 
 
 void Speller1Pass::setGlobal(size_t i, PSO* g) // std::shared_ptr<PSO>
 {
-    if (i >= _index.size())
+    if (i >= nbTons())
     {
         WARN("Speller1Pass: set global {}: not a ton (ignored)", i);
         return;
     }
     if (g == nullptr)
     {
-        g = new PSO(_index, _debug); // empty
+        assert(_index);
+        g = new PSO(index(), _debug); // empty
     }
     else
     {
         WARN("Speller1Pass: set global {}: there are already () global candidates",
              i, g->size());
     }
-    g->setGlobal(i);
+    g->addGlobal(i);
 }
  
 
@@ -63,14 +61,15 @@ size_t Speller1Pass::globalCands(const PSO* g) const // std::shared_ptr<PSO>
     }
 }
 
- 
+
+/// @todo def in PSO
 const Ton& Speller1Pass::globalCand(size_t i, const PSO* g) const // std::shared_ptr<PSO>
 {
     // size_t it = iglobalCand(i);
     // if (it != TonIndex::UNDEF)
     if ((g != nullptr) && (i <  g->size()))
     {
-        assert(_index.size() == g->index().size());  // same index
+        assert(nbTons() == g->index().size());  // same index
         return g->global(i);
     }
     else
@@ -88,7 +87,7 @@ size_t Speller1Pass::iglobalCand(size_t i, const PSO* g) const // std::shared_pt
 {
     if ((g != nullptr) && (i <  g->size()))
     {
-        assert(_index.size() == g->index().size()); // same index
+        assert(nbTons() == g->index().size()); // same index
         return g->iglobal(i);
     }
     else
@@ -138,51 +137,25 @@ const Ton& Speller1Pass::global(size_t n) const
 
 size_t Speller1Pass::ilocal(size_t i, size_t j) const
 {
-    if (_locals0 == nullptr)
+    if (_grid == nullptr)
     {
         ERROR("Speller1Pass local: call spell() first");
     }
-    else if (j >= _locals0->columnNb())
+    else if (j >= _grid->measures())
     {
         ERROR("Speller1Pass local: no bar {}", j);
     }
-    else if (i >= _locals0->rowNb())
+    else if (i >= _grid->nbTons())
     {
         ERROR("Speller1Pass local: no ton of index {}", i);
     }
     else
     {
-        return _locals0->ilocal(i, j);
+        return _grid->ilocal(i, j);
     }
 
-    // in case or error return undefined tonality
+    // in case or error return undefined tonality index
     return TonIndex::UNDEF;
-}
-
-
-const Ton& Speller1Pass::local(size_t i, size_t j) const
-{
-    size_t it = ilocal(i, j);
-    if (it == TonIndex::UNDEF)
-    {
-        // in case or error return undefined tonality
-        // std::shared_ptr<Ton> uton(new Ton());
-        return *_uton;
-        
-    }
-    else
-    {
-        assert(it < _index.size());
-        return _index.ton(it);
-    }
-}
-
-
-const Ton& Speller1Pass::localNote(size_t i, size_t j) const
-{
-    assert(_enum.inside(j));
-    size_t bar = _enum.measure(j);
-    return local(i, bar);
 }
 
 
@@ -197,8 +170,17 @@ bool Speller1Pass::spell(const Cost& seed0, double diff0,
         WARN("PSE: re-spelling, PS table overrided");
         delete _table0;
     }
-    _table0 = new PST(_algo, seed0, _index, _enum, _debug); // std::unique_ptr<PST>
+    
+    clock_t time_start = clock();
+    assert(_enum);
+    _table0 = new PST(_algo, seed0, index(), *_enum, false, _debug); // modal mode
+    _time_table0 = duration(time_start);
     TRACE("pitch-spelling: {} bars", _table0->size());
+    if (_debug)
+    {
+        DEBUGU("time to build first pitch-spelling table: {}ms", 
+               (int)_time_table0);
+    }
     
     //DEBUGU("PSE: table dump");
     //_table0->dump_rowcost();
@@ -218,25 +200,31 @@ bool Speller1Pass::spell(const Cost& seed0, double diff0,
     if (_debug)
     {
         assert(_global0);
-        DEBUGU("{} candidates in first global list: {}",
-               _global0->size(), *_global0);
+        DEBUGU("{} candidates in first global list", _global0->size()); //  *_global0 // content
     }
     
     // extract local tonality for each column of table
-    TRACE("pitch-spelling: start local tonalities estimation");
-    if (_locals0 != nullptr)
+    TRACE("pitch-spelling: start estimate grid of local tonalities ");
+    if (_grid != nullptr)
     {
         WARN("PSE: re-spelling, PS local grid overrided");
-        delete _locals0;
+        delete _grid;
     }
-    _locals0 = new PSG(*_table0, _global0->getMask()); // std::unique_ptr<PSG>
+    
+    time_start = clock();
+    //_grid = new PSG(*_table0, _global0->getMask()); // std::unique_ptr<PSG>
+    _grid = new PSGr(*_table0); // std::unique_ptr<PSG>
+    _time_grid = duration(time_start);
+    if (_debug)
+    {
+        DEBUGU("time to build grid of local tonalities: {}ms", (int)_time_grid);
+    }
 
     //    if (status == false)
     //    {
     //        ERROR("Pitch Spelling: failed to extract local tonalities, abort.");
     //        return false;
     //    }
-
 
     TRACE("Pitch Spelling: {} estimated global tonality candidates",
           globalCands(_global0));
@@ -247,6 +235,7 @@ bool Speller1Pass::spell(const Cost& seed0, double diff0,
 //              _enum.first(), _enum.stop());
 //    }
 
+
     // update the lists _names, _accids and _octave
     if (rename_flag)
     {
@@ -254,7 +243,7 @@ bool Speller1Pass::spell(const Cost& seed0, double diff0,
 
         if (ig != TonIndex::UNDEF)
         {
-            assert(ig < _index.size());
+            assert(ig < nbTons());
             TRACE("Pitch Spelling: renaming with estimated global tonality: {}",
                   ig);
             rename(ig);
@@ -274,7 +263,6 @@ bool Speller1Pass::spell(const Cost& seed0, double diff0,
 
     return status;
 }
-
 
 
 bool Speller1Pass::rename(PST* table, const PSO* globals, size_t n)

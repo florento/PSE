@@ -112,8 +112,9 @@ void PSP::record_path(const PSC0& c)
         const PSC1* com = dynamic_cast<const PSC1*>(co);
         assert(com);
         const enum NoteName& name = com->name();
+        /// @todo revise for the case of octaves
         const enum Accid& accid = com->accidental();
-        assert(accid == MidiNum::accid(com->midi()%12, name));
+        assert(accid == MidiNum::class_to_accid(com->midi()%12, name));
         _names.insert(_names.begin(), name);  // push_front (copy)
         _accids.insert(_accids.begin(), accid);
         _prints.insert(_prints.begin(), com->printed());
@@ -191,6 +192,8 @@ void PSP::rename()
     {
         const enum NoteName& name = _names[i - _enum.first()];
         const enum Accid& accid = _accids[i - _enum.first()];
+        assert(name != NoteName::Undef);
+        assert(accid != Accid::Undef);
         unsigned int mp = _enum.midipitch(i);
         int oct = MidiNum::midi_to_octave(mp, name, accid);
         assert(-2 <= oct);

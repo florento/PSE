@@ -12,21 +12,46 @@
 namespace pse {
 
 
+// refine globals
 PSO::PSO(const PSO& globals, const PST& tab, double d, bool dflag):
 _index(tab.index()),
 _globals(), // empty
 _debug(dflag)
 {
-    assert(d >= 0);
+    ERROR("class PSGlobal is obsolete");
+    assert(0 <= d);
+    assert(d <= 100);
+    // same index for globals and tab
     assert(globals._index.size() == tab.index().size());
     // assert(globals._index == tab.index());
-    init(globals, tab, d);
+    
+    if (d == 100) // we copy all globals to this globals
+    {
+        for (auto it = globals.cbegin(); it != globals.cend(); ++it)
+        {
+            size_t i = *it;
+            assert(i != TonIndex::FAILED);
+            assert(i != TonIndex::UNDEF);
+            assert(i < _index.size());
+            assert(_index.isGlobal(i)); // i can be global (if globals was well formed)
+            _globals.push_back(i);
+        }
+    }
+    else
+    {
+        assert(d < 100);
+        init(globals, tab, d);
+    }
 }
 
 
 PSO::PSO(const PST& tab, double d, bool dflag):
+// first argument (full PSO) is the former set of global candidates
 PSO(PSO(tab.index(), dflag, true), tab, d, dflag)
-{ assert(d >= 0); }
+{
+    ERROR("class PSGlobal is obsolete");
+    assert(d >= 0);
+}
 
 
 PSO::PSO(const TonIndex& id, double dflag, double full):
@@ -34,17 +59,19 @@ _index(id),
 _globals(), // empty
 _debug(dflag)
 {
-    if (full)
+    ERROR("class PSGlobal is obsolete");
+    if (full) // full list of candidate global ton
     {
         for (size_t i = 0; i < _index.size(); ++i)
-            _globals.push_back(i);
+            if (_index.isGlobal(i)) // i can be global
+                _globals.push_back(i);
     }
 }
 
 
 PSO::~PSO()
 { }
-
+ 
 
 void PSO::init(const PSO& globals, const PST& tab, double d)
 {
@@ -58,19 +85,18 @@ void PSO::init(const PSO& globals, const PST& tab, double d)
     // invariant: all index in _globals have the same RowCost
     // _globals.push_back(0);
     
-
     // index of row of best cost
     assert(globals.cbegin() != globals.cend());
     size_t ibest = *(globals.cbegin());
     
-    // estimate the best tonality wrt costs (nb accidentals)
+    // estimate the best tonality in tab wrt costs (nb accidentals)
     for (auto it = globals.cbegin(); it != globals.cend(); ++it)
-
     {
         size_t i = *it;
         assert(i != TonIndex::FAILED);
         assert(i != TonIndex::UNDEF);
         assert(i < _index.size());
+        assert(_index.isGlobal(i)); // i can be global (if globals was well formed)
         //     for (size_t i = 1; ; ++i)
         // all elements of cands have same cost
         const Cost& bestCost = tab.rowCost(ibest);
@@ -86,14 +112,15 @@ void PSO::init(const PSO& globals, const PST& tab, double d)
     assert(ibest < _index.size());
     const Cost& bestCost = tab.rowCost(ibest);
     
-    // add to _globals (candidates) all tonality at distance to ibest
-    // smaller than d
+    // add to _globals (candidates) all tonality of globals
+    // at distance to ibest smaller than best cost
     for (auto it = globals.cbegin(); it != globals.cend(); ++it)
     {
         size_t i = *it;
         assert(i != TonIndex::FAILED);
         assert(i != TonIndex::UNDEF);
         assert(i < _index.size());
+        assert(_index.isGlobal(i)); // i can be global (if globals was well formed)
         const Cost& rc = tab.rowCost(i);
 
         // real tie
@@ -131,6 +158,12 @@ bool PSO::empty() const
 
 bool PSO::contains(size_t n) const
 {
+    if (!(n < _index.size()))
+    {
+        WARN("PSO contains: {} not in ton index", n);
+        return false;
+    }
+
     for (auto it = _globals.cbegin(); it != _globals.cend(); ++it)
     {
         size_t i = *it;
@@ -143,6 +176,25 @@ bool PSO::contains(size_t n) const
     
     return false;
 }
+
+
+//bool PSO::member(size_t ig) const
+//{
+//    if (ig < _index.size())
+//    {
+//        for (size_t it : _globals)
+//        {
+//            if (it == ig)
+//                return true;
+//        }
+//        return false;
+//    }
+//    else
+//    {
+//        return false;
+//    }
+//}
+
 
 size_t PSO::iglobal(size_t i) const
 {
@@ -168,24 +220,6 @@ std::vector<size_t>::const_iterator PSO::cbegin() const
 std::vector<size_t>::const_iterator PSO::cend() const
 {
     return _globals.cend();
-}
-
-
-bool PSO::member(size_t ig) const
-{
-    if (ig < _index.size())
-    {
-        for (size_t it : _globals)
-        {
-            if (it == ig)
-                return true;
-        }
-        return false;
-    }
-    else
-    {
-        return false;
-    }
 }
 
 
@@ -250,7 +284,7 @@ bool PSO::completeEnharmonics()
                    global(i));
             status = false;
         }
-        else if (! member(e))
+        else if (! contains(e))
         {
             DEBUGU("enharmonic ton {} currently not a global candidate, added",
                    _index.ton(e));
@@ -276,7 +310,7 @@ std::vector<bool> PSO::getMask() const
 }
 
 
-void PSO::setGlobal(size_t ig)
+void PSO::addGlobal(size_t ig)
 {
     assert(ig < _index.size());
     _globals.push_back(ig);

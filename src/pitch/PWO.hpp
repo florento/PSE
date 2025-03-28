@@ -14,7 +14,7 @@
 #include <iostream>
 
 #include "NoteName.hpp"
-#include "Accidental.hpp"
+#include "Accid.hpp"
 
 namespace pse {
 
@@ -22,7 +22,8 @@ namespace pse {
 /// Pitch without octave
 class PWO
 {
-public:
+
+public: // construction
     
     PWO();
     
@@ -41,6 +42,8 @@ public:
     /// equality
     virtual bool equal(const PWO&) const;
 
+public: // access
+
     /// unpitched
     virtual bool undef() const;
 
@@ -54,7 +57,6 @@ public: // data
     
     /// @brief note name betwen 'A' and 'G'.
     /// @see MusicXML step https://usermanuals.musicxml.com/MusicXML/Content/EL-MusicXML-step.htm
-    /// @todo revise with NoteName
     enum NoteName name;
 
     /// @brief alteration in [-2, 2] where 1.0 is half tone.
@@ -74,9 +76,11 @@ bool operator!=(const PWO& lhs, const PWO& rhs);
 
 std::ostream& operator<<(std::ostream& o, const PWO& p);
 
-
-
 } // namespace pse
+
+/// fmt v10 and above requires `fmt::formatter<T>` extends `fmt::ostream_formatter`.
+/// @see: https://github.com/fmtlib/fmt/issues/3318
+template<> struct fmt::formatter<pse::PWO> : fmt::ostream_formatter {};
 
 #endif /* PWO_hpp */
 

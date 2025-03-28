@@ -14,9 +14,9 @@
 #include <assert.h>
 #include <memory>
 
-#include "trace.hpp"
+#include "pstrace.hpp"
 #include "NoteName.hpp"
-#include "Accidental.hpp"
+#include "Accid.hpp"
 #include "ModeName.hpp"
 #include "Ton.hpp"
 #include "TonIndex.hpp"
@@ -31,6 +31,7 @@ namespace pse {
 
 
 /// specific structure for the PS14 algorithm.
+/// deterministic evaluation.
 class PS14 : public Speller2Pass
 {
 public:

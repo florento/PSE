@@ -83,112 +83,112 @@ TEST(MidiNum, midi_to_octave)
 TEST(MidiNum, accid)
 {
     //   0 = C
-    EXPECT_EQ(pse::MidiNum::accid(0, pse::NoteName::C), pse::Accid::Natural);
-    EXPECT_EQ(pse::MidiNum::accid(0, pse::NoteName::D), pse::Accid::DoubleFlat);
-    EXPECT_EQ(pse::MidiNum::accid(0, pse::NoteName::E), pse::Accid::Undef);
-    EXPECT_EQ(pse::MidiNum::accid(0, pse::NoteName::F), pse::Accid::Undef);
-    EXPECT_EQ(pse::MidiNum::accid(0, pse::NoteName::G), pse::Accid::Undef);
-    EXPECT_EQ(pse::MidiNum::accid(0, pse::NoteName::A), pse::Accid::TripleSharp);
-    EXPECT_EQ(pse::MidiNum::accid(0, pse::NoteName::B), pse::Accid::Sharp);
+    EXPECT_EQ(pse::MidiNum::class_to_accid(0, pse::NoteName::C), pse::Accid::Natural);
+    EXPECT_EQ(pse::MidiNum::class_to_accid(0, pse::NoteName::D), pse::Accid::DoubleFlat);
+    EXPECT_EQ(pse::MidiNum::class_to_accid(0, pse::NoteName::E), pse::Accid::Undef);
+    EXPECT_EQ(pse::MidiNum::class_to_accid(0, pse::NoteName::F), pse::Accid::Undef);
+    EXPECT_EQ(pse::MidiNum::class_to_accid(0, pse::NoteName::G), pse::Accid::Undef);
+    EXPECT_EQ(pse::MidiNum::class_to_accid(0, pse::NoteName::A), pse::Accid::TripleSharp);
+    EXPECT_EQ(pse::MidiNum::class_to_accid(0, pse::NoteName::B), pse::Accid::Sharp);
 
     //  1 = C#, Db
-    EXPECT_EQ(pse::MidiNum::accid(1, pse::NoteName::C), pse::Accid::Sharp);
-    EXPECT_EQ(pse::MidiNum::accid(1, pse::NoteName::D), pse::Accid::Flat);
-    EXPECT_EQ(pse::MidiNum::accid(1, pse::NoteName::E), pse::Accid::TripleFlat);
-    EXPECT_EQ(pse::MidiNum::accid(1, pse::NoteName::F), pse::Accid::Undef);
-    EXPECT_EQ(pse::MidiNum::accid(1, pse::NoteName::G), pse::Accid::Undef);
-    EXPECT_EQ(pse::MidiNum::accid(1, pse::NoteName::A), pse::Accid::Undef);
-    EXPECT_EQ(pse::MidiNum::accid(1, pse::NoteName::B), pse::Accid::DoubleSharp);
+    EXPECT_EQ(pse::MidiNum::class_to_accid(1, pse::NoteName::C), pse::Accid::Sharp);
+    EXPECT_EQ(pse::MidiNum::class_to_accid(1, pse::NoteName::D), pse::Accid::Flat);
+    EXPECT_EQ(pse::MidiNum::class_to_accid(1, pse::NoteName::E), pse::Accid::TripleFlat);
+    EXPECT_EQ(pse::MidiNum::class_to_accid(1, pse::NoteName::F), pse::Accid::Undef);
+    EXPECT_EQ(pse::MidiNum::class_to_accid(1, pse::NoteName::G), pse::Accid::Undef);
+    EXPECT_EQ(pse::MidiNum::class_to_accid(1, pse::NoteName::A), pse::Accid::Undef);
+    EXPECT_EQ(pse::MidiNum::class_to_accid(1, pse::NoteName::B), pse::Accid::DoubleSharp);
 
     //  2 = D
-    EXPECT_EQ(pse::MidiNum::accid(2, pse::NoteName::C), pse::Accid::DoubleSharp);
-    EXPECT_EQ(pse::MidiNum::accid(2, pse::NoteName::D), pse::Accid::Natural);
-    EXPECT_EQ(pse::MidiNum::accid(2, pse::NoteName::E), pse::Accid::DoubleFlat);
-    EXPECT_EQ(pse::MidiNum::accid(2, pse::NoteName::F), pse::Accid::Undef);
-    EXPECT_EQ(pse::MidiNum::accid(2, pse::NoteName::G), pse::Accid::Undef);
-    EXPECT_EQ(pse::MidiNum::accid(2, pse::NoteName::A), pse::Accid::Undef);
-    EXPECT_EQ(pse::MidiNum::accid(2, pse::NoteName::B), pse::Accid::TripleSharp);
+    EXPECT_EQ(pse::MidiNum::class_to_accid(2, pse::NoteName::C), pse::Accid::DoubleSharp);
+    EXPECT_EQ(pse::MidiNum::class_to_accid(2, pse::NoteName::D), pse::Accid::Natural);
+    EXPECT_EQ(pse::MidiNum::class_to_accid(2, pse::NoteName::E), pse::Accid::DoubleFlat);
+    EXPECT_EQ(pse::MidiNum::class_to_accid(2, pse::NoteName::F), pse::Accid::Undef);
+    EXPECT_EQ(pse::MidiNum::class_to_accid(2, pse::NoteName::G), pse::Accid::Undef);
+    EXPECT_EQ(pse::MidiNum::class_to_accid(2, pse::NoteName::A), pse::Accid::Undef);
+    EXPECT_EQ(pse::MidiNum::class_to_accid(2, pse::NoteName::B), pse::Accid::TripleSharp);
 
     //  3 = D#, Eb
-    EXPECT_EQ(pse::MidiNum::accid(3, pse::NoteName::C), pse::Accid::TripleSharp);
-    EXPECT_EQ(pse::MidiNum::accid(3, pse::NoteName::D), pse::Accid::Sharp);
-    EXPECT_EQ(pse::MidiNum::accid(3, pse::NoteName::E), pse::Accid::Flat);
-    EXPECT_EQ(pse::MidiNum::accid(3, pse::NoteName::F), pse::Accid::DoubleFlat);
-    EXPECT_EQ(pse::MidiNum::accid(3, pse::NoteName::G), pse::Accid::Undef);
-    EXPECT_EQ(pse::MidiNum::accid(3, pse::NoteName::A), pse::Accid::Undef);
-    EXPECT_EQ(pse::MidiNum::accid(3, pse::NoteName::B), pse::Accid::Undef);
+    EXPECT_EQ(pse::MidiNum::class_to_accid(3, pse::NoteName::C), pse::Accid::TripleSharp);
+    EXPECT_EQ(pse::MidiNum::class_to_accid(3, pse::NoteName::D), pse::Accid::Sharp);
+    EXPECT_EQ(pse::MidiNum::class_to_accid(3, pse::NoteName::E), pse::Accid::Flat);
+    EXPECT_EQ(pse::MidiNum::class_to_accid(3, pse::NoteName::F), pse::Accid::DoubleFlat);
+    EXPECT_EQ(pse::MidiNum::class_to_accid(3, pse::NoteName::G), pse::Accid::Undef);
+    EXPECT_EQ(pse::MidiNum::class_to_accid(3, pse::NoteName::A), pse::Accid::Undef);
+    EXPECT_EQ(pse::MidiNum::class_to_accid(3, pse::NoteName::B), pse::Accid::Undef);
 
     //  4 = E
-    EXPECT_EQ(pse::MidiNum::accid(4, pse::NoteName::C), pse::Accid::Undef);
-    EXPECT_EQ(pse::MidiNum::accid(4, pse::NoteName::D), pse::Accid::DoubleSharp);
-    EXPECT_EQ(pse::MidiNum::accid(4, pse::NoteName::E), pse::Accid::Natural);
-    EXPECT_EQ(pse::MidiNum::accid(4, pse::NoteName::F), pse::Accid::Flat);
-    EXPECT_EQ(pse::MidiNum::accid(4, pse::NoteName::G), pse::Accid::TripleFlat);
-    EXPECT_EQ(pse::MidiNum::accid(4, pse::NoteName::A), pse::Accid::Undef);
-    EXPECT_EQ(pse::MidiNum::accid(4, pse::NoteName::B), pse::Accid::Undef);
+    EXPECT_EQ(pse::MidiNum::class_to_accid(4, pse::NoteName::C), pse::Accid::Undef);
+    EXPECT_EQ(pse::MidiNum::class_to_accid(4, pse::NoteName::D), pse::Accid::DoubleSharp);
+    EXPECT_EQ(pse::MidiNum::class_to_accid(4, pse::NoteName::E), pse::Accid::Natural);
+    EXPECT_EQ(pse::MidiNum::class_to_accid(4, pse::NoteName::F), pse::Accid::Flat);
+    EXPECT_EQ(pse::MidiNum::class_to_accid(4, pse::NoteName::G), pse::Accid::TripleFlat);
+    EXPECT_EQ(pse::MidiNum::class_to_accid(4, pse::NoteName::A), pse::Accid::Undef);
+    EXPECT_EQ(pse::MidiNum::class_to_accid(4, pse::NoteName::B), pse::Accid::Undef);
 
     //  5 = F
-    EXPECT_EQ(pse::MidiNum::accid(5, pse::NoteName::C), pse::Accid::Undef);
-    EXPECT_EQ(pse::MidiNum::accid(5, pse::NoteName::D), pse::Accid::TripleSharp);
-    EXPECT_EQ(pse::MidiNum::accid(5, pse::NoteName::E), pse::Accid::Sharp);
-    EXPECT_EQ(pse::MidiNum::accid(5, pse::NoteName::F), pse::Accid::Natural);
-    EXPECT_EQ(pse::MidiNum::accid(5, pse::NoteName::G), pse::Accid::DoubleFlat);
-    EXPECT_EQ(pse::MidiNum::accid(5, pse::NoteName::A), pse::Accid::Undef);
-    EXPECT_EQ(pse::MidiNum::accid(5, pse::NoteName::B), pse::Accid::Undef);
+    EXPECT_EQ(pse::MidiNum::class_to_accid(5, pse::NoteName::C), pse::Accid::Undef);
+    EXPECT_EQ(pse::MidiNum::class_to_accid(5, pse::NoteName::D), pse::Accid::TripleSharp);
+    EXPECT_EQ(pse::MidiNum::class_to_accid(5, pse::NoteName::E), pse::Accid::Sharp);
+    EXPECT_EQ(pse::MidiNum::class_to_accid(5, pse::NoteName::F), pse::Accid::Natural);
+    EXPECT_EQ(pse::MidiNum::class_to_accid(5, pse::NoteName::G), pse::Accid::DoubleFlat);
+    EXPECT_EQ(pse::MidiNum::class_to_accid(5, pse::NoteName::A), pse::Accid::Undef);
+    EXPECT_EQ(pse::MidiNum::class_to_accid(5, pse::NoteName::B), pse::Accid::Undef);
 
     //  6 = F#, Gb
-    EXPECT_EQ(pse::MidiNum::accid(6, pse::NoteName::C), pse::Accid::Undef);
-    EXPECT_EQ(pse::MidiNum::accid(6, pse::NoteName::D), pse::Accid::Undef);
-    EXPECT_EQ(pse::MidiNum::accid(6, pse::NoteName::E), pse::Accid::DoubleSharp);
-    EXPECT_EQ(pse::MidiNum::accid(6, pse::NoteName::F), pse::Accid::Sharp);
-    EXPECT_EQ(pse::MidiNum::accid(6, pse::NoteName::G), pse::Accid::Flat);
-    EXPECT_EQ(pse::MidiNum::accid(6, pse::NoteName::A), pse::Accid::TripleFlat);
-    EXPECT_EQ(pse::MidiNum::accid(6, pse::NoteName::B), pse::Accid::Undef);
+    EXPECT_EQ(pse::MidiNum::class_to_accid(6, pse::NoteName::C), pse::Accid::Undef);
+    EXPECT_EQ(pse::MidiNum::class_to_accid(6, pse::NoteName::D), pse::Accid::Undef);
+    EXPECT_EQ(pse::MidiNum::class_to_accid(6, pse::NoteName::E), pse::Accid::DoubleSharp);
+    EXPECT_EQ(pse::MidiNum::class_to_accid(6, pse::NoteName::F), pse::Accid::Sharp);
+    EXPECT_EQ(pse::MidiNum::class_to_accid(6, pse::NoteName::G), pse::Accid::Flat);
+    EXPECT_EQ(pse::MidiNum::class_to_accid(6, pse::NoteName::A), pse::Accid::TripleFlat);
+    EXPECT_EQ(pse::MidiNum::class_to_accid(6, pse::NoteName::B), pse::Accid::Undef);
 
     //  7 = G
-    EXPECT_EQ(pse::MidiNum::accid(7, pse::NoteName::C), pse::Accid::Undef);
-    EXPECT_EQ(pse::MidiNum::accid(7, pse::NoteName::D), pse::Accid::Undef);
-    EXPECT_EQ(pse::MidiNum::accid(7, pse::NoteName::E), pse::Accid::Undef);
-    EXPECT_EQ(pse::MidiNum::accid(7, pse::NoteName::F), pse::Accid::DoubleSharp);
-    EXPECT_EQ(pse::MidiNum::accid(7, pse::NoteName::G), pse::Accid::Natural);
-    EXPECT_EQ(pse::MidiNum::accid(7, pse::NoteName::A), pse::Accid::DoubleFlat);
-    EXPECT_EQ(pse::MidiNum::accid(7, pse::NoteName::B), pse::Accid::Undef);
+    EXPECT_EQ(pse::MidiNum::class_to_accid(7, pse::NoteName::C), pse::Accid::Undef);
+    EXPECT_EQ(pse::MidiNum::class_to_accid(7, pse::NoteName::D), pse::Accid::Undef);
+    EXPECT_EQ(pse::MidiNum::class_to_accid(7, pse::NoteName::E), pse::Accid::Undef);
+    EXPECT_EQ(pse::MidiNum::class_to_accid(7, pse::NoteName::F), pse::Accid::DoubleSharp);
+    EXPECT_EQ(pse::MidiNum::class_to_accid(7, pse::NoteName::G), pse::Accid::Natural);
+    EXPECT_EQ(pse::MidiNum::class_to_accid(7, pse::NoteName::A), pse::Accid::DoubleFlat);
+    EXPECT_EQ(pse::MidiNum::class_to_accid(7, pse::NoteName::B), pse::Accid::Undef);
 
     //  8 = G#, Ab
-    EXPECT_EQ(pse::MidiNum::accid(8, pse::NoteName::C), pse::Accid::Undef);
-    EXPECT_EQ(pse::MidiNum::accid(8, pse::NoteName::D), pse::Accid::Undef);
-    EXPECT_EQ(pse::MidiNum::accid(8, pse::NoteName::E), pse::Accid::Undef);
-    EXPECT_EQ(pse::MidiNum::accid(8, pse::NoteName::F), pse::Accid::TripleSharp);
-    EXPECT_EQ(pse::MidiNum::accid(8, pse::NoteName::G), pse::Accid::Sharp);
-    EXPECT_EQ(pse::MidiNum::accid(8, pse::NoteName::A), pse::Accid::Flat);
-    EXPECT_EQ(pse::MidiNum::accid(8, pse::NoteName::B), pse::Accid::TripleFlat);
+    EXPECT_EQ(pse::MidiNum::class_to_accid(8, pse::NoteName::C), pse::Accid::Undef);
+    EXPECT_EQ(pse::MidiNum::class_to_accid(8, pse::NoteName::D), pse::Accid::Undef);
+    EXPECT_EQ(pse::MidiNum::class_to_accid(8, pse::NoteName::E), pse::Accid::Undef);
+    EXPECT_EQ(pse::MidiNum::class_to_accid(8, pse::NoteName::F), pse::Accid::TripleSharp);
+    EXPECT_EQ(pse::MidiNum::class_to_accid(8, pse::NoteName::G), pse::Accid::Sharp);
+    EXPECT_EQ(pse::MidiNum::class_to_accid(8, pse::NoteName::A), pse::Accid::Flat);
+    EXPECT_EQ(pse::MidiNum::class_to_accid(8, pse::NoteName::B), pse::Accid::TripleFlat);
 
     //  9 = A
-    EXPECT_EQ(pse::MidiNum::accid(9, pse::NoteName::C), pse::Accid::TripleFlat);
-    EXPECT_EQ(pse::MidiNum::accid(9, pse::NoteName::D), pse::Accid::Undef);
-    EXPECT_EQ(pse::MidiNum::accid(9, pse::NoteName::E), pse::Accid::Undef);
-    EXPECT_EQ(pse::MidiNum::accid(9, pse::NoteName::F), pse::Accid::Undef);
-    EXPECT_EQ(pse::MidiNum::accid(9, pse::NoteName::G), pse::Accid::DoubleSharp);
-    EXPECT_EQ(pse::MidiNum::accid(9, pse::NoteName::A), pse::Accid::Natural);
-    EXPECT_EQ(pse::MidiNum::accid(9, pse::NoteName::B), pse::Accid::DoubleFlat);
+    EXPECT_EQ(pse::MidiNum::class_to_accid(9, pse::NoteName::C), pse::Accid::TripleFlat);
+    EXPECT_EQ(pse::MidiNum::class_to_accid(9, pse::NoteName::D), pse::Accid::Undef);
+    EXPECT_EQ(pse::MidiNum::class_to_accid(9, pse::NoteName::E), pse::Accid::Undef);
+    EXPECT_EQ(pse::MidiNum::class_to_accid(9, pse::NoteName::F), pse::Accid::Undef);
+    EXPECT_EQ(pse::MidiNum::class_to_accid(9, pse::NoteName::G), pse::Accid::DoubleSharp);
+    EXPECT_EQ(pse::MidiNum::class_to_accid(9, pse::NoteName::A), pse::Accid::Natural);
+    EXPECT_EQ(pse::MidiNum::class_to_accid(9, pse::NoteName::B), pse::Accid::DoubleFlat);
 
     // 10 = A#, Bb
-    EXPECT_EQ(pse::MidiNum::accid(10, pse::NoteName::C), pse::Accid::DoubleFlat);
-    EXPECT_EQ(pse::MidiNum::accid(10, pse::NoteName::D), pse::Accid::Undef);
-    EXPECT_EQ(pse::MidiNum::accid(10, pse::NoteName::E), pse::Accid::Undef);
-    EXPECT_EQ(pse::MidiNum::accid(10, pse::NoteName::F), pse::Accid::Undef);
-    EXPECT_EQ(pse::MidiNum::accid(10, pse::NoteName::G), pse::Accid::TripleSharp);
-    EXPECT_EQ(pse::MidiNum::accid(10, pse::NoteName::A), pse::Accid::Sharp);
-    EXPECT_EQ(pse::MidiNum::accid(10, pse::NoteName::B), pse::Accid::Flat);
+    EXPECT_EQ(pse::MidiNum::class_to_accid(10, pse::NoteName::C), pse::Accid::DoubleFlat);
+    EXPECT_EQ(pse::MidiNum::class_to_accid(10, pse::NoteName::D), pse::Accid::Undef);
+    EXPECT_EQ(pse::MidiNum::class_to_accid(10, pse::NoteName::E), pse::Accid::Undef);
+    EXPECT_EQ(pse::MidiNum::class_to_accid(10, pse::NoteName::F), pse::Accid::Undef);
+    EXPECT_EQ(pse::MidiNum::class_to_accid(10, pse::NoteName::G), pse::Accid::TripleSharp);
+    EXPECT_EQ(pse::MidiNum::class_to_accid(10, pse::NoteName::A), pse::Accid::Sharp);
+    EXPECT_EQ(pse::MidiNum::class_to_accid(10, pse::NoteName::B), pse::Accid::Flat);
 
     // 11 = B
-    EXPECT_EQ(pse::MidiNum::accid(11, pse::NoteName::C), pse::Accid::Flat);
-    EXPECT_EQ(pse::MidiNum::accid(11, pse::NoteName::D), pse::Accid::TripleFlat);
-    EXPECT_EQ(pse::MidiNum::accid(11, pse::NoteName::E), pse::Accid::Undef);
-    EXPECT_EQ(pse::MidiNum::accid(11, pse::NoteName::F), pse::Accid::Undef);
-    EXPECT_EQ(pse::MidiNum::accid(11, pse::NoteName::G), pse::Accid::Undef);
-    EXPECT_EQ(pse::MidiNum::accid(11, pse::NoteName::A), pse::Accid::DoubleSharp);
-    EXPECT_EQ(pse::MidiNum::accid(11, pse::NoteName::B), pse::Accid::Natural);
+    EXPECT_EQ(pse::MidiNum::class_to_accid(11, pse::NoteName::C), pse::Accid::Flat);
+    EXPECT_EQ(pse::MidiNum::class_to_accid(11, pse::NoteName::D), pse::Accid::TripleFlat);
+    EXPECT_EQ(pse::MidiNum::class_to_accid(11, pse::NoteName::E), pse::Accid::Undef);
+    EXPECT_EQ(pse::MidiNum::class_to_accid(11, pse::NoteName::F), pse::Accid::Undef);
+    EXPECT_EQ(pse::MidiNum::class_to_accid(11, pse::NoteName::G), pse::Accid::Undef);
+    EXPECT_EQ(pse::MidiNum::class_to_accid(11, pse::NoteName::A), pse::Accid::DoubleSharp);
+    EXPECT_EQ(pse::MidiNum::class_to_accid(11, pse::NoteName::B), pse::Accid::Natural);
 }
 
 
@@ -230,7 +230,7 @@ TEST(MidiNum, to_midi_inv)
                         pse::NoteName::B })
         {
             // has been tested
-            enum pse::Accid a = pse::MidiNum::accid(c, n);
+            enum pse::Accid a = pse::MidiNum::class_to_accid(c, n);
             if (a != pse::Accid::Undef)
             {
                 // has been tested

@@ -21,9 +21,9 @@
 #include "pybind11/pybind11.h"
 #include "pybind11/stl.h"
 
-#include "trace.hpp"
+#include "pstrace.hpp"
 #include "NoteName.hpp"
-#include "Accidental.hpp"
+#include "Accid.hpp"
 #include "PSEnum.hpp"
 //#include "Stream.hpp"
 
@@ -109,13 +109,13 @@ public:
     /// record new NoteName, Accid, Octave, print_flag for the note of given index.
     /// @param name note name in 'A'..'G'.
     /// @param accid accidetal in [-2, 2] where 1 is a half tone
-    /// @param oct octave number in -10..10
+    /// @param oct octave number in Pitch::OCTAVE_MIN and Pitch::OCTAVE_MAX.
     /// @param altprint whether the accidental must be printed.
-    /// @see Pitch::rename()
+    /// @see pse::Pitch::rename()
     /// @warning the notes cannot be renamed in place because the Python
     /// lists in argument contain const objects.
-    virtual void rename(size_t i, const pse::NoteName& name,
-                        const pse::Accid& accid, int oct, bool altprint);
+    virtual void rename(size_t i, const enum pse::NoteName& name,
+                        const enum pse::Accid& accid, int oct, bool altprint);
     
    
 private:
@@ -134,12 +134,12 @@ private:
     /// list of the estimated best note name (in 0..6) for each input note.
     /// copy of the values of the PSPaths (best paths) in the columns of table,
     /// temporaly stored by rename, because the input notes are const protected.
-    std::vector<NoteName> _names;
+    std::vector<enum pse::NoteName> _names;
 
     /// tmp list of the estimated best accident (in -2..2) for each input note.
     /// copy of the values of the PSPaths (best paths) in the columns of table,
     /// temporaly stored by rename, because the input notes are const protected.
-    std::vector<Accid> _accids;
+    std::vector<enum pse::Accid> _accids;
 
     /// tmp list of the estimated best octave (in -2..9) for each input note.
     /// copy of the values of the PSPaths (best paths) in the columns of table,

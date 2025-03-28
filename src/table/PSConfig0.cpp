@@ -15,17 +15,29 @@
 //#include "PSConfig1.hpp"
 //#include "PSConfig1c.hpp"
 //#include "PSConfig2.hpp"
+#include "PSState1.hpp"
+#include "PSState2.hpp"
 #include "Enharmonic.hpp"
 
 
 namespace pse {
 
 
-PSC0::PSC0(const Ton& ton, size_t id, const Cost& seed):
-_state(ton, false),
+PSC0::PSC0(const Ton& ton, size_t id, const Cost& seed,
+           bool tonal, bool octave):
+_state(nullptr),
 _id(id),
 _cost(seed.shared_zero()) // zero
 {
+    if (octave)
+    {
+        _state = std::shared_ptr<PSState0>(new PSState2(ton, tonal));
+    }
+    else
+    {
+        _state = std::shared_ptr<PSState0>(new PSState1(ton, tonal));
+    }
+    
     assert(ton.getMode() != ModeName::Undef);
 }
 
@@ -48,8 +60,9 @@ _cost(seed.shared_zero()) // zero
 //{ }
 
 
+// deep copy
 PSC0::PSC0(const PSC0& rhs):
-_state(rhs._state),
+_state(rhs._state->clone()),
 _id(rhs._id),
 _cost(rhs._cost->shared_clone())
 {
@@ -67,7 +80,8 @@ PSC0& PSC0::operator=(const PSC0& rhs)
 {
     if (this != &rhs)
     {
-        _state = rhs._state; // copy
+        assert(rhs._state);
+        _state = rhs._state->clone();
         _id    = rhs._id;
         _cost  = rhs._cost;  // copy
     }
@@ -77,7 +91,9 @@ PSC0& PSC0::operator=(const PSC0& rhs)
 
 bool PSC0::operator==(const PSC0& rhs) const
 {
-    return (_id == rhs._id) && (_state == rhs._state);
+    assert(_state);
+    assert(rhs._state);
+    return (_id == rhs._id) and _state->equal(*(rhs._state));
 }
 
 
@@ -117,6 +133,13 @@ const PSC0* PSC0::previous() const
 }
 
 
+const PSState0& PSC0::state() const
+{
+    assert(_state);
+    return *_state;
+}
+
+
 size_t PSC0::id() const
 {
     // ERROR("id(): should not be called for a PSC0");
@@ -131,10 +154,16 @@ const Cost& PSC0::cost() const
 }
 
 
-const enum Accid PSC0::accidental(const enum NoteName&  name) const
-{
-    return _state.accid(name);
-}
+} // end namespace pse
+
+/// @}
+
+
+
+//const enum Accid PSC0::accidental(const enum NoteName&  name) const
+//{
+//    return _state.accid(name);
+//}
 
 
 //std::vector<std::shared_ptr<PSC0>>
@@ -308,8 +337,3 @@ const enum Accid PSC0::accidental(const enum NoteName&  name) const
 //    else
 //        return _pred->origin();
 //}
-
-
-} // end namespace pse
-
-/// @}

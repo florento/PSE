@@ -16,7 +16,7 @@
 #include <stdlib.h>     //  abs
 #include <vector>
 
-#include "trace.hpp"
+#include "pstrace.hpp"
 #include "Pitch.hpp"
 
 namespace pse {
@@ -162,6 +162,11 @@ std::ostream& operator<<(std::ostream& o, const SimpleInterval::Quality& q);
 std::ostream& operator<<(std::ostream& o, const SimpleInterval& i);
 
 } // namespace pse
+
+/// fmt v10 and above requires `fmt::formatter<T>` extends `fmt::ostream_formatter`.
+/// @see: https://github.com/fmtlib/fmt/issues/3318
+template<> struct fmt::formatter<enum pse::SimpleInterval::Quality> : fmt::ostream_formatter {};
+template<> struct fmt::formatter<pse::SimpleInterval> : fmt::ostream_formatter {};
 
 #endif /* IntervalSimple_hpp */
 

@@ -5,6 +5,8 @@
 //  Created by Florent on 16/05/2023.
 //
 
+#include <cmath> // std::abs
+
 #include "CostA.hpp"
 #include "PSConfig1.hpp"
 #include "PSConfig1c.hpp"
@@ -14,144 +16,172 @@ namespace pse {
 
 
 CostA::CostA():
-_accid(0)
-{}
+_accid(0),
+_inconsist(0)
+{ }
 
 
 CostA::CostA(const CostA& rhs):
-_accid(rhs._accid)
-{}
+_accid(rhs._accid),
+_inconsist(rhs._inconsist)
+{ }
 
 
 CostA::~CostA()
 {
-    TRACE("delete CostAccid");
+    TRACE("delete CostA");
 }
 
 
-//CostA& CostA::operator=(const CostA& rhs)
-//{
-//    if (this != &rhs)
-//    {
-//        _accid = rhs._accid;
-//    }
-//    return *this;
-//}
-
-
-bool CostA::operator==(const CostA& rhs) const
+//    const CostA& rhs_A = dynamic_cast<const CostA&>(rhs);
+bool CostA::equal(const CostA& rhs) const
 {
-    return (_accid == rhs._accid);
+        return (_accid == rhs._accid);
 }
 
 
-double CostA::dist(const CostA& rhs) const
-{
-    return distCost((double) _accid, (double) rhs._accid);
-}
-
-
-bool CostA::operator<(const CostA& rhs) const
+bool CostA::smaller(const CostA& rhs) const
 {
     return (_accid < rhs._accid);
 }
 
 
-CostA& CostA::operator+=(const CostA& rhs)
+CostA& CostA::add(const CostA& rhs)
 {
     _accid += rhs._accid;
+    _inconsist += rhs._inconsist;
     return *this;
 }
 
 
-//CostA operator+(const CostA& c1, const CostA& c2)
-//{
-//    return c1.operator+(c2);
-//}
-
-
-std::shared_ptr<Cost> CostA::shared_zero() const
+double CostA::pdist(const CostA& rhs) const
 {
-    return std::shared_ptr<Cost>(new CostA());
+    return Cost::dist((double) _accid, (double) rhs._accid);
 }
 
 
-std::shared_ptr<Cost> CostA::shared_clone() const
+bool CostA::updateAccid(const enum NoteName& name,
+                        const enum Accid& accid,
+                        bool printed,
+                        const Ton& gton, const Ton& lton)
 {
-    return std::shared_ptr<Cost>(new CostA(*this));
-}
-
-std::unique_ptr<Cost> CostA::unique_clone() const
-{
-    return std::unique_ptr<Cost>(new CostA(*this));
-}
-
-
-void CostA::update(const enum NoteName& name, const enum Accid& accid,
-                   bool print,
-                   const Ton& gton, const Ton& lton)
-{
-    // count the cost
-    // bool cc = false;
-    
-    // update cost when accident for the name was updated
-    // discount for lead degree
-    // !(gton.lead()  &&  gton.accidDia(name) == accid)
-    if (print && !(gton.accidDia(name) == accid))
+    if (printed)
     {
         switch (accid)
         {
             case Accid::DoubleSharp:
             case Accid::DoubleFlat:
                 _accid += 2;
-                break;
+                return true;
 
             case Accid::Sharp:
             case Accid::Flat:
             case Accid::Natural:
                 _accid += 1;
-                break;
+                return true;
 
             default:
             {
-                ERROR("PSC: unexpected accidental"); // accid
-                break;
+                ERROR("updateAccid: unexpected accidental"); // accid
+                return false;
             }
         }
     }
-
-    if (lton.defined())
+    else
     {
-        //_dist += c.state().dist(lton);
-        //if (print && !(lton.accidDia(name) == accid))
-        // si l'on veut juger purement d'un point de vue tonal
-        // afin de déduire la meilleure tonalité locale,
-        // il vaut mieux ne plus se poser la question du print :
-        // !(gton.lead()  &&  gton.accidDia(name) == accid)
-        if (!(lton.accidDia(name) == accid))
-        {
-            switch (accid)
-            {
-                case Accid::DoubleSharp:
-                case Accid::DoubleFlat:
-                    _accid += 2;
-                    break;
-
-                case Accid::Sharp:
-                case Accid::Flat:
-                case Accid::Natural:
-                    _accid += 1;
-                    break;
-
-                default:
-                {
-                    ERROR("PSC: unexpected accidental"); // accid
-                    break;
-                }
-            }
-        }
+        return false;
     }
 }
+
+
+bool CostA::updateInconsistency(const enum NoteName& prev_name,
+                                const enum NoteName& name)
+{
+    if (prev_name != NoteName::Undef and prev_name != name)
+    {
+        _accid += 1;     // cumul accid + inconsist.
+        _inconsist += 1; // inconsist. only
+        return true;
+    }
+    else
+        return false;
+}
+
+
+// update cost when accident for the name was updated
+bool CostA::update(const enum NoteName& name, const enum Accid& accid,
+                   bool print, const Ton& gton, const Ton& lton,
+                   const enum NoteName& prev_name)
+{
+    bool reti = updateInconsistency(prev_name, name);
+    bool reta = updateAccid(name, accid, print, gton, lton);
+    
+    return reti or reta;
+}
+
+
+CostType CostA::type() const
+{
+    // if (_discount)
+    //     return CostType::ACCIDlead;
+    // else
+    return CostType::ACCID;
+}
+
+
+void CostA::print(std::ostream& o) const
+{
+    assert(_accid >= _inconsist);
+    //    if (_inconsist > 0)
+    //        DEBUG("{} INCONSISTENCIES (CostA)", _inconsist);
+    o << (_accid - _inconsist) << '+' << _inconsist;
+}
+
+
+std::ostream& operator<<(std::ostream& o, const CostA& c)
+{
+    c.print(o);
+    return o;
+}
+
+
+} // end namespace pse
+
+
+
+
+// update cost when accident for the name was updated
+//void CostA::update(const enum NoteName& name, const enum Accid& accid,
+//                   bool print, const Ton& gton, const Ton& lton)
+//{
+//    // second pass
+//    // @todo revise this case
+//    if (lton.defined())
+//    {
+//        //_dist += c.state().dist(lton);
+//        //if (print && !(lton.accidDia(name) == accid))
+//        // si l'on veut juger purement d'un point de vue tonal
+//        // afin de déduire la meilleure tonalité locale,
+//        // il vaut mieux ne plus se poser la question du print :
+//        // !(gton.lead()  &&  gton.accidDia(name) == accid)
+//        // (lton.accidDia(name) != accid)
+//        if (!Accids::contained(accid, lton.accidScale(name)))
+//        {
+//            updateAccid(accid);
+//        }
+//    }
+//    // first pass
+//    // @todo suppr. optional discount for lead degree
+//    else if (print)
+//    {
+//        // !(gton.lead()  &&  gton.accidDia(name) == accid)
+//        // ((! _discount)  || (gton.accidDia(name) != accid))
+//        if ((! _discount)  || !Accids::contained(accid, gton.accidScale(name)))
+//        {
+//            updateAccid(accid);
+//        }
+//    }
+//}
 
 
 //void CostA::update(const PSC1& c, const PSEnum& e, const Ton& gton)
@@ -164,7 +194,8 @@ void CostA::update(const enum NoteName& name, const enum Accid& accid,
 //
 //    // update cost when accident for the name was updated
 //    // discount for lead degree
-//    if (c.printed() && !(gton.accidDia(name) == accid)) //!(gton.lead()  &&  gton.accidDia(name) == accid)
+//    if (c.printed() && !(gton.accidDia(name) == accid)) //!(gton.lead()
+//                    &&  gton.accidDia(name) == accid)
 //    {
 //        switch (accid)
 //        {
@@ -241,21 +272,3 @@ void CostA::update(const enum NoteName& name, const enum Accid& accid,
 //
 //    // complete the update
 //}
-
-
-void CostA::print(std::ostream& o) const
-{
-    o << "a+d=" << _accid;
-}
-
-
-std::ostream& operator<<(std::ostream& o, const CostA& c)
-{
-    c.print(o);
-    return o;
-}
-
-
-} // end namespace pse
-
-

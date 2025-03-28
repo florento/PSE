@@ -1,6 +1,5 @@
 //
 //  PSConfig0.hpp
-//  squant2
 //
 //  Created by Florent Jacquemard on 15/02/2021.
 //  Copyright © 2021 Florent Jacquemard. All rights reserved.
@@ -18,16 +17,16 @@
 #include <stack>
 #include <queue>   // std::priority_queue
 
-#include "trace.hpp"
+#include "pstrace.hpp"
 #include "NoteName.hpp"
-#include "Accidental.hpp"
+#include "Accid.hpp"
 //#include "Pitch.hpp"
 //#include "KeyFifth.hpp"
 #include "Ton.hpp"
-#include "PSState.hpp"
+#include "PSState0.hpp"
 #include "PSEnum.hpp"
 #include "Cost.hpp"
-#include "Costt.hpp"
+// #include "Costt.hpp"
 
 
 namespace pse {
@@ -39,28 +38,33 @@ class PSC0;
 using PSCCompare = std::function<bool(std::shared_ptr<const PSC0>&,
                                       std::shared_ptr<const PSC0>&)>;
 
-
 /// priority queue of PS Configs
 typedef std::priority_queue<std::shared_ptr<const PSC0>,
                             std::vector<std::shared_ptr<const PSC0>>,
                             PSCCompare> PSCQueue;
-
 
 /// Configuration for a pitch spelling algorithm of scope 1 bar.
 /// Configurations of this class are always initial in a best path solution
 /// for pitch spelling.
 class PSC0
 {
-public:
+public: // construction
 
     /// initial configuration for a given tonality.
     /// predecessor configuration will be null.
-    /// @param ton a tonality, used to defined the accident state of this initial config.
+    /// @param ton a tonality, used to defined the accident state
+    /// of this initial config.
     /// @param id index (in a note enumerator) of the note to read
     /// in order to reach the successor configs from this config.
     /// @param seed cost value of specialized type
     /// (to create a cost of the same type).
-    PSC0(const Ton& ton, size_t id, const Cost& seed);
+    /// @param tonal mode: tonal or modal, for the construction
+    /// of initial state.
+    /// @param octave mode for the state transitions: repeat accidents
+    /// at different octaves, or reason modulo 12.
+    /// @see State constructor for tonal/modal mode
+    PSC0(const Ton& ton, size_t id, const Cost& seed,
+         bool tonal, bool octave);
 
     // initial config for a given key signature.
     // @param init index of last note read to reach this configuration.
@@ -78,12 +82,16 @@ public:
     /// assignement operator
     PSC0& operator=(const PSC0& rhs);
 
+public: // comparison
+
     /// configs have  the same list of accidentals
     bool operator==(const PSC0& rhs) const;
     
     /// configs have different list of accidentals
     bool operator!=(const PSC0& rhs) const;
-    
+
+public: // access
+
     /// this configuration is initial in a best path.
     /// always true for this class.
     virtual bool initial() const;
@@ -103,21 +111,23 @@ public:
     /// every config has at most one predecessor.
     virtual const PSC0* previous() const;
 
-    /// accidental for the given note name recorded in this config.
-    /// @param name note nate coded in 0..6 (0 is 'C', 6 is 'B').
-    const enum Accid accidental(const enum NoteName& name) const;
+    // accidental for the given note name recorded in this config.
+    // @param name note nate coded in 0..6 (0 is 'C', 6 is 'B').
+    // @todo rm unused
+    // const enum Accid accidental(const enum NoteName& name) const;
 
     // enumerator this transition was built from
     // PSEnum& psenum() const;
     
+    /// state associated to this configuration.
+    const PSState0& state() const;
+
     /// index (in enumerator) of note read for the transition from
     /// this config to its successors.
     size_t id() const;
     
-    inline const PSState& state() const { return _state; }
-
-    /// cost of the minimal path to this config.
-    const Cost& cost() const; //{ return _cost; }
+    /// cost of the minimal path reaching this config.
+    const Cost& cost() const;
     
     // cumulated number of accidents in the minimal path to this config.
     // @todo remove
@@ -163,10 +173,12 @@ public:
     // origin of the best path this configuration belongs to.
     // virtual const PSC0* origin() const;
         
-protected:
+protected: // data
 
     /// description of accidents for each note name.
-    PSState _state;
+    /// @todo 1. replace by std::shared_ptr<PSState>
+    /// @todo 2. replace by std::shared_ptr<PSState0> (polymorphic)
+    std::shared_ptr<PSState0> _state;
 
     // description of discounted accident for each note name.
     // will not be updated.
@@ -181,6 +193,7 @@ protected:
     size_t _id;
     
     /// cumulated cost in the minimal path to this config.
+    /// @warning pointer for polymorphism (cloning is needed)
     std::shared_ptr<Cost> _cost;
     
     // cumulated number of accidents in the minimal path to this config.
@@ -233,11 +246,6 @@ private:
     // void succ2(PSEnum& e, const Ton& ton, const Ton& lton, PSCQueue& q) const;
 
 };
-
-
-
-
-
 
 } // namespace pse
 

@@ -11,9 +11,9 @@
 #include <iostream>
 #include <vector>
 
-#include "trace.hpp"
+#include "pstrace.hpp"
 #include "NoteName.hpp"
-#include "Accidental.hpp"
+#include "Accid.hpp"
 #include "MidiNum.hpp"
 //#include "Fifths.hpp"
 #include "KeyFifth.hpp"
@@ -25,7 +25,7 @@ namespace pse {
 
 class Ton;
 
-/// Major and harmonic minor scapes for each pitch class
+/// Major and harmonic minor scales for each pitch class
 /// with enharmonics
 ///
 /// | pc | maj          | min          |
@@ -45,6 +45,12 @@ class Ton;
 
 
 /// a scale is defined by a mode, a pitch class and the name of tonic.
+/// It has a certain number of degrees (its size()),
+/// and for each degree,
+/// - one note name,
+/// - one accidental,
+/// - one pitch class (which depends on the name and accid).
+///
 class Scale  // public Mode
 {
 public:
@@ -64,7 +70,7 @@ public:
     /// @param name name of tonic, in A..G
     Scale(const Mode& mode, int pc, const enum NoteName& name);
 
-    /// constructor of diatonic scale associated to a given ton.
+    /// constructor of a scale associated to a given ton.
     /// @param ton a tonality, i.e. a diatonic scale
     /// (defined by key signature and mode). Its mode must be diatonic.
     Scale(const Ton& ton);
@@ -74,6 +80,9 @@ public:
     /// (defined by key signature and mode). Its mode must be diatonic.
     /// @param mode must be ModeName::Chromatic.
     Scale(const Ton& ton, const ModeName& mode);
+
+    /// number of degrees of this scale.
+    size_t size() const;
 
     /// this scale is undefined.
     bool undef() const;
@@ -130,20 +139,25 @@ protected: //data
 
 protected:
     
-    /// mode is major diatonic
+    /// mode is major diatonic.
     static bool major(const Mode& mode);
 
     /// mode is minor diatonic
-    /// (harmonic minor or melodic minor or natural minor)
+    /// (harmonic minor or melodic minor or natural minor).
     static bool minor(const Mode& mode);
+
+    /// mode is diatonic.
+    static bool diatonic(const Mode& mode);
 
 };
 
-
 std::ostream& operator<<(std::ostream& o, const Scale& s);
 
-
 } // end namespace pse
+
+/// fmt v10 and above requires `fmt::formatter<T>` extends `fmt::ostream_formatter`.
+/// @see: https://github.com/fmtlib/fmt/issues/3318
+template<> struct fmt::formatter<pse::Scale> : fmt::ostream_formatter {};
 
 #endif /* Scale_hpp */
 

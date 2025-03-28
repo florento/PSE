@@ -18,11 +18,10 @@
 #include <memory>
 #include <vector>
 
-#include "trace.hpp"
+#include "pstrace.hpp"
 #include "AlgoName.hpp"
 #include "PSEnum.hpp"
 #include "TonIndex.hpp"
-#include "PSCost.hpp" // TBR
 #include "Cost.hpp"
 #include "PSVector.hpp"
 #include "PSGlobal.hpp" // globals
@@ -48,10 +47,11 @@ class PSG;
 
 
 /// A PS Table is a list of PS Vectors, one for each measure.
+/// @todo suppr. algo (useless)
 class PST
 {
     
-public:
+public: // construction
    
     /// main constructor.
     /// @param a name of pitch-spelling algorithm implemented with this table.
@@ -59,12 +59,14 @@ public:
     /// of the same type.
     /// @param e an enumerator of notes for transitions of configs.
     /// @param i array of tonalities = header of rows of this table.
+    /// @param tonal mode: tonal or modal, for the construction
+    /// of initial state. default = modal.
+    /// @param octave mode for the state transitions: repeat accidents
+    /// at different octaves, or reason modulo 12.
     /// @param dflag debug mode (display table during construction).
     /// @warning the enumerator cannot be changed once the object created.
-    PST(const Algo& a, const Cost& seed,
-        const TonIndex& i,
-        PSEnum& e,
-        bool dflag=false);
+    PST(const Algo& a, const Cost& seed, const TonIndex& i, PSEnum& e,
+        bool tonal, bool octave=false, bool dflag=false);
 
     // main constructor.
     // @param e an enumerator of notes for transitions of configs.
@@ -80,27 +82,50 @@ public:
     // The enumeration starts at n0 and stops
     // when there are no more notes to read in e.
     // PST(PSEnum& e, size_t n0);
-
-    /// rebuid a table with the same algo, index, and enumerator as the given
-    /// table, and the new given seed and given grid of local tonalities.
-    /// @param tab PS table whose algo, ton index, and enumerator will be copied.
+    
+    
+    /// rebuid a table with the same index as the given table,
+    /// and the new given seed and given grid of local tonalities.
+    /// @param a name of pitch-spelling algorithm implemented with this table.
     /// @param seed cost value of specialized type used to create a null cost
     /// of the same type.
-    /// @param globals candidate global tonalities.
+    /// @param e an enumerator of notes for transitions of configs.
     /// Its dimensions must be the same as tab.
     /// @param locals table of local tonalities for tab.
     /// Its dimensions must be the same as tab.
+    /// @param tonal mode: tonal or modal, for the construction
+    /// of initial state. default = tonal.
+    /// @param octave mode for the state transitions: repeat accidents
+    /// at different octaves, or reason modulo 12.
     /// @param dflag debug mode (display table during construction).
-    PST(const PST& tab, const Cost& seed,
-        const PSO& globals, const PSG& locals, bool dflag=false);
+    PST(const Algo& a, const Cost& seed, const TonIndex& index, PSEnum& e,
+        const PSG& locals, bool tonal, bool octave=false, bool dflag=false);
+
+    /// rebuid a table with the same algo and index as the given table,
+    /// and the new given seed and given grid of local tonalities.
+    /// @param seed cost value of specialized type used to create a null cost
+    /// of the same type.
+    /// @param e an enumerator of notes for transitions of configs.
+    /// @param locals table of local tonalities for tab.
+    /// Its dimensions must be the same as tab.
+    /// @param tonal mode: tonal or modal, for the construction
+    /// of initial state. default = tonal.
+    /// @param dflag debug mode (display table during construction).
+    // PST(const Cost& seed, const TonIndex& index, PSEnum& e,
+    //    const PSG& locals, bool tonal, bool dflag=false);
+    
+    /// a table cannot be copied
+    PST(const PST& rhs) = delete;
 
     /// destructor.
     virtual ~PST();
-      
-    /// the table content has been correctly initialized.
-    bool status() const;
     
-    /// enumerator of input notes used to build this vector.
+    /// a table cannot be copied
+    PST& operator=(const PST& rhs) = delete;
+      
+public: // access
+    
+    /// enumerator of input notes used to build this table.
     inline PSEnum& enumerator() const { return _enum; }
     
     /// vector of tonalities associated to this table.
@@ -122,101 +147,50 @@ public:
     /// or an indeterminate cost value if the computation failed.
     const Cost& rowCost(size_t i) const;
     
-    /// number of columns (PS Vectors) in this table, i.e. nb of measures spelled.
+    /// number of columns (PS Vectors) in this table,
+    /// i.e. nb of measures spelled.
     size_t size() const;
 
-    /// number of columns (PS Vectors) in this table, i.e. nb of measures spelled.
-    inline size_t columnNb() const { return size(); }
+    /// number of columns (PS Vectors) in this table,
+    /// i.e. nb of measures spelled.
+    inline size_t measures() const { return size(); }
 
     /// the enumerator of input notes used to construict the column of given
     /// index in this table.
     /// @param j the index of a column (ie a bar number).
-    /// must be smaller than columnNb().
+    /// must be smaller than measures().
     const PSEnum& columnHeader(size_t j) const;
 
     /// access a column (PS vector) of this table.
-    /// @param j column number (number of bar). must be smaller than columnNb().
+    /// @param j column number (number of bar). must be smaller than measures().
     PSV& column(size_t j) const;
-    
-    // force a global tonality.
-    // @param ig index of global tonality.
-    // void setGlobal(size_t ig);
-
-    // estimate the global tonality candidate for this table (first step).
-    // @return whether the estimation of the global tonality successed.
-    // @warning call eGlobals_eq and eGlobals_less variants to operator==
-    // and operator<  on cost.
-    // bool estimateGlobals();
-    
-    // a set of candidate global tonalities is known.
-    // estimateGlobals or setGlobal was called.
-    // bool estimatedGlobals() const;
-
-    // number of candidates (ties) for the estimatation of the global tonality.
-    // @warning estimateGlobals() must have been called successfully.
-    // size_t globalCands() const;
-
-    // candidate global tonality for this table.
-    // @param i candidate number, must be in 0..globalCands().
-    // @warning estimateGlobal() must have been called successfully.
-    // @warning estimateGlobal() must have been called successfully.
-    // const Ton& globalCand(size_t i) const;
-    
-    // index of a candidate global tonality for this table, in 0..index.size().
-    // @warning estimGlobal() must have been called successfully.
-    // size_t iglobalCand(size_t i) const;
         
-    // estimated local tonality for one candidate global tonality and one bar.
-    // @param i row index = index of candidate global tonality.
-    // must be smaller than index.size().
-    // @param j column index = bar number. must be smaller than enum.size().
-    // @warning estimLocals() must have been called.
-    // const Ton& local(size_t i, size_t j) const;
-
-    // index of the estimated local tonality for one candidate global tonality
-    // and one bar.
-    // @param i row index = index of candidate global tonality.
-    // must be smaller than size().
-    // @param j column index = bar number. must be smaller than index.size().
-    // @warning estimLocals() must have been called.
-    // size_t ilocal(size_t i, size_t j) const;
-        
-    // estimate the best global tonality for this table
-    // (second step, after estimation local tonalities).
-    // @return whether the estimation of the global tonality successed.
-    // @warning estimLocals() must have been called.
-    // bool estimateGlobal();
-    
-    // global tonality is known.
-    // estimateGlobal or setGlobal was called
-    // bool estimatedGlobal() const;
-
-    // estimated global tonality for this table, in 0..index.size().
-    // @warning estimGlobal() must have been called successfully.
-    // @todo change to const Ton& global(size_t i) const; (ith-best)
-    // const Ton& global() const;
-    
-    // index of the estimated global tonality for this table,
-    // in 0..index.size().
-    // @warning estimGlobal() must have been called successfully.
-    // size_t iglobal() const;
-    
     /// rename all notes read to build this PS table, according to a given
     /// global tonality.
     /// @param ig index of cestimated global tonality = row index.
     /// @return whether renaming succeded for all measures.
     bool rename(size_t ig);
+
+public: // debug
+
+    /// the table content has been correctly initialized.
+    bool status() const;
     
     /// debug: print the array of row costs.
     void dump_rowcost() const;
     
-    /// debug: print the content of the table.
-    void dump_table() const;
-    
+    /// debug: print the content of the table in cvs format
+    /// in the output stream.
+    void print(std::ostream& o) const;
+
+    /// print the content of the table as debug messages
+    /// in the output stream.
+    void dump_table(std::ostream& o) const;
+
 private: // data
 
     /// name  of the pitch spelling algorithm implemented with this table.
-    const Algo& _algo;
+    const Algo _algo;
     
     /// enumerator of notes used to build this PS table.
     PSEnum& _enum;
@@ -272,8 +246,16 @@ private:
 
     /// compute the columns (PS Vectors) of this table,
     /// filling cells with cost values.
+    /// @param seed cost value of specialized type used to create a null cost
+    /// of the same type.
+    /// @param locals table of local tonalities for tab.
+    /// Ignored if empty, otherwise, its dimensions must be the same as the
+    /// ton index and the columns of this table .
+    /// @param tonal mode: for the construction of initial state.
+    /// @param octave mode: for the state transitions.
     /// @return wether the computation was successful.
-    bool init_psvs(const Cost& seed);
+    bool init_psvs(const Cost& seed, const PSG& locals,
+                   bool tonal=false, bool octave=false);
 
     /// compute the columns (PS Vectors) of this table,
     /// filling cells with cost values.
@@ -281,94 +263,36 @@ private:
     /// this table (and former pitch spelling content).
     /// @param seed cost value of specialized type used to create a null cost
     /// of the same type.
-    /// @param globals candidate global tonalities.
-    /// Its dimensions must be the same as the index of this table and
-    /// the columns of tab.
     /// @param locals table of local tonalities for tab.
     /// Its dimensions must be the same as the index of this table and
     /// the columns of tab.
+    /// @param tonal mode: tonal or modal, for the construction
+    /// of initial state.
     /// @return wether the computation was successful.
-    bool init_psvs(const PST& tab, const Cost& seed,
-                   const PSO& globals, const PSG& locals);
+    // bool init_psvs(const PST& tab, const Cost& seed,
+    //                const PSG& locals, bool tonal=true);
     
-    /// initialise the vector of row costs as null vector.
-    void init_rowcosts(const Cost& seed);
+    // initialise the vector of row costs as null vector.
+    // void init_rowcosts(const Cost& seed);
     
     /// fill the the vector of row costs.
-    void compute_rowcosts(const Cost& seed);
+    /// @param globals compute the row costs only for candidate global
+    /// tonalities in the index of this table.
+    void compute_rowcosts(const Cost& seed, bool globals=false);
 
-    /// fill the the vector of row costs for given global tonalities.
-    /// @param globals candidate global tonalities.
-    /// Its dimensions must be the same as the index of this table and
-    /// the columns of tab.
-    void compute_rowcosts(const Cost& seed, const PSO& globals);
-    
-    // estimate local tonalities in every column,
-    // for each potential global tonality.
-    // bool init_locals();
-
-    // estimate a local tonality for each column of this table,
-    // for all candidate global tonalities in _globals.
-    // @return whether estimation of the local tonalities successed.
-    // @warning estimGlobals() must have been called successfully.
-    // bool init_locals_globals();
-    
-    // estimate a local tonality for each column of this table,
-    // for an assumed global tonality ig.
-    // @param ig the index of a candidate global tonality.
-    // @return whether estimation of the local tonalities successed.
-    // @warning estimGlobal() must have been called successfully.
-    // bool init_locals(size_t ig);
-
-    // local tonalities are known.
-    // estimateLocals was called.
-    // bool estimatedLocals() const;
-
-    // macro: cost equality for the estimation of global.
-    // use if Costt.operator== is eq_lex.
-    // @warning static choice
-    // bool eGlobals_eq_lex(const PSCost& lhs, const PSCost& rhs) const;
-
-    // macro: cost equality for the estimation of global.
-    // use if Costt.operator== is eq_cumul.
-    // @warning static choice
-    // inline bool eGlobals_eq_cumul(const PSCost& lhs, const PSCost& rhs) const;
-
-    // macro: cost equality for the estimation of global
-    // @warning static choice
-    // inline bool eGlobals_neq(const PSCost& lhs, const PSCost& rhs) const
-    // { return (lhs != rhs); }
-    // { return lhs.neq_approx(rhs, _enum.length()); }
-    
-    // macro: cost ordering for the estimation of global
-    // @warning static choice
-    // inline bool eGlobals_less(const PSCost& lhs, const PSCost& rhs) const
-    // { return (lhs < rhs); }
-    // { return lhs.less_approx(rhs, _enum.length()); }
-    
+    // fill the the vector of row costs for given global tonalities.
+    // @param globals candidate global tonalities.
+    // Its dimensions must be the same as the index of this table and
+    // the columns of tab.
+    // @todo remove globals, replaced by global flag in ton index.
+    // void compute_rowcosts(const Cost& seed, const PSO& globals);
+        
     /// @param bar measure number (first is 0)
     /// @param i0 index of first note of the measure (wrt the enumerator)
     /// @return the index of the first note of the next bar, or the total
     /// number of note (index of last note + 1) if end of part is reached.
     size_t bound_measure(size_t bar, size_t i0);
   
-    // cumulative sum of cost of one row.
-    // @param step number of step (category of psb (is psv) to sum): 0 or 1.
-    // @param i row number, in the index of tons of this table.
-    // PSCost rowCost(size_t step, size_t i);
-
-    // accessor to the tabulated sum of costs for row (ton) of given index.
-    //unsigned int rowcost(size_t i) const;
-
-    // accessor to the flag for sum of costs for row (ton) of given index.
-    // bool frowcost(size_t i) const;
-
-    /// debug: one row cost at least has been estimated.
-    /// if one psb is empty, the whole column is empty
-    /// hence if a whole row could no be estimated, all columns are empty
-    /// hence the table is empty.
-    // bool check_rowcost(const std::vector<PSCost>& rc) const;
-    
 };
 
 
@@ -377,3 +301,129 @@ private:
 #endif /* PSTable_hpp */
 
 /// @}
+
+
+
+// force a global tonality.
+// @param ig index of global tonality.
+// void setGlobal(size_t ig);
+
+// estimate the global tonality candidate for this table (first step).
+// @return whether the estimation of the global tonality successed.
+// @warning call eGlobals_eq and eGlobals_less variants to operator==
+// and operator<  on cost.
+// bool estimateGlobals();
+
+// a set of candidate global tonalities is known.
+// estimateGlobals or setGlobal was called.
+// bool estimatedGlobals() const;
+
+// number of candidates (ties) for the estimatation of the global tonality.
+// @warning estimateGlobals() must have been called successfully.
+// size_t globalCands() const;
+
+// candidate global tonality for this table.
+// @param i candidate number, must be in 0..globalCands().
+// @warning estimateGlobal() must have been called successfully.
+// @warning estimateGlobal() must have been called successfully.
+// const Ton& globalCand(size_t i) const;
+
+// index of a candidate global tonality for this table, in 0..index.size().
+// @warning estimGlobal() must have been called successfully.
+// size_t iglobalCand(size_t i) const;
+    
+// estimated local tonality for one candidate global tonality and one bar.
+// @param i row index = index of candidate global tonality.
+// must be smaller than index.size().
+// @param j column index = bar number. must be smaller than enum.size().
+// @warning estimLocals() must have been called.
+// const Ton& local(size_t i, size_t j) const;
+
+// index of the estimated local tonality for one candidate global tonality
+// and one bar.
+// @param i row index = index of candidate global tonality.
+// must be smaller than size().
+// @param j column index = bar number. must be smaller than index.size().
+// @warning estimLocals() must have been called.
+// size_t ilocal(size_t i, size_t j) const;
+    
+// estimate the best global tonality for this table
+// (second step, after estimation local tonalities).
+// @return whether the estimation of the global tonality successed.
+// @warning estimLocals() must have been called.
+// bool estimateGlobal();
+
+// global tonality is known.
+// estimateGlobal or setGlobal was called
+// bool estimatedGlobal() const;
+
+// estimated global tonality for this table, in 0..index.size().
+// @warning estimGlobal() must have been called successfully.
+// @todo change to const Ton& global(size_t i) const; (ith-best)
+// const Ton& global() const;
+
+// index of the estimated global tonality for this table,
+// in 0..index.size().
+// @warning estimGlobal() must have been called successfully.
+// size_t iglobal() const;
+
+// cumulative sum of cost of one row.
+// @param step number of step (category of psb (is psv) to sum): 0 or 1.
+// @param i row number, in the index of tons of this table.
+// PSCost rowCost(size_t step, size_t i);
+
+// accessor to the tabulated sum of costs for row (ton) of given index.
+//unsigned int rowcost(size_t i) const;
+
+// accessor to the flag for sum of costs for row (ton) of given index.
+// bool frowcost(size_t i) const;
+
+/// debug: one row cost at least has been estimated.
+/// if one psb is empty, the whole column is empty
+/// hence if a whole row could no be estimated, all columns are empty
+/// hence the table is empty.
+// bool check_rowcost(const std::vector<PSCost>& rc) const;
+
+
+// estimate local tonalities in every column,
+// for each potential global tonality.
+// bool init_locals();
+
+// estimate a local tonality for each column of this table,
+// for all candidate global tonalities in _globals.
+// @return whether estimation of the local tonalities successed.
+// @warning estimGlobals() must have been called successfully.
+// bool init_locals_globals();
+
+// estimate a local tonality for each column of this table,
+// for an assumed global tonality ig.
+// @param ig the index of a candidate global tonality.
+// @return whether estimation of the local tonalities successed.
+// @warning estimGlobal() must have been called successfully.
+// bool init_locals(size_t ig);
+
+// local tonalities are known.
+// estimateLocals was called.
+// bool estimatedLocals() const;
+
+// macro: cost equality for the estimation of global.
+// use if Costt.operator== is eq_lex.
+// @warning static choice
+// bool eGlobals_eq_lex(const PSCost& lhs, const PSCost& rhs) const;
+
+// macro: cost equality for the estimation of global.
+// use if Costt.operator== is eq_cumul.
+// @warning static choice
+// inline bool eGlobals_eq_cumul(const PSCost& lhs, const PSCost& rhs) const;
+
+// macro: cost equality for the estimation of global
+// @warning static choice
+// inline bool eGlobals_neq(const PSCost& lhs, const PSCost& rhs) const
+// { return (lhs != rhs); }
+// { return lhs.neq_approx(rhs, _enum.length()); }
+
+// macro: cost ordering for the estimation of global
+// @warning static choice
+// inline bool eGlobals_less(const PSCost& lhs, const PSCost& rhs) const
+// { return (lhs < rhs); }
+// { return lhs.less_approx(rhs, _enum.length()); }

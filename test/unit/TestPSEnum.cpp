@@ -8,7 +8,7 @@
 #include "gtest/gtest.h"
 
 #include "NoteName.hpp"
-#include "Accidental.hpp"
+#include "Accid.hpp"
 #include "ModeName.hpp"
 #include "Scale.hpp"
 #include "Ton.hpp"
@@ -39,7 +39,7 @@
 
 TEST(PSEnum, empty)
 {
-    pse::PSRawEnum e0(0, 0); // empty
+    pse::PSRawEnum e0(0, 0); // empty, not open
     EXPECT_TRUE(e0.empty());
     EXPECT_FALSE(e0.open());
     EXPECT_EQ(e0.first(), 0);
@@ -56,9 +56,9 @@ TEST(PSEnum, open)
     EXPECT_FALSE(e.empty());
     EXPECT_TRUE(e.open());
     EXPECT_EQ(e.first(), 0);
-    EXPECT_TRUE(e.inside(0));
-    EXPECT_TRUE(e.inside(1));
-    EXPECT_TRUE(e.inside(1000));
+    EXPECT_TRUE(e.inside(0));    // warning
+    EXPECT_TRUE(e.inside(1));    // warning
+    EXPECT_TRUE(e.inside(1000)); // warning
 }
 
 TEST(PSEnum, base)

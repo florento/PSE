@@ -10,8 +10,8 @@
 namespace pse {
 
 
-CostADlex::CostADlex():
-CostAD()
+CostADlex::CostADlex(bool tb_lex):
+CostAD(tb_lex)
 { }
 
 
@@ -26,46 +26,20 @@ CostADlex::~CostADlex()
 }
 
 
-bool CostADlex::operator==(const CostADlex& rhs) const
+// same as CostAD::equal
+bool CostADlex::equal(const CostADlex& rhs) const
 {
-    return (_accid == rhs._accid &&
-            _dist == rhs._dist &&
-            _color == rhs._color &&
-            _cflat == rhs._cflat);
+    return CostAD::equal(rhs);
 }
 
 
-double CostADlex::dist(const CostADlex& rhs) const
+bool CostADlex::smaller(const CostADlex& rhs) const
 {
     if (_accid == rhs._accid)
     {
         if (_dist == rhs._dist)
         {
-            if (_color == rhs._color)
-                return distCost((double) _cflat, (double) rhs._cflat);
-            else
-                return distCost((double) _color, (double) rhs._color);
-        }
-        else
-        {
-            return distCost((double) _dist, (double) rhs._dist);
-        }
-    }
-    else
-        return distCost((double) _accid, (double) rhs._accid);
-}
-
-
-bool CostADlex::operator<(const CostADlex& rhs) const
-{
-    if (_accid == rhs._accid)
-    {
-        if (_dist == rhs._dist)
-        {
-            if (_color == rhs._color)
-                return (_cflat < rhs._cflat);
-            else
-                return (_color < rhs._color);
+            return tiebreak_smaller(rhs);
         }
         else
             return (_dist < rhs._dist);
@@ -75,48 +49,59 @@ bool CostADlex::operator<(const CostADlex& rhs) const
 }
 
 
-CostADlex& CostADlex::operator+=(const CostADlex& rhs)
+// same as CostAD::add
+ Cost& CostADlex::add(const CostADlex& rhs)
+ {
+     CostAD::add(rhs);
+     return *this;
+ }
+
+
+/// @todo TBR sum of dists ?
+double CostADlex::pdist(const CostADlex& rhs) const
 {
-    CostAD::operator+=(rhs);
-    return *this;
+    // ignore the tiebreaking measures (only counts accids + dist)
+    return Cost::dist((double) _accid + _dist, (double) rhs._accid + rhs._dist);
+
+    // if (_accid == rhs_ADlex._accid)
+    // {
+    //     if (_dist == rhs_ADlex._dist)
+    //     {
+    //         return tiebreak_pdist(rhs_ADlex);
+    //     }
+    //     else
+    //         return Cost::dist((double) _dist, (double) rhs_ADlex._dist);
+    // }
+    // else
+    //     return Cost::dist((double) _accid, (double) rhs_ADlex._accid);
 }
 
 
-std::shared_ptr<Cost> CostADlex::shared_zero() const
-{
-    return std::shared_ptr<Cost>(new CostADlex());
-}
-
-
-std::shared_ptr<Cost> CostADlex::shared_clone() const
-{
-    return std::shared_ptr<Cost>(new CostADlex(*this));
-}
-
-
-//std::unique_ptr<Cost> CostADlex::unique_clone() const
+//bool CostADlex::update(const enum NoteName& name, const enum Accid& accid,
+//                       bool print, const Ton& gton, const Ton& lton)
 //{
-//    return std::unique_ptr<Cost>(new CostADlex(*this));
+//    return CostAD::update(name, accid, print, gton, lton);
 //}
 
 
-void CostADlex::update(const enum NoteName& name, const enum Accid& accid,
-                       bool print,
-                       const Ton& gton, const Ton& lton)
+CostType CostADlex::type() const
 {
-    CostAD::update(name, accid, print, gton, lton);
+    if (_tblex)
+        return CostType::ADlex;
+    else
+        return CostType::ADlexs;
 }
 
 
-void CostADlex::print(std::ostream& o) const
-{
-    CostAD::print(o);
-}
+//void CostADlex::print(std::ostream& o) const
+//{
+//    CostAD::print(o);
+//}
 
 
 std::ostream& operator<<(std::ostream& o, const CostADlex& c)
 {
-    c.CostAD::print(o);
+    c.print(o);
     return o;
 }
 

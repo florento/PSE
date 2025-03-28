@@ -130,6 +130,15 @@ def get_table(file, composer='Unknown'):
     df = pd.read_csv(fp)
     return df
 
+
+
+#########################
+##                     ##
+##  Brahms             ##
+##                     ##
+#########################
+
+
 def eval_Brahms(stat=ps.Stats(), algo=ps.pse.Algo_PSE,
                    nbtons=30,          # for PSE
                    kpre=33, kpost=23, # for PS13
@@ -146,6 +155,15 @@ def eval_Brahms(stat=ps.Stats(), algo=ps.pse.Algo_PSE,
 
 
 #eval_Brahms()
+
+
+
+#########################
+##                     ##
+##  Chopin             ##
+##                     ##
+#########################
+
 
 def eval_Chopin(no=1,stat=ps.Stats(), algo=ps.pse.Algo_PSE,
                    nbtons=30,          # for PSE
@@ -212,6 +230,15 @@ def eval_Chopin(stat=ps.Stats(), algo=ps.pse.Algo_PSE,
 
 #eval_Chopin(algo=ps.pse.Algo_PS14)
 
+
+
+#########################
+##                     ##
+##  Mozart             ##
+##                     ##
+#########################
+
+
 def Mozart_list():
     """list of Opus (sonata nb, mvt, file) of Beethoven Sonatas in ASAP"""
     global _dataset_root
@@ -265,6 +292,11 @@ def eval_Mozart(stat=ps.Stats(), algo=ps.pse.Algo_PSE,
 
 #eval_Mozart()
 
+#########################
+##                     ##
+##  Rachmaninov        ##
+##                     ##
+#########################
 
 def eval_Rachmaninov(stat=ps.Stats(), algo=ps.pse.Algo_PSE,
                    nbtons=30,          # for PSE

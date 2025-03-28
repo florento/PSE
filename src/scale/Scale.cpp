@@ -20,8 +20,8 @@ _ks(0)
 { }
 
 
-Scale::Scale(const ModeName& mode, int pc, const enum NoteName& name):
-Scale(Mode(mode), pc, name)
+Scale::Scale(const ModeName& modename, int pc, const enum NoteName& name):
+Scale(Mode(modename), pc, name)
 { }
 
 
@@ -30,7 +30,7 @@ _mode(mode.name()),
 _pcs(),
 _names(),
 _accids(),
-_ks((major(mode)||minor(mode))?pc:0, major(mode))
+_ks(diatonic(mode)?pc:0) //  major(mode)  flag major is OBSOLETE
 {
     assert(0 <= pc);
     assert(pc <= 11);
@@ -45,8 +45,8 @@ _ks((major(mode)||minor(mode))?pc:0, major(mode))
         _pcs.push_back(c);
         enum NoteName n = name + mode.nameDistance(d);
         _names.push_back(n);
-        assert(MidiNum::accid(c, n) != Accid::Undef);
-        _accids.push_back(MidiNum::accid(c, n));
+        assert(MidiNum::class_to_accid(c, n) != Accid::Undef);
+        _accids.push_back(MidiNum::class_to_accid(c, n));
     }
 }
 
@@ -54,23 +54,26 @@ _ks((major(mode)||minor(mode))?pc:0, major(mode))
 Scale::Scale(const Ton& ton):
 Scale(ton.getMode(), ton.getPitchClass(), ton.getName())
 {
+    assert(diatonic(ton.getMode()));
     // @todo also for other modes?
-    assert ((ton.getMode() == ModeName::Major) ||
-            (ton.getMode() == ModeName::Minor) ||
-            (ton.getMode() == ModeName::MinorNat) ||
-            (ton.getMode() == ModeName::MinorMel));
+    // assert((ton.getMode() == ModeName::Major) ||
+    //        (ton.getMode() == ModeName::Minor) ||
+    //        (ton.getMode() == ModeName::MinorNat) ||
+    //        (ton.getMode() == ModeName::MinorMel));
 }
 
 
 Scale::Scale(const Ton& ton, const ModeName& mode):
-Scale(ModeName::Chromatic, ton.getPitchClass(), ton.getName())
+Scale(mode, ton.getPitchClass(), ton.getName())
 {
     assert(mode == ModeName::Chromatic);
     // @todo also for other modes?
-    assert ((ton.getMode() == ModeName::Major) ||
-            (ton.getMode() == ModeName::Minor) ||
-            (ton.getMode() == ModeName::MinorNat) ||
-            (ton.getMode() == ModeName::MinorMel));
+    assert(diatonic(ton.getMode()));
+    // @todo also for other modes?
+    // assert ((ton.getMode() == ModeName::Major) ||
+    //         (ton.getMode() == ModeName::Minor) ||
+    //         (ton.getMode() == ModeName::MinorNat) ||
+    //         (ton.getMode() == ModeName::MinorMel));
 }
 
 
@@ -93,6 +96,27 @@ bool Scale::minor(const Mode& mode)
     return ((mode.name() == ModeName::Minor) ||
             (mode.name() == ModeName::MinorNat) ||
             (mode.name() == ModeName::MinorMel));
+}
+
+// static private
+bool Scale::diatonic(const Mode& mode)
+{
+    return (major(mode) ||
+            minor(mode) ||
+            (mode.name() == ModeName::Ionian) ||
+            (mode.name() == ModeName::Dorian) ||
+            (mode.name() == ModeName::Phrygian) ||
+            (mode.name() == ModeName::Lydian) ||
+            (mode.name() == ModeName::Mixolydian) ||
+            (mode.name() == ModeName::Aeolian) ||
+            (mode.name() == ModeName::Locrian));
+}
+
+
+size_t Scale::size() const
+{
+    assert(_names.size() == _accids.size());
+    return _names.size();
 }
 
 

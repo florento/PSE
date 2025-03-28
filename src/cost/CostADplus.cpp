@@ -10,17 +10,17 @@
 namespace pse {
 
 
-CostADplus::CostADplus():
-CostAD(),
-_sum(_accid + _dist)
+CostADplus::CostADplus(bool tb_lex):
+CostAD(tb_lex)
+// _sum(_accid + _dist)
 { }
 
 
 CostADplus::CostADplus(const CostADplus& rhs):
-CostAD(rhs),
-_sum(rhs._sum)
+CostAD(rhs)
+// _sum(rhs._sum)
 {
-    assert(_sum == _accid + _dist);
+    // assert(_sum == _accid + _dist);
 }
 
 
@@ -30,95 +30,102 @@ CostADplus::~CostADplus()
 }
 
 
-bool CostADplus::operator==(const CostADplus& rhs) const
+// equality of (_accid = accids + dist) and TB
+bool CostADplus::equal(const CostADplus& rhs) const
 {
-    assert(_sum == _accid + _dist);
-    assert(rhs._sum == rhs._accid + rhs._dist);
-    return (_sum == rhs._sum && _chromharm == rhs._chromharm && _color+_cflat == rhs._cflat+rhs._color);
-    //        _color == rhs._color &&
-    //        _cflat == rhs._cflat);
+    // compare _accid (which is the sum of nb of accids and dist) and TB.
+    // ignore the distance value.
+    return CostAT::equal(rhs);
+
+    // assert(_sum == _accid + _dist);
+    // assert(rhs_ADplus._sum == rhs_ADplus._accid + rhs_ADplus._dist);
+    // return ((_sum == rhs_ADplus._sum) and tiebreak_equal(rhs_ADplus));
 }
 
 
-double CostADplus::dist(const CostADplus& rhs) const
+bool CostADplus::smaller(const CostADplus& rhs) const
 {
-    assert(_sum == _accid + _dist);
-    assert(rhs._sum == rhs._accid + rhs._dist);
-    if (_sum == rhs._sum)
-    {
-        if (_chromharm == rhs._chromharm) return distCost((double)(_color+_cflat), (double)(rhs._cflat+rhs._color));
-        else return distCost((double)_chromharm , (double) rhs._chromharm);
-        /*
-        if (_color == rhs._color)
-            return distCost((double) _cflat, (double) rhs._cflat);
-        else
-            return distCost((double) _color, (double) rhs._color);
-        */
-    }
-    else
-        return distCost((double) _sum, (double) rhs._sum);
+    // compare _accid (which is the sum of nb of accids and dist), then TB
+    // ignore the distance value.
+    return CostAT::smaller(rhs);
+    
+    // assert(_sum == _accid + _dist);
+    // assert(rhs_ADplus._sum == rhs_ADplus._accid + rhs_ADplus._dist);
+    // if (_sum == rhs_ADplus._sum)
+    //     return tiebreak_smaller(rhs_ADplus);
+    // else
+    //     return (_sum < rhs_ADplus._sum);
 }
 
 
-bool CostADplus::operator<(const CostADplus& rhs) const
+// same as CostAD::add
+Cost& CostADplus::add(const CostADplus& rhs)
 {
-    assert(_sum == _accid + _dist);
-    assert(rhs._sum == rhs._accid + rhs._dist);
-    if (_sum == rhs._sum)
-    {
-        if (_chromharm == rhs._chromharm) return (_color+_cflat < rhs._cflat+rhs._color);
-        else return (_chromharm < rhs._chromharm);
-        /*
-        if (_color == rhs._color)
-            return (_cflat < rhs._cflat);
-        else
-            return (_color < rhs._color);
-        */
-    }
-    else
-        return (_sum < rhs._sum);
-}
-
-
-CostADplus& CostADplus::operator+=(const CostADplus& rhs)
-{
-    CostAD::operator+=(rhs);
-    _sum = _accid + _dist;
+    CostAD::add(rhs);
+    // _sum = _accid + _dist;
     return *this;
 }
 
 
-std::shared_ptr<Cost> CostADplus::shared_zero() const
+// TBR
+double CostADplus::pdist(const CostADplus& rhs) const
 {
-    return std::shared_ptr<Cost>(new CostADplus());
+    // _accid is the sum of nb of accids and dist
+    return Cost::dist((double) this->_accid, (double) rhs._accid);
+
+    // assert(_sum == _accid + _dist);
+    // assert(rhs_ADplus._sum == rhs_ADplus._accid + rhs_ADplus._dist);
+    // ignore the tiebreaking measures (only counts accids + dist)
+    // return Cost::dist((double) _sum, (double) rhs_ADplus._sum);
+
+    // if (_sum == rhs_ADplus._sum)
+    // {
+    //     return tiebreak_pdist(rhs_ADplus);
+    // }
+    // else
+    //     return Cost::dist((double) _sum, (double) rhs_ADplus._sum);
 }
 
 
-std::shared_ptr<Cost> CostADplus::shared_clone() const
+
+size_t CostADplus::accids() const
 {
-    return std::shared_ptr<Cost>(new CostADplus(*this));
+    assert(_accid >= _dist);
+    return (_accid - _dist);
 }
 
 
-//std::unique_ptr<Cost> CostADplus::unique_clone() const
-//{
-//    return std::unique_ptr<Cost>(new CostADplus(*this));
-//}
-
-
-void CostADplus::update(const enum NoteName& name, const enum Accid& accid,
-                        bool print,
-                        const Ton& gton, const Ton& lton)
+bool CostADplus::update(const enum NoteName& name, const enum Accid& accid,
+                        bool print, const Ton& gton, const Ton& lton,
+                        const enum NoteName& prev_name)
 {
-    CostAD::update(name, accid, print, gton, lton);
-    _sum = _accid + _dist;
+    size_t olddist(_dist);
+    // update accid and dist
+    bool ret = CostAD::update(name, accid, print, gton, lton, prev_name);
+    // dist has been increased (by new dists)
+    assert(olddist <= _dist);
+    // _accid was increased only by new accids, add the new dists
+    _accid += (_dist - olddist);
+    
+    return ret;
+}
+
+
+CostType CostADplus::type() const
+{
+    if (_tblex)
+        return CostType::ADplus;
+    else
+        return CostType::ADpluss;
 }
 
 
 void CostADplus::print(std::ostream& o) const
 {
-    CostAD::print(o);
-    o << " a+d=" << _sum;
+    assert(_accid >= _inconsist + _dist);
+    o << (_accid - _inconsist - _dist) << '+';
+    o <<  _inconsist << '+' << _dist << ':';
+    printTB(o);
 }
 
 
@@ -128,6 +135,5 @@ std::ostream& operator<<(std::ostream& o, const CostADplus& c)
     return o;
 }
 
+
 } // end namespace pse
-
-

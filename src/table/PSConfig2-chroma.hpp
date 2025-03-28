@@ -17,8 +17,8 @@
 #include <array>
 #include <vector>
 
-#include "trace.hpp"
-#include "Accidental.hpp"
+#include "pstrace.hpp"
+#include "Accid.hpp"
 #include "PSConfig0.hpp"
 #include "PSConfig.hpp"
 #include "PSEnum.hpp"
@@ -132,7 +132,7 @@ public:
     /// accidental of the note read for the transition
     /// from this config's predecessor. in -2..2
     /// @param i index of the note in the input chord in 0..size()-1.
-    /// @see Accidental.hpp
+    /// @see Accid.hpp
     /// @warning not formatted for a Pitch object.
     enum Accid accidental(size_t i) const;
 

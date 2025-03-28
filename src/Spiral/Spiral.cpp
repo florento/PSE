@@ -11,7 +11,7 @@
 
 #include "Spiral.hpp"
 
-namespace scoremodel {
+namespace pse {
 
 SpiralPoint::SpiralPoint(double vx, double vy, double vz):
 x(vx),
@@ -282,8 +282,7 @@ const SpiralName& SpiralName::ofkey(int k)
 
 const SpiralName& SpiralName::closest(unsigned int m, const SpiralPoint& p)
 {
-    assert(0 <= m);
-    assert(m < 128);
+    assert(MidiNum::check_midi(m)); // assert(0 <= m); assert(m < 128);
     assert(p.isnormal());
 
     unsigned int k = m % 12;
@@ -326,6 +325,6 @@ const SpiralName& SpiralName::closest(unsigned int m, const SpiralPoint& p)
 }
 
 
-} // end namespace scoremodel
+} // end namespace pse
 
 /// @}

@@ -16,10 +16,10 @@
 #include <cmath> // = <math.h>
 
 #include "NoteName.hpp"
-#include "Accidental.hpp"
+#include "Accid.hpp"
 #include "Pitch.hpp"
 
-namespace scoremodel {
+namespace pse {
 
 /// @brief Elaine Chew's spiral of fifths.
 /// for pitch spelling.
@@ -50,7 +50,8 @@ public:
     /// @return Euclidian distance to given point.
     double distance(const SpiralPoint& rhs) const;
 
-    friend inline std::ostream& operator<<(std::ostream& o, const SpiralPoint& rhs);
+    friend inline std::ostream& operator<<(std::ostream& o, 
+                                           const SpiralPoint& rhs);
 };
 
 
@@ -152,7 +153,8 @@ public:
     friend inline bool operator==(const SpiralName&, const SpiralName&);
     friend inline bool operator!=(const SpiralName&, const SpiralName&);
 
-    friend inline std::ostream& operator<<(std::ostream& o, const SpiralName& rhs);
+    friend inline std::ostream& operator<<(std::ostream& o, 
+                                           const SpiralName& rhs);
 
 };
 
@@ -196,8 +198,13 @@ namespace Spiral
 const pse::NoteName& closest(unsigned int pitch, const SpiralPoint& p);
 }
 
+} // namespace pse
 
-} // namespace scoremodel
+/// fmt v10 and above requires `fmt::formatter<T>` extends `fmt::ostream_formatter`.
+/// @see: https://github.com/fmtlib/fmt/issues/3318
+template<> struct fmt::formatter<pse::SpiralPoint> : fmt::ostream_formatter {};
+template<> struct fmt::formatter<pse::SpiralName> : fmt::ostream_formatter {};
+
 
 #endif /* Spiral_hpp */
 

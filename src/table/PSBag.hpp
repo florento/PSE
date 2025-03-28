@@ -15,7 +15,7 @@
 #include <assert.h>
 #include <vector>
 
-#include "trace.hpp"
+#include "pstrace.hpp"
 //#include "MTU.hpp"
 #include "AlgoName.hpp"
 //#include "Part.hpp"
@@ -45,35 +45,54 @@ typedef std::vector<std::shared_ptr<const PSC0>> PSCHeap;
 /// - all the configs in the bag have the same number of accidentals (best nb).
 class PSB
 {
-public:
+
+public: // construction
     
     // bag of best target configs configs for a conjectured global tonality
     // (key sig) and a measure of notes.
     // @param ton conjectured global tonality (key sig),
     // used to define the initial config.
-    // @param e an enumerator of notes for computing transitions between configs.
+    // @param e an enumerator of notes for computing transitions
+    // between configs.
     // @todo TBR
     // PSB(const Ton& ton, PSEnum& e, const Algo& a);
     
     /// bag of best target configs configs for a conjectured global tonality
-    /// (key sig), a conjectured local tonality (tie break) and a measure of notes.
+    /// (key sig), a conjectured local tonality (tie break)
+    /// and a measure of notes.
     /// @param a name of pitch-spelling algorithm implemented.
     /// @param seed cost value of specialized type (to create a cost of
     /// the same type).
-    /// @param e an enumerator of notes for computing transitions between configs.
+    /// @param e an enumerator of notes for computing transitions
+    /// between configs.
     /// @param ton conjectured global tonality (key sig),
     /// used to define the initial config.
     /// @param lton conjectured local tonality, to compute the cumulated
     /// distance value used for tie break.
-    PSB(const Algo& a, const Cost& seed,
-        PSEnum& e, const Ton& ton, const Ton& lton = Ton());
+    /// @param tonal mode: tonal or modal, for the construction of
+    /// initial state.
+    /// @param octave mode for the state transitions: repeat accidents
+    /// at different octaves, or reason modulo 12.
+    /// @see State constructor for tonal/modal mode
+    PSB(const Algo& a, const Cost& seed, PSEnum& e,
+        bool tonal, bool octave, 
+        const Ton& ton, const Ton& lton = Ton());
     
+    /// a bag cannot be copied.
+    PSB(const PSB& rhs) = delete;
+
+    /// destructor.
     ~PSB();
     
+    /// a bag vector be copied.
+    PSB& operator=(const PSB& rhs) = delete;
+
+public: // access
+
     /// whether this bag is empty.
     bool empty() const;
     
-    /// number of PS Configs in this bag
+    /// number of PS Configs in this bag.
     size_t size() const;
     
     /// cost of the best path in this bag.
@@ -104,6 +123,7 @@ private: // data
     // const Ton& _ton;
 
     /// name  of algorithm to consider for computing the transitions.
+    /// @todo replace by flag: exhaustive or deterministic choice of names
     Algo _algo;
     
     /// enumerator of notes for computing transitions between configs.
@@ -138,15 +158,18 @@ private:
     /// used to define the initial config.
     /// @param lton conjectured local tonality, to compute the cumulated
     /// dist value used for tie break.
+    /// @param tonal mode for initial state.
+    /// @param octave mode for the state transitions.
+    /// @see State constructor
     // @param fsucc flag, whether the successor is computed with ton only
     // or ton and lton.
-    void init(const Cost& seed, const Ton& gton, const Ton& lton); // bool fsucc);
+    void init(const Cost& seed, const Ton& gton, const Ton& lton,
+              bool tonal, bool octave);
 
     /// allocate every config reached by one transition from the given config,
     /// when reading one pitch or several simultaneous pitchs,
     /// and push it to the given queue.
-    /// @param c source configuration.
-    /// this config.
+    /// @param c source configuration. this config.
     /// @param gton conjectured main (global) tonality (key signature).
     /// @param lton conjectured local tonality. ignored if algo is not PSE1.
     /// @param q priority queue receiving the target configs.

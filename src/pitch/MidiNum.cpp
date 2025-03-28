@@ -7,10 +7,18 @@
 //
 
 #include "MidiNum.hpp"
+#include "Pitch.hpp" // OCTAVE_MIN, OCTAVE_MAX, check_octave()
 
 namespace pse {
 
 //namespace MidiNum{
+
+
+// static
+bool MidiNum::check_midi(unsigned int m)
+{
+    return (0 <= m and m <= 128);
+}
 
 // static
 int MidiNum::midi_to_octave(unsigned int m, const enum NoteName& n)
@@ -25,14 +33,15 @@ int MidiNum::midi_to_octave(unsigned int m,
                             const enum Accid& a,
                             bool debug)
 {
-    assert(0 <= m);
-    assert(m <= 128);
+    assert(check_midi(m)); //  assert(0 <= m); assert(m <= 128);
+    assert(!debug || n != NoteName::Undef);
     int oct = int(floor(m/12)) - 1;
-    assert(-1 <= oct);
-    assert(oct <= 9);
+    assert(Pitch::check_octave(oct) and oct != Pitch::UNDEF_OCTAVE);
+    // assert(-1 <= oct);
+    // assert(oct <= 9);
     int chroma = m % 12;
     assert(!debug || a != Accid::Undef);
-    assert(!debug || a == accid(chroma, n));
+    assert(!debug || a == class_to_accid(chroma, n));
     
     // adjust octave for extreme notes
     if (chroma == 0 && n == pse::NoteName::B)
@@ -111,7 +120,7 @@ const enum Accid MidiNum::ACCID[12][7] =
 };
 
 
-enum Accid MidiNum::accid(int c, const enum NoteName& n)
+enum Accid MidiNum::class_to_accid(int c, const enum NoteName& n)
 {
     assert(0 <= c);
     assert(c < 12);
@@ -122,6 +131,12 @@ enum Accid MidiNum::accid(int c, const enum NoteName& n)
     return ACCID[c][i];
 }
 
+
+enum Accid MidiNum::midi_to_accid(unsigned int m, const enum NoteName& n)
+{
+    assert(check_midi(m));
+    return class_to_accid(m%12, n);
+}
 
 // FAUX!!
 //enum Accid MidiNum::accid(int c, const enum NoteName& n)
@@ -160,6 +175,15 @@ enum Accid MidiNum::accid(int c, const enum NoteName& n)
 //            return Accid::Undef;
 //    }
 //}
+
+
+
+unsigned int MidiNum::pitchClass(unsigned int m)
+{
+    assert(check_midi(m)); // assert(0 <= m); assert(m <= 128);
+    return (m % 12);
+}
+
 
 unsigned int MidiNum::pitchClass(const enum NoteName& n, const enum Accid& a)
 {
@@ -212,8 +236,7 @@ unsigned int MidiNum::to_midi(const enum NoteName& n,
     int alt = toint(a);
     assert(-3 <= alt);
     assert(alt <= 3);
-    assert(-2 <= oct);
-    assert(oct <= 9);
+    assert(Pitch::check_octave(oct) and oct != Pitch::UNDEF_OCTAVE);
     
     assert(n != NoteName::Undef);
     int i = pitchClass(n); // in 0..11
@@ -234,8 +257,7 @@ unsigned int MidiNum::to_midi(const enum NoteName& n,
     assert(0 <= r);
     assert(r <= 11);
     int p = ((oct+1) * 12) + r;
-    assert(0 <= p);
-    assert(p <= 128);
+    assert(check_midi(p)); // assert(0 <= p); assert(p <= 128);
     return p;
     //return ((p)+ int((alt-falt)));
 }

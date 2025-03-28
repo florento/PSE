@@ -6,36 +6,90 @@
 //
 
 #include "Speller.hpp"
+#include "PSGridy.hpp"
+#include "PSGridr.hpp"
+#include "PSGridx.hpp"
 
 
 namespace pse {
 
 
-Speller::Speller(const Algo& algo, size_t nbt, bool dflag):
+//Algo Speller::algo() const
+//{
+//    return Algo::Undef;
+//}
+
+
+//void Speller::setTonal()
+//{
+//    _initial_state = 1;
+//}
+
+
+//void Speller::setModal()
+//{
+//    _initial_state = 2;
+//}
+
+
+//void Speller::setChromatic(bool flag)
+//{
+//    _chromatic = flag;
+//}
+
+
+Speller::Speller(PSEnum* e, PSEnum* e_aux,
+                 size_t nbton, const Algo& algo, bool dflag):
+Spelli(nbton, dflag),
 _algo(algo),
-_enum(0, 0),
-_index(nbt),
-_debug(dflag)
+_enum(e),
+_enum_aux(e_aux),
+_table(nullptr),
+_grid(nullptr)
 {
-    spdlog_setVerbosity(4);
-    debug(dflag);
-    spdlog_setPattern();
+    assert(e);
 }
 
 
-Speller::Speller(const Speller& rhs):
-_algo(rhs._algo),
-_enum(rhs._enum),  /// @todo AV copy
-_index(rhs._index), /// @todo AV copy
-_debug(rhs._debug)
+Speller::Speller(PSEnum* e, std::shared_ptr<TonIndex> id,  PSEnum* e_aux,
+                 const Algo& algo, bool dflag):
+Spelli(id, dflag),
+_algo(algo),
+_enum(e),
+_enum_aux(e_aux),
+_table(nullptr),
+_grid(nullptr)
 {
-    TRACE("Speller copy");
+    assert(e);
 }
+
+
+// copy forbiddend
+//Speller::Speller(const Speller& rhs):
+//_algo(rhs._algo),
+//_enum(rhs._enum),  /// @todo AV copy
+//_index(rhs._index), /// @todo AV copy
+//_debug(rhs._debug)
+//{
+//    TRACE("Speller copy");
+//}
 
 
 Speller::~Speller()
 {
     TRACE("delete Speller of type {}", _algo);
+    
+    if (_table)
+    {
+        delete _table;
+        _table = nullptr;
+    }
+
+    if (_grid)
+    {
+        delete _grid;
+        _grid = nullptr;
+    }
 }
 
 
@@ -59,127 +113,440 @@ Speller::~Speller()
 //}
 
 
-//Algo Speller::algo() const
-//{
-//    return Algo::Undef;
-//}
+//
+// parameters
+//
 
 
-void Speller::debug(bool flag)
+size_t Speller::size(bool aux) const
 {
-    TRACE("Speller: debug mode {}", flag);
-    if (flag)
-        spdlog_setVerbosity(5);
-    else
-        spdlog_setVerbosity(4);
+    assert(not aux or hasAuxEnumerator());
+    return enumerator(aux).size();
 }
 
 
-size_t Speller::size() const
+bool Speller::hasAuxEnumerator() const
 {
-    //TRACE("Speller::size");
-    return _enum.size();
+    return (_enum_aux != nullptr);
 }
 
 
-void Speller::add(int note, int bar, bool simult, const Rational& dur)
+bool Speller::setAuxEnumerator(PSEnum* aux)
 {
-    TRACE("Speller: add {} {} {}", note, bar, dur);
-    _enum.add(note, bar, simult, dur);
-}
-
-
-void Speller::add_pybindwd(int note, int bar, bool simult,
-                             long dur_num, long dur_den)
-{
-    TRACE("Speller: add {} {} {}", note, bar, Rational(dur_num, dur_den));
-    _enum.add(note, bar, simult, Rational(dur_num, dur_den));
-}
-
-
-void Speller::add_pybindwod(int note, int bar, bool simult)
-{
-    TRACE("Speller: add {} {}", note, bar);
-    _enum.add(note, bar, simult);
-}
-
-
-size_t Speller::nbTons() const
-{
-    return _index.size();  // nbTons();
-}
-
-
-const Ton& Speller::ton(size_t i) const
-{
-    return _index.ton(i);
-}
-
-
-void Speller::resetTons()
-{
-    _index.reset();
-}
-
-
-void Speller::addTon(const Ton& ton)
-{
-    TRACE("Speller: add tonality {}", ton);
-    _index.add(ton);
-}
-
-
-void Speller::addTon(int ks, ModeName mode)
-{
-    if (ks < -7 || 7 < ks)
+    assert(aux);
+    if (_enum_aux != nullptr)
     {
-        ERROR("Speller addTon: wrong key signature value {}", ks);
+        ERROR("Speller addAuxEnumerator: there is already an auxiliary enumerator.");
+        return false;
     }
-    TRACE("Speller: add tonality {} {}", ks, mode);
-    _index.add(ks, mode);
+    else
+    {
+        _enum_aux = aux;
+        return true;
+    }
 }
 
 
-void Speller::closeTons()
+//
+// spelling
+//
+
+bool Speller::evalTable(CostType ctype, bool tonal, bool octave, 
+                        bool chromatic, bool aux)
 {
-    _index.close();
+    TRACE("Speller: eval table with {}, unlead={}, det={}, {} enumerator",
+          ctype, tonal, chromatic, (aux?"auxiliary":"main"));
+
+    if (ctype == CostType::UNDEF)
+    {
+        ERROR("Speller eval Table: undefined cost type, ignored.");
+        return false;
+    }
+
+    if (_table)
+    {
+        WARN("Speller evalTable: deleting current pitch spelling table");
+        delete _table;
+        _table = nullptr;
+    }
+    
+//    if (_seed == nullptr)
+//    {
+//        WARN("Speller evalTable: no type of cost specified, using default");
+//        _seed = new CostA(true); // with discount
+//    }
+    
+    /// @todo remplacer algo par flag chromatic
+    const Algo algo(chromatic?Algo::PSD:Algo::PSE);
+    std::unique_ptr<Cost> seed = unique_zero(ctype); // was sampleCost(ctype)
+    assert(seed);
+    _table = new PST(algo, *seed, index(), enumerator(aux),
+                     tonal, octave, _debug);
+    return true;
 }
 
 
-bool Speller::closedTons() const
+bool Speller::revalTable(CostType ctype, bool tonal, bool octave,
+                         bool chromatic, bool aux)
 {
-    return _index.closed();
+    TRACE("Speller: reval table with {}, unlead={}, det={}, {} enumerator",
+          ctype, tonal, chromatic, (aux?"auxiliary":"main"));
+    if (ctype == CostType::UNDEF)
+    {
+        ERROR("Speller reval Table: undefined cost type, ignored.");
+        return false;
+    }
+
+    if (_table == nullptr)
+    {
+        ERROR("Speller revalTable: call evalTable first");
+        return false;
+    }
+
+    if (_grid == nullptr)
+    {
+        ERROR("Speller revalTable: call evalGrid first");
+        return false;
+    }
+
+//  if (_seed == nullptr)
+//  {
+//      WARN("Speller revalTable: no type of cost specified, using default");
+//      _seed = new CostA(true); // with discount
+//  }
+    
+    assert(_table);
+    // PST* table_pre = _table;
+    const Algo algo(chromatic?Algo::PSD:Algo::PSE);
+    
+    assert(_enum);
+    std::unique_ptr<Cost> seed = unique_zero(ctype); // was sampleCost(ctype)
+    assert(seed);
+    _table = new PST(algo, // *table_pre,
+                     *seed, index(), enumerator(aux), *_grid,
+                     tonal, octave, _debug);
+    //assert(table_pre);
+    //delete table_pre;
+    return true;
 }
 
 
-size_t Speller::rewritePassing()
+bool Speller::evalGrid(const GridAlgo& algo)
+{
+    if (_grid)
+    {
+        WARN("Speller evalGrid: deleting current grid");
+        delete _grid;
+        _grid = nullptr;
+    }
+    if (_table == nullptr)
+    {
+        ERROR("Speller evalGrid: eval table first");
+        return false;
+    }
+    
+    assert(_index);
+    //std::vector<bool> mask(_index->size(), true); // all true by default
+
+    switch (algo)
+    {
+        case GridAlgo::Best:
+            _grid = new PSGy(*_table);
+            break;
+
+        case GridAlgo::Rank:
+            _grid = new PSGr(*_table);
+            break;
+
+        case GridAlgo::Exhaustive:
+            _grid = new PSGx(*_table);
+            break;
+
+        default:
+        {
+            ERROR("unexpected Grid algorithm");
+            break;
+        }
+    }
+
+    return true;
+}
+
+
+size_t Speller::selectGlobals(double d, bool refine)
+{
+    assert(0 <= d);
+    assert(d <= 100);
+    
+    if (_table == nullptr)
+    {
+        ERROR("Speller selectGlobals: eval table first");
+        return 0;
+    }
+    // if (_debug)
+    // {
+    //     _table->print(std::cout);
+    // }
+    assert(_index);
+    return _index->selectGlobals(*_table, d, refine);
+}
+
+
+bool Speller::selectGlobal()
+{
+    assert(_index);
+    return _index->selectGlobal();
+}
+
+
+bool Speller::rename(size_t i)
+{
+    assert(i != TonIndex::UNDEF);
+    assert(_index);
+    assert(i < _index->size());
+    
+    if (_table == nullptr)
+    {
+        ERROR("Speller rename: eval table first");
+        return false;
+    }
+
+    TRACE("rename with ton={} in enumerator of size={}",
+          i, _table->enumerator().size());
+
+    return _table->rename(i);
+}
+
+
+size_t Speller::rewritePassing(bool aux)
 {
     TRACE("Rewriting passing notes");
-    return _enum.rewritePassing();
+    return enumerator(aux).rewritePassing();
 }
 
 
-enum NoteName Speller::name(size_t i) const
+bool Speller::spell()
 {
-    return _enum.name(i);
+    ERROR("Speller spell should not be called");
+    return false;
 }
 
 
-enum Accid Speller::accidental(size_t i) const
+void Speller::resetTable()
 {
-    return _enum.accidental(i);
+    if (_table)
+    {
+        TRACE("Speller: deleting current pitch spelling table");
+        delete _table;
+        _table = nullptr;
+    }
 }
 
 
-int Speller::octave(size_t i) const
+void Speller::resetGrid()
 {
-    return _enum.octave(i);
+    if (_grid)
+    {
+        TRACE("Speller evalGrid: deleting current grid");
+        delete _grid;
+        _grid = nullptr;
+    }
 }
 
 
-bool Speller::printed(size_t i) const
+//
+// results feedback
+//
+
+
+size_t Speller::measures(bool aux) const
 {
-    return _enum.printed(i);
+    const PSEnum& psenum(enumerator(aux));
+    size_t m;
+    if (psenum.empty())
+    {
+        m = 0;
+    }
+    else
+    {
+        size_t last = psenum.stop();
+        if (last == 0)
+        {
+            m = 0;
+        }
+        else
+        {
+            m = psenum.measure(last-1)+1;
+        }
+    }
+        
+    assert(_table == nullptr or _table->size() == m);
+    // not true if the last measure is empty!
+    // assert(_grid == nullptr or _grid->size() == m);
+    return m;
+}
+
+
+enum NoteName Speller::name(size_t i, bool aux) const
+{
+    return enumerator(aux).name(i);
+}
+
+
+enum Accid Speller::accidental(size_t i, bool aux) const
+{
+    return enumerator(aux).accidental(i);
+}
+
+
+int Speller::octave(size_t i, bool aux) const
+{
+    return enumerator(aux).octave(i);
+}
+
+
+bool Speller::printed(size_t i, bool aux) const
+{
+    return enumerator(aux).printed(i);
+}
+
+
+bool Speller::locals() const
+{
+    return (_grid != nullptr);
+}
+
+
+size_t Speller::ilocal(size_t i, size_t j) const
+{
+    if (_grid == nullptr)
+    {
+        ERROR("Speller ilocal: eval grid first");
+    }
+    else if (j >= _grid->measures())
+    {
+        ERROR("Speller ilocal: no bar {}", j);
+    }
+    else if (i >= _grid->nbTons())
+    {
+        ERROR("Speller ilocal: no ton of index {}", i);
+    }
+    else
+    {
+        return _grid->ilocal(i, j);
+    }
+    
+    // in case of error return undefined tonality index
+    return TonIndex::UNDEF;
+}
+
+
+const Ton& Speller::local(size_t i, size_t j) const
+{
+    size_t it = ilocal(i, j);
+    if (it == TonIndex::UNDEF)
+    {
+        // in case or error return undefined tonality
+        assert(_uton);
+        return *_uton;
+    }
+    else
+    {
+        assert(_index);
+        assert(it < _index->size());
+        return _index->ton(it);
+    }
+}
+
+
+const Ton& Speller::localNote(size_t i, size_t j) const
+{
+    assert(_grid);
+    const PSEnum& psenum(_grid->enumerator());
+    assert(psenum.inside(j));
+    size_t bar = psenum.measure(j);
+    return local(i, bar);
+}
+
+
+PSEnum& Speller::enumerator(bool aux) const
+{
+    if (aux)
+    {
+        assert(_enum_aux);
+        return *_enum_aux;
+    }
+    else
+    {
+        assert(_enum);
+        return *_enum;
+    }
+}
+
+
+// static
+double Speller::duration(clock_t start)
+{
+    return ((double)(clock() - start)/CLOCKS_PER_SEC * 1000);
+}
+
+
+void Speller::printGrid(std::ostream& o) const
+{
+    if (_grid)
+        _grid->print(o);
+}
+
+
+void Speller::printGrid_pybind() const
+{
+    if (_grid)
+        _grid->print(std::cout);
+}
+
+
+void Speller::writeGrid(const std::string& filename) const
+{
+    if (_grid)
+    {
+        std::ofstream file;
+        file.open(filename);
+        if (file.is_open())
+        {
+            _grid->print(file);
+            file.close();
+        }
+        else
+            ERROR("Speller: Unable to open file {}", filename);
+    }
+}
+
+void Speller::printTable(std::ostream& o) const
+{
+    if (_table)
+        _table->print(o);
+}
+
+void Speller::printTable_pybind() const
+{
+    if (_table)
+        _table->print(std::cout);
+}
+
+void Speller::writeTable(const std::string& filename) const
+{
+    if (_table)
+    {
+        std::ofstream file;
+        file.open(filename);
+        if (file.is_open())
+        {
+            _table->print(file);
+            file.close();
+        }
+        else
+            ERROR("Speller: Unable to open file {}", filename);
+    }
 }
 
 

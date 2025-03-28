@@ -62,8 +62,8 @@ pour le spelling de $n$,
 - si il est conjoint, on privilégie le mouvement diatonique (intervale mélodique de seconde)
   i.e. on pénalise un autre mouvement (unison ou tierce)
 
-- ~~si le mouvement est ascendant, on choisit la plus grande des altérations possible ~~
-  ~~si le mouvement est descendant, on choisit la plus petite des altérations possible ~~
+- ~~si le mouvement est ascendant, on choisit la plus grande des altérations possible~~
+  ~~si le mouvement est descendant, on choisit la plus petite des altérations possible~~
   contrex:  do do# mib
 
 - [ ] énumérer tous les cas possibles
@@ -129,6 +129,8 @@ ex: 6te augmentée, [3 cas](https://fr.wikipedia.org/wiki/Sixte_augmentée)
   pour faire suivre d'un accord de 4 et 6 sol - do - mi  (ré# se résoud sur le mi)
 
 http://musictheory.pugetsound.edu/mt21c/TypesOfAugmentedSixthChords.html
+
+
 
 ## 4. tonalités locales
 

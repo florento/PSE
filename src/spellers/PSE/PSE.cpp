@@ -6,7 +6,7 @@
 //
 
 #include "PSE.hpp"
-//#include "CostA.hpp"
+#include "CostA.hpp"
 #include "CostADplus.hpp"
 #include "CostADlex.hpp"
 
@@ -14,7 +14,7 @@ namespace pse {
 
 
 PSE::PSE(size_t nbTons, bool dflag):
-Speller2Pass(Algo::PSE, nbTons, dflag)
+Speller2Pass(nbTons, Algo::PSE, dflag)
 {
 //_table0(Algo::PSE, _index, _enum, dflag)
 // init table with default vector of tons
@@ -45,20 +45,19 @@ PSE::~PSE()
 //}
 
 
-
 /// @todo add steps rewrite passing notes
 bool PSE::spell()
 {
     //DEBUGU("Speller respell: nb tonalities in table: {}", _table.nbTons());
-    if (_index.size() == 0)
+    if (nbTons() == 0)
     {
         /// reset to default
         /// @todo mv to speller cstr?
         WARN("Speller respell: no tonality added, use default 30 tonality array");
         for (int ks = -7; ks <= 7; ++ks)
-            _index.add(ks, ModeName::Major);
+            addTon(ks, ModeName::Major);
         for (int ks = -7; ks <= 7; ++ks)
-            _index.add(ks, ModeName::Minor);
+            addTon(ks, ModeName::Minor);
     }
 
     //    if (finit)
@@ -68,12 +67,12 @@ bool PSE::spell()
     //        _frowcost.assign(nbtons(), false);
     //    }
 
-    CostADplus seed0; // zero
+    CostA      seed0; // zero
     CostADplus seed1; // zero
     //CostADlex seed0;
     //CostADlex seed1;
-    // diff0=0, diff1=0, rewrite_flag1=false
-    return Speller2Pass::spell(seed0, seed1, 0, 0, false, false);
+    // diff0=0, diff1=0, rename_flag1=false, rewrite_flag1=false
+    return Speller2Pass::spell(seed0, seed1, 100, 0, false, false);
 }
 
 

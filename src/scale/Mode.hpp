@@ -13,7 +13,7 @@
 #include <iostream>
 #include <vector>
 
-#include "trace.hpp"
+#include "pstrace.hpp"
 #include "ModeName.hpp"
 
 
@@ -99,6 +99,10 @@ private:
 //std::ostream& operator<<(std::ostream& o, const Mode& ton);
 
 } // end namespace pse
+
+/// fmt v10 and above requires `fmt::formatter<T>` extends `fmt::ostream_formatter`.
+/// @see: https://github.com/fmtlib/fmt/issues/3318
+template<> struct fmt::formatter<pse::Mode> : fmt::ostream_formatter {};
 
 #endif /* Mode_hpp */
 

@@ -14,7 +14,7 @@
 #include <assert.h>
 #include <memory>
 
-#include "trace.hpp"
+#include "pstrace.hpp"
 #include "Speller1pass.hpp"
 
 namespace pse {
@@ -28,7 +28,8 @@ public:
     /// @param nbTons use default list of tonalities (default: empty).
     /// @param dflag debug mode.
     /// @see PSTable
-    Speller2Pass(const Algo& algo=Algo::Undef, size_t nbTons=0,
+    Speller2Pass( size_t nbTons=0,
+                 const Algo& algo=Algo::Undef, // TBR
                  bool dflag=true);
     
     /// destructor
@@ -76,6 +77,7 @@ public:
     size_t globals0() const;
     
     const Ton& global0(size_t n=0) const;
+    
     /// index of the n-best estimated global tonality,
     /// after first pass.
     /// @param n number of candidate estimated global tonality,
@@ -93,6 +95,9 @@ protected: // data
     
     /// Second estimation of global tonality (on table1).
     PSO* _global1; // std::shared_ptr<PSO>
+    
+    /// Time to build the second Pitch Spelling table.
+    double _time_table1;
 
 protected:
     
@@ -100,7 +105,7 @@ protected:
     /// using the algorithm named in this class.
     /// @param seed0 seed cost used to built the first PS table
     /// @param diff0 approximation coeff (percent) for the first estimatation of
-    /// global ton(s).
+    /// global ton(s). 100 for keeping all ton of index as candidates.
     // @param rewrite_flag0 whether the passing note must be rewritten
     // after first pass.
     /// @param seed1 seed cost used to built the second PS table

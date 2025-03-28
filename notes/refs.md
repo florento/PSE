@@ -11,11 +11,18 @@ see also `ps13.md` for Meredith's ref
 
 
 
+> Javier Arau
+> Augmented Scale Theory
+> http://www.javierarau.com/augmented-scale-theory
 
 
 
+> J. Nagel
+> The chromatic modal scale: Proper spelling for tonal voice-leading
+> JOMAR Press, 2007
+> https://www.jomarpress.com/nagel/articles/ChromaticModal.html
 
-
+see also: https://www.dolmetsch.com/musictheory11.htm
 
 
 
@@ -29,5 +36,16 @@ REF: classical textbook on music theory:
 
 other open refs:  
 
+- https://fr.wikipedia.org/wiki/Liste_de_gammes_et_modes_(jazz)
+
 - `muted.io`
 - https://open.umn.edu/opentextbooks/textbooks/1101 ...
+
+
+
+>  Uzay Bora, Baris Tekin Tezel, Alper Vahaplar
+> An algorithm for spelling the pitches of any musical scale
+> Information Sciences, vol. 472, 2019
+> https://doi.org/10.1016/j.ins.2018.09.015
+
+

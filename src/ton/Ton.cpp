@@ -8,222 +8,154 @@
 
 #include <cmath>        // std::abs
 #include <algorithm>    // std::max
-
+  
 #include "Ton.hpp"
-#include "Accidental.hpp"
+#include "Accid.hpp"
 //#include "Pitch.hpp"
 #include "Fifths.hpp"
 //#include "PSState.hpp"
-#include "Weber.hpp" // Weber distance
+#include "Weber_static.hpp" // Weber distance
+#include "WeberModal_static.hpp" // Weber distance
+#include "WeberBluesModal_static.hpp" // Weber distance
 //#include "Scale.hpp" // dependency
 
 
 namespace pse {
 
-// static abbreviations for accidentals
-const enum Accid Ton::_2F = Accid::DoubleFlat;
-const enum Accid Ton::_1F = Accid::Flat;
-const enum Accid Ton::_0N = Accid::Natural;
-const enum Accid Ton::_1S = Accid::Sharp;
-const enum Accid Ton::_2S = Accid::DoubleSharp;
-const enum Accid Ton::__U = Accid::Undef;
 
-// accidentals in key signatures
-// and major or minor natural scales, for each key signature.
-const std::array<std::array<enum Accid, 7>, 15> Ton::KEYS =
-{{
-    { _1F, _1F, _1F, _1F, _1F, _1F, _1F }, // -7  Cb maj / Ab min nat
-    { _1F, _1F, _1F, _0N, _1F, _1F, _1F }, // -6  Gb maj / Eb min nat
-    { _0N, _1F, _1F, _0N, _1F, _1F, _1F }, // -5  Db maj / Bb min nat
-    { _0N, _1F, _1F, _0N, _0N, _1F, _1F }, // -4  Ab maj / F  min nat
-    { _0N, _0N, _1F, _0N, _0N, _1F, _1F }, // -3  Eb maj / C  min nat
-    { _0N, _0N, _1F, _0N, _0N, _0N, _1F }, // -2  Bb maj / G  min nat
-    { _0N, _0N, _0N, _0N, _0N, _0N, _1F }, // -1  F  maj / D  min nat
-    { _0N, _0N, _0N, _0N, _0N, _0N, _0N }, //  0  C  maj / A  min nat
-    { _0N, _0N, _0N, _1S, _0N, _0N, _0N }, //  1  G  maj / E  min nat
-    { _1S, _0N, _0N, _1S, _0N, _0N, _0N }, //  2  D  maj / B  min nat
-    { _1S, _0N, _0N, _1S, _1S, _0N, _0N }, //  3  A  maj / F# min nat
-    { _1S, _1S, _0N, _1S, _1S, _0N, _0N }, //  4  E  maj / C# min nat
-    { _1S, _1S, _0N, _1S, _1S, _1S, _0N }, //  5  B  maj / G# min nat
-    { _1S, _1S, _1S, _1S, _1S, _1S, _0N }, //  6  F# maj / D# min nat
-    { _1S, _1S, _1S, _1S, _1S, _1S, _1S }  //  7  C# maj / A# min nat
-}};
+int Ton::init_KSofMode(int ks, ModeName mode)
+{
+    assert(-7 <= ks);
+    assert(ks <= 10); // chromatic Ton uses -7 to 10
+    
+    switch (mode)
+    {
+        case ModeName::Major:
+        case ModeName::Ionian:
+        case ModeName::Minor:  // harmonic
+        case ModeName::MinorNat:
+        case ModeName::Aeolian:
+        case ModeName::MinorMel:
+        case ModeName::Dorian:
+        case ModeName::Phrygian:
+        case ModeName::Lydian:
+        case ModeName::Mixolydian:
+        case ModeName::Locrian:
+            return ks;
 
-// lead node in minor harmonic tons, in 0..6
-const std::array<int, 15> Ton::LEAD_HARM =
-{   4, 1, 5, 2, 6, 3, 0, 4, 1, 5, 2, 6, 3, 6, 4 };
-// -7 -6 -5 -4 -3 -2 -1  0  1  2  3  4  5  6  7
-//  Ab Eb Bb F  C  G  D  A  E  B  F# C# G# D# A#
+        case ModeName::MajorBlues:
+        case ModeName::MinorBlues:
+            return ks;
+            
+        case ModeName::Augmented:
+            if (ks == -7)
+            {
+                ERROR("Ton, blues scale, unsupported KS {}", ks);
+                return 5;
+            }
+            else if (ks == -6)
+            {
+                ERROR("Ton, blues scale, unsupported KS {}", ks);
+                return 6;
+            }
+            else if (ks == 7)
+            {
+                ERROR("Ton, blues scale, unsupported KS {}", ks);
+                return -5;
+            }
+            else
+            {
+                assert(-5 <= ks && ks <= 6);
+                return ks;
+            }
 
-// accidentals in minor harmonic scales for each key signature.
-const std::array<std::array<enum Accid, 7>, 15> Ton::MIN_HARM =
-{{
-    { _1F, _1F, _1F, _1F, _0N, _1F, _1F }, // -7  Ab min harm
-    { _1F, _0N, _1F, _0N, _1F, _1F, _1F }, // -6  Eb min harm
-    { _0N, _1F, _1F, _0N, _1F, _0N, _1F }, // -5  Bb min harm
-    { _0N, _1F, _0N, _0N, _0N, _1F, _1F }, // -4  F  min harm
-    { _0N, _0N, _1F, _0N, _0N, _1F, _0N }, // -3  C  min harm
-    { _0N, _0N, _1F, _1S, _0N, _0N, _1F }, // -2  G  min harm
-    { _1S, _0N, _0N, _0N, _0N, _0N, _1F }, // -1  D  min harm
-    { _0N, _0N, _0N, _0N, _1S, _0N, _0N }, //  0  A  min harm
-    { _0N, _1S, _0N, _1S, _0N, _0N, _0N }, //  1  E  min harm
-    { _1S, _0N, _0N, _1S, _0N, _1S, _0N }, //  2  B  min harm
-    { _1S, _0N, _1S, _1S, _1S, _0N, _0N }, //  3  F# min harm
-    { _1S, _1S, _0N, _1S, _1S, _0N, _1S }, //  4  C# min harm
-    { _1S, _1S, _0N, _2S, _1S, _1S, _0N }, //  5  G# min harm
-    { _2S, _1S, _1S, _1S, _1S, _1S, _0N }, //  6  D# min harm
-    { _1S, _1S, _1S, _1S, _2S, _1S, _1S }, //  7  A# min harm
-}};
+        case ModeName::Diminished:
+        case ModeName::DiminishedHW:
+            if (ks == -7 || ks == -4  || ks == 2 || ks == 5)
+            {
+                ERROR("Ton, diminished scale, unsupported KS {}", ks);
+                return -1;
+            }
+            if (ks == -6 || ks == -3  || ks == 3 || ks == 6)
+            {
+                ERROR("Ton, diminished scale, unsupported KS {}", ks);
+                return 0;
+            }
+            if (ks == -5 || ks == -2  || ks == 4 || ks == 7)
+            {
+                ERROR("Ton, diminished scale, unsupported KS {}", ks);
+                return 1;
+            }
+            else
+            {
+                assert(-1 <= ks && ks <= 1);
+                return ks;
+            }
 
-// accidentals in minor melodic scales for each key signature.
-const std::array<std::array<enum Accid, 7>, 15> Ton::MIN_MEL =
-{{
-    { _1F, _1F, _1F, _0N, _0N, _1F, _1F }, // -7  Ab min mel
-    { _0N, _0N, _1F, _0N, _1F, _1F, _1F }, // -6  Eb min mel
-    { _0N, _1F, _1F, _0N, _0N, _0N, _1F }, // -5  Bb min mel
-    { _0N, _0N, _0N, _0N, _0N, _1F, _1F }, // -4  F  min mel
-    { _0N, _0N, _1F, _0N, _0N, _0N, _0N }, // -3  C  min mel
-    { _0N, _0N, _0N, _1S, _0N, _0N, _1F }, // -2  G  min mel
-    { _1S, _0N, _0N, _0N, _0N, _0N, _0N }, // -1  D  min mel
-    { _0N, _0N, _0N, _1S, _1S, _0N, _0N }, //  0  A  min mel
-    { _1S, _1S, _0N, _1S, _0N, _0N, _0N }, //  1  E  min mel
-    { _1S, _0N, _0N, _1S, _1S, _1S, _0N }, //  2  B  min mel
-    { _1S, _1S, _1S, _1S, _1S, _0N, _0N }, //  3  F# min mel
-    { _1S, _1S, _0N, _1S, _1S, _1S, _1S }, //  4  C# min mel
-    { _1S, _1S, _1S, _2S, _1S, _1S, _0N }, //  5  G# min mel
-    { _2S, _1S, _1S, _1S, _1S, _1S, _1S }, //  6  D# min mel
-    { _1S, _1S, _1S, _2S, _2S, _1S, _1S },  // 7  A# min mel
-}};
+            
+        case ModeName::Whole:
+            if (ks == -6 || ks == -4 || ks == -2  || 
+                ks == 2 || ks == 4 || ks == 6)
+            {
+                ERROR("Ton, whole-ton scale, unsupported KS {}", ks);
+                return 0;
+            }
+            if (ks == -7 || ks == -5 || ks == -3  || ks == -1 ||
+                ks == 1 || ks == 5 || ks == 7)
+            {
+                ERROR("Ton, whole-ton scale, unsupported KS {}", ks);
+                return 1;
+            }
+            else
+            {
+                assert(0 <= ks && ks <= 1);
+                return ks;
+            }
 
-const std::array<std::array<enum Accid, 7>, 15> Ton::DOR =
-{{
-    { _1F, _1F, _1F, _0N, _1F, _1F, _1F }, // -7  Ab dor
-    { _0N, _1F, _1F, _0N, _1F, _1F, _1F }, // -6  Eb dor
-    { _0N, _1F, _1F, _0N, _0N, _1F, _1F }, // -5  Bb dor
-    { _0N, _0N, _1F, _0N, _0N, _1F, _1F }, // -4  F  dor
-    { _0N, _0N, _1F, _0N, _0N, _0N, _1F }, // -3  C  dor
-    { _0N, _0N, _0N, _0N, _0N, _0N, _1F }, // -2  G  dor
-    { _0N, _0N, _0N, _0N, _0N, _0N, _0N }, // -1  D  dor
-    { _0N, _0N, _0N, _1S, _0N, _0N, _0N }, //  0  A  dor
-    { _1S, _0N, _0N, _1S, _0N, _0N, _0N }, //  1  E  dor
-    { _1S, _0N, _0N, _1S, _1S, _0N, _0N }, //  2  B  dor
-    { _1S, _1S, _0N, _1S, _1S, _0N, _0N }, //  3  F# dor
-    { _1S, _1S, _0N, _1S, _1S, _1S, _0N }, //  4  C# dor
-    { _1S, _1S, _1S, _1S, _1S, _1S, _0N }, //  5  G# dor
-    { _1S, _1S, _1S, _1S, _1S, _1S, _1S }, //  6  D# dor
-    { _1S, _1S, _1S, _2S, _1S, _1S, _1S },  // 7  A# dor
-}};
+        case ModeName::Chromatic:
+            return ks;
+            
+        case ModeName::Undef:
+            ERROR("Ton constructor: UNDEF mode");
+            return ks;
+            
+        default:
+        {
+            ERROR("Ton constructor: unknown mode {}", mode);
+            return ks;
+        }
+    }
+}
 
-
-const std::array<std::array<enum Accid, 7>, 15> Ton::PHRYG =
-{{
-    { _1F, _1F, _1F, _1F, _1F, _1F, _2F }, // -7  Ab phryg
-    { _1F, _1F, _1F, _1F, _1F, _1F, _1F }, // -6  Eb phryg
-    { _1F, _1F, _1F, _0N, _1F, _1F, _1F }, // -5  Bb phryg
-    { _0N, _1F, _1F, _0N, _1F, _1F, _1F }, // -4  F  phryg
-    { _0N, _1F, _1F, _0N, _0N, _1F, _1F }, // -3  C  phryg
-    { _0N, _0N, _1F, _0N, _0N, _1F, _1F }, // -2  G  phryg
-    { _0N, _0N, _1F, _0N, _0N, _0N, _1F }, // -1  D  phryg
-    { _0N, _0N, _0N, _0N, _0N, _0N, _1F }, //  0  A  phryg
-    { _0N, _0N, _0N, _0N, _0N, _0N, _0N }, //  1  E  phryg
-    { _0N, _0N, _0N, _1S, _0N, _0N, _0N }, //  2  B  phryg
-    { _1S, _0N, _0N, _1S, _0N, _0N, _0N }, //  3  F# phryg
-    { _1S, _0N, _0N, _1S, _1S, _0N, _0N }, //  4  C# phryg
-    { _1S, _1S, _0N, _1S, _1S, _0N, _0N }, //  5  G# phryg
-    { _1S, _1S, _0N, _1S, _1S, _1S, _0N }, //  6  D# phryg
-    { _1S, _1S, _1S, _1S, _1S, _1S, _0N },  // 7  A# phryg
-}};
-
-
-const std::array<std::array<enum Accid, 7>, 15> Ton::LYD =
-{{
-    { _1F, _1F, _1F, _0N, _1F, _1F, _1F }, // -7  Cb lyd
-    { _0N, _1F, _1F, _0N, _1F, _1F, _1F }, // -6  Gb lyd
-    { _0N, _1F, _1F, _0N, _0N, _1F, _1F }, // -5  Db lyd
-    { _0N, _0N, _1F, _0N, _0N, _1F, _1F }, // -4  Ab lyd
-    { _0N, _0N, _1F, _0N, _0N, _0N, _1F }, // -3  Eb lyd
-    { _0N, _0N, _0N, _0N, _0N, _0N, _1F }, // -2  Bb lyd
-    { _0N, _0N, _0N, _0N, _0N, _0N, _0N }, // -1  F  lyd
-    { _0N, _0N, _0N, _1S, _0N, _0N, _0N }, //  0  C  lyd
-    { _1S, _0N, _0N, _1S, _0N, _0N, _0N }, //  1  G  lyd
-    { _1S, _0N, _0N, _1S, _1S, _0N, _0N }, //  2  D  lyd
-    { _1S, _1S, _0N, _1S, _1S, _0N, _0N }, //  3  A  lyd
-    { _1S, _1S, _0N, _1S, _1S, _1S, _0N }, //  4  E  lyd
-    { _1S, _1S, _1S, _1S, _1S, _1S, _0N }, //  5  B  lyd
-    { _1S, _1S, _1S, _1S, _1S, _1S, _1S }, //  6  F# lyd
-    { _1S, _1S, _1S, _2S, _1S, _1S, _1S }  //  7  C# lyd
-}};
-
-
-const std::array<std::array<enum Accid, 7>, 15> Ton::MIXO =
-{{
-    { _1F, _1F, _1F, _1F, _1F, _1F, _2F }, // -7  Cb mix
-    { _1F, _1F, _1F, _1F, _1F, _1F, _1F }, // -6  Gb mix
-    { _1F, _1F, _1F, _0N, _1F, _1F, _1F }, // -5  Db mix
-    { _0N, _1F, _1F, _0N, _1F, _1F, _1F }, // -4  Ab mix
-    { _0N, _1F, _1F, _0N, _0N, _1F, _1F }, // -3  Eb mix
-    { _0N, _0N, _1F, _0N, _0N, _1F, _1F }, // -2  Bb mix
-    { _0N, _0N, _1F, _0N, _0N, _0N, _1F }, // -1  F  mix
-    { _0N, _0N, _0N, _0N, _0N, _0N, _1F }, //  0  C  mix
-    { _0N, _0N, _0N, _0N, _0N, _0N, _0N }, //  1  G  mix
-    { _0N, _0N, _0N, _1S, _0N, _0N, _0N }, //  2  D  mix
-    { _1S, _0N, _0N, _1S, _0N, _0N, _0N }, //  3  A  mix
-    { _1S, _0N, _0N, _1S, _1S, _0N, _0N }, //  4  E  mix
-    { _1S, _1S, _0N, _1S, _1S, _0N, _0N }, //  5  B  mix
-    { _1S, _1S, _0N, _1S, _1S, _1S, _0N }, //  6  F# mix
-    { _1S, _1S, _1S, _1S, _1S, _1S, _0N }  //  7  C# mix
-}};
-
-
-const std::array<std::array<enum Accid, 7>, 15> Ton::LOC =
-{{
-    { _1F, _1F, _2F, _1F, _1F, _1F, _2F }, // -7  Ab loc
-    { _1F, _1F, _1F, _1F, _1F, _1F, _2F }, // -6  Eb loc
-    { _1F, _1F, _1F, _1F, _1F, _1F, _1F }, // -5  Bb loc
-    { _1F, _1F, _1F, _0N, _1F, _1F, _1F }, // -4  F  loc
-    { _0N, _1F, _1F, _0N, _1F, _1F, _1F }, // -3  C  loc
-    { _0N, _1F, _1F, _0N, _0N, _1F, _1F }, // -2  G  loc
-    { _0N, _0N, _1F, _0N, _0N, _1F, _1F }, // -1  D  loc
-    { _0N, _0N, _1F, _0N, _0N, _0N, _1F }, //  0  A  loc
-    { _0N, _0N, _0N, _0N, _0N, _0N, _1F }, //  1  E  loc
-    { _0N, _0N, _0N, _0N, _0N, _0N, _0N }, //  2  B  loc
-    { _0N, _0N, _0N, _1S, _0N, _0N, _0N }, //  3  F# loc
-    { _1S, _0N, _0N, _1S, _0N, _0N, _0N }, //  4  C# loc
-    { _1S, _0N, _0N, _1S, _1S, _0N, _0N }, //  5  G# loc
-    { _1S, _1S, _0N, _1S, _1S, _0N, _0N }, //  6  D# loc
-    { _1S, _1S, _0N, _1S, _1S, _1S, _0N },  // 7  A# loc
-}};
 
 Ton::Ton():
 KeyFifth(0),
-_mode(ModeName::Undef),
-_chromatic()
+_mode(ModeName::Undef)
+//_chromatic()
 { }
 
 
 Ton::Ton(int ks, ModeName mode):
-KeyFifth(ks),
-_mode(mode),
-_chromatic(*this, ModeName::Chromatic)
+KeyFifth(init_KSofMode(ks, mode)),
+_mode(mode)
+//_chromatic(*this, ModeName::Chromatic)
 {
     assert(mode != ModeName::Undef);
 }
 
 
 Ton::Ton(const KeyFifth& ks, ModeName mode):
-KeyFifth(ks),
-_mode(mode),
-_chromatic(*this, ModeName::Chromatic)
-{
-    assert(mode != ModeName::Undef);
-}
+Ton(ks.fifths(), mode)
+{ }
 
 
 Ton::Ton(const Ton& ton):
 KeyFifth(ton),
-_mode(ton.getMode()),
-_chromatic(ton._chromatic) // shared ptr copy
-{ }
+_mode(ton.getMode())
+//_chromatic(ton._chromatic) // shared ptr copy
+{
+    assert(init_KSofMode(ton.fifths(), ton.getMode()) == ton.fifths());
+}
 
 
 Ton::~Ton()
@@ -235,6 +167,7 @@ Ton::~Ton()
 Ton& Ton::operator=(const Ton& rhs)
 {
     if (this != &rhs)
+        
     {
         KeyFifth::operator=(rhs);
         _mode = rhs._mode;
@@ -255,6 +188,69 @@ bool Ton::operator!=(const Ton& rhs) const
 }
 
 
+bool Ton::operator<(const Ton& rhs) const
+{
+    int lfifths = std::abs(this->fifths());
+    int rfifths = std::abs(rhs.fifths());
+    int lmode = static_cast<int>(this->_mode);
+    int rmode = static_cast<int>(rhs._mode);
+
+    if (lfifths < rfifths)
+    {
+        return true;
+    }
+    else if (lfifths > rfifths)
+    {
+        return false;
+    }
+    // lfifths == rfifths
+    // the ordering between modes is total but arbitrary in some cases
+    else if (lmode < rmode)
+    {
+        assert(lfifths == rfifths);
+        return true;
+    }
+    else if (lmode > rmode)
+    {
+        assert(lfifths == rfifths);
+        return false;
+    }
+    // lmode == rmode
+    else if (this->fifths() < rhs.fifths())
+    {
+        assert(lfifths == rfifths);
+        assert(_mode == rhs._mode);
+        return true;
+    }
+    else if (this->fifths() > rhs.fifths())
+    {
+        assert(lfifths == rfifths);
+        assert(_mode == rhs._mode);
+        return false;
+    }
+    else
+    {
+        assert(*this == rhs);
+        return false;
+    }
+}
+
+bool Ton::operator<=(const Ton& rhs) const
+{
+    return !operator>(rhs);
+}
+
+bool Ton::operator>(const Ton& rhs) const
+{
+    return rhs.operator<(*this);
+}
+
+bool Ton::operator>=(const Ton& rhs) const
+{
+    return !operator<(rhs);
+}
+
+
 bool Ton::undef() const
 {
     assert(_mode != ModeName::Undef || _sig == 0);
@@ -262,21 +258,72 @@ bool Ton::undef() const
 }
 
 
+bool Ton::isMajorMinor() const
+{
+    return (_mode == ModeName::Major) || (_mode == ModeName::Minor);
+}
+
+
 const enum NoteName Ton::getName() const
 {
-    return Fifths::name(tonic());
+    return Fifths::name(tonicFifth());
 }
 
 
 const enum Accid Ton::getAccidental() const
 {
-    return Fifths::accid(tonic());
+    return Fifths::accid(tonicFifth());
 }
 
 
 int Ton::getPitchClass() const
 {
-    return Fifths::pc(tonic());
+    return Fifths::pc(tonicFifth());
+}
+
+
+int Ton::getRealKS() const
+{
+    assert(-7 <= _sig);
+    assert(_sig <= 7);
+    if (_mode == ModeName::Dorian) return _sig + 1 ;
+    if (_mode == ModeName::Phrygian) return _sig - 1 ;
+    if (_mode == ModeName::Lydian) return _sig + 1 ;
+    if (_mode == ModeName::Mixolydian) return _sig - 1 ;
+    if (_mode == ModeName::Locrian) return _sig - 2 ;
+    else return _sig ;
+}
+
+
+// @todo more clever case analysis
+bool Ton::equivalent(const Ton& rhs, bool tonal) const
+{
+    if (tonal) // tonal mode
+    {
+        for (int n = 0; n < 7; ++n)
+        {
+            if (accidKey(n) != rhs.accidKey(n))
+                return false;
+        }
+        return true;
+    }
+    else    // modal mode
+    {
+        for (int n = 0; n < 7; ++n)
+        {
+            if (accidScale(n) != rhs.accidScale(n))
+                return false;
+        }
+        return true;
+    }
+}
+
+
+// static
+enum Accid Ton::accidSingle(const accids_t a)
+{
+    assert(Accids::single(a));
+    return Accids::first(a);
 }
 
 
@@ -286,7 +333,7 @@ enum Accid Ton::accidKey(int n) const
     assert(_sig <= 7);
     assert(0 <= n);
     assert(n <= 6);
-    return KEYS[_sig + 7][n];
+    return MAJOR[_sig + 7][n];
 }
 
 
@@ -295,6 +342,121 @@ enum Accid Ton::accidKey(const enum NoteName& name) const
     assert(name != NoteName::Undef);
     return accidKey(toint(name));
 }
+
+
+accids_t Ton::accidScale(int n, ModeName mode) const
+{
+    assert(0 <= n);
+    assert(n <= 6);
+
+    switch (mode)
+    {
+        case ModeName::Undef:
+            return Accids::encode();
+            
+        case ModeName::Major:
+        case ModeName::Ionian:
+            assert(-7 <= _sig && _sig <= 7);
+            return Accids::encode(MAJOR[_sig + 7][n]);
+            
+        case ModeName::Minor:  // harmonic
+            assert(-7 <= _sig && _sig <= 7);
+            return Accids::encode(MIN_HARM[_sig + 7][n]);
+            
+        case ModeName::MinorNat:
+        case ModeName::Aeolian:
+            assert(-7 <= _sig && _sig <= 7);
+            return Accids::encode(MAJOR[_sig + 7][n]);
+            
+        case ModeName::MinorMel:
+            assert(-7 <= _sig && _sig <= 7);
+            return Accids::encode(MIN_MEL[_sig + 7][n]);
+            
+        case ModeName::Dorian:
+            assert(-7 <= _sig && _sig <= 7);
+            return Accids::encode(DORIAN[_sig + 7][n]);
+            
+        case ModeName::Phrygian:
+            assert(-7 <= _sig && _sig <= 7);
+            return Accids::encode(PHRYGIAN[_sig + 7][n]);
+            
+        case ModeName::Lydian:
+            assert(-7 <= _sig && _sig <= 7);
+            return Accids::encode(LYDIAN[_sig + 7][n]);
+            
+        case ModeName::Mixolydian:
+            assert(-7 <= _sig && _sig <= 7);
+            return Accids::encode(MIXOLYDIAN[_sig + 7][n]);
+                        
+        case ModeName::Locrian:
+            assert(-7 <= _sig && _sig <= 7);
+            return Accids::encode(LOCRIAN[_sig + 7][n]);
+
+        case ModeName::MajorBlues:
+            assert(-7 <= _sig && _sig <= 7);
+            return MAJ_BLUES[_sig + 7][n];
+            
+        case ModeName::MinorBlues:
+            assert(-7 <= _sig && _sig <= 7);
+            return MIN_BLUES[_sig + 7][n];
+
+        case ModeName::Augmented:
+            assert(-5 <= _sig && _sig <= 6);
+            return AUGMENTED[_sig+5][n];
+
+        case ModeName::Diminished:
+            assert(-1 <= _sig && _sig <= 1);
+            return DIMINISHED_WH[_sig+1][n];
+            
+        case ModeName::DiminishedHW:
+            assert(-1 <= _sig && _sig <= 1);
+            return DIMINISHED_HW[_sig+1][n];
+
+        case ModeName::Whole:
+            assert(0 <= _sig && _sig <= 1);
+            return WHOLE_TONE[_sig][n];
+
+        case ModeName::Chromatic:
+            assert(-7 <= _sig && _sig <= 10);
+            return CHROMATIC[_sig+7][n];
+
+        default:
+        {
+            ERROR("Ton accidScale: not defined for mode {}", mode);
+            return Accids::encode(); // undef
+        }
+    }
+}
+
+
+accids_t Ton::accidScale(const enum NoteName& name) const
+{
+    assert(name != NoteName::Undef);
+    return accidScale(toint(name), _mode);
+}
+
+
+accids_t Ton::accidScale(int n) const
+{
+    return accidScale(n, _mode);
+}
+
+
+accids_t Ton::accidScale(const enum NoteName& name, ModeName mode) const
+{
+    assert(name != NoteName::Undef);
+    return accidScale(toint(name), mode);
+}
+
+
+//accids_t Ton::accidScale(const enum NoteName& n) const
+//{
+//    assert(-7 <= _sig);
+//    assert(_sig <= 7);
+//    assert(0 <= n);
+//    assert(n <= 6);
+//
+//}
 
 
 enum Accid Ton::accidDia(int n, ModeName mode) const
@@ -310,34 +472,37 @@ enum Accid Ton::accidDia(int n, ModeName mode) const
             return Accid::Undef;
             
         case ModeName::Major:
-            return KEYS[_sig + 7][n];
+        case ModeName::Ionian:
+            return MAJOR[_sig + 7][n];
             
         case ModeName::Minor:  // harmonic
             return MIN_HARM[_sig + 7][n];
             
         case ModeName::MinorNat:
-            return KEYS[_sig + 7][n];
+        case ModeName::Aeolian:
+            return MAJOR[_sig + 7][n];
             
         case ModeName::MinorMel:
             return MIN_MEL[_sig + 7][n];
             
-        //case ModeName::Ionian:
         case ModeName::Dorian:
-            return DOR[_sig + 7][n];
+            return DORIAN[_sig + 7][n];
+            
         case ModeName::Phrygian:
-            return PHRYG[_sig + 7][n];
+            return PHRYGIAN[_sig + 7][n];
+            
         case ModeName::Lydian:
-            return LYD[_sig + 7][n];
+            return LYDIAN[_sig + 7][n];
+            
         case ModeName::Mixolydian:
-            return MIXO[_sig + 7][n];
-        case ModeName::Aeolian:
-            return KEYS[_sig + 7][n];
+            return MIXOLYDIAN[_sig + 7][n];
+                        
         case ModeName::Locrian:
-            return LOC[_sig + 7][n];
+            return LOCRIAN[_sig + 7][n];
             
         default:
         {
-            ERROR("unknown Ton mode");
+            ERROR("Ton accidDia: unknown Ton mode");
             return Accid::Undef;
         }
     }
@@ -347,17 +512,35 @@ enum Accid Ton::accidDia(int n, ModeName mode) const
 enum Accid Ton::accidDia(const enum NoteName& name, ModeName mode) const
 {
     assert(name != NoteName::Undef);
-    return accidDia(toint(name),mode);
+    return accidDia(toint(name), mode);
+}
+
+
+enum Accid Ton::accidDia(const enum NoteName& name) const
+{
+    assert(name != NoteName::Undef);
+    return accidDia(toint(name), _mode);
+}
+
+
+enum Accid Ton::accidDia(int n) const
+{
+    assert(-7 <= _sig);
+    assert(_sig <= 7);
+    assert(0 <= n);
+    assert(n <= 6);
+ 
+    return accidDia(n, _mode);
 }
 
 
 enum NoteName Ton::name(int d) const
 {
     // diatonic scale
-    assert(_mode == ModeName::Major ||
-           _mode == ModeName::Minor ||
-           _mode == ModeName::MinorNat ||
-           _mode == ModeName::MinorMel);
+//    assert(_mode == ModeName::Major ||
+//           _mode == ModeName::Minor ||
+//           _mode == ModeName::MinorNat ||
+//           _mode == ModeName::MinorMel);
     assert(d < 7);
     return getName() + d;
 }
@@ -387,19 +570,17 @@ bool Ton::lead(const enum NoteName& name) const
     if (_mode == ModeName::Minor)
     {
         // DEBUGU("{} ({}) is lead of {}", name, n, *this);
-        return (KEYS[_sig + 7][n] != MIN_HARM[_sig + 7][n]);
+        return (MAJOR[_sig + 7][n] != MIN_HARM[_sig + 7][n]);
     }
     // melodic minor
     else if (_mode == ModeName::MinorMel)
     {
         // DEBUGU("{} ({}) is lead of {}", name, n, *this);
-        return (KEYS[_sig + 7][n] != MIN_MEL[_sig + 7][n]);
+        return (MAJOR[_sig + 7][n] != MIN_MEL[_sig + 7][n]);
     }
     else
         return false;
 }
-
-
 
 
 unsigned int Ton::dist(const enum NoteName& name, const enum Accid& accid) const
@@ -463,8 +644,75 @@ unsigned int Ton::distDiatonic(const Ton& rhs) const
 
 unsigned int Ton::distWeber(const Ton& rhs) const
 {
-    int res = Weber::static_dist(*this, rhs);
-    assert(res != Weber::UNDEF_DIST);
+    assert(_mode == ModeName::Major ||
+           _mode == ModeName::Minor);
+    assert(rhs._mode == ModeName::Major ||
+           rhs._mode == ModeName::Minor);
+    int res = Weber_static::dist(*this, rhs);
+    assert(res != Weber_static::UNDEF_DIST);
+    return res;
+}
+
+unsigned int Ton::distWeberModal(const Ton& rhs) const
+{
+    assert(_mode == ModeName::Major ||
+           _mode == ModeName::Minor ||
+           _mode == ModeName::MinorMel ||
+           _mode == ModeName::MinorNat || // Aeolian
+           _mode == ModeName::Ionian ||
+           _mode == ModeName::Dorian ||
+           _mode == ModeName::Phrygian ||
+           _mode == ModeName::Lydian ||
+           _mode == ModeName::Mixolydian ||
+           _mode == ModeName::Aeolian ||
+           _mode == ModeName::Locrian);
+    assert(rhs._mode == ModeName::Major ||
+           rhs._mode == ModeName::Minor ||
+           rhs._mode == ModeName::MinorMel ||
+           rhs._mode == ModeName::MinorNat || // Aeolian
+           rhs._mode == ModeName::Ionian ||
+           rhs._mode == ModeName::Dorian ||
+           rhs._mode == ModeName::Phrygian ||
+           rhs._mode == ModeName::Lydian ||
+           rhs._mode == ModeName::Mixolydian ||
+           rhs._mode == ModeName::Aeolian ||
+           rhs._mode == ModeName::Locrian);
+    int res = WeberModal_static::dist(*this, rhs);
+    assert(res != Weber_static::UNDEF_DIST);
+    return res;
+}
+
+
+unsigned int Ton::distWeberBluesModal(const Ton& rhs) const
+{
+    assert(_mode == ModeName::Major ||
+           _mode == ModeName::Minor ||
+           _mode == ModeName::MinorMel ||
+           _mode == ModeName::MinorNat || // Aeolian
+           _mode == ModeName::Ionian ||
+           _mode == ModeName::Dorian ||
+           _mode == ModeName::Phrygian ||
+           _mode == ModeName::Lydian ||
+           _mode == ModeName::Mixolydian ||
+           _mode == ModeName::Aeolian ||
+           _mode == ModeName::Locrian ||
+           _mode == ModeName::MajorBlues ||
+           _mode == ModeName::MinorBlues);
+    assert(rhs._mode == ModeName::Major ||
+           rhs._mode == ModeName::Minor ||
+           rhs._mode == ModeName::MinorMel ||
+           rhs._mode == ModeName::MinorNat || // Aeolian
+           rhs._mode == ModeName::Ionian ||
+           rhs._mode == ModeName::Dorian ||
+           rhs._mode == ModeName::Phrygian ||
+           rhs._mode == ModeName::Lydian ||
+           rhs._mode == ModeName::Mixolydian ||
+           rhs._mode == ModeName::Aeolian ||
+           rhs._mode == ModeName::Locrian ||
+           rhs._mode == ModeName::MajorBlues ||
+           rhs._mode == ModeName::MinorBlues);
+    int res = WeberBluesModal_static::dist(*this, rhs);
+    assert(res != Weber_static::UNDEF_DIST);
     return res;
 }
 
@@ -534,32 +782,62 @@ unsigned int Ton::distWeber(const Ton& rhs) const
 //    return *(_chromatic);
 //}
 
-const Scale& Ton::chromatic() const
+
+//const Scale& Ton::chromatic() const
+//{
+//    return _chromatic;
+//}
+
+
+const Ton& Ton::chromaton() const
 {
-    return _chromatic;
+    int i = tonicFifth();
+    assert(-7 <= i);
+    assert(i <= 10);
+    return CHROMA_TONS[i+7];
 }
 
-int Ton::tonic() const
+
+// m is a pitch class
+const enum NoteName Ton::chromaname(int m) const
+{
+    assert(0 <= m);
+    assert(m < 12);
+
+    // name of the tonic of scale
+    enum NoteName tonic = getName();
+    // pitch class of the tonic of scale
+    int p = getPitchClass();
+    // degree of m in the chromatic harmonic scale of p
+    size_t deg = (p <= m)?(m - p):(12-p+m);
+    assert(0 <= deg); // debug
+    assert(deg < 12);
+
+    return tonic+CHROMA_NAMES[deg];
+}
+
+
+int Ton::tonicFifth() const
 {
     int i = 99;
     switch (_mode)
     {
-        case ModeName::Undef:
-            break;
-
         case ModeName::Major:
+        case ModeName::MajorBlues:
             i = fifths();
             break;
 
         case ModeName::Minor:
         case ModeName::MinorNat:
         case ModeName::MinorMel:
+        case ModeName::MinorBlues:
             i = fifths()+3;
             break;
             
         case ModeName::Ionian:
             i = fifths();
             break;
+
 
         case ModeName::Dorian:
             i = fifths(); // + 2;
@@ -585,9 +863,35 @@ int Ton::tonic() const
             i = fifths();
             break;
 
+     // case ModeName::Augmented:
+     //     i = fifths();
+     //     break;
+     //
+     // case ModeName::Diminished:
+     //     i = fifths();
+     //     break;
+     //
+     // case ModeName::DiminishedHW:
+     //     i = fifths();
+     //     break;
+     //
+     // case ModeName::Whole:
+     //     i = fifths();
+     //     break;
+
+        case ModeName::Chromatic:
+            i = fifths();
+            break;
+            
+        case ModeName::Undef:
+        {
+            ERROR("Ton tonicFifth: undef mode");
+            break;
+        }
+
         default:
         {
-            ERROR("unknown Ton mode");
+            ERROR("Ton tonicFifth: not defined for mode {}", _mode);
             break;
         }
     }
@@ -601,14 +905,14 @@ int Ton::tonic() const
 
 void Ton::print(std::ostream& o) const
 {
-    int i = tonic();
+    int i = tonicFifth();
     
     if ((-15 <= i) && (i <= 19))
     {
         o << Fifths::name(i);
         if (Fifths::accid(i) != Accid::Natural)
             o << Fifths::accid(i);
-        o << tostring(_mode);
+        o << ' ' << tostring(_mode);
         o << ' ';
         o << '(';
         KeyFifth::print(o);
@@ -625,5 +929,327 @@ std::ostream& operator<<(std::ostream& o, const Ton& ton)
     return o;
 }
 
+
+// static abbreviations for accidentals
+const enum Accid Ton::_F = Accid::DoubleFlat;
+const enum Accid Ton::_f = Accid::Flat;
+const enum Accid Ton::_n = Accid::Natural;
+const enum Accid Ton::_s = Accid::Sharp;
+const enum Accid Ton::_S = Accid::DoubleSharp;
+const enum Accid Ton::_U = Accid::Undef;
+
+const accids_t Ton::_Ff = Accids::encode(Accid::DoubleFlat, Accid::Flat);
+const accids_t Ton::_f_ = Accids::encode(Accid::Flat);
+const accids_t Ton::_fn = Accids::encode(Accid::Flat, Accid::Natural);
+const accids_t Ton::_n_ = Accids::encode(Accid::Natural);
+const accids_t Ton::_ns = Accids::encode(Accid::Natural, Accid::Sharp);
+const accids_t Ton::_s_ = Accids::encode(Accid::Sharp);
+const accids_t Ton::_sS = Accids::encode(Accid::Sharp, Accid::DoubleSharp);
+const accids_t Ton::_UU = Accids::encode();
+
+
+// accidentals in key signatures
+// and major or minor natural scales, for each key signature.
+const std::array<std::array<enum Accid, 7>, 15> Ton::MAJOR =
+{{
+    { _f, _f, _f, _f, _f, _f, _f }, // -7  Cb maj / Ab min nat
+    { _f, _f, _f, _n, _f, _f, _f }, // -6  Gb maj / Eb min nat
+    { _n, _f, _f, _n, _f, _f, _f }, // -5  Db maj / Bb min nat
+    { _n, _f, _f, _n, _n, _f, _f }, // -4  Ab maj / F  min nat
+    { _n, _n, _f, _n, _n, _f, _f }, // -3  Eb maj / C  min nat
+    { _n, _n, _f, _n, _n, _n, _f }, // -2  Bb maj / G  min nat
+    { _n, _n, _n, _n, _n, _n, _f }, // -1  F  maj / D  min nat
+    { _n, _n, _n, _n, _n, _n, _n }, //  0  C  maj / A  min nat
+    { _n, _n, _n, _s, _n, _n, _n }, //  1  G  maj / E  min nat
+    { _s, _n, _n, _s, _n, _n, _n }, //  2  D  maj / B  min nat
+    { _s, _n, _n, _s, _s, _n, _n }, //  3  A  maj / F# min nat
+    { _s, _s, _n, _s, _s, _n, _n }, //  4  E  maj / C# min nat
+    { _s, _s, _n, _s, _s, _s, _n }, //  5  B  maj / G# min nat
+    { _s, _s, _s, _s, _s, _s, _n }, //  6  F# maj / D# min nat
+    { _s, _s, _s, _s, _s, _s, _s }  //  7  C# maj / A# min nat
+}};
+
+// lead node in minor harmonic tons, in 0..6
+const std::array<int, 15> Ton::LEAD_HARM =
+{   4, 1, 5, 2, 6, 3, 0, 4, 1, 5, 2, 6, 3, 6, 4 };
+// -7 -6 -5 -4 -3 -2 -1  0  1  2  3  4  5  6  7
+//  Ab Eb Bb F  C  G  D  A  E  B  F# C# G# D# A#
+
+// accidentals in minor harmonic scales for each key signature.
+const std::array<std::array<enum Accid, 7>, 15> Ton::MIN_HARM =
+{{
+    { _f, _f, _f, _f, _n, _f, _f }, // -7  Ab min harm
+    { _f, _n, _f, _n, _f, _f, _f }, // -6  Eb min harm
+    { _n, _f, _f, _n, _f, _n, _f }, // -5  Bb min harm
+    { _n, _f, _n, _n, _n, _f, _f }, // -4  F  min harm
+    { _n, _n, _f, _n, _n, _f, _n }, // -3  C  min harm
+    { _n, _n, _f, _s, _n, _n, _f }, // -2  G  min harm
+    { _s, _n, _n, _n, _n, _n, _f }, // -1  D  min harm
+    { _n, _n, _n, _n, _s, _n, _n }, //  0  A  min harm
+    { _n, _s, _n, _s, _n, _n, _n }, //  1  E  min harm
+    { _s, _n, _n, _s, _n, _s, _n }, //  2  B  min harm
+    { _s, _n, _s, _s, _s, _n, _n }, //  3  F# min harm
+    { _s, _s, _n, _s, _s, _n, _s }, //  4  C# min harm
+    { _s, _s, _n, _S, _s, _s, _n }, //  5  G# min harm
+    { _S, _s, _s, _s, _s, _s, _n }, //  6  D# min harm
+    { _s, _s, _s, _s, _S, _s, _s }, //  7  A# min harm
+}};
+
+// accidentals in minor melodic scales for each key signature.
+const std::array<std::array<enum Accid, 7>, 15> Ton::MIN_MEL =
+{{
+    { _f, _f, _f, _n, _n, _f, _f }, // -7  Ab min mel
+    { _n, _n, _f, _n, _f, _f, _f }, // -6  Eb min mel
+    { _n, _f, _f, _n, _n, _n, _f }, // -5  Bb min mel
+    { _n, _n, _n, _n, _n, _f, _f }, // -4  F  min mel
+    { _n, _n, _f, _n, _n, _n, _n }, // -3  C  min mel
+    { _n, _n, _n, _s, _n, _n, _f }, // -2  G  min mel
+    { _s, _n, _n, _n, _n, _n, _n }, // -1  D  min mel
+    { _n, _n, _n, _s, _s, _n, _n }, //  0  A  min mel
+    { _s, _s, _n, _s, _n, _n, _n }, //  1  E  min mel
+    { _s, _n, _n, _s, _s, _s, _n }, //  2  B  min mel
+    { _s, _s, _s, _s, _s, _n, _n }, //  3  F# min mel
+    { _s, _s, _n, _s, _s, _s, _s }, //  4  C# min mel
+    { _s, _s, _s, _S, _s, _s, _n }, //  5  G# min mel
+    { _S, _s, _s, _s, _s, _s, _s }, //  6  D# min mel
+    { _s, _s, _s, _S, _S, _s, _s },  // 7  A# min mel
+}};
+
+const std::array<std::array<enum Accid, 7>, 15> Ton::DORIAN =
+{{
+    { _f, _f, _f, _n, _f, _f, _f }, // -7  Ab dor
+    { _n, _f, _f, _n, _f, _f, _f }, // -6  Eb dor
+    { _n, _f, _f, _n, _n, _f, _f }, // -5  Bb dor
+    { _n, _n, _f, _n, _n, _f, _f }, // -4  F  dor
+    { _n, _n, _f, _n, _n, _n, _f }, // -3  C  dor
+    { _n, _n, _n, _n, _n, _n, _f }, // -2  G  dor
+    { _n, _n, _n, _n, _n, _n, _n }, // -1  D  dor
+    { _n, _n, _n, _s, _n, _n, _n }, //  0  A  dor
+    { _s, _n, _n, _s, _n, _n, _n }, //  1  E  dor
+    { _s, _n, _n, _s, _s, _n, _n }, //  2  B  dor
+    { _s, _s, _n, _s, _s, _n, _n }, //  3  F# dor
+    { _s, _s, _n, _s, _s, _s, _n }, //  4  C# dor
+    { _s, _s, _s, _s, _s, _s, _n }, //  5  G# dor
+    { _s, _s, _s, _s, _s, _s, _s }, //  6  D# dor
+    { _s, _s, _s, _S, _s, _s, _s },  // 7  A# dor
+}};
+
+
+const std::array<std::array<enum Accid, 7>, 15> Ton::PHRYGIAN =
+{{
+    { _f, _f, _f, _f, _f, _f, _F }, // -7  Ab phryg
+    { _f, _f, _f, _f, _f, _f, _f }, // -6  Eb phryg
+    { _f, _f, _f, _n, _f, _f, _f }, // -5  Bb phryg
+    { _n, _f, _f, _n, _f, _f, _f }, // -4  F  phryg
+    { _n, _f, _f, _n, _n, _f, _f }, // -3  C  phryg
+    { _n, _n, _f, _n, _n, _f, _f }, // -2  G  phryg
+    { _n, _n, _f, _n, _n, _n, _f }, // -1  D  phryg
+    { _n, _n, _n, _n, _n, _n, _f }, //  0  A  phryg
+    { _n, _n, _n, _n, _n, _n, _n }, //  1  E  phryg
+    { _n, _n, _n, _s, _n, _n, _n }, //  2  B  phryg
+    { _s, _n, _n, _s, _n, _n, _n }, //  3  F# phryg
+    { _s, _n, _n, _s, _s, _n, _n }, //  4  C# phryg
+    { _s, _s, _n, _s, _s, _n, _n }, //  5  G# phryg
+    { _s, _s, _n, _s, _s, _s, _n }, //  6  D# phryg
+    { _s, _s, _s, _s, _s, _s, _n },  // 7  A# phryg
+}};
+
+
+const std::array<std::array<enum Accid, 7>, 15> Ton::LYDIAN =
+{{
+    { _f, _f, _f, _n, _f, _f, _f }, // -7  Cb lyd
+    { _n, _f, _f, _n, _f, _f, _f }, // -6  Gb lyd
+    { _n, _f, _f, _n, _n, _f, _f }, // -5  Db lyd
+    { _n, _n, _f, _n, _n, _f, _f }, // -4  Ab lyd
+    { _n, _n, _f, _n, _n, _n, _f }, // -3  Eb lyd
+    { _n, _n, _n, _n, _n, _n, _f }, // -2  Bb lyd
+    { _n, _n, _n, _n, _n, _n, _n }, // -1  F  lyd
+    { _n, _n, _n, _s, _n, _n, _n }, //  0  C  lyd
+    { _s, _n, _n, _s, _n, _n, _n }, //  1  G  lyd
+    { _s, _n, _n, _s, _s, _n, _n }, //  2  D  lyd
+    { _s, _s, _n, _s, _s, _n, _n }, //  3  A  lyd
+    { _s, _s, _n, _s, _s, _s, _n }, //  4  E  lyd
+    { _s, _s, _s, _s, _s, _s, _n }, //  5  B  lyd
+    { _s, _s, _s, _s, _s, _s, _s }, //  6  F# lyd
+    { _s, _s, _s, _S, _s, _s, _s }  //  7  C# lyd
+}};
+
+
+const std::array<std::array<enum Accid, 7>, 15> Ton::MIXOLYDIAN =
+{{
+    { _f, _f, _f, _f, _f, _f, _F }, // -7  Cb mix
+    { _f, _f, _f, _f, _f, _f, _f }, // -6  Gb mix
+    { _f, _f, _f, _n, _f, _f, _f }, // -5  Db mix
+    { _n, _f, _f, _n, _f, _f, _f }, // -4  Ab mix
+    { _n, _f, _f, _n, _n, _f, _f }, // -3  Eb mix
+    { _n, _n, _f, _n, _n, _f, _f }, // -2  Bb mix
+    { _n, _n, _f, _n, _n, _n, _f }, // -1  F  mix
+    { _n, _n, _n, _n, _n, _n, _f }, //  0  C  mix
+    { _n, _n, _n, _n, _n, _n, _n }, //  1  G  mix
+    { _n, _n, _n, _s, _n, _n, _n }, //  2  D  mix
+    { _s, _n, _n, _s, _n, _n, _n }, //  3  A  mix
+    { _s, _n, _n, _s, _s, _n, _n }, //  4  E  mix
+    { _s, _s, _n, _s, _s, _n, _n }, //  5  B  mix
+    { _s, _s, _n, _s, _s, _s, _n }, //  6  F# mix
+    { _s, _s, _s, _s, _s, _s, _n }  //  7  C# mix
+}};
+
+
+const std::array<std::array<enum Accid, 7>, 15> Ton::LOCRIAN =
+{{
+    { _f, _f, _F, _f, _f, _f, _F }, // -7  Ab loc -> G#
+    { _f, _f, _f, _f, _f, _f, _F }, // -6  Eb loc -> D#
+    { _f, _f, _f, _f, _f, _f, _f }, // -5  Bb loc
+    { _f, _f, _f, _n, _f, _f, _f }, // -4  F  loc
+    { _n, _f, _f, _n, _f, _f, _f }, // -3  C  loc
+    { _n, _f, _f, _n, _n, _f, _f }, // -2  G  loc
+    { _n, _n, _f, _n, _n, _f, _f }, // -1  D  loc
+    { _n, _n, _f, _n, _n, _n, _f }, //  0  A  loc
+    { _n, _n, _n, _n, _n, _n, _f }, //  1  E  loc
+    { _n, _n, _n, _n, _n, _n, _n }, //  2  B  loc
+    { _n, _n, _n, _s, _n, _n, _n }, //  3  F# loc
+    { _s, _n, _n, _s, _n, _n, _n }, //  4  C# loc
+    { _s, _n, _n, _s, _s, _n, _n }, //  5  G# loc
+    { _s, _s, _n, _s, _s, _n, _n }, //  6  D# loc
+    { _s, _s, _n, _s, _s, _s, _n }  // 7  A# loc -> Bb
+}};
+
+
+const std::array<std::array<accids_t, 7>, 15> Ton::MAJ_BLUES =
+{{
+    { _f_, _f_, _Ff, _UU, _f_, _f_, _UU }, // -7  Cb maj blues -> B
+    { _UU, _f_, _f_, _UU, _f_, _f_, _Ff }, // -6  Gb maj blues -> Gb
+    { _UU, _f_, _f_, _fn, _UU, _f_, _f_ }, // -5  Db maj blues
+    { _fn, _UU, _f_, _n_, _UU, _f_, _f_ }, // -4  Ab maj blues
+    { _n_, _UU, _f_, _n_, _fn, _UU, _f_ }, // -3  Eb maj blues
+    { _n_, _fn, _UU, _n_, _n_, _UU, _f_ }, // -2  Bb maj blues
+    { _n_, _n_, _UU, _n_, _n_, _fn, _UU }, // -1  F  maj blues
+    { _n_, _n_, _fn, _UU, _n_, _n_, _UU }, //  0  C  maj blues
+    { _UU, _n_, _n_, _UU, _n_, _n_, _fn }, //  1  G  maj blues
+    { _UU, _n_, _n_, _ns, _UU, _n_, _n_ }, //  2  D  maj blues
+    { _ns, _UU, _n_, _s_, _UU, _n_, _n_ }, //  3  A  maj blues
+    { _s_, _UU, _n_, _s_, _ns, _UU, _n_ }, //  4  E  maj blues
+    { _s_, _ns, _UU, _s_, _s_, _UU, _n_ }, //  5  B  maj blues
+    { _s_, _s_, _UU, _s_, _s_, _ns, _UU }, //  6  F# maj blues
+    { _s_, _s_, _ns, _UU, _s_, _s_, _UU }  //  7  C# maj blues -> Db
+}};
+
+
+const std::array<std::array<accids_t, 7>, 15> Ton::MIN_BLUES =
+{{
+    { _f_, _f_, _Ff, _UU, _f_, _f_, _UU }, // -7  Ab min blues -> G#
+    { _UU, _f_, _f_, _UU, _f_, _f_, _Ff }, // -6  Eb min blues -> D#
+    { _UU, _f_, _f_, _fn, _UU, _f_, _f_ }, // -5  Bb min blues
+    { _fn, _UU, _f_, _n_, _UU, _f_, _f_ }, // -4  F  min blues
+    { _n_, _UU, _f_, _n_, _fn, _UU, _f_ }, // -3  C  min blues
+    { _n_, _fn, _UU, _n_, _n_, _UU, _f_ }, // -2  G  min blues
+    { _n_, _n_, _UU, _n_, _n_, _fn, _UU }, // -1  D  min blues
+    { _n_, _n_, _fn, _UU, _n_, _n_, _UU }, //  0  A  min blues
+    { _UU, _n_, _n_, _UU, _n_, _n_, _fn }, //  1  E  min blues
+    { _UU, _n_, _n_, _ns, _UU, _n_, _n_ }, //  2  B  min blues
+    { _ns, _UU, _n_, _s_, _UU, _n_, _n_ }, //  3  F# min blues
+    { _s_, _UU, _n_, _s_, _ns, _UU, _n_ }, //  4  C# min blues
+    { _s_, _ns, _UU, _s_, _s_, _UU, _n_ }, //  5  G# min blues
+    { _s_, _s_, _UU, _s_, _s_, _ns, _s_ }, //  6  D# min blues
+    { _s_, _s_, _ns, _UU, _s_, _s_, _UU }  //  7  A# min blues -> Bb
+}};
+
+
+// two augmented chords
+const std::array<std::array<accids_t, 7>, 12> Ton::AUGMENTED =
+{{
+//  { _f_, _f_, _Ff, _UU, _f_, _f_, _UU }, // -7  Cb aug -> B
+//  { _UU, _f_, _f_, _UU, _f_, _f_, _Ff }, // -6  Gb aug -> Gb
+    { _n_, _f_, _UU, _fn, _UU, _fn, _UU }, // -5  Db aug
+    { _fn, _UU, _fn, _UU, _n_, _f_, _UU }, // -4  Ab aug
+    { _UU, _n_, _f_, _UU, _fn, _UU, _fn }, // -3  Eb aug
+    { _UU, _fn, _UU, _ns, _UU, _n_, _f_ }, // -2  Bb aug
+    { _ns, _UU, _n_, _n_, _UU, _fn, _UU }, // -1  F  aug
+    { _n_, _UU, _fn, _UU, _ns, _UU, _n_ }, //  0  C  aug
+    { _UU, _ns, _UU, _s_, _n_, _UU, _fn }, //  1  G  aug
+    { _s_, _n_, _UU, _ns, _UU, _ns, _UU }, //  2  D  aug
+    { _ns, _UU, _ns, _UU, _s_, _n_, _UU }, //  3  A  aug
+    { _UU, _s_, _n_, _UU, _ns, _UU, _ns }, //  4  E  aug
+    { _UU, _ns, _UU, _sS, _UU, _s_, _n_ }, //  5  B  aug
+    { _sS, _UU, _s_, _s_, _UU, _ns, _UU }  //  6  F# aug
+//  { _s_, _s_, _ns, _UU, _s_, _s_, _UU }  //  7  C# aug -> Db
+}};
+
+
+const std::array<std::array<accids_t, 7>, 3> Ton::DIMINISHED_WH =
+{{
+    { _s_, _n_, _n_, _n_, _n_, _f_, _fn }, // -1 F dim wh = Ab (-4), D (2), B (5)
+    { _n_, _n_, _f_, _ns, _s_, _n_, _n_ }, //  0 C dim wh = Eb (-3), A (3), F# (6)
+    { _ns, _s_, _n_, _s_, _n_, _n_, _f_ }  //  1 G dim wh = Db (-5), Bb (-2), E (4)
+}};
+ 
+
+const std::array<std::array<accids_t, 7>, 3> Ton::DIMINISHED_HW =
+{{
+    { _n_, _n_, _f_, _n_, _f_, _fn, _n_ }, // -1 F dim hw = Ab (-4), D (2), B (5)
+    { _n_, _f_, _fn, _s_, _n_, _n_, _f_ }, //  0 C dim hw = Eb (-3), A (3), F# (6)
+    { _s_, _n_, _n_, _n_, _n_, _f_, _fn }  //  1 G dim hw = Bb (-2), E (4), C# (7)
+//  { _f_, _fn, _n_, _n_, _n_, _f_, _f_ }, // -5 G dim hw = Bb (-2), E (4), Db (-5)
+}};
+
+
+const std::array<std::array<accids_t, 7>, 2> Ton::WHOLE_TONE =
+{{
+    { _n_, _n_, _n_, _s_, _s_, _s_, _UU }, // 0 C whole tone
+                          // = D (2), E (4), F# (6, -6eq), G# (-4eq), A# (-2eq)
+    { _UU, _f_, _f_, _n_, _n_, _n_, _n_ }  // 5 1 whole tone
+                          // = Db (-5), Eb (-3), F (-1), G (1), B (5)
+}};
+
+
+/// @todo uncomplete
+const std::array<std::array<accids_t, 7>, 18> Ton::CHROMATIC =
+{{
+    { _f_, _Ff, _Ff, _fn, _f_, _Ff, _Ff }, // -7  Cb chromatic
+    { _fn, _f_, _Ff, _fn, _f_, _Ff, _Ff }, // -6  Gb chromatic
+    { _fn, _f_, _Ff, _fn, _fn, _f_, _Ff }, // -5  Db chromatic
+    { _fn, _fn, _f_, _fn, _fn, _f_, _Ff }, // -4  Ab chromatic
+    { _fn, _fn, _f_, _fn, _fn, _fn, _f_ }, // -3  Eb chromatic
+    { _fn, _fn, _fn, _n_, _fn, _fn, _f_ }, // -2  Bb chromatic
+    { _n_, _fn, _fn, _n_, _fn, _fn, _fn }, // -1  F  chromatic
+    { _n_, _fn, _fn, _ns, _n_, _fn, _fn }, //  0  C  chromatic
+    { _ns, _n_, _fn, _ns, _n_, _fn, _fn }, //  1  G  chromatic
+    { _ns, _n_, _fn, _ns, _ns, _n_, _fn }, //  2  D  chromatic
+    { _ns, _ns, _n_, _ns, _ns, _n_, _fn }, //  3  A  chromatic
+    { _ns, _ns, _n_, _ns, _ns, _ns, _n_ }, //  4  E  chromatic
+    { _ns, _ns, _ns, _s_, _ns, _ns, _n_ }, //  5  B  chromatic
+    { _s_, _ns, _ns, _s_, _ns, _ns, _ns }, //  6  F# chromatic
+    { _s_, _ns, _ns, _sS, _s_, _ns, _ns },  // 7  C# chromatic
+    { _sS, _s_, _ns, _sS, _s_, _ns, _ns },  // 8  G# chromatic
+    { _sS, _s_, _ns, _sS, _sS, _s_, _ns },  // 9  D# chromatic
+    { _sS, _sS, _s_, _sS, _sS, _s_, _ns },  // 10 A# chromatic
+}};
+
+
+const std::array<int, 12> Ton::CHROMA_NAMES =
+{{ 0, 1, 1, 2, 2, 3, 3, 4, 5, 5, 6, 6 }};
+
+
+const std::array<Ton, 18> Ton::CHROMA_TONS =
+{{
+    Ton(-7, ModeName::Chromatic),
+    Ton(-6, ModeName::Chromatic),
+    Ton(-5, ModeName::Chromatic),
+    Ton(-4, ModeName::Chromatic),
+    Ton(-3, ModeName::Chromatic),
+    Ton(-2, ModeName::Chromatic),
+    Ton(-1, ModeName::Chromatic),
+    Ton(0, ModeName::Chromatic),
+    Ton(1, ModeName::Chromatic),
+    Ton(2, ModeName::Chromatic),
+    Ton(3, ModeName::Chromatic),
+    Ton(4, ModeName::Chromatic),
+    Ton(5, ModeName::Chromatic),
+    Ton(6, ModeName::Chromatic),
+    Ton(7, ModeName::Chromatic),
+    Ton(8, ModeName::Chromatic),
+    Ton(9, ModeName::Chromatic),
+    Ton(10, ModeName::Chromatic)
+}};
 
 } // end namespace pse

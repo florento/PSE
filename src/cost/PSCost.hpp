@@ -16,10 +16,10 @@
 #include <iostream>
 #include <assert.h>
 
-#include "trace.hpp"
+#include "pstrace.hpp"
 #include "PSEnum.hpp"
 #include "NoteName.hpp"
-#include "Accidental.hpp"
+#include "Accid.hpp"
 #include "Ton.hpp"
 
 namespace pse {
@@ -29,7 +29,8 @@ class PSC2;
 
 
 /// Cost model for the ordering of configuration of the PS algorithm.
-// see Note Spelling Conventions in Behind Bars (page 85)
+/// see Note Spelling Conventions in Behind Bars (page 85)
+/// @todo obsolete. replaced bu Cost.
 struct PSCost
 {
 public:
@@ -87,7 +88,7 @@ public:
     /// negation of <.
     bool operator>=(const PSCost& rhs) const;
     
-
+    
     /// same cost components (exactly).
     bool eq_lex(const PSCost& rhs) const;
 
@@ -269,6 +270,10 @@ PSCost operator+(const PSCost& c1, const PSCost& c2);
 std::ostream& operator<<(std::ostream& o, const PSCost& c);
 
 } // namespace pse
+
+/// fmt v10 and above requires `fmt::formatter<T>` extends `fmt::ostream_formatter`.
+/// @see: https://github.com/fmtlib/fmt/issues/3318
+template<> struct fmt::formatter<pse::PSCost> : fmt::ostream_formatter {};
 
 #endif /* PSCost_hpp */
 

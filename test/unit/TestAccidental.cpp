@@ -1,5 +1,5 @@
 //
-//  TestAccidental.cpp
+//  TestAccid.cpp
 //  testpse
 //
 //  Created by Florent Jacquemard on 01/04/2023.
@@ -8,7 +8,7 @@
 #include "gtest/gtest.h"
 
 #include "NoteName.hpp"
-#include "Accidental.hpp"
+#include "Accid.hpp"
 
 
 TEST(Accid, defined)

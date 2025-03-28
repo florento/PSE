@@ -14,9 +14,9 @@
 #include <assert.h>
 #include <memory>
 
-#include "trace.hpp"
+#include "pstrace.hpp"
 #include "NoteName.hpp"
-#include "Accidental.hpp"
+#include "Accid.hpp"
 #include "ModeName.hpp"
 #include "Ton.hpp"
 #include "TonIndex.hpp"
@@ -24,7 +24,7 @@
 #include "PSRawEnum.hpp"
 #include "Speller2pass.hpp"
 #include "PSTable.hpp"
-#include "PSGlobal.hpp"
+// #include "PSGlobal.hpp"
 #include "PSGrid.hpp"
 
 
@@ -56,7 +56,7 @@ public:
     // Estimation of tonalities
         
     /// @return distance in the array of fifths between
-    /// from estimated global tonality and
+    /// the estimated global tonality and
     /// a signature with no accidentals.
     inline int fifths() const { return global().fifths(); }
           

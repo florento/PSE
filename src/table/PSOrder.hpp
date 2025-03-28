@@ -14,9 +14,9 @@
 #include <iostream>
 #include <assert.h>
 
-#include "trace.hpp"
+#include "pstrace.hpp"
 #include "PSEnum.hpp"
-#include "PSCost.hpp"
+// #include "Cost.hpp"
 #include "PSConfig0.hpp"
 #include "PSConfig1.hpp"
 #include "PSConfig1c.hpp"
@@ -108,9 +108,11 @@ struct PSClexc
 //                    std::shared_ptr<const PSC0>& rhs);
 //};
 
-
-
 } // end namespace pse
+
+/// fmt v10 and above requires `fmt::formatter<T>` extends `fmt::ostream_formatter`.
+/// @see: https://github.com/fmtlib/fmt/issues/3318
+template<> struct fmt::formatter<pse::CostOrdering> : fmt::ostream_formatter {};
 
 #endif /* PSOrder_hpp */
 

@@ -19,8 +19,8 @@ namespace pse {
 // copy and update
 /// @todo TBR
 PSC::PSC(std::shared_ptr<const PSC0> c):
-PSC0(*c),
-_pred(c)
+PSC0(*c), // clone the state
+_pred(c)  // shared ptr copy
 {
     assert(_pred);
     assert(_pred->initial() || _pred->fromNote() || _pred->fromChord());
@@ -35,9 +35,10 @@ _pred(c)
 //}
 
 
+// copy constructor
 PSC::PSC(const PSC& c):
-PSC0(c),
-_pred(c._pred)
+PSC0(c),        // clone the state
+_pred(c._pred)  // shared ptr copy
 { }
 
 
@@ -62,6 +63,7 @@ PSC& PSC::operator=(const PSC& rhs)
 bool PSC::operator==(const PSC& rhs) const
 {
     return (PSC0::operator==(rhs));
+    // do not compare pred.
 }
 
 
@@ -123,7 +125,7 @@ const PSC0* PSC::previous() const
         //assert(ton <= 7);
         // int alt = accidental();
         //DEBUGU("Dist. of {}({}){} to {}: {}",
-        //      Pitch::name_of_int(_name), _name, alt, ton,
+        //      pse::Pitch::name_of_int(_name), _name, alt, ton,
         //      KeySig::distTon(_name, alt, ton));
         /// @todo REVISE
         //_dist += KeySig::distTon(_name, alt, ton);

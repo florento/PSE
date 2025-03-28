@@ -17,18 +17,15 @@
 #include <array>
 #include <vector>
 
-#include "trace.hpp"
-#include "Accidental.hpp"
+#include "pstrace.hpp"
+#include "Accid.hpp"
 #include "PSConfig0.hpp"
 #include "PSConfig.hpp"
 #include "PSEnum.hpp"
 #include "PSChord.hpp"
 #include "PSConfig1c.hpp"
 
-
-
 namespace pse {
-
 
 /// target config of transition,
 /// reached from its predecessor by spelling several simultaneous notes
@@ -43,15 +40,16 @@ namespace pse {
 class PSC2 : public PSC
 {
     
-public:
+public: // construction
 
     /// target PS config for a transition from given (previous) config,
     /// when reading a chord.
     /// @param c0 previous config, to be updated with the received chord.
-    /// @param c1 last config reached after processing the chord.
+    /// @param c1 last config reached when processing the chord.
     /// @param chord note enumerator containing the notes of the read chord.
     PSC2(std::shared_ptr<const PSC0> c0,
-         std::shared_ptr<const PSC1c> c1, PSChord& chord);
+         std::shared_ptr<const PSC1c> c1,
+         PSChord& chord);
 
     /// copy constructor
     PSC2(const PSC2& c);
@@ -61,12 +59,16 @@ public:
     /// assignement operator
     PSC2& operator=(const PSC2& rhs);
 
+public: // comparison
+    
     /// configs have the same list of accidentals
     bool operator==(const PSC2& rhs) const;
     
     /// configs have different list of accidentals
     bool operator!=(const PSC2& rhs) const;
-    
+
+public: // access
+
     // bool acceptable(const enum NoteName& name, const enum Accid& accid) const;
     
     /// number of simultaneous note in chord read to reach this config.
@@ -87,18 +89,24 @@ public:
     /// const iterator pointig to the first name of note in this config.
     std::vector<enum NoteName>::const_iterator cbeginName() const;
 
-    /// const iterator pointig to the one after last name of note in this config.
+    /// const iterator pointig to the one after last name of note
+    /// in this config.
     std::vector<enum NoteName>::const_iterator cendName() const;
 
     /// accidental of the note read for the transition
-    /// from this config's predecessor. in -2..2
+    /// from this config's predecessor.
     /// @param i index of the note in the input chord in 0..size()-1.
-    /// @see Accidental.hpp
+    /// @see Accid.hpp
     /// @warning not formatted for a Pitch object.
     enum Accid accidental(size_t i) const;
+    
+    /// octave of the note read for the transition
+    /// from this config's predecessor.
+    /// @param i index of the note in the input chord in 0..size()-1.
+    int octave(size_t i) const;
 
-    /// whether the accidental of the note (read for the transition from predecessor)
-    /// must be printed or not.
+    /// whether the accidental of the note (read for the transition from
+    /// its predecessor) must be printed or not.
     /// @param i index of the note in the input chord in 0..size()-1.
     bool printed(size_t i) const;
 
@@ -110,12 +118,12 @@ public:
 
     /// this configuration was reached by reading a single note.
     /// Always false for this class.
-    virtual bool fromNote() const;
+    bool fromNote() const override;
 
     /// this configuration was reached by reading
     /// several simultaneous notes (a "chord").
     /// Always true for this class.
-    virtual bool fromChord() const;
+    bool fromChord() const override;
     
 private: // data
         
@@ -133,9 +141,9 @@ private: // data
     /// for the chord read for the transition to this config.
     std::vector<enum NoteName> _names;
     
-    /// chosen number of accidents, in -2..2.
+    // chosen number of accidents, in -2..2.
     // @todo TBR: it is _state[_name] by construction
-    std::vector<enum Accid> _accids;
+    // std::vector<enum Accid> _accids;
    
     /// whether the accident must be printed
     /// for the note read for the transition to this config.

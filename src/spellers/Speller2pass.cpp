@@ -12,8 +12,8 @@
 namespace pse {
 
 
-Speller2Pass::Speller2Pass(const Algo& algo, size_t nbTons, bool dflag):
-Speller1Pass(algo, nbTons, dflag),
+Speller2Pass::Speller2Pass(size_t nbTons, const Algo& algo, bool dflag):
+Speller1Pass(nbTons, algo, dflag),
 _table1(nullptr),
 _global1(nullptr)
 { }
@@ -89,11 +89,18 @@ bool Speller2Pass::spell(const Cost& seed0, const Cost& seed1,
         delete _table1;
     }
     assert(_global0);
-    assert(_locals0);
-       
-    // std::unique_ptr<PST>
-    _table1 = new PST(*_table0, seed1, *_global0, *_locals0, _debug);
-
+    assert(_grid);
+    
+    clock_t time_start = clock();
+    assert(_enum);                                                         // tonal mode
+    _table1 = new PST(_algo, seed1, index(), *_enum, *_grid, true, _debug);
+    _time_table1 = duration(time_start);
+    if (_debug)
+    {
+        DEBUGU("time to build the second pitch-spelling table: {}ms",
+               (int)_time_table1);
+    }
+    
     // DEBUGU("PSE: table dump");
     //_table1->dump_rowcost();
     
@@ -106,6 +113,9 @@ bool Speller2Pass::spell(const Cost& seed0, const Cost& seed1,
     assert(_global0);
     // std::unique_ptr<PSO>
     _global1 = new PSO(*_global0, *_table1, diff1, _debug);
+    // add possible enharmonics in list of global candidate
+    // _global1->completeEnharmonics();
+    
     
     TRACE("Pitch Spelling: {} estimated global tonality candidates", globals());
     if (_debug)
@@ -121,9 +131,9 @@ bool Speller2Pass::spell(const Cost& seed0, const Cost& seed1,
         
         if (ig != TonIndex::UNDEF)
         {
-            assert(ig < _index.size());
+            assert(ig < nbTons());
             TRACE("Pitch Spelling: estimated global tonality: {} ({})",
-                  ig, _index.ton(ig).fifths());
+                  ig, ton(ig).fifths());
             
             // will update the lists _names, _accids and _octave
             TRACE("pitch-spelling: renaming");
@@ -131,8 +141,9 @@ bool Speller2Pass::spell(const Cost& seed0, const Cost& seed1,
         }
         else
         {
+            assert(_enum);
             ERROR("Speller: failure with spelling table {}-{}",
-                  _enum.first(), _enum.stop());
+                  _enum->first(), _enum->stop());
             status = false;
         }
 

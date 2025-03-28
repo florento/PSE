@@ -36,14 +36,6 @@ _color(rhs._color)
 {}
 
 
-//PSCost::PSCost(size_t a, size_t n, size_t d, size_t c):
-//_accid(a),
-//_dist(n),
-//_ndia(d),
-//_color(c)
-//{ }
-
-
 PSCost::~PSCost()
 {
     TRACE("delete PS Cost");
@@ -87,74 +79,10 @@ PSCost operator+(const PSCost& c1, const PSCost& c2)
 }
 
 
-//bool PSCost::operator==(const PSCost& rhs) const
-//{
-//    switch (_order)
-//    {
-//        case CostOrdering::Default:
-//            return eq_lex(rhs);
-//
-//        case CostOrdering::Lex:
-//            return eq_lex(rhs);
-//
-//        case CostOrdering::Cumul:
-//            return eq_cumul(rhs);
-//
-//        case CostOrdering::Approx:
-//            // pb: needs ar. base
-//            return eq_approx(rhs);
-//
-//        case CostOrdering::Undef:
-//        {
-//            ERROR("PSCost: undef ordering code");
-//            return false;
-//        }
-//
-//        default:
-//        {
-//            ERROR("PSCost: unknown ordering code");
-//            return false;
-//        }
-//    }
-//}
-
-
 bool PSCost::operator!=(const PSCost& rhs) const
 {
     return !operator==(rhs);
 }
-
-
-//bool PSCost::operator<(const PSCost& rhs) const
-//{
-//    switch (_order)
-//    {
-//        case CostOrdering::Default:
-//            return less_lex(rhs);
-//
-//        case CostOrdering::Lex:
-//            return less_lex(rhs);
-//
-//        case CostOrdering::Cumul:
-//            return less_cumul(rhs);
-//
-//        case CostOrdering::Approx:
-//            // pb: needs ar. base
-//            return less_approx(rhs);
-//
-//        case CostOrdering::Undef:
-//        {
-//            ERROR("PSCost: undef ordering code");
-//            return false;
-//        }
-//
-//        default:
-//        {
-//            ERROR("PSCost: unknown ordering code");
-//            return false;
-//        }
-//    }
-//}
 
 
 bool PSCost::operator<=(const PSCost& rhs) const
@@ -544,3 +472,68 @@ std::ostream& operator<<(std::ostream& o, const PSCost& c)
 } // end namespace pse
 
 /// @}
+
+
+//bool PSCost::operator==(const PSCost& rhs) const
+//{
+//    switch (_order)
+//    {
+//        case CostOrdering::Default:
+//            return eq_lex(rhs);
+//
+//        case CostOrdering::Lex:
+//            return eq_lex(rhs);
+//
+//        case CostOrdering::Cumul:
+//            return eq_cumul(rhs);
+//
+//        case CostOrdering::Approx:
+//            // pb: needs ar. base
+//            return eq_approx(rhs);
+//
+//        case CostOrdering::Undef:
+//        {
+//            ERROR("PSCost: undef ordering code");
+//            return false;
+//        }
+//
+//        default:
+//        {
+//            ERROR("PSCost: unknown ordering code");
+//            return false;
+//        }
+//    }
+//}
+
+
+//bool PSCost::operator<(const PSCost& rhs) const
+//{
+//    switch (_order)
+//    {
+//        case CostOrdering::Default:
+//            return less_lex(rhs);
+//
+//        case CostOrdering::Lex:
+//            return less_lex(rhs);
+//
+//        case CostOrdering::Cumul:
+//            return less_cumul(rhs);
+//
+//        case CostOrdering::Approx:
+//            // pb: needs ar. base
+//            return less_approx(rhs);
+//
+//        case CostOrdering::Undef:
+//        {
+//            ERROR("PSCost: undef ordering code");
+//            return false;
+//        }
+//
+//        default:
+//        {
+//            ERROR("PSCost: unknown ordering code");
+//            return false;
+//        }
+//    }
+//}
+

@@ -13,7 +13,7 @@
 #include <iostream>
 #include <string>
 
-#include "trace.hpp"
+#include "pstrace.hpp"
 
 
 namespace pse {
@@ -25,20 +25,15 @@ enum class Algo
     /// Unknown
     Undef,
     
-    /// algo PSE, both passes
+    /// exhaustive PSE, explore all paths for the construction of tables.
     PSE,
-    
-    // algo PSE, step 0
-    // PSE0,
 
-    // algo PSE, step 1
-    // PSE1,
+    /// deterministic restriction os PSE
+    /// (paths conform to chromanic harmonic scale).
+    PSD,
 
     /// Meredith's PS13
     PS13,
-
-    /// specialisation or Meredith's PS13
-    PS14,
     
     /// rewriting of passing notes
     RewritePassing
@@ -50,8 +45,11 @@ std::string tostring(const Algo& a);
 
 std::ostream& operator<<(std::ostream& o, const Algo& m);
 
-
 } // end namespace pse
+
+/// fmt v10 and above requires `fmt::formatter<T>` extends `fmt::ostream_formatter`.
+/// @see: https://github.com/fmtlib/fmt/issues/3318
+template<> struct fmt::formatter<pse::Algo> : fmt::ostream_formatter {};
 
 #endif /* AlgoName_hpp */
 

@@ -15,26 +15,37 @@
 #include "PS14.hpp"
 
 
-void issue7(pse::Speller& sp);
+void issue7(pse::SpellerEnum& sp);
 
-void LG101(pse::Speller& sp);
-void LG102(pse::Speller& sp);
-void LG128(pse::Speller& sp);
-void LG228(pse::Speller& sp);
-void LG275(pse::Speller& sp);
-void LG349(pse::Speller& sp);
-void LG405(pse::Speller& sp);
-void LG461(pse::Speller& sp);
-void LG470(pse::Speller& sp);
+// LG
+void LG101(pse::SpellerEnum& sp);
+void LG102(pse::SpellerEnum& sp);
+void LG128(pse::SpellerEnum& sp);
+void LG228(pse::SpellerEnum& sp);
+void LG275(pse::SpellerEnum& sp);
+void LG349(pse::SpellerEnum& sp);
+void LG405(pse::SpellerEnum& sp);
+void LG461(pse::SpellerEnum& sp);
+void LG470(pse::SpellerEnum& sp);
 
-void BWV_857prelude(pse::Speller& sp);
-void BWV_857fugue(pse::Speller& sp);
-void BWV_858prelude(pse::Speller& sp);
-void BWV_864fugue(pse::Speller& sp);
-void BWV_875prelude(pse::Speller& sp);
+// ASAP Bach
+void BWV_857prelude(pse::SpellerEnum& sp);
+void BWV_857fugue(pse::SpellerEnum& sp);
+void BWV_858prelude(pse::SpellerEnum& sp);
+void BWV_864fugue(pse::SpellerEnum& sp);
+void BWV_875prelude(pse::SpellerEnum& sp);
 
-void Waldstein(pse::Speller& sp);
+// ASAP
+void Waldstein(pse::SpellerEnum& sp);
 
+// FRB
+void Airegin(pse::SpellerEnum& sp);
+void Afternoon(pse::SpellerEnum& sp);
+
+// Omnibook
+void vRfYc(pse::SpellerEnum& sp);
+void FRfYc_cs0(pse::SpellerEnum& sp);
+void FRfYc_cs2(pse::SpellerEnum& sp);
 
 
 

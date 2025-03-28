@@ -4,6 +4,7 @@
 //
 //  Created by Florent Jacquemard on 31/05/2023.
 //
+// OBSOLETE. replaced by SpellerEnum.
 /// @addtogroup pitch
 /// @{
 
@@ -14,18 +15,19 @@
 #include <iostream>
 #include <assert.h>
 #include <memory>
+#include <time.h>
 
-#include "trace.hpp"
+#include "pstrace.hpp"
 #include "PSTable.hpp"
 #include "PSGlobal.hpp"
 #include "PSGrid.hpp"
-#include "Speller.hpp"
+#include "SpellerEnum.hpp"
 
 namespace pse {
 
 
-/// speller in 1 passes, with 1 table.
-class Speller1Pass : public Speller
+/// speller in 1 pass, with 1 table.
+class Speller1Pass : public SpellerEnum
 {
 public:
     
@@ -33,7 +35,8 @@ public:
     /// @param nbTons use default list of tonalities (default: empty).
     /// @param dflag debug mode.
     /// @see PSTable
-    Speller1Pass(const Algo& algo=Algo::Undef, size_t nbTons=0,
+    Speller1Pass(size_t nbTons=0,
+                 const Algo& algo=Algo::Undef, // TBR
                  bool dflag=true);
     
     /// destructor
@@ -56,24 +59,7 @@ public:
     /// - TonIndex::FAILED if its estimation failed.
     /// - an integer value between 0 and index.size() otherwise.
     /// @warning spell() must have been called.
-    size_t ilocal(size_t i, size_t j) const;
-
-    /// estimated local tonality for one assumed global tonality and one bar.
-    /// @param i index in the TonIndex of an assumed global tonality.
-    /// @param j measure number.
-    /// @return the estimated local tonality assuming the global tonality i:
-    /// - TonIndex::UNDEF if it was not estimated yet.
-    /// - TonIndex::FAILED if its estimation failed.
-    /// - an integer value between 0 and index.size() otherwise.
-    /// @warning spell() must have been called.
-    const Ton& local(size_t i, size_t j) const;
-    
-    /// estimated local tonality at note of given index, for one given
-    /// assumed global tonality.
-    /// @param i index in the TonIndex of an assumed global tonality.
-    /// @param j index of note in the enumerator of input notes.
-    /// @warning spell() must have been called.
-    const Ton& localNote(size_t i, size_t j) const;
+    size_t ilocal(size_t i, size_t j) const override;
     
     /// force global tonality. it wont be estimated.
     /// @param i index of tonality set as global.
@@ -117,14 +103,17 @@ protected: // data
     /// First estimation of global tonality (on table0).
     PSO* _global0; // std::shared_ptr<PSO>
     
-    /// Grid of loval tonalities (estimated on table0).
-    PSG* _locals0; // std::shared_ptr<PSG>
+    // Grid of local tonalities (estimated on table0).
+    // PSG* _grid; // std::shared_ptr<PSG>
     
     // forced global ton
     // std::unique_ptr<size_t> _global;
     
-    /// undefined tonality, for errors.
-    Ton* _uton; // std::shared_ptr<Ton>
+    /// Time to build the first Pitch Spelling table.
+    double _time_table0;
+
+    /// Time to build the grid of local tonalities
+    double _time_grid;
 
 protected:
     
@@ -141,13 +130,15 @@ protected:
     /// global cand number i in g
     const Ton& globalCand(size_t i, const PSO* g) const; // std::shared_ptr<PSO>
     
-    /// index of global cand number i in g
+    /// index of global cand number i in g.
+    /// call of g.iglobal with some pre-verifications.
     size_t iglobalCand(size_t i, const PSO* g) const; // std::shared_ptr<PSO>
 
     /// compute the best pitch spelling for the input notes,
     /// using the algorithm named in this class.
     /// @param seed0 seed cost used to built the PS table
     /// @param diff0 approximation coeff (percent) to estimate the global ton(s).
+    /// 100 for keeping all ton of index as candidates.
     /// @param rename_flag whether the notes in enumerator must be renamed.
     /// @param rewrite_flag whether the passing note must be rewritten.
     /// @see PSEnum::rewritePassing()
@@ -163,10 +154,7 @@ protected:
     /// @return whether renaming succeded for all measures.
     bool rename(PST* table, const PSO* globals, size_t n=0);
     
-    
-    
 };
-
 
 
 } // namespace pse

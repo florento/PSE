@@ -15,9 +15,9 @@
 #include <assert.h>
 #include <vector>
 
-#include "trace.hpp"
+#include "pstrace.hpp"
 #include "NoteName.hpp"    // in PSE
-#include "Accidental.hpp"  // in PSE
+#include "Accid.hpp"  // in PSE
 #include "MidiNum.hpp"     // in PSE (for def midi_to_octave)
 #include "PWO.hpp"         // in PSE (pitch without octave)
 
@@ -34,23 +34,38 @@ namespace pse {
 /// @todo extend conversions to MIDIcent (import OM)
 class Pitch : public PWO
 {
-public:
+    
+public: // constants
 
     /// MIDI is a MIDI key value in 0..127
-    /// MIDICENT is a value in 0..12700 for mico-tonality
+    /// MIDICENT is a value in 0..12700 for mico-tonality.
     enum class PitchUnit { MIDI, MIDICENT };
     
-    /// code for undefuned MIDI value
-    static const unsigned int UNDEF_MIDICENT;
+    /// code for undefuned MIDI value.
+    static const unsigned int  UNDEF_MIDICENT;
     
-    /// @todo TBR (mv to NoteName.hpp)
-    static const enum NoteName     UNDEF_NOTE_NAME;
+    /// @todo TBR (mv to NoteName.hpp).
+    static const enum NoteName UNDEF_NOTE_NAME;
 
-    /// @todo TBR (mv to Accid.hpp)
-    static const enum Accid        UNDEF_NOTE_ALTERATION;
+    /// @todo TBR (mv to Accid.hpp).
+    static const enum Accid    UNDEF_ALTERATION;
 
-    /// code for undefuned octave value
-    static const int          UNDEF_NOTE_OCTAVE;
+    /// code for undefuned octave value.
+    static const int           UNDEF_OCTAVE;
+
+    /// minimum octave value considered for spelling.
+    static const int           OCTAVE_MIN = -1;
+
+    /// maximum octave value considered for spelling.
+    static const int           OCTAVE_MAX = 9;
+    
+    /// verify that an octave number is within the bounds.
+    /// @param oct an octave number.
+    /// @return whether oct is between OCTAVE_MIN and OCTAVE_MAX
+    /// or it is UNDEF_OCTAVE.
+    static bool check_octave(int oct);
+
+public: // construction
 
     /// @brief undef pitch value.
     Pitch();
@@ -58,8 +73,8 @@ public:
     /// @brief construct pitch from name+alteration+octave.
     /// @param name note name in 'A'..'G'.
     /// @param accid in [-2, 2] where 1.0 is half tone
-    /// @param oct in -10..10
-    /// @see table Pitch::NAME
+    /// @param oct octave number in OCTAVE_MIN, OCTAVE_MAX.
+    /// @see table pse::Pitch::NAME
     Pitch(const enum NoteName& name,
           const enum Accid& accid,
           int oct = 0);
@@ -80,23 +95,41 @@ public:
     
     /// assignment operator
     Pitch& operator=(const Pitch& rhs);
+
+public: // comparison
     
     /// equality
     virtual bool equal(const Pitch& rhs) const;
 
     bool less(const Pitch& rhs) const;
 
+public: // access
+   
     /// the MIDI value is undefined.
     virtual bool undef() const;
+
+    /// the MIDI value is undefined.
     virtual bool unpitched() const { return undef(); }
 
     /// the name/alteration/octave values are set.
     bool named() const;
     
+    /// @brief value in MIDIcent.
+    unsigned int midicent() const { return _midi; };
+    
+    /// @brief value in MIDI.
+    unsigned int midi() const { return (_midi/100); };
+
+    /// @param a alteration in -2..2
+    /// @todo TBR replaced by with Accid
+    static std::string alt_to_string(float a);
+
+public: // modification
+    
     /// set the given name/alteration/octave values.
     /// @param n note name in 'A'..'G'.
     /// @param a accidental in [-2, 2] where 1 is one half tone
-    /// @param o octave number, in -10..10
+    /// @param o octave number in OCTAVE_MIN, OCTAVE_MAX.
     /// @param altprint whether the accidental must be printed.
     /// @warning the triplet n, a, o must correspond to the midi value
     /// of this pitch.
@@ -110,37 +143,18 @@ public:
     /// of this pitch.
     /// @warning the alt-print flag is set arbitrarily to true.
     void rename(const enum NoteName& n);
-    
-    /// @brief value in MIDIcent.
-    unsigned int midicent() const { return _midi; };
-    
-    /// @brief value in MIDI.
-    unsigned int midi() const { return (_midi/100); };
-    
-    /// @param a alteration in -2..2
-    /// @todo TBR replaced by with Accid
-    static std::string alt_to_string(float a);
+        
+public: // debug
     
     virtual void print(std::ostream& o) const;
 
     friend std::ostream& operator<<(std::ostream& o, const Pitch& p);
 
 public: // data
-    
-    // @brief note name betwen 'A' and 'G'.
-    // @see MusicXML step
-    // https://usermanuals.musicxml.com/MusicXML/Content/EL-MusicXML-step.htm
-    // NoteName name;
 
-    // @brief alteration in [-2, 2] where 1.0 is half tone.
-    // e.g. -1 for flat, 1 for sharp
-    // decimal values are used for microtones
-    // e.g. 0.5 for quarter tone sharp
-    // @see MusicXML alter https://usermanuals.musicxml.com/MusicXML/Content/EL-MusicXML-alter.htm
-    // revision: @see https://www.w3.org/2021/06/musicxml40/musicxml-reference/data-types/accidental-value/
-    // Accid alteration;
+    // name and alteration are in PWO
     
-    /// @brief octave in -10..10.
+    /// @brief octave number in OCTAVE_MIN, OCTAVE_MAX.
     int octave;
 
     /// @brief whether the alteration must be printed or not (engraving info).
@@ -250,6 +264,10 @@ inline bool operator>=(const Pitch& lhs, const Pitch& rhs)
 }
 
 } // namespace pse
+
+/// fmt v10 and above requires `fmt::formatter<T>` extends `fmt::ostream_formatter`.
+/// @see: https://github.com/fmtlib/fmt/issues/3318
+template<> struct fmt::formatter<pse::Pitch> : fmt::ostream_formatter {};
 
 #endif /* Pitch_hpp */
 

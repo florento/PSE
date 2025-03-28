@@ -44,8 +44,8 @@ void PSChord::init()
     for (size_t i = first(); i < stop(); ++i)
     {
         unsigned int pm = _enum.midipitch(i);
-        assert(0 <= pm);
-        assert(pm <= 127);
+        assert(MidiNum::check_midi(pm));
+        // assert(0 <= pm); assert(pm <= 127);
         if (pm < _enum.midipitch(bass))
             bass = i;
         int c = pm % 12; // chroma (pitch class) of note, in 0..11
@@ -92,9 +92,15 @@ int PSChord::octave(size_t i) const
 }
 
 
-Rational PSChord::duration(size_t i) const
+long PSChord::duration_num(size_t i) const
 {
-    return _enum.duration(i);
+    return _enum.duration_num(i);
+}
+
+
+long PSChord::duration_den(size_t i) const
+{
+    return _enum.duration_den(i);
 }
 
 

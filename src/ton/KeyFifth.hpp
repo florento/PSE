@@ -14,7 +14,7 @@
 
 #include <iostream>
 
-#include "trace.hpp"
+#include "pstrace.hpp"
 #include "Fifths.hpp"
 
 
@@ -43,18 +43,21 @@ namespace pse {
 /// |  B    |  G#   |    5    |
 /// |  F#   |  D#   |    6    |
 /// |  C#   |  A#   |    7    |
+/// @todo rename KeySig
 class KeyFifth
 {
 
 public:
 
+    static const int UNDEF = 999;
+
     /// main constructor
-    /// @param ton number of flats if negative int,
+    /// @param signature number of flats if negative int,
     /// or number of sharps if positive int. must be in -7..7.
     /// distance in the array of fifths from a signature with no accidentals.
-    KeyFifth(int ton);
+    KeyFifth(int signature);
     
-    /// key signature constructor for a given pitch class in 0..11.
+    /// key signature constructor for a given pitch class in 0..11 and a mode.
     /// @param c a pitch class, in 0..11
     /// @param major true for major key, false for minor key.
     /// @see key(int, bool)
@@ -72,7 +75,7 @@ public:
     /// - for 10, minor, we get -5 (Bb m), it could be  7 (A# m)
     /// - for  3, minor, we get  6 (D# m), it could be -6 (Eb m)
     /// - for  8, minor, we get  5 (G# m), it could be -7 (Ab m)
-    /// @warning obsolete
+    /// @todo RM obsolete (not used)
     KeyFifth(int c, bool major);
 
     /// copy constructor
@@ -84,7 +87,8 @@ public:
     bool operator==(const KeyFifth& rhs) const;
     bool operator!=(const KeyFifth& rhs) const;
 
-    /// @return distance in the array of fifths from a signature with no accidentals.
+    /// @return distance in the array of fifths from a signature 
+    /// with no accidentals.
     inline int fifths() const { return _sig; };
     
     /// number of sharp symbols to denote this key signature.
@@ -118,10 +122,12 @@ protected:
 
 std::ostream& operator<<(std::ostream&, const KeyFifth&);
 
-
-
 } // end namespace pse
-    
+
+/// fmt v10 and above requires `fmt::formatter<T>` extends `fmt::ostream_formatter`.
+/// @see: https://github.com/fmtlib/fmt/issues/3318
+template<> struct fmt::formatter<pse::KeyFifth> : fmt::ostream_formatter {};
+
 #endif /* KeyFifth_hpp */
 
 /// @} // end group pse

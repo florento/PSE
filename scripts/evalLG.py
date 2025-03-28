@@ -10,9 +10,8 @@ Created on Mon Nov 28 12:16:20 2022
 #import logging
 import os
 from pathlib import Path, PosixPath
-from datetime import datetime
 
-import pandas as pd
+# import pandas as pd
 import music21 as m21
 import PSeval as ps
 
@@ -34,7 +33,7 @@ _dataset_root = '../../../Datasets/Lamarque-Goudard/'
 #_output_dir = 'LG/230226'   
 
 # MuseScore commandline executable
-_mscore = '/Applications/MuseScore\ 4.app/Contents/MacOS/mscore'
+_mscore = '/Applications/MuseScore 4.app/Contents/MacOS/mscore'
 
 
 #################################
@@ -49,17 +48,24 @@ def search_xml(directory_path):
     """search for a MusicXML file in a directory path"""
     files = os.listdir(directory_path)
     # 1: file exported by MuseScore
-    for file in files:    
-        file_ext = os.path.splitext(file)[1]   # get the extension in the file name
-        if (file_ext == '.musicxml'):
-            return file
+    if ('musescore' in files) and (os.path.isdir(directory_path/'musescore')) and (len(os.listdir(directory_path/'musescore')) > 0):
+        directory_path = directory_path/'musescore'
+        files = os.listdir(directory_path)        
+        for file in files:    
+            file_ext = os.path.splitext(file)[1]   # get the extension in the file name
+            if (file_ext == '.musicxml'):
+                return directory_path/file
     # 2: get file saved by Finale 26
-    for file in files:    
-        file_ext = os.path.splitext(file)[1]   # get the extension in the file name
-        if (file_ext == '.xml'):
-            return file
+    elif ('finale' in files) and (os.path.isdir(directory_path/'finale')) and (len(os.listdir(directory_path/'finale')) > 0):
+        directory_path = directory_path/'finale'
+        files = os.listdir(directory_path)        
+        for file in files:    
+            file_ext = os.path.splitext(file)[1]   # get the extension in the file name
+            if (file_ext == '.xml'):
+                return directory_path/file
     # no xml file found: return None
-    return 
+    else:
+        return 
 
 def first_part(score):
     lp = score.getElementsByClass(m21.stream.Part)
@@ -99,11 +105,10 @@ def LG_map():
         if 'ref' in files:
             #print(directory, 'has ref')
             directory_path = directory_path / 'ref'
-            file = search_xml(directory_path)
-            if (file == None):
+            filepath = search_xml(directory_path) # returns path
+            if (filepath == None):
                 # print(directory, 'has no XML file')
                 continue
-            filepath = directory_path / file
             id = int(prefix)        
             dataset[id] = filepath            
         else:
@@ -129,95 +134,120 @@ skip = [441, 470, 472, 473, 475, 478]
 # raise MusicXMLExportException('Cannot convert inexpressible durations to MusicXML.')
 # MusicXMLExportException: In part (Voice), measure (11): Cannot convert inexpressible durations to MusicXML.
 
-def eval_LG(psalgo=ps.pse.Algo_PSE, nbtons=30, kpre=33, kpost=23,
-            output_dir='', filename='', 
-            debug=True, mark=True):
-    timestamp = datetime.today().strftime('%Y%m%d-%H%M')
-    # default output dir name
-    if output_dir == '':
-       output_dir = timestamp
-    output_path = Path(_eval_root)/'augLG'/output_dir
-    if not os.path.isdir(output_path):
-        if not os.path.isdir(Path(_eval_root)/'augLG'):
-            os.mkdir(Path(_eval_root)/'augLG')
-        os.mkdir(output_path)
+def eval_LG(output_dir:str='', tablename:str='', 
+            kpre=33, kpost=23,      # parameters specific to PS13
+            nbtons=30,              # PSE: nb of Tons in TonIndex
+            ct1=ps.pse.CTYPE_UNDEF, # PSE: table1, cost type. if set, PSE is used, otherwise, PS13 is used
+            tonal1=True,            # PSE: table1, tonal/modal flag    
+            det1=True,              # PSE: table1, deterministic (PS14) flag
+            ct2=ps.pse.CTYPE_UNDEF, # PSE: table2, cost type 
+            tonal2=True,            # PSE: table2, tonal/modal flag 
+            det2=True,              # PSE: table2, deterministic (PS14) flag
+            emask=False,            # restrict candidate globals after 1st table
+            eglobal1=0,             # % tolerance for restricted list candidate globals
+            eglobal2=0,             # % tolerance for final list globals
+            dflag=True,             # debug flag
+            mflag=True):            # mark flag
+    """eval the whole LG corpus with given algo parameters"""
+    # construction of speller PS13
+    if (ct1 == ps.pse.CTYPE_UNDEF):
+        sp = ps.Spellew(ps13_kpre=kpre, ps13_kpost=kpost, debug=debug) 
+    # construction of speller PSE with 1 or 2 steps
     else:
-        print('WARNING: dir', output_path, 'exists')
-    stat = ps.Stats()   
+        sp = ps.Spellew(nbtons=nbtons,
+                        t1_costtype=ct1, t1_tonal=tonal1, t1_det=det1, 
+                        t2_costtype=ct2, t2_tonal=tonal2, t2_det=det2, 
+                        mask=emask, global1=eglobal1, global2=eglobal2,
+                        debug=dflag) 
+    # output path
+    if not output_dir:
+       output_dir = sp.new_dir() # default timestamped dir associated to current speller 
+    opath = Path(_eval_root)/output_dir
+    if not os.path.isdir(opath):
+        opath.mkdir(parents=True, exist_ok=True) # Python ≥ 3.5
+    # process all LG opus
+    stat = ps.Stats() # will be updated by the speller 
     dataset = LG_map()
     li = sorted(list(dataset)) # list of index in dataset   
-    print('\n')
-    print('starting evaluation of LG dataset -', len(li), 'entries')
-    print('\n')    
+    print('starting evaluation of LG dataset -', len(li), 'entries', flush=True)
     for i in li:
-        if (i in skip):
-            continue
-        file = dataset[i]
+        if (i in skip): # skip particular score
+            print('eval LG: skip', i, flush=True)
+            continue 
+        file = dataset[i] # should always be present
         filep = file.parts
         t = ''
-        if (filep[-2] == 'ref'):
-            t = filep[-3]
+        if (filep[-3] == 'ref'):
+            t = filep[-4]
         else:
-            continue
-        print('\n')
-        print(t)
+            print('eval LG: skip', i, '(ref/ not found)', flush=True)
+            continue # skip score
+        print('   ')
+        print('evaluation of', t, flush=True)
         s = m21.converter.parse(file.as_posix())
-        (ls, lld) = ps.eval_score(score=s, stat=stat, 
-                                  sid=i, title=t, composer='', 
-                                  algo=psalgo,
-                                  nbtons=nbtons,           # for PSE 
-                                  kpre=kpre, kpost=kpost,  # for PS13                                  
-                                  debug=debug, mark=mark)
-        if mark and not ps.empty_difflist(lld):
-            write_score(s, output_path, t)
+        (ls, lld) = sp.eval_score(score=s, stats=stat, 
+                                  score_id=i, title=t, composer='', 
+                                  output_path=opath if mflag else None)
     # display and save evaluation table
-    # default table file name
-    if filename == '':
-       filename =  'LGeval'+str(nbtons)+'_'+timestamp
+    if not tablename:
+       tablename =  'LG_'+output_dir  # default table file name
     stat.show()    
     df = stat.get_dataframe() # create pands dataframe
     df.pop('part') # del column part number (always 0)
-    df.to_csv(output_path/(filename+'.csv') , header=True, index=False)
-    stat.write_datasum(output_path/(filename+'_sum.csv'))
+    df.to_csv(opath/(tablename+'.csv') , header=True, index=False)
+    stat.write_datasum(opath/(tablename+'_sum.csv'))
       
-def eval_LGitem(i, algo=ps.pse.Algo_PSE, nbtons=30, kpre=33, kpost=23, 
-                dflag=True, mflag=True):
-    stat = ps.Stats()   
-    dataset = LG_map()
-    file = dataset[i]
-    filep = file.parts
-    if (filep[-2] == 'ref'):
-        t = filep[-3]+'_eval'
+def eval_LGitem(score_id, 
+                kpre=33, kpost=23,      # parameters specific to PS13
+                nbtons=30,              # PSE: nb of Tons in TonIndex
+                ct1=ps.pse.CTYPE_UNDEF, # PSE: table1, cost type 
+                tonal1=True,            # PSE: table1, tonal/modal flag    
+                det1=True,              # PSE: table1, deterministic (PS14) flag
+                ct2=ps.pse.CTYPE_UNDEF, # PSE: table2, cost type 
+                tonal2=True,            # PSE: table2, tonal/modal flag 
+                det2=True,              # PSE: table2, deterministic (PS14) flag 
+                emask=False,             # restrict candidate globals after 1st table
+                eglobal1=0,               # % tolerance for restricted list candidate globals
+                eglobal2=0,               # % tolerance for final list globals
+                dflag=True, 
+                mflag=True):
+    # construction of speller PS13
+    if (ct1 == ps.pse.CTYPE_UNDEF):
+        sp = ps.Spellew(ps13_kpre=kpre, ps13_kpost=kpost, debug=debug) 
+    # construction of speller PSE with 1 or 2 steps
     else:
-        t = str(i)+'_eval'
+        sp = ps.Spellew(nbtons=nbtons,
+                        t1_costtype=ct1, t1_tonal=tonal1, t1_det=det1, 
+                        t2_costtype=ct2, t2_tonal=tonal2, t2_det=det2, 
+                        mask=emask, global1=eglobal1, global2=eglobal2,
+                        debug=dflag) 
+    stat = ps.Stats()   
+    opath = Path(os.getcwd())
+    # process the LG opus of given id
+    dataset = LG_map()
+    file = dataset.get(score_id)
+    if file is None:
+        print('opus', score_id, 'not found in dataset LG, abort')
+        return
+    filep = file.parts
+    t = ''
+    if (filep[-2] == 'ref'):
+        t = filep[-3]+'_'+sp.new_dir()
+    else:
+        t = str(score_id)+'_'+sp.new_dir()
     s = m21.converter.parse(file.as_posix())
-    # ground truth ks, estimated ks, nnb of nontes and list of diff notes
-    #(k_gt, gt_est, nn, ld) = ps.eval_part(part=part, stat=stat, nbtons=tons, 
-    #                                      debug=dflag, mark=mflag)
-    (ls, lld) = ps.eval_score(score=s, stat=stat, 
-                              sid=i, title=t, composer='', 
-                              algo=algo,
-                              nbtons=nbtons,            # for PSE 
-                              kpre=kpre, kpost=kpost, # for PS13                                  
-                              debug=dflag, mark=mflag)
+    print('evaluation of LG', score_id, t, flush=True)
+
+    (ls, lld) = sp.eval_score(score=s, stats=stat, 
+                              score_id=score_id, title=t, composer='', 
+                              output_path=opath)
     stat.show()   
     assert(len(lld) == 1) # always 1 unique part in LG dataset
     if mflag and len(lld[0]) > 0:
         s.show()
-        write_score(s, Path(os.getcwd()), t)
+        ps.write_score(s, opath, t)
         
-def write_score(score, output_path, outname):
-    assert(len(outname) > 0)
-    if not os.path.isdir(output_path):
-        os.mkdir(output_path)
-    output_path = output_path/outname
-    if not os.path.isdir(output_path):
-        os.mkdir(output_path)
-    xmlfile = output_path/(outname+'.musicxml')
-    score.write('musicxml', fp=xmlfile)
-    # pdffile = dirname+'/'+outname+'.pdf'
-    # os.system(_mscore + ' -o ' + pdffile + ' ' + xmlfile)
-        
+
                     
 #######################
 ##                   ## 

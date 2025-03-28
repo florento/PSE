@@ -15,78 +15,108 @@
 #include <assert.h>
 #include <memory>
 
-#include "trace.hpp"
+#include "pstrace.hpp"
 #include "Cost.hpp"
-#include "Costt.hpp"
+// #include "Costt.hpp"
 #include "CostAD.hpp"
 
 
 
 namespace pse {
 
-class CostADlex : public CostAD, // update
-                  public PolymorphicComparable<Cost, CostADlex>
+/// variant of CostAD
+/// where the number of accidents and distance to local ton are compared
+/// lexicographically.
+class CostADlex : public CostAD // public PolymorphicCost<CostADlex>
 {
-public:
+    
+public: // construction
     
     /// null cost.
-    CostADlex();
+    /// @param tb_lex use lexicographic comparison for tie-breaking components.
+    /// Otherwise make the sum of some tie-breaking components before
+    /// comparison.
+    CostADlex(bool tb_lex=true);
     
     /// copy constructor.
     CostADlex(const CostADlex& rhs);
     
     /// distructor
     virtual ~CostADlex();
+
+    /// create a new null cost value.
+    std::shared_ptr<Cost> shared_zero() const override
+    { return Cost::shared_zero<CostADlex>(this->_tblex); }
+    
+    /// create a shared clone of this cost.
+    std::shared_ptr<Cost> shared_clone() const override
+    { return Cost::shared_clone<CostADlex>(); }
+    
+    /// create a smart clone of this cost.
+    std::unique_ptr<Cost> unique_clone() const
+    { return Cost::unique_clone<CostADlex>(); }
+    
+public: // operators called in Cost
     
     /// cost equality.
     /// @param rhs a cost to compare to.
-    bool operator==(const CostADlex& rhs) const;
-    
-    /// a distance value, in percent of the bigger cost.
-    /// used for approximate equality.
-    double dist(const CostADlex& rhs) const;
+    bool equal(const CostADlex& rhs) const;
     
     /// cost inequality.
     /// @param rhs a cost to compare to.
-    bool operator<(const CostADlex& rhs) const;
-        
+    bool smaller(const CostADlex& rhs) const;
+    
     /// cumulated sum operator. update this cost by adding rhs.
     /// @param rhs a cost to add.
-    CostADlex& operator+=(const CostADlex& rhs);
+    /// @see same as CostAD
+    Cost& add(const CostADlex& rhs);
 
-    /// create a new null cost value.
-    virtual std::shared_ptr<Cost> shared_zero() const override;
+    /// a distance value, in percent of the bigger cost.
+    /// used for approximate equality.
+    /// @warning only used for selection of global (rowcost comparison).
+    double pdist(const CostADlex& rhs) const;
     
-    /// create a shared clone of this cost.
-    virtual std::shared_ptr<Cost> shared_clone() const override;
+protected: // operators
+
+    /// cost equality.
+    /// @param rhs a cost to compare to.
+    bool equal(const Cost& rhs) const override
+    { return Cost::equal<CostADlex>(rhs); }
+        
+    /// cost inequality.
+    /// @param rhs a cost to compare to.
+    bool smaller(const Cost& rhs) const override
+    { return Cost::smaller<CostADlex>(rhs); }
     
-    // create a smart clone of this cost.
-    // virtual std::unique_ptr<Cost> unique_clone() const override;
+    /// cumulated sum operator. update this cost by adding rhs.
+    /// @param rhs a cost to add.
+    Cost& add(const Cost& rhs) override
+    { return Cost::add<CostADlex>(rhs); }
     
-    /// update this cost for doing a transition renaming one note (single
-    /// or in chord) with the given parameters and in a given hypothetic global
-    /// local tonalities.
-    /// @param name chosen name for the received pitch, in 0..6 (0 is 'C', 6 is 'B').
-    /// @param accid chosen alteration for the received pitch, in -2..2.
-    /// @param print whether the accidental must be printed in score.
-    /// @param gton conjectured main (global) tonality (key signature).
-    /// @param lton conjectured local tonality or undef tonlity if it is
-    /// not known.
-    virtual void update(const enum NoteName& name,
-                        const enum Accid& accid,
-                        bool print,
-                        const Ton& gton, const Ton& lton = Ton()) override;
+    /// a distance value, in percent of the smaller cost.
+    /// used for approximate equality.
+    /// @warning only used for selection of global (rowcost comparison).
+    double pdist(const Cost& rhs) const override
+    { return Cost::pdist<CostADlex>(rhs); }
+
+public: // access, debug
     
-    /// @param o output stream where to print this cost.
-    void print(std::ostream& o) const override;
+    /// Cost type of this const value.
+    virtual CostType type() const override;
+    
+    // @param o output stream where to print this cost.
+    // @see same as CostAD::print
+    // void print(std::ostream& o) const override;
 
 };
-    
-    
+        
 std::ostream& operator<<(std::ostream& o, const CostADlex& c);
 
-
 } // namespace pse
+
+/// fmt v10 and above requires `fmt::formatter<T>` extends `fmt::ostream_formatter`.
+/// @see: https://github.com/fmtlib/fmt/issues/3318
+template<> struct fmt::formatter<pse::CostADlex> : fmt::ostream_formatter {};
 
 #endif /* CostADlex_hpp */
 

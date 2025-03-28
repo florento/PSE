@@ -16,20 +16,21 @@
 namespace pse {
 
 
-PST::PST(const Algo& a, const Cost& seed, const TonIndex& i,
-         PSEnum& e, bool dflag):
+PST::PST(const Algo& a, const Cost& seed, const TonIndex& index,
+         PSEnum& e, bool tonal, bool octave, bool dflag):
 _algo(a),
 _enum(e),
-_index(i),
+_index(index),
 _psvs(),     // initially empty
 _rowcost(),
 _debug(dflag)
 {
     TRACE("new PS Table {}-{} for {}", e.first(), e.stop(), a);
        
-    if (a == Algo::PSE || a == Algo::PS14)
+    if (a == Algo::PSE || a == Algo::PSD)
     {
-        bool status = init_psvs(seed);
+        PSG dummy(*this); // empty grid
+        bool status = init_psvs(seed, dummy, tonal, octave);
         if (status == false)
         {
             ERROR("PST: fail to compute spelling table {}-{} for {}",
@@ -37,61 +38,32 @@ _debug(dflag)
         }
     }
     
-    compute_rowcosts(seed);
+    compute_rowcosts(seed, false);
 
-// @todo TBR
-//    if (a == Algo::PSE || a == Algo::PSE0)
-//    {
-//        bool status = init_locals();
-//        if (status == false)
-//        {
-//            ERROR("PST: fail to estimate local tons for table {}-{}, {}",
-//                  e.first(), e.stop(), a);
-//        }
-//    }
-
-// init table with default vector of tons
-//    for (auto ton : TONS) _tons.push_back(ton); // vector copy default tons
-//    _rowcost.assign(nbtons(), 0);
-//    _frowcost.assign(nbtons(), false);
+    // @todo TBR
+    // init table with default vector of tons
+    //    for (auto ton : TONS) _tons.push_back(ton); // vector copy default tons
+    //    _rowcost.assign(nbtons(), 0);
+    //    _frowcost.assign(nbtons(), false);
 }
 
 
-//PST::PST(const PSEnum& e, size_t n0, size_t n1):
-//_tons(TONS), // vector copy
-//_enum(e, n0, n1),
-//_psvs(), // empty
-//_global(nbtons()), // undef (value out of range)
-//_estimated_global(false),
-//_estimated_locals(false),
-//_rowcost(),
-//_frowcost()
-//{
-//    _rowcost.fill(0);
-//    _frowcost.fill(false);
-//    bool status = init();
-//    if (status == false)
-//    {
-//        ERROR("PST: fail to compute spelling table {}-{}", n0, n1);
-//    }
-//}
-
-
-PST::PST(const PST& tab, const Cost& seed,
-         const PSO& globals, const PSG& locals, bool dflag):
-_algo(tab._algo),
-_enum(tab._enum),
-_index(tab._index),
+// tab not used
+PST::PST(const Algo& a, const Cost& seed, const TonIndex& index,
+         PSEnum& e, const PSG& locals, bool tonal, bool octave, bool dflag):
+_algo(a),
+_enum(e),
+_index(index),
 _psvs(),     // initially empty
 _rowcost(),
 _debug(dflag)
 {
     TRACE("new PS Table {}-{} from grid, for {}",
           _enum.first(), _enum.stop(), _algo);
-    assert(locals.rowNb() == _index.size());
-    assert(locals.columnNb() == tab.columnNb());
-    assert(_algo == Algo::PSE || _algo == Algo::PS14);
-    bool status = init_psvs(tab, seed, globals, locals);
+    assert(locals.nbTons() == _index.size());
+    // assert(locals.measures() == tab.measures());
+    assert(_algo == Algo::PSE || _algo == Algo::PSD);
+    bool status = init_psvs(seed, locals, tonal, octave);
     if (status == false)
     {
         ERROR("PST: fail to compute spelling table {}-{} for {}",
@@ -99,9 +71,15 @@ _debug(dflag)
     }
     else
     {
-        compute_rowcosts(seed, globals);
+        compute_rowcosts(seed, true); // only for globals
     }
 }
+
+
+// PST::PST(const Cost& seed, const TonIndex& index, PSEnum& e,
+//          const PSG& locals, bool tonal, bool dflag):
+// PST(tab._algo, seed, index, e, locals, tonal, dflag)
+// { }
 
 
 PST::~PST()
@@ -118,72 +96,85 @@ bool PST::status() const
 }
 
  
-void PST::init_rowcosts(const Cost& seed)
+//void PST::init_rowcosts(const Cost& seed)
+//{
+//    TRACE("PST: initialize row costs to zero");
+//    assert(_rowcost.empty());
+//    
+//    // one different shared pointer for each row cost
+//    for (size_t i = 0; i < _index.size(); ++i)
+//        _rowcost.push_back(seed.shared_zero());
+//}
+
+
+/// @todo revise: 1 loop for both cases
+void PST::compute_rowcosts(const Cost& seed, bool globals)
 {
-    TRACE("PST: initialize row costs to zero");
-    assert(_rowcost.empty());
-    
-    // one different shared pointer for each row cost
-    for (size_t i = 0; i < _index.size(); ++i)
-        _rowcost.push_back(seed.shared_zero());
-}
-
-
-void PST::compute_rowcosts(const Cost& seed)
-{
-    const PSO allglobals(_index, _debug, true); // full
-    compute_rowcosts(seed, allglobals);
-//    init_rowcosts(seed);
-//    for (size_t j = 0; j < _psvs.size(); ++j)
-//    {
-//        assert(_psvs[j]);
-//        PSV& psv = *(_psvs[j]);
-//        assert(psv.size() == _index.size());
-//        for (size_t i = 0; i < psv.size(); ++i)
-//        {
-//            const PSB& psb = psv.bag(i);
-//            assert(_rowcost.at(i));
-//            if (! psb.empty())
-//            {
-//                Cost& rc = *(_rowcost.at(i));
-//                rc += psb.cost();
-//            }
-//        }
-//    }
-}
-
-
-void PST::compute_rowcosts(const Cost& seed, const PSO& globals)
-{
-    init_rowcosts(seed);
-    for (size_t j = 0; j < _psvs.size(); ++j)
+    if (globals)
     {
-        assert(_psvs[j]);
-        PSV& psv = *(_psvs[j]);
-        assert(psv.size() == _index.size());
-
-        // compute the rowcosts only for candidate global tonalities
-        for (auto it = globals.cbegin(); it != globals.cend(); ++it)
+        // init_rowcosts: one different shared pointer for each row cost
+        // TRACE("PST: initialize row costs to zero");
+        assert(_rowcost.empty());
+        for (size_t i = 0; i < _index.size(); ++i)
+            _rowcost.push_back(seed.shared_zero());
+        
+        for (size_t j = 0; j < _psvs.size(); ++j)
         {
-            size_t ig = *it; // index of global tnolity in tonindex.
-            assert(ig < _index.size());
-            assert(ig < psv.size());
-            const PSB& psb = psv.bag(ig);
-            if (! psb.empty())
+            assert(_psvs[j]);
+            PSV& psv = *(_psvs[j]);
+            assert(psv.size() == _index.size());
+            
+            // compute the rowcosts only for candidate global tonalities
+            // for (auto it = globals.cbegin(); it != globals.cend(); ++it)
+            for (size_t ig = 0; ig < _index.size(); ++ig)
             {
-                assert(_rowcost.at(ig));
-                Cost& rc = *(_rowcost.at(ig));
-                rc += psb.cost();
+                // size_t ig = *it; // index of global tnolity in tonindex.
+                if (!_index.isGlobal(ig))
+                {
+                    continue;
+                }
+                assert(ig < _index.size());
+                assert(ig < psv.size());
+                const PSB& psb = psv.bag(ig);
+                if (! psb.empty())
+                {
+                    assert(ig < _rowcost.size());
+                    assert(_rowcost.at(ig));
+                    _rowcost.at(ig)->operator+=(psb.cost());
+                }
+            }
+        }
+    }
+    else
+    {
+        // const PSO allglobals(_index, _debug, true); // full
+        // compute_rowcosts(seed, allglobals);
+        // init_rowcosts(seed);
+        for (size_t i = 0; i < _index.size(); ++i)
+        {
+            _rowcost.push_back(seed.shared_zero());
+            assert(_rowcost.back());
+            for (size_t j = 0; j < _psvs.size(); ++j)
+            {
+                assert(_psvs[j]);
+                assert(_psvs[j]->size() == _index.size());
+                const PSB& psb = _psvs[j]->bag(i);
+                if (! psb.empty())
+                {
+                    _rowcost.back()->operator+=(psb.cost());
+                }
             }
         }
     }
 }
 
 
-bool PST::init_psvs(const Cost& seed)
+// first construction if grid is empty
+bool PST::init_psvs(const Cost& seed, const PSG& grid, bool tonal, bool octave)
 {
     TRACE("PST: computing spelling table {}-{}");
     assert(_psvs.empty()); // do not recompute
+    assert(grid.empty() or grid.index().size() == _index.size());
     
     // first note of current bar
     size_t i0 = _enum.first();
@@ -218,9 +209,22 @@ bool PST::init_psvs(const Cost& seed)
         if (_enum.measure(i0) > b)
         {
             TRACE("PST init: bar {} EMPTY", b);
-            // vector of empty bags
-            _psvs.push_back(std::make_unique<PSV>(_algo, seed, _index,
-                                                  _enum, i0, i0, b));
+            // construction from scratch: vector of empty bags
+            if (grid.empty())
+            {
+                _psvs.emplace_back(std::unique_ptr<PSV>(new
+                PSV(_algo, seed, _index, _enum, i0, i0, b, tonal, octave)));
+            }
+            // construction with grid
+            else
+            {
+                
+                const std::vector<size_t>& locals = grid.column(b);
+                _psvs.emplace_back(std::unique_ptr<PSV>(new
+                PSV(_algo, seed, _index, _enum, i0, i0, b, locals,
+                    tonal, octave)));
+            }
+                        
             ++b;
             continue;
         }
@@ -233,36 +237,272 @@ bool PST::init_psvs(const Cost& seed)
         TRACE("PST: compute column of the best spelling table for measure {}\
               (notes {}-{})", b, i0, i1-1);
         // add a PS vector (column) for the measure b
-        _psvs.push_back(std::make_unique<PSV>(_algo, seed, _index,
-                                              _enum, i0, i1, b));
+        // construction from scratch
+        if (grid.empty())
+        {
+            _psvs.push_back(std::unique_ptr<PSV>(new
+            PSV(_algo, seed, _index, _enum, i0, i1, b, tonal, octave)));
+        }
+        // construction with grid
+        else
+        {
+            assert(b < grid.size()); // measure number
+            const std::vector<size_t>& locals = grid.column(b);
+            _psvs.emplace_back(std::unique_ptr<PSV>(new
+            PSV(_algo, seed, _index, _enum, i0, i1, b, locals,
+                tonal, octave)));
+        }
         assert(_psvs.size() == b+1);
         // then start next measure
         i0 = i1; // index of first note of next bar
         ++b;
     }
+    
+    // assert(grid.empty() or grid.size() == this->size()); // nb of columns
     return true;
 }
 
 
-bool PST::init_psvs(const PST& tab, const Cost& seed,
-                    const PSO& globals, const PSG& grid)
-{
-    TRACE("PST: re-computing spelling table {}-{}");
-    assert(_psvs.empty()); // do not recompute
-    assert(grid.size() == tab.size()); // nb of columns
+// second construction, using a grid of locals
+/// @todo remove globals, replaced by global flag in ton index
+/// @todo remove tab ?
+//bool PST::init_psvs(const PST& tab, const Cost& seed,
+//                    const PSG& grid, bool tonal)
+//{
+//    TRACE("PST: re-computing spelling table {}-{}");
+//    assert(_psvs.empty()); // do not recompute
+//    assert(grid.size() == tab.size()); // nb of columns
+//
+//    /// @todo recompute the boundaries of bars for the enumerator of this table
+//    /// they may differ from the ones for the enumerator of col
+//    /// (col is from another table)
+//    
+//    
+//    for (size_t j = 0; j < tab.size(); ++j)
+//    {
+//        const PSV& col = tab.column(j);
+//        const std::vector<size_t>& locals = grid.column(j);
+//        assert(col.bar() == j);
+//        // ATTENTION: l'enumerator de tab est cloné dans ce PSV
+//        _psvs.emplace_back(std::unique_ptr<PSV>(new
+//                                    PSV(col, seed, locals, tonal)));
+//         // PSV(_algo, seed, _index, col.enumerator(), j)));
+//    }
+//    
+//    return true;
+//}
 
-    for (size_t j = 0; j < tab.size(); ++j)
+
+size_t PST::bound_measure(size_t bar, size_t i0)
+{
+    size_t i;
+    for (i = i0; (_enum.inside(i)) && (_enum.measure(i) == bar); ++i)
     {
-        const PSV& col = tab.column(j);
-        const std::vector<size_t>& locals = grid.column(j);
-        assert(col.bar() == j);
-        _psvs.emplace_back(std::unique_ptr<PSV>(new
-                        PSV(col, seed, globals, locals)));
-         // PSV(_algo, seed, _index, col.enumerator(), j)));
+        assert(_enum.measure(i) == bar);
+    }
+
+    return i;
+}
+
+
+const Ton& PST::rowHeader(size_t i) const
+{
+    assert(i < _index.size());
+    return _index.ton(i);
+}
+
+
+const Cost& PST::rowCost(size_t i) const
+{
+    assert(i < _rowcost.size());
+    assert(_rowcost.at(i));
+    return *(_rowcost.at(i));
+}
+
+
+size_t PST::size() const
+{
+    return _psvs.size();
+}
+
+PSV& PST::column(size_t j) const
+{
+    assert(j < _psvs.size());
+    assert(_psvs.at(j) != nullptr);
+    return *(_psvs.at(j));
+}
+
+
+const PSEnum& PST::columnHeader(size_t j) const
+{
+    assert(j < _psvs.size());
+    assert(_psvs.at(j) != nullptr);
+    return _psvs.at(j)->enumerator();
+}
+
+
+bool PST::rename(size_t ig)
+{
+    bool status = true;
+    
+//    if (! estimatedGlobals())
+//    {
+//        status = estimateGlobals();
+//    }
+//
+//    if (status && !estimatedLocals())
+//    {
+//        status = init_locals();
+//    }
+//
+//    if (status && !estimatedGlobal())
+//    {
+//        status = estimateGlobal();
+//    }
+//
+//    if ((status == false) || (_global == TonIndex::FAILED))
+//    {
+//        ERROR("PST: failed to estimate global ton. cannot rename pitches {}-{}",
+//              _enum.first(), _enum.stop());
+//        return false;
+//    }
+
+    if ((ig == TonIndex::UNDEF) || (ig == TonIndex::FAILED))
+    {
+        ERROR("PST: cannot remame {}-{} with global tonality {}",
+                _enum.first(), _enum.stop(), ig);
+        return false;
     }
     
-    return true;
+    assert(ig < _index.size());
+    TRACE("PST: rename with estimated global ton {}", _index.ton(ig));
+    
+    for (size_t i = 0; i < _psvs.size(); ++i)
+    {
+        assert(_psvs[i]);
+        PSV& psv = *(_psvs[i]);
+        TRACE("PST: renaming bar {} ({}-{})", i, psv.first(), psv.stop());
+        status = status && psv.rename(ig);
+    }
+    return status;
 }
+
+
+// debug
+//bool PST::check_rowcost(const std::vector<PSCost>& rc) const
+//{
+//    for (bool b : rc)
+//    {
+//        if (b == true)
+//            return true;
+//    }
+//    return false;
+//}
+
+
+void PST::print(std::ostream& o) const
+{
+    assert(_rowcost.size() == _index.size());
+    std::string SEP(", ");
+    std::string SPACE(" ");
+    std::string LINE("\n");
+
+    // header : bar numbers
+    o << SPACE;
+    for (size_t j = 0; j < _psvs.size(); ++j)
+    {
+        o << SEP;
+        o << j;
+    }
+    o << SEP;
+    o << "rowcost";
+    o << LINE;
+
+    // rows
+    for (size_t i = 0; i < _index.size(); ++i)
+    {
+        o << _index.ton(i);
+        // columns
+        // every column of the table corresponds to a measure
+        // for (std::unique_ptr<const PSV> psv : _psvs)
+        for (size_t j = 0; j < _psvs.size(); ++j)
+        {
+            o << SEP;
+            assert(_psvs[j]);
+            PSV& psv = *(_psvs[j]);
+            if (psv.undef(i) or psv.bag(i).empty())
+            {
+                o << SPACE;
+            }
+            else
+            {
+                o << psv.bag(i).cost(); // psb.cost().print(o);
+            }
+        }
+        o << SEP;
+        assert(_rowcost.at(i));
+        o << rowCost(i);
+        o << LINE;
+    }
+}
+
+
+void PST::dump_rowcost() const
+{
+    DEBUGU("PST: Row Costs:");
+    assert(_rowcost.size() == _index.size());
+    for (size_t i = 0; i < _index.size(); ++i)
+    {
+        assert(_rowcost.at(i));
+        DEBUGU("PST row {} cost {}", _index.ton(i), *(_rowcost.at(i)));
+    }
+}
+
+
+void PST::dump_table(std::ostream& o) const
+{
+    DEBUGU("PS Table:");
+    assert(_rowcost.size() == _index.size());
+
+    // rows
+    for (size_t i = 0; i < _index.size(); ++i)
+    {
+        std::string srow; // row content (bars)
+
+        // columns
+        // every column of the table corresponds to a measure
+        // for (std::unique_ptr<const PSV> psv : _psvs)
+        for (size_t j = 0; j < _psvs.size(); ++j)
+        {
+            assert(_psvs[j]);
+            PSV& psv = *(_psvs[j]);
+            const PSB& psb = psv.bag(i);
+            srow += " ";
+            if (psb.empty())
+            {
+                srow += std::to_string(j);
+                srow += ":_";
+            }
+            else
+            {
+                srow += std::to_string(j);
+                srow += ":";
+                std::stringstream st;
+                psb.cost().print(st);
+                srow += st.str(); // std::to_string(psb.cost().getAccid());
+            }
+        }
+        assert(_rowcost.at(i));
+        std::string hrow; // header
+        DEBUGU("{} {} {}: {}", i, _index.ton(i), rowCost(i), srow);
+    }
+}
+
+
+} // end namespace pse
+
+/// @}
+
 
 
 //bool PST::init_locals()
@@ -344,53 +584,6 @@ bool PST::init_psvs(const PST& tab, const Cost& seed,
 //    _estimated_locals = true;
 //    return true;
 //}
-
-size_t PST::bound_measure(size_t bar, size_t i0)
-{
-    size_t i;
-    for (i = i0; (_enum.inside(i)) && (_enum.measure(i) == bar); ++i)
-    {
-        assert(_enum.measure(i) == bar);
-    }
-
-    return i;
-}
-
-
-const Ton& PST::rowHeader(size_t i) const
-{
-    assert(i < _index.size());
-    return _index.ton(i);
-}
-
-
-const Cost& PST::rowCost(size_t i) const
-{
-    assert(i < _rowcost.size());
-    assert(_rowcost.at(i));
-    return *(_rowcost.at(i));
-}
-
-
-size_t PST::size() const
-{
-    return _psvs.size();
-}
-
-PSV& PST::column(size_t j) const
-{
-    assert(j < _psvs.size());
-    assert(_psvs.at(j) != nullptr);
-    return *(_psvs.at(j));
-}
-
-
-const PSEnum& PST::columnHeader(size_t j) const
-{
-    assert(j < _psvs.size());
-    assert(_psvs.at(j) != nullptr);
-    return _psvs.at(j)->enumerator();
-}
 
 
 // inline
@@ -747,121 +940,3 @@ const PSEnum& PST::columnHeader(size_t j) const
 //    assert(ig < _index.size());
 //    return _index.ton(ig);
 //}
-
-
-bool PST::rename(size_t ig)
-{
-    bool status = true;
-    
-//    if (! estimatedGlobals())
-//    {
-//        status = estimateGlobals();
-//    }
-//
-//    if (status && !estimatedLocals())
-//    {
-//        status = init_locals();
-//    }
-//
-//    if (status && !estimatedGlobal())
-//    {
-//        status = estimateGlobal();
-//    }
-//
-//    if ((status == false) || (_global == TonIndex::FAILED))
-//    {
-//        ERROR("PST: failed to estimate global ton. cannot rename pitches {}-{}",
-//              _enum.first(), _enum.stop());
-//        return false;
-//    }
-
-    if ((ig == TonIndex::UNDEF) || (ig == TonIndex::FAILED))
-    {
-        ERROR("PST: cannot remame {}-{} with global tonality {}",
-                _enum.first(), _enum.stop(), ig);
-        return false;
-    }
-    
-    assert(ig < _index.size());
-    const Ton& gton = _index.ton(ig);
-    TRACE("PST: rename with estimated global ton {}", gton);
-    
-    for (size_t i = 0; i < _psvs.size(); ++i)
-    {
-        assert(_psvs[i]);
-        PSV& psv = *(_psvs[i]);
-        TRACE("PST: renaming bar {} ({}-{})", i, psv.first(), psv.stop());
-        status = status && psv.rename(ig);
-    }
-    return status;
-}
-
-
-// debug
-//bool PST::check_rowcost(const std::vector<PSCost>& rc) const
-//{
-//    for (bool b : rc)
-//    {
-//        if (b == true)
-//            return true;
-//    }
-//    return false;
-//}
-
-
-void PST::dump_rowcost() const
-{
-    DEBUGU("PST: Row Costs:");
-    assert(_rowcost.size() == _index.size());
-    for (size_t i = 0; i < _index.size(); ++i)
-    {
-        assert(_rowcost.at(i));
-        DEBUGU("PST row {} cost {}", _index.ton(i), *(_rowcost.at(i)));
-    }
-}
-
-
-void PST::dump_table() const
-{
-    DEBUGU("PS Table:");
-    assert(_rowcost.size() == _index.size());
-
-    // rows
-    for (size_t i = 0; i < _index.size(); ++i)
-    {
-        std::string srow; // row content (bars)
-
-        // columns
-        // every column of the table corresponds to a measure
-        // for (std::unique_ptr<const PSV> psv : _psvs)
-        for (size_t j = 0; j < _psvs.size(); ++j)
-        {
-            assert(_psvs[j]);
-            PSV& psv = *(_psvs[j]);
-            const PSB& psb = psv.bag(i);
-            srow += " ";
-            if (psb.empty())
-            {
-                srow += std::to_string(j);
-                srow += ":_";
-            }
-            else
-            {
-                srow += std::to_string(j);
-                srow += ":";
-                std::stringstream st;
-                psb.cost().print(st);
-                srow += st.str(); // std::to_string(psb.cost().getAccid());
-            }
-        }
-        assert(_rowcost.at(i));
-        std::string hrow; // header
-        DEBUGU("PST row {} {}: {}", _index.ton(i), rowCost(i), srow);
-    }
-}
-
-
-
-} // end namespace pse
-
-/// @}

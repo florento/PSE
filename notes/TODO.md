@@ -64,11 +64,11 @@
 
 - [ ] exp. dataset impros FiloSax, Weimar (Jazzomath)
 
-- [ ] contacter Francesco : Pkspell sur FiloBass / FiloSax
+- [x] contacter Francesco : Pkspell sur FiloBass / FiloSax
 
 - [ ] comparer tonalités locales détectées avec grille accords
 
-- [ ] eval sur ASAP :  identifier les 33 extraits du validation subset de PKspell
+- [x] eval sur ASAP :  identifier les 33 extraits du validation subset de PKspell
   entier ?
 
 - [x] framework eval sur ASAP/Bach
@@ -92,11 +92,5 @@
 - [ ]  évaluation P.S. de Musescore ?
 
 - [ ]  chercher dans le code?
-
-
-
-
-
-
 
 

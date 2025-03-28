@@ -18,13 +18,15 @@
 #include <memory>
 #include <vector>
 
-#include "trace.hpp"
-#include "Rational.hpp"
+#include "pstrace.hpp"
+#include "PSRational.hpp"
+#include "Pitch.hpp"
 #include "NoteName.hpp"
-#include "Accidental.hpp"
+#include "Accid.hpp"
 #include "MidiNum.hpp"
 #include "PSEnum.hpp"
 //#include "Stream.hpp"
+
 
 namespace pse {
 
@@ -42,10 +44,14 @@ namespace pse {
 ///   filled by callback of the rename() function.
 struct PSRawEnum : public PSEnum
 {
-public:
+    
+public: // constants
 
-    /// undefined octave number.
-    static int OCTAVE_UNDEF;
+    // undefined octave number.
+    // #todo use Pitch::UNDEF_OCTAVE
+    // static int OCTAVE_UNDEF;
+
+public: // construction
 
     /// Pitch Spelling enumerator with list of notes, initialy empty.
     /// @param i0 index of the first note accessible by this enumerator.
@@ -54,7 +60,8 @@ public:
     /// if given it must be larger than or equal to i0.
     PSRawEnum(size_t i0, size_t i1 = PSEnum::ID_INF);
 
-    // Pitch Spelling enumerator from list of notes with midi pitch and bar number.
+    // Pitch Spelling enumerator from list of notes with midi pitch 
+    // and bar number.
     // PSRawEnum(const std::vector<int>& notes, const std::vector<int>& barnum);
 
     // @param s list of Music 21 Note objects (references).
@@ -81,47 +88,30 @@ public:
     virtual ~PSRawEnum();
     
     /// clone this enumerator into a enumerator of the same type.
-    virtual std::unique_ptr<PSEnum> clone() const override;
+    std::unique_ptr<PSEnum> clone() const override;
     
     /// clone this enumerator and update the bounds with new values.
     /// @param i0 new index of the first note accessible by this enumerator.
     /// @param i1 new index of the note after the last note accessible by this
     /// enumerator. it must be larger than or equal to i0.
     /// The enumerated sequence of notes is empty if i0 == i1.
-    virtual std::unique_ptr<PSEnum> clone(size_t i0, size_t i1) const override;
+    std::unique_ptr<PSEnum> clone(size_t i0, size_t i1) const override;
 
     /// clone this enumerator and update the left bound of interval.
     /// @param i0 new index of the first note accessible by this enumerator.
     /// The enumeration starts at i0 and stops when there are no more notes
     /// to read in e.
-    virtual std::unique_ptr<PSEnum> clone(size_t i0) const override;
+    std::unique_ptr<PSEnum> clone(size_t i0) const override;
+
+            
+public: // access
 
     /// number of notes accessible to this enumerator.
     /// if the enumerator is open, it the real number of notes minus first(),
     /// otherwise, it is stop() - first().
     /// @warning it may not be smaller than the number of notes added
     /// if first() > 0.
-    virtual size_t size() const override;
-    
-    /// add a new input note to the list of enumerated notes.
-    /// @param note MIDI key of the new input note.
-    /// @param bar bar number of the new input note.
-    /// @param simult whether the new input note is simultaneous with the
-    /// next note.
-    /// @param dur note duration, in fraction of bars.
-    void add(int note, int bar, bool simult=false,
-             const Rational& dur = Rational(0));
-    
-    /// add a new input note to the list of enumerated notes.
-    /// @param note MIDI key of the new input note.
-    /// @param bar bar number of the new input note.
-    /// @param simult whether the new input note is simultaneous with the
-    /// next note.
-    /// @param dur_num numerator of note duration, in fraction of bars.
-    /// @param dur_den denominator of note duration, in fraction of bars.
-    /// @warning for Phython binding
-    void addlong(int note, int bar, bool simult=false,
-                 long dur_num=0, long dur_den=1);
+    size_t size() const override;
     
     // the given note index is within the interval of notes accessible
     // to this enumerator.
@@ -130,44 +120,17 @@ public:
 
     /// midi key number in 0..128 of the note of the given index.
     /// @param i index of a note. must be inside the interval of this enumerator.
-    virtual unsigned int midipitch(size_t i) const override;
+    unsigned int midipitch(size_t i) const override;
 
     /// number of measure the note of given index belongs to.
     /// midi key number in 0..128 of the note of the given index.
     /// @param i index of a note. must be inside the interval of this enumerator.
-    virtual long measure(size_t i) const override;
+    long measure(size_t i) const override;
 
     /// whether the note of given index is simultaneous with the next note.
     /// @param i index of a note. must be inside the interval of this enumerator.
-    virtual bool simultaneous(size_t i) const override;
+    bool simultaneous(size_t i) const override;
 
-    /// record new NoteName, Accid, Octave, print flag for the note of given index.
-    /// @param i index of a note. must be inside the interval of this enumerator.
-    /// @param n note name in 'A'..'G'.
-    /// @param a accidental in [-2, 2] where 1 is a half tone
-    /// @param o octave number in -10..10
-    /// @param altprint whether the accidental must be printed.
-    /// @see Pitch::rename()
-    /// @warning the triplet n, a, o must correspond to the midi value
-    /// of this pitch.
-    /// @warning the notes cannot be renamed in place because the Python
-    /// lists in argument contain const objects.
-    virtual void rename(size_t i,
-                        const enum NoteName& n, const enum Accid& a, int o,
-                        bool altprint) override;
-    
-    /// record new note name, accidental, octave, print flag for the note
-    /// of given index. The accidental and octave are deduced from
-    /// @param i index of a note. must be inside the interval of this enumerator.
-    /// @param n note name in 'A'..'G'.
-    /// @see Pitch::rename()
-    /// @warning the name n must be a possible name for the current midi value
-    /// of this pitch.
-    /// @warning the alt-print flag is set arbitrarily to true.
-    /// @warning the notes cannot be renamed in place because the Python
-    /// lists in argument contain const objects.
-    virtual void rename(size_t i, const enum NoteName& n, bool altprint=true) override;
-       
     /// estimated name for the note of given index in the best path,
     /// in 0..6 (0 is 'C', 6 is 'B').
     /// @param i index of note in the list of input notes.
@@ -185,8 +148,9 @@ public:
     /// duration, in number of bars, of the note of given index,
     /// if it has been set, otherwise 0.
     /// @param i index of note in the list of input notes.
-    virtual Rational duration(size_t i) const override;
-    
+    virtual long duration_num(size_t i) const override;
+    virtual long duration_den(size_t i) const override;
+
     /// estimated print flag for the note of given index in the best path.
     /// This flags says wether the accidental of the note must be printed or not.
     /// @param i index of note in the list of input notes.
@@ -201,7 +165,109 @@ public:
     // @return the number of occurrence of c in the interval
     // from i - pre (included) to i + post (excluded).
     // virtual size_t count(int c, size_t i, size_t pre, size_t post);
+
+public: // modification : add, rename and rewrite passing notes
+
+    /// empty the list of notes in this enumerator.
+    void reset(size_t i0, size_t i1 = PSEnum::ID_INF) override;
+        
+    // void add(int midi, int bar, bool simult=false,
+    //          const PSRatio& dur = PSRatio(0));
     
+    /// add a new input note to the list of enumerated notes.
+    /// @param midi MIDI key of the new input note. must be in 0..128.
+    /// @param bar bar number of the new input note. must be positive.
+    /// @param simult whether the new input note is simultaneous with the
+    /// next note.
+    /// @param dur note duration, in fraction of bars.
+    /// @param name note name in 'A'..'G'.
+    /// @param accid accidental.
+    /// @param oct octave number in Pitch::OCTAVE_MIN and Pitch::OCTAVE_MAX.
+    /// @param printed whether the accidental must be printed.
+    /// @warning if one of name, accid, oct is UNDEF, all three must be UNDEF.
+    void add(int midi, int bar, bool simult=false,
+             const PSRatio& dur = PSRatio(0),
+             const enum NoteName& name=NoteName::Undef,
+             const enum Accid& accid=Accid::Undef,
+             int oct=Pitch::UNDEF_OCTAVE,
+             bool printed=false);
+      
+    // add a new input note to the list of enumerated notes,
+    // with constrained name, accidental and octave.
+    // @param midi MIDI key of the new input note. must be in 0..128.
+    // @param bar bar number of the new input note. must be positive.
+    // @param name note name in 'A'..'G'. must not be NoteName::Undef.
+    // @param accid accidental. must not be NoteName::Undef.
+    // @param oct octave number in Pitch::OCTAVE_MIN and Pitch::OCTAVE_MAX.
+    // @param altprint whether the accidental must be printed.
+    // @param simult whether the new input note is simultaneous with the
+    // next note.
+    // @param dur note duration, in fraction of bars.
+    // @warning name, accid, oct must be all set or all unset
+    // void add(int midi, int bar,
+    //          const enum NoteName& name, const enum Accid& accid, int oct,
+    //          bool altprint=false,
+    //          bool simult=false,
+    //          const PSRatio& dur = PSRatio(0));
+    
+    /// add a new input note to the list of enumerated notes.
+    /// @param note MIDI key of the new input note.
+    /// @param bar bar number of the new input note.
+    /// @param simult whether the new input note is simultaneous with the
+    /// next note.
+    /// @param dur_num numerator of note duration, in fraction of bars.
+    /// @param dur_den denominator of note duration, in fraction of bars.
+    /// @warning for Phython binding
+    /// @todo delete, not used.
+    void addlong(int note, int bar, bool simult=false,
+                 long dur_num=0, long dur_den=1);
+
+    /// add a new input note to the list of enumerated notes.
+    /// @param note MIDI key of the new input note.
+    /// @param bar bar number of the new input note.
+    /// @param simult whether the new input note is simultaneous with the
+    /// next note.
+    /// @param dur_num numerator of note duration, in fraction of bars.
+    /// @param dur_den denominator of note duration, in fraction of bars.
+    /// @param name note name in 'A'..'G'. must not be NoteName::Undef.
+    /// @param accid accidental. must not be NoteName::Undef.
+    /// @param oct octave number in Pitch::OCTAVE_MIN and Pitch::OCTAVE_MAX.
+    /// @param altprint whether the accidental must be printed.
+    /// @warning for Phython binding
+    /// @todo delete, not used.
+    void addlong(int note, int bar,
+                 const enum NoteName& name, const enum Accid& accid, int oct,
+                 bool altprint=false,
+                 bool simult=false,
+                 long dur_num=0, long dur_den=1);
+    
+    /// record new NoteName, Accid, Octave, print flag for the note of given index.
+    /// @param i index of a note. must be inside the interval of this enumerator.
+    /// @param n note name in 'A'..'G'.
+    /// @param a accidental in [-2, 2] where 1 is a half tone
+    /// @param o octave number in Pitch::OCTAVE_MIN and Pitch::OCTAVE_MAX.
+    /// @param altprint whether the accidental must be printed.
+    /// @see pse::Pitch::rename()
+    /// @warning the triplet n, a, o must correspond to the midi value
+    /// of this pitch.
+    /// @warning the notes cannot be renamed in place because the Python
+    /// lists in argument contain const objects.
+    void rename(size_t i,
+                const enum NoteName& n, const enum Accid& a, int o,
+                bool altprint) override;
+    
+    /// record new note name, accidental, octave, print flag for the note
+    /// of given index. The accidental and octave are deduced from
+    /// @param i index of a note. must be inside the interval of this enumerator.
+    /// @param n note name in 'A'..'G'.
+    /// @see pse::Pitch::rename()
+    /// @warning the name n must be a possible name for the current midi value
+    /// of this pitch.
+    /// @warning the alt-print flag is set arbitrarily to true.
+    /// @warning the notes cannot be renamed in place because the Python
+    /// lists in argument contain const objects.
+    void rename(size_t i, const enum NoteName& n, bool altprint=true) override;
+           
 private: // data (shared by all copies of this enumerator)
        
     /// list of MIDI pitch of all notes in input.
@@ -218,7 +284,7 @@ private: // data (shared by all copies of this enumerator)
     
     /// list of durations of input notes.
     /// entered with method add().
-    std::shared_ptr<std::vector<Rational>> _durations;
+    std::shared_ptr<std::vector<PSRatio>> _durations;
     
     /// list of the estimated best note name (in 0..6) for each input note.
     /// copy of the values of the PSPaths (best paths) in the columns of table,

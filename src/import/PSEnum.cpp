@@ -8,8 +8,11 @@
 /// @addtogroup pitch
 /// @{
 
-#include "PSEnum.hpp"
+
 #include <stdlib.h>     /* abs */
+
+#include "PSEnum.hpp"
+
 
 namespace pse {
 
@@ -105,7 +108,7 @@ bool PSEnum::inside(size_t i) const
 
     if (open())
     {
-        //WARN("PSEnum: inside {} called for open enumerator", i);
+        WARN("PSEnum: inside {} called for open enumerator", i);
         return true;
     }
     else
@@ -141,8 +144,7 @@ size_t PSEnum::count(int c, size_t i, size_t pre, size_t post) const
         assert(efirst <= j);
         assert(j < estop);
         unsigned int mp = midipitch(j);
-        assert(0 <= mp);
-        assert(mp <= 128);
+        assert(MidiNum::check_midi(mp)); // assert(0 <= mp); assert(mp <= 128);
         if (mp%12 == c) ++cpt;
     }
     
@@ -153,7 +155,7 @@ void PSEnum::rename(size_t i, const enum NoteName& n, bool altprint)
 {
     const unsigned int m = midipitch(i);
     int o = MidiNum::midi_to_octave(m, n);
-    enum Accid a = MidiNum::accid(m % 12, n);
+    enum Accid a = MidiNum::class_to_accid(m % 12, n);
     rename(i, n, a, o, altprint);
 }
 
@@ -161,8 +163,9 @@ size_t PSEnum::rewritePassing()
 {
     size_t ret = 0;
     size_t efirst = first();
-    size_t estop = open()?efirst+size():stop();
-    for (size_t i = efirst; i < estop; ++i)
+    // size_t estop = open()?stop():efirst+size();
+    // for (size_t i = efirst; i < estop; ++i)
+    for (size_t i = efirst; inside(i+2); ++i)
     {
         bool rew = rewritePassing(i);
         ret += rew?1:0;
@@ -172,14 +175,16 @@ size_t PSEnum::rewritePassing()
 
 bool PSEnum::rewritePassing(size_t i)
 {
-    size_t efirst = first();
-    size_t estop = open()?efirst+size():stop();
+    // size_t efirst = first();
+    // size_t estop = open()?stop():efirst+size();
+    assert(first() <= i);
+    // assert(i < estop);
 
-    assert(efirst <= i);
-    assert(i < estop);
-
-    // not a trigram
-    if (estop - i < 3) return false;
+    // not a trigram inside at i
+    // if (estop - i < 3) return false;
+    if (outside(i) || outside(i+1) || outside(i+2))
+        return false;
+    // DEBUG("rewritePassing {}", i);
 
     int d0 = ((int) midipitch(i+1)) - ((int) midipitch(i));
     int d1 = ((int) midipitch(i+2)) - ((int) midipitch(i+1));

@@ -4,6 +4,7 @@
 //
 //  Created by Florent Jacquemard on 25/05/2023.
 //
+// OBSOLETE. replaced by flags `global` in TonIndex.
 /// @addtogroup pitch
 /// @{
 
@@ -16,11 +17,10 @@
 #include <vector>
 #include <set>
 
-#include "trace.hpp"
+#include "pstrace.hpp"
 #include "AlgoName.hpp"
 #include "PSEnum.hpp"
 #include "TonIndex.hpp"
-//#include "PSCost.hpp"
 #include "Cost.hpp"
 //#include "PSTable.hpp"
 
@@ -30,8 +30,11 @@ namespace pse {
 
 class PST;
 
-/// Structure for the estimation from a table
-/// of a glabal tonality, or several candidates for glabal tonality.
+/// list of candidates for a glabal tonality,
+/// usable for the estimation of one glabal tonality or for filtering.
+/// It is associated to a TonIndex and the candidate global tonalities
+/// are indices in this TonIndex.
+/// @todo not used anymore. replaced by flags `global` in TonIndex
 class PSO
 {
     
@@ -42,19 +45,19 @@ public:
     /// @param dflag debug mode (for feeback)
     /// @param full flag, whether the constructed set of condidates is
     /// full (all tonalities of id) or empty.
-    PSO(const TonIndex& id, double dflag = false, double full = false);
+    PSO(const TonIndex& id, double dflag = false, double full=false);
 
     /// Estimate and store the global tonality candidates for the given table.
     /// @param tab for the extraction of global tonality.
     /// The index of tonalities stored refer to the ton index of this table.
     /// @param d tolerance distance (in percent) for considering two
-    /// cost approx. equal in the global ton search.
+    /// cost approximatively equal in the global ton search.
     /// @param dflag debug mode (for feeback)
     // @warning call eGlobals_eq and eGlobals_less variants to operator==
     // and operator< on cost.
-    PSO(const PST& tab, double d = 0, bool dflag=false); // const TonIndex& i
+    PSO(const PST& tab, double d=0, bool dflag=false); // const TonIndex& i
     
-    /// Refine a given store of global tonality candidates, given a new table.
+    /// Refine a given store of global tonality candidates, given a table.
     /// @param globals former list of global tonality conditates.
     /// @param tab table for the extraction of new global tonality condidates,
     /// amongsts the candidates of globals.
@@ -85,22 +88,22 @@ public:
     
     /// vector of tonalities associated to the estimated global tonalities
     /// contained in this structure.
-    /// it is the row-index of the table for the estimation
+    /// it is the row-index of the table for the estimation.
     inline const TonIndex& index() const { return _index; }
 
-    /// estimated candidate global tonality.
-    /// @param i candidate number, must be in 0..globalNb().
+    /// ith estimated candidate global tonality.
+    /// @param i candidate number, must be in 0..size().
     const Ton& global(size_t i = 0) const;
 
-    /// index of an estimated candidate global tonality.
-    /// @param i candidate number, must be in 0..globalNb().
+    /// index of the ith estimated candidate global tonality.
+    /// @param i candidate number, must be in 0..size().
     /// @return index in in 0..index.size() of the ith global candidate.
     // @warning iglobal(0) = TonIndex::FAILED if the evaluation failed.
     size_t iglobal(size_t i = 0) const;
     
     /// Enharmonic tonality of the candidate of the given index.
     /// It is added to this list of candidates if necessary.
-    /// @param i a candidate number, must be in 0..globalNb().
+    /// @param i a candidate number, must be in 0..size().
     /// @return the following index:
     /// - i if the candidate i has no enharmonics,
     /// - j != i if the candidate j is an enharmonic of the candidate i.
@@ -124,13 +127,12 @@ public:
     std::vector<size_t>::const_iterator cend() const;
 
     /// force a global tonality.
-    /// @param ig index of global tonality in ton index.
-    /// It must be in the index of tonalities used to create this structure
-    /// (i.e. in 0..globalNb()).
+    /// @param ig index of global tonality in the ton index.
     /// The given tonality index ig is added at the end of candidate list.
-    void setGlobal(size_t ig);
+    void addGlobal(size_t ig);
 
-    /// mask corresponding to the global tonality candidates in this structure.
+    /// mask for the ton index corresponding to the global tonality
+    /// candidates in this structure (characteristic function).
     std::vector<bool> getMask() const;
     
     // empty the set of candidate global tonality.
@@ -187,8 +189,12 @@ private:
     
     void init(const PSO& globals, const PST& tab, double d);
     
-    bool member(size_t ig) const;
+    // @todo rm same as contains
+    // bool member(size_t ig) const;
 
+    /// @param ig index of a tonality in the ton index of this global array.
+    /// @return the index of ig in this array of globals, or TonIndex::UNDEF
+    /// if not found.
     size_t find(size_t ig) const;
 
     // macro: cost equality for the estimation of global.
@@ -203,12 +209,13 @@ private:
     
 };
 
-
 std::ostream& operator<<(std::ostream& o, const PSO& globals);
 
-
-
 } // namespace pse
+
+/// fmt v10 and above requires `fmt::formatter<T>` extends `fmt::ostream_formatter`.
+/// @see: https://github.com/fmtlib/fmt/issues/3318
+template<> struct fmt::formatter<pse::PSO> : fmt::ostream_formatter {};
 
 #endif /* PSGlobal_hpp */
 

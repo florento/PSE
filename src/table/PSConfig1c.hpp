@@ -15,10 +15,10 @@
 #include <array>
 #include <vector>
 
-#include "trace.hpp"
+#include "pstrace.hpp"
 #include "PSEnum.hpp"
 #include "NoteName.hpp"
-#include "Accidental.hpp"
+#include "Accid.hpp"
 #include "Ton.hpp"
 #include "PSChord.hpp"
 #include "PSConfig1.hpp"
@@ -34,7 +34,8 @@ namespace pse {
 /// - pitch classes already met and name associated.
 class PSC1c : public PSC1
 {
-public:
+    
+public: // construction
     
     // initial PSC1c for the processing of the given chord.
     // PSC1c(std::shared_ptr<const PSC0> c, PSChord& chord);
@@ -96,11 +97,15 @@ public:
     /// assignement operator
     PSC1c& operator=(const PSC1c& rhs);
 
+public: // comparison
+
     /// configs have the same list of accidentals
     bool operator==(const PSC1c& rhs) const;
     
     /// configs have different list of accidentals
     bool operator!=(const PSC1c& rhs) const;
+
+public: // access
 
     /// @param pc a pitch class in 0..11.
     /// @return if the pitch class pc was already met in chord,
@@ -115,30 +120,32 @@ public:
     /// the processing of the chord is terminated.
     bool complete() const;
     
-    /// we are currently processing a chord.
-    virtual bool inChord() const;
-    
     /// the chord currently processed.
     const PSChord& chord() const;
-    
-private:
+
+    /// we are currently processing a chord.
+    bool inChord() const override;
+        
+private: // data
 
     /// chord currently processed.
     std::shared_ptr<const PSChord> _chord;
     
     /// map associating to every pitch class in 0..12
-    /// a note name, if the pitch class was encountered while processing the chord
+    /// a note name, if the pitch class was encountered
+    /// while processing the chord
     /// or NoteName::Undef otherwise.
     std::array<enum NoteName, 12> _pcn;
 
     /// map associating to every pitch class in 0..12
-    /// a print flag, if the pitch class was encountered while processing the chord.
+    /// a print flag, if the pitch class was encountered
+    /// while processing the chord.
     std::array<bool, 12> _pcp;
 
     /// index of the note after the last note of the chord processed.
     bool _complete;
     
-private:
+private: // construction
     
     /// internal constructor.
     PSC1c(const PSC& c, PSChord& chord);

@@ -17,10 +17,10 @@
 #include <array>
 #include <vector>
 
-#include "trace.hpp"
-#include "Rational.hpp"
+#include "pstrace.hpp"
+#include "PSRational.hpp"
 #include "NoteName.hpp"
-#include "Accidental.hpp"
+#include "Accid.hpp"
 #include "PSEnum.hpp"
 
 
@@ -119,8 +119,9 @@ public:
     /// duration, in number of bars, of the note of given index,
     /// if it has been set, otherwise 0.
     /// @param i index of note in the list of input notes.
-    Rational duration(size_t i) const override;
-    
+    long duration_num(size_t i) const override;
+    long duration_den(size_t i) const override;
+
     /// print flag for the note of given index, if it has been set,
     /// otherwise true.
     /// This flags says wether the accidental of the note must be printed or not.
@@ -132,7 +133,7 @@ public:
     /// of this enumerator.
     /// @param name note name in 'A'..'G'.
     /// @param accid accidental in [-2, 2] where 1 is a half tone
-    /// @param oct octave number in -10..10
+    /// @param oct octave number in Pitch::OCTAVE_MIN and Pitch::OCTAVE_MAX.
     /// @param altprint whether the accidental must be printed.
     /// @warning should not be called for this enumerator.
     virtual void rename(size_t i,

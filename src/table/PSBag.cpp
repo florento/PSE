@@ -7,8 +7,10 @@
 //
 
 #include "PSBag.hpp"
+#include "Pitch.hpp"
 #include "Enharmonic.hpp"
 #include "PSOrder.hpp"
+// #include "PSRawEnum.hpp" // OCTAVE_UNDEF
 // #include "PSTransit.hpp" // obsolete
 
 
@@ -16,6 +18,7 @@ namespace pse {
 
 
 PSB::PSB(const Algo& a, const Cost& seed, PSEnum& e,
+         bool tonal, bool octave,
          const Ton& gton, const Ton& lton):
 _algo(a),
 _enum(e),
@@ -23,8 +26,10 @@ _bests(),   // empty
 _cost(seed.shared_zero())     // zero
 //_visited()  // empty
 {
-    if (! e.empty())
-        init(seed, gton, lton);
+    if (not e.empty())
+    {
+        init(seed, gton, lton, tonal, octave);
+    }
     // otherwise n0 == n1, no note, leave _best empty
     else
     {
@@ -56,12 +61,13 @@ PSB::~PSB()
 
 
 // algo best path search
-void PSB::init(const Cost& seed, const Ton& ton, const Ton& lton)
+void PSB::init(const Cost& seed, const Ton& ton, const Ton& lton,
+               bool tonal, bool octave)
 {
     // at least one note, the bag cannot be empty.
     assert(_enum.first() < _enum.stop());
 
-    assert((_algo == Algo::PSE) || (_algo == Algo::PS14));
+    assert((_algo == Algo::PSE) or (_algo == Algo::PSD));
     //Transition transition(a, _enum);
     
     // backup of configurations during construction
@@ -74,7 +80,6 @@ void PSB::init(const Cost& seed, const Ton& ton, const Ton& lton)
     // other configurations are moved to _visited (except if the cost is
     // larger than cost of a best path)
     // @todo limtit _visited to non-final configurations in a best path
-
     // use the default ordering > (and ==) on PSCost
     PSCQueue q = PSCQueue(PSClex());
     
@@ -83,8 +88,9 @@ void PSB::init(const Cost& seed, const Ton& ton, const Ton& lton)
 //    else
 //        q = PSCQueue(PSCad()); // empty
     
-    // initial configuration
-    q.push(std::make_shared<const PSC0>(ton, _enum.first(), seed)); // n0
+    // initial configuration. n0
+    q.push(std::shared_ptr<const PSC0>(new
+                            PSC0(ton, _enum.first(), seed, tonal, octave)));
     
     while (! q.empty())
     {
@@ -92,7 +98,7 @@ void PSB::init(const Cost& seed, const Ton& ton, const Ton& lton)
         assert(c);
         assert(_enum.first() <= c->id());
         assert(c->id() <= _enum.stop());
-        q.pop(); // remove c
+        q.pop(); // remove cg
         
         // the path c is complete
         if (c->id() == _enum.stop())
@@ -178,8 +184,9 @@ void PSB::succ(std::shared_ptr<const PSC0> c, PSCQueue& q,
             assert(c1);
             assert(c1->id() == id);
             const PSChord chord = c1->chord();
-            unsigned int m = chord.midipitch(id) % 12; // chroma in 0..11
-            const enum NoteName dejaname = c1->dejavu(m);
+            unsigned int m = chord.midipitch(id);
+            assert(MidiNum::check_midi(m));
+            const enum NoteName dejaname = c1->dejavu(m%12);
             
             // pitch class already processed in chord,
             // we resuse the previous name chosen for the pitch class
@@ -187,9 +194,8 @@ void PSB::succ(std::shared_ptr<const PSC0> c, PSCQueue& q,
             {
                 q.push(std::make_shared<PSC1c>(c1,
                                                dejaname,
-                                               MidiNum::accid(m, dejaname),
-                                               false,
-                                               //c1->dejaprint(m), // force print
+                                               MidiNum::midi_to_accid(m, dejaname),
+                                               false, //c1->dejaprint(m), // force print
                                                gton, lton));
             }
             else
@@ -238,42 +244,62 @@ void PSB::get_names(size_t id, const Ton& gton,
                     //std::stack<bool>& prints) const
 {
     unsigned int pm = _enum.midipitch(id);
-    assert(0 <= pm);
-    assert(pm <= 127);
+    assert(MidiNum::check_midi(pm)); // assert(0 <= pm); assert(pm <= 128);
     // chroma in 0..11
     int m = pm % 12;
 
-    // 3 potential successors in algo PSE
+    // constrained spelling: the name and accid are known (forced)
+    // only one potential successor
+    if (_enum.name(id) != NoteName::Undef)
+    {
+        assert(_enum.accidental(id) != Accid::Undef);
+        assert(Pitch::check_octave(_enum.octave(id)));
+        assert(_enum.octave(id) != Pitch::UNDEF_OCTAVE);
+        assert(MidiNum::to_midi(_enum.name(id), _enum.accidental(id),
+                                _enum.octave(id)) == pm);
+        names.push(_enum.name(id));
+        accids.push(_enum.accidental(id));
+    }
+    // 3 potential successors in exhaustive search algo PSE
     // if ((_algo == Algo::PSE0) || (_algo == Algo::PSE1))
-    if (_algo == Algo::PSE)
+    else if (_algo == Algo::PSE)
     {
         for (int j = 0; j < 3; ++j)
         {
-            enum NoteName name = Enharmonics::name(m, j);
-            enum Accid accid = Enharmonics::accid(m, j);
+            enum NoteName name = Enharmonics::name(m, j, false, false);
+            enum Accid accid = Enharmonics::accid(m, j, false, false);
+            assert((name == NoteName::Undef) == (accid == Accid::Undef));
             // case of 8 and (short list) 1, 3, 6, 10
-            if (! defined(name) || !defined(accid))
-                continue;
-            assert(accid == MidiNum::accid(m, name));
-            names.push(name);
-            accids.push(accid);
-            //prints.push(false); // no force print
+            // ignore undef (empty cases)
+            if (defined(name) and defined(accid))
+            {
+                if (accid != MidiNum::class_to_accid(m, name))
+                {
+                    ERROR("CLASS {}: NAME={} ACCID={}", m, name, accid);
+                }
+                assert(accid == MidiNum::class_to_accid(m, name));
+                names.push(name);
+                accids.push(accid);
+                //prints.push(false); // no force print
+            }
         }
     }
-    // only 1 potential successor in algo PS14
-    else if (_algo == Algo::PS14)
+    // only 1 potential successor in determonistic variant PSD
+    else if (_algo == Algo::PSD)
     {
-        const Scale& scale = gton.chromatic();
-        int p = scale.pitchClass(0); // pitch class of tonic of scale
+        // const Scale& scale = gton.chromatic();
+        // int p = scale.pitchClass(0); // pitch class of tonic of scale
         // degree of m in the chromatic harmonic scale of p
-        size_t deg = (p <= m)?(m - p):(12-p+m);
-        assert(0 <= deg); // debug
-        assert(deg < 12);
-        enum NoteName name = scale.name(deg);
-        enum Accid accid = scale.accid(deg);
+        // size_t deg = (p <= m)?(m - p):(12-p+m);
+        // assert(0 <= deg); // debug
+        // assert(deg < 12);
+        // enum NoteName name = scale.name(deg);
+        // enum Accid accid = scale.accid(deg);
+        enum NoteName name = gton.chromaname(m);
+        enum Accid accid = MidiNum::class_to_accid(m, name);
         assert(defined(name));
         assert(defined(accid));
-        assert(accid == MidiNum::accid(m, name));
+        assert(accid == MidiNum::class_to_accid(m, name));
         names.push(name);
         accids.push(accid);
         //prints.push(false); // no force print

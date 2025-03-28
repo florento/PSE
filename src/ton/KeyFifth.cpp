@@ -14,7 +14,7 @@ KeyFifth::KeyFifth(int signature):
 _sig(signature)
 {
     assert(-7 <= signature);
-    assert(signature <= 7);
+    assert(signature <= 10); // chromatic Ton uses -7 to 10
 }
 
 
@@ -24,7 +24,7 @@ _sig(key(c, major))
     assert(0 <= c);
     assert(c <= 11);
     assert(-7 <= _sig);
-    assert(_sig <= 7);
+    assert(_sig <= 7); // chromatic Ton uses -7 to 10
 }
 
 
