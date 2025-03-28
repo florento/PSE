@@ -406,7 +406,7 @@ bool CostAT::updateColor1(const enum NoteName& name, const enum Accid& accid,
 
             default:
             {
-                ERROR("updateAccid: unexpected accidental"); // accid
+                ERROR("updateColor1: unexpected accidental"); // accid
                 return false;
             }
         }

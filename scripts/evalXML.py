@@ -322,3 +322,18 @@ def doublaccids(dataset):
 				print(name, 'bar', b, 'double sharp')
 				c += 1
 	return c
+
+def bars(dataset):
+	"""count number of bars in the given dataset"""
+	names = sorted(list(dataset))
+	c = 0
+	for name in names:
+		file = dataset[name]
+		score = m21.converter.parse(file.as_posix())
+		lp = score.getElementsByClass(m21.stream.Part)
+		if (len(lp) > 1):
+			print(name, 'has', len(lp), 'parts')
+		b = len(lp[0].getElementsByClass(m21.stream.Measure))
+		print (name, b, 'bars')
+		c += b
+	return c

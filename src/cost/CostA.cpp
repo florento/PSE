@@ -99,8 +99,8 @@ bool CostA::updateInconsistency(const enum NoteName& prev_name,
 {
     if (prev_name != NoteName::Undef and prev_name != name)
     {
-        _accid += 1; // cumulate with accids
-        _inconsist += 1;
+        _accid += 1;     // cumul accid + inconsist.
+        _inconsist += 1; // inconsist. only
         return true;
     }
     else
